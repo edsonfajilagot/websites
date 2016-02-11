@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="ie ie8"> <![endif]-->
+<!--[if IE 9]><html class="ie ie9"> <![endif]-->
+<!--[if gt IE 9]><!-->	<html> <!--<![endif]-->
+
+<!-- Mirrored from www.tutorialspoint.com/hadoop/hadoop_mapreduce.htm by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 20 Apr 2015 05:13:57 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<!-- Basic -->
+<meta charset="utf-8">
+<title>Hadoop - MapReduce</title>
+<meta name="description" content="Hadoop Mapreduce - Learn Hadoop in simple and easy steps starting from its Overview, Big Data Overview, Big Bata Solutions, Introduction to Hadoop, Enviornment Setup, Hdfs Overview, Hdfs Operations, Command Reference, Mapreduce, Streaming, Multi Node Cluster." />
+<meta name="keywords" content="Hadoop, Tutorial, Beginners, Overview, Big Data Overview, Big Bata Solutions, Introduction to Hadoop, Enviornment Setup, Hdfs Overview, Hdfs Operations, Command Reference, Mapreduce, Streaming, Multi Node Cluster."/>
+<base  />
+<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
+<meta name="author" content="tutorialspoint.com">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=yes">
+<meta property="fb:app_id" content="471319149685276" />
+<!-- Web Fonts  -->
+<link href="../../fonts.googleapis.com/cssf1e9.css?family=Open+Sans:300,400,600,700,800|Shadows+Into+Light" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="../../cdn.tutorialspoint.com/theme/css/fonts/font-awesome/css/font-awesome.css">
+<link rel="stylesheet" href="../../cdn.tutorialspoint.com/theme/css/custom-mini.css"/>
+<script type="text/javascript" src="../../cdn.tutorialspoint.com/theme/js/jquery.js"></script>
+<script type="text/javascript" src="../../cdn.tutorialspoint.com/theme/prettify.js"></script>
+<!-- Head Libs -->
+<script src="../../cdn.tutorialspoint.com/theme/vendor/modernizr.js"></script>
+<!--[if IE]>
+<link rel="stylesheet" href="http://cdn.tutorialspoint.com/theme/css/ie.css">
+<![endif]-->
+<!--[if lte IE 8]>
+<script src="http://cdn.tutorialspoint.com/theme/vendor/respond.js"></script>
+<![endif]-->
+<!--[if IE]>
+<link rel="stylesheet" href="http://cdn.tutorialspoint.com/theme/css/ie.css">
+<![endif]-->
+<!--[if lte IE 8]>
+<script src="http://cdn.tutorialspoint.com/theme/vendor/respond.js"></script>
+<![endif]-->
+<!--[if IE 8]>
+<link rel="stylesheet" type="text/css" href="http://cdn.tutorialspoint.com/theme/css/ie8.css">
+<![endif]-->
+<!--[if IE 9]>
+<link rel="stylesheet" type="text/css" href="http://cdn.tutorialspoint.com/theme/css/ie9.css">
+<![endif]-->
+<!-- Front Page related changes -->
+<style>
+div.feature-box div.feature-box-icon, .col-md-3 .course-box, li.heading, footer div.footer-ribon, div.footer-copyright { background: #39b9fa url(../images/pattern.png) repeat center center !important; }
+header nav ul.nav-main li a:hover, header nav ul.nav-main li.dropdown:hover a.dropdown-toggle { background: #39b9fa;} 
+header nav ul.nav-main li.dropdown:hover > ul{ border:2px solid #39b9fa}
+header nav ul.nav-main ul.dropdown-menu > li > a:hover, #mainMenu > li:hover, header nav.mega-menu ul.nav-main .mega-menu-content ul.sub-menu li:hover{ background: #39b9fa !important;}
+img.mobile-apps { border: 1px solid #39b9fa !important; }
+footer i.icon, footer ul.list.icons li i { color: #39b9fa !important; }
+</style>
+</head>
+<body onload="prettyPrint()">
+<div class="wrapLoader">
+   <div class="imgLoader">
+      <img  src="../../cdn.tutorialspoint.com/images/loading-cg.gif" alt="" width="70" height="70" />
+   </div>
+</div>
+<div id="divGoogle"></div>
+<div class="body">
+<header>
+   <div class="container">			
+      <h1 class="logo">
+      <a href="http://www.tutorialspoint.com/index.htm" title="tutorialspoint">
+      <img alt="tutorialspoint" src="images/logo.png">
+      </a>
+      </h1>			
+      <div class="search" id="searchBar">
+         <form method="get" id="searchform" name="searchform" action="http://www.google.com/search" target="_blank">
+            <input type="hidden" name="sitesearch" value="www.tutorialspoint.com">
+            <div class="input-group">
+               <input type="text" class="form-control search" name="q" id="q" placeholder="Search your tutorials..." onfocus="if (this.value == 'Search your tutorials...') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search your tutorials...';}">
+               <input value="FORID:11" name="cof" type="hidden">
+               <input type="hidden" name="ie" value="ISO-8859-1">
+               <span class="input-group-btn"> <button class="btn btn-default" type="submit"><i class="icon icon-search"></i></button> </span>
+            </div>
+         </form>
+      </div>
+      <nav>
+         <ul class="nav nav-pills nav-top">
+            <li><a href="http://www.tutorialspoint.com/absoluteclasses.htm"><img src="../images/free-training.png" style="width:100px; position:absolute;left:-158px; top:-7px; z-index:99;" title="Free Online Training"></a></li>
+            <li> <a href="http://www.tutorialspoint.com/shared-tutorials.php"><i class="icon icon-user"></i> &nbsp;Shared</a> </li>
+            <li> <a href="http://www.tutorialspoint.com/shorttutorials"><i class="icon icon-file-text-o"></i> &nbsp;Articles</a> </li>
+            <div class="social-icons">
+               <ul class="social-icons">
+               <li class="facebook"><a href="http://www.facebook.com/tutorialspointindia" target="_blank" title="Facebook">Facebook</a></li>
+               <li class="twitter"><a href="http://www.twitter.com/tutorialspoint" target="_blank" title="Twitter">Twitter</a></li>
+               <li class="googleplus"><a href="https://plus.google.com/u/0/116678774017490391259/posts" target="_blank" data-placement="bottom" title="tutorialspoint @ Google+">Google+</a></li>
+               <li class="linkedin"><a href="http://www.linkedin.com/company/tutorialspoint" target="_blank" title="tutorialspoint @ Linkedin">Linkedin</a></li>
+               </ul>
+            </div>
+            </li>
+         </ul>
+      </nav>
+         <!-- search code here  --> 
+      <button class="btn btn-responsive-nav btn-inverse" data-toggle="collapse" data-target=".nav-main-collapse" id="pull"> <i class="icon icon-bars"></i> </button>
+   </div>
+   <div class="navbar-collapse nav-main-collapse collapse">
+      <div class="container">
+         <nav class="nav-main mega-menu">
+            <ul class="nav nav-pills nav-main" id="mainMenu">
+               <li class="dropdown"> <a class="dropdown" href="http://www.tutorialspoint.com/index.htm"><i class="icon icon-home"></i> Home</a> </li>   
+               <li class="dropdown"><a class="dropdown-toggle tut-lib" href="http://www.tutorialspoint.com/tutorialslibrary.htm"> Tutorials Library <i class="fa-angle-down"></i> </a>
+      <ul class="dropdown-menu" id="submenu">
+         <li>
+            <div class="mega-menu-content">
+              <div class="row">
+                 <div class="col-md-6">
+                    <ul class="sub-menu">
+                     <li><a href="http://www.tutorialspoint.com/academic_tutorials.htm">Academic</a></li>
+                     <li><a href="http://www.tutorialspoint.com/big_data_tutorials.htm">Big Data</a></li>
+                     <li><a href="http://www.tutorialspoint.com/database_tutorials.htm">Databases</a></li>
+                     <li><a href="http://www.tutorialspoint.com/java_technology_tutorials.htm">Java Technologies</a></li>
+                     <li><a href="http://www.tutorialspoint.com/mainframe_tutorials.htm">Mainframe</a></li>
+                     <li><a href="http://www.tutorialspoint.com/management_tutorials.htm">Management</a></li>
+                     <li><a href="http://www.tutorialspoint.com/microsoft_technologies_tutorials.htm">Microsoft Technologies</a></li>
+                     <li><a href="http://www.tutorialspoint.com/misc_tutorials.htm">Miscellaneous</a></li>
+                   </ul>
+                 </div>
+                 <div class="col-md-6">
+                  <ul class="sub-menu">
+                     <li><a href="http://www.tutorialspoint.com/mobile_development_tutorials.htm">Mobile Development</a></li>
+                     <li><a href="http://www.tutorialspoint.com/computer_programming_tutorials.htm">Programming</a></li>
+                     <li><a href="http://www.tutorialspoint.com/scripting_lnaguage_tutorials.htm">Scripts</a></li>
+                     <li><a href="http://www.tutorialspoint.com/software_quality_tutorials.htm">Software Quality</a></li>
+                     <li><a href="http://www.tutorialspoint.com/telecom_tutorials.htm">Telecom</a></li>
+                     <li><a href="http://www.tutorialspoint.com/web_development_tutorials.htm">Web Development</a></li>
+                     <li><a href="http://www.tutorialspoint.com/xml_technologies_tutorials.htm">XML Technologies</a></li>
+                     <li><a href="http://www.tutorialspoint.com/multi_language_tutorials.htm">Multi Language Tutorials</a></li>
+                  </ul>
+                 </div>
+              </div>
+            </div>
+         </li>
+       </ul>
+               </li>
+               <li class="dropdown"><a class="dropdown" href="http://www.tutorialspoint.com/codingground.htm"><i class="fa-code"></i> Coding Ground</a> </li>
+                  <li class="dropdown"> 							
+                     <a class="dropdown-toggle tut-plus" href="http://www.tutorialspoint.com/absoluteclasses.htm">Absolute Classes <i class="fa-angle-down"></i></a>                     <ul class="dropdown-menu" id="submenu1">
+                                                <li class="current-menu-ancestor current-menu-parent active dropdown-submenu" style="border-bottom:none;">
+                        <li style="border-bottom:none;"><a href="http://www.tutorialspoint.com/absoluteclasses/userlogin.htm"><i class="fa-sign-in"></i>&nbsp;Login</a></li>
+                        <li style="border-bottom:1px dashed #ccc; height:1px; padding:0px; margin:0px 10px 0px 10px" class="stickyhide">&nbsp;</li>
+                        <li><a href="http://www.tutorialspoint.com/absoluteclasses/usersignup.htm"><i class="fa-pencil-square-o"></i>&nbsp;Sign Up&nbsp;</a></li>
+                        <li style="border-bottom:none;"><a href="http://www.tutorialspoint.com/absoluteclasses/upcomingclasses.htm" style="border-bottom:none;"><i class="fa-book book-head"></i> Upcoming Classes </a></li>
+                        <li style="border-bottom:1px dashed #ccc; height:1px; padding:0px; margin:0px 10px 0px 10px">&nbsp;</li>
+                        <li style="border-bottom:1px dashed #ccc; height:1px; padding:0px; margin:0px 10px 0px 10px">&nbsp;</li>
+                        <li style="border-bottom:1px dashed #ccc;;"><a href="http://www.tutorialspoint.com/absoluteclasses/allcourses.htm" style="border-bottom:none;"><i class="fa-book book-head"></i> All Courses </a></li>
+                        <li style="border-bottom:1px dashed #ccc;;"><a href="http://www.tutorialspoint.com/absoluteclasses/help.htm" style="border-bottom:none;"><i class="fa-question book-head"></i> Help/FAQ</a></li>
+                        <li style="border-bottom:none;"><a href="http://www.tutorialspoint.com/absoluteclasses/contact_abc.htm" style="border-bottom:none;"><i class="fa fa-envelope-o"></i> Contact</a></li>
+                                             
+                     </ul>
+                  </li>
+            </ul>
+         </nav>
+      </div>
+   </div>	
+</header>
+<div style="clear:both;"></div>
+<div role="main" class="main">
+<div class="container">
+<div class="row">
+<div class="col-md-2">
+<aside class="sidebar">
+<div class="mini-logo">
+<img src="images/hadoop-mini-logo.jpg" alt="Hadoop Tutorial" />
+</div>
+<ul class="nav nav-list primary left-menu">
+<li class="heading">Hadoop Tutorial</li>
+<li><a href="index.html">Hadoop - Home</a></li>
+<li><a href="hadoop_big_data_overview.html">Hadoop - Big Data Overview</a></li>
+<li><a href="hadoop_big_data_solutions.html">Hadoop - Big Data Solutions</a></li>
+<li><a href="hadoop_introduction.html">Hadoop - Introduction</a></li>
+<li><a href="hadoop_enviornment_setup.html">Hadoop - Enviornment Setup</a></li>
+<li><a href="hadoop_hdfs_overview.html">Hadoop - HDFS Overview</a></li>
+<li><a href="hadoop_hdfs_operations.html">Hadoop - HDFS Operations</a></li>
+<li><a href="hadoop_command_reference.html">Hadoop - Command Reference</a></li>
+<li><a href="hadoop_mapreduce.html">Hadoop - MapReduce</a></li>
+<li><a href="hadoop_streaming.html">Hadoop - Streaming</a></li>
+<li><a href="hadoop_multi_node_cluster.html">Hadoop - Multi Node Cluster</a></li>
+</ul>
+<ul class="nav nav-list primary left-menu special">
+<li class="heading">Hadoop Useful Resources</li>
+<li><a  href="hadoop_quick_guide.html">Hadoop - Quick Guide</a></li>
+<li><a  href="hadoop_useful_resources.html">Hadoop - Useful Resources</a></li>
+<li><a  href="hadoop_discussion.html">Hadoop - Discussion</a></li>
+</ul>
+<ul class="nav nav-list primary push-bottom left-menu special">
+<li class="sreading">Selected Reading</li>
+<li><a target="_top" href="http://www.tutorialspoint.com/developers_best_practices/index.htm">Developer's Best Practices</a></li>
+<li><a target="_top" href="http://www.tutorialspoint.com/effective_resume_writing.htm">Effective Resume Writing</a></li>
+<li><a target="_top" href="http://www.tutorialspoint.com/computer_glossary.htm">Computer Glossary</a></li>
+<li><a target="_top" href="http://www.tutorialspoint.com/computer_whoiswho.htm">Who is Who</a></li>
+</ul>
+</aside>
+</div>
+<!-- PRINTING STARTS HERE -->
+<div class="row">
+<div class="content">
+<div class="col-md-7 middle-col">
+<h1>Hadoop - MapReduce</h1>
+<div class="topgooglead">
+<hr />
+<div style="padding-bottom:5px;padding-left:10px;">Advertisements</div>
+<script type="text/javascript"><!--
+google_ad_client = "pub-7133395778201029";
+google_ad_width = 468;
+google_ad_height = 60;
+google_ad_format = "468x60_as";
+google_ad_type = "image";
+google_ad_channel = "";
+//--></script>
+<script type="text/javascript" src="../../pagead2.googlesyndication.com/pagead/f.txt">
+</script>
+</div>
+<hr />
+<div class="pre-btn">
+<a href="hadoop_command_reference.html"><i class="icon icon-arrow-circle-o-left big-font"></i> Previous Page</a>
+</div>
+<div class="nxt-btn">
+<a href="hadoop_streaming.html">Next Page <i class="icon icon-arrow-circle-o-right big-font"></i>&nbsp;</a>
+</div>
+<div class="clearer"></div>
+<hr />
+<p>MapReduce is a framework using which we can write applications to process huge amounts of data, in parallel, on large clusters of commodity hardware in a reliable manner.</p>
+<h2>What is MapReduce?</h2>
+<p>MapReduce is a processing technique and a program model for distributed computing based on java. The MapReduce algorithm contains two important tasks, namely Map and Reduce. Map takes a set of data and converts it into another set of data, where individual elements are broken down into tuples (key/value pairs). Secondly, reduce task, which takes the output from a map as an input and combines those data tuples into a smaller set of tuples. As the sequence of the name MapReduce implies, the reduce task is always performed after the map job.</p>
+<p>The major advantage of MapReduce is that it is easy to scale data processing over multiple computing nodes. Under the MapReduce model, the data processing primitives are called mappers and reducers. Decomposing a data processing application into mappers and reducers is sometimes nontrivial. But, once we write an application in the MapReduce form, scaling the application to run over hundreds, thousands, or even tens of thousands of machines in a cluster is merely a configuration change. This simple scalability is what has attracted many programmers to use the MapReduce model.</p>
+<h2>The Algorithm</h2>
+<ul class="list">
+<li><p>Generally MapReduce paradigm is based on sending the computer to where the data resides!</p></li>
+<li><p>MapReduce program executes in three stages, namely map stage, shuffle stage, and reduce stage.</p>
+<ul class="list">
+<li><p><b>Map stage</b> : The map or mapper’s job is to process the input data. Generally the input data is in the form of file or directory and is stored in the Hadoop file system (HDFS). The input file is passed to the mapper function line by line. The mapper processes the data and creates several small chunks of data. </p></li>
+<li><p><b>Reduce stage</b> : This stage is the combination of the <b> Shuffle </b> stage and the <b>Reduce</b> stage. The Reducer’s job is to process the data that comes from the mapper. After processing, it produces a new set of output, which will be stored in the HDFS.</p></li>
+</ul>
+</li>
+<li><p>During a MapReduce job, Hadoop sends the Map and Reduce tasks to the appropriate servers in the cluster.</p></li>
+<li><p>The framework manages all the details of data-passing such as issuing tasks, verifying task completion, and copying data around the cluster between the nodes.</p></li>
+<li><p>Most of the computing takes place on nodes with data on local disks that reduces the network traffic.</p></li>
+<li><p>After completion of the given tasks, the cluster collects and reduces the data to form an appropriate result, and sends it back to the Hadoop server.</p></li>
+</ul>
+<img src="images/mapreduce_algorithm.jpg" alt="MapReduce Algorithm" />
+<h2>Inputs and Outputs (Java Perspective)</h2>
+<p>The MapReduce framework operates on &lt;key, value&gt; pairs, that is, the framework views the input to the job as a set of &lt;key, value&gt; pairs and produces a set of &lt;key, value&gt; pairs as the output of the job, conceivably of different types.</p>
+<p>The key and the value classes should be in serialized manner by the framework and hence, need to implement the Writable interface. Additionally, the key classes have to implement the Writable-Comparable interface to facilitate sorting by the framework. Input and Output types of a MapReduce job: (Input) &lt;k1, v1&gt; -&gt; map -&gt; &lt;k2, v2&gt;-&gt; reduce -&gt; &lt;k3, v3&gt;(Output).</p>
+<table class="table table-bordered">
+<tr>
+<th></th>
+<th>Input</th>
+<th>Output</th>
+</tr>
+<tr>
+<th>Map</th>
+<td>&lt;k1, v1&gt;</td>
+<td>list (&lt;k2, v2&gt;)</td>
+</tr>
+<tr>
+<th>Reduce</th>
+<td>&lt;k2, list(v2)&gt;</td>
+<td>list (&lt;k3, v3&gt;)</td>
+</tr>
+</table>
+<h2>Terminology</h2>
+<ul class="list">
+<li><p><b>PayLoad</b> - Applications implement the Map and the Reduce functions, and form the core of the job.</p></li>
+<li><p><b>Mapper</b> - Mapper maps the input key/value pairs to a set of intermediate key/value pair.</p></li>
+<li><p><b>NamedNode</b> - Node that manages the Hadoop Distributed File System (HDFS).</p></li>
+<li><p><b>DataNode</b> - Node where data is presented in advance before any processing takes place.</p></li>
+<li><p><b>MasterNode</b> - Node where JobTracker runs and which accepts job requests from clients.</p></li>
+<li><p><b>SlaveNode</b> - Node where Map and Reduce program runs.</p></li>
+<li><p><b>JobTracker</b> - Schedules jobs and tracks the assign jobs to Task tracker.</p></li>
+<li><p><b>Task Tracker</b> - Tracks the task and reports status to JobTracker. </p></li>
+<li><p><b>Job</b> - A program is an execution of a Mapper and Reducer across a dataset.</p></li>
+<li><p><b>Task</b> - An execution of a Mapper or a Reducer on a slice of data. </p></li>
+<li><p><b>Task Attempt</b> - A particular instance of an attempt to execute a task on a SlaveNode.</p></li>
+</ul>
+<h2>Example Scenario</h2>
+<p>Given below is the data regarding the electrical consumption of an organization. It contains the monthly electrical consumption and the annual average for various years.</p>
+<table class="table table-bordered">
+<tr>
+<th></th>
+<th>Jan</th>
+<th>Feb</th>
+<th>Mar</th>
+<th>Apr</th>
+<th>May</th>
+<th>Jun</th>
+<th>Jul</th>
+<th>Aug</th>
+<th>Sep</th>
+<th>Oct</th>
+<th>Nov</th>
+<th>Dec</th>
+<th>Avg</th>
+</tr>
+<tr>
+<td>1979</td>
+<td>23</td>
+<td>23</td>
+<td>2</td>
+<td>43</td>
+<td>24</td>
+<td>25</td>
+<td>26</td>
+<td>26</td>
+<td>26</td>
+<td>26</td>
+<td>25</td>
+<td>26</td>
+<td>25</td>
+</tr>
+<tr>
+<td>1980</td>
+<td>26</td>
+<td>27</td>
+<td>28</td>
+<td>28</td>
+<td>28</td>
+<td>30</td>
+<td>31</td>
+<td>31</td>
+<td>31</td>
+<td>30</td>
+<td>30</td>
+<td>30</td>
+<td>29</td>
+</tr>
+<tr>
+<td>1981</td>
+<td>31</td>
+<td>32</td>
+<td>32</td>
+<td>32</td>
+<td>33</td>
+<td>34</td>
+<td>35</td>
+<td>36</td>
+<td>36</td>
+<td>34</td>
+<td>34</td>
+<td>34</td>
+<td>34</td>
+</tr>
+<tr>
+<td>1984</td>
+<td>39</td>
+<td>38</td>
+<td>39</td>
+<td>39</td>
+<td>39</td>
+<td>41</td>
+<td>42</td>
+<td>43</td>
+<td>40</td>
+<td>39</td>
+<td>38</td>
+<td>38</td>
+<td>40</td>
+</tr>
+<tr>
+<td>1985</td>
+<td>38</td>
+<td>39</td>
+<td>39</td>
+<td>39</td>
+<td>39</td>
+<td>41</td>
+<td>41</td>
+<td>41</td>
+<td>00</td>
+<td>40</td>
+<td>39</td>
+<td>39</td>
+<td>45</td>
+</tr>
+</table>
+<p>If the above data is given as input, we have to write applications to process it and produce results such as finding the year of maximum usage, year of minimum usage, and so on. This is a walkover for the programmers with finite number of records. They will simply write the logic to produce the required output, and pass the data to the application written.</p>
+<p>But, think of the data representing the electrical consumption of all the largescale industries of a particular state, since its formation.</p>
+<p>When we write applications to process such bulk data,</p>
+<ul class="list">
+<li>They will take a lot of time to execute.</li>
+<li>There will be a heavy network traffic when we move data from source to network server and so on.</li>
+</ul>
+<p>To solve these problems, we have the MapReduce framework.</p>
+<h3>Input Data</h3>
+<p>The above data is saved as <b>sample.txt</b>and given as input. The input file looks as shown below.</p>
+<pre class="prettyprint notranslate">
+1979   23   23   2   43   24   25   26   26   26   26   25   26  25 
+1980   26   27   28  28   28   30   31   31   31   30   30   30  29 
+1981   31   32   32  32   33   34   35   36   36   34   34   34  34 
+1984   39   38   39  39   39   41   42   43   40   39   38   38  40 
+1985   38   39   39  39   39   41   41   41   00   40   39   39  45 
+</pre>
+<h3>Example Program</h3>
+<p>Given below is the program to the sample data using MapReduce framework.</p>
+<pre class="prettyprint notranslate">
+package hadoop; 
+
+import java.util.*; 
+
+import java.io.IOException; 
+import java.io.IOException; 
+
+import org.apache.hadoop.fs.Path; 
+import org.apache.hadoop.conf.*; 
+import org.apache.hadoop.io.*; 
+import org.apache.hadoop.mapred.*; 
+import org.apache.hadoop.util.*; 
+
+public class ProcessUnits 
+{ 
+   //Mapper class 
+   public static class E_EMapper extends MapReduceBase implements 
+   Mapper&lt;LongWritable ,/*Input key Type */ 
+   Text,                /*Input value Type*/ 
+   Text,                /*Output key Type*/ 
+   IntWritable&gt;        /*Output value Type*/ 
+   { 
+      
+      //Map function 
+      public void map(LongWritable key, Text value, 
+      OutputCollector&lt;Text, IntWritable&gt; output,   
+      Reporter reporter) throws IOException 
+      { 
+         String line = value.toString(); 
+         String lasttoken = null; 
+         StringTokenizer s = new StringTokenizer(line,"\t"); 
+         String year = s.nextToken(); 
+         
+         while(s.hasMoreTokens())
+            {
+               lasttoken=s.nextToken();
+            } 
+            
+         int avgprice = Integer.parseInt(lasttoken); 
+         output.collect(new Text(year), new IntWritable(avgprice)); 
+      } 
+   } 
+   
+   
+   //Reducer class 
+   public static class E_EReduce extends MapReduceBase implements 
+   Reducer&lt; Text, IntWritable, Text, IntWritable &gt; 
+   {  
+   
+      //Reduce function 
+      public void reduce( Text key, Iterator &lt;IntWritable&gt; values, 
+         OutputCollector&lt;Text, IntWritable&gt; output, Reporter reporter) throws IOException 
+         { 
+            int maxavg=30; 
+            int val=Integer.MIN_VALUE; 
+            
+            while (values.hasNext()) 
+            { 
+               if((val=values.next().get())>maxavg) 
+               { 
+                  output.collect(key, new IntWritable(val)); 
+               } 
+            } 
+ 
+         } 
+   }  
+   
+   
+   //Main function 
+   public static void main(String args[])throws Exception 
+   { 
+      JobConf conf = new JobConf(Eleunits.class); 
+      
+      conf.setJobName("max_eletricityunits"); 
+      conf.setOutputKeyClass(Text.class);
+      conf.setOutputValueClass(IntWritable.class); 
+      conf.setMapperClass(E_EMapper.class); 
+      conf.setCombinerClass(E_EReduce.class); 
+      conf.setReducerClass(E_EReduce.class); 
+      conf.setInputFormat(TextInputFormat.class); 
+      conf.setOutputFormat(TextOutputFormat.class); 
+      
+      FileInputFormat.setInputPaths(conf, new Path(args[0])); 
+      FileOutputFormat.setOutputPath(conf, new Path(args[1])); 
+      
+      JobClient.runJob(conf); 
+   } 
+} 
+</pre>
+<p>Save the above program as <b>ProcessUnits.java.</b> The compilation and execution of the program is explained below.</p>
+<h2>Compilation and Execution of Process Units Program</h2>
+<p>Let us assume we are in the home directory of a Hadoop user (e.g. /home/hadoop).</p>
+<p>Follow the steps given below to compile and execute the above program.</p>
+<h3>Step 1</h3>
+<p>The following command is to create a directory to store the compiled java classes.</p>
+<pre class="prettyprint notranslate">
+$ mkdir units 
+</pre>
+<h3>Step 2</h3>
+<p>Download <b>Hadoop-core-1.2.1.jar,</b> which is used to compile and execute the MapReduce program. Visit the following link <a href="http://mvnrepository.com/artifact/org.apache.hadoop/hadoop-core/1.2.1"> http://mvnrepository.com/artifact/org.apache.hadoop/hadoop-core/1.2.1</a> to download the jar. Let us assume the downloaded folder is <b>/home/hadoop/.</b></p>
+<h3>Step 3</h3>
+<p>The following commands are used for compiling the <b>ProcessUnits.java</b> program and creating a jar for the program.</p>
+<pre class="prettyprint notranslate">
+$ javac -classpath hadoop-core-1.2.1.jar -d units ProcessUnits.java 
+$ jar -cvf units.jar -C units/ . 
+</pre>
+<h3>Step 4</h3>
+<p>The following command is used to create an input directory in HDFS.</p>
+<pre class="prettyprint notranslate">
+$HADOOP_HOME/bin/hadoop fs -mkdir input_dir 
+</pre>
+<h3>Step 5</h3>
+<p>The following command is used to copy the input file named <b>sample.txt</b>in the input directory of HDFS.</p>
+<pre class="prettyprint notranslate">
+$HADOOP_HOME/bin/hadoop fs -put /home/hadoop/sample.txt input_dir 
+</pre>
+<h3>Step 6</h3>
+<p>The following command is used to verify the files in the input directory.</p>
+<pre class="prettyprint notranslate">
+$HADOOP_HOME/bin/hadoop fs -ls input_dir/ 
+</pre>
+<h3>Step 7</h3>
+<p>The following command is used to run the Eleunit_max application by taking the input files from the input directory.</p>
+<pre class="prettyprint notranslate">
+$HADOOP_HOME/bin/hadoop jar units.jar hadoop.ProcessUnits input_dir output_dir 
+</pre>
+<p>Wait for a while until the file is executed. After execution, as shown below, the output will contain the number of input splits, the number of Map tasks, the number of reducer tasks, etc.</p>
+<pre class="prettyprint notranslate">
+INFO mapreduce.Job: Job job_1414748220717_0002 
+completed successfully 
+14/10/31 06:02:52 
+INFO mapreduce.Job: Counters: 49 
+File System Counters 
+ 
+FILE: Number of bytes read=61 
+FILE: Number of bytes written=279400 
+FILE: Number of read operations=0 
+FILE: Number of large read operations=0   
+FILE: Number of write operations=0 
+HDFS: Number of bytes read=546 
+HDFS: Number of bytes written=40 
+HDFS: Number of read operations=9 
+HDFS: Number of large read operations=0 
+HDFS: Number of write operations=2 Job Counters 
+
+
+   Launched map tasks=2  
+   Launched reduce tasks=1 
+   Data-local map tasks=2  
+   Total time spent by all maps in occupied slots (ms)=146137 
+   Total time spent by all reduces in occupied slots (ms)=441   
+   Total time spent by all map tasks (ms)=14613 
+   Total time spent by all reduce tasks (ms)=44120 
+   Total vcore-seconds taken by all map tasks=146137 
+   
+   Total vcore-seconds taken by all reduce tasks=44120 
+   Total megabyte-seconds taken by all map tasks=149644288 
+   Total megabyte-seconds taken by all reduce tasks=45178880 
+   
+Map-Reduce Framework 
+ 
+Map input records=5  
+   Map output records=5   
+   Map output bytes=45  
+   Map output materialized bytes=67  
+   Input split bytes=208 
+   Combine input records=5  
+   Combine output records=5 
+   Reduce input groups=5  
+   Reduce shuffle bytes=6  
+   Reduce input records=5  
+   Reduce output records=5  
+   Spilled Records=10  
+   Shuffled Maps =2  
+   Failed Shuffles=0  
+   Merged Map outputs=2  
+   GC time elapsed (ms)=948  
+   CPU time spent (ms)=5160  
+   Physical memory (bytes) snapshot=47749120  
+   Virtual memory (bytes) snapshot=2899349504  
+   Total committed heap usage (bytes)=277684224
+     
+File Output Format Counters 
+ 
+   Bytes Written=40 
+</pre>
+<h3>Step 8</h3>
+<p>The following command is used to verify the resultant files in the output folder.</p>
+<pre class="prettyprint notranslate">
+$HADOOP_HOME/bin/hadoop fs -ls output_dir/ 
+</pre>
+<h3>Step 9</h3>
+<p>The following command is used to see the output in <b> Part-00000 </b> file. This file is generated by HDFS.</p>
+<pre class="prettyprint notranslate">
+$HADOOP_HOME/bin/hadoop fs -cat output_dir/part-00000 
+</pre>
+<p>Below is the output generated by the MapReduce program.</p>
+<pre class="prettyprint notranslate">
+1981    34 
+1984    40 
+1985    45 
+</pre>
+<h3>Step 10</h3>
+<p>The following command is used to copy the output folder from HDFS to the local file system for analyzing.</p>
+<pre class="prettyprint notranslate">
+$HADOOP_HOME/bin/hadoop fs -cat output_dir/part-00000/bin/hadoop dfs get output_dir /home/hadoop 
+</pre>
+<h2>Important Commands</h2>
+<p>All Hadoop commands are invoked by the <b>$HADOOP_HOME/bin/hadoop</b> command. Running the Hadoop script without any arguments prints the description for all commands.</p>
+<p><b>Usage</b> : hadoop [--config confdir] COMMAND</p>
+<p>The following table lists the options available and their description.</p>
+<table class="table table-bordered">
+<tr>
+<th>Options</th>
+<th>Description</th>
+</tr>
+<tr>
+<td>namenode -format</td>
+<td>Formats the DFS filesystem.</td>
+</tr>
+<tr>
+<td>secondarynamenode</td>
+<td>Runs the DFS secondary namenode.</td>
+</tr>
+<tr>
+<td>namenode</td>
+<td>Runs the DFS namenode.</td>
+</tr>
+<tr>
+<td>datanode</td>
+<td>Runs a DFS datanode.</td>
+</tr>
+<tr>
+<td>dfsadmin</td>
+<td>Runs a DFS admin client.</td>
+</tr>
+<tr>
+<td>mradmin</td>
+<td>Runs a Map-Reduce admin client.</td>
+</tr>
+<tr>
+<td>fsck</td>
+<td>Runs a DFS filesystem checking utility.</td>
+</tr>
+<tr>
+<td>fs</td>
+<td>Runs a generic filesystem user client.</td>
+</tr>
+<tr>
+<td>balancer</td>
+<td>Runs a cluster balancing utility.</td>
+</tr>
+<tr>
+<td>oiv</td>
+<td>Applies the offline fsimage viewer to an fsimage.</td>
+</tr>
+<tr>
+<td>fetchdt</td>
+<td>Fetches a delegation token from the NameNode.</td>
+</tr>
+<tr>
+<td>jobtracker</td>
+<td>Runs the MapReduce job Tracker node.</td>
+</tr>
+<tr>
+<td>pipes</td>
+<td>Runs a Pipes job.</td>
+</tr>
+<tr>
+<td>tasktracker</td>
+<td>Runs a MapReduce task Tracker node.</td>
+</tr>
+<tr>
+<td>historyserver</td>
+<td>Runs job history servers as a standalone daemon.</td>
+</tr>
+<tr>
+<td>job</td>
+<td>Manipulates the MapReduce jobs.</td>
+</tr>
+<tr>
+<td>queue</td>
+<td>Gets information regarding JobQueues.</td>
+</tr>
+<tr>
+<td>version</td>
+<td>Prints the version.</td>
+</tr>
+<tr>
+<td>jar &lt;jar&gt;</td>
+<td>Runs a jar file.</td>
+</tr>
+<tr>
+<td>distcp &lt;srcurl&gt; &lt;desturl&gt;</td>
+<td>Copies file or directories recursively.</td>
+</tr>
+<tr>
+<td>distcp2 &lt;srcurl&gt; &lt;desturl&gt;</td>
+<td>DistCp version 2.</td>
+</tr>
+<tr>
+<td>archive -archiveName NAME -p</td>
+<td>Creates a hadoop archive.</td>
+</tr>
+<tr>
+<td>&lt;parent path&gt; &lt;src&gt;* &lt;dest&gt;</td>
+<td></td>
+</tr>
+<tr>
+<td>classpath</td>
+<td>Prints the class path needed to get the Hadoop jar and the required libraries.</td>
+</tr>
+<tr>
+<td>daemonlog</td>
+<td>Get/Set the log level for each daemon</td>
+</tr>
+</table> 
+<h2>How to Interact with MapReduce Jobs</h2>
+<p>Usage: hadoop job [GENERIC_OPTIONS]</p>
+<p>The following are the Generic Options available in a Hadoop job.</p>
+<table class="table table-bordered">
+<tr>
+<th>GENERIC_OPTIONS</th>
+<th>Description</th>
+</tr>
+<tr>
+<td>-submit &lt;job-file&gt;</td>
+<td>Submits the job.</td>
+</tr>
+<tr>
+<td>status &lt;job-id&gt;</td>
+<td>Prints the map and reduce completion percentage and all job counters.</td>
+</tr>
+<tr>
+<td>counter &lt;job-id&gt; &lt;group-name&gt; &lt;countername&gt;</td>
+<td>Prints the counter value.</td>
+</tr>
+<tr>
+<td>-kill &lt;job-id&gt;</td>
+<td>Kills the job.</td>
+</tr>
+<tr>
+<td>-events &lt;job-id&gt; &lt;fromevent-#&gt; &lt;#-of-events&gt;</td>
+<td>Prints the events' details received by jobtracker for the given range.</td>
+</tr>
+<tr>
+<td>-history [all] &lt;jobOutputDir&gt; - history &lt; jobOutputDir&gt;</td>
+<td>Prints job details, failed and killed tip details. More details about the job such as successful tasks and task attempts made for each task can be viewed by specifying the [all] option.</td>
+</tr>
+<tr>
+<td>-list[all]</td>
+<td>Displays all jobs. -list displays only jobs which are yet to complete.</td>
+</tr>
+<tr>
+<td>-kill-task &lt;task-id&gt;</td>
+<td>Kills the task. Killed tasks are NOT counted against failed attempts.</td>
+</tr>
+<tr>
+<td>-fail-task &lt;task-id&gt;</td>
+<td>Fails the task. Failed tasks are counted against</td>
+</tr>
+<tr>
+<td></td>
+<td>failed attempts.</td>
+</tr>
+<tr>
+<td>set-priority &lt;job-id&gt; &lt;priority&gt;</td>
+<td>Changes the priority of the job. Allowed priority values are VERY_HIGH, HIGH, NORMAL, LOW, VERY_LOW</td>
+</tr>
+</table>
+<h3>To see the status of job</h3>
+<pre class="prettyprint notranslate">
+$ $HADOOP_HOME/bin/hadoop job -status &lt;JOB-ID&gt; 
+e.g. 
+$ $HADOOP_HOME/bin/hadoop job -status job_201310191043_0004 
+</pre>
+<h3>To see the history of job output-dir</h3>
+<pre class="prettyprint notranslate">
+$ $HADOOP_HOME/bin/hadoop job -history &lt;DIR-NAME&gt; 
+e.g. 
+$ $HADOOP_HOME/bin/hadoop job -history /user/expert/output 
+</pre>
+<h3>To kill the job</h3>
+<pre class="prettyprint notranslate">
+$ $HADOOP_HOME/bin/hadoop job -kill &lt;JOB-ID&gt; 
+e.g. 
+$ $HADOOP_HOME/bin/hadoop job -kill job_201310191043_0004 
+</pre>
+<hr />
+<div class="pre-btn">
+<a href="hadoop_command_reference.html"><i class="icon icon-arrow-circle-o-left big-font"></i> Previous Page</a>
+</div>
+<div class="print-btn center">
+<a href="http://www.tutorialspoint.com/cgi-bin/printpage.cgi" target="_blank"><i class="icon icon-print big-font"></i> Print</a>
+</div>
+<div class="nxt-btn">
+<a href="hadoop_streaming.html">Next Page <i class="icon icon-arrow-circle-o-right big-font"></i>&nbsp;</a>
+</div>
+<hr />
+<!-- PRINTING ENDS HERE -->
+<div class="bottomgooglead">
+<div class="bottomadtag">Advertisements</div>
+<script type="text/javascript"><!--
+google_ad_client = "pub-7133395778201029";
+google_ad_width = 580;
+google_ad_height = 400;
+google_ad_format = "580x400_as";
+google_ad_type = "image";
+google_ad_channel ="";
+//--></script>
+<script type="text/javascript"
+src="../../pagead2.googlesyndication.com/pagead/f.txt">
+</script>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-3" id="rightbar">
+<!-- AddThis Button BEGIN -->
+<div class="simple-ad">
+<div class="addthis_sharing_toolbox"></div>
+<script type="text/javascript" src="../../s7.addthis.com/js/300/addthis_widget.js#pubid=ra-4f661ec623a400f0"></script>
+</div>
+<!-- AddThis Button END -->
+<div class="google-ad" style="position:relative; left:20px;">Advertisements</div>
+<div class="rightgooglead">
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-2537027957187252";
+/* Right Side Ad */
+google_ad_slot = "right_side_ad";
+google_ad_width = 300;
+google_ad_height = 250;
+//-->
+</script>
+<script type="text/javascript"
+src="../../pagead2.googlesyndication.com/pagead/f.txt">
+</script>
+</div>
+<div class="rightgooglead">
+<script type="text/javascript"><!--
+google_ad_client = "pub-7133395778201029";
+google_ad_width = 300;
+google_ad_height = 600;
+google_ad_format = "300x600_as";
+google_ad_type = "image";
+google_ad_channel ="";
+//--></script>
+<script type="text/javascript"
+src="../../pagead2.googlesyndication.com/pagead/f.txt">
+</script>
+</div>
+<div class="rightgooglead">
+<script type="text/javascript"><!--
+google_ad_client = "pub-7133395778201029";
+google_ad_width = 300;
+google_ad_height = 250;
+google_ad_format = "300x250_as";
+google_ad_type = "image";
+google_ad_channel ="";
+//--></script>
+<script type="text/javascript"
+src="../../pagead2.googlesyndication.com/pagead/f.txt"> 
+</script>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<footer class="inner">
+<div class="container">
+<div class="row">
+<div class="footer-ribon">
+<span>Extras</span>
+</div>
+<div class="col-md-2">
+<h4>Mobile First</h4>
+<ul class="list icons list-unstyled">
+<li><a id="iphone" href="https://itunes.apple.com/om/app/tutorials-point/id914891263?mt=8" target="_blank" rel="nofollow"><img alt="tutorialspoint iPhone App" src="../../cdn.tutorialspoint.com/images/apple_store.png" class="mobile-apps"/></a></li>
+<li><a id="android" href="https://play.google.com/store/apps/details?id=com.tutorialspoint.onlineviewer" target="_blank" rel="nofollow"><img alt="tutorialspoint Android app" src="../../cdn.tutorialspoint.com/images/google_play.png" class="mobile-apps"/></a></li>
+<li><a id="microsoft" href="http://www.windowsphone.com/s?appid=91249671-7184-4ad6-8a5f-d11847946b09" target="_blank" rel="nofollow"><img alt="tutorialspoint Windows app" src="../../cdn.tutorialspoint.com/images/windows_store.png" class="mobile-apps"/></a></li>
+</ul>
+</div>
+<div class="col-md-2">
+<h4>About us</h4>
+<ul class="list icons list-unstyled">
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/about/index.htm">Company</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/about/about_team.htm">Team</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/about/about_careers.htm">Careers</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/about/about_privacy.htm">Privacy Policy</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/about/about_terms_of_use.htm">Terms of use</a></li>
+</ul>
+</div>
+<div class="col-md-2">
+<h4>Extra Links</h4>
+<ul class="list icons list-unstyled">
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/forums/index.php">Forums</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/shorttutorials/">Articles</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/shared-tutorials.php">Shared</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/seo_tools.htm">Seo Tools</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/about/contact_us.htm">Contact</a></li>
+</ul>
+</div>
+<div class="col-md-3">
+<div class="contact-details">
+<h4>Contact Us</h4>
+<ul class="contact">
+<li><p><i class="icon icon-map-marker"></i> <strong>Address:</strong> 388-A , Road no 22, Jubilee Hills, Hyderabad Telangana, INDIA-500033</p></li>
+<li><p><i class="icon icon-envelope"></i> <strong>Email:</strong> <a href="http://www.tutorialspoint.com/about/contact_us.htm">Click Here</a></p></li>
+<li><p><i class="icon icon-dribbble"></i> <strong>Website:</strong> <a href="http://www.tutorialspoint.com/">www.tutorialspoint.com</a></p></li>
+</ul>
+</div>
+<div class="social-icons">
+<ul class="social-icons">
+<li class="facebook"><a href="https://www.facebook.com/tutorialspointindia" target="_blank" data-placement="bottom" title="tutorialspoint @ Facebook">Facebook</a></li>
+<li class="googleplus"><a href="https://plus.google.com/u/0/116678774017490391259/posts" target="_blank" data-placement="bottom" title="tutorialspoint @ Google+">Google+</a></li>
+<li class="twitter"><a href="http://www.twitter.com/tutorialspoint" target="_blank" data-placement="bottom"  title="tutorialspoint @ Twitter">Twitter</a></li>
+<li class="linkedin"><a href="http://www.linkedin.com/company/tutorialspoint" target="_blank" data-placement="bottom"  title="tutorialspoint @ Linkedin">Linkedin</a></li>
+<li class="rss"><a href="http://feeds.feedburner.com/SharedTutorials" target="_blank" data-placement="bottom" title="tutorialspoint RSS">RSS</a></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="footer-copyright">
+<div class="container">
+<div class="row">
+<div class="col-md-1">
+<a href="http://www.tutorialspoint.com/index.htm" class="logo">
+<img alt="Tutorials Point" class="img-responsive" src="../../cdn.tutorialspoint.com/scripts/img/logo-footer.png">
+</a>
+</div>
+<div class="col-md-6">
+<p>&copy; Copyright 2015. All Rights Reserved.</p>
+</div>
+<div class="col-md-4">
+<nav id="sub-menu">
+<ul>
+<li><a href="http://www.tutorialspoint.com/about/tutorials_writing.htm">Write for us</a></li>
+<li><a href="http://www.tutorialspoint.com/about/faq.htm">FAQ's</a></li>
+<li><a href="http://www.tutorialspoint.com/about/about_helping.htm">Helping</a></li>
+<li><a href="http://www.tutorialspoint.com/about/contact_us.htm">Contact</a></li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<!-- Libs -->
+<script type="text/javascript" src="../../cdn.tutorialspoint.com/theme/js/custom-mini.js"></script>
+<script src="../../www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-232293-6";
+urchinTracker();
+$('.pg-icon').click(function(){
+   $('.wrapLoader').show();
+});
+</script>
+<script type="text/javascript" src="../../cdn.tutorialspoint.com/theme/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript">
+   var tryit = new $.TryIt('try_hadoop.html');
+   tryit.compile();
+</script>
+</div>
+</body>
+
+<!-- Mirrored from www.tutorialspoint.com/hadoop/hadoop_mapreduce.htm by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 20 Apr 2015 05:13:58 GMT -->
+</html>

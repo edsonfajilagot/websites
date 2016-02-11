@@ -1,0 +1,895 @@
+﻿<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from blog.miguelgrinberg.com/post/fun-with-the-arduino-esplora-a-digital-picture-frame by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:39:22 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    
+    <title>
+    
+        Fun With The Arduino Esplora: A Digital Picture Frame - miguelgrinberg.com
+    
+</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="description" content="miguelgrinberg.com">
+	<meta name="copyright" content="Copyright (c) 2012-2015 Miguel Grinberg">
+	<meta name="author" content="Miguel Grinberg">
+    
+    <meta name="keywords" content="arduino, lcd, tft, python, pil, esplora">
+    
+
+    
+    <!-- Bootstrap -->
+    <link href="../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../static/prettify.css" type="text/css" rel="stylesheet" />
+    <link href="../static/colorbox/colorbox.css" rel="stylesheet" type="text/css" />
+    <link href="../static/style.css" rel="stylesheet" type="text/css" />
+
+    <link rel="shortcut icon" href="../static/favicon.ico">
+	<link rel="alternate" type="application/rss+xml" href="../feed" title="miguelgrinberg.com RSS feed">
+
+  </head>
+  <body>
+    
+    <!-- facebook sdk -->
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "../../connect.facebook.net/en_US/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    <!-- google plus sdk -->
+    <script type="text/javascript" src="../../apis.google.com/js/plusone.js"></script>
+    <!-- twitter sdk -->
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="../../platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <!-- linkedin sdk -->
+    <script src="../../platform.linkedin.com/in.js" type="text/javascript"></script>
+
+    
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://blog.miguelgrinberg.com/index">miguelgrinberg.com</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="http://blog.miguelgrinberg.com/index">Home</a></li>
+                        <li><a href="about-me.html">About Me</a></li>
+                        <li><a href="about-this-blog.html">About This Blog</a></li>
+                        
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <p class="navbar-text" style="margin-top: 10px; margin-bottom: 0px;">
+                                <a type="application/rss+xml" href="../feed"><img src="../static/rss.png" alt="RSS Feed" title="RSS Feed" /></a>
+                                <a href="https://www.facebook.com/miguelgrinbergblog"><img src="../static/facebook.png" alt="Facebook" title="Facebook" /></a>
+                                <a href="https://plus.google.com/u/0/117786742456929977820"><img src="../static/googleplus.png" alt="Google+" title="Google+" /></a>
+                                <a href="http://www.linkedin.com/in/miguelgrinberg"><img src="../static/linkedin.png" alt="LinkedIn" title="LinkedIn" /></a>
+                                <a href="http://github.com/miguelgrinberg"><img src="../static/github.png" alt="GitHub" title="GitHub" /></a>
+                                <a href="https://twitter.com/#!/miguelgrinberg"><img src="../static/twitter.png" alt="Twitter" title="Twitter" /></a>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </nav>
+
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-push-9 sidebar-bg">
+                <div id="sidebar">
+                    
+
+                    
+                    <h1>An Introduction to Flask</h1>
+                    <p>If you are a beginner giving your first steps in web development, my Flask introductory video is for you:</p>
+                    <p><center><a href="http://bit.ly/flaskintro"><img style="border: 1px solid black;" src="../static/flask-intro-cover-tiny.png"></a></center></p>
+                    <p>Visit <a href="http://flaskbook.com/">http://flaskbook.com</a> for information about this and other Flask training products I have created!</p>
+                    
+
+                    <h1>About Miguel</h1>
+                    <img style="float: right; margin: 0px 8px 8px 0px; padding: 4px; border: 1px solid #ccc;" src="../static/miguel.jpg" />
+                    <p>Welcome to my blog!</p>
+                    <p>I'm a software engineer, photographer and filmmaker in Portland, Oregon, USA.</p>
+                    <p>You can also find me on <a href="https://www.facebook.com/miguelgrinbergblog">Facebook</a>, <a href="https://plus.google.com/u/0/117786742456929977820">Google+</a>, <a href="http://www.linkedin.com/in/miguelgrinberg">LinkedIn</a>, <a href="https://github.com/miguelgrinberg">Github</a> and <a href="https://twitter.com/#!/miguelgrinberg">Twitter</a>.</p>
+                    <p>Thank you for visiting!</p>
+
+                    
+
+                    
+                    <h1>Categories</h1>
+<ul>
+
+	<li>
+		<a href="../category/Arduino/feed">
+			<img src="../static/rss-small.png" title="Arduino RSS Feed" label="Arduino RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Arduino.html">Arduino</a></span> (7)
+	</li>
+
+	<li>
+		<a href="../category/Authentication/feed">
+			<img src="../static/rss-small.png" title="Authentication RSS Feed" label="Authentication RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Authentication.html">Authentication</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../category/Blog/feed">
+			<img src="../static/rss-small.png" title="Blog RSS Feed" label="Blog RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Blog.html">Blog</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/C%2b%2b/feed">
+			<img src="../static/rss-small.png" title="C++ RSS Feed" label="C++ RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/C%2b%2b.html">C++</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Cloud/feed">
+			<img src="../static/rss-small.png" title="Cloud RSS Feed" label="Cloud RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Cloud.html">Cloud</a></span> (2)
+	</li>
+
+	<li>
+		<a href="../category/Filmmaking/feed">
+			<img src="../static/rss-small.png" title="Filmmaking RSS Feed" label="Filmmaking RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Filmmaking.html">Filmmaking</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Flask/feed">
+			<img src="../static/rss-small.png" title="Flask RSS Feed" label="Flask RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Flask.html">Flask</a></span> (39)
+	</li>
+
+	<li>
+		<a href="../category/Games/feed">
+			<img src="../static/rss-small.png" title="Games RSS Feed" label="Games RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Games.html">Games</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Gear/feed">
+			<img src="../static/rss-small.png" title="Gear RSS Feed" label="Gear RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Gear.html">Gear</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/HTML5/feed">
+			<img src="../static/rss-small.png" title="HTML5 RSS Feed" label="HTML5 RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/HTML5.html">HTML5</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Heroku/feed">
+			<img src="../static/rss-small.png" title="Heroku RSS Feed" label="Heroku RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Heroku.html">Heroku</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Javascript/feed">
+			<img src="../static/rss-small.png" title="Javascript RSS Feed" label="Javascript RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Javascript.html">Javascript</a></span> (3)
+	</li>
+
+	<li>
+		<a href="../category/Movie%20Reviews/feed">
+			<img src="../static/rss-small.png" title="Movie Reviews RSS Feed" label="Movie Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Movie%20Reviews.html">Movie Reviews</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Netflix/feed">
+			<img src="../static/rss-small.png" title="Netflix RSS Feed" label="Netflix RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Netflix.html">Netflix</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Node.js/feed">
+			<img src="../static/rss-small.png" title="Node.js RSS Feed" label="Node.js RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Node.html">Node.js</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/OpenStack/feed">
+			<img src="../static/rss-small.png" title="OpenStack RSS Feed" label="OpenStack RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/OpenStack.html">OpenStack</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Personal/feed">
+			<img src="../static/rss-small.png" title="Personal RSS Feed" label="Personal RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Personal.html">Personal</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Photography/feed">
+			<img src="../static/rss-small.png" title="Photography RSS Feed" label="Photography RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Photography.html">Photography</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Product%20Reviews/feed">
+			<img src="../static/rss-small.png" title="Product Reviews RSS Feed" label="Product Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Product%20Reviews.html">Product Reviews</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Programming/feed">
+			<img src="../static/rss-small.png" title="Programming RSS Feed" label="Programming RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Programming.html">Programming</a></span> (47)
+	</li>
+
+	<li>
+		<a href="../category/Project%20Management/feed">
+			<img src="../static/rss-small.png" title="Project Management RSS Feed" label="Project Management RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Project%20Management.html">Project Management</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Python/feed">
+			<img src="../static/rss-small.png" title="Python RSS Feed" label="Python RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Python.html">Python</a></span> (43)
+	</li>
+
+	<li>
+		<a href="../category/REST/feed">
+			<img src="../static/rss-small.png" title="REST RSS Feed" label="REST RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/REST.html">REST</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Rackspace/feed">
+			<img src="../static/rss-small.png" title="Rackspace RSS Feed" label="Rackspace RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Rackspace.html">Rackspace</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Raspberry%20Pi/feed">
+			<img src="../static/rss-small.png" title="Raspberry Pi RSS Feed" label="Raspberry Pi RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Raspberry%20Pi.html">Raspberry Pi</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/RhinoSteady/feed">
+			<img src="../static/rss-small.png" title="RhinoSteady RSS Feed" label="RhinoSteady RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/RhinoSteady.html">RhinoSteady</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Robotics/feed">
+			<img src="../static/rss-small.png" title="Robotics RSS Feed" label="Robotics RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Robotics.html">Robotics</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Video/feed">
+			<img src="../static/rss-small.png" title="Video RSS Feed" label="Video RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Video.html">Video</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../category/Windows/feed">
+			<img src="../static/rss-small.png" title="Windows RSS Feed" label="Windows RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Windows.html">Windows</a></span> (1)
+	</li>
+
+</ul>
+                    
+                </div>
+            </div>
+            <div class="col-md-8 col-md-pull-4">
+                <div id="main">
+                    
+                    
+                    
+                    
+                    
+
+<div class="post">
+
+<p class="date"><span class="flask-moment" data-timestamp="2014-01-29T07:53:29Z" data-format="format('LL')" data-refresh="0">2014-01-29T07:53:29Z</span></p>
+<h1 class="post-title"><a href="fun-with-the-arduino-esplora-a-digital-picture-frame.html">Fun With The Arduino Esplora: A Digital Picture Frame</a></h1>
+<div class="posted">Posted by <span class="label label-danger"><a href="http://blog.miguelgrinberg.com/author/Miguel Grinberg">Miguel Grinberg</a></span> under <span class="label label-primary"><a href="../category/Arduino.html">Arduino</a></span>, <span class="label label-primary"><a href="../category/C%2b%2b.html">C++</a></span>. </div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/fun-with-the-arduino-esplora-a-digital-picture-frame" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/fun-with-the-arduino-esplora-a-digital-picture-frame" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="fun-with-the-arduino-esplora-a-digital-picture-frame.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/fun-with-the-arduino-esplora-a-digital-picture-frame" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+<div class="post_body"><p>With this article I kick off my series on the <a href="http://arduino.cc/en/Main/arduinoBoardEsplora">Arduino Esplora</a> board. Today's project is a nice (and cheap!) little digital picture frame that uses the Esplora's <a href="http://arduino.cc/en/Guide/TFT">TFT Screen</a> add-on.</p>
+<p><center><img src="../static/images/arduino-frame-screenshot.jpg"></center></p>
+<h2>Materials Needed</h2>
+<p>In this section you will find the materials that you need to obtain to build this project.</p>
+<h3>Arduino Esplora Board</h3>
+<p>The <a href="http://www.amazon.com/Arduino-Esplora-Board/dp/B00CMCM688?tag=thirdwish-20">Arduino Esplora</a> is the most feature rich of all the Arduino boards. It has the shape of a game controller, which makes it the coolest looking.</p>
+<p><center><a href="http://www.amazon.com/Arduino-Esplora-Board/dp/B00CMCM688?tag=thirdwish-20"><img src="../static/images/arduino-frame-esplora.jpg"></a></center></p>
+<p>The Esplora board includes joystick, directional buttons, slider, RGB LED, temperature sensor. microphone, buzzer and accelerometer, all on-board, so it can work for lots of different projects. A screen is sold separately.</p>
+<p>The official price for this board is currently $59.99 USD. The Chinese electronics stores on Ebay sell clones for much less, but you'll have to wait several weeks for it to arrive.</p>
+<p>Links: <a href="http://www.amazon.com/Arduino-Esplora-Board/dp/B00CMCM688?tag=thirdwish-20" target="_blank">Amazon</a>, <script>document.write('<scr'+'ipt src="http://rover.ebay.com/ar/1/55242/1?lt=9&adtype=3&pubid=5575073920&toolid=10001&campid=5337443235&customid=&uq=Arduino+Esplora&sellerId=&ex_kw=&sortBy=12&catId=&minPrice=&maxPrice=&laction=_blank&ltext=Ebay&n3y=1&v1e=1&u7v=1&a3h=1&def=a3h&ig=1&mpt='+Math.floor(Math.random()*999999999)+'"></scr'+'ipt>');</script><noscript><a target="_blank" href="http://rover.ebay.com/rover/1/711-53200-19255-0/1?icep_ff3=9&amp;pub=5575073920&amp;toolid=10001&amp;campid=5337443235&amp;customid=&amp;icep_uq=Arduino+Esplora&amp;icep_sellerId=&amp;icep_ex_kw=&amp;icep_sortBy=12&amp;icep_catId=&amp;icep_minPrice=&amp;icep_maxPrice=&amp;ipn=psmain&amp;icep_vectorid=229466&amp;kwid=902099&amp;mtid=824&amp;kw=lg">Arduino Esplora on Ebay</a><img style="text-decoration:none;border:0;padding:0;margin:0;" src="../../rover.ebay.com/roverimp/1/711-53200-19255-0/12c87.gif?ff3=9&amp;pub=5575073920&amp;toolid=10001&amp;campid=5337443235&amp;customid=&amp;uq=Arduino+Esplora&amp;mpt=[CACHEBUSTER]"></noscript></p>
+<h3>TFT Screen</h3>
+<p>The second component that you need is the <a href="http://www.amazon.com/Tontec-Display-Interface-MicroSD-Arduino/dp/B00GOJSIYQ?tag=thirdwish-20">Arduino TFT screen</a>. This is a small 160x128 pixel 16-bit color display that plugs into a socket on the Esplora board. This screen also includes a micro-SD card slot that will give the Arduino board the ability to read and write files to SD cards.</p>
+<p><center><a href="http://www.amazon.com/Tontec-Display-Interface-MicroSD-Arduino/dp/B00GOJSIYQ?tag=thirdwish-20"><img src="../static/images/arduino-frame-tft.jpg"></a></center></p>
+<p>The original Arduino brand of this screen costs $25, but it has been out of stock for a while. There are many clones on Amazon and Ebay that sell for the same or lower price.</p>
+<p>Links: <a href="http://www.amazon.com/Tontec-Display-Interface-MicroSD-Arduino/dp/B00GOJSIYQ?tag=thirdwish-20" target="_blank">Amazon</a>, <script>document.write('<scr'+'ipt src="http://rover.ebay.com/ar/1/55242/1?lt=9&adtype=3&pubid=5575073920&toolid=10001&campid=5337443235&customid=&uq=Arduino+1.8+TFT+LCD+screen&sellerId=&ex_kw=&sortBy=12&catId=&minPrice=&maxPrice=&laction=_blank&ltext=Ebay&n3y=1&v1e=1&u7v=1&a3h=1&def=a3h&ig=1&mpt='+Math.floor(Math.random()*999999999)+'"></scr'+'ipt>');</script><noscript><a target="_blank" href="http://rover.ebay.com/rover/1/711-53200-19255-0/1?icep_ff3=9&amp;pub=5575073920&amp;toolid=10001&amp;campid=5337443235&amp;customid=&amp;icep_uq=Arduino+1.8+TFT+LCD+screen&amp;icep_sellerId=&amp;icep_ex_kw=&amp;icep_sortBy=12&amp;icep_catId=&amp;icep_minPrice=&amp;icep_maxPrice=&amp;ipn=psmain&amp;icep_vectorid=229466&amp;kwid=902099&amp;mtid=824&amp;kw=lg">Arduino 1.8 TFT LCD screen on Ebay</a><img style="text-decoration:none;border:0;padding:0;margin:0;" src="../../rover.ebay.com/roverimp/1/711-53200-19255-0/18c74.gif?ff3=9&amp;pub=5575073920&amp;toolid=10001&amp;campid=5337443235&amp;customid=&amp;uq=Arduino+1.8+TFT+LCD+screen&amp;mpt=[CACHEBUSTER]"></noscript></p>
+<p>Note: when you buy the screen make sure it is the kind that plugs into the Arduino Esplora, as there are other very similar screens that have different connectors.</p>
+<h3>Power Cable</h3>
+<p>To power the Arduino Esplora you need a mini-USB cable, the kind that many smartphones use these days to charge:</p>
+<p><center><a href="http://www.amazon.com/AmazonBasics--Male-Mini-B-Cable-Meters/dp/B001TH7GUK?tag=thirdwish-20"><img src="../static/images/arduino-frame-usb.jpg"></a></center></p>
+<p>Links: <a href="http://www.amazon.com/AmazonBasics--Male-Mini-B-Cable-Meters/dp/B001TH7GUK?tag=thirdwish-20" target="_blank">Amazon</a>, <script>document.write('<scr'+'ipt src="http://rover.ebay.com/ar/1/55242/1?lt=9&adtype=3&pubid=5575073920&toolid=10001&campid=5337443235&customid=&uq=mini-USB+cable&sellerId=&ex_kw=&sortBy=12&catId=&minPrice=&maxPrice=&laction=_blank&ltext=Ebay&n3y=1&v1e=1&u7v=1&a3h=1&def=a3h&ig=1&mpt='+Math.floor(Math.random()*999999999)+'"></scr'+'ipt>');</script><noscript><a target="_blank" href="http://rover.ebay.com/rover/1/711-53200-19255-0/1?icep_ff3=9&amp;pub=5575073920&amp;toolid=10001&amp;campid=5337443235&amp;customid=&amp;icep_uq=mini-USB+cable&amp;icep_sellerId=&amp;icep_ex_kw=&amp;icep_sortBy=12&amp;icep_catId=&amp;icep_minPrice=&amp;icep_maxPrice=&amp;ipn=psmain&amp;icep_vectorid=229466&amp;kwid=902099&amp;mtid=824&amp;kw=lg">Ebay</a><img style="text-decoration:none;border:0;padding:0;margin:0;" src="../../rover.ebay.com/roverimp/1/711-53200-19255-0/1bb31.gif?ff3=9&amp;pub=5575073920&amp;toolid=10001&amp;campid=5337443235&amp;customid=&amp;uq=mini-USB+cable&amp;mpt=[CACHEBUSTER]"></noscript></p>
+<h2>Hardware Setup</h2>
+<p>The hardware preparations are really simple. The TFT screen plugs into the front socket of the Arduino Esplora. After you connect it you can power the board by connecting it to your computer using the USB cable.</p>
+<p>If you are using a Windows PC you need to install drivers for your Arduino board. The process is explained in the <a href="http://arduino.cc/en/Guide/windows">Arduino documentation</a>. If you are using Windows 8 there is an additional complication because the Arduino drivers aren't signed by Microsoft and this version of Windows does not accept drivers that are not signed. The process to bypass the signed driver requirement is described in detail <a href="http://www.nextofwindows.com/how-to-install-an-un-signed-3rd-party-driver-in-windows-8">in this page</a>.</p>
+<p>Users of Linux and Mac OS X do not need to install any drivers.</p>
+<h2>Software Installation</h2>
+<p>Now it is time to install the <a href="http://arduino.cc/en/Main/Software">Arduino Software</a>. This software contains the tools to write and upload programs to your Arduino board. Make sure you install version 1.0.5 or newer.</p>
+<p>With the Arduino board connected, launch the Arduino software. In the Tools menu open the Board submenu and make sure you select the Arduino Esplora from the list.</p>
+<p>Then in the Port submenu you have to select the serial port entry that corresponds to your board. On Windows this is going to be something like <code>COM&lt;n&gt;</code>, on Mac OS X <code>/dev/tty.usbmodem&lt;nnn&gt;</code> and on Linux <code>/dev/ttyACM&lt;n&gt;</code>.</p>
+<h2>A First Arduino Program</h2>
+<p>The large white area in the Arduino software is where programs are entered. Type (or copy/paste) the following C++ program there:</p>
+<pre><code>void setup()
+{
+    Serial.begin(9600);
+    pinMode(13, OUTPUT);
+}
+
+void loop()
+{
+    Serial.println("Hello, world!");
+    digitalWrite(13, HIGH);
+    delay(500);
+    digitalWrite(13, LOW);
+    delay(500);
+}
+</code></pre>
+<p>The <code>setup()</code> and <code>loop()</code> blocks are called functions. These two functions are present in all Arduino programs.</p>
+<p>The <code>setup()</code> function contains instructions that initialize the Arduino. In the above example the serial port is initialized to run at 9600 bauds, and pin 13 is initialized as an output pin.</p>
+<p>The <code>loop()</code> function contains the body of the program. This function is called over and over. In the example the function prints the message "Hello, world!" to the serial port, then gives power to pin 13, which on most Arduino boards turns an on-board LED on. The <code>delay()</code> function waits for the number of milliseconds given as argument, in this case half a second. After the delay the LED is turned off by removing power from pin 13, and then another wait of half a second is done. The cycle then repeats.</p>
+<p>To upload and execute this program in your Esplora board press the "Upload" button in the toolbar (second button from the left).</p>
+<p>The text written to the serial port is sent over the USB cable to your computer. You can view it by opening the Serial Monitor, the button at the far right of the toolbar. If you don't see the greeting printing once per second then make sure the baud selection in the Serial Monitor is set to 9600 to match the program.</p>
+<h2>Controlling the Screen</h2>
+<p>The TFT screen is controlled with the help of the TFT and SPI libraries that come with the Arduino software. Libraries contain utility functions that are generic and can be used by many programs. </p>
+<p>The following Arduino program makes the screen alternate colors between black and white:</p>
+<pre><code>#include &lt;TFT.h&gt;
+#include &lt;SPI.h&gt;
+
+bool black = false;
+
+void setup()
+{
+    EsploraTFT.begin();
+}
+
+void loop()
+{
+    if (black) {
+        EsploraTFT.background(255, 255, 255);
+        black = false;
+    }
+    else {
+        EsploraTFT.background(0, 0, 0);
+        black = true;
+    }
+    delay(1000);
+}
+</code></pre>
+<p>The <code>#include</code> statements at the start of the program import the two libraries that are required to control the screen.</p>
+<p>The <code>EsploraTFT</code> object represents the screen. In the <code>setup()</code> function its <code>begin()</code> method is invoked to initialize the display. Then in <code>loop()</code> the <code>background()</code> method is called to change the color. The three arguments to <code>background()</code> are the red, green, blue components of the color, each a value from 0 to 255. The <code>black</code> variable declared near the top is used to alternate the colors each time <code>loop()</code> executes.</p>
+<p>For this project images will be displayed on the screen. To have the most flexibility I have decided to write my own image drawing function, so the individual pixels need to be set one by one to the correct color, using the <code>drawPixel()</code> method. As an introductory example to pixel drawing, the following Arduino program draws a horizontal red line in the middle of the screen:</p>
+<pre><code>#include &lt;TFT.h&gt;
+#include &lt;SPI.h&gt;
+
+void setup()
+{
+    EsploraTFT.begin();
+    EsploraTFT.background(0, 0, 0);
+}
+
+void loop()
+{
+    int width = EsploraTFT.width();
+    int height = EsploraTFT.height();
+
+    int row = height / 2;
+
+    for (int col = 0; col &lt; width; col++)
+        EsploraTFT.drawPixel(col, row, 0x00F8);
+}
+</code></pre>
+<p>This program sets the background color of the screen in the <code>setup()</code> function. In <code>loop()</code> it obtains the dimensions of the screen in pixels and then uses a for-loop to draw the line of pixels.</p>
+<p>The <code>drawPixel()</code> method takes three arguments. The first two are the column and row for the pixel to draw. The third argument is the color, which for this method is not given as three numbers for red, green and blue. Instead, the color is given as a single number in the internal 16-bit representation of the screen. The red and blue channels use 5 bits each, while the green channel uses 6 bits. The representation is as follows:</p>
+<p><center><img src="../static/images/arduino-frame-16bit-color.png"></center></p>
+<p>For example, the color red, which is represented in 24-bit RGB notation as red=255, green=0 and blue=0 is represented as the 16-bit binary number <code>0000 0000 1111 1000</code>, or <code>0x00F8</code> in hexadecimal. A 50% red color would be <code>0000 0000 1000 0000</code>, or <code>0x0080</code>.</p>
+<p>If this seems like an arbitrary representation consider that the Arduino has a little-endian CPU, so the two bytes are reversed when stored in memory. And now the five red bits appear first, followed by the six green bits and then the five blue bits.</p>
+<h2>Image Processing with Python</h2>
+<p>If you search for other picture slideshows for the Arduino you will find that most, if not all, read the images in BMP format from a memory card installed in the SD slot in the back of the LCD screen. This requires you to convert the images, which you probably have as high resolution JPGs to 160x128 BMPs.</p>
+<p>For this project I've decided to take a completely different approach. Instead of using the SD card as storage I take advantage of the serial connection between the Arduino and the computer. The Esplora acts as a server, it waits for the computer to send pictures to display over the serial port.</p>
+<p>The following Python script runs on the computer connected to the Arduino and accomplishes the task of loading an image, scaling it to 160x128 while preserving the aspect ratio and finally sending it one pixel at a time over the serial port:</p>
+<pre><code>from serial import Serial
+from PIL import Image
+
+def upload_image(filename, screen_size, serial):
+    img = Image.open(filename)
+    img.thumbnail(screen_size, Image.ANTIALIAS)
+    img_data = img.getdata()
+
+    # center image on display
+    top_margin = (screen_size[1] - img.size[1]) / 2
+    bottom_margin = screen_size[1] - img.size[1] - top_margin
+    left_margin = (screen_size[0] - img.size[0]) / 2
+    right_margin = screen_size[0] - img.size[0] - left_margin
+
+    # send image data over serial port
+    serial.write('I')
+    for row in range(top_margin):
+        for col in range(screen_size[0]):
+            serial.write('\x00\x00')
+    i = 0
+    for row in range(img.size[1]):
+        for col in range(left_margin):
+            serial.write('\x00\x00')
+        for col in range(img.size[0]):
+            red = img_data[i][0] &gt;&gt; 3
+            green = img_data[i][1] &gt;&gt; 2
+            blue = img_data[i][2] &gt;&gt; 3
+            serial.write('%c%c' % ((((green &amp; 0x03) &lt;&lt; 5) | red), (blue &lt;&lt; 3) | (green &gt;&gt; 3)))
+            i = i + 1
+        for col in range(left_margin):
+            serial.write('\x00\x00')
+    for row in range(bottom_margin):
+        for col in range(screen_size[0]):
+            serial.write('\x00\x00')
+
+serial = Serial('/dev/ttyACM0') # &lt;--- enter your own serial port here
+upload_image('santi.jpg', (160, 128), serial) # &lt;--- enter a path to a jpg image here
+</code></pre>
+<p>To run this program you need a Python interpreter and the <code>pyserial</code> and <code>pillow</code> packages. If you have <code>pip</code> installed on your system then you can install these packages as follows:</p>
+<pre><code>$ pip install pyserial pillow
+</code></pre>
+<p>Some Python distributions come with <code>easy_install</code> instead:</p>
+<pre><code>$ easy_install pyserial pillow
+</code></pre>
+<p>The <code>upload_image</code> function opens the image file given as the first argument and scales it down to the dimensions of the screen, given as a second argument. This is all done using the <code>Image</code> class from <code>pillow</code>. The <code>img_data</code> variable holds an array of pixels for the resized image, which each pixel represented by a 3-element tuple.</p>
+<p>The resized image may not fit exactly in the screen due to its aspect ratio, so the function then computes the margins to center the image.</p>
+<p>Finally, the function converts each pixel to the 16-bit format used by the Arduino TFT screen and sends each as two bytes over the serial connection, given as third argument to the function.</p>
+<p>The character <code>I</code> is sent before the image data, to inform the Esplora that an image is coming. It is always a good idea to leave room for expansion in any communication protocol, so by adding a one byte prefix new commands can be added later.</p>
+<p>The data sent over the serial port matches exactly the size of the screen, so the margins that were calculated before are used to generate black pixels that complete the picture.</p>
+<p>Copy/paste the script above and write it as file <code>upload_img.py</code>, as you will be able to use it soon.</p>
+<h2>Receiving and Displaying Images</h2>
+<p>The Arduino program that receives and displays images sent by the Python script is shown below:</p>
+<pre><code>#include &lt;TFT.h&gt;
+#include &lt;SPI.h&gt;
+
+unsigned short *line = 0;
+
+void setup()
+{
+    EsploraTFT.begin();
+    EsploraTFT.background(0,0,0);
+    Serial.begin(115200);
+    line = new unsigned short[EsploraTFT.width()];
+}
+
+void loop() {
+    if (Serial.available() &gt; 0) {
+        char cmd = Serial.read();
+        switch (cmd) {
+        case 'I': // image
+           for (int row = 0; row &lt; EsploraTFT.height(); row++) {
+                bytes = EsploraTFT.width() * 2;
+                char* p = (char*)line;
+                while (bytes &gt; 0) {
+                    int n = Serial.readBytes(p, bytes);
+                    if (n == 0) {
+                        // timeout
+                        return;
+                    }
+                    p += n;
+                    bytes -= n;
+                }
+                for (int col = 0; col &lt; EsploraTFT.width(); col++)
+                    EsploraTFT.drawPixel(col, row, line[col]);
+            }
+        }
+    }
+}
+</code></pre>
+<p>This program initializes the screen with black background and sets the speed of the serial port at the maximum, which is 115200 bps. A buffer that is big enough to hold an entire line is also allocated during initialization.</p>
+<p>In <code>loop()</code> the program waits until the is serial data available, and then reads one byte. If it is the <code>I</code> byte then it gets into a for-loop that iterates over all the rows in the image. For each row it reads the entire line of 16-bit pixels into a buffer. Once the entire line is stored an inner loop that iterates on the columns draws the pixels using <code>drawPixel()</code>.</p>
+<p>Why read all the pixels in a row before drawing them? Because it is more efficient to issue large reads. Reading pixels one by one and drawing them is slower because the cost of issuing a read does not scale directly to the size of the read, each read has a fixed cost associated with it, so the least amount of reads the more efficient the program will be.</p>
+<p>Why read a line using a while loop? Because the serial port in the Arduino has a buffer of only 64 bytes, so a single read would never return more than that amount. An entire line has 160 pixels, which at 2 bytes per pixel make it a 320 byte buffer.</p>
+<p>Copy/paste the above program into the Arduino software and upload it to your Esplora. Once the screen turns black the board is waiting for images sent from the computer.</p>
+<p>Now you can run the Python script to send an image over, but first make sure you edit the bottom two lines to use the correct serial port number for your board and the path to a JPG image that you want to use:</p>
+<pre><code> $ python upload_img.py
+</code></pre>
+<p>And voila! You should now be seeing the image displayed on the Esplora screen.</p>
+<h2>Some Improvements</h2>
+<p>I have a more robust version of the code presented above in a GitHub project:</p>
+<ul>
+<li><a href="https://github.com/miguelgrinberg/arduino-digital-picture-frame">View the project on GitHub</a>.</li>
+<li><a href="https://codeload.github.com/miguelgrinberg/arduino-digital-picture-frame/zip/master">Download the project as a zip file</a>.</li>
+</ul>
+<p>The Arduino side is called <code>server.ino</code>, and has been expanded to also support other Arduino boards besides the Esplora. </p>
+<p>If you connect the LCD screen to a different Arduino then you can run this program by removing the <code>IS_ESPLORA</code> definition at the top and setting the correct pin constants where the <code>TFT</code> object is initialized.</p>
+<p>If you recall, images are prepended with an <code>I</code> character in the serial communication. This version of the Arduino program accepts a second command, prefixed with the letter <code>C</code> for "connect". When the client sends this command the Arduino responds by writing the width and height of the screen to the serial port. This is useful to make the client software independent of the hardware. If one day you install a larger screen then the client will not need to change, since the picture dimensions are discovered from the communication with the device.</p>
+<p>The Python script, called <code>client.py</code> is given a folder in the command line arguments. During start up the script searches the folder and all its sub-folders for jpeg pictures. Random images found in this folder are uploaded periodically to the Arduino board, making it into a slideshow.</p>
+<p>The supported command line arguments are shown below:</p>
+<pre><code>$ ./client.py  --help
+usage: client.py [-h] --port PORT [--folder FOLDER] [--interval INTERVAL]
+
+Send pictures to the Arduino based digital picture frame.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --port PORT, -P PORT  serial port number, starting from zero.
+  --folder FOLDER, -f FOLDER
+                        picture folder (default: current directory).
+  --interval INTERVAL, -i INTERVAL
+                        interval between pictures (default: 10 seconds).
+  --baudrate BPS, -b BPS
+                        serial port baud rate (default: 115200 seconds).
+</code></pre>
+<p>Below is a screenshot of the TFT screen connected to an Arduino Uno. </p>
+<p><center><img src="../static/images/arduino-frame-screenshot2.jpg"></center></p>
+<p>Note that the Uno is a bit slower than the Esplora, so I had to lower the baud rate to give it enough time to process the pixels. Another inconvenience is that many of the Arduinos (including the Uno) do a reset each time a serial connection is started or ended, and for this reason the first image is displayed after a delay that gives the board time to start up.</p>
+<h2>Conclusion</h2>
+<p>I hope you have found this tutorial interesting. If you have any questions or suggestions please let me know below in the comments. </p>
+<p>As I said earlier, the Arduino Esplora has a lot of potential for doing cool projects. Stay tuned for more!</p>
+<p>Miguel</p></div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/fun-with-the-arduino-esplora-a-digital-picture-frame" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/fun-with-the-arduino-esplora-a-digital-picture-frame" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="fun-with-the-arduino-esplora-a-digital-picture-frame.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/fun-with-the-arduino-esplora-a-digital-picture-frame" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+
+
+<h4 style="text-align: right"><a name="comments"></a>8 comments</h4>
+
+
+<div class="comment">
+    <ul>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/bd9874111256bf459d8d6c457c7e1bfbce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#1</span> <span class="label label-primary">Amine</span> said
+                    <span class="flask-moment" data-timestamp="2014-04-27T23:31:44Z" data-format="fromNow(0)" data-refresh="0">2014-04-27T23:31:44Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">good work :) </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/0fee007ffafde80ec788917345e69c36ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#2</span> <span class="label label-primary">Omari Kevine</span> said
+                    <span class="flask-moment" data-timestamp="2014-05-19T06:20:29Z" data-format="fromNow(0)" data-refresh="0">2014-05-19T06:20:29Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Good stuff!! </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/0890c0242bf6461dec1d54df297f5d7dce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#3</span> <span class="label label-primary">Markus</span> said
+                    <span class="flask-moment" data-timestamp="2014-07-21T19:21:15Z" data-format="fromNow(0)" data-refresh="0">2014-07-21T19:21:15Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi, very interesting blog! Could you give me a short example for how to send only text to the client TFT.
+Many thanks!
+Regards
+Markus</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#4</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-07-22T04:11:05Z" data-format="fromNow(0)" data-refresh="0">2014-07-22T04:11:05Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Markus: there is a function in the Arduino TFT library to write text: http://arduino.cc/en/Reference/TFTText</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/94245325b9e10e7dba3ad8ae97d88951ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#5</span> <span class="label label-primary">monkeyman</span> said
+                    <span class="flask-moment" data-timestamp="2015-01-01T01:36:12Z" data-format="fromNow(0)" data-refresh="0">2015-01-01T01:36:12Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Can you write a book on how to write code and games for the explora, for kids. I would be the first to buy it 
+Please show us more.
+
+thanks</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/c179d7ced1237579280417a0e3ce50cace2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#6</span> <span class="label label-primary">Christina</span> said
+                    <span class="flask-moment" data-timestamp="2015-04-11T23:13:55Z" data-format="fromNow(0)" data-refresh="0">2015-04-11T23:13:55Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi,
+
+I am electrical engineer student. For the final test in one of my classes I have to build and program a robot. I chose a spider robot and I am using Arduino Uno as the language to program it. The problem I have is that the legs of the spider twitch but the spider does not move. Can you give me a hint what could be wrong with it and how I can fix it?
+
+Thanks</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#7</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2015-04-14T17:19:42Z" data-format="fromNow(0)" data-refresh="0">2015-04-14T17:19:42Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Christina: unfortunately I can&#39;t. I recommend that you find someone that can look at your project and your code to give you advice.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/84e9b5983046fbc708cc8846d9304fc2ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#8</span> <span class="label label-primary">Alina</span> said
+                    <span class="flask-moment" data-timestamp="2015-05-07T20:45:15Z" data-format="fromNow(0)" data-refresh="0">2015-05-07T20:45:15Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi! My name is Alina and I&#39;m new with Arduino:D So I might need some help to do this project you described here for my class. I brought an arduino uno from aliexpress.com, and I saw the picture where you connect the display with an arduino uno, too , and you made it work... I had an LCD, but it doesn&#39;t suport any library. So, first of all, can you say what display did you use? And second, can you send me you code for arduino? I really need help, so please help me :D Thanks
+PS: you cand send me a email to alina-iordache@outlook.com</p>
+                </div>
+            </div>
+        </li>
+        
+    </ul>
+</div>
+
+<div class="page">
+<ul class="pager">
+  <li class="previous disabled">
+    <a href="#">&laquo;&laquo;</a>
+  </li>
+  <li class="previous disabled">
+    <a href="#">&laquo;</a>
+  </li>
+  <li class="next disabled">
+    <a href="#">&raquo;&raquo;</a>
+  </li>
+  <li class="next disabled">
+    <a href="#">&raquo;</a>
+  </li>
+</ul>
+</div>
+
+<h3><a name="commentform"></a>Leave a Comment</h3>
+
+<form action="#commentform" method="post"
+  class="form" role="form">
+  <div style="display:none;"><input id="csrf_token" name="csrf_token" type="hidden" value="1439536701.59##4da6000e0301ca3552e03e6b3dff459495b7c6bb"></div>
+  
+    
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="name">Name</label>
+        <input class="form-control" id="name" name="name" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="url">URL</label>
+        <input class="form-control" id="url" name="url" type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="email">Email</label>
+        <input class="form-control" id="email" name="email" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="comment">Comment</label>
+        <textarea class="form-control" id="comment" name="comment" required></textarea>
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="captcha">Captcha</label>
+        
+<script type="text/javascript">var RecaptchaOptions = {"custom_translations": {"audio_challenge": "Get an audio challenge", "cant_hear_this": "Download sound as MP3", "help_btn": "Help", "image_alt_text": "reCAPTCHA challenge image", "incorrect_try_again": "Incorrect. Try again.", "instructions_audio": "Type what you hear", "instructions_visual": "Type the text", "play_again": "Play sound again", "privacy_and_terms": "Privacy & Terms", "refresh_btn": "Get a new challenge", "visual_challenge": "Get a visual challenge"}, "theme": "white"};</script>
+<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S"></script>
+<noscript>
+  <iframe src="http://www.google.com/recaptcha/api/noscript?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S" height="300" width="500" frameborder="0"></iframe><br>
+  <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+  <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
+</noscript>
+
+  </div>
+
+
+    
+
+
+
+
+
+  
+
+
+    <input class="btn btn-default" id="submit" name="submit" type="submit" value="Submit">
+  
+
+
+
+
+
+</form>
+
+
+</div>
+
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <p class="elapsed">This page was generated in None seconds.</p>
+            <p>&copy; 2014 by Miguel Grinberg. All rights reserved. <a href="mailto:webmaster _at_ miguelgrinberg _dot_ com">Questions?</a></p>
+        </div>
+    </div>
+
+
+    
+    
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.33/jquery.colorbox-min.js"></script>
+    <script type="text/javascript" src="../static/prettify.js"></script>
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment-with-langs.min.js"></script>
+<script>
+function flask_moment_render(elem) {
+    $(elem).text(eval('moment("' + $(elem).data('timestamp') + '").' + $(elem).data('format') + ';'));
+    $(elem).removeClass('flask-moment');
+}
+function flask_moment_render_all() {
+    $('.flask-moment').each(function() {
+        flask_moment_render(this);
+        if ($(this).data('refresh')) {
+            (function(elem, interval) { setInterval(function() { flask_moment_render(elem) }, interval); })(this, $(this).data('refresh'));
+        }
+    })
+}
+$(document).ready(function() {
+    flask_moment_render_all();
+});
+</script>
+    
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4777284-15']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".gallery").colorbox({rel:".gallery",maxWidth:"95%",maxHeight:"95%",scalePhotos:true});
+            // add prettyprint class to all <pre><code></code></pre> blocks
+            var prettify = false;
+            $("pre code").parent().each(function() {
+                $(this).addClass('prettyprint');
+                prettify = true;
+            });
+            prettyPrint();
+        });
+    </script>
+
+
+  </body>
+
+<!-- Mirrored from blog.miguelgrinberg.com/post/fun-with-the-arduino-esplora-a-digital-picture-frame by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:39:58 GMT -->
+</html>

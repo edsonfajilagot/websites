@@ -1,0 +1,407 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from www.python-course.eu/text_classification_python.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:07:00 GMT -->
+<head>
+
+<!-- Dieses Tag in den Head-Bereich oder direkt vor dem schlieÃŸenden Body-Tag einfÃ¼gen -->
+<script type="text/javascript" src="../apis.google.com/js/plusone.js"></script>
+
+
+
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "../connect.facebook.net/en_GB/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script><title>Python Advanced: Text Classification in Python</title>
+<meta http-equiv="content-type" content="text/html; charset="ISO-8859-1">
+<meta name="Description" content="Text Classification in Python Using Naive Bayes in the Python Implementation." />
+<meta name="Keywords" content="Python, Text, classification, naive bayes, bag of words, classifier, classify, text documents" />
+
+<link href="favicon.ico" rel="shortcut icon">
+
+<link href="moderna.css" rel="stylesheet" type="text/css" />
+<link href="moderna_print.css" media="print" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+<div id="container">
+
+<div id="banner">
+<!-- <a href="impressum.php">Impressum</a> | <a href="mailto:">contact</a> | --><h1>Python Course</h1>
+
+</div>
+
+	<!-- Begin Top Menu -->
+<ul id="navlist">
+<li><a href="index-2.html" >Home</a></li><li><a href="course.html" >Python 2 Tutorial</a></li><li><a href="python3_course.html" >Python 3 Tutorial</a></li><li class="active"><a id="current" href="advanced_topics.html" >Advanced Topics</a></li><li><a href="python_books.html" >Python Books</a></li><li><a href="python_tkinter.html" >Tkinter Tutorial</a></li><li><a href="contact.html" rel="nofollow">Contact</a></li>                          
+</ul>
+	<!-- End Top Menu -->
+<div id="sidebar-a">
+<img class="border" src="images/python_eye.png" alt="box" />    <h2>Advanced Topics</h2>
+
+<div class="menu">
+
+<ul>
+<li><a href="sys_module.html">Introduction into the sys module</a></li><li><a href="os_module_shell.html">Python and the Shell</a></li><li><a href="forking.html">Forks and Forking in Python</a></li><li><a href="threads.html">Introduction into Threads</a></li><li><a href="pipes.html">Pipe, Pipes and "99 Bottles of Beer"</a></li><li><a href="graphs_python.html">Graph Theory and Graphs in Python"</a></li><li><a href="pygraph.html">Graphs: PyGraph"</a></li><li><a href="networkx.html">Graphs: NetworkX"</a></li><li><a href="finite_state_machine.html">Finite State Machine in Python</a></li><li><a href="turing_machine.html">Turing Machine in Python</a></li><li><a href="numpy.html">NumPy Module</a></li><li><a href="matrix_arithmetic.html">Matrix Arithmetic</a></li><li><a href="linear_combinations.html">Linear Combinations</a></li><li><a href="text_classification_introduction.html">Introduction into Text Classification using Naive Bayes</a></li><li><a href="text_classification_python.html">Python Implementation of Text Classification</a></li><li><a href="towers_of_hanoi.html">Example for recursive Programming: Towers of Hanoi</a></li><li><a href="mastermind.html">Mastermind / Bulls and Cows</a></li><li><a href="dynamic_websites_wsgi.html">Creating dynamic websites with WSGI</a></li><li><a href="dynamic_websites.html">Dynamic websites with mod_python</a></li><li><a href="pylons.html">Dynamic websites with Pylons</a></li><li><a href="sql_python.html">Python, SQL, MySQL and SQLite</a></li><li><a href="python_scores.html">Python Scores</a></li></ul>
+
+</div>
+
+<p>
+<h3>Text Processing and Python</h3>
+
+What is text processing? Generally speaking it means taking some form of textual information and working on
+it, i.e. extracting, changing or adding information. Programmes and system administrators use text processing,
+when working with log files, configuration files, access files and so on.
+<br><br>
+Python is well suited for text processing.
+<br>
+<hr>
+This website is created by:<br><br>
+<a href="http://www.python-training-courses.com/"><img style="width: 150px;" alt="Python Training Courses"
+		     src="images/toronto_building.jpg"><br><br>Python Training Courses in Toronto, Canada</a>
+<br>
+On site trainings in Europe, Canada and the US.
+<br>
+<hr>
+<hr>
+We also like to thank Denise Mitchinson for providing the stylesheet of this website.<br> 
+</div><div id="sidebar-b"><img style="width: 150px;" alt="Python-Logo"
+		     src="images/python-logo.png"><!-- Dieses Tag dort einfügen, wo die +1-Schaltfläche dargestellt werden soll -->
+<g:plusone></g:plusone>
+<br><br>
+
+<div class="fb-like" data-href="www.python-course.eu" data-send="false" data-layout="button_count" 
+data-width="130" data-show-faces="true" data-action="recommend"></div>
+
+<br><br>
+This topic in German / Deutsche Übersetzung:
+    <a href="http://www.python-kurs.eu/text_klassifikation_python.php">Text-Klassifikation in Python</a><h3>Python Courses</h3>
+<p>
+This example is taken from the Python course 
+<a href="http://www.bodenseo.com/courses.php?topic=Python">
+<img class="imgright" src="images/radolfzell_segel_bodenseo_logo.jpg" alt="Bodenseo logo" />
+<br>"Python Text Processing Course"</a> by Bodenseo.
+<br><br>
+<h3>Text Classification</h3>
+Though the automated classification (categorization) of texts has been flourishing 
+in the last decade or so, it has a history, which dates back to about 1960. The incredible 
+increase in online documents, which has been mostly due to the expanding internet, has 
+renewed the interst in automated document classification and data mining. While text 
+classification in the beginning was based mainly on heuristic methods, i.e. applying 
+a set of rules based on expert knowledge, nowadays the focus has turned to fully 
+automatic learning and even clustering methods. 
+<br>
+from:
+<a href="http://www.bklein.de/text_classification.php">Text Classification at Bernd Klein.</a>
+ </p>
+
+</p></div>
+<div id="content">
+
+<div id="contextlinks">Previous Chapter: <a href="text_classification_introduction.html">Introduction into Text Classification using Naive Bayes</a><br>
+<LINK rel="prev" href="text_classification_introduction.html">Next Chapter: <a href="towers_of_hanoi.html">Example for recursive Programming: Towers of Hanoi</a><br>
+<LINK rel="next" href="towers_of_hanoi.html"></div><h2>Text Classification in Python</h2>
+<h3>Introduction</h3>
+<img class="imgright" src="images/bag_of_words.png" alt="Base of Text Classification: Bag of Words" />
+In the previous chapter, we have deduced the formula for calculating the probability that a document d belongs
+to a category or class c, denoted as P(c|d).
+<br><br>
+We have transformed the standard formular for P(c|d), as it is used in many treatises<sup>1</sup>, into a numerically
+stable form.
+<br><br>
+We use a Naive Bayes classifier for our implementation in Python. The formal introduction into the Naive Bayes 
+approach can be found in our previous chapter.
+<br><br>
+Python is ideal for text classification, because of it's strong string class with powerful methods. Furthermore
+the regular expression module re of Python provides the user with tools, which are way beyond other programming
+languages.
+<br><br>
+The only downside might be, that this Python implementation is not tuned for efficiency. 
+<br><br>
+<h3>The Python Implementation</h3>
+Warning: The implemenatiation is in Python 3 and it is not compatible to Python 2.x!
+<h4>Document Representation</h4>
+The document representation, which is based on the bag of word model, is illustrated in the following diagram:
+<br><br>
+<img class="img" src="images/document_representation.png" alt="Document Representation" />
+<br><br>
+<h4>Imports Needed</h4>
+Our implementation needs the regular expression module re and the os module:
+<pre>
+import re, os
+</pre>
+<h4>BagOfWords Class</h4>
+<pre>
+class BagOfWords(object):
+    """ Implementing a bag of words, words corresponding with their frequency of usages in a "document"
+    for usage by the Document class, DocumentClass class and the Pool class."""
+    
+    def __init__(self):
+        self.__number_of_words = 0
+        self.__bag_of_words = {}
+        
+    def __add__(self,other):
+        """ Overloading of the "+" operator to join two BagOfWords """
+        erg = BagOfWords()
+        sum = erg.__bag_of_words
+        for key in self.__bag_of_words:
+            sum[key] = self.__bag_of_words[key]
+            if key in other.__bag_of_words:
+                sum[key] += other.__bag_of_words[key]
+        for key in other.__bag_of_words:
+            if key not in sum:
+                sum[key] = other.__bag_of_words[key]
+        return erg
+        
+    def add_word(self,word):
+        """ A word is added in the dictionary __bag_of_words"""
+        self.__number_of_words += 1
+        if word in self.__bag_of_words:
+            self.__bag_of_words[word] += 1
+        else:
+            self.__bag_of_words[word] = 1
+    
+    def len(self):
+        """ Returning the number of different words of an object """
+        return len(self.__bag_of_words)
+    
+    def Words(self):
+        """ Returning a list of the words contained in the object """
+        return self.__bag_of_words.keys()
+    
+        
+    def BagOfWords(self):
+        """ Returning the dictionary, containing the words (keys) with their frequency (values)"""
+        return self.__bag_of_words
+        
+    def WordFreq(self,word):
+        """ Returning the frequency of a word """
+        if word in self.__bag_of_words:
+            return self.__bag_of_words[word]
+        else:
+            return 0
+</pre>
+
+<h4>The Document Class</h4>
+<pre>
+class Document(object):
+    """ Used both for learning (training) documents and for testing documents. The optional parameter lear
+    has to be set to True, if a classificator should be trained. If it is a test document learn has to be set to False. """
+    _vocabulary = BagOfWords()
+ 
+    def __init__(self, vocabulary):
+        self.__name = ""
+        self.__document_class = None
+        self._words_and_freq = BagOfWords()
+        Document._vocabulary = vocabulary
+    
+    def read_document(self,filename, learn=False):
+        """ A document is read. It is assumed, that the document is either encoded in utf-8 or in iso-8859... (latin-1).
+        The words of the document are stored in a Bag of Words, i.e. self._words_and_freq = BagOfWords() """
+        try:
+            text = open(filename,"r", encoding='utf-8').read()
+        except UnicodeDecodeError:
+            text = open(filename,"r", encoding='latin-1').read()
+        text = text.lower()
+        words = re.split("[^\wäöüÄÖÜß]*",text)
+
+        self._number_of_words = 0
+        for word in words:
+            self._words_and_freq.add_word(word)
+            if learn:
+                Document._vocabulary.add_word(word)
+
+
+    def __add__(self,other):
+        """ Overloading the "+" operator. Adding two documents consists in adding the BagOfWords of the Documents """
+        res = Document(Document._vocabulary)
+        res._words_and_freq = self._words_and_freq + other._words_and_freq    
+        return res
+    
+    def vocabulary_length(self):
+        """ Returning the length of the vocabulary """
+        return len(Document._vocabulary)
+                
+    def WordsAndFreq(self):
+        """ Returning the dictionary, containing the words (keys) with their frequency (values) as contained
+        in the BagOfWords attribute of the document"""
+        return self._words_and_freq.BagOfWords()
+        
+    def Words(self):
+        """ Returning the words of the Document object """
+        d =  self._words_and_freq.BagOfWords()
+        return d.keys()
+    
+    def WordFreq(self,word):
+        """ Returning the number of times the word "word" appeared in the document """
+        bow =  self._words_and_freq.BagOfWords()
+        if word in bow:
+            return bow[word]
+        else:
+            return 0
+                
+    def __and__(self, other):
+        """ Intersection of two documents. A list of words occuring in both documents is returned """
+        intersection = []
+        words1 = self.Words()
+        for word in other.Words():
+            if word in words1:
+                intersection += [word]
+        return intersection
+</pre>
+
+<h4>The DocumentClass Class</h4>
+The class DocumentClass is the class for our Document categories. It's inheriting from our Document class.
+<pre>
+class DocumentClass(Document):
+    def __init__(self, vocabulary):
+        Document.__init__(self, vocabulary)
+        self._number_of_docs = 0
+
+    def Probability(self,word):
+        """ returns the probabilty of the word "word" given the class "self" """
+        voc_len = Document._vocabulary.len()
+        SumN = 0
+        for i in range(voc_len):
+            SumN = DocumentClass._vocabulary.WordFreq(word)
+        N = self._words_and_freq.WordFreq(word)
+        erg = 1 + N
+        erg /= voc_len + SumN
+        return erg
+
+    def __add__(self,other):
+        """ Overloading the "+" operator. Adding two DocumentClass objects consists in adding the 
+        BagOfWords of the DocumentClass objectss """
+        res = DocumentClass(self._vocabulary)
+        res._words_and_freq = self._words_and_freq + other._words_and_freq 
+ 
+        return res
+
+    def SetNumberOfDocs(self, number):
+        self._number_of_docs = number
+    
+    def NumberOfDocuments(self):
+        return self._number_of_docs
+</pre>
+<h4>The Pool class</h4>
+The pool is the class, where the document classes are learnt and kept:
+<pre>
+class Pool(object):
+    def __init__(self):
+        self.__document_classes = {}
+        self.__vocabulary = BagOfWords()
+            
+    def sum_words_in_class(self, dclass):
+        """ The number of times all different words of a dclass appear in a class """
+        sum = 0
+        for word in self.__vocabulary.Words():
+            WaF = self.__document_classes[dclass].WordsAndFreq()
+            if word in WaF:
+                sum +=  WaF[word]
+        return sum
+    
+    def learn(self, directory, dclass_name):
+        """ directory is a path, where the files of the class with the name dclass_name can be found """
+        x = DocumentClass(self.__vocabulary)
+        dir = os.listdir(directory)
+        for file in dir:
+            d = Document(self.__vocabulary)
+            print(directory + "/" + file)
+            d.read_document(directory + "/" +  file, learn = True)
+            x = x + d
+        self.__document_classes[dclass_name] = x
+        x.SetNumberOfDocs(len(dir))
+
+    
+    def Probability(self, doc, dclass = ""):
+        """Calculates the probability for a class dclass given a document doc"""
+        if dclass:
+            sum_dclass = self.sum_words_in_class(dclass)
+            prob = 0
+        
+            d = Document(self.__vocabulary)
+            d.read_document(doc)
+
+            for j in self.__document_classes:
+                sum_j = self.sum_words_in_class(j)
+                prod = 1
+                for i in d.Words():
+                    wf_dclass = 1 + self.__document_classes[dclass].WordFreq(i)
+                    wf = 1 + self.__document_classes[j].WordFreq(i)
+                    r = wf * sum_dclass / (wf_dclass * sum_j)
+                    prod *= r
+                prob += prod * self.__document_classes[j].NumberOfDocuments() / self.__document_classes[dclass].NumberOfDocuments()
+            if prob != 0:
+                return 1 / prob
+            else:
+                return -1
+        else:
+            prob_list = []
+            for dclass in self.__document_classes:
+                prob = self.Probability(doc, dclass)
+                prob_list.append([dclass,prob])
+            prob_list.sort(key = lambda x: x[1], reverse = True)
+            return prob_list
+
+    def DocumentIntersectionWithClasses(self, doc_name):
+        res = [doc_name]
+        for dc in self.__document_classes:
+            d = Document(self.__vocabulary)
+            d.read_document(doc_name, learn=False)
+            o = self.__document_classes[dc] &  d
+            intersection_ratio = len(o) / len(d.Words())
+            res += (dc, intersection_ratio)
+        return res
+</pre>
+<h4>Using the Classifier</h4>
+To be able to learn and test a classifier, wie offer a  
+<a href="learn_and_test.tbz2">"Learn and test set to Download"</a>.
+The learn and test sets contain (old) jokes labelled in six categories:
+"clinton",  "lawyer",  "math",  "medical",  "music",  "sex".
+
+<pre>
+from NaiveBayes import  Pool
+import os
+
+DClasses = ["clinton",  "lawyer",  "math",  "medical",  "music",  "sex"]
+
+base = "../learn/"
+p = Pool()
+for i in DClasses:
+    p.learn(base + i, i)
+
+
+
+base = "../test/"
+for i in DClasses:
+    dir = os.listdir(base + i)
+    for file in dir:
+        res = p.Probability(base + i + "/" + file)
+        print(i + ": " + file + ": " + str(res))
+</pre>
+<br><br>
+<hr>
+Footnotes:
+<br>
+<sup>1</sup> Please see our "Further Reading" section of our previous chapter
+<br><br>
+</div>
+<div id="contextlinks">Previous Chapter: <a href="text_classification_introduction.html">Introduction into Text Classification using Naive Bayes</a><br>
+<LINK rel="prev" href="text_classification_introduction.html">Next Chapter: <a href="towers_of_hanoi.html">Example for recursive Programming: Towers of Hanoi</a><br>
+<LINK rel="next" href="towers_of_hanoi.html"></div><br><br><br>
+
+</div>
+<div id="footer">  &copy; 2011 - 2014 <a href="http://www.bklein.de/">Bernd Klein</a>,
+Bodenseo; 
+Design by Denise Mitchinson adapted for python-course.eu by Bernd Klein</div>
+</div>
+</body>
+
+<!-- Mirrored from www.python-course.eu/text_classification_python.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:07:10 GMT -->
+</html>

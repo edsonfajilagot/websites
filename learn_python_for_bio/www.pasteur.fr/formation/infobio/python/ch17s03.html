@@ -1,0 +1,101 @@
+<html>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch17s03.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:35 GMT -->
+<head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>17.3. Parsing command line options with
+      getopt</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><meta name="keywords" content="python, biology, bioinformatics, programming, computational biology"><link rel="home" href="index-2.html" title="Introduction to Programming using Python"><link rel="up" href="ch17.html" title="Chapter 17. Scripting"><link rel="previous" href="ch17s02.html" title="17.2. Running Programs"><link rel="next" href="ch17s04.html" title="17.4. Parsing"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">17.3. Parsing command line options with
+      getopt</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch17s02.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><th width="60%" align="center">Chapter 17. Scripting</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch17s04.html"><img src="images/next.png" alt="Next"></a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="sect_scripting_getopt"></a>17.3. Parsing command line options with
+      <tt>getopt</tt></h2></div></div>
+      
+      The <tt>getopt</tt> module helps script to parse a
+      complex command line options. <a href="ch17s03.html#exa_getopt" title="Example 17.5. Getopt example">Example 17.5</a> shows
+      an example. 
+
+      <div class="example"><a name="exa_getopt"></a><p class="title"><b>Example 17.5. Getopt example</b></p>
+	This example shows a piece of code for handling options in a
+	program called, say, <b>filteralig</b>, taking an
+	alignment  and filtering some sites according to specific
+	criteria. Options are of the form: '-o1 value1 -o2 value2'
+	where 'o1' and 'o2' are the
+	names of the options and value1, value2 are their argument,
+	which might be optional for some of the parameters. You can
+	use this script this way, for instance: 
+
+	<pre class="programlisting">
+filteralig -t0.7 -f2,3 align_file
+	</pre><div class="programlistingco"><pre class="programlisting">
+import sys
+import getopt
+
+def usage(prog="filtersites"):                                            <span class="co"><img src="images/callouts/1.png" alt="(1)"></span>
+    print """
+filteralig : filter sites in alignments
+
+ filteralig [-ch] [-t &lt;threshold&gt;] [-f &lt;frames&gt;] [-i &lt;cols&gt;] &lt;alignment&gt;
+
+ -h                  print this message
+ 
+ -c                  print colum numbers of the original alignment
+        
+ -t &lt;threshold&gt;      filter all colums with a conservation above &lt;threshold&gt;
+ -f &lt;frames&gt;         filter all codonpositions of frames
+                     possible values 1, 2, 3 
+                     for more than one use syntaxe: '1,2'
+ -i &lt;cols&gt;           filter this columns
+                     syntaxe: give a string with the column numbers separated by
+ ','
+
+ &lt;alignment&gt;         the file has to be in clustalw format
+
+ """
+
+o, a = getopt.getopt(sys.argv[1:], 'ct:f:i:h')                            <span class="co"><img src="images/callouts/2.png" alt="(2)"></span>
+opts = {}
+for k,v in o:                                                             <span class="co"><img src="images/callouts/3.png" alt="(3)"></span>
+    opts[k] = v
+if  opts.has_key('-h'):                                                   <span class="co"><img src="images/callouts/4.png" alt="(4)"></span>
+    usage(); sys.exit(0)
+if len(a) &lt; 1:                                                            <span class="co"><img src="images/callouts/5.png" alt="(5)"></span>
+    usage(); sys.exit("alignment file missing")
+	  </pre><div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><img src="images/callouts/1.png" alt="1" border="0"></td><td valign="top" align="left"><p>
+		  A <tt>usage</tt> function is very useful
+		  to help the user in case of an error on the command
+		  line. 
+	      </p></td></tr><tr><td width="5%" valign="top" align="left"><img src="images/callouts/2.png" alt="2" border="0"></td><td valign="top" align="left"><p>
+		</p><p>
+		  The first parameter for the
+		  <tt>getopt</tt> function should be a
+		  string containing the actual arguments the script
+		  has been called with, not including the script name,
+		  available in <tt>sys.argv[0]</tt>.
+		</p><p>
+		</p><p>
+		The second parameter is a string describing the expected
+		  options. The options string which is passed to
+		  <tt>getopt</tt> is here:
+		  'ct:f:i:h'. This means that the following options are
+		  available: c, t, f, i and h. When a ':' is added
+		  just after, this means that the option expects a
+		  value. For instance, the '-t' option requires a
+		  threshold value. See the <tt>usage</tt>!
+		</p><p>
+		</p><p>
+		The  <tt>getopt</tt> function returns
+		tuple, whose first element is a list of (option,
+		  value) pairs. The 
+		  second element is the list of program arguments
+        left after the option list was stripped. Here, a filename for
+		  an alignment file is expected.
+		</p><p>
+	      </p></td></tr><tr><td width="5%" valign="top" align="left"><img src="images/callouts/3.png" alt="3" border="0"></td><td valign="top" align="left"><p>
+		Storing (option,
+		  value) pairs in a dictionary. 
+	      </p></td></tr><tr><td width="5%" valign="top" align="left"><img src="images/callouts/4.png" alt="4" border="0"></td><td valign="top" align="left"><p>
+		If the user has entered a <b>-h</b>, help
+		is printed.
+	      </p></td></tr><tr><td width="5%" valign="top" align="left"><img src="images/callouts/5.png" alt="5" border="0"></td><td valign="top" align="left"><p>
+		Has the user provided a filename ? If so, it is
+		available in <tt>a[0]</tt>.
+	      </p></td></tr></table></div></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch17s02.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch17.html"><img src="images/up.png" alt="Up"></a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch17s04.html"><img src="images/next.png" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">17.2. Running Programs&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index-2.html"><img src="images/home.png" alt="Home"></a></td><td width="40%" align="right" valign="top">&nbsp;17.4. Parsing</td></tr></table></div></body>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch17s03.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:35 GMT -->
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from zetcode.com/wxpython/draganddrop/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Aug 2015 19:21:54 GMT -->
+<head>
+<title>Drag and drop in wxPython</title>
+<link rel="stylesheet" href="../../cfg/format2.css" type="text/css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="wxPython, drag and drop, Linux, Python, programming">
+<meta name="description" content="This part of the wxPython tutorial covers drag and drop 
+operations in wxPython.">
+<meta name="author" content="Jan Bodnar">
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="content">
+
+<header>
+
+<nav>
+<a href="http://zetcode.com/" title="Home">Home</a>&#160;
+<a href="../index.html">Contents</a>
+</nav>
+
+</header>
+
+
+<h1>Drag and drop in wxPython</h1>
+
+
+<p>
+Wikipedia: 
+
+In computer graphical user interfaces, drag-and-drop is the action 
+of (or support for the action of) clicking on a virtual object and 
+dragging it to a different location or onto another virtual object. 
+In general, it can be used to invoke many kinds of actions, or create 
+various types of associations between two abstract objects. 
+</p>
+
+<p>
+Drag and drop functionality is one of the most visible aspects of the 
+graphical user interface. 
+Drag and drop operation enables you to do complex things intuitively. 
+</p>
+
+<p>
+In drag and drop we basically drag some data from a data source to a data target. 
+So we must have:
+</p>
+
+<ul>
+	<li>Some data</li>
+	<li>A data source</li>
+	<li>A data target</li>
+</ul>
+
+<p>
+In wxPython we have two predefined data targets. 
+<code>wx.TextDropTarget</code> and <code>wx.FileDropTarget</code>.
+</p>
+
+<ul>
+	<li>wx.TextDropTarget</li>
+	<li>wx.FileDropTarget</li>
+</ul>
+
+
+<h2>wx.TextDropTarget</h2>
+
+<figure>
+<img src="../../img/gui/wxpython/dragdrop.png" alt="Text drag and drop">
+<figcaption>Figure: Text drag and drop</figcaption>
+</figure>
+
+<pre class="code">
+#!/usr/bin/python
+
+# dragdrop.py
+
+import os
+import wx
+
+class MyTextDropTarget(wx.TextDropTarget):
+    def __init__(self, object):
+        wx.TextDropTarget.__init__(self)
+        self.object = object
+
+    def OnDropText(self, x, y, data):
+        self.object.InsertStringItem(0, data)
+
+
+class DragDrop(wx.Frame):
+    def __init__(self, parent, id, title):
+        wx.Frame.__init__(self, parent, id, title, size=(650, 500))
+
+        splitter1 = wx.SplitterWindow(self, -1, style=wx.SP_3D)
+        splitter2 = wx.SplitterWindow(splitter1, -1, style=wx.SP_3D)
+        self.dir = wx.GenericDirCtrl(splitter1, -1, dir='/home/', style=wx.DIRCTRL_DIR_ONLY)
+        self.lc1 = wx.ListCtrl(splitter2, -1, style=wx.LC_LIST)
+        self.lc2 = wx.ListCtrl(splitter2, -1, style=wx.LC_LIST)
+
+        dt = MyTextDropTarget(self.lc2)
+        self.lc2.SetDropTarget(dt)
+        self.Bind(wx.EVT_LIST_BEGIN_DRAG, self.OnDragInit, id=self.lc1.GetId())
+
+        tree = self.dir.GetTreeCtrl()
+
+        splitter2.SplitHorizontally(self.lc1, self.lc2)
+        splitter1.SplitVertically(self.dir, splitter2)
+
+        self.Bind(wx.EVT_TREE_SEL_CHANGED, self.OnSelect, id=tree.GetId())
+
+        self.OnSelect(0)
+        self.Centre()
+        self.Show(True)
+
+    def OnSelect(self, event):
+        list = os.listdir(self.dir.GetPath())
+        self.lc1.ClearAll()
+        self.lc2.ClearAll()
+        for i in range(len(list)):
+            if list[i][0] != '.':
+                self.lc1.InsertStringItem(0, list[i])
+
+    def OnDragInit(self, event):
+        text = self.lc1.GetItemText(event.GetIndex())
+        tdo = wx.TextDataObject(text)
+        tds = wx.DropSource(self.lc1)
+        tds.SetData(tdo)
+        tds.DoDragDrop(True)
+
+
+app = wx.App()
+DragDrop(None, -1, 'dragdrop.py')
+app.MainLoop()
+</pre>
+
+
+<h2>wx.FileDropTarget</h2>
+
+<p>
+One of the advantages of the GUI over the console is its intuitiveness. 
+You can learn a GUI program easier than a console application. 
+You often do not need a manual. On the other hand, some graphical 
+operations are too complex. For example, deleting a file by dragging
+it and dropping it to the trash basket is very intuitive and easy to 
+understand, but many people just press the <kbd>Delete</kbd> key.
+It is more effective. In our next example we explore a graphical operation,
+that is very handy. In most GUI text editors, we can open a file by simply 
+dragging it from the file manager and dropping it on the editor.
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+
+# filedrop.py
+
+import wx
+
+class FileDrop(wx.FileDropTarget):
+    def __init__(self, window):
+        wx.FileDropTarget.__init__(self)
+        self.window = window
+
+    def OnDropFiles(self, x, y, filenames):
+
+        for name in filenames:
+            try:
+                file = open(name, 'r')
+                text = file.read()
+                self.window.WriteText(text)
+                file.close()
+            except IOError, error:
+                dlg = wx.MessageDialog(None, 'Error opening file\n' + str(error))
+                dlg.ShowModal()
+            except UnicodeDecodeError, error:
+                dlg = wx.MessageDialog(None, 'Cannot open non ascii files\n' + str(error))
+                dlg.ShowModal()
+
+class DropFile(wx.Frame):
+    def __init__(self, parent, id, title):
+        wx.Frame.__init__(self, parent, id, title, size = (450, 400))
+
+        self.text = wx.TextCtrl(self, -1, style = wx.TE_MULTILINE)
+        dt = FileDrop(self.text)
+        self.text.SetDropTarget(dt)
+        self.Centre()
+        self.Show(True)
+
+
+app = wx.App()
+DropFile(None, -1, 'filedrop.py')
+app.MainLoop()
+</pre>
+
+<p>
+This chapter described shortly drag and drop operations in wxPython.
+</p>
+
+<div class="hor">
+<script async src="../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- horizontal -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:468px;height:60px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="1734478269"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<footer>
+
+<nav class="center">
+<span class="botNavItem"><a href="http://zetcode.com/">Home</a></span> &#135; <span class="botNavItem"><a href="../index.html">Contents</a></span> ‡ 
+<span class="botNavItem"><a href="#">Top of Page</a></span>
+</nav>
+
+<div class="signature">
+<a href="http://zetcode.com/">ZetCode</a> last modified June 28, 2007  <span class="copyright">&copy; 2007 - 2015 Jan Bodnar</span>
+</div>
+
+</footer>
+
+</div> <!-- content -->
+
+</div> <!-- container -->
+
+</body>
+
+<!-- Mirrored from zetcode.com/wxpython/draganddrop/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Aug 2015 19:21:55 GMT -->
+</html>

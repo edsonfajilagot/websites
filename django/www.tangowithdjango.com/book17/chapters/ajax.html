@@ -1,0 +1,506 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+<!-- Mirrored from www.tangowithdjango.com/book17/chapters/ajax.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 10 Jan 2016 04:11:38 GMT -->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>19. AJAX in Django with JQuery &mdash; How to Tango with Django 1.7</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/twd.ico"/>
+    <link rel="top" title="How to Tango with Django 1.7" href="../index-2.html" />
+    <link rel="next" title="20. Automated Testing" href="test.html" />
+    <link rel="prev" title="18. JQuery and Django" href="jquery.html" />
+ <style type="text/css">
+	img{
+	    width: 85%; /* you can use % */
+	    height: auto;
+	}
+	
+	table {
+		margin: auto;
+	}
+	
+	p.caption {
+		font-size: 10pt;
+		font-style: italic;
+	}
+ </style>
+ <script type="text/javascript">
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','../../../www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-44397330-1', 'tangowithdjango.com');
+  ga('send', 'pageview');
+     
+
+  </script>      
+
+  </head>
+  <body role="document">
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        
+        <li class="right" >
+          <a href="test.html" title="20. Automated Testing"
+             accesskey="N">next</a>
+          </li>
+		
+        <li class="right" >
+          <a href="jquery.html" title="18. JQuery and Django"
+             accesskey="P">previous</a>
+          </li>
+		
+        <li><a href="../index-2.html">How to Tango with Django 1.7</a> &raquo;</li> 
+
+      </ul>
+
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index-2.html">
+              <img class="logo" src="../_static/twd200x200.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index-2.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">19. AJAX in Django with JQuery</a><ul>
+<li><a class="reference internal" href="#ajax-based-functionality">19.1. AJAX based Functionality</a></li>
+<li><a class="reference internal" href="#add-a-like-button">19.2. Add a &#8220;Like Button&#8221;</a><ul>
+<li><a class="reference internal" href="#workflow">19.2.1. Workflow</a></li>
+<li><a class="reference internal" href="#updating-category-template">19.2.2. Updating Category Template</a></li>
+<li><a class="reference internal" href="#create-a-like-category-view">19.2.3. Create a Like Category View</a></li>
+<li><a class="reference internal" href="#making-the-ajax-request">19.2.4. Making the AJAX request</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#adding-inline-category-suggestions">19.3. Adding Inline Category Suggestions</a><ul>
+<li><a class="reference internal" href="#id1">19.3.1. Workflow</a></li>
+<li><a class="reference internal" href="#parameterise-the-get-category-list-function">19.3.2. Parameterise the Get Category List Function</a></li>
+<li><a class="reference internal" href="#create-a-suggest-category-view">19.3.3. Create a Suggest Category View</a></li>
+<li><a class="reference internal" href="#map-view-to-url">19.3.4. Map View to URL</a></li>
+<li><a class="reference internal" href="#update-base-template">19.3.5. Update Base Template</a></li>
+<li><a class="reference internal" href="#add-ajax-to-request-suggestions">19.3.6. Add AJAX to Request Suggestions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exercises">19.4. Exercises</a><ul>
+<li><a class="reference internal" href="#hints">19.4.1. Hints</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="jquery.html"
+                        title="previous chapter">18. JQuery and Django</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="test.html"
+                        title="next chapter">20. Automated Testing</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/chapters/ajax.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="http://www.tangowithdjango.com/book17/search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="ajax-in-django-with-jquery">
+<span id="ajax-label"></span><h1>19. AJAX in Django with JQuery<a class="headerlink" href="#ajax-in-django-with-jquery" title="Permalink to this headline">¶</a></h1>
+<p>AJAX essentially is a combination of technologies that are integrated together to reduce the number of page loads. Instead of reloading the full page, only part of the page or the data in the page is reloaded.       If you haven&#8217;t used AJAX before or would like to know more about it before using it, check out the resources at the Mozilla website: <a class="reference external" href="https://developer.mozilla.org/en-US/docs/AJAX">https://developer.mozilla.org/en-US/docs/AJAX</a></p>
+<p>To simplify the AJAX requests, we will be using the JQuery library. Note that if you are using the Twitter CSS Bootstrap toolkit then JQuery will already be added in. Otherwise, download the latest version of JQuery and include it within your application (see Chapter ..).</p>
+<div class="section" id="ajax-based-functionality">
+<h2>19.1. AJAX based Functionality<a class="headerlink" href="#ajax-based-functionality" title="Permalink to this headline">¶</a></h2>
+<p>To make the interaction with the Rango application more seamless let&#8217;s add in a number of features that use AJAX, such as:</p>
+<ul class="simple">
+<li>Add a &#8220;Like Button&#8221; to let registered users &#8220;like&#8221; a particular category</li>
+<li>Add inline category suggestions - so that when a user types they can quickly find a category</li>
+<li>Add an &#8220;Add Button&#8221; to let registered users quickly and easily add a Page to the Category</li>
+</ul>
+<p>Create a new file, called <code class="docutils literal"><span class="pre">rango-ajax.js</span></code> and add it to your <code class="docutils literal"><span class="pre">js</span></code> directory. Then in your <em>base</em> template include:</p>
+<div class="highlight-html"><div class="highlight"><pre>&lt;script src=&quot;{% static &quot;js/jquery.js&quot; %}&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;{% static &quot;js/rango-ajax.js&quot; %}&quot;&gt;&lt;/script&gt;
+</pre></div>
+</div>
+<p>Here we assume you have downloaded a version of the JQuery library, but you can also just directly refer to it:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</pre></div>
+</div>
+<p>Now that the pre-reqs for using JQuery are in place we can use it to pimp the rango application.</p>
+</div>
+<div class="section" id="add-a-like-button">
+<h2>19.2. Add a &#8220;Like Button&#8221;<a class="headerlink" href="#add-a-like-button" title="Permalink to this headline">¶</a></h2>
+<p>It would be nice to let user, who are registered, denote that they &#8220;like&#8221; a particular category. In the following workflow, we will let users &#8220;like&#8221; categories, but we will not be keeping track of what categories they have &#8220;liked&#8221;, we&#8217;ll be trusting them not to click the like button multiple times.</p>
+<div class="section" id="workflow">
+<h3>19.2.1. Workflow<a class="headerlink" href="#workflow" title="Permalink to this headline">¶</a></h3>
+<p>To let users &#8220;like&#8221; certain categories undertake the following workflow:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>In the <code class="docutils literal"><span class="pre">category.html</span></code> template:</dt>
+<dd><ul class="first last simple">
+<li>Add in a &#8220;Like&#8221; button with <code class="docutils literal"><span class="pre">id=&quot;like&quot;</span></code>.</li>
+<li>Add in a template tag to display the number of likes: <code class="docutils literal"><span class="pre">{{%</span> <span class="pre">category.likes</span> <span class="pre">%}}</span></code></li>
+<li>Place this inside a div with <code class="docutils literal"><span class="pre">id=&quot;like_count&quot;</span></code>, i.e. <code class="docutils literal"><span class="pre">&lt;div</span> <span class="pre">id=&quot;like_count&quot;&gt;{{</span> <span class="pre">category.likes</span> <span class="pre">}}</span> <span class="pre">&lt;/div&gt;</span></code></li>
+<li>This sets up the template to capture likes and to display likes for the category.</li>
+<li>Note, since the <code class="docutils literal"><span class="pre">category()</span></code> view passes a reference to the category object, we can use that to access the number of likes, with <code class="docutils literal"><span class="pre">{{</span> <span class="pre">category.likes</span> <span class="pre">}}</span></code> in the template</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Create a view called, <code class="docutils literal"><span class="pre">like_category</span></code> which will examine the request and pick out the <code class="docutils literal"><span class="pre">category_id</span></code> and then increment the number of likes for that category.</dt>
+<dd><ul class="first last simple">
+<li>Don&#8217;t forgot to add in the url mapping; i.e  map the <code class="docutils literal"><span class="pre">like_category</span></code> view to <code class="docutils literal"><span class="pre">rango/like_category/</span></code>. The GET request will then be <code class="docutils literal"><span class="pre">rango/like_category/?category_id=XXX</span></code></li>
+<li>Instead of returning a HTML page have this view will return the new total number of likes for that category.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Now in &#8220;rango-ajax.js&#8221; add the JQuery code to perform the AJAX GET request.</dt>
+<dd><ul class="first last simple">
+<li>If the request is successful, then update the <code class="docutils literal"><span class="pre">#like_count</span></code> element, and hide the like button.</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="updating-category-template">
+<h3>19.2.2. Updating Category Template<a class="headerlink" href="#updating-category-template" title="Permalink to this headline">¶</a></h3>
+<p>To prepare the template we will need to add in the &#8220;Like&#8221; button with <code class="docutils literal"><span class="pre">id=&quot;like&quot;</span></code> and create a <code class="docutils literal"><span class="pre">&lt;div&gt;</span></code> to display the number of likes <code class="docutils literal"><span class="pre">{{%</span> <span class="pre">category.likes</span> <span class="pre">%}}</span></code>. To do this, add the following <code class="docutils literal"><span class="pre">&lt;div&gt;</span></code> to the <em>category.html</em> template:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;p&gt;</span>
+
+<span class="nt">&lt;strong</span> <span class="na">id=</span><span class="s">&quot;like_count&quot;</span><span class="nt">&gt;</span>{{ category.likes }}<span class="nt">&lt;/strong&gt;</span> people like this category
+
+{% if user.is_authenticated %}
+        <span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">&quot;likes&quot;</span> <span class="na">data-catid=</span><span class="s">&quot;{{category.id}}&quot;</span> <span class="na">class=</span><span class="s">&quot;btn btn-primary&quot;</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;glyphicon glyphicon-thumbs-up&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+        Like
+        <span class="nt">&lt;/button&gt;</span>
+{% endif %}
+
+<span class="nt">&lt;/p&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="create-a-like-category-view">
+<h3>19.2.3. Create a Like Category View<a class="headerlink" href="#create-a-like-category-view" title="Permalink to this headline">¶</a></h3>
+<p>Create a view called, <code class="docutils literal"><span class="pre">like_category</span></code> in <code class="docutils literal"><span class="pre">rango/views.py</span></code> which will examine the request and pick out the category_id and then increment the number of likes for that category.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.contrib.auth.decorators</span> <span class="kn">import</span> <span class="n">login_required</span>
+
+<span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">like_category</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+
+    <span class="n">cat_id</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;GET&#39;</span><span class="p">:</span>
+        <span class="n">cat_id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="p">[</span><span class="s">&#39;category_id&#39;</span><span class="p">]</span>
+
+    <span class="n">likes</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="n">cat_id</span><span class="p">:</span>
+        <span class="n">cat</span> <span class="o">=</span> <span class="n">Category</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">cat_id</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">cat</span><span class="p">:</span>
+            <span class="n">likes</span> <span class="o">=</span> <span class="n">cat</span><span class="o">.</span><span class="n">likes</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">cat</span><span class="o">.</span><span class="n">likes</span> <span class="o">=</span>  <span class="n">likes</span>
+            <span class="n">cat</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">likes</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>On examining the code, you will see that we are only allowing authenticated users to denote that they like a category. The view assumes that a variable <code class="docutils literal"><span class="pre">category_id</span></code> has been passed through via a GET so that the we can identify the category to update. In this view, we could also track and record that a particular user has &#8220;liked&#8221; this category if we wanted - but we are keeping it simple to focus on the AJAX mechanics.</p>
+<p>Don&#8217;t forget to add in the URL mapping, into <code class="docutils literal"><span class="pre">rango/urls.py</span></code>. Update the <code class="docutils literal"><span class="pre">urlpatterns</span></code> by adding in:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">url</span><span class="p">(</span><span class="s">r&#39;^like_category/$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">like_category</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;like_category&#39;</span><span class="p">),</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="making-the-ajax-request">
+<h3>19.2.4. Making the AJAX request<a class="headerlink" href="#making-the-ajax-request" title="Permalink to this headline">¶</a></h3>
+<p>Now in &#8220;rango-ajax.js&#8221; you will need to add some JQuery code to perform an AJAX GET request. Add in the following code:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#likes&#39;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">catid</span><span class="p">;</span>
+    <span class="nx">catid</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;data-catid&quot;</span><span class="p">);</span>
+    <span class="nx">$</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/rango/like_category/&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">category_id</span><span class="o">:</span> <span class="nx">catid</span><span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+               <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#like_count&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+               <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#likes&#39;</span><span class="p">).</span><span class="nx">hide</span><span class="p">();</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>This piece of JQuery/Javascript will add an event handler to the element with id <code class="docutils literal"><span class="pre">#likes</span></code>, i.e. the button. When clicked, it will extract the category id from the button element, and then make an AJAX GET request which will make a call to <code class="docutils literal"><span class="pre">/rango/like_category/</span></code> encoding the <code class="docutils literal"><span class="pre">category_id</span></code> in the request. If the request is successful, then the HTML element with id like_count (i.e. the &lt;strong&gt; ) is updated with the data returned by the request, and the HTML element with id likes (i.e. the &lt;button&gt;) is hidden.</p>
+<p>There is a lot going on here and getting the mechanics right when constructing pages with AJAX can be a bit tricky. Essentially here, when the button is clicked an AJAX request is made, given our url mapping, this invokes the <code class="docutils literal"><span class="pre">like_category</span></code> view which updates the category and returns the new number of likes. When the AJAX request receives the response it updates parts of the page, i.e. the text and the button. The <code class="docutils literal"><span class="pre">#likes</span></code> button is hidden.</p>
+</div>
+</div>
+<div class="section" id="adding-inline-category-suggestions">
+<h2>19.3. Adding Inline Category Suggestions<a class="headerlink" href="#adding-inline-category-suggestions" title="Permalink to this headline">¶</a></h2>
+<p>It would be really neat if we could provide a fast way for users to find a category, rather than browsing through a long list. To do this we can create a suggestion component which lets users type in a letter or part of a word, and then the system responds by providing a list of suggested categories, that the user can then select from. As the user types a series of requests will be made to the server to fetch the suggested categories relevant to what the user has entered.</p>
+<div class="section" id="id1">
+<h3>19.3.1. Workflow<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>To do this you will need to do the following.</p>
+<ul>
+<li><dl class="first docutils">
+<dt>Create a parameterised function called <code class="docutils literal"><span class="pre">get_category_list(max_results=0,</span> <span class="pre">starts_with='')</span></code> that returns all the categories starting with <code class="docutils literal"><span class="pre">starts_with</span></code> if <code class="docutils literal"><span class="pre">max_results=0</span></code> otherwise it returns up to <code class="docutils literal"><span class="pre">max_results</span></code> categories.</dt>
+<dd><ul class="first last simple">
+<li>The function returns a list of category objects annotated with the encoded category denoted by the attribute, <code class="docutils literal"><span class="pre">url</span></code></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Create a view called <em>suggest_category</em> which will examine the request and pick out the category query string.</dt>
+<dd><ul class="first last simple">
+<li>Assume that a GET request is made and attempt to get the <em>query</em> attribute.</li>
+<li>If the query string is not empty, ask the Category model to get the top 8 categories that start with the query string.</li>
+<li>The list of category objects will then be combined into a piece of HTML via template.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">Instead of creating a template called <code class="docutils literal"><span class="pre">suggestions.html</span></code> re-use the <code class="docutils literal"><span class="pre">cats.html</span></code> as it will be displaying data of the same type (i.e. categories).</p>
+</li>
+<li><p class="first">To let the client ask for this data, you will need to create a URL mapping; lets call it <em>category_suggest</em></p>
+</li>
+</ul>
+<p>With the mapping, view, and template for this view in place, you will need to update the <code class="docutils literal"><span class="pre">base.html</span></code> template and add in some javascript so that the categories can be displayed as the user types.</p>
+<ul>
+<li><dl class="first docutils">
+<dt>In the <code class="docutils literal"><span class="pre">base.html</span></code> template modify the sidebar block so that a div with an id=&#8221;cats&#8221; encapsulates the categories being presented. The JQuery/AJAX will update this element.</dt>
+<dd><ul class="first last">
+<li><p class="first">Above this &lt;div&gt; add an input box for a user to enter the letters of a category, i.e.:</p>
+<blockquote>
+<div><p><code class="docutils literal"><span class="pre">&lt;input</span>&nbsp; <span class="pre">class=&quot;input-medium</span> <span class="pre">search-query&quot;</span> <span class="pre">type=&quot;text&quot;</span> <span class="pre">name=&quot;suggestion&quot;</span> <span class="pre">value=&quot;&quot;</span> <span class="pre">id=&quot;suggestion&quot;</span> <span class="pre">/&gt;</span></code></p>
+</div></blockquote>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>With these elements added into the templates, you can add in some JQuery to update the categories list as the user types.</dt>
+<dd><ul class="first last simple">
+<li>Associate an on keypress event handler to the <em>input</em> with <code class="docutils literal"><span class="pre">id=&quot;suggestion&quot;</span></code></li>
+<li><code class="docutils literal"><span class="pre">$('#suggestion').keyup(function(){</span> <span class="pre">...</span> <span class="pre">})</span></code></li>
+<li>On keyup, issue an ajax call to retrieve the updated categories list</li>
+<li>Then use the JQuery <code class="docutils literal"><span class="pre">.get()</span></code> function i.e. <code class="docutils literal"><span class="pre">$(this).get(</span> <span class="pre">...</span> <span class="pre">)</span></code></li>
+<li>If the call is successful, replace the content of the &lt;div&gt; with id=&#8221;cats&#8221; with the data received.</li>
+<li>Here you can use the JQuery <code class="docutils literal"><span class="pre">.html()</span></code> function i.e. <code class="docutils literal"><span class="pre">$('#cats').html(</span> <span class="pre">data</span> <span class="pre">)</span></code></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="parameterise-the-get-category-list-function">
+<h3>19.3.2. Parameterise the Get Category List Function<a class="headerlink" href="#parameterise-the-get-category-list-function" title="Permalink to this headline">¶</a></h3>
+<p>In this helper function we use a filter to find all the categories that start with the string supplied. The filter we use will be <code class="docutils literal"><span class="pre">istartwith</span></code>, this will make sure that it doesn&#8217;t matter whether we use upper-case or lower-case letters. If it on the other hand was important to take into account whether letters was upper-case or not you would use <code class="docutils literal"><span class="pre">startswith</span></code> instead.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">get_category_list</span><span class="p">(</span><span class="n">max_results</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">starts_with</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">):</span>
+        <span class="n">cat_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">starts_with</span><span class="p">:</span>
+                <span class="n">cat_list</span> <span class="o">=</span> <span class="n">Category</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">name__istartswith</span><span class="o">=</span><span class="n">starts_with</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">max_results</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">cat_list</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">max_results</span><span class="p">:</span>
+                        <span class="n">cat_list</span> <span class="o">=</span> <span class="n">cat_list</span><span class="p">[:</span><span class="n">max_results</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">cat_list</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="create-a-suggest-category-view">
+<h3>19.3.3. Create a Suggest Category View<a class="headerlink" href="#create-a-suggest-category-view" title="Permalink to this headline">¶</a></h3>
+<p>Using the <code class="docutils literal"><span class="pre">get_category_list</span></code> function we can now create a view that returns the top 8 matching results as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">suggest_category</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+
+        <span class="n">cat_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">starts_with</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;GET&#39;</span><span class="p">:</span>
+                <span class="n">starts_with</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="p">[</span><span class="s">&#39;suggestion&#39;</span><span class="p">]</span>
+
+        <span class="n">cat_list</span> <span class="o">=</span> <span class="n">get_category_list</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="n">starts_with</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&#39;rango/category_list.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;cat_list&#39;</span><span class="p">:</span> <span class="n">cat_list</span> <span class="p">})</span>
+</pre></div>
+</div>
+<p>Note here we are re-using the <code class="docutils literal"><span class="pre">rango/cats.html</span></code> template :-).</p>
+</div>
+<div class="section" id="map-view-to-url">
+<h3>19.3.4. Map View to URL<a class="headerlink" href="#map-view-to-url" title="Permalink to this headline">¶</a></h3>
+<p>Add the following code to <code class="docutils literal"><span class="pre">urlpatterns</span></code> in <code class="docutils literal"><span class="pre">rango/urls.py</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">url</span><span class="p">(</span><span class="s">r&#39;^suggest_category/$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">suggest_category</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;suggest_category&#39;</span><span class="p">),</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="update-base-template">
+<h3>19.3.5. Update Base Template<a class="headerlink" href="#update-base-template" title="Permalink to this headline">¶</a></h3>
+<p>In the base template in the sidebar div add in the following HTML code:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;nav nav-list&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;nav-header&quot;</span><span class="nt">&gt;</span>Find a Category<span class="nt">&lt;/li&gt;</span>
+        <span class="nt">&lt;form&gt;</span>
+        <span class="nt">&lt;label&gt;&lt;/label&gt;</span>
+        <span class="nt">&lt;li&gt;&lt;input</span>  <span class="na">class=</span><span class="s">&quot;search-query span10&quot;</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">name=</span><span class="s">&quot;suggestion&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span> <span class="na">id=</span><span class="s">&quot;suggestion&quot;</span> <span class="nt">/&gt;&lt;/li&gt;</span>
+        <span class="nt">&lt;/form&gt;</span>
+<span class="nt">&lt;/ul&gt;</span>
+
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;cats&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+</div>
+<p>Here we have added in an input box with <code class="docutils literal"><span class="pre">id=&quot;suggestion&quot;</span></code> and div with <code class="docutils literal"><span class="pre">id=&quot;cats&quot;</span></code> in which we will display the response. We don&#8217;t need to add a button as we will be adding an event handler on keyup to the input box which will send the suggestion request.</p>
+</div>
+<div class="section" id="add-ajax-to-request-suggestions">
+<h3>19.3.6. Add AJAX to Request Suggestions<a class="headerlink" href="#add-ajax-to-request-suggestions" title="Permalink to this headline">¶</a></h3>
+<p>Add the following JQuery code to the <code class="docutils literal"><span class="pre">js/rango-ajax.js</span></code>:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#suggestion&#39;</span><span class="p">).</span><span class="nx">keyup</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+        <span class="kd">var</span> <span class="nx">query</span><span class="p">;</span>
+        <span class="nx">query</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">val</span><span class="p">();</span>
+        <span class="nx">$</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/rango/suggest_category/&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">suggestion</span><span class="o">:</span> <span class="nx">query</span><span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+         <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#cats&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+        <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>Here, we attached an event handler to the HTML input element with <code class="docutils literal"><span class="pre">id=&quot;suggestion&quot;</span></code> to trigger when a keyup event occurs. When it does the contents of the input box is obtained and placed into the <code class="docutils literal"><span class="pre">query</span></code> variable. Then a AJAX GET request is made calling <code class="docutils literal"><span class="pre">/rango/category_suggest/</span></code> with the <code class="docutils literal"><span class="pre">query</span></code> as the parameter. On success, the HTML element with id=&#8221;cats&#8221; i.e. the div, is updated with the category list html.</p>
+</div>
+</div>
+<div class="section" id="exercises">
+<h2>19.4. Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline">¶</a></h2>
+<p>To let registered users quickly and easily add a Page to the Category put an &#8220;Add&#8221; button next to each search result.</p>
+<ul>
+<li><dl class="first docutils">
+<dt>Update the <code class="docutils literal"><span class="pre">category.html</span></code> template:</dt>
+<dd><ul class="first last simple">
+<li>Add a mini-button next to each search result (if the user is authenticated), garnish the button with the title and url data, so that the JQuery can pick it out.</li>
+<li>Put a &lt;div&gt; with <code class="docutils literal"><span class="pre">id=&quot;page&quot;</span></code> around the pages in the category so that it can be updated when pages are added.</li>
+<li>Remove that link to add button, if you like.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">Create a view auto_add_page that accepts a parameterised GET request (title, url, catid) and adds it to the category</p>
+</li>
+<li><p class="first">Map an url to the view <code class="docutils literal"><span class="pre">url(r'^auto_add_page/$',</span> <span class="pre">views.auto_add_page,</span> <span class="pre">name='auto_add_page'),</span></code></p>
+</li>
+<li><p class="first">Add an event handler to the button using JQuery - when added hide the button. The response could also update the pages listed on the category page, too.</p>
+</li>
+</ul>
+<div class="section" id="hints">
+<h3>19.4.1. Hints<a class="headerlink" href="#hints" title="Permalink to this headline">¶</a></h3>
+<p>HTML Template code:</p>
+<div class="highlight-html"><div class="highlight"><pre>{% if user.is_authenticated %}
+        <span class="nt">&lt;button</span> <span class="na">data-catid=</span><span class="s">&quot;{{category.id}}&quot;</span> <span class="na">data-title=</span><span class="s">&quot;{{ result.title }}&quot;</span> <span class="na">data-url=</span><span class="s">&quot;{{ result.link }}&quot;</span> <span class="na">class=</span><span class="s">&quot;rango-add btn btn-mini btn-info&quot;</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span><span class="nt">&gt;</span>Add<span class="nt">&lt;/button&gt;</span>
+{% endif %}
+</pre></div>
+</div>
+<p>JQuery code:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.rango-add&#39;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">catid</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;data-catid&quot;</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;data-url&quot;</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">title</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;data-title&quot;</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">me</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">)</span>
+        <span class="nx">$</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/rango/auto_add_page/&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">category_id</span><span class="o">:</span> <span class="nx">catid</span><span class="p">,</span> <span class="nx">url</span><span class="o">:</span> <span class="nx">url</span><span class="p">,</span> <span class="nx">title</span><span class="o">:</span> <span class="nx">title</span><span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+                        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#pages&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+                        <span class="nx">me</span><span class="p">.</span><span class="nx">hide</span><span class="p">();</span>
+                        <span class="p">});</span>
+                                <span class="p">});</span>
+</pre></div>
+</div>
+<p>Note here we are assigned the event handler to all the buttons with class <code class="docutils literal"><span class="pre">rango-add</span></code>.</p>
+<p>View code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">auto_add_page</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">cat_id</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">context_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;GET&#39;</span><span class="p">:</span>
+        <span class="n">cat_id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="p">[</span><span class="s">&#39;category_id&#39;</span><span class="p">]</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="p">[</span><span class="s">&#39;url&#39;</span><span class="p">]</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="p">[</span><span class="s">&#39;title&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">cat_id</span><span class="p">:</span>
+            <span class="n">category</span> <span class="o">=</span> <span class="n">Category</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">cat_id</span><span class="p">))</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">Page</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">category</span><span class="o">=</span><span class="n">category</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">)</span>
+
+            <span class="n">pages</span> <span class="o">=</span> <span class="n">Page</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">category</span><span class="o">=</span><span class="n">category</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;-views&#39;</span><span class="p">)</span>
+
+            <span class="c"># Adds our results list to the template context under name pages.</span>
+            <span class="n">context_dict</span><span class="p">[</span><span class="s">&#39;pages&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pages</span>
+
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&#39;rango/page_list.html&#39;</span><span class="p">,</span> <span class="n">context_dict</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        
+        <li class="right" >
+          <a href="test.html" title="20. Automated Testing"
+             >next</a>
+          </li>
+		
+        <li class="right" >
+          <a href="jquery.html" title="18. JQuery and Django"
+             >previous</a>
+          </li>
+		
+        <li><a href="../index-2.html">How to Tango with Django 1.7</a> &raquo;</li> 
+
+      </ul>
+
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2013, Leif Azzopardi and David Maxwell.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+
+<!-- Mirrored from www.tangowithdjango.com/book17/chapters/ajax.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 10 Jan 2016 04:11:38 GMT -->
+</html>

@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from zetcode.com/databases/mysqltutorial/datatypes/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Jul 2015 02:47:03 GMT -->
+<head>
+<title>MySQL data types</title>
+<link rel="stylesheet" href="../../../cfg/format2.css" type="text/css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="MySQL, data types, tutorial, databases, SQL">
+<meta name="description" content="In this part of the MySQL tutorial, we 
+will cover MySQL data types.">
+<meta name="author" content="Jan Bodnar">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div id="wide_ad" class="ltow">
+<script async src="../../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- 160x600, August 2011 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:600px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="2484182563"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<div class="content">
+
+
+<header>
+
+<nav>
+<a href="http://zetcode.com/" title="Home">Home</a>&#160;
+<a href="../index.html">Contents</a>
+</nav>
+
+</header>
+
+
+<h1>MySQL data types</h1>
+
+
+<p>
+In this part of the MySQL tutorial, we will cover MySQL data types. 
+</p>
+
+<div class="med_rec">
+<script async src="../../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- NewSquare -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:250px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="0364418177"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+
+<p>
+A data type is a set of representable values. Each value belongs to 
+one data type. Items that can be referenced by a name, such as SQL 
+parameters, columns, fields, attributes, and variables, also have declared types. 
+</p>
+
+<p>
+MySQL supports three groups
+of data types:
+</p>
+
+<ul>
+	<li><a href="#numbers">Numeric</a></li>
+	<li><a href="#datetime">Date &amp; time</a></li>
+	<li><a href="#strings">String</a></li>
+</ul>
+
+<p>
+Choosing the right data types for columns is a part of the initial design
+of the database. Data types ensure the correctness of the data provided. 
+They ensure that the data is used in a meaningful way. This is important when
+we do comparisons, ordering of data. For example dates are compared differently than
+numbers. Other developers using our tables will know what data to expect from the
+database schema. Data types enable MySQL to do validation on the data inserted. 
+Finally, with correct data types for table columns, we allow MySQL to optimise
+the queries and use less disk space. 
+</p>
+
+
+<h2 id="numbers">Numbers</h2>
+
+
+<p>
+Numeric types can be either integers or floating point numbers.
+</p>
+
+<ol>
+  <li>Integers
+    <ol>
+      <li>TINYINT</li>      
+      <li>SMALLINT</li>
+      <li>MEDIUMINT</li>
+      <li>INTEGER</li>
+      <li>BIGINT</li>
+    </ol>
+   </li>
+  <li>Floating points
+    <ol>
+      <li>FLOAT</li>
+      <li>DOUBLE</li>
+      <li>DECIMAL</li>
+    </ol>
+</ol>
+
+
+<h3>Integers</h3>
+
+<p>
+Integers are a subset of the real numbers. They are written without a 
+fraction or a decimal component. Integers fall within a set 
+Z = {..., -2, -1, 0, 1, 2, ...} Integers are infinite.
+Computers can practically work only with a subset of integer values, 
+because computers have finite capacity. Integers are used to count discrete 
+entities. We can have 3, 4, 6 cars, but we cannot have 3.33 cars. 
+We can have 3.33 kilograms.
+</p>
+
+<p>
+The following is a table of integer types in MySQL: <code>TINYINT</code>, 
+<code>MEDIUMINT</code> and <code>BIGINT</code> are MySQL extensions to the 
+SQL standard. 
+</p>
+
+<table> 
+  <tr> 
+    <th>Data type</th> 
+    <th>Bytes</th>
+    <th>Minimum value</th> 
+    <th>Maximum value</th>
+  </tr> 
+  <tr> 
+    <td>TINYINT</td> 
+    <td>1</td>     
+    <td>-128</td>
+    <td>127</td>
+  </tr> 
+  <tr class="gray"> 
+    <td>SMALLINT</td> 
+    <td>2</td>     
+    <td>-32768</td>
+    <td>32767</td>
+  </tr> 
+  <tr> 
+    <td>MEDIUMINT</td> 
+    <td>3</td>     
+    <td>-8388608</td>
+    <td>8388607</td>
+  </tr> 
+  <tr class="gray"> 
+    <td>INTEGER</td> 
+    <td>4</td>     
+    <td>-2147483648</td>
+    <td>2147483647</td>
+  </tr> 
+  <tr> 
+    <td>BIGINT</td> 
+    <td>8</td>     
+    <td>-9223372036854775808</td>
+    <td>9223372036854775807</td>
+  </tr> 
+</table> 
+
+<p>
+The integer types differ in their storage. We can choose values that
+fit our requirements. 
+</p>
+
+<pre class="code">
+mysql> CREATE TABLE Ages(Id SMALLINT, Age TINYINT) ENGINE=Memory;
+</pre>
+
+<p>
+We have created a temporary <code>Ages</code> table. This will be only a 
+temporary testing table, so there will be only a few rows. <code>SMALLINT</code> 
+will certainly suffice. We do not know anyone older than 130 years, so 
+<code>TINYINT</code> will be OK for the <code>Age</code> column. 
+</p>
+
+<pre class="code">
+mysql> INSERT INTO Ages VALUES(1, 43);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO Ages VALUES(2, 128);
+Query OK, 1 row affected, 1 warning (0.00 sec)
+</pre>
+
+<p>
+We insert two rows into the table. There is a warning for the second
+SQL statement. 
+</p>
+
+<pre class="code">
+mysql> SHOW WARNINGS;
++---------+------+----------------------------------------------+
+| Level   | Code | Message                                      |
++---------+------+----------------------------------------------+
+| Warning | 1264 | Out of range value for column 'Age' at row 1 |
++---------+------+----------------------------------------------+
+</pre>
+
+<p>
+We use the <code>SHOW WARNINGS</code> SQL statement to show the last warning
+message. We have tried to insert a value which is larger than the column
+data type allows. There is no integer overflow, as we know from the C language.
+In such a case, the largest allowable integer is written and a warning is 
+issued. 
+</p>
+
+<p>
+When we are dealing with ages, we do not need negative integer values. 
+MySQL supports unsigned integers. This way we can further optimise our
+table definitions.
+</p>
+
+<pre class="code">
+mysql> ALTER TABLE Ages MODIFY Age TINYINT UNSIGNED;
+</pre>
+
+<p>
+We use the SQL statement to change the Age column to have a
+<code>TINYINT UNSIGNED</code> data type. Now we can insert values
+from 0 to 255. 
+</p>
+
+
+<pre class="code">
+mysql> INSERT INTO Ages VALUES(3, 240);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> SELECT * FROM Ages;
++------+------+
+| Id   | Age  |
++------+------+
+|    1 |   43 |
+|    2 |  127 |
+|    3 |  240 |
++------+------+
+</pre>
+
+<p>
+We have inserted a hypothetical 240. Now the column accepts it. 
+</p>
+
+
+<h3>Floating point values</h3>
+
+<p>
+Floating point numbers represent real numbers in computing. 
+Real numbers measure continuous quantities. Like weight, 
+height or speed. MySQL has <code>FLOAT</code>, 
+<code>DOUBLE</code> and <code>DECIMAL</code> floating point values.
+</p>
+
+<p>
+A <code>FLOAT</code> is a single precision floating point number.
+MySQL uses four bytes to store a <code>FLOAT</code> value.
+A <code>DOUBLE</code> is a double precision floating point number.
+MySQL uses eight bytes to store a <code>DOUBLE</code> value. 
+<code>DECIMAL</code> data type is best used for financial calculations.
+</p>
+
+<p>
+Floats, doubles and decimals may have specified their precision and scale.
+In <code>DECIMAL[M, D]</code> the M is the maximum number of digits, the precision.
+The D is the number of digits to the right of the decimal point. It is the scale. 
+If you have a column with <code>DECIMAL(3, 1)</code>, you can insert numbers 
+with maximum of three digits. Two before and one after the decimal point.
+</p>
+
+
+<pre class="code">
+mysql> SELECT 1/3;
++--------+
+| 1/3    |
++--------+
+| 0.3333 |
++--------+
+1 row in set (0.02 sec)
+
+mysql> SELECT 0.3333 = 1/3;
++--------------+
+| 0.3333 = 1/3 |
++--------------+
+|            0 |
++--------------+
+1 row in set (0.00 sec)
+</pre>
+
+<p>
+You might expect that the comparison in the second SQL statement
+returns true, but it does not. The reason is the way, how floating
+point values are stored. 
+</p>
+
+<p>
+Caution must be exercised when working with floating point values. Floats 
+and doubles are faster to deal with, but they are not accurate to the last
+digit. There is a
+small rounding error, which is OK in many cases. In many real word
+situations, we just need to have an approximate value. For example, you have
+a shop in which you have 7.5321 kg of apples, 4.372 kg of oranges. It is 
+perfectly valid to store these two values as 7.5 kg and 4.4 kg. No big deal.
+On the other hand, when we do exact mathematical calculations; let's say 
+we add some financial data or any scientific calculations, we need more 
+precision. For such cases, we use the <code>DECIMAL</code> data type.
+</p>
+
+<pre class="code">
+mysql> CREATE TABLE Numbers (Id TINYINT, Floats FLOAT, Decimals DECIMAL(3, 2));
+</pre>
+
+<p>
+We create a table, in which we are going to store a few floats and decimals.
+</p>
+
+<pre class="code">
+mysql> INSERT INTO Numbers VALUES (1, 1.1, 1.1), (2, 1.1, 1.1), (3, 1.1, 1.1);
+</pre>
+
+<p>
+We insert three rows into the newly created table. 
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM Numbers;
++------+--------+----------+
+| Id   | Floats | Decimals |
++------+--------+----------+
+|    1 |    1.1 |     1.10 |
+|    2 |    1.1 |     1.10 |
+|    3 |    1.1 |     1.10 |
++------+--------+----------+
+</pre>
+
+<p>
+This is how the table looks. 
+</p>
+
+<pre class="code">
+mysql> SELECT SUM(Floats), SUM(Decimals) FROM Numbers;
++------------------+---------------+
+| SUM(Floats)      | SUM(Decimals) |
++------------------+---------------+
+| 3.30000007152557 |          3.30 |
++------------------+---------------+
+</pre>
+
+<p>
+The two results differ. The decimal calculation is more precise. 
+Due to some internal rounding, the sum of floats is not accurate.
+</p>
+
+
+<h2 id="datetime">Date &amp; time values</h2>
+
+<p>
+MySQL has data types for storing dates and times. It has <code>DATE</code>,
+<code>TIME</code>, <code>DATETIME</code>, <code>YEAR</code> and <code>TIMESTAMP</code>.
+</p>
+
+
+<p>
+The <code>DATE</code> is used to store dates. MySQL retrieves and displays date values
+in <code>YYYY-MM-DD</code> format. The supported range is from 
+<code>1000-01-01</code> to <code>9999-12-31</code>.
+</p>
+
+<pre class="code">
+mysql> CREATE TABLE Dates(Id TINYINT, Dates DATE);
+mysql> INSERT INTO Dates VALUES(1, '2011-01-24');
+mysql> INSERT INTO Dates VALUES(2, '2011/01/25');
+mysql> INSERT INTO Dates VALUES(3, '20110126');
+mysql> INSERT INTO Dates VALUES(4, '110127');
+mysql> INSERT INTO Dates VALUES(5, '2011+01+28');
+</pre>
+
+<p>
+Dates are displayed in MySQL in one format, but we can use various 
+date formats in our SQL statements. The <code>YYYY-MM-DD</code>
+is the standard format. But we can use any punctuation character
+between the date parts.
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM Dates;
++------+------------+
+| Id   | Dates      |
++------+------------+
+|    1 | 2011-01-24 |
+|    2 | 2011-01-25 |
+|    3 | 2011-01-26 |
+|    4 | 2011-01-27 |
+|    5 | 2011-01-28 |
++------+------------+
+</pre>
+
+<p>
+We have used multiple formats to insert dates into the table. MySQL
+uses one format to display the dates. 
+</p>
+
+<pre class="code">
+mysql> INSERT INTO Dates VALUES (6, '10000-01-01');
+Query OK, 1 row affected, 1 warning (0.00 sec)
+
+mysql> SHOW WARNINGS;
++---------+------+--------------------------------------------+
+| Level   | Code | Message                                    |
++---------+------+--------------------------------------------+
+| Warning | 1265 | Data truncated for column 'Dates' at row 1 |
++---------+------+--------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT Id, Dates FROM Dates WHERE Id=6;
++------+------------+
+| Id   | Dates      |
++------+------------+
+|    6 | 0000-00-00 |
++------+------------+
+1 row in set (0.00 sec)
+</pre>
+
+<p>
+In case we go beyond the range of supported date values a warning is issued.
+The data is truncated to zero values. 
+</p>
+
+
+<p>
+The <code>TIME</code> data type is used to display time in MySQL. It shows
+values in <code>HH:MM:SS</code> format. The range is from <code>-838:59:59</code> 
+to <code>838:59:59</code>. The hours part of the time format may be greater 
+than 24. It is because <code>TIME</code> data type can be used to denote time 
+intervals. This is also why we can have negative time values. 
+</p>
+
+<pre class="code">
+mysql> SELECT TIMEDIFF('23:34:32', '22:00:00');
++----------------------------------+
+| TIMEDIFF('23:34:32', '22:00:00') |
++----------------------------------+
+| 01:34:32                         |
++----------------------------------+
+</pre>
+
+<p>
+We use the <code>TIMEDIFF()</code> function to subtract two time values.
+</p>
+
+<pre class="code">
+mysql> SELECT TIME('2011-01-29 11:27:42');
++-----------------------------+
+| TIME('2011-01-29 11:27:42') |
++-----------------------------+
+| 11:27:42                    |
++-----------------------------+
+</pre>
+
+<p>
+We can use the <code>TIME()</code> function to extract the time
+part of the date and time value. 
+</p>
+
+<pre class="code">
+mysql> SELECT TIMEDIFF('211344', 201123);
++----------------------------+
+| TIMEDIFF('211344', 201123) |
++----------------------------+
+| 01:02:21                   |
++----------------------------+
+</pre>
+
+<p>
+We can write time values in different formats too. The first
+parameter is a time value in a string format without delimiters.
+The second is a time value specified as a number.
+</p>
+
+
+<p>
+The <code>DATETIME</code> values contain both date and time. MySQL retrieves and
+displays values in <code>YYYY-MM-DD HH:MM:SS</code> format. The supported range 
+is from <code>1000-01-01 00:00:00</code> to <code>9999-12-31 23:59:59</code>.
+</p>
+
+<pre class="code">
+mysql> SELECT DAYNAME('2011@01@29 11@50@13');
++--------------------------------+
+| DAYNAME('2011@01@29 11@50@13') |
++--------------------------------+
+| Saturday                       |
++--------------------------------+
+</pre>
+
+<p>
+MySQL displays date and time in only one format. But in our SQL statements,
+we can use different formats. Any punctuation character may be used as 
+the delimiter between date parts or time parts. In our case, we have used
+the <code>@</code> character. 
+</p>
+
+<p>
+The <code>YEAR</code> is a data type used for representing years. 
+MySQL displays <code>YEAR</code> values in <code>YYYY</code> format. 
+It allows us to assign values to YEAR columns using either strings or 
+numbers. The allowable range is from 1901 to 2155. Illegal year values are
+converted to 0000. 
+</p>
+
+<p>
+A <em>timestamp</em> is a sequence of characters, denoting the
+date and/or time at which a certain event occurred. Timestamps are
+typically used for logging events. In MySQL we have a 
+<code>TIMESTAMP</code> data type for creating timestamps. 
+A <code>TIMESTAMP</code> column is useful for recording the date and 
+time of an <code>INSERT</code> or <code>UPDATE</code> operation. It 
+automatically sets to the date and time of the most recent operation if 
+you do not give it a value yourself. The <code>TIMESTAMP</code> data type 
+has a range of <code>1970-01-01 00:00:01</code> UTC to 
+<code>2038-01-19 03:14:07</code> UTC.
+</p>
+
+<p>
+The following table summarises the supported <code>TIMESTAMP</code>
+formats. 
+</p>
+
+<table> 
+  <tr> 
+    <th>Data type</th> 
+    <th>Format</th>
+  </tr> 
+  <tr> 
+    <td>TIMESTAMP(14)</td> 
+    <td>YYYYMMDDHHMMSS</td>     
+  </tr> 
+  <tr class="gray"> 
+    <td>TIMESTAMP(12)</td> 
+    <td>YYMMDDHHMMSS</td>     
+  </tr> 
+  <tr> 
+    <td>TIMESTAMP(10)</td> 
+    <td>YYMMDDHHMM</td>     
+  </tr> 
+  <tr class="gray"> 
+    <td>TIMESTAMP(8)</td> 
+    <td>YYYYMMDD</td>     
+  </tr> 
+  <tr> 
+    <td>TIMESTAMP(6)</td> 
+    <td>YYMMDD</td>     
+  </tr> 
+  <tr class="gray"> 
+    <td>TIMESTAMP(4)</td> 
+    <td>YYMM</td>     
+  </tr> 
+  <tr> 
+    <td>TIMESTAMP(2)</td> 
+    <td>YY</td>     
+  </tr> 
+</table>
+
+<p>
+The <code>TIMESTAMP</code> data type offers automatic initialisation and 
+updating. We can restrict this data type to have only automatic initialisation or
+automatic update only.
+</p>
+
+<pre class="code">
+mysql> CREATE TABLE Prices(Id TINYINT, Price Decimal(8, 2),
+    -> Stamp TIMESTAMP);
+mysql> INSERT INTO Prices (Id, Price) VALUES (1, 234.34);
+mysql> INSERT INTO Prices (Id, Price) VALUES (2, 344.12);
+</pre>
+
+<p>
+We create a table with a <code>TIMESTAMP</code> column. 
+We insert two rows into the table. The Stamp column is
+not included in the SQL statements. MySQL automatically
+fills the column. 
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM Prices;
++------+--------+---------------------+
+| Id   | Price  | Stamp               |
++------+--------+---------------------+
+|    1 | 234.34 | 2011-01-29 13:24:29 |
+|    2 | 344.12 | 2011-01-29 13:24:59 |
++------+--------+---------------------+
+</pre>
+
+<p>
+The timestamps for the two rows were created. This is the auto-initialisation
+of the <code>TIMESTAMP</code> data type. This can be turned off by 
+<code>Stamp TIMESTAMP DEFAULT 0 ON UPDATE CURRENT_TIMESTAMP</code> SQL code. 
+</p>
+
+<pre class="code">
+mysql> UPDATE Prices SET Price=250.50 WHERE Id=1;
+</pre>
+
+<p>
+We execute the SQL statement to update the <code>Price</code> column in the first row.
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM Prices;
++------+--------+---------------------+
+| Id   | Price  | Stamp               |
++------+--------+---------------------+
+|    1 | 250.50 | 2011-01-29 13:25:50 |
+|    2 | 344.12 | 2011-01-29 13:24:59 |
++------+--------+---------------------+
+</pre>
+
+<p>
+The timestamp of the first column was updated.
+If we wanted to turn off the auto-update of the <code>TIMESTAMP</code>, we could
+use the <code>Stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP</code> SQL code.
+</p>
+
+
+
+<h2 id="strings">Strings</h2>
+
+<p>
+MySQL has the following string data types:
+</p>
+
+<ul>
+  <li>CHAR</li>
+  <li>VARCHAR</li>
+  <li>BINARY</li>
+  <li>VARBINARY</li>
+  <li>BLOB</li>
+  <li>TEXT</li>
+  <li>ENUM</li>
+  <li>SET</li>
+</ul>
+
+
+<p>
+A <code>CHAR</code> is a fixed length character data type. 
+It is declared with a length, <code>CHAR(x)</code>, where x can
+be between 0 to 255. <code>CHAR</code> always uses the same 
+amount of storage space per entry. In case we specify an item
+which is shorter than the declared length, the value is right-padded
+with spaces to the specified length. Trailing spaces are removed 
+when the value is retrieved. 
+</p>
+
+<pre class="code">
+mysql> CREATE TABLE Chars(Id TINYINT, Chars CHAR(3));
+Query OK, 0 rows affected (0.08 sec)
+
+mysql> INSERT INTO Chars VALUES (1, 'a'), (2, 'ab'), 
+    -> (3, 'abc'), (4, 'abce');
+Query OK, 4 rows affected, 1 warning (0.00 sec)
+Records: 4  Duplicates: 0  Warnings: 1
+
+mysql> SHOW WARNINGS;
++---------+------+--------------------------------------------+
+| Level   | Code | Message                                    |
++---------+------+--------------------------------------------+
+| Warning | 1265 | Data truncated for column 'Chars' at row 4 |
++---------+------+--------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+
+<p>
+In the above SQL code, we have created a Chars table, which has one
+column of the <code>CHAR</code> data type. The length is set to three
+characters.  The second SQL statement inserts four rows into the table. 
+Note that there is a warning. With the <code>SHOW WARNINGS</code> statement
+we find out that the data to be inserted at the fourth row has been truncated.
+It is because it exceeded the maximum length allowed.
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM Chars;
++------+-------+
+| Id   | Chars |
++------+-------+
+|    1 | a     |
+|    2 | ab    |
+|    3 | abc   |
+|    4 | abc   |
++------+-------+
+</pre>
+
+<p>
+This is what we have in the table. 
+</p>
+
+<pre class="code">
+mysql> SELECT Id, LENGTH(Chars) AS Length FROM Chars;
++------+--------+
+| Id   | Length |
++------+--------+
+|    1 |      1 |
+|    2 |      2 |
+|    3 |      3 |
+|    4 |      3 |
++------+--------+
+</pre>
+
+<p>
+We have retrieved Ids and the length of the characters that we have
+inserted. Above we have stated that chars are stored at fixed size. 
+Why do we have different size values for the rows. We would expect each
+row to have exactly 3 characters. The reason is that MySQL trims spaces
+for chars at the data retrieval. By setting the <code>sql_mode</code>
+to <code>PAD_CHAR_TO_FULL_LENGTH</code> the spaces are also trimmed. 
+</p>
+
+<pre class="code">
+mysql> SET sql_mode = 'PAD_CHAR_TO_FULL_LENGTH';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SELECT Id, LENGTH(Chars) AS Length FROM Chars;
++------+--------+
+| Id   | Length |
++------+--------+
+|    1 |      3 |
+|    2 |      3 |
+|    3 |      3 |
+|    4 |      3 |
++------+--------+
+4 rows in set (0.00 sec)
+</pre>
+
+<p>
+By changing the <code>sql_mode</code>, we get the expected results. 
+</p>
+
+
+
+<p>
+<code>VARCHAR</code> data types stores variable-length strings. The length
+of the string can be from 0 to 65535. <code>VARCHAR</code> values are not 
+padded when they are stored. Trailing spaces are retained when values 
+are stored and retrieved. Most shorter string data types are stored in
+this data type. For example emails, names of people, of merchandise,
+addresses etc. 
+</p>
+
+<pre class="code">
+mysql> CREATE TABLE FirstNames(Id TINYINT, FirstName VARCHAR(20));
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> INSERT INTO FirstNames VALUES (1, 'Tom'), (2, 'Lucy'), (3, 'Alice'),
+    -> (4, 'Robert'), (5, 'Timothy'), (6, 'Alexander');
+Query OK, 6 rows affected (0.00 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+</pre>
+
+<p>
+We create a FirstNames table in which we store six first names.
+</p>
+
+<pre class="code">
+mysql> SELECT Id, LENGTH(FirstName) AS Length FROM FirstNames;
++------+--------+
+| Id   | Length |
++------+--------+
+|    1 |      3 |
+|    2 |      4 |
+|    3 |      5 |
+|    4 |      6 |
+|    5 |      7 |
+|    6 |      9 |
++------+--------+
+</pre>
+
+<p>
+We can see that names in a <code>VARCHAR</code> column type are stored
+in variable length. This saves disk space.
+</p>
+
+
+<p>
+<code>BINARY</code> and <code>VARBINARY</code> are binary byte data types. 
+They contain byte strings rather than character strings. 
+They have no character sets. Sorting and comparison are based on the numeric 
+values of the bytes in the values.
+The range of the <code>BINARY</code> data types is from 0 to 255. It stores values
+in fixed length. The range of the <code>VARBINARY</code> is from 0 to 65535. 
+</p>
+
+<p>
+A <code>BLOB</code> is a binary large object data type. It can hold a variable
+amount of binary data. It can be used to store binary data like images or
+documents. <code>BLOB</code> has four types:
+</p>
+
+<table> 
+  <tr> 
+    <th>Blog type</th> 
+    <th>Range in bytes</th>
+  </tr> 
+  <tr> 
+    <td>TINYBLOB</td> 
+    <td>0 - 255</td>     
+  </tr> 
+  <tr class="gray"> 
+    <td>BLOB</td> 
+    <td>0 - 65535</td> 
+  </tr> 
+  <tr> 
+    <td>MEDIUMBLOB</td> 
+    <td>0 - 16777215</td>     
+  </tr> 
+  <tr class="gray"> 
+    <td>LONGBLOB</td> 
+    <td>0 - 4294967295</td> 
+  </tr> 
+</table>
+
+
+
+<p>
+A <code>TEXT</code> datatype is used for storing large textual data. 
+For example articles, blogs, pages or comments.
+</p>
+
+<table> 
+  <tr> 
+    <th>Blog type</th> 
+    <th>Range in bytes</th>
+  </tr> 
+  <tr> 
+    <td>TINYTEXT</td> 
+    <td>0 - 255</td>     
+  </tr> 
+  <tr class="gray"> 
+    <td>TEXT</td> 
+    <td>0 - 65535</td> 
+  </tr> 
+  <tr> 
+    <td>MEDIUMTEXT</td> 
+    <td>0 - 16777215</td>     
+  </tr> 
+  <tr class="gray"> 
+    <td>LONGTEXT</td> 
+    <td>0 - 4294967295</td> 
+  </tr> 
+</table>
+
+
+<p>
+The last data types we are going to mention are <code>ENUM</code> and 
+<code>SET</code> The <code>ENUM</code> is a string object with a value 
+chosen from a permitted list of values. They are enumerated explicitly in 
+the column specification. We can insert only one value from the list. 
+</p>
+
+<pre class="code">
+mysql> CREATE TABLE SizeTable(Size ENUM('S', 'M', 'L', 'XL', 'XXL'));
+</pre>
+
+<p>
+We create a table, which has one column of the <code>ENUM</code> type. The 
+list of permitted values is explicitly stated. 
+</p>
+
+<pre class="code">
+mysql> INSERT INTO SizeTable VALUES ('S'), ('L');
+</pre>
+
+<p>
+We insert two rows in the table. 
+</p>
+
+<pre>
+mysql> INSERT INTO SizeTable VALUES ('Large');
+Query OK, 1 row affected, 1 warning (0.00 sec)
+
+mysql> SHOW WARNINGS;
++---------+------+-------------------------------------------+
+| Level   | Code | Message                                   |
++---------+------+-------------------------------------------+
+| Warning | 1265 | Data truncated for column 'Size' at row 1 |
++---------+------+-------------------------------------------+
+</pre>
+
+<p>
+<code>Large</code> was not mentioned in the list. In such a case 
+a warning is issued. It says that the data was truncated. 
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM SizeTable;
++------+
+| Size |
++------+
+| S    |
+| L    |
+|      |
++------+
+</pre>
+
+<p>
+We have two regular values in the table. In the third case, empty text
+was written. 
+</p>
+
+<p>
+A <code>SET</code> is a string object that can have zero or more values,
+each of which must be chosen from a list of permitted values. It is similar
+to the <code>ENUM</code> data type. The difference is that it can contain 
+zero or more values from the list of permitted values. 
+</p>
+
+<p>
+This part of the MySQL tutorial was dedicated to MySQL data types.
+</p>
+
+
+<footer>
+
+<nav class="center">
+<span class="botNavItem"><a href="http://zetcode.com/">Home</a></span> ‡ <span class="botNavItem"><a href="../index.html">Contents</a></span> ‡ 
+<span class="botNavItem"><a href="#">Top of Page</a></span>
+</nav>
+
+<div class="signature">
+<a href="http://zetcode.com/">ZetCode</a> last modified January 18, 2011  <span class="copyright">&copy; 2007 - 2015 Jan Bodnar</span>
+</div>
+
+</footer>
+
+</div> <!-- content -->
+
+</div> <!-- container -->
+
+</body>
+
+<!-- Mirrored from zetcode.com/databases/mysqltutorial/datatypes/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Jul 2015 02:47:03 GMT -->
+</html>
+
+

@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from zetcode.com/wxpython/in18/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Aug 2015 19:21:55 GMT -->
+<head>
+<title>Internationalisation in wxPython</title>
+<link rel="stylesheet" href="../../cfg/format2.css" type="text/css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="wxPython, Internationalization, tutorial, programming, python">
+<meta name="description" content="This part of the wxPython tutorial covers internationalisation.">
+<meta name="author" content="Jan Bodnar">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div id="wide_ad" class="ltow">
+<script async src="../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- 160x600, August 2011 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:600px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="2484182563"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<div class="content">
+
+
+<header>
+
+<nav>
+<a href="http://zetcode.com/" title="Home">Home</a>&#160;
+<a href="../index.html">Contents</a>
+</nav>
+
+</header>
+
+
+<h1>Internationalisation</h1>
+
+<p>
+In computing, Internationalisation and localisation are means of 
+adapting computer software for non-native environments, especially 
+other nations and cultures. Internationalisation is the process of 
+ensuring that an application is capable of adapting to local 
+requirements, for instance ensuring that the local writing system 
+can be displayed. Localisation is the process of adapting the software 
+to be as familiar as possible to a specific locale, by displaying 
+text in the local language and using local conventions for the 
+display of such things as units of measurement. (wikipedia)
+</p>
+
+<div class="med_rec">
+<script async src="../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- NewSquare -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:250px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="0364418177"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div> 
+
+<h2>Unicode</h2>
+
+<p>
+There are two builds of wxPython. The ANSI build and the Unicode build. 
+If we want to create and use wxPython applications
+in languages other than English, we must have the Unicode build.
+</p>
+
+<p>
+<em>Unicode</em> is an industry standard allowing computers to consistently 
+represent and manipulate text expressed in any of the world's writing systems. 
+It is a character encoding standard which uses 16 bits for storing characters. 
+The traditional <em>ASCII</em> encoding uses only 8 bits.
+</p>
+
+<p>
+First, we need to get the Unicode encoding of Лев Николaевич Толстoй Анна Каренина words. 
+</p>
+
+<pre class="code">
+>>> unicode(u'Лев Николaевич Толстoй Анна Каренина')
+u'\u041b\u0435\u0432 \u041d\u0438\u043aa\u0430\u0301\u0435\u0432\u0438\u0447
+\u0422\u043e\u043b\u0441o\u0439 \u0410\u043d\u043d\u0430 
+\u041a\u0430\u0440\u0435\u043d\u0438\u043d\u0430'
+</pre>
+
+<p>
+We launch the Python terminal and use the <code>unicode()</code> function call. 
+Notice that in the example, we use additional \n\ characters to divide the 
+words into two lines.
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+
+import wx
+
+text = u'\u041b\u0435\u0432 \u041d\u0438\u043a\u043e\u043b\u0430\
+\u0435\u0432\u0438\u0447 \u0422\u043e\u043b\u0441\u0442\u043e\u0439 \n\
+\u0410\u043d\u043d\u0430 \u041a\u0430\u0440\u0435\u043d\u0438\u043d\u0430'
+
+
+class Unicode(wx.Frame):
+    def __init__(self, parent, id, title):
+        wx.Frame.__init__(self, parent, id, title, size=(250, 150))
+
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
+
+        self.Centre()
+        self.Show(True)
+
+    def OnPaint(self, event):
+        dc = wx.PaintDC(self)
+        dc.DrawText(text, 50, 50)
+
+app = wx.App()
+Unicode(None, -1, 'Unicode')
+app.MainLoop()
+</pre>
+
+<p>
+In the example, we draw Anna Karenina in russian azbuka on the window.
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/unicode.jpg" alt="Unicode">
+<figcaption>Figure: Unicode</figcaption>
+</figure>
+
+
+<h3>Locale</h3>
+
+<p>
+A <em>locale</em> is an object that defines user's language, country, number format, letter 
+format, currency format etc. A local variant has the following format.
+</p>
+
+<pre class="definition">
+[language[_territory][.codeset][@modifier]]
+</pre>
+
+<p>
+For example, <em>de_AT.utf8</em> is a German local used in Austria, with UTF8 codeset.
+</p>
+
+
+<pre class="code">
+#!/usr/bin/python
+
+# locale.py
+
+import wx
+import time
+import locale
+
+class Locale(wx.Frame):
+    def __init__(self, parent, id, title):
+        wx.Frame.__init__(self, parent, id, title, size=(250, 420))
+
+        panel = wx.Panel(self, -1)
+
+
+        tm = time.localtime()
+
+        font = wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.BOLD)
+        us = wx.StaticText(self, -1, 'United States', (25, 20))
+        us.SetFont(font)
+
+        wx.StaticLine(self, -1, (25, 50), (200 ,1))
+
+        locale.setlocale(locale.LC_ALL, '')
+        date = time.strftime('%x', tm)
+        time_ = time.strftime('%X', tm)
+        curr =  locale.currency(100000)
+
+        wx.StaticText(self, -1, 'date: ', (25, 70))
+        wx.StaticText(self, -1, 'time: ', (25, 90))
+        wx.StaticText(self, -1, 'currency: ', (25, 110))
+
+        wx.StaticText(self, -1, str(date), (125, 70))
+        wx.StaticText(self, -1, str(time_), (125, 90))
+        wx.StaticText(self, -1, str(curr), (125, 110))
+
+        de = wx.StaticText(self, -1, 'Germany', (25, 150))
+        de.SetFont(font)
+
+        wx.StaticLine(self, -1, (25, 180), (200,1))
+
+        locale.setlocale(locale.LC_ALL, ('de_DE', 'UTF8'))
+        date = time.strftime('%x', tm)
+        time_ = time.strftime('%X', tm)
+        curr =  locale.currency(100000)
+
+        wx.StaticText(self, -1, 'date: ', (25, 200))
+        wx.StaticText(self, -1, 'time: ', (25, 220))
+        wx.StaticText(self, -1, 'currency: ', (25, 240))
+        wx.StaticText(self, -1, date, (125, 200))
+        wx.StaticText(self, -1, time_, (125, 220))
+        wx.StaticText(self, -1, curr, (125, 240))
+
+        de = wx.StaticText(self, -1, 'Slovakia', (25, 280))
+        de.SetFont(font)
+
+        wx.StaticLine(self, -1, (25, 310), (200,1))
+
+        locale.setlocale(locale.LC_ALL, ('sk_SK', 'UTF8'))
+        date = time.strftime('%x', tm)
+        time_ = time.strftime('%X', tm)
+        curr =  locale.currency(100000)
+
+        wx.StaticText(self, -1, 'date: ', (25, 330))
+        wx.StaticText(self, -1, 'time: ', (25, 350))
+        wx.StaticText(self, -1, 'currency: ', (25, 370))
+
+        wx.StaticText(self, -1, str(date), (125, 330))
+        wx.StaticText(self, -1, str(time_), (125, 350))
+        wx.StaticText(self, -1, str(curr), (125, 370))
+
+        self.Centre()
+        self.Show(True)
+
+app = wx.App()
+Locale(None, -1, 'Locale')
+app.MainLoop()
+</pre>
+
+<p>	
+We use the standard built-in module <em>locale</em> to work with localised settings. 
+In our example, we will show various formats of date, time 
+and currency in the USA, Germany, and Slovakia. 
+</p>
+
+<pre class="explanation">
+locale.setlocale(locale.LC_ALL, ('de_DE', 'UTF8'))
+</pre>
+
+<p>
+Here we set a locale object for Germany. <code>LC_ALL</code> is a combination 
+of all various local settings, e.g. <code>LC_TIME</code>, <code>LC_MONETARY</code>, 
+and <code>LC_NUMERIC</code>.
+</p>
+
+<pre class="explanation">
+date = time.strftime('%x', tm)
+time_ = time.strftime('%X', tm)
+curr =  locale.currency(100000)
+</pre>
+
+<p>
+These function calls reflect the current locale object.
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/locale.jpg" alt="Locale">
+<figcaption>Figure: Locale</figcaption>
+</figure>
+
+
+<h2>World Time</h2>
+
+
+<p>
+At a specific moment, we have different time in countries across the world. 
+Our globe is divided into time zones. It is not uncommon for programmers 
+to deal with such tasks. wxPython comes with a <code>wx.DateTime</code> object. 
+According to the documentation, <code>wxDateTime</code> class represents an absolute 
+moment in the time. 
+</p>
+
+
+<pre class="code">
+#!/usr/bin/python
+
+import wx
+import time
+
+class WorldTime(wx.Frame):
+    def __init__(self, parent, id, title):
+        wx.Frame.__init__(self, parent, id, title, size=(270, 280))
+
+        self.panel = wx.Panel(self, -1)
+        self.panel.SetBackgroundColour('#000000')
+        font = wx.Font(12, wx.FONTFAMILY_DEFAULT, 
+                wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, 'Georgia')
+
+        self.dt = wx.DateTime()
+
+        self.tokyo = wx.StaticText(self.panel, -1, 
+                self.dt.FormatTime() , (20, 20))
+        self.tokyo.SetForegroundColour('#23f002')
+        self.tokyo.SetFont(font)
+
+        self.moscow = wx.StaticText(self.panel, -1,  
+                self.dt.FormatTime() , (20, 70))
+        self.moscow.SetForegroundColour('#23f002')
+        self.moscow.SetFont(font)
+
+        self.budapest = wx.StaticText(self.panel, -1,  
+                self.dt.FormatTime() , (20, 120))
+        self.budapest.SetForegroundColour('#23f002')
+        self.budapest.SetFont(font)
+
+        self.london = wx.StaticText(self.panel, -1,  
+                self.dt.FormatTime() , (20, 170))
+        self.london.SetForegroundColour('#23f002')
+        self.london.SetFont(font)
+
+        self.newyork = wx.StaticText(self.panel, -1,  
+                self.dt.FormatTime() , (20, 220))
+        self.newyork.SetForegroundColour('#23f002')
+        self.newyork.SetFont(font)
+
+        self.OnTimer(None)
+
+        self.timer = wx.Timer(self)
+        self.timer.Start(1000)
+        self.Bind(wx.EVT_TIMER, self.OnTimer)
+
+        self.Centre()
+        self.Show(True)
+
+    def OnTimer(self, evt):
+        now = self.dt.Now()
+        self.tokyo.SetLabel('Tokyo: ' + str(now.Format(('%a %T'), 
+                wx.DateTime.GMT_9)))
+        self.moscow.SetLabel('Moscow: ' + str(now.Format(('%a %T'), 
+                wx.DateTime.MSD)))
+        self.budapest.SetLabel('Budapest: ' +  str(now.Format(('%a %T'), 
+                wx.DateTime.CEST)))
+        self.london.SetLabel('London: ' + str(now.Format(('%a %T'), 
+                wx.DateTime.WEST)))
+        self.newyork.SetLabel('New York: ' + str(now.Format(('%a %T'), 
+                wx.DateTime.EDT)))
+
+
+app = wx.App()
+WorldTime(None, -1, 'World Time')
+app.MainLoop()
+</pre>
+
+<p>
+In the code example, we show current time in Tokyo, 
+Moscow, Budapest, London, and New York.
+</p>
+
+<pre class="explanation">
+self.dt = wx.DateTime()
+</pre>
+
+<p>
+Here we create a <code>wx.DateTime</code> object.
+</p>
+
+<pre class="explanation">
+now = self.dt.Now()
+</pre>
+
+<p>
+We get the "absolute moment" in time.
+</p>
+
+<pre class="explanation">
+self.tokyo.SetLabel('Tokyo: ' + str(now.Format(('%a %T'), 
+    wx.DateTime.GMT_9)))
+</pre>
+
+<p>
+This code line sets the time to the appropriate format. The <code>%a</code> 
+conversion specifier is an abbreviated weekday name according to the current 
+locale. The <code>%T</code> is the time of day using decimal numbers 
+using the format <code>%H:%M:%S</code>. The second parameter of the 
+<code>Format()</code> method specifies the time zone. 
+GMT_9 is used for Japan, EDT (Eastern Daylight Saving Time) is used in New York etc.
+</p>
+
+<p>
+The code example was checked with the 
+<a href="http://www.timeanddate.com/worldclock/">timeanddate.com</a> website.
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/worldtime.jpg" alt="World Time">
+<figcaption>Figure: World Time</figcaption>
+</figure>
+
+
+<h2>Sorting</h2>
+
+<p>
+Locale settings also affect the way, how strings are being sorted. For example 
+Hungarian language has some characters that are missing in Slovak 
+language or English language. Some languages have accents, others do not. 
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+
+# collate.py
+
+import wx
+import locale
+
+ID_SORT = 1
+
+words = [u'Sund', u'S\xe4bel', u'S\xfcnde', u'Schl\xe4fe', u'Sabotage']
+
+
+class Collate(wx.Frame):
+    def __init__(self, parent, id, title):
+        wx.Frame.__init__(self, parent, id, title, size=(300, 220))
+
+        panel = wx.Panel(self, -1)
+        hbox = wx.BoxSizer(wx.HORIZONTAL)
+
+        self.listbox = wx.ListBox(panel, -1)
+        for i in words:
+            self.listbox.Append(i)
+        hbox.Add(self.listbox, 1, wx.EXPAND | wx.ALL, 20)
+
+        btnPanel = wx.Panel(panel, -1)
+        vbox = wx.BoxSizer(wx.VERTICAL)
+        new = wx.Button(btnPanel, ID_SORT, 'Sort', size=(90, 30))
+
+        self.Bind(wx.EVT_BUTTON, self.OnSort, id=ID_SORT)
+
+        vbox.Add((-1, 20))
+        vbox.Add(new)
+
+        btnPanel.SetSizer(vbox)
+        hbox.Add(btnPanel, 0.6, wx.EXPAND | wx.RIGHT, 20)
+        panel.SetSizer(hbox)
+
+        locale.setlocale(locale.LC_COLLATE, ('de_DE', 'UTF8'))
+
+        self.Centre()
+        self.Show(True)
+
+    def OnSort(self, event):
+        self.listbox.Clear()
+        words.sort( lambda a,b: locale.strcoll(a, b) )
+        for i in words:
+            self.listbox.Append(i)
+
+
+app = wx.App()
+Collate(None, -1, 'Collate')
+app.MainLoop()
+</pre>
+
+<p>
+In our example, we took 5 germam words from the dictionary. 
+The default <code>sort()</code> function sorts these words this way:
+Sabotage, Schläfe, Sund, Säbel, Sünde. This is incorrect, 
+because in german alphabet ä character precedes a character.
+To get the corect sorting, we must use locale functions.
+</p>
+
+<pre class="explanation">
+locale.setlocale(locale.LC_COLLATE, ('de_DE', 'UTF8'))
+</pre>
+
+<p>
+Here we set the german collate. We could use the <code>LC_ALL</code> option or 
+the more specific <code>LC_COLLATE</code> one.
+</p>
+
+<pre class="explanation">
+words.sort( lambda a,b: locale.strcoll(a, b) )
+</pre>
+
+<p>
+The trick is to use a new compare function within the <code>sort()</code> function. 
+We define an anonymous lambda function.
+The <code>strcoll()</code> function compares two strings and returns -1, 0, 1 
+exactly like the default one, but it takes the locale settings (the collate) 
+into account. This way we have the correct sorting of words.
+</p>
+
+
+<figure>
+<img src="../../img/gui/wxpython/collate.jpg" alt="Collate">
+<figcaption>Figure: Collate</figcaption>
+</figure>
+
+
+<h2>Simple Translation</h2>
+
+<p>
+In the following example, we will demonstrate a very basic translation.
+</p>
+
+<p>
+A programmer has two options. Either to use the GNU gettext or to use the 
+wxPython catalogs. Both systems are compatible.
+</p>
+
+<p>
+wxPython has a class <code>wx.Locale</code>, which is a base for using message 
+catalogs. Each translation has one catalog.
+Say, we want to translate a string into German language. 
+First, we must ensure that we have language support for German language.
+</p>
+
+<pre class="code">
+$ locale -a
+C
+de_AT.utf8
+de_BE.utf8
+de_CH.utf8
+de_DE.utf8
+de_LU.utf8
+en_AU.utf8
+en_BW.utf8
+en_CA.utf8
+en_DK.utf8
+en_GB.utf8
+en_HK.utf8
+en_IE.utf8
+en_IN
+en_NZ.utf8
+en_PH.utf8
+en_SG.utf8
+en_US.utf8
+en_ZA.utf8
+en_ZW.utf8
+POSIX
+sk_SK.utf8
+</pre>
+
+<p>
+To check what languages are supported, we use the <code>locale</code> command. 
+On my system, I have english, german and slovak language support. English 
+language and german language have different dialects that is why we have 
+so many options. Notice the <em>utf8</em> string. This means that the system uses 
+utf8 encoding for working with strings.
+</p>
+
+<p>
+Next we write our code example. We put the string that are to be 
+translated into this <code>_()</code>, or we can use the <code>wx.GetTranslation()</code> call.
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+
+import wx
+
+class Translation(wx.Frame):
+    def __init__(self, parent, id, title):
+        wx.Frame.__init__(self, parent, id, title, size=(220, 100))
+
+        panel = wx.Panel(self, -1)
+
+        mylocale = wx.Locale()
+        mylocale.AddCatalogLookupPathPrefix('.')
+        mylocale.AddCatalog('simple_de')
+
+        _ = wx.GetTranslation
+
+        wx.StaticText(panel, -1, _("hello"), (10, 10))
+        #wx.StaticText(panel, -1, wx.GetTranslation('hello'), (10, 10))
+
+        self.Centre()
+        self.Show(True)
+
+app = wx.App()
+Translation(None, -1, 'Translation')
+app.MainLoop()
+</pre>
+
+<p>
+Next we create a so called PO file. It is a simple text file, which is 
+translators use to translate the strings.
+</p>
+
+<pre class="code">
+pygettext -o simple_de.po simple.py
+</pre>
+
+<p>
+To create a po file, we use the <em>pygettext</em> command. To fully 
+understand the format of the po file, consult 
+the gnu gettext <a href="http://www.gnu.org/software/gettext/manual/gettext.html">manual</a>.
+</p>
+
+<pre class="code">
+"Content-Type: text/plain; charset=utf-8\n"
+</pre>
+
+<p>
+We edit the <code>simple_de.po</code> file. We must specify the charset. In our case 
+it is utf-8. 
+</p>
+
+<pre class="code">
+#: simple.py:17
+msgid "hello"
+msgstr "Grüß Gott"
+</pre>
+
+<p>
+Here we provide a translation for the hello string. 
+</p>
+
+<p>
+The last thing we do is to create a binary message catalog.
+</p>
+
+<pre class="code">
+msgfmt --output-file simple_de.mo simple_de.po
+</pre>
+
+<p>
+To produce a mo file, we call the <em>msgfmt</em> command.
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/translation.jpg" alt="Simple translation">
+<figcaption>Figure: Simple translation</figcaption>
+</figure>
+
+
+<p>
+In this chapter, we have worked with Unicode characters. 
+</p>
+
+<div class="hor">
+<script async src="../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- horizontal -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:468px;height:60px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="1734478269"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<footer>
+
+<nav class="center">
+<span class="botNavItem"><a href="http://zetcode.com/">Home</a></span> ‡ <span class="botNavItem"><a href="../index.html">Contents</a></span> ‡
+<span class="botNavItem"><a href="#">Top of Page</a></span>
+</nav>
+
+<div class="signature">
+<a href="http://zetcode.com/">ZetCode</a> last modified October 8, 2007  <span class="copyright">&copy; 2007 - 2015 Jan Bodnar</span>
+</div>
+
+</footer>
+
+</div> <!-- content -->
+
+</div> <!-- container -->
+
+</body>
+
+<!-- Mirrored from zetcode.com/wxpython/in18/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Aug 2015 19:21:58 GMT -->
+</html>
+

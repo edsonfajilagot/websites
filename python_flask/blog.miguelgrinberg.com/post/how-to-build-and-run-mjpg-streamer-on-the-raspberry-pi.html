@@ -1,0 +1,1001 @@
+﻿<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from blog.miguelgrinberg.com/post/how-to-build-and-run-mjpg-streamer-on-the-raspberry-pi by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:51:49 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    
+    <title>
+    
+        How to build and run MJPG-Streamer on the Raspberry Pi - miguelgrinberg.com
+    
+</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="description" content="miguelgrinberg.com">
+	<meta name="copyright" content="Copyright (c) 2012-2015 Miguel Grinberg">
+	<meta name="author" content="Miguel Grinberg">
+    
+    <meta name="keywords" content="raspberry pi, programming, video, camera, security, mjpg-streamer, feed, streaming">
+    
+
+    
+    <!-- Bootstrap -->
+    <link href="../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../static/prettify.css" type="text/css" rel="stylesheet" />
+    <link href="../static/colorbox/colorbox.css" rel="stylesheet" type="text/css" />
+    <link href="../static/style.css" rel="stylesheet" type="text/css" />
+
+    <link rel="shortcut icon" href="../static/favicon.ico">
+	<link rel="alternate" type="application/rss+xml" href="../feed" title="miguelgrinberg.com RSS feed">
+
+  </head>
+  <body>
+    
+    <!-- facebook sdk -->
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "../../connect.facebook.net/en_US/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    <!-- google plus sdk -->
+    <script type="text/javascript" src="../../apis.google.com/js/plusone.js"></script>
+    <!-- twitter sdk -->
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="../../platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <!-- linkedin sdk -->
+    <script src="../../platform.linkedin.com/in.js" type="text/javascript"></script>
+
+    
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://blog.miguelgrinberg.com/index">miguelgrinberg.com</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="http://blog.miguelgrinberg.com/index">Home</a></li>
+                        <li><a href="about-me.html">About Me</a></li>
+                        <li><a href="about-this-blog.html">About This Blog</a></li>
+                        
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <p class="navbar-text" style="margin-top: 10px; margin-bottom: 0px;">
+                                <a type="application/rss+xml" href="../feed"><img src="../static/rss.png" alt="RSS Feed" title="RSS Feed" /></a>
+                                <a href="https://www.facebook.com/miguelgrinbergblog"><img src="../static/facebook.png" alt="Facebook" title="Facebook" /></a>
+                                <a href="https://plus.google.com/u/0/117786742456929977820"><img src="../static/googleplus.png" alt="Google+" title="Google+" /></a>
+                                <a href="http://www.linkedin.com/in/miguelgrinberg"><img src="../static/linkedin.png" alt="LinkedIn" title="LinkedIn" /></a>
+                                <a href="http://github.com/miguelgrinberg"><img src="../static/github.png" alt="GitHub" title="GitHub" /></a>
+                                <a href="https://twitter.com/#!/miguelgrinberg"><img src="../static/twitter.png" alt="Twitter" title="Twitter" /></a>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </nav>
+
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-push-9 sidebar-bg">
+                <div id="sidebar">
+                    
+
+                    
+                    <h1>Building Web APIs with Flask</h1>
+                    <p>Flask is the ideal Python framework for building REST APIs that are flexible, easy to maintain and efficient. I have created a training video with O'Reilly in which I show all my techniques:</p>
+                    <p><center><a href="http://bit.ly/flaskapi"><img style="border: 1px solid black;" src="../static/flask-api-cover-tiny.png"></a></center></p>
+                    <p>Visit <a href="http://flaskbook.com/">http://flaskbook.com</a> for information about this and other Flask training products I have created!</p>
+                    
+
+                    <h1>About Miguel</h1>
+                    <img style="float: right; margin: 0px 8px 8px 0px; padding: 4px; border: 1px solid #ccc;" src="../static/miguel.jpg" />
+                    <p>Welcome to my blog!</p>
+                    <p>I'm a software engineer, photographer and filmmaker in Portland, Oregon, USA.</p>
+                    <p>You can also find me on <a href="https://www.facebook.com/miguelgrinbergblog">Facebook</a>, <a href="https://plus.google.com/u/0/117786742456929977820">Google+</a>, <a href="http://www.linkedin.com/in/miguelgrinberg">LinkedIn</a>, <a href="https://github.com/miguelgrinberg">Github</a> and <a href="https://twitter.com/#!/miguelgrinberg">Twitter</a>.</p>
+                    <p>Thank you for visiting!</p>
+
+                    
+
+                    
+                    <h1>Categories</h1>
+<ul>
+
+	<li>
+		<a href="../category/Arduino/feed">
+			<img src="../static/rss-small.png" title="Arduino RSS Feed" label="Arduino RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Arduino.html">Arduino</a></span> (7)
+	</li>
+
+	<li>
+		<a href="../category/Authentication/feed">
+			<img src="../static/rss-small.png" title="Authentication RSS Feed" label="Authentication RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Authentication.html">Authentication</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../category/Blog/feed">
+			<img src="../static/rss-small.png" title="Blog RSS Feed" label="Blog RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Blog.html">Blog</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/C%2b%2b/feed">
+			<img src="../static/rss-small.png" title="C++ RSS Feed" label="C++ RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/C%2b%2b.html">C++</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Cloud/feed">
+			<img src="../static/rss-small.png" title="Cloud RSS Feed" label="Cloud RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Cloud.html">Cloud</a></span> (2)
+	</li>
+
+	<li>
+		<a href="../category/Filmmaking/feed">
+			<img src="../static/rss-small.png" title="Filmmaking RSS Feed" label="Filmmaking RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Filmmaking.html">Filmmaking</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Flask/feed">
+			<img src="../static/rss-small.png" title="Flask RSS Feed" label="Flask RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Flask.html">Flask</a></span> (39)
+	</li>
+
+	<li>
+		<a href="../category/Games/feed">
+			<img src="../static/rss-small.png" title="Games RSS Feed" label="Games RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Games.html">Games</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Gear/feed">
+			<img src="../static/rss-small.png" title="Gear RSS Feed" label="Gear RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Gear.html">Gear</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/HTML5/feed">
+			<img src="../static/rss-small.png" title="HTML5 RSS Feed" label="HTML5 RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/HTML5.html">HTML5</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Heroku/feed">
+			<img src="../static/rss-small.png" title="Heroku RSS Feed" label="Heroku RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Heroku.html">Heroku</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Javascript/feed">
+			<img src="../static/rss-small.png" title="Javascript RSS Feed" label="Javascript RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Javascript.html">Javascript</a></span> (3)
+	</li>
+
+	<li>
+		<a href="../category/Movie%20Reviews/feed">
+			<img src="../static/rss-small.png" title="Movie Reviews RSS Feed" label="Movie Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Movie%20Reviews.html">Movie Reviews</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Netflix/feed">
+			<img src="../static/rss-small.png" title="Netflix RSS Feed" label="Netflix RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Netflix.html">Netflix</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Node.js/feed">
+			<img src="../static/rss-small.png" title="Node.js RSS Feed" label="Node.js RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Node.html">Node.js</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/OpenStack/feed">
+			<img src="../static/rss-small.png" title="OpenStack RSS Feed" label="OpenStack RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/OpenStack.html">OpenStack</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Personal/feed">
+			<img src="../static/rss-small.png" title="Personal RSS Feed" label="Personal RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Personal.html">Personal</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Photography/feed">
+			<img src="../static/rss-small.png" title="Photography RSS Feed" label="Photography RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Photography.html">Photography</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Product%20Reviews/feed">
+			<img src="../static/rss-small.png" title="Product Reviews RSS Feed" label="Product Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Product%20Reviews.html">Product Reviews</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Programming/feed">
+			<img src="../static/rss-small.png" title="Programming RSS Feed" label="Programming RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Programming.html">Programming</a></span> (47)
+	</li>
+
+	<li>
+		<a href="../category/Project%20Management/feed">
+			<img src="../static/rss-small.png" title="Project Management RSS Feed" label="Project Management RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Project%20Management.html">Project Management</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Python/feed">
+			<img src="../static/rss-small.png" title="Python RSS Feed" label="Python RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Python.html">Python</a></span> (43)
+	</li>
+
+	<li>
+		<a href="../category/REST/feed">
+			<img src="../static/rss-small.png" title="REST RSS Feed" label="REST RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/REST.html">REST</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Rackspace/feed">
+			<img src="../static/rss-small.png" title="Rackspace RSS Feed" label="Rackspace RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Rackspace.html">Rackspace</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Raspberry%20Pi/feed">
+			<img src="../static/rss-small.png" title="Raspberry Pi RSS Feed" label="Raspberry Pi RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Raspberry%20Pi.html">Raspberry Pi</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/RhinoSteady/feed">
+			<img src="../static/rss-small.png" title="RhinoSteady RSS Feed" label="RhinoSteady RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/RhinoSteady.html">RhinoSteady</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Robotics/feed">
+			<img src="../static/rss-small.png" title="Robotics RSS Feed" label="Robotics RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Robotics.html">Robotics</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Video/feed">
+			<img src="../static/rss-small.png" title="Video RSS Feed" label="Video RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Video.html">Video</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../category/Windows/feed">
+			<img src="../static/rss-small.png" title="Windows RSS Feed" label="Windows RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Windows.html">Windows</a></span> (1)
+	</li>
+
+</ul>
+                    
+                </div>
+            </div>
+            <div class="col-md-8 col-md-pull-4">
+                <div id="main">
+                    
+                    
+                    
+                    
+                    
+
+<div class="post">
+
+<p class="date"><span class="flask-moment" data-timestamp="2013-10-01T05:45:43Z" data-format="format('LL')" data-refresh="0">2013-10-01T05:45:43Z</span></p>
+<h1 class="post-title"><a href="how-to-build-and-run-mjpg-streamer-on-the-raspberry-pi.html">How to build and run MJPG-Streamer on the Raspberry Pi</a></h1>
+<div class="posted">Posted by <span class="label label-danger"><a href="http://blog.miguelgrinberg.com/author/Miguel Grinberg">Miguel Grinberg</a></span> under <span class="label label-primary"><a href="../category/Raspberry%20Pi.html">Raspberry Pi</a></span>, <span class="label label-primary"><a href="../category/Programming.html">Programming</a></span>, <span class="label label-primary"><a href="../category/Video.html">Video</a></span>. </div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/how-to-build-and-run-mjpg-streamer-on-the-raspberry-pi" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/how-to-build-and-run-mjpg-streamer-on-the-raspberry-pi" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="how-to-build-and-run-mjpg-streamer-on-the-raspberry-pi.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/how-to-build-and-run-mjpg-streamer-on-the-raspberry-pi" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+<div class="post_body"><p>It's been a while since I wrote the article on <a href="stream-video-from-the-raspberry-pi-camera-to-web-browsers-even-on-ios-and-android.html">streaming video from the Raspberry Pi using MJPG-Streamer</a>. Since I published that article I have received several comments and questions regarding issues building MJPG-Streamer, so in this short post I'm giving you revised build instructions.</p>
+<h2>1. Install build dependencies</h2>
+<p>The following command installs the three libraries that MJPG-Streamer uses:</p>
+<pre><code>$ sudo apt-get install libjpeg8-dev imagemagick libv4l-dev
+</code></pre>
+<h2>2. Add missing videodev.h</h2>
+<p>The <code>videodev.h</code> header file that MJPG-Streamer needs has been replaced with a <code>videodev2.h</code>. To make MJPG-Streamer happy you have to create a symbolic link:</p>
+<pre><code>$ sudo ln -s /usr/include/linux/videodev2.h /usr/include/linux/videodev.h
+</code></pre>
+<h2>3. Download MJPG-Streamer</h2>
+<p>The source code for MJPG-Streamer is available at sourceforge.net, but it is tricky to find the direct download link:</p>
+<pre><code>$ wget http://sourceforge.net/code-snapshots/svn/m/mj/mjpg-streamer/code/mjpg-streamer-code-182.zip
+</code></pre>
+<p>Note that sometimes the link above fails to work. If that is the case, you can also download from your web browser by opening this page: <a href="http://sourceforge.net/p/mjpg-streamer/code/HEAD/tarball">http://sourceforge.net/p/mjpg-streamer/code/HEAD/tarball</a>.</p>
+<h2>4. Unzip the MJPG-Streamer source code</h2>
+<p>The source code download is a compressed zip file. Put the file in your home directory (or a temporary folder, if you prefer) and run the following to extract the files:</p>
+<pre><code>$ unzip mjpg-streamer-code-182.zip
+</code></pre>
+<h2>5. Build MJPG-Streamer</h2>
+<p>MJPG-Streamer comes with several plugins, but only a couple of them are needed to stream video according to the method I explained in my <a href="stream-video-from-the-raspberry-pi-camera-to-web-browsers-even-on-ios-and-android.html">previous article</a>. The command below only builds what's needed:</p>
+<pre><code>$ cd mjpg-streamer-code-182/mjpg-streamer
+$ make mjpg_streamer input_file.so output_http.so
+</code></pre>
+<h2>6. Install MJPG-Streamer</h2>
+<p>I did not discuss installation in the previous article, and that confused many readers. The following commands copy all the needed files into system directories:</p>
+<pre><code>$ sudo cp mjpg_streamer /usr/local/bin
+$ sudo cp output_http.so input_file.so /usr/local/lib/
+$ sudo cp -R www /usr/local/www
+</code></pre>
+<h2>7. Start the camera</h2>
+<p>We are almost there. Now it is time to start the camera module:</p>
+<pre><code>$ mkdir /tmp/stream
+$ raspistill --nopreview -w 640 -h 480 -q 5 -o /tmp/stream/pic.jpg -tl 100 -t 9999999 -th 0:0:0 &amp;
+</code></pre>
+<p>Of course, you can use different options to <code>raspistill</code> if you like.</p>
+<h2>8. Start MJPG-Streamer</h2>
+<p>The camera is now writing images, so all that is left is to start MJPG-Streamer:</p>
+<pre><code>LD_LIBRARY_PATH=/usr/local/lib mjpg_streamer -i "input_file.so -f /tmp/stream -n pic.jpg" -o "output_http.so -w /usr/local/www"
+</code></pre>
+<h2>9. Watch the Stream!</h2>
+<p>Now you can connect with your web browser and watch the stream live. If you want to watch from within the same Raspberry Pi you can enter <code>http://localhost:8080</code> in the browser's address bar. If you want to watch from another computer in your network use <code>http://&lt;IP-address&gt;:8080</code>.</p>
+<h2>10. Cleanup</h2>
+<p>After you verify that everything is working you can remove the source code:</p>
+<pre><code>$ cd ../../
+$ rm -rf mjpg-streamer-182
+</code></pre>
+<h2>Conclusion</h2>
+<p>I hope these instructions clarify all the aspects of setting up the streaming server on the Pi. If you still have questions let me know below!</p>
+<p>Miguel</p></div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/how-to-build-and-run-mjpg-streamer-on-the-raspberry-pi" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/how-to-build-and-run-mjpg-streamer-on-the-raspberry-pi" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="how-to-build-and-run-mjpg-streamer-on-the-raspberry-pi.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/how-to-build-and-run-mjpg-streamer-on-the-raspberry-pi" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+
+
+<h4 style="text-align: right"><a name="comments"></a>266 comments</h4>
+
+
+<div class="comment">
+    <ul>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/c65a5f7f6e5574386989eb93247183fcce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#1</span> <span class="label label-primary">Edwin</span> said
+                    <span class="flask-moment" data-timestamp="2013-10-01T17:55:33Z" data-format="fromNow(0)" data-refresh="0">2013-10-01T17:55:33Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hello,
+
+I just wanted to say &#39;big thank you for your efforts&#39;. However, I still have some question. There is symbol &amp; in code, which puts the application to run in the background. I pasted command in terminal, but preview windows still showing up. I can&#39;t do anything in a system, because it&#39;s so big. It hides my dekstop. Maybe there is another way to hide this preview function? Thanks!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#2</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-10-01T18:15:09Z" data-format="fromNow(0)" data-refresh="0">2013-10-01T18:15:09Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Edwin: I don&#39;t see a preview because I don&#39;t use the windowed mode, I do everything in the command line. Would that be an option for you?
+
+Looking at the raspistill documentation it appears you can use &#34;-n&#34; to disable the preview. Here is the documentation: http://www.raspberrypi.org/wp-content/uploads/2013/07/RaspiCam-Documentation.pdf
+If you confirm that this addresses the problem I&#39;ll add the -n to the example above. Thanks!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/c65a5f7f6e5574386989eb93247183fcce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#3</span> <span class="label label-primary">Edwin</span> said
+                    <span class="flask-moment" data-timestamp="2013-10-01T19:00:09Z" data-format="fromNow(0)" data-refresh="0">2013-10-01T19:00:09Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I made short video about this problem. http://sdrv.ms/18LuFE2 Maybe it has to be that way? I am still a beginner in Linux, so there is a high probability that&#39;s my mistake. Sorry.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#4</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-10-02T14:23:20Z" data-format="fromNow(0)" data-refresh="0">2013-10-02T14:23:20Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Edwin: interesting. Try running this from the command prompt, not from a Terminal inside &#34;startx&#34;. That is how I do it, I didn&#39;t even realize raspistill tries to open a preview window. If I figure out a way to turn it off I&#39;ll post it here.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/671c4d58de4fa595d3b99f1ebd3fb9f5ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#5</span> <span class="label label-primary">Cromfel</span> said
+                    <span class="flask-moment" data-timestamp="2013-10-03T08:46:48Z" data-format="fromNow(0)" data-refresh="0">2013-10-03T08:46:48Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hello Miguel
+
+Thanks for this tutorial. Im stuck on the phase for getting the mjpg-streamer. I found some r63 tar.gz file only from sourceforge, since your link was dead. Unfortunately Im not experienced enough in linux to circumvent this. Do you think you could upload this .zip file to google drive or somewhere for download or the 181 ?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/671c4d58de4fa595d3b99f1ebd3fb9f5ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#6</span> <span class="label label-primary">Cromfel</span> said
+                    <span class="flask-moment" data-timestamp="2013-10-03T09:48:48Z" data-format="fromNow(0)" data-refresh="0">2013-10-03T09:48:48Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Forget the previous message. It was as usual just a stupid typo :)
+
+Now I have everything apparently up and running. 
+I run:
+LD_LIBRARY_PATH=/usr/local/lib mjpg_streamer -i &#34;input_file.so -f /tmp/stream&#34; -o &#34;output_http.so -w /usr/local/www&#34;
+
+And now apparently the streaming is live. When I go to my www folder and open the mjpg-streamer simple html I see only thumbnail of the picture what should be there (SOme placeholder image) so apparently it is not working. My picture file is updating correctly with the raspistill. 
+
+Any idea how to proceed debugging this?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#7</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-10-03T14:15:10Z" data-format="fromNow(0)" data-refresh="0">2013-10-03T14:15:10Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Cromfel: are you opening the pages in the &#34;www&#34; directory directly? That&#39;s not how it works, you should connect to the web server instead. Type &#34;http://localhost:8080&#34; in your address bar, or if you are doing it from another machine &#34;http://&lt;IP-address&gt;:8080&#34;.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/c65a5f7f6e5574386989eb93247183fcce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#8</span> <span class="label label-primary">Edwin</span> said
+                    <span class="flask-moment" data-timestamp="2013-10-04T12:26:21Z" data-format="fromNow(0)" data-refresh="0">2013-10-04T12:26:21Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hello, Miguel!
+
+In previous comment you mentioned about &#39;command prompt&#39;. I tried to use your code withouth Gui, but same thing happened. I saw myself in monitor. I will have plenty of time this weekend, so I will check camera and PI connection, maybe there is wrong connection. Can you provide your email? We can chat about this stuff. I am glad that there is people who like technologies, Linux, etc.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/671c4d58de4fa595d3b99f1ebd3fb9f5ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#9</span> <span class="label label-primary">Cromfel</span> said
+                    <span class="flask-moment" data-timestamp="2013-10-04T13:46:55Z" data-format="fromNow(0)" data-refresh="0">2013-10-04T13:46:55Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Ok naturally. Yeah I managed to grab another PC to test it. Works. Unfortunately the fps using the raspistill is quite low. And for some reasons every now and then it just stops the streaming saying &#34;could not open file for reading: No such file or directory&#34; what seems to be pretty random. Some times it never starts. Some times it works for while and suddenly gives this message. </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/04d62e7122d5a99e82d24274680aaffdce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#10</span> <span class="label label-primary">Homer</span> said
+                    <span class="flask-moment" data-timestamp="2013-10-04T14:58:21Z" data-format="fromNow(0)" data-refresh="0">2013-10-04T14:58:21Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I have tried this twice now on a fresh build of wheezy, and get the same problem. MJPG-streamer is running but I get a file not found. I can&#39;t work out why. Any idea&#39;s anyone? Thanks Homer.
+
+
+pi@raspberrypi ~/mjpg-streamer-code-181/mjpg-streamer $ sudo cp mjpg_streamer /usr/local/bin
+pi@raspberrypi ~/mjpg-streamer-code-181/mjpg-streamer $ sudo cp output_http.so input_file.so /usr/local/lib/
+pi@raspberrypi ~/mjpg-streamer-code-181/mjpg-streamer $ sudo cp -R www /usr/local/www
+pi@raspberrypi ~/mjpg-streamer-code-181/mjpg-streamer $ mkdir /tmp/stream
+pi@raspberrypi ~/mjpg-streamer-code-181/mjpg-streamer $ raspistill --nopreview -w 640 -h 480 -q 5 -o /tmp/stream/pic.jpg -tl 100 -t 9999999 -th 0:0:0 &amp;
+[1] 4460
+pi@raspberrypi ~/mjpg-streamer-code-181/mjpg-streamer $ LD_LIBRARY_PATH=/usr/local/lib mjpg_streamer -i &#34;input_file.so -f /tmp/stream&#34; -o &#34;output_http.so -w /usr/local/www&#34;
+MJPG Streamer Version: svn rev: 
+ i: folder to watch...: /tmp/stream/
+ i: forced delay......: 0
+ i: delete file.......: no, do not delete
+ i: filename must be..: -no filter for certain filename set-
+ o: www-folder-path...: /usr/local/www/
+ o: HTTP TCP port.....: 8080
+ o: username:password.: disabled
+ o: commands..........: enabled
+could not open file for reading: No such file or directory
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#11</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-10-05T03:54:40Z" data-format="fromNow(0)" data-refresh="0">2013-10-05T03:54:40Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Edwin: When you say you tried the command prompt, was it a console outside of &#34;startx&#34; or a terminal application window inside &#34;startx&#34;? The first is the one I was suggesting, as that runs without the graphics and windowing subsystems enabled.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#12</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-10-05T04:01:57Z" data-format="fromNow(0)" data-refresh="0">2013-10-05T04:01:57Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Homer: another commenter says he worked around the &#34;could not open file for reading&#34; adding a &#34;-n pic.jpg&#34; argument right after &#34;-f /tmp/stream&#34;. Could you try that and let me know if it works for you as well?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/c65a5f7f6e5574386989eb93247183fcce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#13</span> <span class="label label-primary">Edwin</span> said
+                    <span class="flask-moment" data-timestamp="2013-10-05T10:39:39Z" data-format="fromNow(0)" data-refresh="0">2013-10-05T10:39:39Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">So I managed to get through it. I used &#39;--nopreview&#39; in raspistill code. Thanks, Homer! Now camera works in the background mode. Anyway, one thing is not clear. I check http://&lt;IP-address&gt;:8080 where &lt;IP-address&gt; is my ip address and I don&#39;t see any picture. There is Welcome page, but somehow my system can&#39;t show any pictures. Very strange stuff I should say.
+
+P.S. Homer. Try to change directories in which you place your picture. I will get some break, because those issues of Linux drives me crazy. </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#14</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-10-05T17:13:26Z" data-format="fromNow(0)" data-refresh="0">2013-10-05T17:13:26Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Edwin: One of the sections of the MJPG-Streamer website shows static pictures. Do you see a picture there? If you do, then the problem with the streaming is browser related, try the Javascript section which shows the stream using a different method.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/3c547f1ab23754bdb9063a05211e59b6ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#15</span> <span class="label label-primary">Kevin</span> said
+                    <span class="flask-moment" data-timestamp="2013-10-05T18:00:23Z" data-format="fromNow(0)" data-refresh="0">2013-10-05T18:00:23Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Same error here as Homer has got...
+By the way, your other (older) tutorial has worked fine for weeks with another pi. So thank you very much anyway :)</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/c65a5f7f6e5574386989eb93247183fcce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#16</span> <span class="label label-primary">Edwin</span> said
+                    <span class="flask-moment" data-timestamp="2013-10-05T18:07:36Z" data-format="fromNow(0)" data-refresh="0">2013-10-05T18:07:36Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I produced another video. http://sdrv.ms/16LDQZb Same thing happens without startx mode. I don&#39;t want to spam your blog. </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#17</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-10-06T02:00:07Z" data-format="fromNow(0)" data-refresh="0">2013-10-06T02:00:07Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Edwin: what&#39;s that error you get on your screen, something like &#34;no output file will be produced&#34;? I think there is a problem with your raspistill comand. Check in /tmp/stream to make sure file pic.jpg is constantly generated.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/c65a5f7f6e5574386989eb93247183fcce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#18</span> <span class="label label-primary">Edwin</span> said
+                    <span class="flask-moment" data-timestamp="2013-10-06T08:20:08Z" data-format="fromNow(0)" data-refresh="0">2013-10-06T08:20:08Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hello, guys!
+
+After long week of failures, my Raspberry Pi Camera works like a charm!  What I did differently? Miguel was right! You need attention to detail. I double-checked raspistill script and found a tiny mistake. I used slash where you don&#39;t need that. So my new script line was &#39;sudo raspistill -n -w 640 -h 480 -q 5 -o pictures/pic.jpg -tl 100 -t 9999999 -th 0:0:0 &amp;&#39; My mistake was a slash before pictures. I don&#39;t know why, but I use sudo just in case. After that, I hit another command sudo LD_LIBRARY_PATH=/usr/local/lib mjpg_streamer -i &#34;input_file.so -f pictures -n pic.jpg&#34; -o &#34;output_http.so -w /usr/local/www&#34; I added a tiny -n pic.jpg argument after pictures folder. Now everything works. My advise to others - double-check your scripts and try changing directories. I think there is no difference where you will place your pictures. 
+
+Here is my video proof about whole concept. http://sdrv.ms/1f9MBOY Sorry about lots of rubbish comments in this blog. I guess that&#39;s a newbie mistake. You ask a lot of questions. </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/3bf3660a3d83091e552492b854623632ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#19</span> <span class="label label-primary"><a href="http://medicforlife.blogspot.com/">StaticDet5</a></span> said
+                    <span class="flask-moment" data-timestamp="2013-10-09T17:57:46Z" data-format="fromNow(0)" data-refresh="0">2013-10-09T17:57:46Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Fantastic work!
+
+I just set this up to work on two of my Pi&#39;s.  The first one gave me fits.  I may have hit upon one solution.  Between steps six and seven I tried:
+&#34;sudo apt-get update&#34;
+followed by
+&#34;sudo apt-get upgrade&#34;
+
+When I did this in sequence with the second Pi, things went very smoothly.
+Finally, I wrote a quick command, CamStart:
+
+mkdir /tmp/stream
+raspistill --nopreview -w 960 -h 540 -q 80 -o /tmp/stream/pic.jpg -tl 10 -t 9999999 -th 0:0:0 &amp;
+LD_LIBRARY_PATH=/usr/local/lib mjpg_streamer -i &#34;input_file.so -f /tmp/stream -n pic.jpg&#34; -o &#34;output_http.so -w /usr/local/www&#34;
+
+It&#39;s just steps 7 and 8 in a command file, making it easy to start the camera up.
+
+Thanks again!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/9ed9f6d5b56fae77679b04abc777eed2ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#20</span> <span class="label label-primary">Juan</span> said
+                    <span class="flask-moment" data-timestamp="2013-10-10T21:24:19Z" data-format="fromNow(0)" data-refresh="0">2013-10-10T21:24:19Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi
+
+Thanks for your tutorial.
+
+I have a problem with this command
+
+LD_LIBRARY_PATH=/usr/local/lib mjpg_streamer -i &#34;input_file.so -f /tmp/stream -n pic.jpg&#34; -o &#34;output_http.so -w /usr/local/www&#34;
+
+it appear this error
+
+MJPG Stream Version: svn rev:
+
+ERROR: could not find input plugin
+               Perhaps you want to adjust the search path with:
+               # export LD_LIBRARY_PATH=/path/to/plugin/folder
+               dlopen: input_file.so: cannot open shared object file: No such file or directory
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/a7f0ee1cc30209df3ba5e81ff70b067ece2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#21</span> <span class="label label-primary">zark</span> said
+                    <span class="flask-moment" data-timestamp="2013-10-13T13:58:13Z" data-format="fromNow(0)" data-refresh="0">2013-10-13T13:58:13Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Homer,
+
+I found this page last night.  I got the same error.  Check /usr/local/www directory to make sure web server markup did not end up in /usr/local/www/www. 
+
+Miguel, thanks for the writeup.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/7c463c3c58bdaaec18624ee447eb45cdce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#22</span> <span class="label label-primary">PattyChuck</span> said
+                    <span class="flask-moment" data-timestamp="2013-10-13T21:27:09Z" data-format="fromNow(0)" data-refresh="0">2013-10-13T21:27:09Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Any advice on getting this to run on boot? I&#39;m a bit of a noob with Linux. I added the &#34;mkdir&#34; and &#34;raspistill&#34; commands to a start-up script, and it works just fine (the jpg is most certainly being written to the temp folder). However, adding the command in step #8 does not seem to start the server. Any pointers on getting this to run when the RPi is booted up?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#23</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-10-14T00:12:33Z" data-format="fromNow(0)" data-refresh="0">2013-10-14T00:12:33Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@PattyChuck: an easy way to get a program to run after boot is to add the command to the /etc/rc.local file. For an example see http://www.raspberry-projects.com/pi/pi-operating-systems/raspbian/auto-running-programs.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/9ed9f6d5b56fae77679b04abc777eed2ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#24</span> <span class="label label-primary">Juan</span> said
+                    <span class="flask-moment" data-timestamp="2013-10-15T12:38:47Z" data-format="fromNow(0)" data-refresh="0">2013-10-15T12:38:47Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi
+
+I check the path that you said and I found the /usr/local/www has the same archives than /usr/local/www/www  
+
+Any help would be much appreciated
+
+Thanks </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/a474e5bd8d581ae3aa5b1b5fb79fae5cce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#25</span> <span class="label label-primary">melb_guy</span> said
+                    <span class="flask-moment" data-timestamp="2013-10-15T16:54:05Z" data-format="fromNow(0)" data-refresh="0">2013-10-15T16:54:05Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">worked for me. Great instructions How do I run this script at the boot up to start camera automatically ?. and storing it on the cloud or NAS storage ?</p>
+                </div>
+            </div>
+        </li>
+        
+    </ul>
+</div>
+
+<div class="page">
+<ul class="pager">
+  <li class="previous disabled">
+    <a href="#">&laquo;&laquo;</a>
+  </li>
+  <li class="previous disabled">
+    <a href="#">&laquo;</a>
+  </li>
+  <li class="next">
+    <a href="how-to-build-and-run-mjpg-streamer-on-the-raspberry-pi/page/0.html#comments">&raquo;&raquo;</a>
+  </li>
+  <li class="next">
+    <a href="how-to-build-and-run-mjpg-streamer-on-the-raspberry-pi/page/2.html#comments">&raquo;</a>
+  </li>
+</ul>
+</div>
+
+<h3><a name="commentform"></a>Leave a Comment</h3>
+
+<form action="#commentform" method="post"
+  class="form" role="form">
+  <div style="display:none;"><input id="csrf_token" name="csrf_token" type="hidden" value="1439536831.89##13e0c955d5837d97ffab61c75d4dbc87133bdc57"></div>
+  
+    
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="name">Name</label>
+        <input class="form-control" id="name" name="name" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="url">URL</label>
+        <input class="form-control" id="url" name="url" type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="email">Email</label>
+        <input class="form-control" id="email" name="email" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="comment">Comment</label>
+        <textarea class="form-control" id="comment" name="comment" required></textarea>
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="captcha">Captcha</label>
+        
+<script type="text/javascript">var RecaptchaOptions = {"custom_translations": {"audio_challenge": "Get an audio challenge", "cant_hear_this": "Download sound as MP3", "help_btn": "Help", "image_alt_text": "reCAPTCHA challenge image", "incorrect_try_again": "Incorrect. Try again.", "instructions_audio": "Type what you hear", "instructions_visual": "Type the text", "play_again": "Play sound again", "privacy_and_terms": "Privacy & Terms", "refresh_btn": "Get a new challenge", "visual_challenge": "Get a visual challenge"}, "theme": "white"};</script>
+<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S"></script>
+<noscript>
+  <iframe src="http://www.google.com/recaptcha/api/noscript?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S" height="300" width="500" frameborder="0"></iframe><br>
+  <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+  <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
+</noscript>
+
+  </div>
+
+
+    
+
+
+
+
+
+  
+
+
+    <input class="btn btn-default" id="submit" name="submit" type="submit" value="Submit">
+  
+
+
+
+
+
+</form>
+
+
+</div>
+
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <p class="elapsed">This page was generated in None seconds.</p>
+            <p>&copy; 2014 by Miguel Grinberg. All rights reserved. <a href="mailto:webmaster _at_ miguelgrinberg _dot_ com">Questions?</a></p>
+        </div>
+    </div>
+
+
+    
+    
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.33/jquery.colorbox-min.js"></script>
+    <script type="text/javascript" src="../static/prettify.js"></script>
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment-with-langs.min.js"></script>
+<script>
+function flask_moment_render(elem) {
+    $(elem).text(eval('moment("' + $(elem).data('timestamp') + '").' + $(elem).data('format') + ';'));
+    $(elem).removeClass('flask-moment');
+}
+function flask_moment_render_all() {
+    $('.flask-moment').each(function() {
+        flask_moment_render(this);
+        if ($(this).data('refresh')) {
+            (function(elem, interval) { setInterval(function() { flask_moment_render(elem) }, interval); })(this, $(this).data('refresh'));
+        }
+    })
+}
+$(document).ready(function() {
+    flask_moment_render_all();
+});
+</script>
+    
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4777284-15']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".gallery").colorbox({rel:".gallery",maxWidth:"95%",maxHeight:"95%",scalePhotos:true});
+            // add prettyprint class to all <pre><code></code></pre> blocks
+            var prettify = false;
+            $("pre code").parent().each(function() {
+                $(this).addClass('prettyprint');
+                prettify = true;
+            });
+            prettyPrint();
+        });
+    </script>
+
+
+  </body>
+
+<!-- Mirrored from blog.miguelgrinberg.com/post/how-to-build-and-run-mjpg-streamer-on-the-raspberry-pi by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:51:58 GMT -->
+</html>

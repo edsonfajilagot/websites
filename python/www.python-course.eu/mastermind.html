@@ -1,0 +1,468 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from www.python-course.eu/mastermind.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:07:15 GMT -->
+<head>
+
+<!-- Dieses Tag in den Head-Bereich oder direkt vor dem schlieÃŸenden Body-Tag einfÃ¼gen -->
+<script type="text/javascript" src="../apis.google.com/js/plusone.js"></script>
+
+
+
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "../connect.facebook.net/en_GB/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script><title>Python Advanced: Mastermind / Bulls and Cows</title>
+<meta http-equiv="content-type" content="text/html; charset="ISO-8859-1">
+<meta name="Description" content="Python Program with an implementation of the game Mastermind" />
+<meta name="Keywords" content="Python, recursive, recursion, game, towers, towers of Hanoi, solution, exercise, problem" />
+
+<link href="favicon.ico" rel="shortcut icon">
+
+<link href="moderna.css" rel="stylesheet" type="text/css" />
+<link href="moderna_print.css" media="print" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+<div id="container">
+
+<div id="banner">
+<!-- <a href="impressum.php">Impressum</a> | <a href="mailto:">contact</a> | --><h1>Python Course</h1>
+
+</div>
+
+	<!-- Begin Top Menu -->
+<ul id="navlist">
+<li><a href="index-2.html" >Home</a></li><li><a href="course.html" >Python 2 Tutorial</a></li><li><a href="python3_course.html" >Python 3 Tutorial</a></li><li class="active"><a id="current" href="advanced_topics.html" >Advanced Topics</a></li><li><a href="python_books.html" >Python Books</a></li><li><a href="python_tkinter.html" >Tkinter Tutorial</a></li><li><a href="contact.html" rel="nofollow">Contact</a></li>                          
+</ul>
+	<!-- End Top Menu -->
+<div id="sidebar-a">
+<img class="border" src="images/Bull.jpg" alt="box" />    <h2>Advanced Topics</h2>
+
+<div class="menu">
+
+<ul>
+<li><a href="sys_module.html">Introduction into the sys module</a></li><li><a href="os_module_shell.html">Python and the Shell</a></li><li><a href="forking.html">Forks and Forking in Python</a></li><li><a href="threads.html">Introduction into Threads</a></li><li><a href="pipes.html">Pipe, Pipes and "99 Bottles of Beer"</a></li><li><a href="graphs_python.html">Graph Theory and Graphs in Python"</a></li><li><a href="pygraph.html">Graphs: PyGraph"</a></li><li><a href="networkx.html">Graphs: NetworkX"</a></li><li><a href="finite_state_machine.html">Finite State Machine in Python</a></li><li><a href="turing_machine.html">Turing Machine in Python</a></li><li><a href="numpy.html">NumPy Module</a></li><li><a href="matrix_arithmetic.html">Matrix Arithmetic</a></li><li><a href="linear_combinations.html">Linear Combinations</a></li><li><a href="text_classification_introduction.html">Introduction into Text Classification using Naive Bayes</a></li><li><a href="text_classification_python.html">Python Implementation of Text Classification</a></li><li><a href="towers_of_hanoi.html">Example for recursive Programming: Towers of Hanoi</a></li><li><a href="mastermind.html">Mastermind / Bulls and Cows</a></li><li><a href="dynamic_websites_wsgi.html">Creating dynamic websites with WSGI</a></li><li><a href="dynamic_websites.html">Dynamic websites with mod_python</a></li><li><a href="pylons.html">Dynamic websites with Pylons</a></li><li><a href="sql_python.html">Python, SQL, MySQL and SQLite</a></li><li><a href="python_scores.html">Python Scores</a></li></ul>
+
+</div>
+
+<p>
+<h3>Bulls and Cows</h3>
+Bulls and Cows -- also known as Cows and Bulls or Pigs and Bulls or Bulls and Cleots -- 
+is an old code-breaking paper and pencil game for two players
+<br>
+<br>
+<hr>
+<br>
+This website is created by:<br><br>
+<a href="http://www.python-training-courses.com/"><img style="width: 150px;" alt="Python Training Courses"
+		     src="images/toronto_building.jpg"><br><br>Python Training Courses in Toronto, Canada</a>
+<br>
+On site trainings in Europe, Canada and the US.
+<br>
+<hr>
+</div><div id="sidebar-b"><img style="width: 150px;" alt="Python-Logo"
+		     src="images/python-logo.png"><!-- Dieses Tag dort einfügen, wo die +1-Schaltfläche dargestellt werden soll -->
+<g:plusone></g:plusone>
+<br><br>
+
+<div class="fb-like" data-href="www.python-course.eu" data-send="false" data-layout="button_count" 
+data-width="130" data-show-faces="true" data-action="recommend"></div>
+
+<br><br>
+<h3>Classroom Training Courses</h3>
+<p>
+This website contains a free and extensive online tutorial by Bernd Klein, using
+material from his classroom <a href="python_classes.html">Python courses</a>.
+<br><br>
+If you are interested in an instructor-led classroom training, you may have a look at the 
+<a href="http://www.bodenseo.com/courses.php?topic=Python">Python courses
+<br><img style="width: 150px;" 
+alt="Bodenseo, Python and other courses and seminars"
+		     src="images/classroom_training_courses.jpg">
+</a>
+by Bernd Klein at Bodenseo.
+<font size="1">© kabliczech - Fotolia.com</font>
+ </p>
+
+
+
+<h3>Quote of the Day:</h3>
+<p>
+
+The real problem is not whether machines think but whether men do. <br>
+(B. F. Skinner)
+<br>
+<br><hr>
+
+<h3>Advantages of Python</h3>
+<p>
+<ul>
+<li>Easy and fast to learn</li>
+<li>Simple to get support</li>
+<li>Python's syntax is clear and readable</li>
+<li>Fast to Code, i.e. it is easier and faster to code a problem in Python than in 
+C, C++ or Java, just to mention a few other languages</li>
+<li>Python is portable, i.e. it runs on multiple platforms and systems, like e.g. Linux 
+and Microsoft Windows</li>
+<li>Object oriented</li>
+<li>It's trendy, i.e more and more successful companies switch to Python, like Google did a long
+time ago.</li>
+</ul>
+</p>
+
+
+</p></div>
+<div id="content">
+
+<div id="contextlinks">Previous Chapter: <a href="towers_of_hanoi.html">Example for recursive Programming: Towers of Hanoi</a><br>
+<LINK rel="prev" href="towers_of_hanoi.html">Next Chapter: <a href="dynamic_websites_wsgi.html">Creating dynamic websites with WSGI</a><br>
+<LINK rel="next" href="dynamic_websites_wsgi.html"></div>
+<h2>Mastermind / Bulls and Cows</h2>
+<br>
+<h3>Introduction</h3>
+<img class="imgright" src="images/Bull_and_cows.jpg" alt="Bulls and Cows" />
+In this chapter of our advanced Python topics we present an implementation of the game Bulls and Cows.
+This game, which is also known as "Cows and Bulls" or "Pigs and Bulls", is an old code-breaking game
+played by two players. The game goes back to the 19th century and can be played with paper and pencil.
+Bulls and Cows -- also known as Cows and Bulls or Pigs and Bulls or Bulls and Cleots --
+was the inspirational source of Mastermind, a game invented in 1970 by Mordecai Meirowitz.  
+The game is played by two players. Mastermind and "Bulls and Cows" are very similar and the underlying
+idea is essentially the same, but Mastermind is sold in a box with a decoding board and pegs for the coding and the 
+feedback pegs. Mastermind uses colours as the underlying code information, while Bulls and Cows uses digits. 
+<br><br>
+<h3>Rules of the Game</h3>
+<img class="imgright" src="images/ColorCode.png" alt="Colour Code" />
+<b>Bulls and Cows</b>
+<br><br>
+We start with the rules of "Bulls and Cows": 
+<br>
+It's a pencil and paper game played by two players. The two players write a 4-digit number on a sheet of paper. 
+The digits must be all different, but there is a version, where digits can be used more than once. 
+Each player has to find out the opponent's secret code. To this purpose, the players - in turn - try to 
+guess the opponent's number. The opponent has to score the guess: A "bull" is a digit which is
+located at the right position. If for example the hidden code is "4 3 2 5" and the guess is "4 3 1 2", then
+we have the two bulls "4" and "3" in the guess "4 3 1 2".  A "Cow" on the other hand is a correct number,
+which is on the wrong position. The "2" of the previous example is a cow.
+<br><br>
+The first player to reveal the other's secret number is the winner of the game. 
+<br><br>
+The secret numbers for bulls and cows are usually 4-digit-numbers, but the game can be played with 3 to 6 digit 
+numbers.
+<br><br>
+There are lots of computer implementations of "Bulls and Cows". The first one was a program called moo, written
+in PL/I.
+<br><br><br>
+<b>Mastermind</b>
+<br><br>
+Mastermind obeys essentially the same rules as "Bulls and Cows", but colours are used instead of digits. 
+Mastermind is a commercial board game, which is played on a decoding board with a shield on one side hiding a row of 
+four large holes to put in coloured pegs, i.e. the secret code, which has to be found out by the opponent. 
+There are 8 to 12 rows of four holes for the guesses, which are open to the view. Beside of each row, 
+there is a set of four small holes for the black and white score pegs.
+<br><br>
+
+<h3>The Implementation</h3>
+
+The following program is a Python implementation (Python3), which is capable of breaking a colour code of four positions
+and six colours, but these numbers are scalable. The colour code is not allowed to contain multiple occurrences
+of colours. We need the function all_colours from the following combinatorics module, which can be saved as 
+combinatorics.py:
+<br><br>
+<pre>
+import random
+
+def fac(n):
+    if n == 0:
+        return 1
+    else:
+        return (fac(n-1) * n)
+
+def permutations(items):
+    n = len(items)
+    if n==0: yield []
+    else:
+        for i in range(len(items)):
+            for cc in permutations(items[:i]+items[i+1:]):
+                yield [items[i]]+cc
+                
+def k_permutations(items, n):
+    if n==0: yield []
+    else:
+        for i in range(len(items)):
+            for ss in k_permutations(items, n-1):
+                if (not items[i] in ss):
+                    yield [items[i]]+ss
+
+def random_permutation(list):
+    length = len(list);
+    max = fac(length);
+    index = random.randrange(0, max)
+    i = 0
+    for p in permutations(list):
+        if i == index:
+            return p
+        i += 1
+
+def all_colours(colours, positions):
+    colours = random_permutation(colours)
+    for s in k_permutations(colours, positions):
+        yield(s)
+</pre>
+<br><br>
+If you want to know more about permutations, you may confer to our chapter about 
+"<a href="python3_generators.html">generators and iterators</a>".
+The function all_colours is essentially like k_permutations, but it starts the sequence of permutations with a random 
+permutations, because we want to make sure, that the computer starts each new game with a completely new guess.
+<br><br>
+The colours, which are used for the guesses, are defined in a list assigned to the variable "colours". 
+It's possible to put in different elements into this list, e.g. 
+<pre>
+colours = ["a","b","c","d","e","f"]
+</pre> 
+or something like the following assignment, which doesn't make a lot of sense in terms of colours:
+<pre>
+colours = ["Paris blue", "London green", "Berlin black", "Vienna yellow", "Frankfurt red", "Hamburg brown"]
+</pre>
+
+The list "guesses" has to be empty. All the guesses with the scores from the human player will be saved in this
+list. 
+It might look like this in a game:
+
+<pre>
+[(['pink', 'green', 'blue', 'orange'], (1, 1)), 
+ (['pink', 'blue', 'red', 'yellow'], (1, 2)), 
+ (['pink', 'orange', 'yellow', 'red'], (0, 2))]
+</pre>
+
+We can see, that guesses is a list of tuples. Each tuple contains a list of colours<sup>1</sup> and a 2-tuple
+with the scores from the human player, e.g. (1, 2) with 1 the number of "bulls" or "blacks" in the Mastermind lingo
+and the 2 is the number of "cows" (or "whites" in the mastermind jargon) in ['pink', 'blue', 'red', 'yellow']
+
+<br><br>
+We use the generator all_colours() to create the first guess:
+<pre>
+permutation_iterator = all_colours(colours, number_of_positions)
+current_colour_choices = next(permutation_iterator)
+</pre>
+<br>
+The following while loop presents the guesses to the human player, evaluates the answers and produces
+a new guess. The while loop ends, if either the number of "black" ("cows") (new_guess[1][0]) 
+is equal to number_of_positions or if new_guess[1][0] == -1, which means that the answers were inconsistent.
+<br><br>
+We have a closer look at the function new_evaluation. At first, it calls the the function 
+get_evaluation() which returns the "bulls" and "cows" or terms of our program the values for  rightly_positioned and permutated. 
+<br>
+<pre>
+def get_evaluation():
+   """ asks the human player for an evaluation """
+   show_current_guess(new_guess[0])
+   rightly_positioned = int(input("Blacks: "))
+   permutated = int(input("Whites: "))
+   return (rightly_positioned, permutated)
+</pre> 
+<br>
+The game is over, if the number of rightly positioned colours, as returned by the function
+get_evaluation(), is equal to the number_of_positions, i.e. 4:
+<pre>
+   if rightly_positioned == number_of_positions:
+      return(current_colour_choices, (rightly_positioned, permutated))
+</pre>
+
+In the next if statement, we check, if the human answer makes sense. 
+There are combinations of whites and blacks, which don't make sense, 
+for example three blacks and one white don't make sense, as you can easily
+understand. The function answer_correct() is used to check, if the input makes sense:
+<br>
+<pre>
+def answer_ok(a):
+   (rightly_positioned, permutated) = a
+   if (rightly_positioned + permutated > number_of_positions) \
+       or (rightly_positioned + permutated < len(colours) - number_of_positions):
+      return False
+   if rightly_positioned == 3 and permutated == 1:
+      return False
+   return True
+</pre>
+
+The function answer_ok() should be self-explanatory. If answer_ok returns False, 
+new_evaluation will be left with the return value -1 for the blacks, which in 
+turn will end the while loop in the main program:
+
+<pre>
+   if not answer_ok((rightly_positioned, permutated)):
+      print("Input Error: Sorry, the input makes no sense")
+      return(current_colour_choices, (-1, permutated))
+</pre>
+
+If the check was True, the guess will be appended to the previous guesses and 
+will be shown to the user:
+<br>
+
+<pre>
+   guesses.append((current_colour_choices, (rightly_positioned, permutated)))
+   view_guesses()
+</pre>
+
+After this steps, a new guess will be created. If a new guess could be created, 
+it will be shown, together with the black and white values from the previous guess, 
+which are checked in the while loop. If a new guess
+can not be created, a -1 will be returned for the blacks:
+
+<pre>
+   current_colour_choices = create_new_guess() 
+   if not current_colour_choices:
+      return(current_colour_choices, (-1, permutated))
+   return(current_colour_choices, (rightly_positioned, permutated))
+</pre>
+
+The following code is the complete program, which you can save and start, but don't forget to use Python3:
+
+<pre>
+import random
+from combinatorics import all_colours
+
+def inconsistent(p, guesses):
+   """ the function checks, if a permutation p, i.e. a list of 
+colours like p = ['pink', 'yellow', 'green', 'red'] is consistent
+with the previous colours. Each previous colour permuation guess[0]
+compared (check()) with p has to return the same amount of blacks 
+(rightly positioned colours) and whites (right colour at wrong 
+position) as the corresponding evaluation (guess[1] in the 
+list guesses) """
+   for guess in guesses:
+      res = check(guess[0], p)
+      (rightly_positioned, permutated) = guess[1]
+      if res != [rightly_positioned, permutated]:
+         return True # inconsistent
+   return False # i.e. consistent
+
+def answer_ok(a):
+   """ checking of an evaulation given by the human player makes 
+sense. 3 blacks and 1 white make no sense for example. """
+   (rightly_positioned, permutated) = a
+   if (rightly_positioned + permutated > number_of_positions) \
+       or (rightly_positioned + permutated < len(colours) - number_of_positions):
+      return False
+   if rightly_positioned == 3 and permutated == 1:
+      return False
+   return True
+
+def get_evaluation():
+   """ asks the human player for an evaluation """
+   show_current_guess(new_guess[0])
+   rightly_positioned = int(input("Blacks: "))
+   permutated = int(input("Whites: "))
+   return (rightly_positioned, permutated)
+
+def new_evaluation(current_colour_choices):
+   """ This funtion gets an evaluation of the current guess, checks 
+the consistency of this evaluation, adds the guess together with
+the evaluation to the list of guesses, shows the previous guesses 
+and creates a new guess """
+   rightly_positioned, permutated = get_evaluation()
+   if rightly_positioned == number_of_positions:
+      return(current_colour_choices, (rightly_positioned, permutated))
+	
+   if not answer_ok((rightly_positioned, permutated)):
+      print("Input Error: Sorry, the input makes no sense")
+      return(current_colour_choices, (-1, permutated))
+   guesses.append((current_colour_choices, (rightly_positioned, permutated)))
+   view_guesses()
+	
+   current_colour_choices = create_new_guess() 
+   if not current_colour_choices:
+      return(current_colour_choices, (-1, permutated))
+   return(current_colour_choices, (rightly_positioned, permutated))
+
+
+def check(p1, p2):
+   """ check() calcualtes the number of bulls (blacks) and cows (whites)
+of two permutations """
+   blacks = 0
+   whites = 0
+   for i in range(len(p1)):
+      if p1[i] == p2[i]:
+          blacks += 1
+      else:
+         if p1[i] in p2:
+             whites += 1
+   return [blacks, whites] 
+
+def create_new_guess():
+   """ a new guess is created, which is consistent to the 
+previous guesses """
+   next_choice = next(permutation_iterator) 
+   while inconsistent(next_choice, guesses):
+      try:
+         next_choice = next(permutation_iterator)
+      except StopIteration:
+         print("Error: Your answers were inconsistent!")
+         return ()
+   return next_choice
+
+def show_current_guess(new_guess):
+   """ The current guess is printed to stdout """
+   print("New Guess: ",end=" ")
+
+   for c in new_guess:
+      print(c, end=" ")
+   print()
+
+def view_guesses():
+   """ The list of all guesses with the corresponding evaluations 
+is printed """
+   print("Previous Guesses:")
+   for guess in guesses:
+      guessed_colours = guess[0]
+      for c in guessed_colours:
+         print(c, end=" ")
+      for i in guess[1]:
+         print(" %i " % i, end=" ")
+      print()
+
+if __name__ == "__main__":
+   colours = ["red","green","blue","yellow","orange","pink"]
+   guesses = []				
+   number_of_positions = 4
+
+   permutation_iterator = all_colours(colours, number_of_positions)
+   current_colour_choices = next(permutation_iterator)
+
+   new_guess = (current_colour_choices, (0,0) )
+   while (new_guess[1][0] == -1) or (new_guess[1][0] != number_of_positions):
+      new_guess = new_evaluation(new_guess[0])
+</pre>
+
+<br>
+<br>
+<h3>Gui for Mastermind</h3>
+You can find an <a href="tkinter_mastermind.html">implementation</a> of the previous program with a graphical user interface using Tkinter in our Tkinter Tutorial.
+<br><br>
+<hr>
+<br>
+Footnotes:
+<br>
+<sup>1</sup> The colour guesses don't have to be lists, we could have used tuples to represent the colours guesses as well. 
+<br><br>
+</div>
+
+<div id="contextlinks">Previous Chapter: <a href="towers_of_hanoi.html">Example for recursive Programming: Towers of Hanoi</a><br>
+<LINK rel="prev" href="towers_of_hanoi.html">Next Chapter: <a href="dynamic_websites_wsgi.html">Creating dynamic websites with WSGI</a><br>
+<LINK rel="next" href="dynamic_websites_wsgi.html"></div><br><br><br>
+
+</div>
+<div id="footer">  &copy; 2011 - 2014 <a href="http://www.bklein.de/">Bernd Klein</a>,
+Bodenseo; 
+Design by Denise Mitchinson adapted for python-course.eu by Bernd Klein</div>
+</div>
+</body>
+
+<!-- Mirrored from www.python-course.eu/mastermind.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:07:16 GMT -->
+</html>

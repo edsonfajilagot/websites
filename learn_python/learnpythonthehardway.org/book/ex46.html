@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+    
+<!-- Mirrored from learnpythonthehardway.org/book/ex46.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 03 Sep 2014 17:52:40 GMT -->
+<head>
+        <link href='stylesheets/fonts.css' rel='stylesheet' type='text/css'>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="twitter:creator" content="@lzsthw">
+        <title>Learn Python</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href='stylesheets/pure.css' rel='stylesheet'>
+        <link href='stylesheets/pygments.css' rel='stylesheet'>
+        <link href='stylesheets/main.css' rel='stylesheet'>
+        <link href='stylesheets/nav.css' rel='stylesheet'>
+        <style>
+        </style>
+ 
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.11: http://docutils.sourceforge.net/" />
+<title>Exercise 46: A Project Skeleton</title>
+    </head>
+    <body id='wrapper'>
+        <div class='master-logo-wrapper clearfix'>
+            <a href='index-2.html'>
+                <div class='python-logo-sprite'></div>
+            </a>
+                <span class='edition-3'><img src='images/3rd-edition-cloud.png' /></span>
+        </div><!-- /.master-logo-wrapper -->
+
+        <div style='clear: both;'>
+
+        <div id="main">
+            <div class='chapters-wrapper'>
+                  <nav id='chapters'>
+                      <div class='masthead-title'></div>
+                      <ul class='masthead'>
+                          <li>
+                              <a href='index.html'>
+                                  <div class='nav-tcontents'>
+                                      <img src='images/nav-contents.png' /></br>
+                                  main
+                                  </div>
+                              </a>
+                          </li>
+                          <li>
+                              <a href='#video'>
+                                  <div class='nav-play-video' id="#video_toggle_icon">
+                                      <img src='images/nav-play.png' /><br/>
+                                      play video
+                                      <div class='line-2'>(this chapter)</div>
+                                  </div>
+                              </a>
+                          </li>
+                          <li>
+                              <a href='#' id='prev_link'>
+                                  <div class='nav-previous'>
+                                      <img src='images/nav-previous.png' /></br>
+                                      previous
+                                  </div>
+                              </a>
+                          </li>
+                          <li>
+                              <a href='#' id='next_link'>
+                                  <div class='nav-next'>
+                                      <img src='images/nav-next.png' /></br>
+                                      next
+                                  </div>
+                              </a>
+                          </li>
+                          <li><!-- AMBULANCE ICON -->
+                              <a href='help.html' id=''>
+                                  <div class='ambulance'>
+                                      <img src='images/help-ambulance.png' /></br>
+                                      help
+                                  </div>
+                              </a>
+                          </li>
+                          <li id="follow">
+                                <a href="https://twitter.com/lzsthw" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false" data-dnt="true">Follow @lzsthw</a>
+                                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                           </li>
+
+                      </ul><!-- /.masthead -->
+                      <!--<img src='images/fa-bullhorn.png' />-->
+                  </nav><!-- /.chapters -->
+            </div><!-- /.chapters-wrapper -->
+
+        <!--- RST STARTS -->
+            <h1 class="title">Exercise 46: A Project Skeleton</h1>
+            <p>This will be where you start learning how to set up a good project &quot;skeleton&quot; directory.  This skeleton directory will have all the basics you need to get a new project up and running.  It will have your project layout, automated tests, modules, and install scripts.  When you go to make a new project, just copy this directory to a new name and edit the files to get started.</p>
+<div class="section" id="installing-python-packages">
+<h1>Installing Python Packages</h1>
+<p>Before you can begin this exercise you need to install some software for Python by using a tool called &quot;pip&quot; to install new modules.  Here's the problem though.  You are at a point where it's difficult for me to help you do that and keep this book sane and clean.  There are so many ways to install software on so many computers that I'd have to spend 10 pages walking you through every step, and let me tell you I am a lazy guy.</p>
+<p>Rather than tell you how to do it exactly, I'm going to tell you what you should install, and then you tell you to watch the video that accompanies this exercise and follow along.  You will have to struggle with this part of the exercise though as giving accurate and current installation instructions is tricky.  Computers change frequently so you may have to do some research if you get stuck.</p>
+<p>Install the following Python packages:</p>
+<ol class="arabic simple">
+<li>pip from <a class="reference external" href="http://pypi.python.org/pypi/pip">http://pypi.python.org/pypi/pip</a></li>
+<li>distribute from <a class="reference external" href="http://pypi.python.org/pypi/distribute">http://pypi.python.org/pypi/distribute</a></li>
+<li>nose from <a class="reference external" href="http://pypi.python.org/pypi/nose/">http://pypi.python.org/pypi/nose/</a></li>
+<li>virtualenv from <a class="reference external" href="http://pypi.python.org/pypi/virtualenv">http://pypi.python.org/pypi/virtualenv</a></li>
+</ol>
+<p>Do not just download these packages and install them by hand.  Instead see how other people recommend you install these packages and use them for your particular system.  The process will be different for most versions of Linux, OSX, and definitely different for Windows.</p>
+<p>I am warning you; this will be frustrating.  In the business we call this &quot;yak shaving.&quot;  Yak shaving is any activity that is mind numblingly, irritatingly boring and tedious that you have to do before you can do something else that's more fun.  You want to create cool Python projects, but you can't do that until you set up a skeleton directory, but you can't set up a skeleton directory until you install some packages, but you can't install packages until you install package installers, and you can't install package installers until you figure out how your system installs software in general, and so on.</p>
+<p>Struggle through this anyway.  Consider it your trial by annoyance to get into the programmer club.  Every programmer has to do these annoying tedious tasks before they can do something cool.</p>
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p>Sometimes the Python installer does not add the <tt class="docutils literal"><span class="pre">C:\Python27\Script</span></tt> to the system <tt class="docutils literal">PATH</tt>.  If this is the case
+for you, go back and add this to the path just like you did for <tt class="docutils literal"><span class="pre">C:\Python27</span></tt> in Exercise 0 with:</p>
+<pre class="last literal-block">
+[Environment]::SetEnvironmentVariable(&quot;Path&quot;,
+&quot;$env:Path;C:\Python27\Scripts&quot;, &quot;User&quot;)
+</pre>
+</div>
+</div>
+<div class="section" id="creating-the-skeleton-project-directory">
+<h1>Creating the Skeleton Project Directory</h1>
+<p>First, create the structure of your skeleton directory with these commands:</p>
+<pre class="code console literal-block">
+<span class="generic prompt">$</span> mkdir projects
+<span class="generic prompt">$</span> <span class="name builtin">cd </span>projects/
+<span class="generic prompt">$</span> mkdir skeleton
+<span class="generic prompt">$</span> <span class="name builtin">cd </span>skeleton
+<span class="generic prompt">$</span> mkdir bin NAME tests docs
+</pre>
+<p>I use a directory named <tt class="docutils literal">projects</tt> to store all the various things I'm working on.  Inside that directory I have my <tt class="docutils literal">skeleton</tt> directory that I put the basis of my projects into.  The directory <tt class="docutils literal">NAME</tt> will be renamed to whatever you are calling your project's main module when you use the skeleton.</p>
+<p>Next we need to set up some initial files. Here's how you do that on Linxu/OSX:</p>
+<pre class="code console literal-block">
+<span class="generic prompt">$</span> touch NAME/__init__.py
+<span class="generic prompt">$</span> touch tests/__init__.py
+</pre>
+<p>Here's the same thing on Windows PowerShell:</p>
+<pre class="code console literal-block">
+<span class="generic prompt">$</span> new-item -type file NAME/__init__.py
+<span class="generic prompt">$</span> new-item -type file tests/__init__.py
+</pre>
+<p>That creates an empty Python module directories we can put our code in.  Then we need to create a <tt class="docutils literal">setup.py</tt> file we can use to install our project later if we want:</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19</pre></div></td><td class="code"><div class="highlight"><pre><a name="python--skeleton--setup.py-idio.html-1"></a><span class="k">try</span><span class="p">:</span>
+<a name="python--skeleton--setup.py-idio.html-2"></a>    <span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span>
+<a name="python--skeleton--setup.py-idio.html-3"></a><span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+<a name="python--skeleton--setup.py-idio.html-4"></a>    <span class="kn">from</span> <span class="nn">distutils.core</span> <span class="kn">import</span> <span class="n">setup</span>
+<a name="python--skeleton--setup.py-idio.html-5"></a>
+<a name="python--skeleton--setup.py-idio.html-6"></a><span class="n">config</span> <span class="o">=</span> <span class="p">{</span>
+<a name="python--skeleton--setup.py-idio.html-7"></a>    <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;My Project&#39;</span><span class="p">,</span>
+<a name="python--skeleton--setup.py-idio.html-8"></a>    <span class="s">&#39;author&#39;</span><span class="p">:</span> <span class="s">&#39;My Name&#39;</span><span class="p">,</span>
+<a name="python--skeleton--setup.py-idio.html-9"></a>    <span class="s">&#39;url&#39;</span><span class="p">:</span> <span class="s">&#39;URL to get it at.&#39;</span><span class="p">,</span>
+<a name="python--skeleton--setup.py-idio.html-10"></a>    <span class="s">&#39;download_url&#39;</span><span class="p">:</span> <span class="s">&#39;Where to download it.&#39;</span><span class="p">,</span>
+<a name="python--skeleton--setup.py-idio.html-11"></a>    <span class="s">&#39;author_email&#39;</span><span class="p">:</span> <span class="s">&#39;My email.&#39;</span><span class="p">,</span>
+<a name="python--skeleton--setup.py-idio.html-12"></a>    <span class="s">&#39;version&#39;</span><span class="p">:</span> <span class="s">&#39;0.1&#39;</span><span class="p">,</span>
+<a name="python--skeleton--setup.py-idio.html-13"></a>    <span class="s">&#39;install_requires&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;nose&#39;</span><span class="p">],</span>
+<a name="python--skeleton--setup.py-idio.html-14"></a>    <span class="s">&#39;packages&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;NAME&#39;</span><span class="p">],</span>
+<a name="python--skeleton--setup.py-idio.html-15"></a>    <span class="s">&#39;scripts&#39;</span><span class="p">:</span> <span class="p">[],</span>
+<a name="python--skeleton--setup.py-idio.html-16"></a>    <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;projectname&#39;</span>
+<a name="python--skeleton--setup.py-idio.html-17"></a><span class="p">}</span>
+<a name="python--skeleton--setup.py-idio.html-18"></a>
+<a name="python--skeleton--setup.py-idio.html-19"></a><span class="n">setup</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">)</span>
+</pre></div>
+</td></tr></table><p>Edit this file so that it has your contact information and is ready to go for when you copy it.</p>
+<p>Finally you will want a simple skeleton file for tests named <tt class="docutils literal">tests/NAME_tests.py</tt>:</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></div></td><td class="code"><div class="highlight"><pre><a name="python--skeleton--tests--NAME_tests.py-idio.html-1"></a><span class="kn">from</span> <span class="nn">nose.tools</span> <span class="kn">import</span> <span class="o">*</span>
+<a name="python--skeleton--tests--NAME_tests.py-idio.html-2"></a><span class="kn">import</span> <span class="nn">NAME</span>
+<a name="python--skeleton--tests--NAME_tests.py-idio.html-3"></a>
+<a name="python--skeleton--tests--NAME_tests.py-idio.html-4"></a><span class="k">def</span> <span class="nf">setup</span><span class="p">():</span>
+<a name="python--skeleton--tests--NAME_tests.py-idio.html-5"></a>    <span class="k">print</span> <span class="s">&quot;SETUP!&quot;</span>
+<a name="python--skeleton--tests--NAME_tests.py-idio.html-6"></a>
+<a name="python--skeleton--tests--NAME_tests.py-idio.html-7"></a><span class="k">def</span> <span class="nf">teardown</span><span class="p">():</span>
+<a name="python--skeleton--tests--NAME_tests.py-idio.html-8"></a>    <span class="k">print</span> <span class="s">&quot;TEAR DOWN!&quot;</span>
+<a name="python--skeleton--tests--NAME_tests.py-idio.html-9"></a>
+<a name="python--skeleton--tests--NAME_tests.py-idio.html-10"></a><span class="k">def</span> <span class="nf">test_basic</span><span class="p">():</span>
+<a name="python--skeleton--tests--NAME_tests.py-idio.html-11"></a>    <span class="k">print</span> <span class="s">&quot;I RAN!&quot;</span>
+</pre></div>
+</td></tr></table><div class="section" id="final-directory-structure">
+<h2>Final Directory Structure</h2>
+<p>When you are done setting all of this up, your directory should look like mine here:</p>
+<pre class="code console literal-block">
+<span class="generic output">skeleton/
+     NAME/
+         __init__.py
+     bin/
+     docs/
+     setup.py
+     tests/
+         NAME_tests.py
+         __init__.py</span>
+</pre>
+<p>And from now on, you should run your commands from that work with this directory from this point.  If you can't do <tt class="docutils literal">ls <span class="pre">-R</span></tt> and see this same structure, then you are in the wrong place.  For example, people commonly go into the <tt class="docutils literal">tests/</tt> directory to try to run files there, which won't work.  To run your application's tests, you would need to be <em>above</em> <tt class="docutils literal">tests/</tt> and this location I have above.  So, if you try this:</p>
+<pre class="code console literal-block">
+<span class="generic prompt">$</span> <span class="name builtin">cd </span>tests/   <span class="comment"># WRONG! WRONG! WRONG!
+</span><span class="generic prompt">$</span><span class="comment"></span> nosetests
+<span class="generic output">
+----------------------------------------------------------------------
+Ran 0 tests in 0.000s
+
+OK</span>
+</pre>
+<p>Then that is <em>wrong</em>!  You have to be above tests, so assuming you made this mistake, you would fix it by doing this:</p>
+<pre class="code console literal-block">
+<span class="generic prompt">$</span> <span class="name builtin">cd</span> ..   <span class="comment"># get out of tests/
+</span><span class="generic prompt">$</span><span class="comment"></span> ls      <span class="comment"># CORRECT! you are now in the right spot
+</span><span class="generic output">NAME                bin             docs            setup.py        tests
+</span><span class="generic prompt">$</span> nosetests
+<span class="generic output">.
+----------------------------------------------------------------------
+Ran 1 test in 0.004s
+
+OK</span>
+</pre>
+<p>Remember this because people make this mistake quite frequently.</p>
+</div>
+</div>
+<div class="section" id="testing-your-setup">
+<h1>Testing Your Setup</h1>
+<p>After you get all that installed you should be able to do this:</p>
+<pre class="code console literal-block">
+<span class="generic prompt">$</span> nosetests
+<span class="generic output">.
+----------------------------------------------------------------------
+Ran 1 test in 0.007s
+
+OK</span>
+</pre>
+<p>I'll explain what this <tt class="docutils literal">nosetests</tt> thing is doing in the next exercise, but for now if you do not see that, you probably got something wrong.  Make sure you put <tt class="docutils literal">__init__.py</tt> files in your <tt class="docutils literal">NAME</tt> and <tt class="docutils literal">tests</tt> directories and make sure you got <tt class="docutils literal">tests/NAME_tests.py</tt> right.</p>
+</div>
+<div class="section" id="using-the-skeleton">
+<h1>Using the Skeleton</h1>
+<p>You are now done with most of your yak shaving.  Whenever you want to start a new project, just do this:</p>
+<ol class="arabic simple">
+<li>Make a copy of your skeleton directory.  Name it after your new project.</li>
+<li>Rename (move) the <tt class="docutils literal">NAME</tt> directory to be the name of your project or whatever you want to call your root module.</li>
+<li>Edit your <tt class="docutils literal">setup.py</tt> to have all the information for your project.</li>
+<li>Rename <tt class="docutils literal">tests/NAME_tests.py</tt> to also have your module name.</li>
+<li>Double check it's all working by using <tt class="docutils literal">nosetests</tt> again.</li>
+<li>Start coding.</li>
+</ol>
+</div>
+<div class="section" id="required-quiz">
+<h1>Required Quiz</h1>
+<p>This exercise doesn't have Study Drills but a quiz you should complete:</p>
+<ol class="arabic simple">
+<li>Read about how to use all of the things you installed.</li>
+<li>Read about the <tt class="docutils literal">setup.py</tt> file and all it has to offer.  Warning: it is not a very well-written piece of software, so it will be very strange to use.</li>
+<li>Make a project and start putting code into the module, then get the module working.</li>
+<li>Put a script in the <tt class="docutils literal">bin</tt> directory that you can run.  Read about how you can make a Python script that's runnable for your system.</li>
+<li>Mention the <tt class="docutils literal">bin</tt> script you created in your <tt class="docutils literal">setup.py</tt> so that it gets installed.</li>
+<li>Use your <tt class="docutils literal">setup.py</tt> to install your own module and make sure it works, then use
+<tt class="docutils literal">pip</tt> to uninstall it.</li>
+</ol>
+</div>
+<div class="section" id="common-student-questions">
+<h1>Common Student Questions</h1>
+<dl class="docutils">
+<dt>Do these instructions work on Windows?</dt>
+<dd>They should, but depending on the version of Windows you may need to struggle with the setup a bit to get it working.  Just keep researching and trying it until you get it, or see if you can ask a more experienced Python+Windows friend to help out.</dd>
+<dt>It seems I can't run <tt class="docutils literal">nosetests</tt> on Windows?</dt>
+<dd>Sometimes the Python installer does not add the <tt class="docutils literal"><span class="pre">C:\Python27\Script</span></tt> to the system <tt class="docutils literal">PATH</tt>.  If this is the case for you, go back and add this to the path just like you did for <tt class="docutils literal"><span class="pre">C:\Python27</span></tt> in Exercise 0.</dd>
+<dt>What do I put in the config dictionary in my <tt class="docutils literal">setup.py</tt>?</dt>
+<dd>Make sure you read the documentation for distutils at <a class="reference external" href="http://docs.python.org/distutils/setupscript.html">http://docs.python.org/distutils/setupscript.html</a>.</dd>
+<dt>I can't seem to load the <tt class="docutils literal">NAME</tt> module and just get an ImportError.</dt>
+<dd>Make sure you made the <tt class="docutils literal">NAME/__init__.py</tt> file.  If you're on Windows make sure you didn't accidentally name it <tt class="docutils literal">NAME/__init__.py.txt</tt> which happens by default with some editors.</dd>
+<dt>Why do we need a <tt class="docutils literal">bin/</tt> folder at all?</dt>
+<dd>This is just a standard place to put scripts that are run on the command line, not a place to put modules.</dd>
+<dt>Do you have a real world example project?</dt>
+<dd>There are many projects written in Python that do this, but try this simple one I created: <a class="reference external" href="https://gitorious.org/python-modargs">https://gitorious.org/python-modargs</a>.</dd>
+<dt>My <tt class="docutils literal">nosetests</tt> run only shows one test being run. Is that right?</dt>
+<dd>Yes, that's what my output shows too.</dd>
+</dl>
+</div>
+        <!-- RST ENDS -->
+
+            <!-- /.help-icon -->
+        <div id="video_holder">
+            <h1>Video</h1>
+            <div id="video" class="row inner">
+                <div class="small-12 small-centered columns">
+                    <div data-paydiv_product="2" id='paydiv'>
+                        &nbsp;
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        </div><!-- /#main -->
+
+        <div class='ad-deck gold' id="footer">
+            <ul class='retailers clearfix'>
+                <li>
+                    <a href='https://paydiv.io/access/buy/2/'>
+                        <div class='retailer-name'>Zed Shaw</div>
+                        <div class='book-type'>PDF + Videos + Updates</div>
+                        <div class='book-price'>$29.95</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.amazon.com/gp/product/0321884914/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0321884914&amp;linkCode=as2&amp;tag=lepythhawa-20'>
+                        <div class='retailer-name'>Amazon</div>
+                        <div class='book-type'>Paper + DVD</div>
+                        <div class='book-price'>$29.95</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.amazon.com/gp/product/B00FGUS948/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=B00FGUS948&amp;linkCode=as2&amp;tag=lepythhawa-20'>
+                        <div class='retailer-name'>Amazon</div>
+                        <div class='book-type'>Kindle (No Videos)</div>
+                        <div class='book-price'>$17.27</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.barnesandnoble.com/w/learn-python-the-hard-way-zed-shaw/1112055406?ean=9780321884916'>
+                        <div class='retailer-name'>B&amp;N</div>
+                        <div class='book-type'>Paper + DVD</div>
+                        <div class='book-price'>$17.27</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.barnesandnoble.com/w/learn-python-the-hard-way-zed-shaw/1112055406?ean=9780133124347&amp;itm=1&amp;usri=learn+python+the+hard+way'>
+                        <div class='retailer-name'>B&amp;N</div>
+                        <div class='book-type'>Nook (No Video)</div>
+                        <div class='book-price'>$17.27</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.informit.com/store/learn-python-the-hard-way-a-very-simple-introduction-9780321884916'>
+                        <div class='retailer-name'>InformIT</div>
+                        <div class='book-type'>eBook + Paper</div>
+                        <div class='book-price'>$43.19</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://ruby.learncodethehardway.org/book/'>
+                        <div class='retailer-name'>Interested In Ruby?</div>
+                        <div class='book-type'>Ruby is also a great language.</div>
+                        <div class='book-price'>Learn Ruby The Hard Way</div>
+                    </a>
+                </li>
+
+            </ul><!-- /.places -->
+        </div><!-- /#ad-deck -->
+
+        <script src="javascripts/jquery.js"></script>
+        <script src="index.js"></script>
+        <script src="../../paydiv.io/static/jzed.js"></script>
+        <script src="../../paydiv.io/static/js/videojs/video.js"></script>
+        <link rel="stylesheet" href="../../paydiv.io/static/js/videojs/video-js.css">
+        <script src="../../paydiv.io/static/api/v1/paydiv.js"></script>
+        <script src="javascripts/app.js"></script>
+        <script src="javascripts/littools.js"></script>
+        <script type="text/javascript">
+        
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-24168052-1']);
+        _gaq.push(['_trackPageview']);
+        
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+        
+        </script>
+
+
+        <script src="javascripts/littools.js"></script>
+
+        </body>
+
+<!-- Mirrored from learnpythonthehardway.org/book/ex46.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 03 Sep 2014 17:52:40 GMT -->
+</html>
+

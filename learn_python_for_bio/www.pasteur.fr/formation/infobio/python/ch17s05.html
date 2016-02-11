@@ -1,0 +1,268 @@
+<html>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch17s05.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:36 GMT -->
+<head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>17.5. Searching for patterns.</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><meta name="keywords" content="python, biology, bioinformatics, programming, computational biology"><link rel="home" href="index-2.html" title="Introduction to Programming using Python"><link rel="up" href="ch17.html" title="Chapter 17. Scripting"><link rel="previous" href="ch17s04.html" title="17.4. Parsing"><link rel="next" href="ch18.html" title="Chapter 18. Object-oriented programming"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">17.5. Searching for patterns.</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch17s04.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><th width="60%" align="center">Chapter 17. Scripting</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch18.html"><img src="images/next.png" alt="Next"></a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="sect_scripting_regexp"></a>17.5. Searching for patterns.</h2></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="d0e7255"></a>17.5.1. Introduction to regular expressions</h3></div></div><p>
+    <span class="emphasis"><em>Regular expression</em></span> is a term used in computer
+    science to refer to the language that is used to describe patterns
+    to be searched for in a text. The term comes from the computing
+    languages theory where regular expressions are used to denote
+    regular languages. In turn, regular languages are defined as the languages
+    that can be recognized by a finite-state automaton (a topic that
+    will be introduced in the algorithmic course).
+    </p><p>
+    The aim of a pattern is to define not only one word to be searched
+    for, but a set of words. This definition is provided in a given
+    language, depending on the system you are working with;  the
+    set of corresponding words also depends on the system. 
+    </p><p>
+    In the
+    Unix shell, for instance:
+    <pre class="programlisting">
+ls s*
+    </pre>
+    means list all the files beginning by 's', and potentially followed
+    by anything. The command:
+    <pre class="programlisting">
+ls s[ie]n*
+    </pre>
+    means list all the files beginning by 's', followed by either 'i'
+    or 'e', and followed by anything, including nothing. So, in the
+    context of the <tt>ls</tt> function within a Unix
+    shell, the set of words is defined as the files existing on the
+    filesytem (as opposed, for instance, to the files stored on another
+    computer, not being made available through a distributed filesystem). 
+    </p><p>
+In the Prosite database, patterns describing protein domains are
+described, such as:
+    <pre class="programlisting">
+H-C-H-x(3)-H-x(3)-[AG]-[LM]
+    </pre>
+    which represent the following set of amino-acid sequences:
+    sequences begining by 'HCH', followed by 3 positions containing
+    any amino-acid letter, followed by 'H', followed again by 3 free
+    positions, followed by either 'A' or 'G', followed by either 'L'
+    or 'M'. As you can notice, the language to define patterns is
+    different from the Unix shell, as well as the set of corresponding
+    words. Here, they are just sequences of amino-acids letters.
+    </p><p>
+    In the <tt>grep</tt> Unix command, a command to search
+ for patterns in files, although similar to
+ the shell pattern syntax, there is a slight difference. Say that a
+ file contains:
+    <pre class="programlisting">
+science
+s
+another
+    </pre>
+    the following command:
+    <pre class="programlisting">
+grep 's*' file
+    </pre>
+will return ... all the lines, because 's*' means all the words
+ beginning by 0 or any number of 's'. In the <tt>grep</tt>
+ command, the set of words is composed of the lines of the file. So
+ the term "set of words" must be understood in a broad sense. It must
+ be understood also that <span class="emphasis"><em>the set is not actually
+ generated</em></span>, of course: it can be infinite! Instead, an
+ operational representation of this set is built, through a
+ finite-state automaton.
+
+    </p><p>
+    In <tt>SQL</tt> languages, you can also
+    provide patterns:
+    <pre class="programlisting">
+select clone_name from CLONE where clone_id like '[^A]%[02468]'
+    </pre>
+    means that you restrict the query to the clones whose identifier
+    does not begin with a 'A', is followed by any character N times, and ends
+    with an even number (Sybase).
+    </p><p>
+    While the set of words corresponding to a pattern is described by
+    the given expression and the semantics of the system being used,
+    the set of found words, also called
+    <span class="emphasis"><em>occurrences</em></span>, depends on data. So, occurrences
+    are the words from the set of words that were actually found within
+    data. <a href="ch17s05.html#fig_regexp_system" title="Figure 17.5. Pattern searching">Figure 17.5</a> summarizes the concepts.
+
+	  </p><div class="figure"><a name="fig_regexp_system"></a><p class="title"><b>Figure 17.5. Pattern searching</b></p><div class="mediaobject"><img src="images/regexp_system.png"></div></div><p>
+
+    </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="d0e7322"></a>17.5.2. Regular expressions in Python</h3></div></div><p>
+    A detailed presentation of Python regular expressions is available here: 
+    <a href="http://py-howto.sourceforge.net/regex/regex.html" target="_top">Regular Expression HOWTO</a>.
+	  To get information about the <tt>re</tt>
+	  module, see pydoc, but also the <tt>sre</tt>
+	  module (Support for regular expressions), for which
+	  <tt>re</tt> is a wrapper.
+    </p><p>
+    In Python, regular expressions are handled by a module:
+    <tt>re</tt>:
+      <pre class="programlisting">
+&gt;&gt;&gt; import re
+      </pre>
+    Before searching for a pattern, you must first
+    <span class="emphasis"><em>compile</em></span> it (this builds the "set of words",
+    or rather the representation of this set):
+
+      <pre class="programlisting">
+&gt;&gt;&gt; expression = '[AP]{1,2}D'
+&gt;&gt;&gt; pattern = re.compile(expression)
+      </pre>
+      <tt>pattern</tt> is a <span class="emphasis"><em>pattern object</em></span>.
+
+    You then issue a <span class="emphasis"><em>search</em></span>, for instance in the
+    small sequence <tt>seq</tt>, by a request to the pattern
+    object: 
+      <pre class="programlisting">
+&gt;&gt;&gt; seq = "RPAD"
+&gt;&gt;&gt; match = pattern.search(seq)
+      </pre>
+      This  establishes the <span class="emphasis"><em>matching</em></span>, or
+    correspondances, between the set of possible words 
+    and data. <tt>match</tt> is called a <span class="emphasis"><em>match
+    object</em></span>. To get the occurrences, you can ask the match
+    object for the start and end of the match in the searched text:
+      <pre class="programlisting">
+&gt;&gt;&gt; print match.start(), match.end(), seq[match.start():match.end()]
+1 4 PAD
+      </pre>
+      or the <tt>group</tt>:
+      <pre class="programlisting">
+&gt;&gt;&gt; match.group(0)
+'PAD'
+      </pre>
+      <a href="ch17s05.html#fig_regexp_python" title="Figure 17.6. Python regular expressions">Figure 17.6</a> summarizes this system.
+
+	  </p><div class="figure"><a name="fig_regexp_python"></a><p class="title"><b>Figure 17.6. Python regular expressions</b></p><div class="mediaobject"><img src="images/regexp_python.png"></div></div><p>
+
+      </p><div class="example"><p class="title"><b>Example 17.6. Searching for the occurrence of PS00079 and PS00080
+      Prosite patterns in the Human Ferroxidase protein</b></p><p>
+	  </p><div class="programlistingco"><pre class="programlisting">
+import sys
+import re
+from Bio.SwissProt import SProt
+
+sp = open(sys.argv[1])
+iterator = SProt.Iterator(sp, SProt.SequenceParser())
+seq = iterator.next().seq
+sp.close()
+
+PS00079 = 'G.[FYW].[LIVMFYW].[CST].{8,8}G[LM]...[LIVMFYW]'                <span class="co"><img src="images/callouts/1.png" alt="(1)"></span>
+pattern = re.compile(PS00079)                                             <span class="co"><img src="images/callouts/2.png" alt="(2)"></span>
+match = pattern.search(seq.tostring())                                    <span class="co"><img src="images/callouts/3.png" alt="(3)"></span>
+print PS00079
+print match.start(), match.end(), seq[match.start():match.end()]          <span class="co"><img src="images/callouts/4.png" alt="(4)"></span>
+            </pre><div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><img src="images/callouts/1.png" alt="1" border="0"></td><td valign="top" align="left"><p>The regular expression is stored in a string.</p></td></tr><tr><td width="5%" valign="top" align="left"><img src="images/callouts/2.png" alt="2" border="0"></td><td valign="top" align="left"><p>The regular expression is compiled in a pattern.</p></td></tr><tr><td width="5%" valign="top" align="left"><img src="images/callouts/3.png" alt="3" border="0"></td><td valign="top" align="left"><p>The compiled pattern is searched in the sequence.</p></td></tr><tr><td width="5%" valign="top" align="left"><img src="images/callouts/4.png" alt="4" border="0"></td><td valign="top" align="left"><p>The result of the search is printed.</p></td></tr></table></div></div><p>
+	  There are several methods to search:
+	  <tt>search</tt> and <tt>match</tt>,
+	  the difference being that <tt>match</tt>
+	  looks for a match <span class="emphasis"><em>at the beginning of the
+	  string</em></span>. So, back to the example, the following
+	  statement:
+	    <pre class="programlisting">
+match = pattern.match(seq.tostring())
+	    </pre>
+	    would return a positive result only if the sequence
+	    begins by an occurrence of PS00079.
+	  </p><p>
+      A convenient feature enables to associate a name to sub-parts of
+    the matched text:
+	  </p><div class="programlistingco"><pre class="programlisting">
+import sys
+import re
+from Bio.SwissProt import SProt
+
+sp = open(sys.argv[1])
+iterator = SProt.Iterator(sp, SProt.SequenceParser())
+seq = iterator.next().seq
+sp.close()
+
+PS00080 = '(?P&lt;copper3&gt;H)CH...H...[AG](?P&lt;copper1&gt;[LM])'                  <span class="co"><img src="images/callouts/1.png" alt="(1)"></span>
+pattern = re.compile(PS00080)
+match = pattern.search(seq.tostring())
+print PS00080
+print match.start(), match.end(), seq[match.start():match.end()]
+
+print 'copper type 3 binding residue: ', match.group('copper3')           <span class="co"><img src="images/callouts/2.png" alt="(2)"></span>
+print 'copper type 1 binding residue: ', match.group('copper1')
+
+            </pre><div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><img src="images/callouts/1.png" alt="1" border="0"></td><td valign="top" align="left"><p>The regular expression now contains 2 identifiers: <tt>copper1</tt> and <tt>copper3</tt>.</p></td></tr><tr><td width="5%" valign="top" align="left"><img src="images/callouts/2.png" alt="2" border="0"></td><td valign="top" align="left"><p>You can print the sub-parts of the result identified by variables: <tt>copper1</tt> and <tt>copper3</tt>.</p></td></tr></table></div></div><p>
+	</p></div><p>
+    </p><p><b>Shortcuts.&nbsp;</b>
+	The <tt>re</tt> module provides shortcuts to
+	directly search for an expression without compiling the
+	pattern into a pattern object:
+	<pre class="programlisting">
+&gt;&gt;&gt; match = re.search('[AP]{1,2}D', "RPAD")
+&gt;&gt;&gt; match.group(0)
+'PAD'
+	</pre>
+	You can also directly get the occurrences of a pattern object
+	in a string:
+	<pre class="programlisting">
+&gt;&gt;&gt; pattern = re.compile('[AP]{1,2}D', )
+&gt;&gt;&gt; pattern.findall("RPAD")
+['PAD']
+	</pre>
+	or even the occurences of an expression, without compiling the
+	pattern:
+	<pre class="programlisting">
+&gt;&gt;&gt; re.findall('[AP]{1,2}D', "RPAD")
+['PAD']
+	</pre>
+
+	<a href="ch17s05.html#fig_regexp_python_sum" title="Figure 17.7. Python regular expressions: classes and methods summary">Figure 17.7</a> summarizes
+	<tt>re</tt> module 
+	objects and methods to perform pattern searching. 
+
+	  <div class="figure"><a name="fig_regexp_python_sum"></a><p class="title"><b>Figure 17.7. Python regular expressions: classes and methods summary</b></p><div class="mediaobject"><img src="images/regexp_python_sum.png"></div></div>
+      </p><p><b>Search modes.&nbsp;</b>
+      </p><p><b>Text substitutions.&nbsp;</b>
+      </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="d0e7509"></a>17.5.3. Prosite</h3></div></div><p>
+    This section presents the Prosite classes in Biopython, which have
+    a common interface with the Python pattern module.
+    </p><div class="sect3"><div class="titlepage"><div><h4 class="title"><a name="d0e7514"></a>17.5.3.1. Prosite Dictionary</h4></div></div><p>
+	Biopython defines several dictionaries to access biological
+	databases. Having a dictionary means that you can fetch an
+	entry by:
+	<pre class="programlisting">
+	  entry = prosite['PS00079']
+	</pre>
+	For this to work, you first need to create the dictionary:
+	<pre class="programlisting">
+	  prosite = Bio.Prosite.ExPASyDictionary()
+	</pre>
+	As you can guess by the name of the module, you actually fetch
+	the Prosite entry on the Web. You could also fetch the Prosite
+	entry from a local database  with the golden program (see ???).
+	The entry fetched above is actually a string. In order to have
+	the dictionary return a record, you must rather create it like
+	this:
+	<pre class="programlisting">
+	  prosite = Bio.Prosite.ExPASyDictionary(parser=Bio.Prosite.RecordParser())
+	</pre>
+      </p></div><div class="sect3"><div class="titlepage"><div><h4 class="title"><a name="d0e7530"></a>17.5.3.2. Prosite patterns</h4></div></div><p>
+       The <tt>Bio.Prosite</tt> package defines a
+      <tt>Pattern</tt> class that enables to create 
+      patterns which may be searched for in sequences objects, as in the
+      <tt>re</tt> Python module for regular expressions.
+
+      The result of a search is a <tt>PrositeMatch</tt>,
+      that behaves in a way similar to a regular expression match.
+
+      </p></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="d0e7547"></a>17.5.4. Searching for patterns and parsing</h3></div></div><p>
+  As a conclusion, let us summarize how pattern searching and parsing
+  interact when analyzing text. Basic text analysis is performed by
+  searching for patterns, that are extracted (or scanned) from a text. Then
+  patterns occurrences may be analyzed (or parsed) as a more
+  general structure. In more complex parsing
+  architectures, as the ones that have been introduced in 
+ <a href="ch17s04.html" title="17.4. Parsing">Section 17.4</a>, it is the
+  <span class="emphasis"><em>parser</em></span> engine which drives
+  the process, by asking a <span class="emphasis"><em>scanner</em></span> to feed him
+  with basic token found in the text. In such systems, regular
+  expressions are defined and used in the scanner.
+
+  </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch17s04.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch17.html"><img src="images/up.png" alt="Up"></a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch18.html"><img src="images/next.png" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">17.4. Parsing&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index-2.html"><img src="images/home.png" alt="Home"></a></td><td width="40%" align="right" valign="top">&nbsp;Chapter 18. Object-oriented programming</td></tr></table></div></body>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch17s05.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:37 GMT -->
+</html>

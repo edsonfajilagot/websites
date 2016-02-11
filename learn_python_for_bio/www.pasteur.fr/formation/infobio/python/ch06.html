@@ -1,0 +1,350 @@
+<html>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch06.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:23 GMT -->
+<head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Chapter 6. Strings</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><meta name="keywords" content="python, biology, bioinformatics, programming, computational biology"><link rel="home" href="index-2.html" title="Introduction to Programming using Python"><link rel="up" href="index-2.html" title="Introduction to Programming using Python"><link rel="previous" href="ch05s02.html" title="5.2. Interpreter and Compiler"><link rel="next" href="ch07.html" title="Chapter 7. Branching and Decisions"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 6. Strings</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch05s02.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch07.html"><img src="images/next.png" alt="Next"></a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><h2 class="title"><a name="chap_str"></a>Chapter 6. Strings</h2></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt>6.1. <a href="ch06.html#sect_string_val_obj">Values as objects</a></dt><dt>6.1. <a href="ch06.html#d0e2065">Working with strings</a></dt><dd><dl><dt>6.1.1. <a href="ch06.html#d0e2488">Unicode</a></dt><dt>6.1.2. <a href="ch06.html#d0e2531">Iterations on strings</a></dt></dl></dd></dl></div><p>
+    So far we have seen a lot about strings. Before giving
+    a summary about this data type, let us explain
+    the <span class="emphasis"><em>object</em></span> syntax feature. 
+  </p><div class="section"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="sect_string_val_obj"></a>6.1. Values as objects</h2></div></div><p>
+      We have seen that <span class="emphasis"><em>strings</em></span> have a
+      <span class="emphasis"><em>value</em></span>. But Python
+      <span class="emphasis"><em>values</em></span> are more than that. They are
+      <span class="emphasis"><em>objects.</em></span>
+
+      </p><div class="definition"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/definition.png"></td><td><p class="title"><b>Object</b></p></td></tr><tr><td colspan="2" align="left" valign="top">
+	
+	<p>
+	  <span class="emphasis"><em>Objects</em></span> are things that know more than
+	  their <span class="emphasis"><em>values</em></span>. In particular, you can ask
+	  them to perform specialized tasks that only them can perform.
+	</p>
+      </td></tr></table></div><p>
+
+      Up to now we have used some special functions handling string
+      data available to us by the up to now
+      <span class="emphasis"><em>magic</em></span> statement <tt>from string import
+	*</tt>. But <span class="emphasis"><em>strings</em></span> themselves know how to
+      execute all of them and even more. Look at this:
+
+      <pre class="programlisting">
+&gt;&gt;&gt; motif = "gaattc"
+&gt;&gt;&gt; motif.upper()
+'GAATTC'
+&gt;&gt;&gt; motif
+'gaattc'
+&gt;&gt;&gt; motif.isalpha()
+1
+&gt;&gt;&gt; motif.count('n')
+0
+
+&gt;&gt;&gt; motif = 'GAATTC_'   
+&gt;&gt;&gt; motif + motif
+'GAATTC_GAATTC_'
+&gt;&gt;&gt; motif * 3
+'GAATTC_GAATTC_GAATTC_'
+      </pre>
+ 
+      At the first glance this looks a little bit strange, but you can
+      read the <tt>.</tt> (dot) operator as:
+      &#8220;ask
+	object <tt>motif</tt> to
+      <span class="emphasis"><em>do</em></span> something&#8221; as: transform
+      <tt>motif</tt> in an uppercase string
+      (<tt>upper</tt>), ask whether it contains only letters
+      (<tt>isalpha</tt>) or count the number of 
+      &#8220;n&#8221; characters.
+    </p><p><b>Objects as namespaces.&nbsp;</b>
+      How does it work? All objects have their own namespace 
+      containing all variable and function names that are defined for
+      that object.
+      As already describeb in <a href="ch02s04.html" title="2.4. Namespaces or representing variables">Section 2.4</a>
+      you can see all names defined for an object by using the <tt>dir</tt>
+      function:
+
+      <pre class="programlisting">
+&gt;&gt;&gt; dir(motif)
+['__add__', '__class__', '__contains__', '__delattr__', '__eq__', '__ge__', 
+'__getattribute__', '__getitem__', '__getslice__', '__gt__', '__hash__', 
+'__init__', '__le__', '__len__', '__lt__', '__mul__', '__ne__',	'__new__', 
+'__reduce__', '__repr__', '__rmul__', '__setattr__', '__str__',	'capitalize',
+ 'center', 'count', 'decode', 'encode', 'endswith', 'expandtabs', 'find', 
+'index', 'isalnum', 'isalpha', 'isdigit', 'islower', 'isspace',	'istitle', 
+'isupper', 'join', 'ljust', 'lower', 'lstrip', 'replace', 'rfind', 'rindex', 
+'rjust', 'rstrip', 'split', 'splitlines', 'startswith', 'strip', 'swapcase', 
+'title', 'translate', 'upper']
+      </pre>
+
+	The dot operator is used to access this namespace. It
+      will look up in the namespace of the object for the name
+      following the dot operator.
+
+      <pre class="programlisting">
+&gt;&gt;&gt; motif.__class__
+&lt;type 'str'&gt;
+&gt;&gt;&gt; motif.replace('a', 'A')
+'gAAttc'
+      </pre>
+      </p><p>
+      Variables and functions defined in object namespaces are called
+      <span class="emphasis"><em>attributes</em></span> and
+      <span class="emphasis"><em>methods</em></span> of the object.
+    </p><div class="definition"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/definition.png"></td><td><p class="title"><b>Attribute</b></p></td></tr><tr><td colspan="2" align="left" valign="top">
+      
+      <p>
+	An <span class="emphasis"><em>attribute</em></span> is a
+	<span class="emphasis"><em>variable</em></span> defined in a namespace of an
+	object, which can only be accessed via the object himself.
+      </p>
+    </td></tr></table></div><div class="definition"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/definition.png"></td><td><p class="title"><b>Method</b></p></td></tr><tr><td colspan="2" align="left" valign="top">
+      
+      <p>
+	<span class="emphasis"><em>Methods</em></span> are
+	<span class="emphasis"><em>functions</em></span> defined in a namespace of an
+	<span class="emphasis"><em>object</em></span>. 	
+      </p>
+    </td></tr></table></div><p>
+      This is just a little introduction to objects making it
+      possible to use the <span class="emphasis"><em>object syntax</em></span> for the
+      basic types in Python. We will give further explanation into
+      <span class="emphasis"><em>object-oriented programming</em></span> in <a href="ch18.html" title="Chapter 18. Object-oriented programming">Chapter 18</a>. 
+    </p></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="d0e2065"></a>6.1. Working with strings</h2></div></div><div class="definition"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/definition.png"></td><td><p class="title"><b>Strings</b></p></td></tr><tr><td colspan="2" align="left" valign="top">
+	
+	<p>
+	  <span class="emphasis"><em>Strings</em></span> are sequences or
+	  <span class="emphasis"><em>ordered collections </em></span> of
+	  <span class="emphasis"><em>characters</em></span>. 
+	</p>
+      </td></tr></table></div><p>
+      You can write them in Python
+      using quotes, double quotes, triple quotes or triple double
+      quotes. The triple quote notation permits to write strings
+      spanning multiple lines while keeping line feeds.
+
+      
+      <pre class="programlisting">
+&gt;&gt;&gt; 'ATGCA'
+'ATGCA'
+&gt;&gt;&gt; "ATGCA"
+'ATGCA'
+&gt;&gt;&gt; """ATGATA
+... AGAGA"""
+'ATGATA\nAGAGA'	
+      </pre>
+
+    </p><p>
+      The first thing that we would sum up is how to extract
+      characters or substrings . Characters are accessible using their
+      position in the string which has to be enclosed into brackets
+      following the string. The position number can be positive or
+      negative, which means starting at the beginning or the end of
+      the string. Substrings are extracted by providing an interval
+      of the start and end position separated by a colon. Both
+      positions are optional which means either to start at the beginning
+      of the string or to extract the substring until the end. 
+      When accessing characters, it is forbidden to access position
+      that does not exist, whereas during substring extraction, the
+      longest possible string is extracted.
+
+      <pre class="programlisting">
+&gt;&gt;&gt; motif = 'GAATTC'
+&gt;&gt;&gt; motif[0]
+'G'
+&gt;&gt;&gt; motif[-1]
+'C'
+
+&gt;&gt;&gt; motif[0:3]
+'GAA'
+&gt;&gt;&gt; motif[1:3]
+'AA'
+&gt;&gt;&gt; motif[:3]
+'GAA'
+&gt;&gt;&gt; motif[3:]
+'TTC'
+&gt;&gt;&gt; motif[3:6]
+'TTC'
+&gt;&gt;&gt; motif[3:-1]
+'TT'
+&gt;&gt;&gt; motif[-3:-1]
+'TT'
+&gt;&gt;&gt; motif[:]
+'GAATTC'
+
+&gt;&gt;&gt; motif[100]
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in ?
+IndexError: string index out of range
+&gt;&gt;&gt; motif[3:100]
+'TTC'
+&gt;&gt;&gt; motif[3:2]
+''
+    </pre>
+  </p><div class="caution" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/caution.png"></td><th align="left">Caution</th></tr><tr><td colspan="2" align="left" valign="top"><p>
+      <a href="ch06.html#fig_string_index" title="Figure 6.1. String indices">Figure 6.1</a> compares positive and
+      negative indices. Be careful, forward string indices starts 
+      always with 0, whereas backward string indices starts with -1. 
+    </p></td></tr></table></div><div class="figure"><a name="fig_string_index"></a><p class="title"><b>Figure 6.1. String indices</b></p><div class="mediaobject"><img src="images/string_index_2.png" width="290.49999999999994"></div></div><div class="caution" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/caution.png"></td><th align="left">Caution</th></tr><tr><td colspan="2" align="left" valign="top"><p>
+	It is also important to notice that the character at the end
+	position during a substring extraction is never included in
+	the extracted substring. 
+    </p></td></tr></table></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td colspan="2" align="left" valign="top"><p>
+	Strings are immutable in Python. This means you can neither
+	change characters or substrings. You have always to create a
+	new copy of the string. 
+	<pre class="programlisting">
+&gt;&gt;&gt; motif[1] = 'n'
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in ?
+TypeError: object doesn't support item assignment
+
+&gt;&gt;&gt; motif[:1] + 'n' + motif[2:]
+'GnATTC'
+	</pre>
+      </p></td></tr></table></div><p>
+      A list of all other methods, function and operators and their action on
+      string objects are summarized in <a href="ch06.html#tab_string_met" title="Table 6.1. String methods, operators and builtin functions">Table 6.1</a> and <a href="ch06.html#tab_string_bool" title="Table 6.2. Boolean methods and operators on strings">Table 6.2</a>).
+    </p><div class="table"><a name="tab_string_met"></a><p class="title"><b>Table 6.1. String methods, operators and builtin functions</b></p><table summary="String methods, operators and builtin functions" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Method, Operator, Function</th><th>Description</th></tr></thead><tbody><tr><td><tt>s + t</tt></td><td>Concatenation</td></tr><tr><td><tt>s * 3</tt></td><td>Repetition</td></tr><tr><td><tt>len(s)</tt></td><td>Returns the length of s</td></tr><tr><td><tt>min(s), max(s)</tt></td><td>Returns the &#8220;smallest&#8221;,
+	      &#8220;largest&#8221; character of s, depending on
+	      their position in the ASCII code</td></tr><tr><td><tt>s.capitalize()</tt></td><td>The first character of s is put in uppercase</td></tr><tr><td><tt>s.center([width])</tt></td><td>Centers s in a field of length width</td></tr><tr><td><tt>s.count(sub [,start [, end]])</tt></td><td>Counts occurrences of <span class="emphasis"><em>sub</em></span>
+		between <span class="emphasis"><em>start</em></span> and
+	      <span class="emphasis"><em>end</em></span></td></tr><tr><td><tt>s.encode([encoding [, errors]])</tt></td><td>Encode s using <span class="emphasis"><em>encoding</em></span> as
+		code and <span class="emphasis"><em>error</em></span></td></tr><tr><td><tt>s.expandtabs([tabsize])</tt></td><td>Expands tabs</td></tr><tr><td><tt>s.find(sub [, start [, end]])</tt></td><td>Finds the first occurrence of
+		<span class="emphasis"><em>sub</em></span> between
+		<span class="emphasis"><em>start</em></span> and <span class="emphasis"><em>end</em></span></td></tr><tr><td><tt>s.index(sub [,start [, end]])</tt></td><td>same as <tt>find</tt> but raises an
+	      exception if no occurrence is found</td></tr><tr><td><tt>s.join(words)</tt></td><td>Joins the list of <span class="emphasis"><em>words</em></span> with
+	      s as delimiter</td></tr><tr><td><tt>s.ljust(width)</tt></td><td>Left align s in a string of length
+	      <span class="emphasis"><em>width</em></span></td></tr><tr><td><tt>s.lower()</tt></td><td>Returns a lowercase version of s</td></tr><tr><td><tt>s.lstrip()</tt></td><td>Removes all leading whitespace characters of s</td></tr><tr><td><tt>s.replace(old, new [, maxrep])</tt></td><td>Replace maximal <span class="emphasis"><em>maxrep</em></span>
+	      versions of substring <span class="emphasis"><em>old</em></span> with
+		substring <span class="emphasis"><em>new</em></span></td></tr><tr><td><tt>s.rfind(sub [, start [, end]])</tt></td><td>Finds the last occurrence of substring
+		<span class="emphasis"><em>sub</em></span> between
+		<span class="emphasis"><em>start</em></span> and <span class="emphasis"><em>end</em></span></td></tr><tr><td><tt>s.rindex(sub [,start [, end]])</tt></td><td>Same as <tt>rfind</tt> but raise an
+		exception if <span class="emphasis"><em>sub</em></span> does not exists</td></tr><tr><td><tt></tt></td><td>&nbsp;</td></tr><tr><td><tt>s.rjust(width)</tt></td><td>Right-align s in a string of length
+	      <span class="emphasis"><em>width</em></span></td></tr><tr><td><tt>s.rstrip()</tt></td><td>Removes trailing whitespace characters</td></tr><tr><td><tt>s.split([sep [, maxsplit]]))</tt></td><td>Split s into maximal
+		<span class="emphasis"><em>maxsplit</em></span> words using
+	      <span class="emphasis"><em>sep</em></span> as separator (default whitespace)</td></tr><tr><td><tt>s.splitlines([keepends])</tt></td><td>Split s into lines, if
+	      <span class="emphasis"><em>keepends</em></span> is 1 keep the trailing newline</td></tr><tr><td><tt>s.strip()</tt></td><td>Removes trailing and leading whitespace characters</td></tr><tr><td><tt>s.swapcase()</tt></td><td>Returns a copy of s with lowercase letters turn
+	      into uppercase and vice versa</td></tr><tr><td><tt>s.title()</tt></td><td>Returns a title-case version of s (all words capitalized)</td></tr><tr><td><tt>s.upper()</tt></td><td>Returns an uppercase version of s</td></tr><tr><td><tt>s.translate(table, deletions)</tt></td><td>Returns a string translated according to <tt>table</tt>,
+	      with <tt>deletions</tt> character deleted. Table may be built
+	      with the <tt>maketrans()</tt> function.</td></tr></tbody></table></div><p>
+    See below an interesting application of
+    the <tt>translate</tt> function:
+    <pre class="programlisting">
+&gt;&gt;&gt; trans = maketrans('atgc', 'tacg')
+&gt;&gt;&gt; seq = 'atcggnntga'
+&gt;&gt;&gt; seq.translate(trans,'n')
+'tagccact'
+    </pre>
+
+    </p><div class="table"><a name="tab_string_bool"></a><p class="title"><b>Table 6.2. Boolean methods and operators on strings</b></p><table summary="Boolean methods and operators on strings" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Method or operator</th><th>Description</th></tr></thead><tbody><tr><td><tt>s &lt; &lt;=, &gt;=, &gt; t</tt></td><td>Checks if s appears before, before or at the same
+	      point, after or at the same point, after than t in an
+	      alphabetically sorted dictionary</td></tr><tr><td><tt>s &lt; &lt;= t &gt;=, &gt; r</tt></td><td>Checks if r appears between s and t in an
+	      alphabetically sorted dictionary</td></tr><tr><td><tt>s ==, !=, is, not is t</tt></td><td>Checks the identity or difference of s and t</td></tr><tr><td><tt>c in s, c not in s</tt></td><td>Checks if character <span class="emphasis"><em>c</em></span> appears in
+	      s</td></tr><tr><td><tt>s.endswith(suffix [,start [,end]])</tt></td><td>Checks if s ends with <span class="emphasis"><em>suffix</em></span></td></tr><tr><td><tt>s.isalnum()</tt></td><td>Checks whether all characters are alphanumeric</td></tr><tr><td><tt>s.isalpha()</tt></td><td>Checks whether all characters are alphabetic</td></tr><tr><td><tt>s.isdigit()</tt></td><td>Checks whether all characters are digits</td></tr><tr><td><tt>s.islower()</tt></td><td>Checks whether all characters are lowercase</td></tr><tr><td><tt>s.isspace()</tt></td><td>Checks whether all characters are whitespace</td></tr><tr><td><tt>s.istitle()</tt></td><td>Checks whether s is title-case meaning all words
+	      are capitalized</td></tr><tr><td><tt>s.isupper()</tt></td><td>&nbsp;</td></tr><tr><td><tt>s.startswith(prefix [, start [, end]]))</tt></td><td>Checks whether s starts with
+		<span class="emphasis"><em>prefix</em></span> between
+		<span class="emphasis"><em>start</em></span> and <span class="emphasis"><em>end</em></span></td></tr></tbody></table></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="d0e2488"></a>6.1.1. Unicode</h3></div></div><p>
+	  Characters are stored as numbers. The ASCII code is the
+	default character encoding in computers (ASCII means
+	"American Standard Code for Information Interchange"). For
+	instance, the 'a' character is coded 97, and the 'b' character
+	is coded 98. You can check this under Python with
+	the <tt>ord()</tt>. The <tt>chr()</tt>
+	does the reverse.
+	  function:
+
+  <pre class="programlisting">
+&gt;&gt;&gt; ord('a')
+97
+&gt;&gt;&gt; ord('b')
+98
+&gt;&gt;&gt; chr(122)
+'z'
+  </pre>
+
+   ASCII however is stored on a 7 bits only, and
+	this is not enough to represent all the characters for several languages, such as chinese.
+	Unicode, which does not have this limitation, is a mapping
+	between a numerical representation of characters and
+	characters for as 
+	many different non American standard character sets as possible. 
+	The purpose of this paragraph is not to teach everything about
+	Unicode, but just to save you time for the most common
+	problems you may encounter if you want to program in say,
+	French, Arabic or Spanish. <a href="ch06.html#fig_unicode" title="Figure 6.2. Unicode">Figure 6.2</a> shows the general mechanism: using
+	Unicode, you can either <tt>decode</tt> a string
+	from your character set (e.g: French) to Unicode,
+	or <tt>encode</tt> a Unicode string into a specific
+	character set. This way, you can store and exchange your data
+	into a universal code (Unicode), while being able to print and
+	enter your strings in the appropriate language character set.
+
+  </p><div class="figure"><a name="fig_unicode"></a><p class="title"><b>Figure 6.2. Unicode</b></p><div class="mediaobject"><img src="images/unicode.png" width="333.9"></div></div><p>
+
+  The following program shows how to create a Unicode string. 
+  The next statement shows how to tell Python to
+  print this Unicode string into the 'latin-1' character set.
+
+  <pre class="programlisting">
+&gt;&gt;&gt; q = unicode("Parlez-vous fran&ccedil;ais?")
+&gt;&gt;&gt; q
+u'Parlez-vous fran\x8dais?'
+&gt;&gt;&gt; print q.encode('latin-1')
+Parlez-vous fran&ccedil;ais?
+  </pre>
+
+   Another way to create a Unicode string is by providing a literal, by using
+  the prefix: u''. 
+  <pre class="programlisting">
+&gt;&gt;&gt; q = u"Parlez-vous fran&ccedil;ais?"
+&gt;&gt;&gt; q
+u'Parlez-vous fran\x8dais?'
+  </pre>
+
+   The next important thing to know is how to tell your editor how to
+   store and display non-ASCII characters. Under the Emacs editor, you
+   just have to add a comment line at the top of your source file (as
+   the 1st or second line if you put the interpreter line before):
+
+  <pre class="programlisting">
+#!/usr/local/bin/python
+# -*- coding: latin-1 -*-
+
+  </pre>
+  If you don't put this line, Python may complain with an error such
+  as:
+
+  <pre class="programlisting">
+DeprecationWarning: Non-ASCII character '\xc3' in file  etc...
+
+  </pre>
+      </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="d0e2531"></a>6.1.2. Iterations on strings</h3></div></div><p>
+       In Python, strings are sequences, meaning that you can iterate
+       of each element of this sequence, namely here its characters.
+       The following loop prints each character of a string separated
+       by a hyphen ('-').
+
+  <pre class="programlisting">
+&gt;&gt;&gt; for c in 'abcd':
+...   print c, "-"
+...
+a - b - c - d -
+  </pre>
+
+    </p><div class="exercise"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/exercise.png"></td><td><p class="title"><b>Exercise 6.1. Iterating on strings</b></p></td></tr><tr><td colspan="2" align="left" valign="top">
+      
+      <p>
+	What does the following code perform?
+	<pre class="programlisting">
+&gt;&gt;&gt; r = ''
+&gt;&gt;&gt; for c in 'abcd':
+...   r = c + r
+...
+&gt;&gt;&gt; r
+?
+   </pre>
+   </p>
+    </td></tr></table></div><p>
+
+     </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch05s02.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="index-2.html"><img src="images/up.png" alt="Up"></a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch07.html"><img src="images/next.png" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">5.2. Interpreter and Compiler&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index-2.html"><img src="images/home.png" alt="Home"></a></td><td width="40%" align="right" valign="top">&nbsp;Chapter 7. Branching and Decisions</td></tr></table></div></body>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch06.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:24 GMT -->
+</html>

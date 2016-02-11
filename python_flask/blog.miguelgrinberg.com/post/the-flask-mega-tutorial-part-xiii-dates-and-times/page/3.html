@@ -1,0 +1,897 @@
+﻿<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xiii-dates-and-times/page/3 by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:13:26 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    
+    <title>
+    
+        The Flask Mega-Tutorial, Part XIII: Dates and Times - miguelgrinberg.com
+    
+</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="description" content="miguelgrinberg.com">
+	<meta name="copyright" content="Copyright (c) 2012-2015 Miguel Grinberg">
+	<meta name="author" content="Miguel Grinberg">
+    
+    <meta name="keywords" content="python, programming, flask, web, tutorial, moment.js">
+    
+
+    
+    <!-- Bootstrap -->
+    <link href="../../../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../../../static/prettify.css" type="text/css" rel="stylesheet" />
+    <link href="../../../static/colorbox/colorbox.css" rel="stylesheet" type="text/css" />
+    <link href="../../../static/style.css" rel="stylesheet" type="text/css" />
+
+    <link rel="shortcut icon" href="../../../static/favicon.ico">
+	<link rel="alternate" type="application/rss+xml" href="../../../feed" title="miguelgrinberg.com RSS feed">
+
+  </head>
+  <body>
+    
+    <!-- facebook sdk -->
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "../../../../connect.facebook.net/en_US/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    <!-- google plus sdk -->
+    <script type="text/javascript" src="../../../../apis.google.com/js/plusone.js"></script>
+    <!-- twitter sdk -->
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="../../../../platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <!-- linkedin sdk -->
+    <script src="../../../../platform.linkedin.com/in.js" type="text/javascript"></script>
+
+    
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://blog.miguelgrinberg.com/index">miguelgrinberg.com</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="http://blog.miguelgrinberg.com/index">Home</a></li>
+                        <li><a href="../../about-me.html">About Me</a></li>
+                        <li><a href="../../about-this-blog.html">About This Blog</a></li>
+                        
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <p class="navbar-text" style="margin-top: 10px; margin-bottom: 0px;">
+                                <a type="application/rss+xml" href="../../../feed"><img src="../../../static/rss.png" alt="RSS Feed" title="RSS Feed" /></a>
+                                <a href="https://www.facebook.com/miguelgrinbergblog"><img src="../../../static/facebook.png" alt="Facebook" title="Facebook" /></a>
+                                <a href="https://plus.google.com/u/0/117786742456929977820"><img src="../../../static/googleplus.png" alt="Google+" title="Google+" /></a>
+                                <a href="http://www.linkedin.com/in/miguelgrinberg"><img src="../../../static/linkedin.png" alt="LinkedIn" title="LinkedIn" /></a>
+                                <a href="http://github.com/miguelgrinberg"><img src="../../../static/github.png" alt="GitHub" title="GitHub" /></a>
+                                <a href="https://twitter.com/#!/miguelgrinberg"><img src="../../../static/twitter.png" alt="Twitter" title="Twitter" /></a>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </nav>
+
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-push-9 sidebar-bg">
+                <div id="sidebar">
+                    
+
+                    
+                    <h1>Building Web APIs with Flask</h1>
+                    <p>Flask is the ideal Python framework for building REST APIs that are flexible, easy to maintain and efficient. I have created a training video with O'Reilly in which I show all my techniques:</p>
+                    <p><center><a href="http://bit.ly/flaskapi"><img style="border: 1px solid black;" src="../../../static/flask-api-cover-tiny.png"></a></center></p>
+                    <p>Visit <a href="http://flaskbook.com/">http://flaskbook.com</a> for information about this and other Flask training products I have created!</p>
+                    
+
+                    <h1>About Miguel</h1>
+                    <img style="float: right; margin: 0px 8px 8px 0px; padding: 4px; border: 1px solid #ccc;" src="../../../static/miguel.jpg" />
+                    <p>Welcome to my blog!</p>
+                    <p>I'm a software engineer, photographer and filmmaker in Portland, Oregon, USA.</p>
+                    <p>You can also find me on <a href="https://www.facebook.com/miguelgrinbergblog">Facebook</a>, <a href="https://plus.google.com/u/0/117786742456929977820">Google+</a>, <a href="http://www.linkedin.com/in/miguelgrinberg">LinkedIn</a>, <a href="https://github.com/miguelgrinberg">Github</a> and <a href="https://twitter.com/#!/miguelgrinberg">Twitter</a>.</p>
+                    <p>Thank you for visiting!</p>
+
+                    
+
+                    
+                    <h1>Categories</h1>
+<ul>
+
+	<li>
+		<a href="../../../category/Arduino/feed">
+			<img src="../../../static/rss-small.png" title="Arduino RSS Feed" label="Arduino RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Arduino.html">Arduino</a></span> (7)
+	</li>
+
+	<li>
+		<a href="../../../category/Authentication/feed">
+			<img src="../../../static/rss-small.png" title="Authentication RSS Feed" label="Authentication RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Authentication.html">Authentication</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../../../category/Blog/feed">
+			<img src="../../../static/rss-small.png" title="Blog RSS Feed" label="Blog RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Blog.html">Blog</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/C%2b%2b/feed">
+			<img src="../../../static/rss-small.png" title="C++ RSS Feed" label="C++ RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/C%2b%2b.html">C++</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../../../category/Cloud/feed">
+			<img src="../../../static/rss-small.png" title="Cloud RSS Feed" label="Cloud RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Cloud.html">Cloud</a></span> (2)
+	</li>
+
+	<li>
+		<a href="../../../category/Filmmaking/feed">
+			<img src="../../../static/rss-small.png" title="Filmmaking RSS Feed" label="Filmmaking RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Filmmaking.html">Filmmaking</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/Flask/feed">
+			<img src="../../../static/rss-small.png" title="Flask RSS Feed" label="Flask RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Flask.html">Flask</a></span> (39)
+	</li>
+
+	<li>
+		<a href="../../../category/Games/feed">
+			<img src="../../../static/rss-small.png" title="Games RSS Feed" label="Games RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Games.html">Games</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Gear/feed">
+			<img src="../../../static/rss-small.png" title="Gear RSS Feed" label="Gear RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Gear.html">Gear</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/HTML5/feed">
+			<img src="../../../static/rss-small.png" title="HTML5 RSS Feed" label="HTML5 RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/HTML5.html">HTML5</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Heroku/feed">
+			<img src="../../../static/rss-small.png" title="Heroku RSS Feed" label="Heroku RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Heroku.html">Heroku</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Javascript/feed">
+			<img src="../../../static/rss-small.png" title="Javascript RSS Feed" label="Javascript RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Javascript.html">Javascript</a></span> (3)
+	</li>
+
+	<li>
+		<a href="../../../category/Movie%20Reviews/feed">
+			<img src="../../../static/rss-small.png" title="Movie Reviews RSS Feed" label="Movie Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Movie%20Reviews.html">Movie Reviews</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../../../category/Netflix/feed">
+			<img src="../../../static/rss-small.png" title="Netflix RSS Feed" label="Netflix RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Netflix.html">Netflix</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../../../category/Node.js/feed">
+			<img src="../../../static/rss-small.png" title="Node.js RSS Feed" label="Node.js RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Node.html">Node.js</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/OpenStack/feed">
+			<img src="../../../static/rss-small.png" title="OpenStack RSS Feed" label="OpenStack RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/OpenStack.html">OpenStack</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Personal/feed">
+			<img src="../../../static/rss-small.png" title="Personal RSS Feed" label="Personal RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Personal.html">Personal</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Photography/feed">
+			<img src="../../../static/rss-small.png" title="Photography RSS Feed" label="Photography RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Photography.html">Photography</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/Product%20Reviews/feed">
+			<img src="../../../static/rss-small.png" title="Product Reviews RSS Feed" label="Product Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Product%20Reviews.html">Product Reviews</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Programming/feed">
+			<img src="../../../static/rss-small.png" title="Programming RSS Feed" label="Programming RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Programming.html">Programming</a></span> (47)
+	</li>
+
+	<li>
+		<a href="../../../category/Project%20Management/feed">
+			<img src="../../../static/rss-small.png" title="Project Management RSS Feed" label="Project Management RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Project%20Management.html">Project Management</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Python/feed">
+			<img src="../../../static/rss-small.png" title="Python RSS Feed" label="Python RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Python.html">Python</a></span> (43)
+	</li>
+
+	<li>
+		<a href="../../../category/REST/feed">
+			<img src="../../../static/rss-small.png" title="REST RSS Feed" label="REST RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/REST.html">REST</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../../../category/Rackspace/feed">
+			<img src="../../../static/rss-small.png" title="Rackspace RSS Feed" label="Rackspace RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Rackspace.html">Rackspace</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Raspberry%20Pi/feed">
+			<img src="../../../static/rss-small.png" title="Raspberry Pi RSS Feed" label="Raspberry Pi RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Raspberry%20Pi.html">Raspberry Pi</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/RhinoSteady/feed">
+			<img src="../../../static/rss-small.png" title="RhinoSteady RSS Feed" label="RhinoSteady RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/RhinoSteady.html">RhinoSteady</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/Robotics/feed">
+			<img src="../../../static/rss-small.png" title="Robotics RSS Feed" label="Robotics RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Robotics.html">Robotics</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/Video/feed">
+			<img src="../../../static/rss-small.png" title="Video RSS Feed" label="Video RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Video.html">Video</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../../../category/Windows/feed">
+			<img src="../../../static/rss-small.png" title="Windows RSS Feed" label="Windows RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Windows.html">Windows</a></span> (1)
+	</li>
+
+</ul>
+                    
+                </div>
+            </div>
+            <div class="col-md-8 col-md-pull-4">
+                <div id="main">
+                    
+                    
+                    
+                    
+                    
+
+<div class="post">
+
+<p class="date"><span class="flask-moment" data-timestamp="2013-01-01T18:58:58Z" data-format="format('LL')" data-refresh="0">2013-01-01T18:58:58Z</span></p>
+<h1 class="post-title"><a href="../../the-flask-mega-tutorial-part-xiii-dates-and-times.html">The Flask Mega-Tutorial, Part XIII: Dates and Times</a></h1>
+<div class="posted">Posted by <span class="label label-danger"><a href="http://blog.miguelgrinberg.com/author/Miguel Grinberg">Miguel Grinberg</a></span> under <span class="label label-primary"><a href="../../../category/Programming.html">Programming</a></span>, <span class="label label-primary"><a href="../../../category/Python.html">Python</a></span>, <span class="label label-primary"><a href="../../../category/Flask.html">Flask</a></span>. </div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xiii-dates-and-times" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xiii-dates-and-times" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="../../the-flask-mega-tutorial-part-xiii-dates-and-times.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xiii-dates-and-times" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+<div class="post_body"><p>This is the thirteenth article in the series in which I document my experience writing web applications in <a href="http://python.org/">Python</a> using the <a href="http://flask.pocoo.org/">Flask</a> microframework.</p>
+<p>The goal of the tutorial series is to develop a decently featured microblogging application that demonstrating total lack of originality I have decided to call <code>microblog</code>.</p>
+<p><strong>NOTE</strong>: This article was revised in September 2014 to be in sync with current versions of Python and Flask.</p>
+<p>Here is an index of all the articles in the series that have been published to date:</p>
+<ul>
+<li><a href="../../the-flask-mega-tutorial-part-i-hello-world.html">Part I: Hello, World!</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-ii-templates.html">Part II: Templates</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-iii-web-forms.html">Part III: Web Forms</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-iv-database.html">Part IV: Database</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-v-user-logins.html">Part V: User Logins</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-vi-profile-page-and-avatars.html">Part VI: Profile Page And Avatars</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-vii-unit-testing.html">Part VII: Unit Testing</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-viii-followers-contacts-and-friends.html">Part VIII: Followers, Contacts And Friends</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-ix-pagination.html">Part IX: Pagination</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-x-full-text-search.html">Part X: Full Text Search</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xi-email-support.html">Part XI: Email Support</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xii-facelift.html">Part XII: Facelift</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xiii-dates-and-times.html">Part XIII: Dates and Times</a> (this article)</li>
+<li><a href="../../the-flask-mega-tutorial-part-xiv-i18n-and-l10n.html">Part XIV: I18n and L10n</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xv-ajax.html">Part XV: Ajax</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xvi-debugging-testing-and-profiling.html">Part XVI: Debugging, Testing and Profiling</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xvii-deployment-on-linux-even-on-the-raspberry-pi.html">Part XVII: Deployment on Linux (even on the Raspberry Pi!)</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xviii-deployment-on-the-heroku-cloud.html">Part XVIII: Deployment on the Heroku Cloud</a></li>
+</ul>
+<h2>A quick note about github</h2>
+<p>For those that did not notice, I recently moved the hosting of the <code>microblog</code> application to github. You can find the repository at this location:</p>
+<p><a href="https://github.com/miguelgrinberg/microblog">https://github.com/miguelgrinberg/microblog</a></p>
+<p>I have added tags that point to each tutorial step for your convenience.</p>
+<h2>The problem with timestamps</h2>
+<p>One of the aspects of our <code>microblog</code> application that we have left ignored for a long time is the display of dates and times.</p>
+<p>Until now, we just trusted Python to render the <code>datetime</code> objects in our <code>User</code> and <code>Post</code> objects on its own, and that isn't really a good solution.</p>
+<p>Consider the following example. I'm writing this at 3:54PM on December 31st, 2012. My timezone is PST (or UTC-8 if you prefer). Running in a Python interpreter I get the following:</p>
+<pre><code>&gt;&gt;&gt; from datetime import datetime
+&gt;&gt;&gt; now = datetime.now()
+&gt;&gt;&gt; print now
+2012-12-31 15:54:42.915204
+&gt;&gt;&gt; now = datetime.utcnow()
+&gt;&gt;&gt; print now
+2012-12-31 23:55:13.635874
+</code></pre>
+<p>The <code>now()</code> call returns the correct time for my location, while the <code>utcnow()</code> call returns the time in the UTC time zone.</p>
+<p>So which one is better to use?</p>
+<p>If we go with <code>now()</code> then all the timestamps that we store in the database will be local to where the application server is running, and this presents a few problems.</p>
+<p>One day we may need to move the server to another location across time zones, and then all the times will have to be corrected to the new local time in the database before the server can be restarted.</p>
+<p>But there is a more important problem with this approach. For users in different timezones it will be awfully difficult to figure out when a post was made if they see times in the PST timezone. They would need to know in advance that the times are in PST so that they can do the proper adjustments.</p>
+<p>Clearly this is not a good option, and this is why back when we started our database we decided the we would always store timestamps in the UTC timezone.</p>
+<p>While standardizing the timestamps to UTC solves the issue of moving the server across timezones, it does not address the second issue, dates and times are now presented to users from any part of the world in UTC.</p>
+<p>This can still be pretty confusing to many. Imagine a user in the PST timezone that posts something at 3:00pm. The post immediately shows up in his or her index page with a 11:00pm time, or to be more exact 23:00.</p>
+<p>The goal of today's article is to address  the issue of date and time display so that our users do not get confused.</p>
+<h2>User specific timestamps</h2>
+<p>The obvious solution to the problem is to individually convert all timestamps from UTC to local time for each user. This allows us to continue using UTC in our database so that we have consistency, while an on-the-fly conversion for each user makes times consistent for everyone.</p>
+<p>But how do we know the location of each of our users?</p>
+<p>Many websites have a configuration page where users can specify their timezone. This would require us to add a new page with a form in which we present users with a dropdown with the list of timezones. Users should be asked to enter their timezone when they access the site for the first time, as part of their registration.</p>
+<p>While this is a decent solution that solves our problem, it is a bit cumbersome to ask our users to enter a piece of information that they have already configured in their systems. It seems it would be more efficient if we could just grab the timezone setting from their computers.</p>
+<p>For security reasons web browsers will not allow us to get into the computers of our users to obtain this information. Even if this was possible we would need to know where to find the timezone on Windows, Linux, Mac, iOS, and Android, without counting other less common operating systems.</p>
+<p>But as it turns out, the web browser knows the user's timezone, and exposes it through the standard Javascript APIs. In this Web 2.0 world it is safe to assume that users will have Javascript enabled (no modern site will work without scripting), so this solution has potential.</p>
+<p>We have two ways to take advantage of the timezone configuration available via Javascript:</p>
+<ul>
+<li>The "old-school" approach would be to have the web browser somehow send the timezone information to the server when the user first logs on to the server. This could be done with an <a href="http://en.wikipedia.org/wiki/Ajax_(programming)">Ajax</a> call, or much more simply with a <a href="http://en.wikipedia.org/wiki/Meta_refresh">meta refresh tag</a>. Once the server knows the timezone it can keep it in the user's session and adjust all timestamps with it when templates are rendered.</li>
+<li>The "new-school" approach would be to not change a thing in the server, which will continue to send UTC timestamps to the client browser. The conversion from UTC to local then happens in the client, using Javascript.</li>
+</ul>
+<p>Both options are valid, but the second one has an advantage. The browser is best able to render times according to the system locale configuration. Things like  AM/PM vs. 24 hour clock, DD/MM/YYYY vs. MM/DD/YYYY and many other cultural styles are all accessible to the browser and unknown to the server.</p>
+<p>And if that wasn't enough, there is yet one more advantage for the new-school approach. Turns out someone else has done all the work for us!</p>
+<h2>Introducing moment.js</h2>
+<p><a href="http://momentjs.com/">Moment.js</a> is a small, free and open source Javascript library that takes date and time rendering to another level. It provides every imaginable formatting option, and then some.</p>
+<p>To use moment.js in our application we need to write a little bit of Javascript into our templates. We start by constructing a <code>moment</code> object from an <a href="http://en.wikipedia.org/wiki/ISO_8601">ISO 8601</a> time. For example, using the UTC time from the Python example above we create a moment object like this:</p>
+<pre><code>moment("2012-12-31T23:55:13Z")
+</code></pre>
+<p>Once the object is constructed it can be rendered to a string in a large variety of formats. For example, a very verbose rendering according to the system locale would be done as follows:</p>
+<pre><code>moment("2012-12-31T23:55:13Z").format('LLLL');
+</code></pre>
+<p>Below is how your system renders the above date:</p>
+<p><em><script>
+document.write(moment("2012-12-31T23:55:13Z").format('LLLL'));
+</script></em></p>
+<p>Here are some more examples of this same timestamp rendered in different formats:</p>
+<table class="data">
+<tr><th>Format</th><th>Result</th></tr>
+<tr><td>L</td><td><em><script>
+document.write(moment("2012-12-31T23:55:13Z").format('L'));
+</script></em>
+</td></tr>
+<tr><td>LL</td><td><em><script>
+document.write(moment("2012-12-31T23:55:13Z").format('LL'));
+</script></em>
+</td></tr>
+<tr><td>LLL</td><td><em><script>
+document.write(moment("2012-12-31T23:55:13Z").format('LLL'));
+</script></em>
+</td></tr>
+<tr><td>LLLL</td><td><em><script>
+document.write(moment("2012-12-31T23:55:13Z").format('LLLL'));
+</script></em>
+</td></tr>
+<tr><td>dddd</td><td><em><script>
+document.write(moment("2012-12-31T23:55:13Z").format('dddd'));
+</script></em>
+</td></tr>
+</table>
+
+<p>The library support for rendering options does not end there. In addition to <code>format()</code> it offers <code>fromNow()</code> and <code>calendar()</code>, with much more friendly renderings of timestamps:</p>
+<table class="data">
+<tr><th>Format</th><th>Result</th></tr>
+<tr><td>fromNow()</td><td><em><script>
+document.write(moment("2012-12-31T23:55:13Z").fromNow());
+</script></em>
+</td></tr>
+<tr><td>calendar()</td><td><em><script>
+document.write(moment("2012-12-31T23:55:13Z").calendar());
+</script></em>
+</td></tr>
+</table>
+
+<p>Note that in all the examples above the server is rendering the same UTC time, the different renderings were executed by your own web browser.</p>
+<p>The last bit of Javascript magic that we are missing is the code that actually makes the string returned by <code>moment</code> visible in the page. The simplest way to accomplish this is with Javascript's <code>document.write</code> function, as follows:</p>
+<pre><code>&lt;script&gt;
+document.write(moment("2012-12-31T23:55:13Z").format('LLLL'));
+&lt;/script&gt;
+</code></pre>
+<p>While using <code>document.write</code> is extremely simple and straightforward as a way to generate portions of an HTML document via javascript, it should be noted that this approach has some limitations. The most important one to note is that <code>document.write</code> can only be used while a document is loading, it cannot be used to modify the document once it has completed loading. As a result of this limitation this solution would not work when loading data via <a href="http://en.wikipedia.org/wiki/Ajax_(programming)">Ajax</a>.</p>
+<h2>Integrating <code>moment.js</code></h2>
+<p>There are a few things we need to do to be able to use <code>moment.js</code> in our microblog application.</p>
+<p>First, we place the downloaded library <code>moment.min.js</code> in the <code>/app/static/js</code> folder, so that it can be served to clients as a static file.</p>
+<p>Next we add the reference to this library in our base template (file <code>app/templates/base.html</code>):</p>
+<pre><code>&lt;script src="/static/js/moment.min.js"&gt;&lt;/script&gt;
+</code></pre>
+<p>We can now add <code>&lt;script&gt;</code> tags in the templates that show timestamps and we would be done. But instead of doing it that way, we are going to create a wrapper for <code>moment.js</code> that we can invoke from the templates. This is going to save us time in the future if we need to change our timestamp rendering code, because we will have it just in one place.</p>
+<p>Our wrapper will be a very simple Python class (file <code>app/momentjs.py</code>):</p>
+<pre><code>from jinja2 import Markup
+
+class momentjs(object):
+    def __init__(self, timestamp):
+        self.timestamp = timestamp
+
+    def render(self, format):
+        return Markup("&lt;script&gt;\ndocument.write(moment(\"%s\").%s);\n&lt;/script&gt;" % (self.timestamp.strftime("%Y-%m-%dT%H:%M:%S Z"), format))
+
+    def format(self, fmt):
+        return self.render("format(\"%s\")" % fmt)
+
+    def calendar(self):
+        return self.render("calendar()")
+
+    def fromNow(self):
+        return self.render("fromNow()")
+</code></pre>
+<p>Note that the <code>render</code> method does not directly return a string but instead wraps the string inside a <code>Markup</code> object provided by Jinja2, our template engine. The reason is that Jinja2 escapes all strings by default, so for example, our <code>&lt;script&gt;</code> tag will not arrive as such to the client but as <code>&amp;lt;script&amp;gt;</code>. Wrapping the string in a <code>Markup</code> object tells Jinja2 that this string should not be escaped.</p>
+<p>So now that we have a wrapper we need to hook it up with Jinja2 so that our templates can call it (file <code>app/__init__.py</code>):</p>
+<pre><code>from .momentjs import momentjs
+app.jinja_env.globals['momentjs'] = momentjs
+</code></pre>
+<p>This just tells Jinja2 to expose our class as a global variable to all templates.</p>
+<p>Now we are ready to modify our templates. we have two places in our application where we display dates and times. One is in the user profile page, where we show the "last seen" time. For this timestamp we will use the <code>calendar()</code> formatting (file <code>app/templates/user.html</code>):</p>
+<pre><code>{% if user.last_seen %}
+&lt;p&gt;&lt;em&gt;Last seen: {{ momentjs(user.last_seen).calendar() }}&lt;/em&gt;&lt;/p&gt;
+{% endif %}
+</code></pre>
+<p>The second place is in the post sub-template, which is invoked from the index, user and search pages. In posts we will use the <code>fromNow()</code> formatting, because the exact time of a post isn't as important as how long ago it was made. Since we abstracted the rendering of a post into the sub-template we now need to make this change in just one place to affect all the pages that render posts (file <code>app/templates/post.html</code>):</p>
+<pre><code>&lt;p&gt;&lt;a href="{{ url_for('user', nickname=post.author.nickname)}}"&gt;{{ post.author.nickname }}&lt;/a&gt; said {{ momentjs(post.timestamp).fromNow() }}:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;{{ post.body }}&lt;/strong&gt;&lt;/p&gt;
+</code></pre>
+<p>And with these simple template changes we have solved all our timestamps issues. We didn't need to make a single change to our server code!</p>
+<h2>Final words</h2>
+<p>Without even noticing it, today we've made an important step towards making <code>microblog</code> accessible to international users with the change to render dates and times according to the client configured locale.</p>
+<p>In the next installment of this series we are going to make our international users even happier, as we will enable <code>microblog</code> to render in multiple languages.</p>
+<p>In the meantime, here is the download link for the application with the new moment.js integration:</p>
+<p>Download <a href="https://codeload.github.com/miguelgrinberg/microblog/zip/version-0.13">microblog-0.13.zip</a>.</p>
+<p>Or if you prefer, you can find the code on github <a href="https://github.com/miguelgrinberg/microblog/tree/version-0.13">here</a>.</p>
+<p>Thank you for following my tutorials, I hope to see you in the next one.</p>
+<p>Miguel</p></div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xiii-dates-and-times" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xiii-dates-and-times" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="../../the-flask-mega-tutorial-part-xiii-dates-and-times.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xiii-dates-and-times" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+
+
+<h4 style="text-align: right"><a name="comments"></a>60 comments</h4>
+
+
+<div class="comment">
+    <ul>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/42e10e7df6c5f098e09e8d4a1d612cc3ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#51</span> <span class="label label-primary">Jonathan Pepin</span> said
+                    <span class="flask-moment" data-timestamp="2014-12-15T19:20:06Z" data-format="fromNow(0)" data-refresh="0">2014-12-15T19:20:06Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hey Miguel,
+
+thanks for the tutorial, it&#39;s helping a lot in understand flask better!
+
+One question: Why aren&#39;t you using a context preprocessor for the momentjs function, instead of adding this in the app.jinja_env variable in __init__?
+http://flask.pocoo.org/docs/0.10/templating/#context-processors</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#52</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-12-17T17:20:26Z" data-format="fromNow(0)" data-refresh="0">2014-12-17T17:20:26Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Jonathan: this article is almost two years old now. Back then I don&#39;t remember if context processors were available, I was not aware of that feature. In any case, between then and now I released my Flask-Moment extension (https://github.com/miguelgrinberg/Flask-Moment) which does make use of a context processor for the same purpose shown in this article.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/7e649ba54e250453377186dd61343543ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#53</span> <span class="label label-primary">Theo</span> said
+                    <span class="flask-moment" data-timestamp="2015-01-13T17:11:47Z" data-format="fromNow(0)" data-refresh="0">2015-01-13T17:11:47Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hey Miguel, great tutorial. 
+
+One small issue on this post is that you seem to be missing the &#39;.&#39; in front of the &#39;momentjs&#39; import statement. 
+
+Keep up the great work!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#54</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2015-01-14T02:54:14Z" data-format="fromNow(0)" data-refresh="0">2015-01-14T02:54:14Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Theo: fixed. Thanks!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/8b0fa78e5be69e5b07373eb8fe583c75ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#55</span> <span class="label label-primary"><a href="http://jacquerie.github.io/">Jacopo Notarstefano</a></span> said
+                    <span class="flask-moment" data-timestamp="2015-01-22T09:31:02Z" data-format="fromNow(0)" data-refresh="0">2015-01-22T09:31:02Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel,
+
+thanks again for your tutorial!
+
+A small heads up: it appears that moment.js stopped working in this page.
+
+Cheers,
+Jacopo Notarstefano</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#56</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2015-01-22T19:59:06Z" data-format="fromNow(0)" data-refresh="0">2015-01-22T19:59:06Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Jacopo: can you describe the problem?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/b9f511bdba602cf0217db33e16257b2bce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#57</span> <span class="label label-primary">Oliver Bienert</span> said
+                    <span class="flask-moment" data-timestamp="2015-02-24T08:53:52Z" data-format="fromNow(0)" data-refresh="0">2015-02-24T08:53:52Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hello Miguel,
+
+This is a great tutorial, thank you!
+
+One small note:
+I can confirm Jacopo&#39;s problem, date rendering doesn&#39;t work on this page, all result cells above are empty.
+This is what firebug prints several times in the console:
+
+ReferenceError: moment is not defined
+document.write(moment(&#34;2012-12-31T23:55:13Z&#34;).format(&#39;LLLL&#39;));
+
+etc.
+
+Tested in Firefox, 35.0.1, Ubuntu 14.04
+The same with Chromium, Version 40.0.2214.111 Ubuntu 14.04
+
+Cheers Oliver</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/a26188736b05216ca8240f61fb006b3dce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#58</span> <span class="label label-primary"><a href="http://cico.herokuapp.com/">Risinger</a></span> said
+                    <span class="flask-moment" data-timestamp="2015-03-18T16:24:33Z" data-format="fromNow(0)" data-refresh="0">2015-03-18T16:24:33Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I am trying to have a UTC date (timestamp without time zone) in a SQLAlchemy database display the time in the user&#39;s browser with the time in the their timezone, not UTC.
+
+Here is my python/Flask code :
+=======================
+	#First I query the SQLAlchemy database
+    timeclockinfo = TimeClock.query.filter_by(parent_id=current_user.parent_id, user_id=current_user.user_id, closed=1).all()
+
+    #Then I tuple the data
+    child_patient = zip(timeclockinfo, user_names, visit_dates )
+
+    #I render the data with Flask
+    return render_template(&#39;locationcheckinrpt.html&#39;, form=form, child_patient=child_patient, searchForm=searchForm)
+    .
+    .
+    #In the template I have a date time field for the records rendered
+    {% for times in child_time %}
+          {{  times[0].checkintime.strftime(&#39;%Y/%m/%d @ %I:%M %p&#39;)    }}
+    {% endfor %}
+=======================    
+
+Do you have  on how to have the UTC &#39;times[0].checkintime&#39; display in the browser users timezone and not UTC.
+
+I do have the User enter their time zone so I subtract the appropriate number of hours.
+
+But, I cannot hack through getting this to display adjusted for the different timezone.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#59</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2015-03-19T04:59:04Z" data-format="fromNow(0)" data-refresh="0">2015-03-19T04:59:04Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Risinger: the easiest is to use a javascript library such as moment.js to render the time on the fly in the browser. </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/e7b212058acfde7f3cc44ef6d0a9a8f9ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#60</span> <span class="label label-primary"><a href="https://www.kirkg.us/">Kirk</a></span> said
+                    <span class="flask-moment" data-timestamp="2015-07-18T18:55:15Z" data-format="fromNow(0)" data-refresh="0">2015-07-18T18:55:15Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">The issue with the empty dates has to do with newer versions on moment.js deprecating that the &#34;moment&#34; method. The easy way to fix it is to roll back to an older version of moment.js. I rolled back to 2.4.0, and it seemed to do the trick.</p>
+                </div>
+            </div>
+        </li>
+        
+    </ul>
+</div>
+
+<div class="page">
+<ul class="pager">
+  <li class="previous">
+    <a href="1.html#comments">&laquo;&laquo;</a>
+  </li>
+  <li class="previous">
+    <a href="2.html#comments">&laquo;</a>
+  </li>
+  <li class="next disabled">
+    <a href="#">&raquo;&raquo;</a>
+  </li>
+  <li class="next disabled">
+    <a href="#">&raquo;</a>
+  </li>
+</ul>
+</div>
+
+<h3><a name="commentform"></a>Leave a Comment</h3>
+
+<form action="#commentform" method="post"
+  class="form" role="form">
+  <div style="display:none;"><input id="csrf_token" name="csrf_token" type="hidden" value="1439536538.24##d8397e6a270e691b95a7909555fc36c9353c180f"></div>
+  
+    
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="name">Name</label>
+        <input class="form-control" id="name" name="name" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="url">URL</label>
+        <input class="form-control" id="url" name="url" type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="email">Email</label>
+        <input class="form-control" id="email" name="email" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="comment">Comment</label>
+        <textarea class="form-control" id="comment" name="comment" required></textarea>
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="captcha">Captcha</label>
+        
+<script type="text/javascript">var RecaptchaOptions = {"custom_translations": {"audio_challenge": "Get an audio challenge", "cant_hear_this": "Download sound as MP3", "help_btn": "Help", "image_alt_text": "reCAPTCHA challenge image", "incorrect_try_again": "Incorrect. Try again.", "instructions_audio": "Type what you hear", "instructions_visual": "Type the text", "play_again": "Play sound again", "privacy_and_terms": "Privacy & Terms", "refresh_btn": "Get a new challenge", "visual_challenge": "Get a visual challenge"}, "theme": "white"};</script>
+<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S"></script>
+<noscript>
+  <iframe src="http://www.google.com/recaptcha/api/noscript?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S" height="300" width="500" frameborder="0"></iframe><br>
+  <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+  <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
+</noscript>
+
+  </div>
+
+
+    
+
+
+
+
+
+  
+
+
+    <input class="btn btn-default" id="submit" name="submit" type="submit" value="Submit">
+  
+
+
+
+
+
+</form>
+
+
+</div>
+
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <p class="elapsed">This page was generated in None seconds.</p>
+            <p>&copy; 2014 by Miguel Grinberg. All rights reserved. <a href="mailto:webmaster _at_ miguelgrinberg _dot_ com">Questions?</a></p>
+        </div>
+    </div>
+
+
+    
+    
+    <script src="../../../../cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="../../../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../../../cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.33/jquery.colorbox-min.js"></script>
+    <script type="text/javascript" src="../../../static/prettify.js"></script>
+    <script src="../../../../cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment-with-langs.min.js"></script>
+<script>
+function flask_moment_render(elem) {
+    $(elem).text(eval('moment("' + $(elem).data('timestamp') + '").' + $(elem).data('format') + ';'));
+    $(elem).removeClass('flask-moment');
+}
+function flask_moment_render_all() {
+    $('.flask-moment').each(function() {
+        flask_moment_render(this);
+        if ($(this).data('refresh')) {
+            (function(elem, interval) { setInterval(function() { flask_moment_render(elem) }, interval); })(this, $(this).data('refresh'));
+        }
+    })
+}
+$(document).ready(function() {
+    flask_moment_render_all();
+});
+</script>
+    
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4777284-15']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".gallery").colorbox({rel:".gallery",maxWidth:"95%",maxHeight:"95%",scalePhotos:true});
+            // add prettyprint class to all <pre><code></code></pre> blocks
+            var prettify = false;
+            $("pre code").parent().each(function() {
+                $(this).addClass('prettyprint');
+                prettify = true;
+            });
+            prettyPrint();
+        });
+    </script>
+
+
+  </body>
+
+<!-- Mirrored from blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xiii-dates-and-times/page/3 by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:13:26 GMT -->
+</html>

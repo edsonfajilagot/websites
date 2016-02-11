@@ -1,0 +1,948 @@
+﻿<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from blog.miguelgrinberg.com/post/two-factor-authentication-with-flask by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:43:28 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    
+    <title>
+    
+        Two Factor Authentication with Flask - miguelgrinberg.com
+    
+</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="description" content="miguelgrinberg.com">
+	<meta name="copyright" content="Copyright (c) 2012-2015 Miguel Grinberg">
+	<meta name="author" content="Miguel Grinberg">
+    
+    <meta name="keywords" content="flask, python, programming, authentication, two-factor, security, password, token">
+    
+
+    
+    <!-- Bootstrap -->
+    <link href="../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../static/prettify.css" type="text/css" rel="stylesheet" />
+    <link href="../static/colorbox/colorbox.css" rel="stylesheet" type="text/css" />
+    <link href="../static/style.css" rel="stylesheet" type="text/css" />
+
+    <link rel="shortcut icon" href="../static/favicon.ico">
+	<link rel="alternate" type="application/rss+xml" href="../feed" title="miguelgrinberg.com RSS feed">
+
+  </head>
+  <body>
+    
+    <!-- facebook sdk -->
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "../../connect.facebook.net/en_US/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    <!-- google plus sdk -->
+    <script type="text/javascript" src="../../apis.google.com/js/plusone.js"></script>
+    <!-- twitter sdk -->
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="../../platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <!-- linkedin sdk -->
+    <script src="../../platform.linkedin.com/in.js" type="text/javascript"></script>
+
+    
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://blog.miguelgrinberg.com/index">miguelgrinberg.com</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="http://blog.miguelgrinberg.com/index">Home</a></li>
+                        <li><a href="about-me.html">About Me</a></li>
+                        <li><a href="about-this-blog.html">About This Blog</a></li>
+                        
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <p class="navbar-text" style="margin-top: 10px; margin-bottom: 0px;">
+                                <a type="application/rss+xml" href="../feed"><img src="../static/rss.png" alt="RSS Feed" title="RSS Feed" /></a>
+                                <a href="https://www.facebook.com/miguelgrinbergblog"><img src="../static/facebook.png" alt="Facebook" title="Facebook" /></a>
+                                <a href="https://plus.google.com/u/0/117786742456929977820"><img src="../static/googleplus.png" alt="Google+" title="Google+" /></a>
+                                <a href="http://www.linkedin.com/in/miguelgrinberg"><img src="../static/linkedin.png" alt="LinkedIn" title="LinkedIn" /></a>
+                                <a href="http://github.com/miguelgrinberg"><img src="../static/github.png" alt="GitHub" title="GitHub" /></a>
+                                <a href="https://twitter.com/#!/miguelgrinberg"><img src="../static/twitter.png" alt="Twitter" title="Twitter" /></a>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </nav>
+
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-push-9 sidebar-bg">
+                <div id="sidebar">
+                    
+
+                    
+                    <h1>An Introduction to Flask</h1>
+                    <p>If you are a beginner giving your first steps in web development, my Flask introductory video is for you:</p>
+                    <p><center><a href="http://bit.ly/flaskintro"><img style="border: 1px solid black;" src="../static/flask-intro-cover-tiny.png"></a></center></p>
+                    <p>Visit <a href="http://flaskbook.com/">http://flaskbook.com</a> for information about this and other Flask training products I have created!</p>
+                    
+
+                    <h1>About Miguel</h1>
+                    <img style="float: right; margin: 0px 8px 8px 0px; padding: 4px; border: 1px solid #ccc;" src="../static/miguel.jpg" />
+                    <p>Welcome to my blog!</p>
+                    <p>I'm a software engineer, photographer and filmmaker in Portland, Oregon, USA.</p>
+                    <p>You can also find me on <a href="https://www.facebook.com/miguelgrinbergblog">Facebook</a>, <a href="https://plus.google.com/u/0/117786742456929977820">Google+</a>, <a href="http://www.linkedin.com/in/miguelgrinberg">LinkedIn</a>, <a href="https://github.com/miguelgrinberg">Github</a> and <a href="https://twitter.com/#!/miguelgrinberg">Twitter</a>.</p>
+                    <p>Thank you for visiting!</p>
+
+                    
+
+                    
+                    <h1>Categories</h1>
+<ul>
+
+	<li>
+		<a href="../category/Arduino/feed">
+			<img src="../static/rss-small.png" title="Arduino RSS Feed" label="Arduino RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Arduino.html">Arduino</a></span> (7)
+	</li>
+
+	<li>
+		<a href="../category/Authentication/feed">
+			<img src="../static/rss-small.png" title="Authentication RSS Feed" label="Authentication RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Authentication.html">Authentication</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../category/Blog/feed">
+			<img src="../static/rss-small.png" title="Blog RSS Feed" label="Blog RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Blog.html">Blog</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/C%2b%2b/feed">
+			<img src="../static/rss-small.png" title="C++ RSS Feed" label="C++ RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/C%2b%2b.html">C++</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Cloud/feed">
+			<img src="../static/rss-small.png" title="Cloud RSS Feed" label="Cloud RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Cloud.html">Cloud</a></span> (2)
+	</li>
+
+	<li>
+		<a href="../category/Filmmaking/feed">
+			<img src="../static/rss-small.png" title="Filmmaking RSS Feed" label="Filmmaking RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Filmmaking.html">Filmmaking</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Flask/feed">
+			<img src="../static/rss-small.png" title="Flask RSS Feed" label="Flask RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Flask.html">Flask</a></span> (39)
+	</li>
+
+	<li>
+		<a href="../category/Games/feed">
+			<img src="../static/rss-small.png" title="Games RSS Feed" label="Games RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Games.html">Games</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Gear/feed">
+			<img src="../static/rss-small.png" title="Gear RSS Feed" label="Gear RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Gear.html">Gear</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/HTML5/feed">
+			<img src="../static/rss-small.png" title="HTML5 RSS Feed" label="HTML5 RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/HTML5.html">HTML5</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Heroku/feed">
+			<img src="../static/rss-small.png" title="Heroku RSS Feed" label="Heroku RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Heroku.html">Heroku</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Javascript/feed">
+			<img src="../static/rss-small.png" title="Javascript RSS Feed" label="Javascript RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Javascript.html">Javascript</a></span> (3)
+	</li>
+
+	<li>
+		<a href="../category/Movie%20Reviews/feed">
+			<img src="../static/rss-small.png" title="Movie Reviews RSS Feed" label="Movie Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Movie%20Reviews.html">Movie Reviews</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Netflix/feed">
+			<img src="../static/rss-small.png" title="Netflix RSS Feed" label="Netflix RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Netflix.html">Netflix</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Node.js/feed">
+			<img src="../static/rss-small.png" title="Node.js RSS Feed" label="Node.js RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Node.html">Node.js</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/OpenStack/feed">
+			<img src="../static/rss-small.png" title="OpenStack RSS Feed" label="OpenStack RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/OpenStack.html">OpenStack</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Personal/feed">
+			<img src="../static/rss-small.png" title="Personal RSS Feed" label="Personal RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Personal.html">Personal</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Photography/feed">
+			<img src="../static/rss-small.png" title="Photography RSS Feed" label="Photography RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Photography.html">Photography</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Product%20Reviews/feed">
+			<img src="../static/rss-small.png" title="Product Reviews RSS Feed" label="Product Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Product%20Reviews.html">Product Reviews</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Programming/feed">
+			<img src="../static/rss-small.png" title="Programming RSS Feed" label="Programming RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Programming.html">Programming</a></span> (47)
+	</li>
+
+	<li>
+		<a href="../category/Project%20Management/feed">
+			<img src="../static/rss-small.png" title="Project Management RSS Feed" label="Project Management RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Project%20Management.html">Project Management</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Python/feed">
+			<img src="../static/rss-small.png" title="Python RSS Feed" label="Python RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Python.html">Python</a></span> (43)
+	</li>
+
+	<li>
+		<a href="../category/REST/feed">
+			<img src="../static/rss-small.png" title="REST RSS Feed" label="REST RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/REST.html">REST</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Rackspace/feed">
+			<img src="../static/rss-small.png" title="Rackspace RSS Feed" label="Rackspace RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Rackspace.html">Rackspace</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Raspberry%20Pi/feed">
+			<img src="../static/rss-small.png" title="Raspberry Pi RSS Feed" label="Raspberry Pi RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Raspberry%20Pi.html">Raspberry Pi</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/RhinoSteady/feed">
+			<img src="../static/rss-small.png" title="RhinoSteady RSS Feed" label="RhinoSteady RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/RhinoSteady.html">RhinoSteady</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Robotics/feed">
+			<img src="../static/rss-small.png" title="Robotics RSS Feed" label="Robotics RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Robotics.html">Robotics</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Video/feed">
+			<img src="../static/rss-small.png" title="Video RSS Feed" label="Video RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Video.html">Video</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../category/Windows/feed">
+			<img src="../static/rss-small.png" title="Windows RSS Feed" label="Windows RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Windows.html">Windows</a></span> (1)
+	</li>
+
+</ul>
+                    
+                </div>
+            </div>
+            <div class="col-md-8 col-md-pull-4">
+                <div id="main">
+                    
+                    
+                    
+                    
+                    
+
+<div class="post">
+
+<p class="date"><span class="flask-moment" data-timestamp="2015-02-17T01:26:04Z" data-format="format('LL')" data-refresh="0">2015-02-17T01:26:04Z</span></p>
+<h1 class="post-title"><a href="two-factor-authentication-with-flask.html">Two Factor Authentication with Flask</a></h1>
+<div class="posted">Posted by <span class="label label-danger"><a href="http://blog.miguelgrinberg.com/author/Miguel Grinberg">Miguel Grinberg</a></span> under <span class="label label-primary"><a href="../category/Python.html">Python</a></span>, <span class="label label-primary"><a href="../category/Flask.html">Flask</a></span>, <span class="label label-primary"><a href="../category/Authentication.html">Authentication</a></span>, <span class="label label-primary"><a href="../category/Programming.html">Programming</a></span>. </div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/two-factor-authentication-with-flask" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/two-factor-authentication-with-flask" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="two-factor-authentication-with-flask.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/two-factor-authentication-with-flask" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+<div class="post_body"><p><center><iframe width="450" height="253" src="https://www.youtube.com/embed/kMTXL5FUHGM" frameborder="0" allowfullscreen></iframe></center></p>
+<p>In this article I'm going to introduce an authentication scheme known as <em>two factor authentication</em>. As the name implies, this method requires the user to provide two forms of identification: a regular password and a one-time token. This greatly increases account security, because a compromised password alone is not enough to gain access, an attacker also needs to have the token, which is different every time. You can see me do a short demonstration of this technique in the video above.</p>
+<p>As usual, this article includes a complete example that implements this authentication technique in a Flask application. You may think this is going to be an advanced article that needs complex cryptographic techniques, specialized hardware and/or proprietary libraries, but in reality it requires none of the above. The solution is relatively simple to add if you already have username and password authentication in place, and can be done entirely with open standards and open-source software. There are even open-source token generation apps for your Android or iOS smartphone!</p>
+<h2>The Example Application</h2>
+<p>As mentioned above, in this article I present a complete example application. This application demonstrates how to do two factor authentication in a web application that uses Flask and Flask-Login. If you would like to try a live version of this application, click the link below and follow the instructions to register an account. Note that you will be asked to install a free app on your smartphone as part of the registration process (Android and iOS are both supported).</p>
+<p><a href="https://two-factor-auth.herokuapp.com/">Try the example application now!</a></p>
+<p>The source code for the example application is hosted in the following Github repository: <a href="https://github.com/miguelgrinberg/two-factor-auth-flask">https://github.com/miguelgrinberg/two-factor-auth-flask</a>. See the README file for installation instructions.</p>
+<h2>Introduction to Two Factor Authentication</h2>
+<p>Letting users authenticate to an application just with a username and password combination is inherently risky, because when the password is compromised the attacker obtains full access. To reduce that risk, security conscious applications can implement <a href="http://en.wikipedia.org/wiki/Multi-factor_authentication">multi-factor authentication</a>, which requires the user to provide additional additional proofs of identity. With two factor authentication, the user must provide the password, plus a second authentication factor.</p>
+<p>Some of these accessory identity verification schemes are based on a physical characteristic of the user, such as a fingerprint, or an iris scan. Another common way to prove identity is with a physical object that the user carries at all times, such as a card with a magnetic strip, or a portable token generator.</p>
+<p>If you work for a company that lets you connect to the office from home through a <a href="http://en.wikipedia.org/wiki/Virtual_private_network">VPN</a>, chances are you are already familiar with two factor authentication, and you already have a token generation device or app similar to these:</p>
+<p><center><img src="../static/images/two-factor-01.jpg"></center></p>
+<p>For the example application in this article I'm going to concentrate on this type of authentication factor, which is based on one-time password generation algorithms.</p>
+<h2>One-Time Passwords</h2>
+<p>The idea behind one-time passwords is that they are only valid for a single login session. These passwords are generated algorithmically by a hardware device or a smartphone app. To validate a one-time password, the server runs the same algorithm and compares the result with the password provided by the user. The difference with a traditional password is that the user does not need to memorize anything, the generated password is displayed by the token generation device and the user just copies it to the login form.</p>
+<p>There are many one-time password algorithms, most are proprietary, but there are a few open standards, of which <a href="http://en.wikipedia.org/wiki/HOTP">HOTP</a> and <a href="http://en.wikipedia.org/wiki/Time-based_One-time_Password_Algorithm">TOTP</a> are the most commonly used.</p>
+<p>The HOTP algorithm, short for HMAC-based One-time Password, is described in <a href="http://tools.ietf.org/html/rfc4226">RFC 4226</a>. This algorithm generates tokens based on a secret and a counter, both known by the token generation device and the authentication server. Each time a token is used the counter is incremented on both sides, and that makes the algorithm generate a different token for the next login attempt.</p>
+<p>The TOTP algorithm, short for Time-based One-time Password, is described in <a href="http://tools.ietf.org/html/rfc6238">RFC 6238</a>. This standard also uses a shared secret, but deals away with the counter, which is replaced by the current time. With this algorithm the token changes at a predefined time interval, usually every 30 seconds.</p>
+<p>The benefit of TOTP over HOTP is that tokens are a function of time, and thus are constantly changing. That means that even if an attacker can take a peek at the current token displayed on your smartphone app, a few seconds later it will be superseded by a new one. The disadvantage of TOTP is that it requires the token generator and the authentication server to have their clocks set to approximately the same time. This is not a problem for the smartphone, but on the server it is recommended that you run an <a href="http://www.ntp.org/">NTP</a> client to keep the clock from drifting.</p>
+<p>For the example application that I present in this article I'm going to use TOTP, but it should be fairly easy to adapt the application to use HOTP.</p>
+<h2>The First Factor: Password Authentication</h2>
+<p>I'm not going to spend a lot of time describing how to do password authentication because I have written extensively about it. But I feel it is always good to repeat a few best-practices to keep user passwords safe:</p>
+<ul>
+<li>Passwords must never be stored in the database. Store a password hash instead.</li>
+<li>To verify a password, calculate its hash, then compare it against the hash stored in the database.</li>
+<li>Always use secure HTTP to transmit forms that contain passwords.</li>
+</ul>
+<p>If you would like to see a fairly complete implementation of password authentication that includes user registration, email verification and password resets, you will find one in my <a href="http://flaskbook.com/">book</a>. The source code featured in the book is in <a href="https://github.com/miguelgrinberg/flasky">this Github repository</a>.</p>
+<p>For this example I used a much simpler setup, because I did not want to complicate the example with features that are largely unrelated to this article. I have basically skipped email verification and password reset options, but note that these are necessary for a production application, even when two-factor authentication is added to the mix.</p>
+<p>For this application, I used Flask-SQLAlchemy, Flask-Login, Flask-WTF and Flask-Bootstrap, so for those that have read my other Flask tutorials this is going to be a fairly familiar application. The <code>User</code> model class is shown below:</p>
+<pre><code>from werkzeug.security import generate_password_hash, check_password_hash
+from flask.ext.login import UserMixin
+from app import db, lm
+
+class User(UserMixin, db.Model):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(64), index=True)
+    password_hash = db.Column(db.String(128))
+
+    @property
+    def password(self):
+        raise AttributeError('password is not a readable attribute')
+
+    @password.setter
+    def password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def verify_password(self, password):
+        return check_password_hash(self.password_hash, password)
+</code></pre>
+<p>As you can see, I'm hashing the passwords using Werkzeug's hashing functions. Note that the <code>password</code> property allows me to say <code>user.password = 'some-password'</code>, and this will automatically trigger the hash of the password to be stored in <code>user.password_hash</code>. The original password is then discarded.</p>
+<p>The user registers an account by providing a username and a password. The password is asked twice to ensure it is typed correctly. Here is the Flask-WTF form that handles this:</p>
+<pre><code>class RegisterForm(Form):
+    username = StringField('Username', validators=[Required(), Length(1, 64)])
+    password = PasswordField('Password', validators=[Required()])
+    password_again = PasswordField('Password again',
+                                   validators=[Required(), EqualTo('password')])
+    submit = SubmitField('Register')
+</code></pre>
+<p>Once users are registered, they can login by entering the username and the password on the login form, which you can see below:</p>
+<pre><code>class LoginForm(Form):
+    username = StringField('Username', validators=[Required(), Length(1, 64)])
+    password = PasswordField('Password', validators=[Required()])
+    submit = SubmitField('Login')
+</code></pre>
+<p>The route that handles the registration form is pretty straightforward, so I'm not going to show it here. It basically takes the username and the password submitted by the user and adds then as a new user to the database. Below you can see the route that logs a user in:</p>
+<pre><code>@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated():
+        # if user is logged in we get out of here
+        return redirect(url_for('index'))
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        if user is None or not user.verify_password(form.password.data):
+            flash('Invalid username or password.')
+            return redirect(url_for('login'))
+        # log user in
+        login_user(user)
+        flash('You are now logged in!')
+        return redirect(url_for('index'))
+    return render_template('login.html', form=form)
+</code></pre>
+<p>Here you can see how the password verification is done, simply by calling <code>user.verify_password()</code> in the model.</p>
+<p>If you look at the commit history in the Github repository, you can find a commit that adds all the code related to password authentication together. You can also checkout that commit and try the application at that stage if you like. Once you feel you have a good understanding of the application at this stage, you are ready to move on to the tokens.</p>
+<h2>The Second Factor: TOTP Tokens</h2>
+<p>A search on <a href="https://pypi.python.org/pypi?%3Aaction=search&amp;term=totp&amp;submit=search">pypi</a> revealed a few packages that implement the TOTP algorithm. I tested a few of them and decided on <a href="https://github.com/tadeck/onetimepass/">onetimepass</a>, a small library that supports HOTP and TOTP and is compatible with Python 2 and 3. If you want to learn how these tokens are calculated, I recommend that you read the source code, which is short and easy to understand.</p>
+<h3>The User Model</h3>
+<p>Now that the problem of calculating and verifying tokens is solved, let's look at the changes that add token support to the user model:</p>
+<pre><code>import os
+import base64
+import onetimepass
+
+class User(UserMixin, db.Model):
+    # ...
+    otp_secret = db.Column(db.String(16))
+
+    def __init__(self, **kwargs):
+        super(User, self).__init__(**kwargs)
+        if self.otp_secret is None:
+            # generate a random secret
+            self.otp_secret = base64.b32encode(os.urandom(10)).decode('utf-8')
+
+    # ...
+
+    def get_totp_uri(self):
+        return 'otpauth://totp/2FA-Demo:{0}?secret={1}&amp;issuer=2FA-Demo' \
+            .format(self.username, self.otp_secret)
+
+    def verify_totp(self, token):
+        return onetimepass.valid_totp(token, self.otp_secret)
+</code></pre>
+<p>The user model gets an additional field called <code>otp_secret</code> that stores the shared secret that the TOTP algorithm uses as input. This should be a binary string of length 10 encoded as a <a href="http://en.wikipedia.org/wiki/Base32">base32</a> string, which makes it a printable string with 16 characters. The <code>__init__()</code> constructor sets it to a random string if a value for this field isn't given as an argument.</p>
+<p>The <code>get_totp_uri()</code> function returns an authentication URI. This is used to transfer the shared secret and additional account information to the smartphone. This URI will be rendered as a <a href="http://en.wikipedia.org/wiki/QR_code">QR code</a> that you have to scan with your phone. Below you can see the structure of these URIs:</p>
+<pre><code>otpauth://&lt;protocol&gt;/&lt;service-name&gt;:&lt;user-account&gt;?secret=&lt;shared-secret&gt;&amp;issuer=&lt;service-name&gt;
+</code></pre>
+<p>Here the <code>&lt;protocol&gt;</code> can be <code>totp</code> or <code>hotp</code>. The <code>&lt;service-name&gt;</code> is the name of the service or application that the user is authenticating to. The <code>&lt;user-account&gt;</code> can be the username, the user's email address or anything that identifies the user account. The <code>&lt;shared-secret&gt;</code> is the code that is used to seed the token generator algorithm. The <code>issuer</code> argument is normally set to the service name. A <code>period</code> optional argument can also be used to change the interval for token changes, which defaults to 30 seconds. For more information about these URIs, see the documentation on the <a href="https://github.com/google/google-authenticator/wiki/Key-Uri-Format">Google Authenticator wiki</a>.</p>
+<p>Finally, the <code>verify_totp()</code> function takes a token as input, and validates using the support provided by the onetimepass package.</p>
+<h3>User Registration</h3>
+<p>There are several possible options to consider when implementing the user registration flow. For some applications it may make sense to leave user registration as is, and then give users the option to optionally enable two factor authentication if they wish so. For other applications, two factor may be mandatory, so it is  incorporated into the registration process.</p>
+<p>For this application, I have opted for the latter, so immediately after submitting the user registration page the user is presented with a two factor authentication setup page that looks like this:</p>
+<p><center><img src="../static/images/two-factor-02.jpg"></center></p>
+<p>Here the user needs to start the token generator app on the smartphone, and use it to scan the QR code. This is all it takes to register the shared secret and account information on the phone. After this step is done, the user can go to the login page and login using password and token for the first time.</p>
+<p>The changes to implement the QR code page are not as scary as they may seem. First, the original registration route is changed to redirect to a new route that I called <code>two_factor_setup</code> instead of sending the user to the login page. Before redirecting, it adds the <code>username</code> to the user session, so that the QR code page knows what user is registering. Here are the changes to the registration route:</p>
+<pre><code>@app.route('/register', methods=['GET', 'POST'])
+def register():
+    # ...
+    form = RegisterForm()
+    if form.validate_on_submit():
+        # ...
+
+        # redirect to the two-factor auth page, passing username in session
+        session['username'] = user.username
+        return redirect(url_for('two_factor_setup'))
+    return render_template('register.html', form=form)
+</code></pre>
+<p>And below you can see the implementation of the <code>two_factor_setup</code> route:</p>
+<pre><code>@app.route('/twofactor')
+def two_factor_setup():
+    if 'username' not in session:
+        return redirect(url_for('index'))
+    user = User.query.filter_by(username=session['username']).first()
+    if user is None:
+        return redirect(url_for('index'))
+    # since this page contains the sensitive qrcode, make sure the browser
+    # does not cache it
+    return render_template('two-factor-setup.html'), 200, {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'}
+</code></pre>
+<p>After validating that there is a username stored in the user session, this route ensures the user exists, and if it does it just renders a new template called <code>two-factor-setup.html</code>. This page is served with extra headers that tell the browser to not do any caching. The reason is that this page will include a QR code that can give an attacker access to the time based tokens, so it's best to take precautions and make sure there are no copies of the QR code lost in a cache.</p>
+<p>The <code>two-factor-setup.html</code> template is also fairly simple:</p>
+<pre><code>{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block page_content %}
+    &lt;h1&gt;Two Factor Authentication Setup&lt;/h1&gt;
+    &lt;p&gt;You are almost done! Please start FreeOTP on your smartphone and scan the following QR Code with it:&lt;/p&gt;
+    &lt;p&gt;&lt;img id="qrcode" src="{{ url_for('qrcode') }}"&gt;&lt;/p&gt;
+    &lt;p&gt;I'm done, take me to the &lt;a href="{{ url_for('login') }}"&gt;Login&lt;/a&gt; page!&lt;/p&gt;
+{% endblock %}
+</code></pre>
+<p>The page includes a reference to the QR code image, but the URL for this image is not a usual image link, it is a dynamic URL generated with Flask's <code>url_for()</code> function. This is because the QR code image has to be generated specifically for each user, so a Flask route is invoked to do this work.</p>
+<p>This <code>qrcode</code> route is different than the rest, because instead of returning HTML it returns image data, in this case in <a href="http://en.wikipedia.org/wiki/Scalable_Vector_Graphics">SVG</a> format. To generate the QR code I'm using package <a href="https://github.com/mnooner256/pyqrcode">pyqrcode</a>. Here is the code for this route:</p>
+<pre><code>@app.route('/qrcode')
+def qrcode():
+    if 'username' not in session:
+        abort(404)
+    user = User.query.filter_by(username=session['username']).first()
+    if user is None:
+        abort(404)
+
+    # for added security, remove username from session
+    del session['username']
+
+    # render qrcode for FreeTOTP
+    url = pyqrcode.create(user.get_totp_uri())
+    stream = StringIO()
+    url.svg(stream, scale=5)
+    return stream.getvalue().encode('utf-8'), 200, {
+        'Content-Type': 'image/svg+xml',
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'}
+</code></pre>
+<p>Here once again I check that the username is in the session and that it is a known user. If any of those checks fail, I return a 404 error code, which to the browser will look like it requested an image file that does not exist. If the user is valid, I quickly remove it from the session, because once the user requests the QR code I want to make sure it this image cannot be requested again. This means that if the user does not scan the QR code in this only occasion it is presented, then the account is not going to be accessible.</p>
+<p>The information stored in the QR code is the URL that includes the TOTP data. This is what most TOTP smartphone apps expect, something that the <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&amp;hl=en">Google Authenticator</a> app started and everyone else copied. Recall that I've added a method that generates this URL as <code>User.get_totp_uri()</code> above. The QR code rendering simply involves using the <code>pyqrcode</code> functions to render the TOTP URL as a SVG image, which I save to a <code>StringIO</code> stream in memory. This buffer is then returned as a response with the correct content type for SVG images. I also threw in the headers that disable caching for the image, as I did with the parent HTML page.</p>
+<p>The user now can scan the QR code with a TOTP enabled smartphone app, and as soon as that is done the registration process is complete. Pretty cool, right?</p>
+<h3>Login</h3>
+<p>The only piece that is left to do is to extend the login form to accept a token, and also to validate it. I mentioned above that applications may opt to make two factor authentication optional or mandatory. If this is made optional, then the login form does not change, users enter their username and password, and upon verification the application can find out if two factor authentication is enabled and present an additional form where the user enters the token. In the case of this application, however, two factor setup is required for all accounts, so I decided to make a single login dialog that accepts username, password and token together.</p>
+<p>Here is the improved login form, which just gets an extra field for the token.</p>
+<pre><code>class LoginForm(Form):
+    username = StringField('Username', validators=[Required(), Length(1, 64)])
+    password = PasswordField('Password', validators=[Required()])
+    token = StringField('Token', validators=[Required(), Length(6, 6)])
+    submit = SubmitField('Login')
+</code></pre>
+<p>And then the login route is simply enhanced with an additional validation check:</p>
+<pre><code>@app.route('/login', methods=['GET', 'POST'])
+def login():
+    # ...
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        if user is None or not user.verify_password(form.password.data) or \
+                not user.verify_totp(form.token.data):
+            flash('Invalid username, password or token.')
+            return redirect(url_for('login'))
+
+        # log user in
+        # ...
+    return render_template('login.html', form=form)
+</code></pre>
+<p>Here the only addition is the call to <code>user.verify_totp()</code>, the method that I added to the user model to check tokens using the onetimepass package. Note that when authentication fails I do not give any clues about what part has failed, the error message is pretty generic.</p>
+<p>And that is all, the application with two factor authentication is now complete!</p>
+<h2>Possible Improvements</h2>
+<p>This application is focused on simplicity, I tried to not over complicate it so that the core concepts of working with tokens are easy to understand. However, in a real world application you may want to make things a bit more robust, so I'm going to discuss some of these additions that may be useful.</p>
+<p>As I mentioned above, for many types of applications using two factor authentication should be optional, so it is only for users that want to take advantage of the stronger account security. For these applications, user registration and login pages do not need to change. Instead, a settings page allows users to enable and set up two factor authentication once they are logged in. The login process is then split in two parts, the first part is the regular username and password login, and then for those users that enabled two factor authentication a second page requests the token.</p>
+<p>A common practice for applications that allow users to edit sensitive account settings is to request the user to authenticate again right before making account changes. For example, to change your password, applications typically ask you to enter your old password first. When two factor authentication is used, the application should ask the user to provide the current token as well, but it is important that this is a new token that was not used before. Imagine that somehow an attacker was able to crack your password, and also spied on your phone and knows the current code. That means that for up to 30 seconds you are vulnerable. If the attacker logs in to your account and then quickly goes to the account settings page entering the password and the same token again, your account is compromised. Now the attacker can disable two factor authentication and gain full access in the future. To avoid this, an application should save any tokens that were consumed to the user database and not allow the same token to be used a second time. The attacker will be forced to wait those 30 seconds before entering the settings page, so it gets even harder to have the account compromised.</p>
+<p>An alternative to use a smartphone app to generate the tokens is to have the server send an email or SMS with the current code. The onetimepass package that I used for the example application not only provides a function to validate TOTP codes, it has a function that just returns the current code, so you can then send it to the user as you see appropriate. For this type of workflow it may be necessary to increase the period at which tokens change.</p>
+<p>Account recovery is harder when two factor authentication is used. If an application allows users to regain access to their accounts without having a valid token, then an attacker can take advantage of this facility as well. Typically users that are locked out of their accounts have to contact an administrator and have their accounts reset manually. You can also opt to add another form of verification, such as security questions, but of course this in part undermines the increased account security.</p>
+<p>As mentioned in the <a href="http://www.reddit.com/r/Python/comments/2wtfc6/two_factor_authentication_with_flask/">reddit discussion of this article</a>, there are a couple of implementation details that can be improved to make the application more secure. Storing the OTP secret and the hashed passwords in the same table can be seen as a security risk, because in the event of a security breach that gives the attacker access to the database, both will be accessible. To mitigate this risk, you could choose to store these two sensitive items in different database tables, or even better, different databases altogether. Encrypting the OTP secret, maybe using Flask's <code>SECRET_KEY</code> as encryption key, can also help. In all cases secure HTTP must be used for all communications that include passwords and the OTP secret (which is encoded in the QR code).</p>
+<h2>Conclusion</h2>
+<p>I hope this was a useful article. I would love to hear what you build with the techniques I presented in this article, so please let me know of any projects you make. As always, feel free to write your questions below.</p>
+<p>Miguel</p></div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/two-factor-authentication-with-flask" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/two-factor-authentication-with-flask" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="two-factor-authentication-with-flask.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/two-factor-authentication-with-flask" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+
+
+<h4 style="text-align: right"><a name="comments"></a>13 comments</h4>
+
+
+<div class="comment">
+    <ul>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/79980195d69b0608f70b2dea32be790fce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#1</span> <span class="label label-primary">Kai</span> said
+                    <span class="flask-moment" data-timestamp="2015-02-19T20:28:50Z" data-format="fromNow(0)" data-refresh="0">2015-02-19T20:28:50Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">That was very interesting and I must say you have a very good way of explaining things in aneasy and understandable way.
+Since I&#39;m still building my REST-API based on your tutorial and build a Falsk-site... this willbe the next to include!!!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/23463b99b62a72f26ed677cc556c44e8ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#2</span> <span class="label label-primary">Laowai</span> said
+                    <span class="flask-moment" data-timestamp="2015-02-26T19:42:00Z" data-format="fromNow(0)" data-refresh="0">2015-02-26T19:42:00Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Always excited to read your new articles. I&#39;m actually reading through your flask book for the second time right now =) </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/9a4913bc72cc949e5b7fbc105d6e7766ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#3</span> <span class="label label-primary">Dee Odee</span> said
+                    <span class="flask-moment" data-timestamp="2015-03-19T12:59:27Z" data-format="fromNow(0)" data-refresh="0">2015-03-19T12:59:27Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">great tutorial. just wanted to say that the code on this page (haven&#39;t looked at the repo code yet) is missing a `.format(` (in `User.get_totp_uri()`)</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#4</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2015-03-21T21:48:27Z" data-format="fromNow(0)" data-refresh="0">2015-03-21T21:48:27Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Dee: thanks, I corrected the mistake here. The code on Github was correct.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/d52693ba7139e08b0ea5c3064caa4421ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#5</span> <span class="label label-primary"><a href="http://stackoverflow.com/users/2787992/ichux">nwaomachux</a></span> said
+                    <span class="flask-moment" data-timestamp="2015-04-01T14:46:13Z" data-format="fromNow(0)" data-refresh="0">2015-04-01T14:46:13Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I used the one hosted on Heroku, thanks for help. </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/95a39244bde7d35e3d9257b29573021bce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#6</span> <span class="label label-primary">Bob Jansen</span> said
+                    <span class="flask-moment" data-timestamp="2015-05-26T16:56:19Z" data-format="fromNow(0)" data-refresh="0">2015-05-26T16:56:19Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I appreciate your clean, well-documented approach, Miguel. I will read much more of your work. My interest is in interfacing my household electronics  (past and real-time temperatures, energy usage, lights controlled, etc.) through the Raspberry Pi as dynamic web forms with Python and Flask.  I have lots of VB programming experience and a good bit with python, not to mention various microcontrollers and their languages, but the raspberry will be a new challenge.  Just getting 2 separate network interfaces working through the ethernet and wlan devices has been problematic. Hopefully I will be able to share some success details with you along the way.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/18f058b5621f8a4d42a35fe475fb3a67ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#7</span> <span class="label label-primary">Jan</span> said
+                    <span class="flask-moment" data-timestamp="2015-06-14T18:13:11Z" data-format="fromNow(0)" data-refresh="0">2015-06-14T18:13:11Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Thank you for the tutorial Miguel! Much appreciated.
+
+For those that want to use this in Python 3+, use BytesIO instead of StringIO and remove the encoding part like this:
+
+return stream.getvalue(), 200, {
+        &#39;Content-Type&#39;: &#39;image/svg+xml&#39;,
+        &#39;Cache-Control&#39;: &#39;no-cache, no-store, must-revalidate&#39;,
+        &#39;Pragma&#39;: &#39;no-cache&#39;,
+        &#39;Expires&#39;: &#39;0&#39;}
+
+That should make it work.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/2aaa4ad47bb8ead5d3cc8e0a5f646d3bce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#8</span> <span class="label label-primary">Bang</span> said
+                    <span class="flask-moment" data-timestamp="2015-06-26T06:22:20Z" data-format="fromNow(0)" data-refresh="0">2015-06-26T06:22:20Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I register and use Google Authenticator to scan qrcode successfully. But when login with token that provided by Google Authenticator the page at http://two-factor-auth.herokuapp.com/login said Invalid username, password or token.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/2aaa4ad47bb8ead5d3cc8e0a5f646d3bce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#9</span> <span class="label label-primary">Bang</span> said
+                    <span class="flask-moment" data-timestamp="2015-06-26T08:17:40Z" data-format="fromNow(0)" data-refresh="0">2015-06-26T08:17:40Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">If someone failed to login, just install ClockSync(android) to update correct time for your phone. So the token generated by Google Authenticator or other alike apps will be correct. I solved it that way.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/4a6477d749ce054fd1e3385162fd17a1ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#10</span> <span class="label label-primary">Jay Tee</span> said
+                    <span class="flask-moment" data-timestamp="2015-07-12T11:51:28Z" data-format="fromNow(0)" data-refresh="0">2015-07-12T11:51:28Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Can you tell me what the wtf.html looks like? Trying your approach with the two-factor but the only thing stopping me is the wtf.html file in the bootstrap directory. Thanks in advance! </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#11</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2015-07-16T06:01:46Z" data-format="fromNow(0)" data-refresh="0">2015-07-16T06:01:46Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Jay: wtf.html is a file that contains some macros for form generation. If you get the project from the github repository and follow the instructions to run you&#39;ll get all the dependencies.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/e267705ea2720ff3b801db4c6b5adccfce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#12</span> <span class="label label-primary"><a href="http://greenash.net.au/">Jeremy Epstein</a></span> said
+                    <span class="flask-moment" data-timestamp="2015-08-14T01:13:54Z" data-format="fromNow(0)" data-refresh="0">2015-08-14T01:13:54Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Great article, Miguel - I didn&#39;t realise that it&#39;s so easy to implement basic 2FA these days. For my projects (small company, clients with limited budget), I had ruled it out as requiring too much integration code / expensive 2FA cloud providers. But I see that it&#39;s a trivial amount of code in Flask (which is my framework of choice these days), and that there are no provider costs with an app like FreeOTP. Of course, sending codes via SMS needs to be done via some sort of premium service, but I guess that SMS isn&#39;t necessary for all use cases (although personally, I prefer it over having to install an app on my phone, just to log in to a web site).</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/89fbe3bf3a71de6c32c34adb65059e5ece2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#13</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2015-08-14T05:03:56Z" data-format="fromNow(0)" data-refresh="0">2015-08-14T05:03:56Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Jeremy: twilio is fairly accessible price wise for sending SMS: https://www.twilio.com/sms/pricing.</p>
+                </div>
+            </div>
+        </li>
+        
+    </ul>
+</div>
+
+<div class="page">
+<ul class="pager">
+  <li class="previous disabled">
+    <a href="#">&laquo;&laquo;</a>
+  </li>
+  <li class="previous disabled">
+    <a href="#">&laquo;</a>
+  </li>
+  <li class="next disabled">
+    <a href="#">&raquo;&raquo;</a>
+  </li>
+  <li class="next disabled">
+    <a href="#">&raquo;</a>
+  </li>
+</ul>
+</div>
+
+<h3><a name="commentform"></a>Leave a Comment</h3>
+
+<form action="#commentform" method="post"
+  class="form" role="form">
+  <div style="display:none;"><input id="csrf_token" name="csrf_token" type="hidden" value="1439536729.09##92aa478cdeb44e315ad900d0155d3795484859a7"></div>
+  
+    
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="name">Name</label>
+        <input class="form-control" id="name" name="name" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="url">URL</label>
+        <input class="form-control" id="url" name="url" type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="email">Email</label>
+        <input class="form-control" id="email" name="email" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="comment">Comment</label>
+        <textarea class="form-control" id="comment" name="comment" required></textarea>
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="captcha">Captcha</label>
+        
+<script type="text/javascript">var RecaptchaOptions = {"custom_translations": {"audio_challenge": "Get an audio challenge", "cant_hear_this": "Download sound as MP3", "help_btn": "Help", "image_alt_text": "reCAPTCHA challenge image", "incorrect_try_again": "Incorrect. Try again.", "instructions_audio": "Type what you hear", "instructions_visual": "Type the text", "play_again": "Play sound again", "privacy_and_terms": "Privacy & Terms", "refresh_btn": "Get a new challenge", "visual_challenge": "Get a visual challenge"}, "theme": "white"};</script>
+<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S"></script>
+<noscript>
+  <iframe src="http://www.google.com/recaptcha/api/noscript?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S" height="300" width="500" frameborder="0"></iframe><br>
+  <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+  <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
+</noscript>
+
+  </div>
+
+
+    
+
+
+
+
+
+  
+
+
+    <input class="btn btn-default" id="submit" name="submit" type="submit" value="Submit">
+  
+
+
+
+
+
+</form>
+
+
+</div>
+
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <p class="elapsed">This page was generated in None seconds.</p>
+            <p>&copy; 2014 by Miguel Grinberg. All rights reserved. <a href="mailto:webmaster _at_ miguelgrinberg _dot_ com">Questions?</a></p>
+        </div>
+    </div>
+
+
+    
+    
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.33/jquery.colorbox-min.js"></script>
+    <script type="text/javascript" src="../static/prettify.js"></script>
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment-with-langs.min.js"></script>
+<script>
+function flask_moment_render(elem) {
+    $(elem).text(eval('moment("' + $(elem).data('timestamp') + '").' + $(elem).data('format') + ';'));
+    $(elem).removeClass('flask-moment');
+}
+function flask_moment_render_all() {
+    $('.flask-moment').each(function() {
+        flask_moment_render(this);
+        if ($(this).data('refresh')) {
+            (function(elem, interval) { setInterval(function() { flask_moment_render(elem) }, interval); })(this, $(this).data('refresh'));
+        }
+    })
+}
+$(document).ready(function() {
+    flask_moment_render_all();
+});
+</script>
+    
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4777284-15']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".gallery").colorbox({rel:".gallery",maxWidth:"95%",maxHeight:"95%",scalePhotos:true});
+            // add prettyprint class to all <pre><code></code></pre> blocks
+            var prettify = false;
+            $("pre code").parent().each(function() {
+                $(this).addClass('prettyprint');
+                prettify = true;
+            });
+            prettyPrint();
+        });
+    </script>
+
+
+  </body>
+
+<!-- Mirrored from blog.miguelgrinberg.com/post/two-factor-authentication-with-flask by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:43:36 GMT -->
+</html>

@@ -1,0 +1,137 @@
+<html>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch11s03.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:30 GMT -->
+<head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>11.3. The while loop</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><meta name="keywords" content="python, biology, bioinformatics, programming, computational biology"><link rel="home" href="index-2.html" title="Introduction to Programming using Python"><link rel="up" href="ch11.html" title="Chapter 11. Repetitions"><link rel="previous" href="ch11s02.html" title="11.2. The for loop"><link rel="next" href="ch11s04.html" title="11.4. Comparison of for and&#xA;    while loops"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">11.3. The while loop</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch11s02.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><th width="60%" align="center">Chapter 11. Repetitions</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch11s04.html"><img src="images/next.png" alt="Next"></a></td></tr></table><hr></div><div class="section"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="sect_while"></a>11.3. The <tt>while</tt> loop</h2></div></div><p></p><div class="definition"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/definition.png"></td><td><p class="title"><b>The <tt>while</tt> loop</b></p></td></tr><tr><td colspan="2" align="left" valign="top">
+      
+
+      <p>A <tt>while</tt> loop is composed of two
+	parts, a<span class="emphasis"><em> condition</em></span> and a
+	<span class="emphasis"><em>sequence of statements</em></span> to repeat. During
+	the execution, the <span class="emphasis"><em>sequence of statements</em></span>
+	are repeated as long as the <span class="emphasis"><em>condition</em></span> is
+	true. <a href="ch11s03.html#fig_foe_while" title="Figure 11.2. Flow of execution of a while statement">Figure 11.2</a> illustrates the flow of
+	execution. 
+      </p>
+
+
+    </td></tr></table></div><div class="figure"><a name="fig_foe_while"></a><p class="title"><b>Figure 11.2. Flow of execution of a <tt>while</tt> statement</b></p><div class="mediaobject"><img src="images/while_flow.png" width="445.2"></div></div><p>
+      Before saying more, let us illustrate that  with an example.
+      We have already shown how to use the <tt>find</tt>
+      method of strings to find pattern (<a href="ch01.html#sect_first_session" title="1.1. First session">Section 1.1</a>). Let's try now to find all occurrences of
+      a specific pattern in a DNA sequence. Here is one
+      possible way to proceed:
+    </p><div class="procedure"><p class="title"><b>Procedure 11.6. Find all occurrences of a pattern in a sequence</b></p><p>INPUT: a DNA sequence <span class="emphasis"><em>seq</em></span> and a
+	pattern <span class="emphasis"><em>pat</em></span>
+      </p><p>OUTPUT: a list of positions
+	<span class="emphasis"><em>matches</em></span> containing all start positions of
+	<span class="emphasis"><em>pat</em></span> in <span class="emphasis"><em>seq</em></span>
+      </p><ol type="1"><li><span class="emphasis"><em>matches</em></span> &lt;- empty list
+      </li><li><span class="emphasis"><em>current_match</em></span> &lt;-
+	  position of the first occurrence of pattern
+	  <span class="emphasis"><em>pat</em></span> in sequence
+	  <span class="emphasis"><em>seq</em></span> or -1 <span class="bold"><b>if</b></span>
+	  there is not anyone
+	
+      </li><li><span class="bold"><b>as long as</b></span><span class="emphasis"><em> current_match</em></span> is not -1:
+	
+	<ol type="a"><li><span class="emphasis"><em>matches</em></span> &lt;-
+	      <span class="emphasis"><em>matches</em></span> +
+	      <span class="emphasis"><em>current_matches</em></span></li><li><span class="emphasis"><em>current_match</em></span> &lt;-
+	  position of the next occurrence of pattern
+	  <span class="emphasis"><em>pat</em></span> in sequence
+	      <span class="emphasis"><em>seq</em></span> after
+	      <span class="emphasis"><em>current_match</em></span> or -1 <span class="bold"><b>if</b></span> there is not anyone
+	    
+	  </li></ol></li><li><span class="bold"><b>return</b></span><span class="emphasis"><em> matches</em></span></li></ol></div><div class="example"><a name="exa_restrict"></a><p class="title"><b>Example 11.2. First example of a <tt>while</tt> loop</b></p><p>And here is the implementation in
+	<b>Python</b>:
+      </p><pre class="programlisting">
+	
+def findpos(seq, pat):
+    matches = []
+    current_match = seq.find(pat)
+    while current_match != -1:
+        matches.append(current_match)
+        current_match =seq.find(pat, current_match+1)
+    return matches
+
+      </pre></div><p>
+      In <b>Python</b> a <tt>while</tt> loop
+      is written using the <tt>while</tt> statement which
+      is as the <tt>for</tt> and the
+      <tt>if</tt> statements a <span class="emphasis"><em>block
+	statement</em></span>. The header of the <span class="emphasis"><em>block
+      statement</em></span> contains the conditional expression and the
+      body contains the sequence of statements to repeat (<a href="ch11s03.html#fig_while" title="Figure 11.3. Structure of the while statement">Figure 11.3</a>). 
+    </p><div class="figure"><a name="fig_while"></a><p class="title"><b>Figure 11.3. Structure of the <tt>while</tt> statement</b></p><div class="mediaobject"><img src="images/while_statement.png" width="436.79999999999995"></div></div><p>
+      Look at the following example. Do you know what happened during
+      the execution?
+    
+    <pre class="programlisting">
+while 1:
+   print "hello"
+    </pre>
+
+      It simply never stops, because 1 is always true and therefore it
+      is neither an algorithm nor a program. But it illustrates an
+      important feature of a <tt>while</tt> loop. The
+      conditional expression has to contain at least one variable
+      whose value changes during the execution of the sequence of
+      statements. 
+    </p><p>
+      This variable is often a simple iterator, which is increased or
+      decreased until it reaches a limit.  The behavior of the
+      <tt>current_match</tt> variable in <a href="ch11s03.html#exa_restrict" title="Example 11.2. First example of a while loop">Example 11.2</a> is more complicated, because it 
+      represents two situations. Its value is the start position of a
+      pattern occurrence or it is -1 if there are no more
+      occurrences. In this example the second argument of the
+      <tt>find</tt> function ensures that the
+      <span class="emphasis"><em>next</em></span> occurrence is found but no occurrence
+      missed. 
+    </p><p>
+      Because the iteration variable is used in the condition and the
+      condition is evaluated first when a <tt>while</tt>
+      loop is entered, it has to be defined before entering the
+      loop. This means there are two different affectations of this
+      variable. A first affectation or
+      <span class="emphasis"><em>initialization</em></span> before the loop is entered
+      and a second affectation statement in the repeated sequence of
+      statements that gives it the next value. In general, this is the
+      last statement of the sequence. Even if it is not always the case,
+      and sometimes not necessary, it is a convention to put it at the
+      end if possible because it is easy to find if it has been forgotten. 
+    </p><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td colspan="2" align="left" valign="top"><p>
+	Conditions of <tt>while</tt> loops are frequent
+	source of errors. They are sometimes difficult to detect because
+	they are semantic errors that produce wrong results on all or
+	sometimes only special input data sets. You have to ensure
+	that the iteration variable changes and that the end condition
+	is always reached. 
+      </p></td></tr></table></div><p>
+    The following example illustrates a common use of
+    the  <tt>while</tt> construct to get input from an
+    interactive user:
+
+      <pre class="programlisting">
+en2fr = {
+    'comma': 'virgule',
+    'hyphen': 'tiret',
+    'colon': 'deux-points'
+}
+x = raw_input("Enter an English word (hit return to finish): ")
+while x != "":
+    if en2fr.has_key(x):
+       print en2fr[x]
+    else:
+       	print x, "does not exist"
+    x = raw_input("Enter an English word (hit return to finish): ")
+      </pre>
+
+      This loop uses what is called a <span class="emphasis"><em>sentinel</em></span>, a
+      special value to indicate the end of the input. The sentinel has
+      to be chosen in order to be a value that does not belong to the collection.
+
+      </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch11s02.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch11.html"><img src="images/up.png" alt="Up"></a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch11s04.html"><img src="images/next.png" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">11.2. The for loop&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index-2.html"><img src="images/home.png" alt="Home"></a></td><td width="40%" align="right" valign="top">&nbsp;11.4. Comparison of for and
+    while loops</td></tr></table></div></body>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch11s03.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:31 GMT -->
+</html>

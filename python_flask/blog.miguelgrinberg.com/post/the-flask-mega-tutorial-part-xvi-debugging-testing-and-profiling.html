@@ -1,0 +1,1405 @@
+﻿<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xvi-debugging-testing-and-profiling by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 05:42:56 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    
+    <title>
+    
+        The Flask Mega-Tutorial, Part XVI: Debugging, Testing and Profiling - miguelgrinberg.com
+    
+</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="description" content="miguelgrinberg.com">
+	<meta name="copyright" content="Copyright (c) 2012-2015 Miguel Grinberg">
+	<meta name="author" content="Miguel Grinberg">
+    
+    <meta name="keywords" content="python, programming, flask, web, tutorial, debugging, logging, profiling, profiler">
+    
+
+    
+    <!-- Bootstrap -->
+    <link href="../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../static/prettify.css" type="text/css" rel="stylesheet" />
+    <link href="../static/colorbox/colorbox.css" rel="stylesheet" type="text/css" />
+    <link href="../static/style.css" rel="stylesheet" type="text/css" />
+
+    <link rel="shortcut icon" href="../static/favicon.ico">
+	<link rel="alternate" type="application/rss+xml" href="../feed" title="miguelgrinberg.com RSS feed">
+
+  </head>
+  <body>
+    
+    <!-- facebook sdk -->
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "../../connect.facebook.net/en_US/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    <!-- google plus sdk -->
+    <script type="text/javascript" src="../../apis.google.com/js/plusone.js"></script>
+    <!-- twitter sdk -->
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="../../platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <!-- linkedin sdk -->
+    <script src="../../platform.linkedin.com/in.js" type="text/javascript"></script>
+
+    
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://blog.miguelgrinberg.com/index">miguelgrinberg.com</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="http://blog.miguelgrinberg.com/index">Home</a></li>
+                        <li><a href="about-me.html">About Me</a></li>
+                        <li><a href="about-this-blog.html">About This Blog</a></li>
+                        
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <p class="navbar-text" style="margin-top: 10px; margin-bottom: 0px;">
+                                <a type="application/rss+xml" href="../feed"><img src="../static/rss.png" alt="RSS Feed" title="RSS Feed" /></a>
+                                <a href="https://www.facebook.com/miguelgrinbergblog"><img src="../static/facebook.png" alt="Facebook" title="Facebook" /></a>
+                                <a href="https://plus.google.com/u/0/117786742456929977820"><img src="../static/googleplus.png" alt="Google+" title="Google+" /></a>
+                                <a href="http://www.linkedin.com/in/miguelgrinberg"><img src="../static/linkedin.png" alt="LinkedIn" title="LinkedIn" /></a>
+                                <a href="http://github.com/miguelgrinberg"><img src="../static/github.png" alt="GitHub" title="GitHub" /></a>
+                                <a href="https://twitter.com/#!/miguelgrinberg"><img src="../static/twitter.png" alt="Twitter" title="Twitter" /></a>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </nav>
+
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-push-9 sidebar-bg">
+                <div id="sidebar">
+                    
+
+                    
+                    <h1>Flask Web Development</h1>
+                    <p>If you want to learn modern web development techniques with Python and Flask, you may find my O'Reilly book useful:</p>
+                    <p><center><a href="http://bit.ly/flaskbook"><img style="border: 1px solid black;" src="../static/flask-book-cover-tiny.png"></a></center></p>
+                    <p>Visit <a href="http://flaskbook.com/">http://flaskbook.com</a> for information about this and other Flask training products I have created!</p>
+                    
+
+                    <h1>About Miguel</h1>
+                    <img style="float: right; margin: 0px 8px 8px 0px; padding: 4px; border: 1px solid #ccc;" src="../static/miguel.jpg" />
+                    <p>Welcome to my blog!</p>
+                    <p>I'm a software engineer, photographer and filmmaker in Portland, Oregon, USA.</p>
+                    <p>You can also find me on <a href="https://www.facebook.com/miguelgrinbergblog">Facebook</a>, <a href="https://plus.google.com/u/0/117786742456929977820">Google+</a>, <a href="http://www.linkedin.com/in/miguelgrinberg">LinkedIn</a>, <a href="https://github.com/miguelgrinberg">Github</a> and <a href="https://twitter.com/#!/miguelgrinberg">Twitter</a>.</p>
+                    <p>Thank you for visiting!</p>
+
+                    
+
+                    
+                    <h1>Categories</h1>
+<ul>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Arduino/feed">
+			<img src="../static/rss-small.png" title="Arduino RSS Feed" label="Arduino RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Arduino">Arduino</a></span> (7)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Authentication/feed">
+			<img src="../static/rss-small.png" title="Authentication RSS Feed" label="Authentication RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Authentication">Authentication</a></span> (4)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Blog/feed">
+			<img src="../static/rss-small.png" title="Blog RSS Feed" label="Blog RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Blog">Blog</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/C++/feed">
+			<img src="../static/rss-small.png" title="C++ RSS Feed" label="C++ RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/C++">C++</a></span> (5)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Cloud/feed">
+			<img src="../static/rss-small.png" title="Cloud RSS Feed" label="Cloud RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Cloud">Cloud</a></span> (2)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Filmmaking/feed">
+			<img src="../static/rss-small.png" title="Filmmaking RSS Feed" label="Filmmaking RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Filmmaking">Filmmaking</a></span> (6)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Flask/feed">
+			<img src="../static/rss-small.png" title="Flask RSS Feed" label="Flask RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Flask">Flask</a></span> (39)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Games/feed">
+			<img src="../static/rss-small.png" title="Games RSS Feed" label="Games RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Games">Games</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Gear/feed">
+			<img src="../static/rss-small.png" title="Gear RSS Feed" label="Gear RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Gear">Gear</a></span> (6)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/HTML5/feed">
+			<img src="../static/rss-small.png" title="HTML5 RSS Feed" label="HTML5 RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/HTML5">HTML5</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Heroku/feed">
+			<img src="../static/rss-small.png" title="Heroku RSS Feed" label="Heroku RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Heroku">Heroku</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Javascript/feed">
+			<img src="../static/rss-small.png" title="Javascript RSS Feed" label="Javascript RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Javascript">Javascript</a></span> (3)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Movie Reviews/feed">
+			<img src="../static/rss-small.png" title="Movie Reviews RSS Feed" label="Movie Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Movie Reviews">Movie Reviews</a></span> (5)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Netflix/feed">
+			<img src="../static/rss-small.png" title="Netflix RSS Feed" label="Netflix RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Netflix">Netflix</a></span> (5)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Node.js/feed">
+			<img src="../static/rss-small.png" title="Node.js RSS Feed" label="Node.js RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Node.html">Node.js</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/OpenStack/feed">
+			<img src="../static/rss-small.png" title="OpenStack RSS Feed" label="OpenStack RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/OpenStack">OpenStack</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Personal/feed">
+			<img src="../static/rss-small.png" title="Personal RSS Feed" label="Personal RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Personal">Personal</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Photography/feed">
+			<img src="../static/rss-small.png" title="Photography RSS Feed" label="Photography RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Photography">Photography</a></span> (6)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Product Reviews/feed">
+			<img src="../static/rss-small.png" title="Product Reviews RSS Feed" label="Product Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Product Reviews">Product Reviews</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Programming/feed">
+			<img src="../static/rss-small.png" title="Programming RSS Feed" label="Programming RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Programming">Programming</a></span> (47)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Project Management/feed">
+			<img src="../static/rss-small.png" title="Project Management RSS Feed" label="Project Management RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Project Management">Project Management</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Python/feed">
+			<img src="../static/rss-small.png" title="Python RSS Feed" label="Python RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Python">Python</a></span> (43)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/REST/feed">
+			<img src="../static/rss-small.png" title="REST RSS Feed" label="REST RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/REST">REST</a></span> (5)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Rackspace/feed">
+			<img src="../static/rss-small.png" title="Rackspace RSS Feed" label="Rackspace RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Rackspace">Rackspace</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Raspberry Pi/feed">
+			<img src="../static/rss-small.png" title="Raspberry Pi RSS Feed" label="Raspberry Pi RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Raspberry Pi">Raspberry Pi</a></span> (6)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/RhinoSteady/feed">
+			<img src="../static/rss-small.png" title="RhinoSteady RSS Feed" label="RhinoSteady RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/RhinoSteady">RhinoSteady</a></span> (6)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Robotics/feed">
+			<img src="../static/rss-small.png" title="Robotics RSS Feed" label="Robotics RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Robotics">Robotics</a></span> (6)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Video/feed">
+			<img src="../static/rss-small.png" title="Video RSS Feed" label="Video RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Video">Video</a></span> (4)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Windows/feed">
+			<img src="../static/rss-small.png" title="Windows RSS Feed" label="Windows RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Windows">Windows</a></span> (1)
+	</li>
+
+</ul>
+                    
+                </div>
+            </div>
+            <div class="col-md-8 col-md-pull-4">
+                <div id="main">
+                    
+                    
+                    
+                    
+                    
+
+<div class="post">
+
+<p class="date"><span class="flask-moment" data-timestamp="2013-03-10T04:19:00Z" data-format="format('LL')" data-refresh="0">2013-03-10T04:19:00Z</span></p>
+<h1 class="post-title"><a href="the-flask-mega-tutorial-part-xvi-debugging-testing-and-profiling.html">The Flask Mega-Tutorial, Part XVI: Debugging, Testing and Profiling</a></h1>
+<div class="posted">Posted by <span class="label label-danger"><a href="http://blog.miguelgrinberg.com/author/Miguel Grinberg">Miguel Grinberg</a></span> under <span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Programming">Programming</a></span>, <span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Python">Python</a></span>, <span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Flask">Flask</a></span>. </div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xvi-debugging-testing-and-profiling" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xvi-debugging-testing-and-profiling" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="the-flask-mega-tutorial-part-xvi-debugging-testing-and-profiling.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xvi-debugging-testing-and-profiling" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+<div class="post_body"><p>This is the sixteenth article in the series in which I document my experience writing web applications in <a href="http://python.org/">Python</a> using the <a href="http://flask.pocoo.org/">Flask</a> microframework.</p>
+<p>The goal of the tutorial series is to develop a decently featured microblogging application that demonstrating total lack of originality I have decided to call <code>microblog</code>.</p>
+<p><strong>NOTE</strong>: This article was revised in September 2014 to be in sync with current versions of Python and Flask.</p>
+<p>Here is an index of all the articles in the series that have been published to date:</p>
+<ul>
+<li><a href="the-flask-mega-tutorial-part-i-hello-world.html">Part I: Hello, World!</a></li>
+<li><a href="the-flask-mega-tutorial-part-ii-templates.html">Part II: Templates</a></li>
+<li><a href="the-flask-mega-tutorial-part-iii-web-forms.html">Part III: Web Forms</a></li>
+<li><a href="the-flask-mega-tutorial-part-iv-database.html">Part IV: Database</a></li>
+<li><a href="the-flask-mega-tutorial-part-v-user-logins.html">Part V: User Logins</a></li>
+<li><a href="the-flask-mega-tutorial-part-vi-profile-page-and-avatars.html">Part VI: Profile Page And Avatars</a></li>
+<li><a href="the-flask-mega-tutorial-part-vii-unit-testing.html">Part VII: Unit Testing</a></li>
+<li><a href="the-flask-mega-tutorial-part-viii-followers-contacts-and-friends.html">Part VIII: Followers, Contacts And Friends</a></li>
+<li><a href="the-flask-mega-tutorial-part-ix-pagination.html">Part IX: Pagination</a></li>
+<li><a href="the-flask-mega-tutorial-part-x-full-text-search.html">Part X: Full Text Search</a></li>
+<li><a href="the-flask-mega-tutorial-part-xi-email-support.html">Part XI: Email Support</a></li>
+<li><a href="the-flask-mega-tutorial-part-xii-facelift.html">Part XII: Facelift</a></li>
+<li><a href="the-flask-mega-tutorial-part-xiii-dates-and-times.html">Part XIII: Dates and Times</a></li>
+<li><a href="the-flask-mega-tutorial-part-xiv-i18n-and-l10n.html">Part XIV: I18n, L10n</a></li>
+<li><a href="the-flask-mega-tutorial-part-xv-ajax.html">Part XV: Ajax</a></li>
+<li><a href="the-flask-mega-tutorial-part-xvi-debugging-testing-and-profiling.html">Part XVI: Debugging, Testing and Profiling</a> (this article)</li>
+<li><a href="the-flask-mega-tutorial-part-xvii-deployment-on-linux-even-on-the-raspberry-pi.html">Part XVII: Deployment on Linux (even on the Raspberry Pi!)</a></li>
+<li><a href="the-flask-mega-tutorial-part-xviii-deployment-on-the-heroku-cloud.html">Part XVIII: Deployment on the Heroku Cloud</a></li>
+</ul>
+<p>Our little <code>microblog</code> application is starting to feel decent enough for a release, so it is time to start thinking about cleaning things up as much as we can. Recently, a reader of this blog (Hi, George!) reported a strange database bug that we are going to debug today. This should help us realize that no matter how careful we are and how much we test our application there is a good chance we will miss some bugs. Unfortunately users are very good at finding them!</p>
+<p>Instead of just fixing this bug and forgetting about it until we come across another one, we are going to take some proactive measures to be better prepared for the next one.</p>
+<p>In the first part of this article we'll cover <em>debugging</em>, and I'll show you some techniques I use to debug tough problems.</p>
+<p>Later we will see how we can have an idea of how effective our testing strategy is. We will specifically look at measuring how much of our application our unit tests are exercising, something called <em>test coverage</em>.</p>
+<p>And finally, we will think about another type of problems that many applications can suffer from, bad performance. We will look at <em>profiling</em> techniques to find the parts of our application that are slow.</p>
+<p>Sounds good? Let's get started then.</p>
+<h2>The Bug</h2>
+<p>This problem was found by a reader of this blog, after he implemented a new function that allows users to delete their own posts. The official version of <code>microblog</code> does not have that, so we'll quickly put together this feature so that we can work on the bug.</p>
+<p>The view function that we will use to delete a post is below (file <code>app/views.py</code>):</p>
+<pre><code>@app.route('/delete/&lt;int:id&gt;')
+@login_required
+def delete(id):
+    post = Post.query.get(id)
+    if post is None:
+        flash('Post not found.')
+        return redirect(url_for('index'))
+    if post.author.id != g.user.id:
+        flash('You cannot delete this post.')
+        return redirect(url_for('index'))
+    db.session.delete(post)
+    db.session.commit()
+    flash('Your post has been deleted.')
+    return redirect(url_for('index'))
+</code></pre>
+<p>To invoke this function we will add a delete link on all posts that are authored by the logged in user (file <code>app/templates/post.html</code>):</p>
+<pre><code>{% if post.author.id == g.user.id %}
+&lt;div&gt;&lt;a href="{{ url_for('delete', id=post.id) }}"&gt;{{ _('Delete') }}&lt;/a&gt;&lt;/div&gt;
+{% endif %}
+</code></pre>
+<p>There is nothing earth shattering here, we've done this many times already. </p>
+<p><strong>NOTE</strong>: The bug discussed in this section only existed when using an old version of Flask-WhooshAlchemy. If you would like to experience the bug then uninstall the current version and then install version 0.54a of this extension.</p>
+<p>Now let's go ahead and start our application in production mode, to experience it like a regular user would. Linux and Mac users do it like this:</p>
+<pre><code>$ ./runp.py
+</code></pre>
+<p>Windows users do it like this instead:</p>
+<pre><code>flask/Scripts/python runp.py
+</code></pre>
+<p>Now as a user, write a post, then change your mind and delete it. And right when you click the delete link... Boom!</p>
+<p>We get a terse message that says that the application has encountered an error and that the administrator has been notified. This message is actually our <code>500.html</code> template. In production mode Flask issues the status code 500 template back to the client when an exception occurs while handling a request. Since we are now in production mode we will not see error messages or stack traces.</p>
+<h2>Debugging issues from the field</h2>
+<p>If you recall the <a href="the-flask-mega-tutorial-part-vii-unit-testing.html">unit testing</a> article, we enabled a couple of debugging services to run on the production version of our application. Back then we created a logger that writes to a log file, so that the application can write debugging or diagnostic information at run time. Flask itself writes the stack trace of any exceptions that aren't handled before ending the request with a code 500 error. As an extra option, we have also enabled an email based logger that will send the people in the admin list an email when an error is written to the log message.</p>
+<p>So for a bug like the one above we would get some debugging information captured in two places, the log file and an email sent to us.</p>
+<p>A stack trace isn't much to go on, but it's far better than nothing. Assuming we know nothing about the problem, we now need to figure out what happened from the stack trace alone. Here is a copy of this particular stack trace:</p>
+<pre><code>127.0.0.1 - - [03/Mar/2013 23:57:39] "GET /delete/12 HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/microblog/flask/lib/python2.7/site-packages/flask/app.py", line 1701, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/microblog/flask/lib/python2.7/site-packages/flask/app.py", line 1689, in wsgi_app
+    response = self.make_response(self.handle_exception(e))
+  File "/home/microblog/flask/lib/python2.7/site-packages/flask/app.py", line 1687, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/microblog/flask/lib/python2.7/site-packages/flask/app.py", line 1360, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/microblog/flask/lib/python2.7/site-packages/flask/app.py", line 1358, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/microblog/flask/lib/python2.7/site-packages/flask/app.py", line 1344, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/microblog/flask/lib/python2.7/site-packages/flask_login.py", line 496, in decorated_view
+    return fn(*args, **kwargs)
+  File "/home/microblog/app/views.py", line 195, in delete
+    db.session.delete(post)
+  File "/home/microblog/flask/lib/python2.7/site-packages/sqlalchemy/orm/scoping.py", line 114, in do
+    return getattr(self.registry(), name)(*args, **kwargs)
+  File "/home/microblog/flask/lib/python2.7/site-packages/sqlalchemy/orm/session.py", line 1400, in delete
+    self._attach(state)
+  File "/home/microblog/flask/lib/python2.7/site-packages/sqlalchemy/orm/session.py", line 1656, in _attach
+    state.session_id, self.hash_key))
+InvalidRequestError: Object '&lt;Post at 0xff35e7ac&gt;' is already attached to session '1' (this is '3')
+</code></pre>
+<p>If you are used to reading stack traces in other languages, then be aware that Python shows the stack traces in reverse order, with the bottom frame being the one that caused the exception.</p>
+<p>Now how do we make sense of this?</p>
+<p>From the above stack trace we can see that the exception was triggered from SQLAlchemy's session handling code, which is safe to assume from the <code>sqlalchemy/orm/session.py</code> filename in the bottom most frame.</p>
+<p>With stack traces it is always useful to find out what was the last statement in our own code that executed. If we start at the bottom and we go up one frame at a time we'll find that the fourth frame is in our <code>app/views.py</code>, more specifically in the <code>db.session.delete(post)</code> statement in our <code>delete()</code> view function.</p>
+<p>Now we know that SQLAlchemy is unable to register the deletion of this post in the database session. But we still don't know why.</p>
+<p>If you look at the text of the exception in the bottom most line of the stack trace the problem appears to be that the <code>Post</code> object is attached to a session <code>'1'</code> from before, and now we are trying to attach the same object to another session <code>'3'</code>.</p>
+<p>If you Google the exception message you will find that most people having issues with this are using a multithreaded web server, and they get two requests trying to add the same object to different sessions at the same time. But we are using Python's development web server which is single threaded, so that could not be our case. There is a different problem here that causes two sessions to be active at the same time, while there should only be one.</p>
+<p>To see if we can learn more about the problem we should try to reproduce the bug in a more controlled environment. Luckily, trying to do this in the development version of the application does reproduce, and this is a bit better because when the exception occurs in development mode we get Flask's web based stack trace instead of the <code>500.html</code> template.</p>
+<p>The web stack trace is nice because it allows you to inspect code and evaluate expressions all from the browser. Without really understanding much of what's going on in this code we know there is a session <code>'1'</code> (which we can assume is the first session ever created) that for some reason didn't get deleted like normal sessions do when the request that created them ends. So a good approach to make progress would be to figure out who is creating this first session that never goes away.</p>
+<h2>Using the Python Debugger</h2>
+<p>The easiest way to find out who is creating an object is to put a <em>breakpoint</em> in the object's constructor. A breakpoint is a command that interrupts the program when certain condition is met. At this point it is possible to inspect the program, like obtaining the stack trace at the time of interruption, checking or even changing variable values, etc. Breakpoints are one of the basic features found in <em>debuggers</em>. For this task we will use the debugger that comes with Python, appropriately called <code>pdb</code>.</p>
+<p>But what class are we looking for? Let's go back to the web based stack trace and look some more there. In the bottom most stack frame we can use the code viewer and the Python console (note the icons to enable these on the right side when you hover over the frame) to find out the class that is used for sessions. In the code pane we see that we are inside a <code>Session</code> class, which is likely the base class for database sessions in SQLAlchemy. Since the context in the bottom stack frame is inside the session object we can just get the actual class of the session in the console, by running:</p>
+<pre><code>&gt;&gt;&gt; print self
+&lt;flask_sqlalchemy._SignallingSession object at 0xff34914c&gt;
+</code></pre>
+<p>And now we know that the sessions that we are using are defined by Flask-SQLAlchemy, because likely this extension defines its own session class, which is a subclass of SQLAlchemy's <code>Session</code>.</p>
+<p>Now we can go and inspect the source code for the Flask-SQLAlchemy extension in <code>flask/lib/python2.7/site-packages/flask_sqlalchemy.py</code> and locate class <code>_SignallingSession</code> and its <code>__init__()</code> constructor, and now we are ready to play with the debugger.</p>
+<p>There is more than one way to insert a breakpoint in a Python application. The simplest one is to just write the following at the place we want the program to stop:</p>
+<pre><code>import pdb; pdb.set_trace()
+</code></pre>
+<p>So we'll go ahead and temporarily insert this breakpoint in the <code>_SignallingSession</code> class constructor (file <code>flask/lib/python2.7/site-packages/flask_sqlalchemy.py</code>):</p>
+<pre><code>class _SignallingSession(Session):
+
+    def __init__(self, db, autocommit=False, autoflush=False, **options):
+        import pdb; pdb.set_trace() # &lt;-- this is temporary!
+        self.app = db.get_app()
+        self._model_changes = {}
+        Session.__init__(self, autocommit=autocommit, autoflush=autoflush,
+                         extension=db.session_extensions,
+                         bind=db.engine,
+                         binds=db.get_binds(self.app), **options)
+
+    # ...
+</code></pre>
+<p>So let's run the application again to see what happens:</p>
+<pre><code>$ ./run.py
+&gt; /home/microblog/flask/lib/python2.7/site-packages/flask_sqlalchemy.py(198)__init__()
+-&gt; self.app = db.get_app()
+(Pdb)
+</code></pre>
+<p>Since there is no "Running on..." message printed we know the server didn't actually complete its start up procedures. The interruption that brought us to the <code>pdb</code> prompt occurred because in some part of the application someone requested the creation of our mysterious session!</p>
+<p>The most important question that we need to answer right now is where are we in the application, because that will tell us who is requesting the creation of this session <code>'1'</code> we can't get rid of later. We will use the <code>bt</code> command (short for backtrace) to get a stack trace:</p>
+<pre><code>(Pdb) bt
+  /home/microblog/run.py(2)&lt;module&gt;()
+-&gt; from app import app
+  /home/microblog/app/__init__.py(44)&lt;module&gt;()
+-&gt; from app import views, models
+  /home/microblog/app/views.py(6)&lt;module&gt;()
+-&gt; from forms import LoginForm, EditForm, PostForm, SearchForm
+  /home/microblog/app/forms.py(4)&lt;module&gt;()
+-&gt; from app.models import User
+  /home/microblog/app/models.py(92)&lt;module&gt;()
+-&gt; whooshalchemy.whoosh_index(app, Post)
+  /home/microblog/flask/lib/python2.6/site-packages/flask_whooshalchemy.py(168)whoosh_index()
+-&gt; _create_index(app, model))
+  /home/microblog/flask/lib/python2.6/site-packages/flask_whooshalchemy.py(199)_create_index()
+-&gt; model.query = _QueryProxy(model.query, primary_key,
+  /home/microblog/flask/lib/python2.6/site-packages/flask_sqlalchemy.py(397)__get__()
+-&gt; return type.query_class(mapper, session=self.sa.session())
+  /home/microblog/flask/lib/python2.6/site-packages/sqlalchemy/orm/scoping.py(54)__call__()
+-&gt; return self.registry()
+  /home/microblog/flask/lib/python2.6/site-packages/sqlalchemy/util/_collections.py(852)__call__()
+-&gt; return self.registry.setdefault(key, self.createfunc())
+&gt; /home/microblog/flask/lib/python2.6/site-packages/flask_sqlalchemy.py(198)__init__()
+-&gt; self.app = db.get_app()
+(Pdb)
+</code></pre>
+<p>As we did before, we start from the bottom and locate the first stack frame that has code that we recognize as ours. That turns out to be our <code>models.py</code> file at line 92, which is the initialization of our full text search engine:</p>
+<pre><code>whooshalchemy.whoosh_index(app, Post)
+</code></pre>
+<p>Hmm. We are not doing anything intentional that would trigger the creation of a database session this early in the application's life, but it appears that the act of initializing Flask-WhooshAlchemy does create a database session.</p>
+<p>This feels like this isn't our bug after all, maybe some sort of interaction between the two Flask extensions that wrap SQLAlchemy and Whoosh. We could stop here and ask for help from the developers of these two fine extensions or the communities around them. Or we could continue debugging to see if we can figure this out and have the problem solved today. I'll keep going, if you are bored already feel free to jump to the next section.</p>
+<p>Let's have another look at the stack trace. We call <code>whoosh_index()</code>, which in turn calls <code>_create_index()</code>. The line of code in <code>_create_index()</code> is this:</p>
+<pre><code>model.query = _QueryProxy(model.query, primary_key,
+            searcher, model)
+</code></pre>
+<p>The <code>model</code> variable in this context is set to our <code>Post</code> class, we passed it as an argument in our call to <code>whoosh_index()</code>. With that in mind, it appears Flask-WhooshAlchemy is creating a <code>Post.query</code> wrapper that takes the original <code>Post.query</code> as an argument, plus some other Whoosh specific stuff. And here is the interesting part. According to the stack trace above, the next function in the call stack is <code>__get__()</code>, one of Python's <a href="http://docs.python.org/2/howto/descriptor.html">descriptor methods</a>.</p>
+<p>The <code>__get__()</code> method is used to implement descriptors, which are attributes that have behavior associated with them instead of just a value. Each time the descriptor is referenced the function <code>__get__()</code> is called. Then the function is supposed to return the value of the attribute. The only attribute that is mentioned in this line of code is <code>query</code>, so now we know that this seemingly simple attribute that we have used in the past to generate our database queries isn't really an attribute but a descriptor. The remainder of the stack trace then is dealing with computing the value of the <code>model.query</code> expression that appears in the right side, in preparation of creating the <code>_QueryProxy</code> constructor.</p>
+<p>Let's continue down the stack trace to see what happens next. The instruction in <code>__get__()</code> is this one:</p>
+<pre><code>return type.query_class(mapper, session=self.sa.session())
+</code></pre>
+<p>And this is a pretty revealing piece of code. When we say, for example, <code>User.query.get(id)</code> we are indirectly calling this <code>__get__()</code> method to provide the query object, and here we can see that this query object implicitly brings a database session along with it!</p>
+<p>When Flask-WhooshAlchemy says <code>model.query</code> that also triggers a session to be created and associated with the query object. But the query object that Flask-WhooshAlchemy requests isn't short lived like any normal queries we run inside our view functions. Flask-WhooshAlchemy is wrapping this query object into its own query object, which it then stores back into <code>model.query</code>. Since there is no <code>__set__()</code> method counterpart, the new object will be stored as an attribute. For our <code>Post</code> class that means that after Flask-WhooshAlchemy completes its initialization we will have a descriptor and an attribute with the same name. According to the precedence rules, in this case the attribute wins, which is expected, since if not our Whoosh searches would not have worked.</p>
+<p>The important aspect of all this is that this code is setting a persistent attribute that inside has our session <code>'1'</code>. Even though the first request handled by the application will use this session and then forget about it, the session does not go away because it is still referenced by the <code>Post.query</code> attribute. This is our bug!</p>
+<p>The bug is caused by the confusing (my opinion) nature of descriptors. They look like regular attributes, so people tend to use them as such. The Flask-WhooshAlchemy developer just wanted to create an enhanced query object that can store some state useful for Whoosh queries, but didn't realize that referencing the <code>query</code> attribute of a model does way more than it seems, as there is hidden behavior associated with this attribute that starts a database session.</p>
+<h2>Regression Testing</h2>
+<p>For many, the most logical thing to do at this point would be to fix the Flask-WhooshAlchemy code and move on. But if we just do that, then what protects us from this or a similar bug happening in the future? For example, what happens if a year from now we decide to update Flask-WhooshAlchemy to a new version and forget that we had applied a custom fix to it?</p>
+<p>The best option every time a bug is discovered is to create a unit test for it, so that we can make sure we don't have a <em>regression</em> in the future.</p>
+<p>There is some trickiness in creating a test for this bug, as we need to simulate two requests inside a single test. The first request will query a Post object, simulating the query that we make to request data for displaying in the web page. Since this is the first query it will use the session <code>'1'</code>. Then we need to forget that session and make a new one, exactly like Flask-SQLAlchemy does. Trying to delete the Post object on the second session should trigger this bug, because the first session would not have gone away as expected.</p>
+<p>After taking another peek at the source code for Flask-SQLAlchemy we can see that new sessions are created using the <code>db.create_scoped_session()</code> function, and when a request ends a session is destroyed by calling <code>db.session.remove()</code>. Knowing this makes it easy to write a test for this bug:</p>
+<pre><code>def test_delete_post(self):
+    # create a user and a post
+    u = User(nickname='john', email='john@example.com')
+    p = Post(body='test post', author=u, timestamp=datetime.utcnow())
+    db.session.add(u)
+    db.session.add(p)
+    db.session.commit()
+    # query the post and destroy the session
+    p = Post.query.get(1)
+    db.session.remove()
+    # delete the post using a new session
+    db.session = db.create_scoped_session()
+    db.session.delete(p)
+    db.session.commit()
+</code></pre>
+<p>And sure enough, now when we run our test suite the failure appears:</p>
+<pre><code>$ ./tests.py
+.E....
+======================================================================
+ERROR: test_delete_post (__main__.TestCase)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "./tests.py", line 133, in test_delete_post
+    db.session.delete(p)
+  File "/home/microblog/flask/lib/python2.7/site-packages/sqlalchemy/orm/scoping.py", line 114, in do
+    return getattr(self.registry(), name)(*args, **kwargs)
+  File "/home/microblog/flask/lib/python2.7/site-packages/sqlalchemy/orm/session.py", line 1400, in delete
+    self._attach(state)
+  File "/home/microblog/flask/lib/python2.7/site-packages/sqlalchemy/orm/session.py", line 1656, in _attach
+    state.session_id, self.hash_key))
+InvalidRequestError: Object '&lt;Post at 0xff09b7ac&gt;' is already attached to session '1' (this is '3')
+
+----------------------------------------------------------------------
+Ran 6 tests in 3.852s
+
+FAILED (errors=1)
+</code></pre>
+<h2>The Fix</h2>
+<p>To address this problem we need to find an alternative way of attaching Flask-WhooshAlchemy's query object to the model.</p>
+<p>The documentation for Flask-SQLAlchemy mentions there is a <a href="http://pythonhosted.org/Flask-SQLAlchemy/api.html#flask.ext.sqlalchemy.Model.query_class">model.query_class</a> attribute that contains the class to use for queries. This is actually a much cleaner way to make Flask-SQLAlchemy use a custom query class than what Flask-WhooshAlchemy is doing. If we configure Flask-SQLAlchemy to create queries using the Whoosh enabled query class (which is already a subclass of Flask-SQLAlchemy's <code>BaseQuery</code>), then we should have the same result as before, but without the bug.</p>
+<p>I have created a fork of the Flask-WhooshAlchemy project on github where I have implemented these changes. If you want to see the changes you can see the <a href="https://github.com/miguelgrinberg/Flask-WhooshAlchemy/commit/1e17350ea600e247c0094cfa4ae7145f08f4c4a3">github diff</a> for my commit, or you can also <a href="https://raw.github.com/miguelgrinberg/Flask-WhooshAlchemy/1e17350ea600e247c0094cfa4ae7145f08f4c4a3/flask_whooshalchemy.py">download the fixed extension</a> and install it in place of your original <code>flask_whooshalchemy.py</code> file.</p>
+<p>I have submitted my fix to the developer of Flask-WhooshAlchemy, so I hope at some point it will get included in an official version (Update: my fix has been included in version 0.56).</p>
+<h2>Test Coverage</h2>
+<p>One way we can greatly reduce the chances of having bugs after we deploy our application is to have a comprehensive test suite. We already have a unit testing framework, but how do we know how much of our application are we currently testing with it?</p>
+<p>A <em>test coverage</em> tool can observe a running application and take note of which lines of code execute and which do not. After execution ends it can produce a report showing what lines have not executed. If we had such report for our test suite we would know right away what parts of our code need tests that exercise them.</p>
+<p>Python has a coverage tool that we can use called simply <a href="http://nedbatchelder.com/code/coverage/">coverage</a> that we installed way back when we started this tutorial. This tool can be used as a command line tool or can also be started from inside a script. To make it easier to not forget to run it we will go with the latter.</p>
+<p>These are the changes that we need to make to add a coverage report to our test suite (file <code>tests.py</code>):</p>
+<pre><code>from coverage import coverage
+cov = coverage(branch=True, omit=['flask/*', 'tests.py'])
+cov.start()
+
+# ...
+
+if __name__ == '__main__':
+    try:
+        unittest.main()
+    except:
+        pass
+    cov.stop()
+    cov.save()
+    print("\n\nCoverage Report:\n")
+    cov.report()
+    print("HTML version: " + os.path.join(basedir, "tmp/coverage/index.html"))
+    cov.html_report(directory='tmp/coverage')
+    cov.erase()
+</code></pre>
+<p>We begin by initializing the <code>coverage</code> module at the very top of the script. The <code>branch = True</code> argument requests that branch analysis is done in addition to regular line based coverage. The <code>omit</code> argument makes sure we do not get coverage report for the modules we have installed in our virtual environment and for the unit testing framework itself, we just want coverage for our application code.</p>
+<p>To gather coverage statistics we just call <code>cov.start()</code>, then run our unit tests. We have to catch and pass exceptions from the unit testing framework, because if not the script would end without giving us a chance to produce a coverage report. After we are back from the testing we stop coverage with <code>cov.stop()</code>, and write the results with <code>cov.save()</code>. Finally, <code>cov.report()</code> dumps the data to the console, <code>cov.html_report()</code> generates a nicer HTML report with the same date, and <code>cov.erase()</code> deletes the data file.</p>
+<p>Here is an example test run with coverage report included (note I left an intentional failure in there):</p>
+<pre><code>$ ./tests.py
+.....F
+    ======================================================================
+FAIL: test_translation (__main__.TestCase)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "./tests.py", line 143, in test_translation
+    assert microsoft_translate(u'English', 'en', 'es') == u'Inglés'
+AssertionError
+
+----------------------------------------------------------------------
+Ran 6 tests in 3.981s
+
+FAILED (failures=1)
+
+
+Coverage Report:
+
+Name             Stmts   Miss Branch BrMiss  Cover   Missing
+------------------------------------------------------------
+app/__init__        39      0      6      3    93%
+app/decorators       6      2      0      0    67%   5-6
+app/emails          14      6      0      0    57%   9, 12-15, 21
+app/forms           30     14      8      8    42%   15-16, 19-30
+app/models          63      8     10      1    88%   32, 37, 47, 50, 53, 56, 78, 90
+app/momentjs        12      5      0      0    58%   5, 8, 11, 14, 17
+app/translate       33     24      4      3    27%   10-36, 39-56
+app/views          169    124     46     46    21%   16, 20, 24-30, 34-37, 41, 45-46, 53-67, 75-81, 88-109, 113-114, 120-125, 132-143, 149-164, 169-183, 188-198, 203-205, 210-211, 218
+config              22      0      0      0   100%
+------------------------------------------------------------
+TOTAL              388    183     74     61    47%
+
+HTML version: /home/microblog/tmp/coverage/index.html
+</code></pre>
+<p>With this report we know that we are testing 47% of our application. And we are given the list of lines that didn't execute during the test run, so we just need to review those lines and think about what tests we can write that use them.</p>
+<p>We can see that our coverage for <code>app/models.py</code> is pretty high (88%), since we have mostly focused on testing our models. The <code>app/views.py</code> coverage is pretty low (21%) because we aren't executing view function code in our tests yet.</p>
+<p>In addition to lines of code that were missed, this tool gives us <em>branch coverage</em> information in the Branch and BrMiss columns. Consider the following example script:</p>
+<pre><code>def f(x):
+    if x &gt;= 0:
+        x = x + 1
+    return x
+
+f(1)
+</code></pre>
+<p>If we run coverage in this simple function we will get 100% coverage, because when the function gets <code>1</code> as an argument its three lines execute. But we have never executed this function with the argument set to 0 or less, and that causes a different behavior. In a more complex case that could cause a bug.</p>
+<p>Branch coverage tells us how many branches of code we have missed, and this is another pointer to the kinds of tests we might be missing in our suite.</p>
+<p>The coverage tool also generates a very nice HTML based report that displays the source code annotated with color coded markers for line and branches covered and missed.</p>
+<p>Continuing with our testing strategy centered in testing the models we can look at the parts of our <code>app/models.py</code> file that have no test coverage. This is easy to visualize in the HTML report, from where we can obtain the following list:</p>
+<ul>
+<li><code>User.make_valid_nickname()</code></li>
+<li><code>User.is_authenticated()</code></li>
+<li><code>User.is_active()</code></li>
+<li><code>User.is_anonymous()</code></li>
+<li><code>User.get_id()</code></li>
+<li><code>User.__repr__()</code></li>
+<li><code>Post.__repr__()</code></li>
+<li><code>User.make_unique_nickname()</code> (only for the branch case where the given name is already unique)</li>
+</ul>
+<p>We can put the first five in the list in a new test:</p>
+<pre><code>def test_user(self):
+    # make valid nicknames
+    n = User.make_valid_nickname('John_123')
+    assert n == 'John_123'
+    n = User.make_valid_nickname('John_[123]\n')
+    assert n == 'John_123'
+    # create a user
+    u = User(nickname='john', email='john@example.com')
+    db.session.add(u)
+    db.session.commit()
+    assert u.is_authenticated() is True
+    assert u.is_active() is True
+    assert u.is_anonymous() is False
+    assert u.id == int(u.get_id())
+</code></pre>
+<p>The <code>__repr__()</code> functions are really used internally, so we don't need to test them. For this, we can mark them as not interesting as follows:</p>
+<pre><code>def __repr__(self):  # pragma: no cover
+    return '&lt;User %r&gt;' % (self.nickname)
+</code></pre>
+<p>Finally, back when we wrote the test for <code>make_unique_nickname()</code> we focused only on how the function resolves a name collision, but we forgot to provide a test case that is unique and requires no handling. We can expand our existing test to cover that case as well:</p>
+<pre><code>def test_make_unique_nickname(self):
+    # create a user and write it to the database
+    u = User(nickname='john', email='john@example.com')
+    db.session.add(u)
+    db.session.commit()
+    nickname = User.make_unique_nickname('susan')
+    assert nickname == 'susan'
+    nickname = User.make_unique_nickname('john')
+    assert nickname != 'john'
+    #...
+</code></pre>
+<p>And with these simple changes we get to almost 100% coverage on our <code>models.py</code> source file. When running on Python 2.7 there are only two Python 3 specific lines of code that are missed.</p>
+<p>For now we'll call it good. Some other day we may decide to pick this up again and figure out a good way to test view functions, but we should feel good that we have full coverage on the code that talks to the database.</p>
+<h2>Profiling for performance</h2>
+<p>The next topic of the day is performance. There is nothing more frustrating for users than having to wait a long time for pages to load. We want to make sure our application is as fast as it can be so we need to take some measures to be prepared to analyze performance problems.</p>
+<p>The technique that we are going to use is called <code>profiling</code>. A code profiler watches a running program, pretty much like coverage tools do, but instead of noting which lines execute and which don't it notes how much time is spent on each function. At the end of the profiling period a report is generated that lists all the functions that executed and how long was spent in each. Sorting this list from the largest to the smallest time will give us a pretty good idea of where we should spend time optimizing code.</p>
+<p>Python comes with a nice source code profiler called <a href="http://docs.python.org/2/library/profile.html">cProfile</a>. We could embed this profiler into our application directly, but before we do any work it is a good idea to search if someone has done the integration work already. A quick search for "Flask profiler" tells us that the Werkzeug module used by Flask comes with a profiler plugin that is all ready to go, so we'll just use that.</p>
+<p>To enable the Werkzeug profiler we can create another starter script like <code>run.py</code>. Let's call it <code>profile.py</code>:</p>
+<pre><code>#!flask/bin/python
+from werkzeug.contrib.profiler import ProfilerMiddleware
+from app import app
+
+app.config['PROFILE'] = True
+app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=[30])
+app.run(debug = True)
+</code></pre>
+<p>Starting the application with the above script will enable the profiler to show the 30 most expensive functions for each request (the syntax for the <code>restrictions</code> argument is documented <a href="http://docs.python.org/dev/library/profile.html#pstats.Stats.print_stats">here</a>).</p>
+<p>Once the application starts, each request will show a profiler summary. Here is an example:</p>
+<pre><code>--------------------------------------------------------------------------------
+PATH: '/'
+         95477 function calls (89364 primitive calls) in 0.202 seconds
+
+   Ordered by: internal time, call count
+   List reduced from 1587 to 30 due to restriction &lt;30&gt;
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.061    0.061    0.061    0.061 {method 'commit' of 'sqlite3.Connection' objects}
+        1    0.013    0.013    0.018    0.018 flask/lib/python2.7/site-packages/sqlalchemy/dialects/sqlite/pysqlite.py:278(dbapi)
+    16807    0.006    0.000    0.006    0.000 {isinstance}
+     5053    0.006    0.000    0.012    0.000 flask/lib/python2.7/site-packages/jinja2/nodes.py:163(iter_child_nodes)
+8746/8733    0.005    0.000    0.005    0.000 {getattr}
+      817    0.004    0.000    0.011    0.000 flask/lib/python2.7/site-packages/jinja2/lexer.py:548(tokeniter)
+        1    0.004    0.004    0.004    0.004 /usr/lib/python2.7/sqlite3/dbapi2.py:24(&lt;module&gt;)
+        4    0.004    0.001    0.015    0.004 {__import__}
+        1    0.004    0.004    0.009    0.009 flask/lib/python2.7/site-packages/sqlalchemy/dialects/sqlite/__init__.py:7(&lt;module&gt;)
+   1808/8    0.003    0.000    0.033    0.004 flask/lib/python2.7/site-packages/jinja2/visitor.py:34(visit)
+     9013    0.003    0.000    0.005    0.000 flask/lib/python2.7/site-packages/jinja2/nodes.py:147(iter_fields)
+     2822    0.003    0.000    0.003    0.000 {method 'match' of '_sre.SRE_Pattern' objects}
+      738    0.003    0.000    0.003    0.000 {method 'split' of 'str' objects}
+     1808    0.003    0.000    0.006    0.000 flask/lib/python2.7/site-packages/jinja2/visitor.py:26(get_visitor)
+     2862    0.003    0.000    0.003    0.000 {method 'append' of 'list' objects}
+  110/106    0.002    0.000    0.008    0.000 flask/lib/python2.7/site-packages/jinja2/parser.py:544(parse_primary)
+       11    0.002    0.000    0.002    0.000 {posix.stat}
+        5    0.002    0.000    0.010    0.002 flask/lib/python2.7/site-packages/sqlalchemy/engine/base.py:1549(_execute_clauseelement)
+        1    0.002    0.002    0.004    0.004 flask/lib/python2.7/site-packages/sqlalchemy/dialects/sqlite/base.py:124(&lt;module&gt;)
+  1229/36    0.002    0.000    0.008    0.000 flask/lib/python2.7/site-packages/jinja2/nodes.py:183(find_all)
+    416/4    0.002    0.000    0.006    0.002 flask/lib/python2.7/site-packages/jinja2/visitor.py:58(generic_visit)
+   101/10    0.002    0.000    0.003    0.000 flask/lib/python2.7/sre_compile.py:32(_compile)
+       15    0.002    0.000    0.003    0.000 flask/lib/python2.7/site-packages/sqlalchemy/schema.py:1094(_make_proxy)
+        8    0.002    0.000    0.002    0.000 {method 'execute' of 'sqlite3.Cursor' objects}
+        1    0.002    0.002    0.002    0.002 flask/lib/python2.7/encodings/base64_codec.py:8(&lt;module&gt;)
+        2    0.002    0.001    0.002    0.001 {method 'close' of 'sqlite3.Connection' objects}
+        1    0.001    0.001    0.001    0.001 flask/lib/python2.7/site-packages/sqlalchemy/dialects/sqlite/pysqlite.py:215(&lt;module&gt;)
+        2    0.001    0.001    0.002    0.001 flask/lib/python2.7/site-packages/wtforms/form.py:162(__call__)
+      980    0.001    0.000    0.001    0.000 {id}
+  936/127    0.001    0.000    0.008    0.000 flask/lib/python2.7/site-packages/jinja2/visitor.py:41(generic_visit)
+
+
+--------------------------------------------------------------------------------
+
+127.0.0.1 - - [09/Mar/2013 19:35:49] "GET / HTTP/1.1" 200 -
+</code></pre>
+<p>The columns in this report are as follows:</p>
+<ul>
+<li><strong>ncalls</strong>: number of times this function was called.</li>
+<li><strong>tottime</strong>: total time spent inside this function.</li>
+<li><strong>percall</strong>: this is tottime divided by ncalls.</li>
+<li><strong>cumtime</strong>: total time spent inside this function and any functions called from it.</li>
+<li><strong>percall</strong>: cumtime divided by ncalls.</li>
+<li><strong>filename:lineno(function)</strong>: the function name and location.</li>
+</ul>
+<p>It is interesting to note that our templates will also appear here as functions. This is because Jinja2 templates are compiled to Python code. That means that the profiler will not only point us to slow code we have written but also to slow templates!</p>
+<p>We really don't have a performance problem at this point, at least not in this one request. We can see that the most time consuming functions are related to the sqlite3 database and Jinja2 template rendering, which is totally expected. Note in the header at the top that the this request took just 0.2 seconds to complete, so the scale of these per-function times is so small that it is in the noise.</p>
+<p>As the application grows, it is useful to run new requests we add through the profiler, to make sure we are not doing anything that is slow. </p>
+<h2>Database Performance</h2>
+<p>To end this article, we are going to look at database performance. We've seen above that our database handling is at the top of the profiler report, so it would be good to have a system in place to get an alert when and if our database becomes too slow during production use.</p>
+<p>The Flask-SQLAlchemy documentation mentions a <a href="http://pythonhosted.org/Flask-SQLAlchemy/api.html#flask.ext.sqlalchemy.get_debug_queries">get_debug_queries</a> function, which returns a list of all the queries issued during the request with their durations.</p>
+<p>This is very useful information. The intended use appears to be to time queries during debugging or testing, but being able to send an alert when a query takes too long is useful as a feature for the production version, even if it adds a little bit of overhead.</p>
+<p>To use this feature during production we need to enable it in the configuration (file <code>config.py</code>):</p>
+<pre><code>SQLALCHEMY_RECORD_QUERIES = True
+</code></pre>
+<p>We are also going to setup a threshold for what we will consider a slow query (file <code>config.py</code>):</p>
+<pre><code># slow database query threshold (in seconds)
+DATABASE_QUERY_TIMEOUT = 0.5
+</code></pre>
+<p>To check if we need to send any alerts we'll add a hook after each request. In Flask this is easy, we just set up a <code>after_request</code> handler (file <code>app/views.py</code>):</p>
+<pre><code>from flask.ext.sqlalchemy import get_debug_queries
+from config import DATABASE_QUERY_TIMEOUT
+
+@app.after_request
+def after_request(response):
+    for query in get_debug_queries():
+        if query.duration &gt;= DATABASE_QUERY_TIMEOUT:
+            app.logger.warning("SLOW QUERY: %s\nParameters: %s\nDuration: %fs\nContext: %s\n" % (query.statement, query.parameters, query.duration, query.context))
+    return response
+</code></pre>
+<p>This will write to the log any queries that took longer than half a second. The information in the log will include the SQL statement, the actual parameters used in that statement, the duration and the location in the sources from where the query was issued.</p>
+<p>With a small database like ours it is unlikely that we will have slow queries, but as the database and the application grow we may find that some database queries need to be optimized, for example with the addition of indexes. By simply checking the log file from time to time we will learn if some of the queries we are issuing need optimization.</p>
+<h2>Final words</h2>
+<p>Today we have done a number of mundane, yet important things all robust applications must have. The code for the updated application can be downloaded below:</p>
+<p>Download <a href="https://codeload.github.com/miguelgrinberg/microblog/zip/version-0.16">microblog-0.16.zip</a>.</p>
+<p>Users comfortable with github can also get the code from <a href="https://github.com/miguelgrinberg/microblog/tree/version-0.16">here</a>.</p>
+<p>It feels like we are reaching the end of this tutorial series, as I'm running out of ideas for what to present. In the next, possibly last chapter we will look at deployment options, both traditional and cloud based. </p>
+<p>If you have any topics that you feel have not been given coverage in this tutorial please let me know in the comments below.</p>
+<p>I hope to see you next time!</p>
+<p>Miguel</p></div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xvi-debugging-testing-and-profiling" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xvi-debugging-testing-and-profiling" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="the-flask-mega-tutorial-part-xvi-debugging-testing-and-profiling.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xvi-debugging-testing-and-profiling" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+
+
+<h4 style="text-align: right"><a name="comments"></a>48 comments</h4>
+
+
+<div class="comment">
+    <ul>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/a717bd282a6648e3852e3a344517dcd3ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#1</span> <span class="label label-primary">Slarti</span> said
+                    <span class="flask-moment" data-timestamp="2013-03-13T18:37:48Z" data-format="fromNow(0)" data-refresh="0">2013-03-13T18:37:48Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">This whole series has been wonderful. Great detail, clear explanations and examples.
+
+I&#39;m not sure how you&#39;re defining &#34;traditional,&#34; but when you go over deployments, please include something on packaging your app in a way that&#39;s friendly to the package management system and filesystem layout of the server it&#39;ll be running on in production. (RPM/deb/whatever, Linux FHS, etc.) Speaking as someone who&#39;s a systems admin by trade, I can&#39;t tell you how often and how badly I despair when developers treat tarballs or git checkouts into rathole subdirectories with their own self-contained locations for confs, logs, etc. like they&#39;re legitimate deployment strategies.
+
+(I also despair at how virtualenv and keeping local unmanaged copies of dependency modules (potentially leading to multiple copies of the same modules if more than one app lives on a system) is considered the done thing rather than solving the problem of properly integrating with the system-managed python, but I&#39;ve accepted that I might possibly have lost that fight. I&#39;ll accept considering the dependencies as part of the app settle for integration of the app as a whole into the system as a whole.)
+
+Thanks!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/6dcc85f5501798d6895335487c49df51ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#2</span> <span class="label label-primary">Jimmy Juno</span> said
+                    <span class="flask-moment" data-timestamp="2013-03-23T16:34:08Z" data-format="fromNow(0)" data-refresh="0">2013-03-23T16:34:08Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Coming from the C/C++ world, the pythonic debugging technique of modifying 3rd-party scripts to set breakpoints feels very risky.  I would suggest using pudb instead of pdb for debugging anyway -- it has a much nicer UI to pdb yet still runs in the console.
+
+Another great tutorial, Miguel.  I can&#39;t wait to read the one on deployment. :-)</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#3</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-03-23T17:34:59Z" data-format="fromNow(0)" data-refresh="0">2013-03-23T17:34:59Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Jimmy: Why do you think modifying 3rd party code is risky? I also come from a C/C++ world, but I learned not to take 3rd party code for granted, getting familiar with the libraries that you use enable you to understand their pluses and minuses better, and in fact, this bug I was chasing ended up being in a 3rd party library after all!  Now with that said, I was not aware of pudb, looks like a much nicer alternative to pdb and I&#39;ll definitely give it a try. Thanks!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/2c02c167f88ee80d03aa6d3b489ca935ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#4</span> <span class="label label-primary">George Mabley</span> said
+                    <span class="flask-moment" data-timestamp="2013-03-24T05:15:43Z" data-format="fromNow(0)" data-refresh="0">2013-03-24T05:15:43Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I have been looking at the capabilities of the extensions we have added so far, and I thought I should try out WTForm&#39;s recaptcha.  I modified my forms.py correctly and added a RecaptchaField as recaptcha.  I added my keys to the config.py,  and then called {{form.recaptcha}} in a template.  After the code hit {{form.recaptcha}}, this traceback was given: http://pastebin.com/1LVBcmMc.  The error was simply &#34;KeyError: &#39;babel&#39;.&#34;  Any suggestions as to what my problem is?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#5</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-03-24T05:28:44Z" data-format="fromNow(0)" data-refresh="0">2013-03-24T05:28:44Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@George: are you running your app without initializing Flask-Babel maybe? The recaptcha widget has internationalized texts in its template, it seems it&#39;s trying to get babel to translate a text and babel isn&#39;t there.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/2c02c167f88ee80d03aa6d3b489ca935ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#6</span> <span class="label label-primary">George Mabley</span> said
+                    <span class="flask-moment" data-timestamp="2013-03-24T16:38:11Z" data-format="fromNow(0)" data-refresh="0">2013-03-24T16:38:11Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">That was it.  Thank you!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/ccf35211b9e3a1f0026f33c3a881cd85ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#7</span> <span class="label label-primary">Aaron</span> said
+                    <span class="flask-moment" data-timestamp="2013-03-29T19:48:00Z" data-format="fromNow(0)" data-refresh="0">2013-03-29T19:48:00Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Did you cover caching anywhere? I see mention of it here, but can&#39;t find it in your tutorial:
+
+http://blog.miguelgrinberg.com/post/about-this-blog</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#8</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-03-30T01:30:23Z" data-format="fromNow(0)" data-refresh="0">2013-03-30T01:30:23Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Aaron: you are right, I never found a good excuse to talk about caching, since microblog is largely dynamic. The only place it would make sense to cache is at the post level, but posts are also pretty simple. I&#39;ll think about it and if I can come up with a good way to insert caching I&#39;ll write an article about it. Thanks!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/ccf35211b9e3a1f0026f33c3a881cd85ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#9</span> <span class="label label-primary">Aaron</span> said
+                    <span class="flask-moment" data-timestamp="2013-03-30T03:23:21Z" data-format="fromNow(0)" data-refresh="0">2013-03-30T03:23:21Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Oh, is the software referenced in the about post not the same as what you covered in this mega-tutorial?
+
+If the queries are so simple as to not need caching, it&#39;s a little curious that you covered slow query logging at the end  ;-)
+
+I&#39;ve been working on a project with some fairly slow queries here and there, and I&#39;ll have to get some caching in place soon. I just thought I ought to see if you&#39;d covered it, as your tutorial is among the best I&#39;ve seen for all the things you *do* cover... even though I&#39;m not a novice, it&#39;s helpful.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#10</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-03-30T05:10:46Z" data-format="fromNow(0)" data-refresh="0">2013-03-30T05:10:46Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Aaron: the software mentioned in the About page is this blog, it is not the subject of the tutorial. You find it a &#34;little curious&#34; that I don&#39;t cache my database queries because you are confused about the reasons for caching and how caching works. Caching is not a solution to fix slow queries, for that problem you improve your database design so that your queries run more efficiently. Caching only works for data that rarely changes, it would not work for an application like microblog, which as I said above, is dynamic and needs to show updated content constantly. On the other side, caching works great for a blog since articles rarely change and they are rendered exactly the same for all clients. My recommendation for your problem is that you learn about database optimization more than caching.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/6dcc85f5501798d6895335487c49df51ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#11</span> <span class="label label-primary">Jimmy Juno</span> said
+                    <span class="flask-moment" data-timestamp="2013-03-30T18:55:52Z" data-format="fromNow(0)" data-refresh="0">2013-03-30T18:55:52Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Miguel, my comments regarding the risk involved in editing source for breakpoints relate back to my own forgetfulness than anything else.  My experience in C++ shops was that vendor code was by policy kept read-only to protect against exactly that problem.  Anyway, time to let go of the past!
+
+Besides that, I&#39;m finding pudb difficult to use in the context with frequent crashes related to signals (which is a shame -- the pudb UI is rather nice).  I thereby now endorse your use of pdb as described in this tutorial. ;-)</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/2c0b6c9bf16b0793d29a13ad4f0f4b21ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#12</span> <span class="label label-primary">Albert Boehmler</span> said
+                    <span class="flask-moment" data-timestamp="2013-03-30T23:30:01Z" data-format="fromNow(0)" data-refresh="0">2013-03-30T23:30:01Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">This has been great so far! I&#39;ve got a couple of suggestions below...
+
+There are a couple of flask-bootstrap plugins that might simplify the bootstrap integration section (not that it was very complicated to begin with) - I&#39;d be interested in seeing if they would help with the bootstrap section of this tutorial. I&#39;ve had some luck with this one: https://github.com/mbr/flask-bootstrap
+
+Packaging the app for PyPI/the cheeseshop distribution would be another usefulthing  to learn - something in the vein of this: http://guide.python-distribute.org/creation.html</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/dfb54030d7ecb7f314447241508fa3fdce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#13</span> <span class="label label-primary">Cam</span> said
+                    <span class="flask-moment" data-timestamp="2013-04-03T06:26:43Z" data-format="fromNow(0)" data-refresh="0">2013-04-03T06:26:43Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I downloaded the latest version from both github &amp; zip files. Both report the same error when executing db_upgrade.py or db_create.py. e.g.:
+\db_create.py&#34;, line 2, in &lt;module&gt;
+    from migrate.versioning import api
+ImportError: No module named migrate.versioning</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#14</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-04-03T06:36:03Z" data-format="fromNow(0)" data-refresh="0">2013-04-03T06:36:03Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Cam: did you create a virtual environment and install all the required modules into it? You can either do it manually (see the first article in the series for that) or by running the setup.py script.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/42b8853d855ebee3961dca35bcc61a63ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#15</span> <span class="label label-primary">Rich</span> said
+                    <span class="flask-moment" data-timestamp="2013-04-03T11:15:23Z" data-format="fromNow(0)" data-refresh="0">2013-04-03T11:15:23Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I&#39;ve just inserted the deletion code for the first section of this article: &#34;The Bug&#34;. When I click a delete link in debug mode I get &#34;InvalidRequestError: Object &#39;&lt;Post at 0x3395350&gt;&#39; is already attached to session &#39;1&#39; (this is &#39;3&#39;)&#34;
+Out of debug mode the server just locks up. Any help would be appreciated.
+I&#39;ve been following your tutorial from the beginning. The only bit I skipped was the use of Babel and Ajax (although I read enough to be able to pick the relevant code out).</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/42b8853d855ebee3961dca35bcc61a63ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#16</span> <span class="label label-primary">Rich</span> said
+                    <span class="flask-moment" data-timestamp="2013-04-03T11:27:25Z" data-format="fromNow(0)" data-refresh="0">2013-04-03T11:27:25Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Ah maybe I should have continued reading before panicking. Sorry. I would like to know why my server locked up rather than the error handling kicking in though. </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#17</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-04-04T04:26:00Z" data-format="fromNow(0)" data-refresh="0">2013-04-04T04:26:00Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Rich: You need to explain better what you mean by &#34;locked up&#34;. Also, don&#39;t forget that in production mode any errors go to the log (written to the &#34;tmp&#34; folder if you are following my recommendations), so you can have some clues there.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/0264569f682177ca40d2673420a2ae1ece2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#18</span> <span class="label label-primary">Steven</span> said
+                    <span class="flask-moment" data-timestamp="2013-04-11T02:05:41Z" data-format="fromNow(0)" data-refresh="0">2013-04-11T02:05:41Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I know this is purely superficial but it&#39;s just nice to see a python tutorial that shows pictures of a Windows OS for a change. Aside from that it&#39;s also a great intro to flask.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/a83f52338dbe949c9a2564f70d1a5463ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#19</span> <span class="label label-primary">bwlee</span> said
+                    <span class="flask-moment" data-timestamp="2013-04-23T07:53:25Z" data-format="fromNow(0)" data-refresh="0">2013-04-23T07:53:25Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Great jobs! 
+It is very clear and interactive for those new to Flask.
+
+Thank you very much!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/710df24986d101585889d552bc038966ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#20</span> <span class="label label-primary">Marco N</span> said
+                    <span class="flask-moment" data-timestamp="2013-06-09T23:05:35Z" data-format="fromNow(0)" data-refresh="0">2013-06-09T23:05:35Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I just downloaded this, executed &#34;setup.py&#34; then &#34;db_create&#34; and then &#34;run.py&#34;. Everything seems to work fine until I want to post something or even check &#34;My profile&#34;. I get this &#34; AttributeError: class momentjs has no attribute &#39;__call__&#39; &#34;
+It only disappear if I delete the app.db and then create it again but the same error ocurrs if I want to do something again.
+Do you know what is going on?
+Ps. I loved your tutorial</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/c96a14d9115f4fb2fd8efca4e2a38b97ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#21</span> <span class="label label-primary">Arthur</span> said
+                    <span class="flask-moment" data-timestamp="2013-06-15T17:05:09Z" data-format="fromNow(0)" data-refresh="0">2013-06-15T17:05:09Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel, this is the greatest web development tutorial that I have ever found.  I have just recently gotten into web development, and this has been an incredible resource.  Keep up the good work.
+
+Small note, in the &#34;Database Performance&#34; section you don&#39;t mention to include this line in &#34;views.py&#34;:
+
+from flask.ext.sqlalchemy import get_debug_queries
+
+You have it in your code, you just don&#39;t mention it in the tutorial.
+
+Thanks again for all of your work, and I really hope you continue to put out articles.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#22</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-06-15T18:39:28Z" data-format="fromNow(0)" data-refresh="0">2013-06-15T18:39:28Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Arthur: Thanks. Correction made.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/c96a14d9115f4fb2fd8efca4e2a38b97ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#23</span> <span class="label label-primary">Arthur</span> said
+                    <span class="flask-moment" data-timestamp="2013-07-05T18:44:59Z" data-format="fromNow(0)" data-refresh="0">2013-07-05T18:44:59Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel,
+
+I have gone through all of your articles on this tutorial (great tutorial, by the way... it was incredibly helpful), and now I am trying to extend it to play around with using a GridView to show tabular data on one of the pages.  I found a grid control that I like (made by w2ui), and it expects data to be passed to it in JSON format.  I am having a bit of trouble passing JSON from Python to JavaScript, and I was hoping that you might have some clue what I am doing wrong... here is a rundown of what I&#39;ve tried so far:
+
+Within my &#39;view&#39; function, I originally tried passing &#39;user.posts.all()&#39; into my template.  I was able to iterate over each post by using Jinja2 templating directly in JavaScript, but I couldn&#39;t get it into anything that was readable by the grid control (i.e. it&#39;s not JSON).
+
+I tried using &#39;jsonify&#39; and &#39;json.dumps()&#39;... I had more luck with &#39;json.dumps()&#39;, since when I print the output of that to the terminal from my view function, it is a string which does actually look like JSON.  I think the problem though is that when I pass it over to my template, it can&#39;t translate a Python string into something it understands (if I check the type of string that I passed in, it is &#39;undefined&#39;).
+
+I&#39;ve tried using JSON.parse(posts), but it just isn&#39;t working.  I do know that JSON.parse() works on my browser though, since if I create a string within JavaScript and call JSON.parse() on that string, it works great.  It just can&#39;t parse the post JSON object that I&#39;m passing in.
+
+So from what I can tell, within Python I am able to get my data into JSON format, and then I am able to pass that over to my template.  Within my template, I know that I can parse JSON data as long as that data is from a string that was created inside the template itself.  The problem seems to be getting JavaScript to recognize the data that I have passed in as something that it can parse into JSON.
+
+I&#39;ve been struggling with this for longer than I care to admit, and am really hoping that you might have some insight into this.  Do you know what I&#39;m doing wrong?
+
+Thanks,
+Arthur</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#24</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-07-06T17:19:34Z" data-format="fromNow(0)" data-refresh="0">2013-07-06T17:19:34Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Arthur: first of all, note that the Jinja2 templates are 100% server side. Nothing from the template runs in the client. If you need to run Javascript code in the client then the template must generate the JS code all in the server. Your render_template would be something like this:
+
+    render_template(&#39;grid.html&#39;, records = jsonify(records))
+
+And then in your template:
+
+$(&#39;#grid&#39;).w2grid({
+    name: &#39;grid&#39;,
+    // ... other initialization here ...
+    records: {{ records }}
+});
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/18ec48ea975d23282376c87b81259190ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#25</span> <span class="label label-primary">Robin Siebler</span> said
+                    <span class="flask-moment" data-timestamp="2013-07-08T14:38:16Z" data-format="fromNow(0)" data-refresh="0">2013-07-08T14:38:16Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I don&#39;t know WHAT I did wrong, but suddenly I am getting this error (and I am using PyCharm as my IDE):
+
+C:\Users\robin\microblog\virtenv\Scripts\python.exe C:/Users/robin/microblog/run.py -d
+Traceback (most recent call last):
+  File &#34;C:/Users/robin/microblog/run.py&#34;, line 3, in &lt;module&gt;
+    from app import app
+  File &#34;C:\Users\robin\microblog\app\__init__.py&#34;, line 42, in &lt;module&gt;
+    from app import views, models
+  File &#34;C:\Users\robin\microblog\app\views.py&#34;, line 15, in &lt;module&gt;
+    from forms import LoginForm, EditForm, PostForm, SearchForm
+  File &#34;C:\Users\robin\microblog\app\forms.py&#34;, line 5, in &lt;module&gt;
+    from app.models import User
+  File &#34;C:\Users\robin\microblog\app\models.py&#34;, line 97, in &lt;module&gt;
+    whooshalchemy.whoosh_index(app, Post)  # what in the hell went wrong here?
+  File &#34;C:\Users\robin\microblog\virtenv\lib\site-packages\flask_whooshalchemy.py&#34;, line 165, in whoosh_index
+    _create_index(app, model))
+  File &#34;C:\Users\robin\microblog\virtenv\lib\site-packages\flask_whooshalchemy.py&#34;, line 187, in _create_index
+    if whoosh.index.exists_in(wi):
+  File &#34;C:\Users\robin\microblog\virtenv\lib\site-packages\whoosh\index.py&#34;, line 136, in exists_in
+    ix = open_dir(dirname, indexname=indexname)
+  File &#34;C:\Users\robin\microblog\virtenv\lib\site-packages\whoosh\index.py&#34;, line 123, in open_dir
+    return FileIndex(storage, schema=schema, indexname=indexname)
+  File &#34;C:\Users\robin\microblog\virtenv\lib\site-packages\whoosh\index.py&#34;, line 421, in __init__
+    TOC.read(self.storage, self.indexname, schema=self._schema)
+  File &#34;C:\Users\robin\microblog\virtenv\lib\site-packages\whoosh\index.py&#34;, line 656, in read
+    schema = pickle.loads(stream.read_string())
+ImportError: No module named pycharm_re
+</p>
+                </div>
+            </div>
+        </li>
+        
+    </ul>
+</div>
+
+<div class="page">
+<ul class="pager">
+  <li class="previous disabled">
+    <a href="#">&laquo;&laquo;</a>
+  </li>
+  <li class="previous disabled">
+    <a href="#">&laquo;</a>
+  </li>
+  <li class="next">
+    <a href="the-flask-mega-tutorial-part-xvi-debugging-testing-and-profiling/page/0.html#comments">&raquo;&raquo;</a>
+  </li>
+  <li class="next">
+    <a href="the-flask-mega-tutorial-part-xvi-debugging-testing-and-profiling/page/2.html#comments">&raquo;</a>
+  </li>
+</ul>
+</div>
+
+<h3><a name="commentform"></a>Leave a Comment</h3>
+
+<form action="#commentform" method="post"
+  class="form" role="form">
+  <div style="display:none;"><input id="csrf_token" name="csrf_token" type="hidden" value="1439534485.7##a9c52cf079289743bdbd159c9f26c5250c07e4d0"></div>
+  
+    
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="name">Name</label>
+        <input class="form-control" id="name" name="name" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="url">URL</label>
+        <input class="form-control" id="url" name="url" type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="email">Email</label>
+        <input class="form-control" id="email" name="email" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="comment">Comment</label>
+        <textarea class="form-control" id="comment" name="comment" required></textarea>
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="captcha">Captcha</label>
+        
+<script type="text/javascript">var RecaptchaOptions = {"custom_translations": {"audio_challenge": "Get an audio challenge", "cant_hear_this": "Download sound as MP3", "help_btn": "Help", "image_alt_text": "reCAPTCHA challenge image", "incorrect_try_again": "Incorrect. Try again.", "instructions_audio": "Type what you hear", "instructions_visual": "Type the text", "play_again": "Play sound again", "privacy_and_terms": "Privacy & Terms", "refresh_btn": "Get a new challenge", "visual_challenge": "Get a visual challenge"}, "theme": "white"};</script>
+<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S"></script>
+<noscript>
+  <iframe src="http://www.google.com/recaptcha/api/noscript?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S" height="300" width="500" frameborder="0"></iframe><br>
+  <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+  <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
+</noscript>
+
+  </div>
+
+
+    
+
+
+
+
+
+  
+
+
+    <input class="btn btn-default" id="submit" name="submit" type="submit" value="Submit">
+  
+
+
+
+
+
+</form>
+
+
+</div>
+
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <p class="elapsed">This page was generated in None seconds.</p>
+            <p>&copy; 2014 by Miguel Grinberg. All rights reserved. <a href="mailto:webmaster _at_ miguelgrinberg _dot_ com">Questions?</a></p>
+        </div>
+    </div>
+
+
+    
+    
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.33/jquery.colorbox-min.js"></script>
+    <script type="text/javascript" src="../static/prettify.js"></script>
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment-with-langs.min.js"></script>
+<script>
+function flask_moment_render(elem) {
+    $(elem).text(eval('moment("' + $(elem).data('timestamp') + '").' + $(elem).data('format') + ';'));
+    $(elem).removeClass('flask-moment');
+}
+function flask_moment_render_all() {
+    $('.flask-moment').each(function() {
+        flask_moment_render(this);
+        if ($(this).data('refresh')) {
+            (function(elem, interval) { setInterval(function() { flask_moment_render(elem) }, interval); })(this, $(this).data('refresh'));
+        }
+    })
+}
+$(document).ready(function() {
+    flask_moment_render_all();
+});
+</script>
+    
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4777284-15']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".gallery").colorbox({rel:".gallery",maxWidth:"95%",maxHeight:"95%",scalePhotos:true});
+            // add prettyprint class to all <pre><code></code></pre> blocks
+            var prettify = false;
+            $("pre code").parent().each(function() {
+                $(this).addClass('prettyprint');
+                prettify = true;
+            });
+            prettyPrint();
+        });
+    </script>
+
+
+  </body>
+
+<!-- Mirrored from blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xvi-debugging-testing-and-profiling by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 05:43:10 GMT -->
+</html>

@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+    
+<!-- Mirrored from learnpythonthehardway.org/book/ex49.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 03 Sep 2014 17:52:40 GMT -->
+<head>
+        <link href='stylesheets/fonts.css' rel='stylesheet' type='text/css'>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="twitter:creator" content="@lzsthw">
+        <title>Learn Python</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href='stylesheets/pure.css' rel='stylesheet'>
+        <link href='stylesheets/pygments.css' rel='stylesheet'>
+        <link href='stylesheets/main.css' rel='stylesheet'>
+        <link href='stylesheets/nav.css' rel='stylesheet'>
+        <style>
+        </style>
+ 
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.11: http://docutils.sourceforge.net/" />
+<title>Exercise 49: Making Sentences</title>
+    </head>
+    <body id='wrapper'>
+        <div class='master-logo-wrapper clearfix'>
+            <a href='index-2.html'>
+                <div class='python-logo-sprite'></div>
+            </a>
+                <span class='edition-3'><img src='images/3rd-edition-cloud.png' /></span>
+        </div><!-- /.master-logo-wrapper -->
+
+        <div style='clear: both;'>
+
+        <div id="main">
+            <div class='chapters-wrapper'>
+                  <nav id='chapters'>
+                      <div class='masthead-title'></div>
+                      <ul class='masthead'>
+                          <li>
+                              <a href='index.html'>
+                                  <div class='nav-tcontents'>
+                                      <img src='images/nav-contents.png' /></br>
+                                  main
+                                  </div>
+                              </a>
+                          </li>
+                          <li>
+                              <a href='#video'>
+                                  <div class='nav-play-video' id="#video_toggle_icon">
+                                      <img src='images/nav-play.png' /><br/>
+                                      play video
+                                      <div class='line-2'>(this chapter)</div>
+                                  </div>
+                              </a>
+                          </li>
+                          <li>
+                              <a href='#' id='prev_link'>
+                                  <div class='nav-previous'>
+                                      <img src='images/nav-previous.png' /></br>
+                                      previous
+                                  </div>
+                              </a>
+                          </li>
+                          <li>
+                              <a href='#' id='next_link'>
+                                  <div class='nav-next'>
+                                      <img src='images/nav-next.png' /></br>
+                                      next
+                                  </div>
+                              </a>
+                          </li>
+                          <li><!-- AMBULANCE ICON -->
+                              <a href='help.html' id=''>
+                                  <div class='ambulance'>
+                                      <img src='images/help-ambulance.png' /></br>
+                                      help
+                                  </div>
+                              </a>
+                          </li>
+                          <li id="follow">
+                                <a href="https://twitter.com/lzsthw" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false" data-dnt="true">Follow @lzsthw</a>
+                                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                           </li>
+
+                      </ul><!-- /.masthead -->
+                      <!--<img src='images/fa-bullhorn.png' />-->
+                  </nav><!-- /.chapters -->
+            </div><!-- /.chapters-wrapper -->
+
+        <!--- RST STARTS -->
+            <h1 class="title">Exercise 49: Making Sentences</h1>
+            <p>What we should be able to get from our little game lexicon scanner is a list that looks like this:</p>
+<div class="highlight"><pre><a name="python--ex49_pycon.py-idio-pycon-pyg.html-1"></a><span class="go">Python 2.7.1 (r271:86832, Jun 16 2011, 16:59:05) </span>
+<a name="python--ex49_pycon.py-idio-pycon-pyg.html-2"></a><span class="go">[GCC 4.2.1 (Based on Apple Inc. build 5658) (LLVM build 2335.15.00)] on darwin</span>
+<a name="python--ex49_pycon.py-idio-pycon-pyg.html-3"></a><span class="go">Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.</span>
+<a name="python--ex49_pycon.py-idio-pycon-pyg.html-4"></a><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">ex48</span> <span class="kn">import</span> <span class="n">lexicon</span>
+<a name="python--ex49_pycon.py-idio-pycon-pyg.html-5"></a><span class="gp">&gt;&gt;&gt; </span><span class="n">lexicon</span><span class="o">.</span><span class="n">scan</span><span class="p">(</span><span class="s">&quot;go north&quot;</span><span class="p">)</span>
+<a name="python--ex49_pycon.py-idio-pycon-pyg.html-6"></a><span class="go">[(&#39;verb&#39;, &#39;go&#39;), (&#39;direction&#39;, &#39;north&#39;)]</span>
+<a name="python--ex49_pycon.py-idio-pycon-pyg.html-7"></a><span class="gp">&gt;&gt;&gt; </span><span class="n">lexicon</span><span class="o">.</span><span class="n">scan</span><span class="p">(</span><span class="s">&quot;kill the princess&quot;</span><span class="p">)</span>
+<a name="python--ex49_pycon.py-idio-pycon-pyg.html-8"></a><span class="go">[(&#39;verb&#39;, &#39;kill&#39;), (&#39;stop&#39;, &#39;the&#39;), (&#39;noun&#39;, &#39;princess&#39;)]</span>
+<a name="python--ex49_pycon.py-idio-pycon-pyg.html-9"></a><span class="gp">&gt;&gt;&gt; </span><span class="n">lexicon</span><span class="o">.</span><span class="n">scan</span><span class="p">(</span><span class="s">&quot;eat the bear&quot;</span><span class="p">)</span>
+<a name="python--ex49_pycon.py-idio-pycon-pyg.html-10"></a><span class="go">[(&#39;verb&#39;, &#39;eat&#39;), (&#39;stop&#39;, &#39;the&#39;), (&#39;noun&#39;, &#39;bear&#39;)]</span>
+<a name="python--ex49_pycon.py-idio-pycon-pyg.html-11"></a><span class="gp">&gt;&gt;&gt; </span><span class="n">lexicon</span><span class="o">.</span><span class="n">scan</span><span class="p">(</span><span class="s">&quot;open the door and smack the bear in the nose&quot;</span><span class="p">)</span>
+<a name="python--ex49_pycon.py-idio-pycon-pyg.html-12"></a><span class="go">[(&#39;error&#39;, &#39;open&#39;), (&#39;stop&#39;, &#39;the&#39;), (&#39;error&#39;, &#39;door&#39;), (&#39;error&#39;, &#39;and&#39;), (&#39;error&#39;, &#39;smack&#39;), (&#39;stop&#39;, &#39;the&#39;), (&#39;noun&#39;, &#39;bear&#39;), (&#39;stop&#39;, &#39;in&#39;), (&#39;stop&#39;, &#39;the&#39;), (&#39;error&#39;, &#39;nose&#39;)]</span>
+</pre></div><p>Now let us turn this into something the game can work with, which would be some kind of <tt class="docutils literal">Sentence</tt> class.</p>
+<p>If you remember grade school, a sentence can be a simple structure like:</p>
+<blockquote>
+Subject Verb Object</blockquote>
+<p>Obviously it gets more complex than that, and you probably did many days of annoying sentence graphs for English class.  What we want is to turn the above lists of tuples into a nice Sentence object that has subject, verb, and object.</p>
+<div class="section" id="match-and-peek">
+<h1>Match and Peek</h1>
+<p>To do this we need four tools:</p>
+<ol class="arabic simple">
+<li>A way to loop through the list of scanned words.  That's easy.</li>
+<li>A way to &quot;match&quot; different types of tuples that we expect in our Subject Verb Object setup.</li>
+<li>A way to &quot;peek&quot; at a potential tuple so we can make some decisions.</li>
+<li>A way to &quot;skip&quot; things we do not care about, like stop words.</li>
+<li>A Sentence object to put the results in.</li>
+</ol>
+<p>We will be putting these functions in a module named <tt class="docutils literal">ex48.parser</tt> in a file named <tt class="docutils literal">ex48/parser.rb</tt> in order to test it.  We use the <tt class="docutils literal">peek</tt> function to say look at the next element in our tuple list, and then match to take one off and work with it.</p>
+</div>
+<div class="section" id="the-sentence-grammar">
+<h1>The Sentence Grammar</h1>
+<p>Before you can write the code you need to understand how a basic English sentence grammar works.  In our parser we want to produce a <tt class="docutils literal">Sentence</tt> object that has three attributes:</p>
+<dl class="docutils">
+<dt>Sentence.subject</dt>
+<dd>This is the subject of any sentence, but could default to &quot;player&quot; most of the time since a sentence of, &quot;run north&quot; is implying &quot;player run north&quot;.  This will be a noun.</dd>
+<dt>Sentence.verb</dt>
+<dd>This is the action of the sentence. In &quot;run north&quot; it would be &quot;run&quot;.  This will be a verb.</dd>
+<dt>Sentence.object</dt>
+<dd>This is another noun that refers to what the verb is done on.  In our game we separate out directions which would also be objects.  In &quot;run north&quot; the word &quot;north&quot; would be the object.  In &quot;hit bear&quot; the word &quot;bear&quot; would be the object.</dd>
+</dl>
+<p>Our parser then has to use the functions we described and given a scanned sentence, convert it into an <tt class="docutils literal">List</tt> of <tt class="docutils literal">Sentence</tt> objects to match the input.</p>
+</div>
+<div class="section" id="a-word-on-exceptions">
+<h1>A Word On Exceptions</h1>
+<p>You briefly learned about exceptions but not how to raise them.  This code demonstrates how to do that with the <tt class="docutils literal">ParserError</tt> at the top.  Notice that it uses classes to give it the type of <tt class="docutils literal">Exception</tt>.  Also notice the use of the <tt class="docutils literal">raise</tt> keyword to raise the exception.</p>
+<p>In your tests, you will want to work with these exceptions, which I'll show you how to do.</p>
+</div>
+<div class="section" id="the-parser-code">
+<h1>The Parser Code</h1>
+<p>If you want an extra challenge, stop right now and try to write this based on just my description.  If you get stuck you can come back and see how I did it, but trying to implement the parser yourself is good practice.  I will now walk through the code so you can enter it into your <tt class="docutils literal">ex48/parser.py</tt>.  We start the parser with the exception we need for a parsing error:</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="highlight"><pre><a name="python--ex48--parser.py-idio.html-1"></a><span class="k">class</span> <span class="nc">ParserError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<a name="python--ex48--parser.py-idio.html-2"></a>    <span class="k">pass</span>
+</pre></div>
+</td></tr></table><p>This is how you make your own <tt class="docutils literal">ParserError</tt> exception class you can throw.  Next we need the <tt class="docutils literal">Sentence</tt> object we'll create:</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7</pre></div></td><td class="code"><div class="highlight"><pre><a name="python--ex48--parser.py-idio.html-1"></a><span class="k">class</span> <span class="nc">Sentence</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<a name="python--ex48--parser.py-idio.html-2"></a>
+<a name="python--ex48--parser.py-idio.html-3"></a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subject</span><span class="p">,</span> <span class="n">verb</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+<a name="python--ex48--parser.py-idio.html-4"></a>        <span class="c"># remember we take (&#39;noun&#39;,&#39;princess&#39;) tuples and convert them</span>
+<a name="python--ex48--parser.py-idio.html-5"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">subject</span> <span class="o">=</span> <span class="n">subject</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<a name="python--ex48--parser.py-idio.html-6"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">verb</span> <span class="o">=</span> <span class="n">verb</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<a name="python--ex48--parser.py-idio.html-7"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">object</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</td></tr></table><p>There's nothing special about this code so far. You're just making simple classes.</p>
+<p>In our description of the problem we need a function that can peek at a list of words and return what type of word it is:</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="highlight"><pre><a name="python--ex48--parser.py-idio.html-1"></a><span class="k">def</span> <span class="nf">peek</span><span class="p">(</span><span class="n">word_list</span><span class="p">):</span>
+<a name="python--ex48--parser.py-idio.html-2"></a>    <span class="k">if</span> <span class="n">word_list</span><span class="p">:</span>
+<a name="python--ex48--parser.py-idio.html-3"></a>        <span class="n">word</span> <span class="o">=</span> <span class="n">word_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<a name="python--ex48--parser.py-idio.html-4"></a>        <span class="k">return</span> <span class="n">word</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<a name="python--ex48--parser.py-idio.html-5"></a>    <span class="k">else</span><span class="p">:</span>
+<a name="python--ex48--parser.py-idio.html-6"></a>        <span class="k">return</span> <span class="bp">None</span>
+</pre></div>
+</td></tr></table><p>We need this function because we'll have to make decisions about what kind of sentence we're dealing with based on what the next word is, and then we can call another function to consume that word and carry on.</p>
+<p>To consume a word we use a the <tt class="docutils literal">match</tt> function, which confirms that the expected word is the right type, takes it off the list, and returns the word.</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></div></td><td class="code"><div class="highlight"><pre><a name="python--ex48--parser.py-idio.html-1"></a><span class="k">def</span> <span class="nf">match</span><span class="p">(</span><span class="n">word_list</span><span class="p">,</span> <span class="n">expecting</span><span class="p">):</span>
+<a name="python--ex48--parser.py-idio.html-2"></a>    <span class="k">if</span> <span class="n">word_list</span><span class="p">:</span>
+<a name="python--ex48--parser.py-idio.html-3"></a>        <span class="n">word</span> <span class="o">=</span> <span class="n">word_list</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<a name="python--ex48--parser.py-idio.html-4"></a>
+<a name="python--ex48--parser.py-idio.html-5"></a>        <span class="k">if</span> <span class="n">word</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">expecting</span><span class="p">:</span>
+<a name="python--ex48--parser.py-idio.html-6"></a>            <span class="k">return</span> <span class="n">word</span>
+<a name="python--ex48--parser.py-idio.html-7"></a>        <span class="k">else</span><span class="p">:</span>
+<a name="python--ex48--parser.py-idio.html-8"></a>            <span class="k">return</span> <span class="bp">None</span>
+<a name="python--ex48--parser.py-idio.html-9"></a>    <span class="k">else</span><span class="p">:</span>
+<a name="python--ex48--parser.py-idio.html-10"></a>        <span class="k">return</span> <span class="bp">None</span>
+</pre></div>
+</td></tr></table><p>Again, fairly simple but make sure you understand this code but also <em>why</em> I'm doing it this way.  I need to peek at words in the list to decide what kind of sentence I'm dealing with, and then I need to match those words to create my <tt class="docutils literal">Sentence</tt>.</p>
+<p>The last thing I need is a way to skip words that aren't useful to the <tt class="docutils literal">Sentence</tt>.  These are the words labeled &quot;stop words&quot; (type 'stop') that are words like &quot;the&quot;, &quot;and&quot;, and &quot;a&quot;.</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><a name="python--ex48--parser.py-idio.html-1"></a><span class="k">def</span> <span class="nf">skip</span><span class="p">(</span><span class="n">word_list</span><span class="p">,</span> <span class="n">word_type</span><span class="p">):</span>
+<a name="python--ex48--parser.py-idio.html-2"></a>    <span class="k">while</span> <span class="n">peek</span><span class="p">(</span><span class="n">word_list</span><span class="p">)</span> <span class="o">==</span> <span class="n">word_type</span><span class="p">:</span>
+<a name="python--ex48--parser.py-idio.html-3"></a>        <span class="n">match</span><span class="p">(</span><span class="n">word_list</span><span class="p">,</span> <span class="n">word_type</span><span class="p">)</span>
+</pre></div>
+</td></tr></table><p>Remember that <tt class="docutils literal">skip</tt> doesn't skip one word, it skips as many words of that type as it finds.  This makes it so if someone types, &quot;scream at the bear&quot; you get &quot;scream&quot; and &quot;bear.&quot;</p>
+<p>That's our basic set of parsing functions, and with that we can actually parse just about any text we want.  Our parser is very simple though, so the remaining functions are short.</p>
+<p>First we can handle parsing a verb:</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7</pre></div></td><td class="code"><div class="highlight"><pre><a name="python--ex48--parser.py-idio.html-1"></a><span class="k">def</span> <span class="nf">parse_verb</span><span class="p">(</span><span class="n">word_list</span><span class="p">):</span>
+<a name="python--ex48--parser.py-idio.html-2"></a>    <span class="n">skip</span><span class="p">(</span><span class="n">word_list</span><span class="p">,</span> <span class="s">&#39;stop&#39;</span><span class="p">)</span>
+<a name="python--ex48--parser.py-idio.html-3"></a>
+<a name="python--ex48--parser.py-idio.html-4"></a>    <span class="k">if</span> <span class="n">peek</span><span class="p">(</span><span class="n">word_list</span><span class="p">)</span> <span class="o">==</span> <span class="s">&#39;verb&#39;</span><span class="p">:</span>
+<a name="python--ex48--parser.py-idio.html-5"></a>        <span class="k">return</span> <span class="n">match</span><span class="p">(</span><span class="n">word_list</span><span class="p">,</span> <span class="s">&#39;verb&#39;</span><span class="p">)</span>
+<a name="python--ex48--parser.py-idio.html-6"></a>    <span class="k">else</span><span class="p">:</span>
+<a name="python--ex48--parser.py-idio.html-7"></a>        <span class="k">raise</span> <span class="n">ParserError</span><span class="p">(</span><span class="s">&quot;Expected a verb next.&quot;</span><span class="p">)</span>
+</pre></div>
+</td></tr></table><p>We skip any stop words, then peek ahead to make sure the next word is a &quot;verb&quot; type.  If it's not then raise the <tt class="docutils literal">ParserError</tt> to say why.  If it is a &quot;verb&quot; then match it, which takes it off the list.  A similar function handles sentence objects:</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></div></td><td class="code"><div class="highlight"><pre><a name="python--ex48--parser.py-idio.html-1"></a><span class="k">def</span> <span class="nf">parse_object</span><span class="p">(</span><span class="n">word_list</span><span class="p">):</span>
+<a name="python--ex48--parser.py-idio.html-2"></a>    <span class="n">skip</span><span class="p">(</span><span class="n">word_list</span><span class="p">,</span> <span class="s">&#39;stop&#39;</span><span class="p">)</span>
+<a name="python--ex48--parser.py-idio.html-3"></a>    <span class="n">next_word</span> <span class="o">=</span> <span class="n">peek</span><span class="p">(</span><span class="n">word_list</span><span class="p">)</span>
+<a name="python--ex48--parser.py-idio.html-4"></a>
+<a name="python--ex48--parser.py-idio.html-5"></a>    <span class="k">if</span> <span class="n">next_word</span> <span class="o">==</span> <span class="s">&#39;noun&#39;</span><span class="p">:</span>
+<a name="python--ex48--parser.py-idio.html-6"></a>        <span class="k">return</span> <span class="n">match</span><span class="p">(</span><span class="n">word_list</span><span class="p">,</span> <span class="s">&#39;noun&#39;</span><span class="p">)</span>
+<a name="python--ex48--parser.py-idio.html-7"></a>    <span class="k">elif</span> <span class="n">next_word</span> <span class="o">==</span> <span class="s">&#39;direction&#39;</span><span class="p">:</span>
+<a name="python--ex48--parser.py-idio.html-8"></a>        <span class="k">return</span> <span class="n">match</span><span class="p">(</span><span class="n">word_list</span><span class="p">,</span> <span class="s">&#39;direction&#39;</span><span class="p">)</span>
+<a name="python--ex48--parser.py-idio.html-9"></a>    <span class="k">else</span><span class="p">:</span>
+<a name="python--ex48--parser.py-idio.html-10"></a>        <span class="k">raise</span> <span class="n">ParserError</span><span class="p">(</span><span class="s">&quot;Expected a noun or direction next.&quot;</span><span class="p">)</span>
+</pre></div>
+</td></tr></table><p>Again, skip the stop words, peek ahead, and decide if the sentence is correct based on what's there.  In the <tt class="docutils literal">parse_object</tt> function though we need to handle both &quot;noun&quot; and &quot;direction&quot; words as possible objects.  Subjects are then similar again, but since we want to handle the implied &quot;player&quot; noun, we have to use <tt class="docutils literal">peek</tt>:</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></div></td><td class="code"><div class="highlight"><pre><a name="python--ex48--parser.py-idio.html-1"></a><span class="k">def</span> <span class="nf">parse_subject</span><span class="p">(</span><span class="n">word_list</span><span class="p">):</span>
+<a name="python--ex48--parser.py-idio.html-2"></a>    <span class="n">skip</span><span class="p">(</span><span class="n">word_list</span><span class="p">,</span> <span class="s">&#39;stop&#39;</span><span class="p">)</span>
+<a name="python--ex48--parser.py-idio.html-3"></a>    <span class="n">next_word</span> <span class="o">=</span> <span class="n">peek</span><span class="p">(</span><span class="n">word_list</span><span class="p">)</span>
+<a name="python--ex48--parser.py-idio.html-4"></a>
+<a name="python--ex48--parser.py-idio.html-5"></a>    <span class="k">if</span> <span class="n">next_word</span> <span class="o">==</span> <span class="s">&#39;noun&#39;</span><span class="p">:</span>
+<a name="python--ex48--parser.py-idio.html-6"></a>        <span class="k">return</span> <span class="n">match</span><span class="p">(</span><span class="n">word_list</span><span class="p">,</span> <span class="s">&#39;noun&#39;</span><span class="p">)</span>
+<a name="python--ex48--parser.py-idio.html-7"></a>    <span class="k">elif</span> <span class="n">next_word</span> <span class="o">==</span> <span class="s">&#39;verb&#39;</span><span class="p">:</span>
+<a name="python--ex48--parser.py-idio.html-8"></a>        <span class="k">return</span> <span class="p">(</span><span class="s">&#39;noun&#39;</span><span class="p">,</span> <span class="s">&#39;player&#39;</span><span class="p">)</span>
+<a name="python--ex48--parser.py-idio.html-9"></a>    <span class="k">else</span><span class="p">:</span>
+<a name="python--ex48--parser.py-idio.html-10"></a>        <span class="k">raise</span> <span class="n">ParserError</span><span class="p">(</span><span class="s">&quot;Expected a verb next.&quot;</span><span class="p">)</span>
+</pre></div>
+</td></tr></table><p>With that all out of the way and ready, our final <tt class="docutils literal">parse_sentence</tt> function is very simple:</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="highlight"><pre><a name="python--ex48--parser.py-idio.html-1"></a><span class="k">def</span> <span class="nf">parse_sentence</span><span class="p">(</span><span class="n">word_list</span><span class="p">):</span>
+<a name="python--ex48--parser.py-idio.html-2"></a>    <span class="n">subj</span> <span class="o">=</span> <span class="n">parse_subject</span><span class="p">(</span><span class="n">word_list</span><span class="p">)</span>
+<a name="python--ex48--parser.py-idio.html-3"></a>    <span class="n">verb</span> <span class="o">=</span> <span class="n">parse_verb</span><span class="p">(</span><span class="n">word_list</span><span class="p">)</span>
+<a name="python--ex48--parser.py-idio.html-4"></a>    <span class="n">obj</span> <span class="o">=</span> <span class="n">parse_object</span><span class="p">(</span><span class="n">word_list</span><span class="p">)</span>
+<a name="python--ex48--parser.py-idio.html-5"></a>
+<a name="python--ex48--parser.py-idio.html-6"></a>    <span class="k">return</span> <span class="n">Sentence</span><span class="p">(</span><span class="n">subj</span><span class="p">,</span> <span class="n">verb</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<div class="section" id="playing-with-the-parser">
+<h1>Playing With The Parser</h1>
+<p>To see how this works, you can play with it like this:</p>
+<div class="highlight"><pre><a name="python--ex49a_pycon.py-idio-pycon-pyg.html-1"></a><span class="go">Python 2.7.1 (r271:86832, Jun 16 2011, 16:59:05) </span>
+<a name="python--ex49a_pycon.py-idio-pycon-pyg.html-2"></a><span class="go">[GCC 4.2.1 (Based on Apple Inc. build 5658) (LLVM build 2335.15.00)] on darwin</span>
+<a name="python--ex49a_pycon.py-idio-pycon-pyg.html-3"></a><span class="go">Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.</span>
+<a name="python--ex49a_pycon.py-idio-pycon-pyg.html-4"></a><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">ex48.parser</span> <span class="kn">import</span> <span class="o">*</span>
+<a name="python--ex49a_pycon.py-idio-pycon-pyg.html-5"></a><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">parse_sentence</span><span class="p">([(</span><span class="s">&#39;verb&#39;</span><span class="p">,</span> <span class="s">&#39;run&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;direction&#39;</span><span class="p">,</span> <span class="s">&#39;north&#39;</span><span class="p">)])</span>
+<a name="python--ex49a_pycon.py-idio-pycon-pyg.html-6"></a><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">subject</span>
+<a name="python--ex49a_pycon.py-idio-pycon-pyg.html-7"></a><span class="go">&#39;player&#39;</span>
+<a name="python--ex49a_pycon.py-idio-pycon-pyg.html-8"></a><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">verb</span>
+<a name="python--ex49a_pycon.py-idio-pycon-pyg.html-9"></a><span class="go">&#39;run&#39;</span>
+<a name="python--ex49a_pycon.py-idio-pycon-pyg.html-10"></a><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">object</span>
+<a name="python--ex49a_pycon.py-idio-pycon-pyg.html-11"></a><span class="go">&#39;north&#39;</span>
+<a name="python--ex49a_pycon.py-idio-pycon-pyg.html-12"></a><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">parse_sentence</span><span class="p">([(</span><span class="s">&#39;noun&#39;</span><span class="p">,</span> <span class="s">&#39;bear&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;verb&#39;</span><span class="p">,</span> <span class="s">&#39;eat&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;stop&#39;</span><span class="p">,</span> <span class="s">&#39;the&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;noun&#39;</span><span class="p">,</span> <span class="s">&#39;honey&#39;</span><span class="p">)])</span>
+<a name="python--ex49a_pycon.py-idio-pycon-pyg.html-13"></a><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">subject</span>
+<a name="python--ex49a_pycon.py-idio-pycon-pyg.html-14"></a><span class="go">&#39;bear&#39;</span>
+<a name="python--ex49a_pycon.py-idio-pycon-pyg.html-15"></a><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">verb</span>
+<a name="python--ex49a_pycon.py-idio-pycon-pyg.html-16"></a><span class="go">&#39;eat&#39;</span>
+<a name="python--ex49a_pycon.py-idio-pycon-pyg.html-17"></a><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">object</span>
+<a name="python--ex49a_pycon.py-idio-pycon-pyg.html-18"></a><span class="go">&#39;honey&#39;</span>
+</pre></div></div>
+<div class="section" id="what-you-should-test">
+<h1>What You Should Test</h1>
+<p>For Exercise 49, write a complete test that confirms everything in this code is working.  Put the test in <tt class="docutils literal">tests/parser_tests.rb</tt> similar to the test file from the last exercise. That includes making exceptions happen by giving the parser bad sentences.</p>
+<p>Check for an exception by using the function <tt class="docutils literal">assert_raises</tt> from the <tt class="docutils literal">nose</tt> documentation.  Learn how to use this so you can write a test that is <em>expected</em> to fail, which is very important in testing.  Learn about this function (and others) by reading the nose documentation.</p>
+<p>When you are done, you should know how this bit of code works and how to write a test for other people's code even if they do not want you to.  Trust me, it's a very handy skill to have.</p>
+</div>
+<div class="section" id="study-drills">
+<h1>Study Drills</h1>
+<ol class="arabic simple">
+<li>Change the <tt class="docutils literal">parse_</tt> methods and try to put them into a class rather than be just methods.  Which design do you like better?</li>
+<li>Make the parser more error-resistant so that you can avoid annoying your users if they type words your lexicon doesn't understand.</li>
+<li>Improve the grammar by handling more things like numbers.</li>
+<li>Think about how you might use this Sentence class in your game to do more fun things with a user's input.</li>
+</ol>
+</div>
+<div class="section" id="common-student-questions">
+<h1>Common Student Questions</h1>
+<dl class="docutils">
+<dt>I can't seem to make <tt class="docutils literal">assert_raises</tt> work right.</dt>
+<dd>Make sure you are writing <tt class="docutils literal">assert_raises(exception, callable, parameters)</tt> and <em>not</em> writing <tt class="docutils literal">assert_raises(exception, callable(parameters))</tt>.  Notice how the second form is calling the function then passing the result to <tt class="docutils literal">assert_raises</tt>, which is <em>wrong</em>.  You have to pass the function to call <em>and</em> its arguments to <tt class="docutils literal">assert_raises</tt>.</dd>
+</dl>
+</div>
+        <!-- RST ENDS -->
+
+            <!-- /.help-icon -->
+        <div id="video_holder">
+            <h1>Video</h1>
+            <div id="video" class="row inner">
+                <div class="small-12 small-centered columns">
+                    <div data-paydiv_product="2" id='paydiv'>
+                        &nbsp;
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        </div><!-- /#main -->
+
+        <div class='ad-deck gold' id="footer">
+            <ul class='retailers clearfix'>
+                <li>
+                    <a href='https://paydiv.io/access/buy/2/'>
+                        <div class='retailer-name'>Zed Shaw</div>
+                        <div class='book-type'>PDF + Videos + Updates</div>
+                        <div class='book-price'>$29.95</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.amazon.com/gp/product/0321884914/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0321884914&amp;linkCode=as2&amp;tag=lepythhawa-20'>
+                        <div class='retailer-name'>Amazon</div>
+                        <div class='book-type'>Paper + DVD</div>
+                        <div class='book-price'>$29.95</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.amazon.com/gp/product/B00FGUS948/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=B00FGUS948&amp;linkCode=as2&amp;tag=lepythhawa-20'>
+                        <div class='retailer-name'>Amazon</div>
+                        <div class='book-type'>Kindle (No Videos)</div>
+                        <div class='book-price'>$17.27</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.barnesandnoble.com/w/learn-python-the-hard-way-zed-shaw/1112055406?ean=9780321884916'>
+                        <div class='retailer-name'>B&amp;N</div>
+                        <div class='book-type'>Paper + DVD</div>
+                        <div class='book-price'>$17.27</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.barnesandnoble.com/w/learn-python-the-hard-way-zed-shaw/1112055406?ean=9780133124347&amp;itm=1&amp;usri=learn+python+the+hard+way'>
+                        <div class='retailer-name'>B&amp;N</div>
+                        <div class='book-type'>Nook (No Video)</div>
+                        <div class='book-price'>$17.27</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.informit.com/store/learn-python-the-hard-way-a-very-simple-introduction-9780321884916'>
+                        <div class='retailer-name'>InformIT</div>
+                        <div class='book-type'>eBook + Paper</div>
+                        <div class='book-price'>$43.19</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://ruby.learncodethehardway.org/book/'>
+                        <div class='retailer-name'>Interested In Ruby?</div>
+                        <div class='book-type'>Ruby is also a great language.</div>
+                        <div class='book-price'>Learn Ruby The Hard Way</div>
+                    </a>
+                </li>
+
+            </ul><!-- /.places -->
+        </div><!-- /#ad-deck -->
+
+        <script src="javascripts/jquery.js"></script>
+        <script src="index.js"></script>
+        <script src="../../paydiv.io/static/jzed.js"></script>
+        <script src="../../paydiv.io/static/js/videojs/video.js"></script>
+        <link rel="stylesheet" href="../../paydiv.io/static/js/videojs/video-js.css">
+        <script src="../../paydiv.io/static/api/v1/paydiv.js"></script>
+        <script src="javascripts/app.js"></script>
+        <script src="javascripts/littools.js"></script>
+        <script type="text/javascript">
+        
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-24168052-1']);
+        _gaq.push(['_trackPageview']);
+        
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+        
+        </script>
+
+
+        <script src="javascripts/littools.js"></script>
+
+        </body>
+
+<!-- Mirrored from learnpythonthehardway.org/book/ex49.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 03 Sep 2014 17:52:40 GMT -->
+</html>
+

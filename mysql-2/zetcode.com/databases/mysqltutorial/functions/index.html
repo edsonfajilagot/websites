@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from zetcode.com/databases/mysqltutorial/functions/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Jul 2015 02:47:03 GMT -->
+<head>
+<title>MySQL functions</title>
+<link rel="stylesheet" href="../../../cfg/format2.css" type="text/css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="MySQL, SQL, functions database">
+<meta name="description" content="In this part of the MySQL tutorial, we
+cover MySQL functions.">
+<meta name="author" content="Jan Bodnar">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div id="wide_ad" class="ltow">
+<script async src="../../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- 160x600, August 2011 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:600px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="2484182563"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<div class="content">
+
+
+<header>
+
+<nav>
+<a href="http://zetcode.com/" title="Home">Home</a>&#160;
+<a href="../index.html">Contents</a>
+</nav>
+
+</header>
+
+
+<h1>MySQL functions</h1>
+
+
+<p>
+In this part of the MySQL tutorial, we will cover MySQL built-in functions. 
+</p>
+
+<div class="med_rec">
+<script async src="../../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- NewSquare -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:250px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="0364418177"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<p>
+MySQL built-in functions can be categorised into several groups.
+</p>
+
+<ul>
+<li>Mathematical functions</li>
+<li>Aggregate functions</li>
+<li>String functions</li>
+<li>Date and time functions</li>
+<li>System Functions</li>
+</ul>
+
+<p>
+Here we show only a portion of all MySQL functions. To get
+the full list of available functions, consult the MySQL 
+reference manual.
+</p>
+
+
+<h2 id="math">Mathematical functions</h2>
+
+<p>
+MySQL supports multiple mathematical functions.
+</p>
+
+<pre class="code">
+mysql> SELECT RAND();
++-------------------+
+| RAND()            |
++-------------------+
+| 0.786536605829873 |
++-------------------+
+</pre>
+
+<p>
+The <code>RAND()</code> function returns a random number
+from the &lt;0, 1&gt; interval.
+</p>
+
+
+
+<pre class="code">
+mysql> SELECT ABS(-3), PI(), SIN(0.5);
++---------+----------+-------------------+
+| ABS(-3) | PI()     | SIN(0.5)          |
++---------+----------+-------------------+
+|       3 | 3.141593 | 0.479425538604203 |
++---------+----------+-------------------+
+</pre>
+
+<p>
+The <code>ABS()</code> function returns the absolute value
+of a number. The <code>PI()</code> function gives the value
+of PI. And the <code>SIN()</code> function computes the sine
+of an argument. 
+</p>
+
+<pre class="code">
+mysql> SELECT BIN(22), OCT(22), HEX(22);
++---------+---------+---------+
+| BIN(22) | OCT(22) | HEX(22) |
++---------+---------+---------+
+| 10110   | 26      | 16      |
++---------+---------+---------+
+</pre>
+
+<p>
+We use functions to give binary, octal and hexadecimal
+representation of decimal 22.
+</p>
+
+<pre class="code">
+mysql> SELECT CEIL(11.256), FLOOR(11.256), ROUND(11.256, 2);
++--------------+---------------+------------------+
+| CEIL(11.256) | FLOOR(11.256) | ROUND(11.256, 2) |
++--------------+---------------+------------------+
+|           12 |            11 |            11.26 |
++--------------+---------------+------------------+
+</pre>
+
+<p>
+The <code>CEIL()</code> function rounds the value to the
+smallest following integer. The <code>FLOOR()</code> function
+rounds the value to the largest previous integer. 
+The <code>ROUND()</code> returns a number rounded to a 
+specified number of decimal places.
+</p>
+
+<pre class="code">
+mysql> SELECT POW(3, 3), SQRT(9);
++-----------+---------+
+| POW(3, 3) | SQRT(9) |
++-----------+---------+
+|        27 |       3 |
++-----------+---------+
+</pre>
+
+<p>
+The power and the square root functions.
+</p>
+
+<pre class="code">
+mysql> SELECT DEGREES(2*PI());
++-----------------+
+| DEGREES(2*PI()) |
++-----------------+
+|             360 |
++-----------------+
+</pre>
+
+<p>
+The <code>DEGREES()</code> function computes degrees from radians.
+</p>
+
+
+<h2 id="aggregate">Aggregate functions</h2>
+
+<p>
+Aggregate functions operate on sets of values.
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM Cars;
++----+------------+--------+
+| Id | Name       | Cost   |
++----+------------+--------+
+|  1 | Audi       |  52642 |
+|  2 | Mercedes   |  57127 |
+|  3 | Skoda      |   9000 |
+|  4 | Volvo      |  29000 |
+|  5 | Bentley    | 350000 |
+|  6 | Citroen    |  21000 |
+|  7 | Hummer     |  41400 |
+|  8 | Volkswagen |  21600 |
++----+------------+--------+
+</pre>
+
+<p>
+We have the Cars table.
+</p>
+
+<pre class="code">
+mysql> SELECT MIN(Cost), MAX(Cost), AVG(Cost)
+    -> FROM Cars;
++-----------+-----------+------------+
+| MIN(Cost) | MAX(Cost) | AVG(Cost)  |
++-----------+-----------+------------+
+|      9000 |    350000 | 72721.1250 |
++-----------+-----------+------------+
+</pre>
+
+<p>
+We use the <code>MIN()</code>, <code>MAX()</code> and <code>AVG()</code>
+aggregate functions to compute the minimal price, maximal price and
+the average price of cars in the table.
+</p>
+
+<pre class="code">
+mysql> SELECT SUM(Cost), COUNT(Id), STD(Cost), 
+    -> VARIANCE(Cost) FROM Cars;
++-----------+-----------+-------------+------------------+
+| SUM(Cost) | COUNT(Id) | STD(Cost)   | VARIANCE(Cost)   |
++-----------+-----------+-------------+------------------+
+|    581769 |         8 | 105931.1676 | 11221412265.3594 |
++-----------+-----------+-------------+------------------+
+</pre>
+
+<p>
+We use the <code>SUM()</code> function to get the sum of all values in 
+the <code>Cost</code> column. We count the number of cars
+in the table with the <code>COUNT()</code> function. Finally,
+we get the standard deviation and variance using the <code>STD()</code>
+and <code>VARIANCE()</code> functions.
+</p>
+
+<h2 id="string">String functions</h2>
+
+<p>
+In this group we have various strings related functions.
+</p>
+
+
+<pre class="code">
+mysql> SELECT LENGTH('ZetCode'), UPPER('ZetCode'), LOWER('ZetCode');
++-------------------+------------------+------------------+
+| LENGTH('ZetCode') | UPPER('ZetCode') | LOWER('ZetCode') |
++-------------------+------------------+------------------+
+|                 7 | ZETCODE          | zetcode          |
++-------------------+------------------+------------------+
+</pre>
+
+<p>
+The <code>LENGTH()</code> function returns the length of a string.
+The <code>UPPER()</code> function converts characters into upper-case
+letters. The <code>LOWER()</code> function converts characters into
+lower-case letters.
+</p>
+
+<pre class="code">
+ysql> SELECT LPAD(RPAD("ZetCode", 10, "*"), 13, "*");
++-----------------------------------------+
+| LPAD(RPAD("ZetCode", 10, "*"), 13, "*") |
++-----------------------------------------+
+| ***ZetCode***                           |
++-----------------------------------------+
+</pre>
+
+<p>
+We use the <code>LPAD()</code> and <code>RPAD()</code> functions to 
+append and prepend characters to a specified string. The "ZetCode"
+string has 7 characters. The <code>RPAD()</code> function appends
+3 '*' characters to the string, which will be now 10 characters long.
+</p>
+
+<pre class="code">
+mysql> SELECT REVERSE('ZetCode'), REPEAT('*', 6);
++--------------------+----------------+
+| REVERSE('ZetCode') | REPEAT('*', 6) |
++--------------------+----------------+
+| edoCteZ            | ******         |
++--------------------+----------------+
+</pre>
+
+<p>
+The <code>REVERSE()</code> function reverses the characters in a string.
+The <code>REPEAT()</code> function repeats a string specified number of
+times.
+</p>
+
+<pre class="code">
+mysql> SELECT LEFT('ZetCode', 3), RIGHT('ZetCode', 3), 
+    -> SUBSTRING('ZetCode', 3, 3);
++--------------------+---------------------+----------------------------+
+| LEFT('ZetCode', 3) | RIGHT('ZetCode', 3) | SUBSTRING('ZetCode', 3, 3) |
++--------------------+---------------------+----------------------------+
+| Zet                | ode                 | tCo                        |
++--------------------+---------------------+----------------------------+
+</pre>
+
+<p>
+The <code>LEFT()</code> function returns 3 leftmost characters, the <code>RIGHT()</code>
+function returns 3 characters from the right. The <code>SUBSTRING()</code> function
+returns three characters from the third position of the string.
+</p>
+
+<pre class="code">
+mysql> SELECT STRCMP('byte', 'byte'), CONCAT('three', ' apples');
++------------------------+----------------------------+
+| STRCMP('byte', 'byte') | CONCAT('three', ' apples') |
++------------------------+----------------------------+
+|                      0 | three apples               |
++------------------------+----------------------------+
+</pre>
+
+<p>
+The <code>STRCMP()</code> compares two strings and returns 0 if they 
+are the same. The <code>CONCAT()</code> function concatenates two
+strings. 
+</p>
+
+
+<pre class="code">
+mysql> SELECT REPLACE('basketball', 'basket', 'foot');
++-----------------------------------------+
+| REPLACE('basketball', 'basket', 'foot') |
++-----------------------------------------+
+| football                                |
++-----------------------------------------+
+</pre>
+
+<p>
+The <code>REPLACE()</code> function returns a string, in which 
+we have replaced some text. The first parameter is the original string.
+The second parameter is a string, we want to replace. And the last
+parameter is the new replacing string.
+</p>
+
+<h2 id="datetime">Date &amp; time functions</h2>
+
+<p>
+In this group we have various date and time functions.
+</p>
+
+
+<pre class="code">
+mysql> SELECT DAYNAME('2011-01-23'), YEAR('2011/01/23'),
+    -> MONTHNAME('110123');
++-----------------------+--------------------+---------------------+
+| DAYNAME('2011-01-23') | YEAR('2011/01/23') | MONTHNAME('110123') |
++-----------------------+--------------------+---------------------+
+| Sunday                |               2011 | January             |
++-----------------------+--------------------+---------------------+
+</pre>
+
+<p>
+In MySQL, date is written in the format <code>YYYY-MM-DD</code>. Year is 
+followed by month and day. They can be separated by slash or by hyphen. 
+MySQL also supports a shortened date format, without separators. 
+Time is written in a standard form, <code>HH:MM:SS</code>. 
+Hours followed by minutes and seconds.
+</p>
+
+<pre class="code">
+mysql> SELECT NOW();
++---------------------+
+| NOW()               |
++---------------------+
+| 2011-01-22 00:24:49 |
++---------------------+
+</pre>
+
+<p>
+The <code>NOW()</code> function returns the current date and time.
+</p>
+
+<pre class="code">
+mysql> SELECT CURTIME(), CURDATE();
++-----------+------------+
+| CURTIME() | CURDATE()  |
++-----------+------------+
+| 00:25:03  | 2011-01-22 |
++-----------+------------+
+</pre>
+
+<p>
+The <code>CURTIME()</code> returns the current time and the <code>CURDATE()</code>
+returns the current date.
+</p>
+
+<pre class="code">
+mysql> SELECT DATEDIFF('2011-3-12', '2011-1-12');
++------------------------------------+
+| DATEDIFF('2011-3-12', '2011-1-12') |
++------------------------------------+
+|                                 59 |
++------------------------------------+
+</pre>
+
+<p>
+With the <code>DATEDIFF()</code> we get the number of days between
+two dates. 
+</p>
+
+<pre class="code">
+mysql> SELECT DAYNAME('1982-4-12'), MONTHNAME('1982-4-12') ;
++----------------------+------------------------+
+| DAYNAME('1982-4-12') | MONTHNAME('1982-4-12') |
++----------------------+------------------------+
+| Monday               | April                  |
++----------------------+------------------------+
+</pre>
+
+<p>
+The <code>DAYNAME()</code> function returns the day name of a date.
+The <code>MONTHNAME()</code> function returns a month name of a date.
+</p>
+
+<pre class="code">
+mysql> SELECT WEEKOFYEAR('110123'), WEEKDAY('110123'),
+    -> QUARTER('110123');
++----------------------+-------------------+-------------------+
+| WEEKOFYEAR('110123') | WEEKDAY('110123') | QUARTER('110123') |
++----------------------+-------------------+-------------------+
+|                    3 |                 6 |                 1 |
++----------------------+-------------------+-------------------+
+</pre>
+
+<p>
+January 23, 2011 can be written in a shortened date format, 110123. 
+We use the <code>WEEKOFYEAR()</code> to find out the week of the year. 
+The <code>WEEKDAY()</code> returns 6, which is Sunday. And the
+<code>QUARTER()</code> function returns the quarter of the year.
+</p>
+
+<pre class="code">
+mysql> SELECT DATE_FORMAT('110123', '%d-%m-%Y');
++-----------------------------------+
+| DATE_FORMAT('110123', '%d-%m-%Y') |
++-----------------------------------+
+| 23-01-2011                        |
++-----------------------------------+
+</pre>
+
+<p>
+To display date in a different format, we use the <code>DATE_FORMAT()</code>.
+</p>
+
+<pre class="code">
+mysql> SELECT DATE_ADD('110123', INTERVAL 45 DAY), 
+    -> SUBDATE('110309', INTERVAL 45 DAY);
++-------------------------------------+------------------------------------+
+| DATE_ADD('110123', INTERVAL 45 DAY) | SUBDATE('110309', INTERVAL 45 DAY) |
++-------------------------------------+------------------------------------+
+| 2011-03-09                          | 2011-01-23                         |
++-------------------------------------+------------------------------------+
+</pre>
+
+<p>
+We can use <code>DATE_ADD()</code> to add time intervals to a date and 
+<code>SUBDATE()</code> to subtract time intervals from a date. 
+</p>
+
+
+<h2 id="system">System functions</h2>
+
+<p>
+System functions provide some system information about MySQL database.
+</p>
+
+<pre class="code">
+mysql> SELECT VERSION(), DATABASE();
++--------------------+------------+
+| VERSION()          | DATABASE() |
++--------------------+------------+
+| 5.1.41-3ubuntu12.8 | mydb       |
++--------------------+------------+
+</pre>
+
+<p>
+We get the version of the MySQL database and the current database name.
+</p>
+
+<pre class="code">
+mysql> SELECT USER();
++----------------+
+| USER()         |
++----------------+
+| root@localhost |
++----------------+
+</pre>
+
+<p>
+The <code>USER()</code> function returns the user name and the host name 
+provided by the client.
+</p>
+
+<pre class="code">
+mysql> SELECT CHARSET('ZetCode'), COLLATION('ZetCode');
++--------------------+----------------------+
+| CHARSET('ZetCode') | COLLATION('ZetCode') |
++--------------------+----------------------+
+| utf8               | utf8_general_ci      |
++--------------------+----------------------+
+</pre>
+
+<p>
+The <code>CHARSET()</code> function returns the character set of the
+argument. The <code>COLLATION()</code> returns the collation of the
+current string argument. They depend on the charset and collation
+of the client in use.
+</p>
+
+<p>
+In this part of the MySQL tutorial, we worked with the built-in MySQL functions. 
+</p>
+
+
+<footer>
+
+<nav class="center">
+<span class="botNavItem"><a href="http://zetcode.com/">Home</a></span> ‡ <span class="botNavItem"><a href="../index.html">Contents</a></span> ‡
+<span class="botNavItem"><a href="#">Top of Page</a></span>
+</nav>
+
+<div class="signature">
+<a href="http://zetcode.com/">ZetCode</a> last modified January 21, 2011  <span class="copyright">&copy; 2007 - 2015 Jan Bodnar</span>
+</div>
+
+</footer>
+
+</div> <!-- content -->
+
+</div> <!-- container -->
+
+</body>
+
+<!-- Mirrored from zetcode.com/databases/mysqltutorial/functions/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Jul 2015 02:47:03 GMT -->
+</html>
+

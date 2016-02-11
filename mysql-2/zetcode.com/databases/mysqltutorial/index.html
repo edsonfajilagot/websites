@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from zetcode.com/databases/mysqltutorial/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Jul 2015 02:46:41 GMT -->
+<head>
+<title>MySQL tutorial</title>
+<link rel="stylesheet" href="../../cfg/format2.css" type="text/css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="MySQL, database, tutorial, SQL, command line tool">
+<meta name="description" content="This is MySQL tutorial. It covers the MySQL database engine and 
+the SQL language supported by the database engine. ">
+<meta name="author" content="Jan Bodnar">
+
+<style>
+/* Mobile friendly */
+ol {line-height: 1.7em}
+</style>
+
+<script src="../../../apis.google.com/js/platform.js" async defer></script>
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-5536206-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</head>
+
+<body>
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "../../../connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+<div class="container">
+
+<div id="wide_ad" class="ltow">
+<script async src="../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- 160x600, August 2011 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:600px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="2484182563"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+
+<div class="content">
+
+<header>
+
+<nav>
+<a href="http://zetcode.com/" title="Home">Home</a>
+</nav>
+
+</header>
+
+<h1>MySQL tutorial</h1>
+
+<nav>
+<ol>
+
+<li>
+<a href="introduction/index.html">Introduction</a>
+<ol>
+<li><a href="introduction#about">About this tutorial</a></li>
+<li><a href="introduction#mysql">MySQL database</a></li>
+<li><a href="introduction#definitions">Definitions</a></li>
+<li><a href="introduction#tables">Tables used</a></li>
+<li><a href="introduction#sources">Sources</a></li>
+</ol>
+</li>
+
+<li>
+<a href="installation/index.html">Installation</a>
+<ol>
+<li><a href="installation#sources">Installation from sources</a></li>
+<li><a href="installation#root">Changing the root password</a></li>
+<li><a href="installation#other">Other settings</a></li>
+</ol>
+</li>
+
+<li>
+<a href="firststeps/index.html">First steps</a>
+<ol>
+<li><a href="firststeps/index.html#startstop">Starting/stopping the server</a></li>
+<li><a href="firststeps/index.html#connect">Connecting to the server</a></li>
+<li><a href="firststeps/index.html#database">Creating a database</a></li>
+<li><a href="firststeps/index.html#user">Creating a user</a></li>
+</ol>
+</li>
+
+<li>
+<a href="quick/index.html">Quick MySQL tutorial</a>
+<ol>
+<li><a href="quick/index.html#world">The world database</a></li>
+<li><a href="quick.html#examine">Examining the database</a></li>
+<li><a href="quick.html#queries">Queries</a></li>
+</ol>
+</li>
+
+<li>
+<a href="storageengines/index.html">Storage engines</a>
+<ol>
+<li><a href="storageengines/index.html#list">List of storage engines</a></li>
+<li><a href="storageengines.html#choose">Choosing the right engine</a></li>
+<li><a href="storageengines.html#specalt">Specifying and altering storage engines</a></li>
+</ol>
+</li>
+
+<li>
+<a href="datatypes/index.html">Data types</a>
+<ol>
+<li><a href="datatypes/index.html#numbers">Numbers</a></li>
+<li><a href="datatypes.html#datetime">Date &amp; time</a></li>
+<li><a href="datatypes.html#strings">Strings</a></li>
+</ol>
+</li>
+
+<li>
+<a href="tables/index.html">Creating, altering and dropping tables</a>
+<ol>
+<li><a href="tables/index.html#create">CREATE and DROP statements</a></li>
+<li><a href="tables.html#alter">ALTER TABLE statement</a></li>
+</ol>
+</li>
+
+<li>
+<a href="expressions/index.html">MySQL expressions</a>
+<ol>
+<li><a href="expressions/index.html#literal">Literal values</a></li>
+<li><a href="expressions.html#variables">Variables</a></li>
+<li><a href="expressions.html#operators">Operators</a></li>
+<li><a href="expressions.html#precedence">Precedence and associativity</a></li>
+<li><a href="expressions.html#associativity">Associativity</a></li>
+</ol>
+</li>
+
+<li>
+<a href="datamanipulation/index.html">Inserting, updating and deleting data</a>
+<ol>
+<li><a href="datamanipulation/index.html#insert">Inserting data</a></li>
+<li><a href="datamanipulation.html#delete">Deleting data</a></li>
+<li><a href="datamanipulation.html#update">Updating data</a></li>
+</ol>
+</li>
+
+<li>
+<a href="select/index.html">The SELECT statement</a>
+<ol>
+<li><a href="select/index.html#retrieve">Retrieving data</a></li>
+<li><a href="select.html#limit">Limiting data output</a></li>
+<li><a href="select.html#order">Ordering data</a></li>
+<li><a href="select.html#where">Selecting specific rows with the WHERE clause</a></li>
+<li><a href="select.html#remove">Removing duplicate items</a></li>
+<li><a href="select.html#group">Grouping data</a></li>
+</ol>
+</li>
+
+<li>
+<a href="subqueries/index.html">Subqueries</a>
+</li>
+
+<li>
+<a href="constraints/index.html">Constraints</a>
+</li>
+
+<li>
+<a href="exportimport/index.html">Exporting and importing data</a>
+<ol>
+<li><a href="exportimport/index.html#simple">Simple data export</a></li>
+<li><a href="exportimport/index.html#xml">Exporting to XML files</a></li>
+<li><a href="exportimport/index.html#dump">Using mysqldump tool</a></li>
+</ol>
+</li>
+
+<li>
+<a href="joins/index.html">Joining tables</a>
+<ol>
+<li><a href="joins/index.html#inner">Inner joins</a></li>
+<li><a href="joins.html#outer">Outer joins</a></li>
+<li><a href="joins.html#natural">Natural joins</a></li>
+<li><a href="joins.html#recap">Quick recap</a></li>
+</ol>
+</li>
+
+<li>
+<a href="functions/index.html">MySQL functions</a>
+<ol>
+<li><a href="functions/index.html#math">Mathematical functions</a></li>
+<li><a href="functions.html#aggregate">Aggregate functions</a></li>
+<li><a href="functions.html#string">String functions</a></li>
+<li><a href="functions.html#datetime">Date &amp; time functions</a></li>
+<li><a href="functions.html#system">System functions</a></li>
+</ol>
+</li>
+
+<li>
+<a href="views/index.html">Views</a>
+<ol>
+<li><a href="views/index.html#definition">View definition</a></li>
+<li><a href="views.html#cmdv">Creating, modifying and dropping a view</a></li>
+<li><a href="views.html#find">Finding views</a></li>
+<li><a href="views.html#crun">Creating a view with a union</a></li>
+</ol>
+</li>
+
+<li>
+<a href="transactions/index.html">Transactions</a>
+<ol>
+<li><a href="transactions/index.html#definition">Definition of transaction</a></li>
+<li><a href="transactions.html#isolation">Isolation levels</a></li>
+<li><a href="transactions.html#autocommit">Autocommit</a></li>
+<li><a href="transactions.html#start">Starting transactions</a></li>
+</ol>
+</li>
+
+<li>
+<a href="routines/index.html">Stored routines</a>
+<ol>
+<li><a href="routines/index.html#simproc">A simple procedure</a></li>
+<li><a href="routines.html#simfunc">A simple function</a></li>
+<li><a href="routines.html#procpar">Procedure parameters</a></li>
+<li><a href="routines.html#rand">Random numbers</a></li>
+<li><a href="routines.html#find">Finding routines</a></li>
+</ol>
+</li>
+
+</ol>
+
+</nav>
+
+<p> 
+This is MySQL tutorial. It covers the MySQL database engine and 
+the SQL language supported by the database engine.
+</p>
+
+<div class="social">
+
+<div class="fb-like" data-href="http://zetcode.com/databases/mysqltutorial/" 
+    data-layout="button_count" data-action="like" data-show-faces="false" data-share="true"></div>
+
+<div class="g-plusone" data-size="medium"></div>
+
+<a href="https://twitter.com/share" class="twitter-share-button">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id))
+{js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 
+'twitter-wjs');</script>
+
+</div>
+
+
+<h2>Related tutorials</h2>
+
+<nav>
+<ul>
+<li><a href="http://zetcode.com/db/sqlite/">SQLite tutorial</a></li>
+<li><a href="http://zetcode.com/db/mysqlc/">MySQL C API tutorial</a></li>
+<li><a href="http://zetcode.com/databases/mysqlphptutorial/">MySQL PHP tutorial</a></li>
+<li><a href="http://zetcode.com/databases/mysqlvisualbasictutorial/">MySQL Visual Basic tutorial</a></li>
+<li><a href="http://zetcode.com/databases/mysqlpythontutorial/">MySQL Python tutorial</a></li>
+<li><a href="http://zetcode.com/databases/mysqljavatutorial/">MySQL Java tutorial</a></li>
+<li><a href="http://zetcode.com/db/mysqlperl/">MySQL Perl tutorial</a></li>
+</ul>
+</nav>
+
+<footer>
+
+<div class="signature">
+<a href="http://zetcode.com/">ZetCode::</a> last modified February 21, 2011 <span class="copyright">&copy; 2007 - 2015 Jan Bodnar</span>
+</div>
+
+</footer>
+
+</div> <!-- content -->
+
+</div> <!-- container -->
+
+</body>
+
+<!-- Mirrored from zetcode.com/databases/mysqltutorial/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Jul 2015 02:47:03 GMT -->
+</html>

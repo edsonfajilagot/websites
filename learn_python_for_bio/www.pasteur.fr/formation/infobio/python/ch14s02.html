@@ -1,0 +1,78 @@
+<html>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch14s02.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:33 GMT -->
+<head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>14.2. Packages</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><meta name="keywords" content="python, biology, bioinformatics, programming, computational biology"><link rel="home" href="index-2.html" title="Introduction to Programming using Python"><link rel="up" href="ch14.html" title="Chapter 14. Modules and packages in Python"><link rel="previous" href="ch14.html" title="Chapter 14. Modules and packages in Python"><link rel="next" href="ch14s03.html" title="14.3. Getting information on available modules and packages"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">14.2. Packages</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch14.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><th width="60%" align="center">Chapter 14. Modules and packages in Python</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch14s03.html"><img src="images/next.png" alt="Next"></a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="sect_packages"></a>14.2. Packages</h2></div></div><p>
+	A package is a set of modules or sub-packages. A package is actually a directory containing either <tt>.py</tt> files or sub-directories defining other packages.
+      </p><p>
+	The dot (.) operator is used to describe a hierarchy of packages and modules. 
+	For instance, the module <tt>Bio.WWW.ExPASy</tt> is located in the file <tt><tt>PYTHONHOME</tt>/site-packages/Bio/WWW/ExPASy.py</tt>. This module belongs to the Bio.WWW package located into the <tt><tt>PYTHONHOME</tt>/site-packages/Bio/WWW/</tt> directory. 
+      </p><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="d0e5543"></a>14.2.1. Loading</h3></div></div><p>When loading a package, the <tt>__init__.py</tt> file is executed. If the <tt>__init__.py</tt> defines classes, functions, etc... they become available at once, as shown in the following example:</p><div class="example"><a name="sa_pack_import"></a><p class="title"><b>Example 14.2. Using the Bio.Fasta package</b></p><pre class="programlisting">
+	    &gt;&gt;&gt; import Bio.Fasta
+	    &gt;&gt;&gt; handle = open("data/ceru_human.fasta")
+	    &gt;&gt;&gt; it = Bio.Fasta.Iterator(pin, Bio.Fasta.SequenceParser())
+	    &gt;&gt;&gt; seq = it.next()
+	    &gt;&gt;&gt; print seq.seq
+	    &gt;&gt;&gt; it.close()
+	  </pre><p>
+	    However, loading a package does not automatically load the
+	    inner modules. For instance, even though the
+	    <tt>Bio.Fasta</tt> package directory
+	    contains the following files: 
+	    <pre class="programlisting">
+	      % ls Bio/Fasta
+              FastaAlign.py   FastaAlign.pyc  __init__.py     __init__.pyc
+	    </pre>
+	    this does not imply that importing the
+	    <tt>Bio.Fasta</tt> package loads the
+	    <tt>Bio.Fasta.FastaAlign</tt> module:
+	    <pre class="programlisting">
+	      &gt;&gt;&gt; import Bio.Fasta
+	      &gt;&gt;&gt; Bio.Fasta.FastaAlign.parse_file("data/ceru_human.fasta")
+	      AttributeError: 'module' object has no attribute 'FastaAlign'
+	    </pre>
+	    Issuing:
+	    <pre class="programlisting">
+	      &gt;&gt;&gt; from Bio.Fasta import *
+	    </pre>
+	    will however load the <tt>Bio.Fasta.FastaAlign</tt>, because this module is mentioned in the <tt>__all__</tt> attribute in the <tt>Bio/Fasta/__init__.py</tt> file:
+	    <pre class="programlisting">
+	      __all__ = [
+	         'FastaAlign',
+	      ]
+
+	    </pre>
+	    Other attributes of interest for packages and modules:
+	    </p><div class="itemizedlist"><ul type="disc"><li><tt>__name__</tt></li><li><tt>__path__</tt></li><li><tt>__file__</tt></li></ul></div><p>
+	  </p></div><div class="exercise"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/exercise.png"></td><td><a name="quest_pack"></a><p class="title"><b>Exercise 14.2. Bio.SwissProt package</b></p></td></tr><tr><td colspan="2" align="left" valign="top">
+	  
+	  <p>Which import statements are necessary to make the following code work?</p>
+	  <pre class="programlisting">
+	    expasy = ExPASy.get_sprot_raw('CERU_HUMAN')
+	    sp = SProt.Iterator(expasy, SProt.RecordParser())
+	    record = sp.next()
+	    print record.keywords
+	  </pre>
+	  <p>???</p>
+	</td></tr></table></div><div class="exercise"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/exercise.png"></td><td><a name="quest_pack2"></a><p class="title"><b>Exercise 14.3. Using a class from a module</b></p></td></tr><tr><td colspan="2" align="left" valign="top">
+	  
+	  <p>Why does the following code issue an error?</p>
+	  <pre class="programlisting">
+	    from Bio.SubsMat import FreqTable
+	    dict = ...  # whatever
+	    f = FreqTable(dict, 'COUNT')
+	    TypeError: 'module' object is not callable
+	  </pre>
+	  <p>???</p>
+	</td></tr></table></div><div class="exercise"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/exercise.png"></td><td><a name="quest_pack3"></a><p class="title"><b>Exercise 14.4. Import from <tt>Bio.Clustalw</tt></b></p></td></tr><tr><td colspan="2" align="left" valign="top">
+	  
+	  <p>Why does the following code not work?</p>
+	  <pre class="programlisting">
+	    from Bio.Clustalw import *
+	    a=ClustalAlignment()
+	    NameError: name 'ClustalAlignment' is not defined
+	  </pre>
+	  <p>???</p>
+	</td></tr></table></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch14.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch14.html"><img src="images/up.png" alt="Up"></a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch14s03.html"><img src="images/next.png" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 14. Modules and packages in Python&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index-2.html"><img src="images/home.png" alt="Home"></a></td><td width="40%" align="right" valign="top">&nbsp;14.3. Getting information on available modules and packages</td></tr></table></div></body>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch14s02.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:33 GMT -->
+</html>

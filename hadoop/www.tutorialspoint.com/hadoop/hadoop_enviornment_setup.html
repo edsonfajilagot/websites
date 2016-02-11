@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="ie ie8"> <![endif]-->
+<!--[if IE 9]><html class="ie ie9"> <![endif]-->
+<!--[if gt IE 9]><!-->	<html> <!--<![endif]-->
+
+<!-- Mirrored from www.tutorialspoint.com/hadoop/hadoop_enviornment_setup.htm by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 20 Apr 2015 05:13:53 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<!-- Basic -->
+<meta charset="utf-8">
+<title>Hadoop Enviornment Setup</title>
+<meta name="description" content="Hadoop Enviornment Setup - Learn Hadoop in simple and easy steps starting from its Overview, Big Data Overview, Big Data Solutions, Introduction to Hadoop, Enviornment Setup, Hdfs Overview, Hdfs Operations, Command Reference, Mapreduce, Streaming, Multi Node Cluster." />
+<meta name="keywords" content="Hadoop, Tutorial, Beginners, Overview, Big Data Overview, Big Data Solutions, Introduction to Hadoop, Enviornment Setup, Hdfs Overview, Hdfs Operations, Command Reference, Mapreduce, Streaming, Multi Node Cluster."/>
+<base  />
+<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
+<meta name="author" content="tutorialspoint.com">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=yes">
+<meta property="fb:app_id" content="471319149685276" />
+<!-- Web Fonts  -->
+<link href="../../fonts.googleapis.com/cssf1e9.css?family=Open+Sans:300,400,600,700,800|Shadows+Into+Light" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="../../cdn.tutorialspoint.com/theme/css/fonts/font-awesome/css/font-awesome.css">
+<link rel="stylesheet" href="../../cdn.tutorialspoint.com/theme/css/custom-mini.css"/>
+<script type="text/javascript" src="../../cdn.tutorialspoint.com/theme/js/jquery.js"></script>
+<script type="text/javascript" src="../../cdn.tutorialspoint.com/theme/prettify.js"></script>
+<!-- Head Libs -->
+<script src="../../cdn.tutorialspoint.com/theme/vendor/modernizr.js"></script>
+<!--[if IE]>
+<link rel="stylesheet" href="http://cdn.tutorialspoint.com/theme/css/ie.css">
+<![endif]-->
+<!--[if lte IE 8]>
+<script src="http://cdn.tutorialspoint.com/theme/vendor/respond.js"></script>
+<![endif]-->
+<!--[if IE]>
+<link rel="stylesheet" href="http://cdn.tutorialspoint.com/theme/css/ie.css">
+<![endif]-->
+<!--[if lte IE 8]>
+<script src="http://cdn.tutorialspoint.com/theme/vendor/respond.js"></script>
+<![endif]-->
+<!--[if IE 8]>
+<link rel="stylesheet" type="text/css" href="http://cdn.tutorialspoint.com/theme/css/ie8.css">
+<![endif]-->
+<!--[if IE 9]>
+<link rel="stylesheet" type="text/css" href="http://cdn.tutorialspoint.com/theme/css/ie9.css">
+<![endif]-->
+<!-- Front Page related changes -->
+<style>
+div.feature-box div.feature-box-icon, .col-md-3 .course-box, li.heading, footer div.footer-ribon, div.footer-copyright { background: #39b9fa url(../images/pattern.png) repeat center center !important; }
+header nav ul.nav-main li a:hover, header nav ul.nav-main li.dropdown:hover a.dropdown-toggle { background: #39b9fa;} 
+header nav ul.nav-main li.dropdown:hover > ul{ border:2px solid #39b9fa}
+header nav ul.nav-main ul.dropdown-menu > li > a:hover, #mainMenu > li:hover, header nav.mega-menu ul.nav-main .mega-menu-content ul.sub-menu li:hover{ background: #39b9fa !important;}
+img.mobile-apps { border: 1px solid #39b9fa !important; }
+footer i.icon, footer ul.list.icons li i { color: #39b9fa !important; }
+</style>
+</head>
+<body onload="prettyPrint()">
+<div class="wrapLoader">
+   <div class="imgLoader">
+      <img  src="../../cdn.tutorialspoint.com/images/loading-cg.gif" alt="" width="70" height="70" />
+   </div>
+</div>
+<div id="divGoogle"></div>
+<div class="body">
+<header>
+   <div class="container">			
+      <h1 class="logo">
+      <a href="http://www.tutorialspoint.com/index.htm" title="tutorialspoint">
+      <img alt="tutorialspoint" src="images/logo.png">
+      </a>
+      </h1>			
+      <div class="search" id="searchBar">
+         <form method="get" id="searchform" name="searchform" action="http://www.google.com/search" target="_blank">
+            <input type="hidden" name="sitesearch" value="www.tutorialspoint.com">
+            <div class="input-group">
+               <input type="text" class="form-control search" name="q" id="q" placeholder="Search your tutorials..." onfocus="if (this.value == 'Search your tutorials...') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search your tutorials...';}">
+               <input value="FORID:11" name="cof" type="hidden">
+               <input type="hidden" name="ie" value="ISO-8859-1">
+               <span class="input-group-btn"> <button class="btn btn-default" type="submit"><i class="icon icon-search"></i></button> </span>
+            </div>
+         </form>
+      </div>
+      <nav>
+         <ul class="nav nav-pills nav-top">
+            <li><a href="http://www.tutorialspoint.com/absoluteclasses.htm"><img src="../images/free-training.png" style="width:100px; position:absolute;left:-158px; top:-7px; z-index:99;" title="Free Online Training"></a></li>
+            <li> <a href="http://www.tutorialspoint.com/shared-tutorials.php"><i class="icon icon-user"></i> &nbsp;Shared</a> </li>
+            <li> <a href="http://www.tutorialspoint.com/shorttutorials"><i class="icon icon-file-text-o"></i> &nbsp;Articles</a> </li>
+            <div class="social-icons">
+               <ul class="social-icons">
+               <li class="facebook"><a href="http://www.facebook.com/tutorialspointindia" target="_blank" title="Facebook">Facebook</a></li>
+               <li class="twitter"><a href="http://www.twitter.com/tutorialspoint" target="_blank" title="Twitter">Twitter</a></li>
+               <li class="googleplus"><a href="https://plus.google.com/u/0/116678774017490391259/posts" target="_blank" data-placement="bottom" title="tutorialspoint @ Google+">Google+</a></li>
+               <li class="linkedin"><a href="http://www.linkedin.com/company/tutorialspoint" target="_blank" title="tutorialspoint @ Linkedin">Linkedin</a></li>
+               </ul>
+            </div>
+            </li>
+         </ul>
+      </nav>
+         <!-- search code here  --> 
+      <button class="btn btn-responsive-nav btn-inverse" data-toggle="collapse" data-target=".nav-main-collapse" id="pull"> <i class="icon icon-bars"></i> </button>
+   </div>
+   <div class="navbar-collapse nav-main-collapse collapse">
+      <div class="container">
+         <nav class="nav-main mega-menu">
+            <ul class="nav nav-pills nav-main" id="mainMenu">
+               <li class="dropdown"> <a class="dropdown" href="http://www.tutorialspoint.com/index.htm"><i class="icon icon-home"></i> Home</a> </li>   
+               <li class="dropdown"><a class="dropdown-toggle tut-lib" href="http://www.tutorialspoint.com/tutorialslibrary.htm"> Tutorials Library <i class="fa-angle-down"></i> </a>
+      <ul class="dropdown-menu" id="submenu">
+         <li>
+            <div class="mega-menu-content">
+              <div class="row">
+                 <div class="col-md-6">
+                    <ul class="sub-menu">
+                     <li><a href="http://www.tutorialspoint.com/academic_tutorials.htm">Academic</a></li>
+                     <li><a href="http://www.tutorialspoint.com/big_data_tutorials.htm">Big Data</a></li>
+                     <li><a href="http://www.tutorialspoint.com/database_tutorials.htm">Databases</a></li>
+                     <li><a href="http://www.tutorialspoint.com/java_technology_tutorials.htm">Java Technologies</a></li>
+                     <li><a href="http://www.tutorialspoint.com/mainframe_tutorials.htm">Mainframe</a></li>
+                     <li><a href="http://www.tutorialspoint.com/management_tutorials.htm">Management</a></li>
+                     <li><a href="http://www.tutorialspoint.com/microsoft_technologies_tutorials.htm">Microsoft Technologies</a></li>
+                     <li><a href="http://www.tutorialspoint.com/misc_tutorials.htm">Miscellaneous</a></li>
+                   </ul>
+                 </div>
+                 <div class="col-md-6">
+                  <ul class="sub-menu">
+                     <li><a href="http://www.tutorialspoint.com/mobile_development_tutorials.htm">Mobile Development</a></li>
+                     <li><a href="http://www.tutorialspoint.com/computer_programming_tutorials.htm">Programming</a></li>
+                     <li><a href="http://www.tutorialspoint.com/scripting_lnaguage_tutorials.htm">Scripts</a></li>
+                     <li><a href="http://www.tutorialspoint.com/software_quality_tutorials.htm">Software Quality</a></li>
+                     <li><a href="http://www.tutorialspoint.com/telecom_tutorials.htm">Telecom</a></li>
+                     <li><a href="http://www.tutorialspoint.com/web_development_tutorials.htm">Web Development</a></li>
+                     <li><a href="http://www.tutorialspoint.com/xml_technologies_tutorials.htm">XML Technologies</a></li>
+                     <li><a href="http://www.tutorialspoint.com/multi_language_tutorials.htm">Multi Language Tutorials</a></li>
+                  </ul>
+                 </div>
+              </div>
+            </div>
+         </li>
+       </ul>
+               </li>
+               <li class="dropdown"><a class="dropdown" href="http://www.tutorialspoint.com/codingground.htm"><i class="fa-code"></i> Coding Ground</a> </li>
+                  <li class="dropdown"> 							
+                     <a class="dropdown-toggle tut-plus" href="http://www.tutorialspoint.com/absoluteclasses.htm">Absolute Classes <i class="fa-angle-down"></i></a>                     <ul class="dropdown-menu" id="submenu1">
+                                                <li class="current-menu-ancestor current-menu-parent active dropdown-submenu" style="border-bottom:none;">
+                        <li style="border-bottom:none;"><a href="http://www.tutorialspoint.com/absoluteclasses/userlogin.htm"><i class="fa-sign-in"></i>&nbsp;Login</a></li>
+                        <li style="border-bottom:1px dashed #ccc; height:1px; padding:0px; margin:0px 10px 0px 10px" class="stickyhide">&nbsp;</li>
+                        <li><a href="http://www.tutorialspoint.com/absoluteclasses/usersignup.htm"><i class="fa-pencil-square-o"></i>&nbsp;Sign Up&nbsp;</a></li>
+                        <li style="border-bottom:none;"><a href="http://www.tutorialspoint.com/absoluteclasses/upcomingclasses.htm" style="border-bottom:none;"><i class="fa-book book-head"></i> Upcoming Classes </a></li>
+                        <li style="border-bottom:1px dashed #ccc; height:1px; padding:0px; margin:0px 10px 0px 10px">&nbsp;</li>
+                        <li style="border-bottom:1px dashed #ccc; height:1px; padding:0px; margin:0px 10px 0px 10px">&nbsp;</li>
+                        <li style="border-bottom:1px dashed #ccc;;"><a href="http://www.tutorialspoint.com/absoluteclasses/allcourses.htm" style="border-bottom:none;"><i class="fa-book book-head"></i> All Courses </a></li>
+                        <li style="border-bottom:1px dashed #ccc;;"><a href="http://www.tutorialspoint.com/absoluteclasses/help.htm" style="border-bottom:none;"><i class="fa-question book-head"></i> Help/FAQ</a></li>
+                        <li style="border-bottom:none;"><a href="http://www.tutorialspoint.com/absoluteclasses/contact_abc.htm" style="border-bottom:none;"><i class="fa fa-envelope-o"></i> Contact</a></li>
+                                             
+                     </ul>
+                  </li>
+            </ul>
+         </nav>
+      </div>
+   </div>	
+</header>
+<div style="clear:both;"></div>
+<div role="main" class="main">
+<div class="container">
+<div class="row">
+<div class="col-md-2">
+<aside class="sidebar">
+<div class="mini-logo">
+<img src="images/hadoop-mini-logo.jpg" alt="Hadoop Tutorial" />
+</div>
+<ul class="nav nav-list primary left-menu">
+<li class="heading">Hadoop Tutorial</li>
+<li><a href="index.html">Hadoop - Home</a></li>
+<li><a href="hadoop_big_data_overview.html">Hadoop - Big Data Overview</a></li>
+<li><a href="hadoop_big_data_solutions.html">Hadoop - Big Data Solutions</a></li>
+<li><a href="hadoop_introduction.html">Hadoop - Introduction</a></li>
+<li><a href="hadoop_enviornment_setup.html">Hadoop - Enviornment Setup</a></li>
+<li><a href="hadoop_hdfs_overview.html">Hadoop - HDFS Overview</a></li>
+<li><a href="hadoop_hdfs_operations.html">Hadoop - HDFS Operations</a></li>
+<li><a href="hadoop_command_reference.html">Hadoop - Command Reference</a></li>
+<li><a href="hadoop_mapreduce.html">Hadoop - MapReduce</a></li>
+<li><a href="hadoop_streaming.html">Hadoop - Streaming</a></li>
+<li><a href="hadoop_multi_node_cluster.html">Hadoop - Multi Node Cluster</a></li>
+</ul>
+<ul class="nav nav-list primary left-menu special">
+<li class="heading">Hadoop Useful Resources</li>
+<li><a  href="hadoop_quick_guide.html">Hadoop - Quick Guide</a></li>
+<li><a  href="hadoop_useful_resources.html">Hadoop - Useful Resources</a></li>
+<li><a  href="hadoop_discussion.html">Hadoop - Discussion</a></li>
+</ul>
+<ul class="nav nav-list primary push-bottom left-menu special">
+<li class="sreading">Selected Reading</li>
+<li><a target="_top" href="http://www.tutorialspoint.com/developers_best_practices/index.htm">Developer's Best Practices</a></li>
+<li><a target="_top" href="http://www.tutorialspoint.com/effective_resume_writing.htm">Effective Resume Writing</a></li>
+<li><a target="_top" href="http://www.tutorialspoint.com/computer_glossary.htm">Computer Glossary</a></li>
+<li><a target="_top" href="http://www.tutorialspoint.com/computer_whoiswho.htm">Who is Who</a></li>
+</ul>
+</aside>
+</div>
+<!-- PRINTING STARTS HERE -->
+<div class="row">
+<div class="content">
+<div class="col-md-7 middle-col">
+<h1>Hadoop - Enviornment Setup</h1>
+<div class="topgooglead">
+<hr />
+<div style="padding-bottom:5px;padding-left:10px;">Advertisements</div>
+<script type="text/javascript"><!--
+google_ad_client = "pub-7133395778201029";
+google_ad_width = 468;
+google_ad_height = 60;
+google_ad_format = "468x60_as";
+google_ad_type = "image";
+google_ad_channel = "";
+//--></script>
+<script type="text/javascript" src="../../pagead2.googlesyndication.com/pagead/f.txt">
+</script>
+</div>
+<hr />
+<div class="pre-btn">
+<a href="hadoop_introduction.html"><i class="icon icon-arrow-circle-o-left big-font"></i> Previous Page</a>
+</div>
+<div class="nxt-btn">
+<a href="hadoop_hdfs_overview.html">Next Page <i class="icon icon-arrow-circle-o-right big-font"></i>&nbsp;</a>
+</div>
+<div class="clearer"></div>
+<hr />
+<p>Hadoop is supported by GNU/Linux platform and its flavors. Therefore, we have to install a Linux operating system for setting up Hadoop environment. In case you have an OS other than Linux, you can install a Virtualbox software in it and have Linux inside the Virtualbox.</p>
+<h2>Pre-installation Setup</h2>
+<p>Before installing Hadoop into the Linux environment, we need to set up Linux using ssh (Secure Shell). Follow the steps given below for setting up the Linux environment.</p>
+<h3>Creating a User</h3>
+<p>At the beginning, it is recommended to create a separate user for Hadoop to isolate Hadoop file system from Unix file system. Follow the steps given below to create a user:</p>
+<ul class="list">
+<li>Open the root using the command “su”.</li>
+<li>Create a user from the root account using the command “useradd username”.</li>
+<li>Now you can open an existing user account using the command “su username”. </li>
+</ul>
+<p>Open the Linux terminal and type the following commands to create a user.</p>
+<pre class="prettyprint notranslate">
+$ su 
+   password: 
+# useradd hadoop 
+# passwd hadoop 
+   New passwd: 
+   Retype new passwd 
+</pre>
+<h2>SSH Setup and Key Generation </h2>
+<p>SSH setup is required to do different operations on a cluster such as starting, stopping, distributed daemon shell operations. To authenticate different users of Hadoop, it is required to provide public/private key pair for a Hadoop user and share it with different users.</p>
+<p>The following commands are used for generating a key value pair using SSH. Copy the public keys form id_rsa.pub to authorized_keys, and provide the owner with read and write permissions to authorized_keys file respectively.</p>
+<pre class="prettyprint notranslate">
+$ ssh-keygen -t rsa 
+$ cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys 
+$ chmod 0600 ~/.ssh/authorized_keys 
+</pre>
+<h2>Installing Java</h2>
+<p>Java is the main prerequisite for Hadoop. First of all, you should verify the existence of java in your system using the command “java -version”. The syntax of java version command is given below.</p>
+<pre class="prettyprint notranslate">
+$ java -version 
+</pre>
+<p>If everything is in order, it will give you the following output.</p>
+<pre class="prettyprint notranslate">
+java version "1.7.0_71" 
+Java(TM) SE Runtime Environment (build 1.7.0_71-b13) 
+Java HotSpot(TM) Client VM (build 25.0-b02, mixed mode)  
+</pre>
+<p>If java is not installed in your system, then follow the steps given below for installing java.</p>
+<h3>Step 1</h3>
+<p>Download java (JDK &lt;latest version&gt; - X64.tar.gz) by visiting the following link<a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads1880260.html"> http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads1880260.html.</a></p>
+<p>Then jdk-7u71-linux-x64.tar.gz will be downloaded into your system. </p>
+<h3>Step 2</h3>
+<p>Generally you will find the downloaded java file in Downloads folder. Verify it and extract the jdk-7u71-linux-x64.gz file using the following commands.</p>
+<pre class="prettyprint notranslate">
+$ cd Downloads/ 
+$ ls 
+jdk-7u71-linux-x64.gz 
+$ tar zxf jdk-7u71-linux-x64.gz 
+$ ls 
+jdk1.7.0_71   jdk-7u71-linux-x64.gz 
+</pre>
+<h3>Step 3</h3>
+<p>To make java available to all the users, you have to move it to the location “/usr/local/”. Open root, and type the following commands.</p>
+<pre class="prettyprint notranslate">
+$ su 
+password: 
+# mv jdk1.7.0_71 /usr/local/ 
+# exit 
+</pre>
+<h3>Step 4</h3>
+<p>For setting up PATH and JAVA_HOME variables, add the following commands to ~/.bashrc file.</p>
+<pre class="prettyprint notranslate">
+export JAVA_HOME=/usr/local/jdk1.7.0_71 
+export PATH=$PATH:$JAVA_HOME/bin 
+</pre>
+
+<p>Now apply all the changes into the current running system.</p>
+<pre class="prettyprint notranslate">
+$ source ~/.bashrc
+</pre>
+<h3>Step 5</h3>
+<p>Use the following commands to configure java alternatives:</p>
+<pre class="prettyprint notranslate">
+# alternatives --install /usr/bin/java java usr/local/java/bin/java 2
+
+# alternatives --install /usr/bin/javac javac usr/local/java/bin/javac 2
+
+# alternatives --install /usr/bin/jar jar usr/local/java/bin/jar 2
+
+# alternatives --set java usr/local/java/bin/java
+
+# alternatives --set javac usr/local/java/bin/javac
+
+# alternatives --set jar usr/local/java/bin/jar
+</pre>
+<p>Now verify the java -version command from the terminal as explained above.</p>
+<h2>Downloading Hadoop</h2>
+<p>Download and extract Hadoop 2.4.1 from Apache software foundation using the following commands.</p>
+<pre class="prettyprint notranslate">
+$ su 
+password: 
+# cd /usr/local 
+# wget http://apache.claz.org/hadoop/common/hadoop-2.4.1/ 
+hadoop-2.4.1.tar.gz 
+# tar xzf hadoop-2.4.1.tar.gz 
+# mv hadoop-2.4.1/* to hadoop/ 
+# exit 
+</pre>
+<h2>Hadoop Operation Modes</h2>
+<p>Once you have downloaded Hadoop, you can operate your Hadoop cluster in one of the three supported modes:</p>
+<ul class="list">
+<li><p><b>Local/Standalone Mode</b> : After downloading Hadoop in your system, by default, it is configured in a standalone mode and can be run as a single java process.</p></li>
+<li><p><b>Pseudo Distributed Mode</b> : It is a distributed simulation on single machine. Each Hadoop daemon such as hdfs, yarn, MapReduce etc., will run as a separate java process. This mode is useful for development.</p></li>
+<li><p><b>Fully Distributed Mode</b> : This mode is fully distributed with minimum two or more machines as a cluster. We will come across this mode in detail in the coming chapters.</p></li>
+</ul> 
+<h2>Installing Hadoop in Standalone Mode</h2>
+<p>Here we will discuss the installation of <b>Hadoop 2.4.1</b> in standalone mode.</p>
+<p>There are no daemons running and everything runs in a single JVM. Standalone mode is suitable for running MapReduce programs during development, since it is easy to test and debug them.</p>
+<h3>Setting Up Hadoop</h3>
+<p>You can set Hadoop environment variables by appending the following commands to <b>~/.bashrc</b> file.</p>
+<pre class="prettyprint notranslate">
+export HADOOP_HOME=/usr/local/hadoop 
+</pre>
+<p>Before proceeding further, you need to make sure that Hadoop is working fine. Just issue the following command:</p>
+<pre class="prettyprint notranslate">
+$ hadoop version 
+</pre>
+<p>If everything is fine with your setup, then you should see the following result:</p>
+<pre class="prettyprint notranslate">
+Hadoop 2.4.1 
+Subversion https://svn.apache.org/repos/asf/hadoop/common -r 1529768 
+Compiled by hortonmu on 2013-10-07T06:28Z 
+Compiled with protoc 2.5.0
+From source with checksum 79e53ce7994d1628b240f09af91e1af4 
+</pre>
+<p>It means your Hadoop's standalone mode setup is working fine. By default, Hadoop is configured to run in a non-distributed mode on a single machine.</p>
+<h3>Example</h3>
+<p>Let's check a simple example of Hadoop. Hadoop installation delivers the following example MapReduce jar file, which provides basic functionality of MapReduce and can be used for calculating, like Pi value, word counts in a given list of files, etc.</p>
+<pre class="prettyprint notranslate">
+$HADOOP_HOME/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.2.0.jar 
+</pre>
+<p>Let's have an input directory where we will push a few files and our requirement is to count the total number of words in those files. To calculate the total number of words, we do not need to write our MapReduce, provided the .jar file contains the implementation for word count. You can try other examples using the same .jar file; just issue the following commands to check supported MapReduce functional programs by hadoop-mapreduce-examples-2.2.0.jar file.</p>
+<pre class="prettyprint notranslate">
+$ hadoop jar $HADOOP_HOME/share/hadoop/mapreduce/hadoop-mapreduceexamples-2.2.0.jar 
+</pre>
+<h3>Step 1</h3>
+<p>Create temporary content files in the input directory. You can create this input directory anywhere you would like to work.</p>
+<pre class="prettyprint notranslate">
+$ mkdir input 
+$ cp $HADOOP_HOME/*.txt input 
+$ ls -l input 
+</pre>
+<p>It will give the following files in your input directory:</p>
+<pre class="prettyprint notranslate">
+total 24 
+-rw-r--r-- 1 root root 15164 Feb 21 10:14 LICENSE.txt 
+-rw-r--r-- 1 root root   101 Feb 21 10:14 NOTICE.txt
+-rw-r--r-- 1 root root  1366 Feb 21 10:14 README.txt 
+</pre>
+<p>These files have been copied from the Hadoop installation home directory. For your experiment, you can have different and large sets of files.</p>
+<h3>Step 2</h3>
+<p>Let's start the Hadoop process to count the total number of words in all the files available in the input directory, as follows:</p>
+<pre class="prettyprint notranslate">
+$ hadoop jar $HADOOP_HOME/share/hadoop/mapreduce/hadoop-mapreduceexamples-2.2.0.jar  wordcount input ouput 
+</pre>
+<h3>Step 3</h3>
+<p>Step-2 will do the required processing and save the output in output/part-r00000 file, which you can check by using:</p>
+<pre class="prettyprint notranslate">
+$cat output/* 
+</pre>
+<p>It will list down all the words along with their total counts available in all the files available in the input directory.</p>
+<pre class="prettyprint notranslate">
+"AS      4 
+"Contribution" 1 
+"Contributor" 1 
+"Derivative 1
+"Legal 1
+"License"      1
+"License");     1 
+"Licensor"      1
+"NOTICE”        1 
+"Not      1 
+"Object"        1 
+"Source”        1 
+"Work”    1 
+"You"     1 
+"Your")   1 
+"[]"      1 
+"control"       1 
+"printed        1 
+"submitted"     1 
+(50%)     1 
+(BIS),    1 
+(C)       1 
+(Don't)   1 
+(ECCN)    1 
+(INCLUDING      2 
+(INCLUDING,     2 
+.............
+</pre>
+<h2>Installing Hadoop in Pseudo Distributed Mode</h2>
+<p>Follow the steps given below to install Hadoop 2.4.1 in pseudo distributed mode.</p>
+<h3>Step 1: Setting Up Hadoop</h3>
+<p>You can set Hadoop environment variables by appending the following commands to <b>~/.bashrc</b> file.</p>
+<pre class="prettyprint notranslate">
+export HADOOP_HOME=/usr/local/hadoop 
+export HADOOP_MAPRED_HOME=$HADOOP_HOME 
+export HADOOP_COMMON_HOME=$HADOOP_HOME 
+export HADOOP_HDFS_HOME=$HADOOP_HOME 
+export YARN_HOME=$HADOOP_HOME 
+export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native 
+export PATH=$PATH:$HADOOP_HOME/sbin:$HADOOP_HOME/bin 
+export HADOOP_INSTALL=$HADOOP_HOME 
+</pre>
+<p>Now apply all the changes into the current running system.</p>
+<pre class="prettyprint notranslate">
+$ source ~/.bashrc 
+</pre>
+<h3>Step 2: Hadoop Configuration</h3>
+<p>You can find all the Hadoop configuration files in the location “$HADOOP_HOME/etc/hadoop”. It is required to make changes in those configuration files according to your Hadoop infrastructure.</p>
+<pre class="prettyprint notranslate">
+$ cd $HADOOP_HOME/etc/hadoop
+</pre>
+<p>In order to develop Hadoop programs in java, you have to reset the java environment variables in <b>hadoop-env.sh</b> file by replacing <b>JAVA_HOME</b> value with the location of java in your system.</p>
+<pre class="prettyprint notranslate">
+export JAVA_HOME=/usr/local/jdk1.7.0_71
+</pre>
+<p>The following are the list of files that you have to edit to configure Hadoop. </p>
+<p><b>core-site.xml</b></p>
+<p>The <b>core-site.xml</b> file contains information such as the port number used for Hadoop instance, memory allocated for the file system, memory limit for storing the data, and size of Read/Write buffers.</p>
+<p>Open the core-site.xml and add the following properties in between &lt;configuration&gt;, &lt;/configuration&gt; tags.</p>
+<pre class="prettyprint notranslate">
+&lt;configuration&gt;
+
+   &lt;property&gt;
+      &lt;name&gt;fs.default.name &lt;/name&gt;
+      &lt;value&gt; hdfs://localhost:9000 &lt;/value&gt; 
+   &lt;/property&gt;
+ 
+&lt;/configuration&gt;
+</pre>
+<p><b>hdfs-site.xml</b></p>
+<p>The <b>hdfs-site.xml</b> file contains information such as the value of replication data, namenode path, and datanode paths of your local file systems. It means the place where you want to store the Hadoop infrastructure.</p>
+<p>Let us assume the following data.</p>
+<pre class="prettyprint notranslate">
+dfs.replication (data replication value) = 1 
+(In the below given path /hadoop/ is the user name. 
+hadoopinfra/hdfs/namenode is the directory created by hdfs file system.) 
+namenode path = //home/hadoop/hadoopinfra/hdfs/namenode 
+(hadoopinfra/hdfs/datanode is the directory created by hdfs file system.) 
+datanode path = //home/hadoop/hadoopinfra/hdfs/datanode 
+</pre>
+<p>Open this file and add the following properties in between the &lt;configuration&gt; &lt/configuration&gt; tags in this file.</p>
+<pre class="prettyprint notranslate">
+&lt;configuration&gt;
+
+   &lt;property&gt;
+      &lt;name&gt;dfs.replication&lt;/name&gt;
+      &lt;value&gt;1&lt;/value&gt;
+   &lt;/property&gt;
+    
+   &lt;property&gt;
+      &lt;name&gt;dfs.name.dir&lt;/name&gt;
+      &lt;value&gt;file:///home/hadoop/hadoopinfra/hdfs/namenode &lt;/value&gt;
+   &lt;/property&gt;
+    
+   &lt;property&gt;
+      &lt;name&gt;dfs.data.dir&lt/name&gt; 
+      &lt;value&gt;file:///home/hadoop/hadoopinfra/hdfs/datanode &lt;/value&gt; 
+   &lt;/property&gt;
+       
+&lt;/configuration&gt;
+</pre>
+<p><b>Note:</b> In the above file, all the property values are user-defined and you can make changes according to your Hadoop infrastructure.</p>
+<p><b>yarn-site.xml</b></p>
+<p>This file is used to configure yarn into Hadoop. Open the yarn-site.xml file and add the following properties in between the &lt;configuration&gt;, &lt;/configuration&gt; tags in this file.</p>
+<pre class="prettyprint notranslate">
+&lt;configuration&gt;
+ 
+   &lt;property&gt;
+      &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;
+      &lt;value&gt;mapreduce_shuffle&lt/value&gt; 
+   &lt;/property&gt;
+  
+&lt;/configuration&gt;
+</pre>
+<p><b>mapred-site.xml</b></p>
+<p>This file is used to specify which MapReduce framework we are using. By default, Hadoop contains a template of yarn-site.xml. First of all, it is required to copy the file from <b>mapred-site,xml.template</b> to <b> mapred-site.xml</b> file using the following command.</p>
+<pre class="prettyprint notranslate">
+$ cp mapred-site.xml.template mapred-site.xml 
+</pre>
+<p>Open mapred-site.xml file and add the following properties in between the &lt;configuration&gt;, &lt;/configuration&gt;tags in this file.</p>
+<pre class="prettyprint notranslate">
+&lt;configuration&gt;
+ 
+   &lt;property&gt; 
+      &lt;name&gt;mapreduce.framework.name&lt;/name&gt;
+      &lt;value&gt;yarn&lt;/value&gt;
+   &lt;/property&gt;
+   
+&lt;/configuration&gt;
+</pre>
+<h2>Verifying Hadoop Installation</h2>
+<p>The following steps are used to verify the Hadoop installation.</p>
+<h3>Step 1: Name Node Setup</h3>
+<p>Set up the namenode using the command “hdfs namenode -format” as follows.</p>
+<pre class="prettyprint notranslate">
+$ cd ~ 
+$ hdfs namenode -format 
+</pre>
+<p>The expected result is as follows.</p>
+<pre class="prettyprint notranslate">
+10/24/14 21:30:55 INFO namenode.NameNode: STARTUP_MSG: 
+/************************************************************ 
+STARTUP_MSG: Starting NameNode 
+STARTUP_MSG:   host = localhost/192.168.1.11 
+STARTUP_MSG:   args = [-format] 
+STARTUP_MSG:   version = 2.4.1 
+...
+...
+10/24/14 21:30:56 INFO common.Storage: Storage directory 
+/home/hadoop/hadoopinfra/hdfs/namenode has been successfully formatted. 
+10/24/14 21:30:56 INFO namenode.NNStorageRetentionManager: Going to 
+retain 1 images with txid >= 0 
+10/24/14 21:30:56 INFO util.ExitUtil: Exiting with status 0 
+10/24/14 21:30:56 INFO namenode.NameNode: SHUTDOWN_MSG: 
+/************************************************************ 
+SHUTDOWN_MSG: Shutting down NameNode at localhost/192.168.1.11 
+************************************************************/
+</pre>
+<h3>Step 2: Verifying Hadoop dfs</h3>
+<p>The following command is used to start dfs. Executing this command will start your Hadoop file system.</p>
+<pre class="prettyprint notranslate">
+$ start-dfs.sh 
+</pre>
+<p>The expected output is as follows:</p>
+<pre class="prettyprint notranslate">
+10/24/14 21:37:56 
+Starting namenodes on [localhost] 
+localhost: starting namenode, logging to /home/hadoop/hadoop
+2.4.1/logs/hadoop-hadoop-namenode-localhost.out 
+localhost: starting datanode, logging to /home/hadoop/hadoop
+2.4.1/logs/hadoop-hadoop-datanode-localhost.out 
+Starting secondary namenodes [0.0.0.0]
+</pre>
+<h3>Step 3: Verifying Yarn Script</h3>
+<p>The following command is used to start the yarn script. Executing this command will start your yarn daemons.</p>
+<pre class="prettyprint notranslate">
+$ start-yarn.sh 
+</pre>
+<p>The expected output as follows:</p>
+<pre class="prettyprint notranslate">
+starting yarn daemons 
+starting resourcemanager, logging to /home/hadoop/hadoop
+2.4.1/logs/yarn-hadoop-resourcemanager-localhost.out 
+localhost: starting nodemanager, logging to /home/hadoop/hadoop
+2.4.1/logs/yarn-hadoop-nodemanager-localhost.out 
+</pre>
+<h3>Step 4: Accessing Hadoop on Browser</h3>
+<p>The default port number to access Hadoop is 50070. Use the following url to get Hadoop services on browser.</p>
+<pre class="prettyprint notranslate">
+http://localhost:50070/
+</pre>
+<img src="images/hadoop_on_browser.jpg" alt="Accessing Hadoop on Browser" />
+<h3>Step 5: Verify All Applications for Cluster</h3>
+<p>The default port number to access all applications of cluster is 8088. Use the following url to visit this service.</p>
+<pre class="prettyprint notranslate">
+http://localhost:8088/
+</pre>
+<img src="images/hadoop_application_cluster.jpg" alt="Hadoop Application Cluster" />
+<hr />
+<div class="pre-btn">
+<a href="hadoop_introduction.html"><i class="icon icon-arrow-circle-o-left big-font"></i> Previous Page</a>
+</div>
+<div class="print-btn center">
+<a href="http://www.tutorialspoint.com/cgi-bin/printpage.cgi" target="_blank"><i class="icon icon-print big-font"></i> Print</a>
+</div>
+<div class="nxt-btn">
+<a href="hadoop_hdfs_overview.html">Next Page <i class="icon icon-arrow-circle-o-right big-font"></i>&nbsp;</a>
+</div>
+<hr />
+<!-- PRINTING ENDS HERE -->
+<div class="bottomgooglead">
+<div class="bottomadtag">Advertisements</div>
+<script type="text/javascript"><!--
+google_ad_client = "pub-7133395778201029";
+google_ad_width = 580;
+google_ad_height = 400;
+google_ad_format = "580x400_as";
+google_ad_type = "image";
+google_ad_channel ="";
+//--></script>
+<script type="text/javascript"
+src="../../pagead2.googlesyndication.com/pagead/f.txt">
+</script>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-3" id="rightbar">
+<!-- AddThis Button BEGIN -->
+<div class="simple-ad">
+<div class="addthis_sharing_toolbox"></div>
+<script type="text/javascript" src="../../s7.addthis.com/js/300/addthis_widget.js#pubid=ra-4f661ec623a400f0"></script>
+</div>
+<!-- AddThis Button END -->
+<div class="google-ad" style="position:relative; left:20px;">Advertisements</div>
+<div class="rightgooglead">
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-2537027957187252";
+/* Right Side Ad */
+google_ad_slot = "right_side_ad";
+google_ad_width = 300;
+google_ad_height = 250;
+//-->
+</script>
+<script type="text/javascript"
+src="../../pagead2.googlesyndication.com/pagead/f.txt">
+</script>
+</div>
+<div class="rightgooglead">
+<script type="text/javascript"><!--
+google_ad_client = "pub-7133395778201029";
+google_ad_width = 300;
+google_ad_height = 600;
+google_ad_format = "300x600_as";
+google_ad_type = "image";
+google_ad_channel ="";
+//--></script>
+<script type="text/javascript"
+src="../../pagead2.googlesyndication.com/pagead/f.txt">
+</script>
+</div>
+<div class="rightgooglead">
+<script type="text/javascript"><!--
+google_ad_client = "pub-7133395778201029";
+google_ad_width = 300;
+google_ad_height = 250;
+google_ad_format = "300x250_as";
+google_ad_type = "image";
+google_ad_channel ="";
+//--></script>
+<script type="text/javascript"
+src="../../pagead2.googlesyndication.com/pagead/f.txt"> 
+</script>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<footer class="inner">
+<div class="container">
+<div class="row">
+<div class="footer-ribon">
+<span>Extras</span>
+</div>
+<div class="col-md-2">
+<h4>Mobile First</h4>
+<ul class="list icons list-unstyled">
+<li><a id="iphone" href="https://itunes.apple.com/om/app/tutorials-point/id914891263?mt=8" target="_blank" rel="nofollow"><img alt="tutorialspoint iPhone App" src="../../cdn.tutorialspoint.com/images/apple_store.png" class="mobile-apps"/></a></li>
+<li><a id="android" href="https://play.google.com/store/apps/details?id=com.tutorialspoint.onlineviewer" target="_blank" rel="nofollow"><img alt="tutorialspoint Android app" src="../../cdn.tutorialspoint.com/images/google_play.png" class="mobile-apps"/></a></li>
+<li><a id="microsoft" href="http://www.windowsphone.com/s?appid=91249671-7184-4ad6-8a5f-d11847946b09" target="_blank" rel="nofollow"><img alt="tutorialspoint Windows app" src="../../cdn.tutorialspoint.com/images/windows_store.png" class="mobile-apps"/></a></li>
+</ul>
+</div>
+<div class="col-md-2">
+<h4>About us</h4>
+<ul class="list icons list-unstyled">
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/about/index.htm">Company</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/about/about_team.htm">Team</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/about/about_careers.htm">Careers</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/about/about_privacy.htm">Privacy Policy</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/about/about_terms_of_use.htm">Terms of use</a></li>
+</ul>
+</div>
+<div class="col-md-2">
+<h4>Extra Links</h4>
+<ul class="list icons list-unstyled">
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/forums/index.php">Forums</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/shorttutorials/">Articles</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/shared-tutorials.php">Shared</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/seo_tools.htm">Seo Tools</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/about/contact_us.htm">Contact</a></li>
+</ul>
+</div>
+<div class="col-md-3">
+<div class="contact-details">
+<h4>Contact Us</h4>
+<ul class="contact">
+<li><p><i class="icon icon-map-marker"></i> <strong>Address:</strong> 388-A , Road no 22, Jubilee Hills, Hyderabad Telangana, INDIA-500033</p></li>
+<li><p><i class="icon icon-envelope"></i> <strong>Email:</strong> <a href="http://www.tutorialspoint.com/about/contact_us.htm">Click Here</a></p></li>
+<li><p><i class="icon icon-dribbble"></i> <strong>Website:</strong> <a href="http://www.tutorialspoint.com/">www.tutorialspoint.com</a></p></li>
+</ul>
+</div>
+<div class="social-icons">
+<ul class="social-icons">
+<li class="facebook"><a href="https://www.facebook.com/tutorialspointindia" target="_blank" data-placement="bottom" title="tutorialspoint @ Facebook">Facebook</a></li>
+<li class="googleplus"><a href="https://plus.google.com/u/0/116678774017490391259/posts" target="_blank" data-placement="bottom" title="tutorialspoint @ Google+">Google+</a></li>
+<li class="twitter"><a href="http://www.twitter.com/tutorialspoint" target="_blank" data-placement="bottom"  title="tutorialspoint @ Twitter">Twitter</a></li>
+<li class="linkedin"><a href="http://www.linkedin.com/company/tutorialspoint" target="_blank" data-placement="bottom"  title="tutorialspoint @ Linkedin">Linkedin</a></li>
+<li class="rss"><a href="http://feeds.feedburner.com/SharedTutorials" target="_blank" data-placement="bottom" title="tutorialspoint RSS">RSS</a></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="footer-copyright">
+<div class="container">
+<div class="row">
+<div class="col-md-1">
+<a href="http://www.tutorialspoint.com/index.htm" class="logo">
+<img alt="Tutorials Point" class="img-responsive" src="../../cdn.tutorialspoint.com/scripts/img/logo-footer.png">
+</a>
+</div>
+<div class="col-md-6">
+<p>&copy; Copyright 2015. All Rights Reserved.</p>
+</div>
+<div class="col-md-4">
+<nav id="sub-menu">
+<ul>
+<li><a href="http://www.tutorialspoint.com/about/tutorials_writing.htm">Write for us</a></li>
+<li><a href="http://www.tutorialspoint.com/about/faq.htm">FAQ's</a></li>
+<li><a href="http://www.tutorialspoint.com/about/about_helping.htm">Helping</a></li>
+<li><a href="http://www.tutorialspoint.com/about/contact_us.htm">Contact</a></li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<!-- Libs -->
+<script type="text/javascript" src="../../cdn.tutorialspoint.com/theme/js/custom-mini.js"></script>
+<script src="../../www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-232293-6";
+urchinTracker();
+$('.pg-icon').click(function(){
+   $('.wrapLoader').show();
+});
+</script>
+<script type="text/javascript" src="../../cdn.tutorialspoint.com/theme/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript">
+   var tryit = new $.TryIt('try_hadoop.html');
+   tryit.compile();
+</script>
+</div>
+</body>
+
+<!-- Mirrored from www.tutorialspoint.com/hadoop/hadoop_enviornment_setup.htm by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 20 Apr 2015 05:13:55 GMT -->
+</html>

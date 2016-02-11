@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="ie ie8"> <![endif]-->
+<!--[if IE 9]><html class="ie ie9"> <![endif]-->
+<!--[if gt IE 9]><!-->	<html> <!--<![endif]-->
+
+<!-- Mirrored from www.tutorialspoint.com/mysql/mysql-string-functions.htm by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 20 Apr 2015 05:35:11 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<!-- Basic -->
+<meta charset="utf-8">
+<title>MySQL String Functions</title>
+<meta name="description" content="MySQL Numeric Functions- Learn MySQL from basic to advanced covering database programming clauses command functions administration queries and usage along with PHP in simple steps. This tutorial takes you starting from basic to advance MySQL concepts." />
+<meta name="keywords" content="Learning, MySQL, Programming, Database, Clauses, Commands, Functions, MySQL Between Clause, Queries, Simple, Steps, Basic, Advanced, Concepts." />
+<base  />
+<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
+<meta name="author" content="tutorialspoint.com">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=yes">
+<meta property="fb:app_id" content="471319149685276" />
+<!-- Web Fonts  -->
+<link href="../../fonts.googleapis.com/cssf1e9.css?family=Open+Sans:300,400,600,700,800|Shadows+Into+Light" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="../../cdn.tutorialspoint.com/theme/css/fonts/font-awesome/css/font-awesome.css">
+<link rel="stylesheet" href="../../cdn.tutorialspoint.com/theme/css/custom-mini.css"/>
+<script type="text/javascript" src="../../cdn.tutorialspoint.com/theme/js/jquery.js"></script>
+<script type="text/javascript" src="../../cdn.tutorialspoint.com/theme/prettify.js"></script>
+<!-- Head Libs -->
+<script src="../../cdn.tutorialspoint.com/theme/vendor/modernizr.js"></script>
+<!--[if IE]>
+<link rel="stylesheet" href="http://cdn.tutorialspoint.com/theme/css/ie.css">
+<![endif]-->
+<!--[if lte IE 8]>
+<script src="http://cdn.tutorialspoint.com/theme/vendor/respond.js"></script>
+<![endif]-->
+<!--[if IE]>
+<link rel="stylesheet" href="http://cdn.tutorialspoint.com/theme/css/ie.css">
+<![endif]-->
+<!--[if lte IE 8]>
+<script src="http://cdn.tutorialspoint.com/theme/vendor/respond.js"></script>
+<![endif]-->
+<!--[if IE 8]>
+<link rel="stylesheet" type="text/css" href="http://cdn.tutorialspoint.com/theme/css/ie8.css">
+<![endif]-->
+<!--[if IE 9]>
+<link rel="stylesheet" type="text/css" href="http://cdn.tutorialspoint.com/theme/css/ie9.css">
+<![endif]-->
+<!-- Front Page related changes -->
+<style>
+div.feature-box div.feature-box-icon, .col-md-3 .course-box, li.heading, footer div.footer-ribon, div.footer-copyright { background: #004e61 url(../images/pattern.png) repeat center center !important; }
+header nav ul.nav-main li a:hover, header nav ul.nav-main li.dropdown:hover a.dropdown-toggle { background: #004e61;} 
+header nav ul.nav-main li.dropdown:hover > ul{ border:2px solid #004e61}
+header nav ul.nav-main ul.dropdown-menu > li > a:hover, #mainMenu > li:hover, header nav.mega-menu ul.nav-main .mega-menu-content ul.sub-menu li:hover{ background: #004e61 !important;}
+img.mobile-apps { border: 1px solid #004e61 !important; }
+footer i.icon, footer ul.list.icons li i { color: #004e61 !important; }
+</style>
+</head>
+<body onload="prettyPrint()">
+<div class="wrapLoader">
+   <div class="imgLoader">
+      <img  src="../../cdn.tutorialspoint.com/images/loading-cg.gif" alt="" width="70" height="70" />
+   </div>
+</div>
+<div id="divGoogle"></div>
+<div class="body">
+<header>
+   <div class="container">			
+      <h1 class="logo">
+      <a href="http://www.tutorialspoint.com/index.htm" title="tutorialspoint">
+      <img alt="tutorialspoint" src="images/logo.png">
+      </a>
+      </h1>			
+      <div class="search" id="searchBar">
+         <form method="get" id="searchform" name="searchform" action="http://www.google.com/search" target="_blank">
+            <input type="hidden" name="sitesearch" value="www.tutorialspoint.com">
+            <div class="input-group">
+               <input type="text" class="form-control search" name="q" id="q" placeholder="Search your tutorials..." onfocus="if (this.value == 'Search your tutorials...') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search your tutorials...';}">
+               <input value="FORID:11" name="cof" type="hidden">
+               <input type="hidden" name="ie" value="ISO-8859-1">
+               <span class="input-group-btn"> <button class="btn btn-default" type="submit"><i class="icon icon-search"></i></button> </span>
+            </div>
+         </form>
+      </div>
+      <nav>
+         <ul class="nav nav-pills nav-top">
+            <li><a href="http://www.tutorialspoint.com/absoluteclasses.htm"><img src="../images/free-training.png" style="width:100px; position:absolute;left:-158px; top:-7px; z-index:99;" title="Free Online Training"></a></li>
+            <li> <a href="http://www.tutorialspoint.com/shared-tutorials.php"><i class="icon icon-user"></i> &nbsp;Shared</a> </li>
+            <li> <a href="http://www.tutorialspoint.com/shorttutorials"><i class="icon icon-file-text-o"></i> &nbsp;Articles</a> </li>
+            <div class="social-icons">
+               <ul class="social-icons">
+               <li class="facebook"><a href="http://www.facebook.com/tutorialspointindia" target="_blank" title="Facebook">Facebook</a></li>
+               <li class="twitter"><a href="http://www.twitter.com/tutorialspoint" target="_blank" title="Twitter">Twitter</a></li>
+               <li class="googleplus"><a href="https://plus.google.com/u/0/116678774017490391259/posts" target="_blank" data-placement="bottom" title="tutorialspoint @ Google+">Google+</a></li>
+               <li class="linkedin"><a href="http://www.linkedin.com/company/tutorialspoint" target="_blank" title="tutorialspoint @ Linkedin">Linkedin</a></li>
+               </ul>
+            </div>
+            </li>
+         </ul>
+      </nav>
+         <!-- search code here  --> 
+      <button class="btn btn-responsive-nav btn-inverse" data-toggle="collapse" data-target=".nav-main-collapse" id="pull"> <i class="icon icon-bars"></i> </button>
+   </div>
+   <div class="navbar-collapse nav-main-collapse collapse">
+      <div class="container">
+         <nav class="nav-main mega-menu">
+            <ul class="nav nav-pills nav-main" id="mainMenu">
+               <li class="dropdown"> <a class="dropdown" href="http://www.tutorialspoint.com/index.htm"><i class="icon icon-home"></i> Home</a> </li>   
+               <li class="dropdown"><a class="dropdown-toggle tut-lib" href="http://www.tutorialspoint.com/tutorialslibrary.htm"> Tutorials Library <i class="fa-angle-down"></i> </a>
+      <ul class="dropdown-menu" id="submenu">
+         <li>
+            <div class="mega-menu-content">
+              <div class="row">
+                 <div class="col-md-6">
+                    <ul class="sub-menu">
+                     <li><a href="http://www.tutorialspoint.com/academic_tutorials.htm">Academic</a></li>
+                     <li><a href="http://www.tutorialspoint.com/big_data_tutorials.htm">Big Data</a></li>
+                     <li><a href="http://www.tutorialspoint.com/database_tutorials.htm">Databases</a></li>
+                     <li><a href="http://www.tutorialspoint.com/java_technology_tutorials.htm">Java Technologies</a></li>
+                     <li><a href="http://www.tutorialspoint.com/mainframe_tutorials.htm">Mainframe</a></li>
+                     <li><a href="http://www.tutorialspoint.com/management_tutorials.htm">Management</a></li>
+                     <li><a href="http://www.tutorialspoint.com/microsoft_technologies_tutorials.htm">Microsoft Technologies</a></li>
+                     <li><a href="http://www.tutorialspoint.com/misc_tutorials.htm">Miscellaneous</a></li>
+                   </ul>
+                 </div>
+                 <div class="col-md-6">
+                  <ul class="sub-menu">
+                     <li><a href="http://www.tutorialspoint.com/mobile_development_tutorials.htm">Mobile Development</a></li>
+                     <li><a href="http://www.tutorialspoint.com/computer_programming_tutorials.htm">Programming</a></li>
+                     <li><a href="http://www.tutorialspoint.com/scripting_lnaguage_tutorials.htm">Scripts</a></li>
+                     <li><a href="http://www.tutorialspoint.com/software_quality_tutorials.htm">Software Quality</a></li>
+                     <li><a href="http://www.tutorialspoint.com/telecom_tutorials.htm">Telecom</a></li>
+                     <li><a href="http://www.tutorialspoint.com/web_development_tutorials.htm">Web Development</a></li>
+                     <li><a href="http://www.tutorialspoint.com/xml_technologies_tutorials.htm">XML Technologies</a></li>
+                     <li><a href="http://www.tutorialspoint.com/multi_language_tutorials.htm">Multi Language Tutorials</a></li>
+                  </ul>
+                 </div>
+              </div>
+            </div>
+         </li>
+       </ul>
+               </li>
+               <li class="dropdown"><a class="dropdown" href="http://www.tutorialspoint.com/codingground.htm"><i class="fa-code"></i> Coding Ground</a> </li>
+                  <li class="dropdown"> 							
+                     <a class="dropdown-toggle tut-plus" href="http://www.tutorialspoint.com/absoluteclasses.htm">Absolute Classes <i class="fa-angle-down"></i></a>                     <ul class="dropdown-menu" id="submenu1">
+                                                <li class="current-menu-ancestor current-menu-parent active dropdown-submenu" style="border-bottom:none;">
+                        <li style="border-bottom:none;"><a href="http://www.tutorialspoint.com/absoluteclasses/userlogin.htm"><i class="fa-sign-in"></i>&nbsp;Login</a></li>
+                        <li style="border-bottom:1px dashed #ccc; height:1px; padding:0px; margin:0px 10px 0px 10px" class="stickyhide">&nbsp;</li>
+                        <li><a href="http://www.tutorialspoint.com/absoluteclasses/usersignup.htm"><i class="fa-pencil-square-o"></i>&nbsp;Sign Up&nbsp;</a></li>
+                        <li style="border-bottom:none;"><a href="http://www.tutorialspoint.com/absoluteclasses/upcomingclasses.htm" style="border-bottom:none;"><i class="fa-book book-head"></i> Upcoming Classes </a></li>
+                        <li style="border-bottom:1px dashed #ccc; height:1px; padding:0px; margin:0px 10px 0px 10px">&nbsp;</li>
+                        <li style="border-bottom:1px dashed #ccc; height:1px; padding:0px; margin:0px 10px 0px 10px">&nbsp;</li>
+                        <li style="border-bottom:1px dashed #ccc;;"><a href="http://www.tutorialspoint.com/absoluteclasses/allcourses.htm" style="border-bottom:none;"><i class="fa-book book-head"></i> All Courses </a></li>
+                        <li style="border-bottom:1px dashed #ccc;;"><a href="http://www.tutorialspoint.com/absoluteclasses/help.htm" style="border-bottom:none;"><i class="fa-question book-head"></i> Help/FAQ</a></li>
+                        <li style="border-bottom:none;"><a href="http://www.tutorialspoint.com/absoluteclasses/contact_abc.htm" style="border-bottom:none;"><i class="fa fa-envelope-o"></i> Contact</a></li>
+                                             
+                     </ul>
+                  </li>
+            </ul>
+         </nav>
+      </div>
+   </div>	
+</header>
+<div style="clear:both;"></div>
+<div role="main" class="main">
+<div class="container">
+<div class="row">
+<div class="col-md-2">
+<aside class="sidebar">
+<div class="mini-logo">
+<img src="images/mysql-mini-logo.jpg" alt="MySQL Tutorial" />
+</div>
+<ul class="nav nav-list primary left-menu" >
+<li class="heading">Learn MySQL</li>
+<li><a target="_top" href="index.html">MySQL - Home</a></li>
+<li><a target="_top" href="mysql-introduction.html">MySQL - Introduction</a></li>
+<li><a target="_top" href="mysql-installation.html">MySQL - Installation</a></li>
+<li><a target="_top" href="mysql-administration.html" >MySQL - Administration</a></li>
+<li><a target="_top" href="mysql-php-syntax.html">MySQL - PHP Syntax</a></li>
+<li><a target="_top" href="mysql-connection.html">MySQL - Connection</a></li>
+<li><a target="_top" href="mysql-create-database.html">MySQL - Create Database</a></li>
+<li><a target="_top" href="mysql-drop-database.html">MySQL - Drop Database</a></li>
+<li><a target="_top" href="mysql-select-database.html">MySQL - Select Database</a></li>
+<li><a target="_top" href="mysql-data-types.html">MySQL - Data Types</a></li>
+<li><a target="_top" href="mysql-create-tables.html">MySQL - Create Tables</a></li>
+<li><a target="_top" href="mysql-drop-tables.html">MySQL - Drop Tables</a></li>
+<li><a target="_top" href="mysql-insert-query.html">MySQL - Insert Query</a></li>
+<li><a target="_top" href="mysql-select-query.html">MySQL - Select Query</a></li>
+<li><a target="_top" href="mysql-where-clause.html">MySQL - Where Clause</a></li>
+<li><a target="_top" href="mysql-update-query.html">MySQL - Update Query</a></li>
+<li><a target="_top" href="mysql-delete-query.html">MySQL - Delete Query</a></li>
+<li><a target="_top" href="mysql-like-clause.html">MySQL - Like Clause</a></li>
+<li><a target="_top" href="mysql-sorting-results.html">MySQL - Sorting Results</a></li>
+<li><a target="_top" href="mysql-using-joins.html">MySQL - Using Join</a></li>
+<li><a target="_top" href="mysql-null-values.html">MySQL - NULL Values</a></li>
+<li><a target="_top" href="mysql-regexps.html">MySQL - Regexps</a></li>
+<li><a target="_top" href="mysql-transactions.html">MySQL - Transactions</a></li>
+<li><a target="_top" href="mysql-alter-command.html">MySQL - Alter Command</a></li>
+<li><a target="_top" href="mysql-indexes.html">MySQL - Indexes</a></li>
+<li><a target="_top" href="mysql-temporary-tables.html">MySQL - Temporary Tables</a></li>
+<li><a target="_top" href="mysql-clone-tables.html">MySQL - Clone Tables</a></li>
+<li><a target="_top" href="mysql-database-info.html">MySQL - Database Info</a></li>
+<li><a target="_top" href="mysql-using-sequences.html">MySQL - Using Sequences</a></li>
+<li><a target="_top" href="mysql-handling-duplicates.html">MySQL - Handling Duplicates</a></li>
+<li><a target="_top" href="mysql-sql-injection.html">MySQL - SQL Injection</a></li>
+<li><a target="_top" href="mysql-database-export.html">MySQL - Database Export</a></li>
+<li><a target="_top" href="mysql-database-import.html">MySQL - Database Import</a></li>
+</ul>
+<ul class="nav nav-list primary left-menu" >
+<li class="heading">MySQL Useful Resources</li>
+<li><a target="_top" href="mysql-useful-functions.html">MySQL - Useful Functions</a></li>
+<li><a target="_top" href="mysql-quick-guide.html">MySQL - Quick Guide</a></li>
+<li><a target="_top" href="mysql-useful-resources.html">MySQL - Useful Resources</a></li>
+<li><a target="_top" href="mysql-discussion.html">MySQL - Discussion</a></li>
+</ul>
+<ul class="nav nav-list primary push-bottom left-menu special">
+<li class="sreading">Selected Reading</li>
+<li><a target="_top" href="http://www.tutorialspoint.com/developers_best_practices/index.htm">Developer's Best Practices</a></li>
+<li><a target="_top" href="http://www.tutorialspoint.com/effective_resume_writing.htm">Effective Resume Writing</a></li>
+<li><a target="_top" href="http://www.tutorialspoint.com/computer_glossary.htm">Computer Glossary</a></li>
+<li><a target="_top" href="http://www.tutorialspoint.com/computer_whoiswho.htm">Who is Who</a></li>
+</ul>
+</aside>
+</div>
+<!-- PRINTING STARTS HERE -->
+<div class="row">
+<div class="content">
+<div class="col-md-7 middle-col">
+<h1>MySQL String Functions</h1>
+<div class="topgooglead">
+<hr />
+<div style="padding-bottom:5px;padding-left:10px;">Advertisements</div>
+<script type="text/javascript"><!--
+google_ad_client = "pub-7133395778201029";
+google_ad_width = 468;
+google_ad_height = 60;
+google_ad_format = "468x60_as";
+google_ad_type = "image";
+google_ad_channel = "";
+//--></script>
+<script type="text/javascript"
+src="../../pagead2.googlesyndication.com/pagead/f.txt"> 
+</script>
+</div>
+<hr />
+<div class="pre-btn">
+<a href="mysql-useful-functions.html"><i class="icon icon-arrow-circle-o-left big-font"></i> Previous Page</a>
+</div>
+<div class="nxt-btn">
+<a href="mysql-useful-functions.html">Next Page <i class="icon icon-arrow-circle-o-right big-font"></i>&nbsp;</a>
+</div>
+<div class="clearer"></div>
+<hr />
+<table class="table table-bordered">
+<tr>
+<th><strong>Name</strong></span></th>
+<th><strong>Description</strong></th>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_ascii">ASCII()</a></td>
+<td>Returns numeric value of left-most character</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_bin">BIN()</a></td>
+<td>Returns a string representation of the argument</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_bit-length">BIT_LENGTH()</a></td>
+<td>Returns length of argument in bits</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_char-length">CHAR_LENGTH()</a></td>
+<td>Returns number of characters in argument</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_char">CHAR()</a></td>
+<td>Returns the character for each integer passed</td>
+</tr>
+<tr nowrap>
+<td nowrap><a href="mysql-string-functions.html#function_character-length">CHARACTER_LENGTH()</a></td>
+<td>A synonym for CHAR_LENGTH()</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_concat-ws">CONCAT_WS()</a></td>
+<td>Returns concatenate with  separator</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_concat">CONCAT()</a></td>
+<td>Returns concatenated string</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_conv">CONV()</a></td>
+<td>Converts numbers between different number bases</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_elt">ELT()</a></td>
+<td>Returns string at index number</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_export-set">EXPORT_SET()</a></td>
+<td>Returns a string such that for every bit set in the value  bits, you get an on string and for every unset bit, you get an off string</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_field">FIELD()</a></td>
+<td>Returns the index (position) of the first argument  in the subsequent arguments</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_find-in-set">FIND_IN_SET()</a></td>
+<td>Returns the index position of  the first argument within the second argument</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_format">FORMAT()</a></td>
+<td>Returns a number formatted to specified number of decimal places</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_hex">HEX()</a></td>
+<td>Returns a string representation of a hex value</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_insert">INSERT()</a></td>
+<td>Inserts a substring at the specified position up to  the specified number of characters</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_instr">INSTR()</a></td>
+<td>Returns the index of the first occurrence of substring</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_lcase">LCASE()</a></td>
+<td>Synonym for LOWER() </td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_left">LEFT()</a></td>
+<td>Returns the leftmost number of characters as specified</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_length">LENGTH()</a></td>
+<td>Returns the length of a string in bytes</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_load-file">LOAD_FILE()</a></td>
+<td>Loads the named file</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_locate">LOCATE()</a></td>
+<td>Returns the position of the first occurrence  of substring</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_lower">LOWER()</a></td>
+<td>Returns the argument in lowercase </td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_lpad">LPAD()</a></td>
+<td>Returns the string argument, left-padded  with the specified string</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_ltrim">LTRIM()</a></td>
+<td>Removes leading spaces</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_make-set">MAKE_SET()</a></td>
+<td>Returns a set of comma-separated strings  that have the corresponding bit in bits set</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_mid">MID()</a></td>
+<td>Returns a substring starting from the specified position</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_oct">OCT()</a></td>
+<td>Returns a string representation of the octal argument</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_octet-length">OCTET_LENGTH()</a></td>
+<td>A synonym for LENGTH()</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_ord">ORD()</a></td>
+<td>If the leftmost character of the  argument is a multi-byte character,  returns the code for that character</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_position">POSITION()</a></td>
+<td>A synonym for LOCATE()</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_quote">QUOTE()</a></td>
+<td>Escapes the argument for use in an SQL statement</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#operator_regexp">REGEXP</a></td>
+<td>Pattern matching using regular expressions</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_repeat">REPEAT()</a></td>
+<td>Repeats a string the specified number of times</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_replace">REPLACE()</a></td>
+<td>Replaces occurrences of a specified string</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_reverse">REVERSE()</a></td>
+<td>Reverses the characters in a string</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_right">RIGHT()</a></td>
+<td>Returns the specified rightmost number of characters</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_rpad">RPAD()</a></td>
+<td>Appends string the specified number of times</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_rtrim">RTRIM()</a></td>
+<td>Removes trailing spaces</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_soundex">SOUNDEX()</a></td>
+<td>Returns a soundex string</td>
+</tr>
+<tr>
+<td>
+<a href="mysql-string-functions.html#operator_sounds-like">SOUNDS LIKE</a></td>
+<td>Compares sounds</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_space">SPACE()</a></td>
+<td>Returns a string of the specified number of spaces</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_strcmp">STRCMP()</a></td>
+<td>Compares two strings</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_substring-index">SUBSTRING_INDEX()</a></td>
+<td>Returns a substring from a  string before the specified number of occurrences of the delimiter</td>
+</tr>
+<tr>
+<td nowrap><a href="mysql-string-functions.html#function_substring">SUBSTRING(), SUBSTR()</a></td>
+<td>Returns the substring as specified</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_trim">TRIM()</a></td>
+<td>Removes leading and trailing spaces</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_ucase">UCASE()</a></td>
+<td>Synonym for UPPER()</td>
+</tr>
+<tr>
+<td>
+<a href="mysql-string-functions.html#function_unhex">UNHEX()</a></td>
+<td>Converts each pair of hexadecimal digits  to a character</td>
+</tr>
+<tr>
+<td><a href="mysql-string-functions.html#function_upper">UPPER()</a></td>
+<td>Converts to uppercase</td>
+</tr>
+</table>
+<a name="function_ascii"></a>
+<h2>ASCII(str)</h2>
+<p>Returns the numeric value of the leftmost character of the string str. Returns 0 if str is the empty string. Returns NULL if str is NULL. ASCII() works for characters with numeric values from 0 to 255.</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT ASCII('2');
++---------------------------------------------------------+
+| ASCII('2')                                              |
++---------------------------------------------------------+
+| 50                                                      |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql&gt; SELECT ASCII('dx');
++---------------------------------------------------------+
+| ASCII('dx')                                             |
++---------------------------------------------------------+
+| 100                                                     |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_bin"></a>
+<h2>BIN(N)</h2>
+<p>Returns a string representation of the binary value of N, where N is a longlong (BIGINT) number. This is equivalent to CONV(N,10,2). Returns NULL if N is NULL.</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT BIN(12);
++---------------------------------------------------------+
+| BIN(12)                                                 |
++---------------------------------------------------------+
+| 1100                                                    |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_bit-length"></a>
+<h2>BIT_LENGTH(str)</h2>
+<p>Returns the length of the string str in bits.</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT BIT_LENGTH('text');
++---------------------------------------------------------+
+| BIT_LENGTH('text')                                      |
++---------------------------------------------------------+
+| 32                                                      |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_char"></a>
+<h2>CHAR(N,... [USING charset_name])</h2>
+<p>CHAR() interprets each argument N as an integer and returns a string consisting of the characters given by the code values of those integers. NULL values are skipped.</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT CHAR(77,121,83,81,'76');
++---------------------------------------------------------+
+| CHAR(77,121,83,81,'76')                                 |
++---------------------------------------------------------+
+| MySQL                                                   |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_char-length"></a>
+<h2>CHAR_LENGTH(str)</h2>
+<p>Returns the length of the string str, measured in characters. A multi-byte character counts as a single character. This means that for a string containing five two-byte characters, LENGTH() returns 10, whereas CHAR_LENGTH() returns 5.</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT CHAR_LENGTH("text");
++---------------------------------------------------------+
+| CHAR_LENGTH("text")                                     |
++---------------------------------------------------------+
+| 4                                                       |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_character-length"></a>
+<h2>CHARACTER_LENGTH(str)</h2>
+<p>CHARACTER_LENGTH() is a synonym for CHAR_LENGTH().</h2>
+<a name="function_concat"></a>
+<h2>CONCAT(str1,str2,...)</h2>
+<p>Returns the string that results from concatenating the arguments. May have one or more arguments. If all arguments are non-binary strings, the result is a non-binary string. If the arguments include any binary strings, the result is a binary string. A numeric argument is converted to its equivalent binary string form; if you want to avoid that, you can use an explicit type cast, as in this example: </p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT CONCAT('My', 'S', 'QL');
++---------------------------------------------------------+
+| CONCAT('My', 'S', 'QL')                                 |
++---------------------------------------------------------+
+| MySQL                                                   |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_concat-ws"></a>
+<h2>CONCAT_WS(separator,str1,str2,...)</h2>
+<p>CONCAT_WS() stands for Concatenate With Separator and is a special form of CONCAT(). The first argument is the separator for the rest of the arguments. The separator is added between the strings to be concatenated. The separator can be a string, as can the rest of the arguments. If the separator is NULL, the result is NULL.</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT CONCAT_WS(',','First name','Last Name' );
++---------------------------------------------------------+
+| CONCAT_WS(',','First name','Last Name' )                |
++---------------------------------------------------------+
+| First name, Last Name                                   |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_conv"></a>
+<h2>CONV(N,from_base,to_base)</h2>
+<p>Converts numbers between different number bases. Returns a string representation of the number N, converted from base from_base to base to_base. Returns NULL if any argument is NULL. The argument N is interpreted as an integer, but may be specified as an integer or a string. The minimum base is 2 and the maximum base is 36. If to_base is a negative number, N is regarded as a signed number. Otherwise, N is treated as unsigned. CONV() works with 64-bit precision.</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT CONV('a',16,2);
++---------------------------------------------------------+
+| CONV('a',16,2)                                          |
++---------------------------------------------------------+
+| 1010                                                    |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_elt"></a>
+<h2>ELT(N,str1,str2,str3,...)</h2>
+<p>Returns str1 if N = 1, str2 if N = 2, and so on. Returns NULL if N is less than 1 or greater than the number of arguments. ELT() is the complement of FIELD().</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT ELT(1, 'ej', 'Heja', 'hej', 'foo');
++---------------------------------------------------------+
+| ELT(1, 'ej', 'Heja', 'hej', 'foo')                      |
++---------------------------------------------------------+
+| ej                                                      |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_export-set"></a>
+<h2>EXPORT_SET(bits,on,off[,separator[,number_of_bits]])</h2>
+<p>Returns a string such that for every bit set in the value bits, you get an on string and for every bit not set in the value, you get an off string. Bits in bits are examined from right to left (from low-order to high-order bits). Strings are added to the result from left to right, separated by the separator string (the default being the comma character .,.). The number of bits examined is given by number_of_bits (defaults to 64).</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT EXPORT_SET(5,'Y','N',',',4);
++---------------------------------------------------------+
+| EXPORT_SET(5,'Y','N',',',4)                             |
++---------------------------------------------------------+
+| Y,N,Y,N                                                 |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+ <a name="function_field"></a>
+ <h2>FIELD(str,str1,str2,str3,...)</h2>
+ <p>Returns the index (position starting with 1) of str in the str1, str2, str3, ... list. Returns 0 if str is not found.</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT FIELD('ej', 'Hej', 'ej', 'Heja', 'hej', 'foo');
++---------------------------------------------------------+
+| FIELD('ej', 'Hej', 'ej', 'Heja', 'hej', 'foo')          |
++---------------------------------------------------------+
+| 2                                                       |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_find-in-set"></a>
+<h2>FIND_IN_SET(str,strlist)</h2>
+<p>Returns a value in the range of 1 to N if the string str is in the string list strlist consisting of N substrings.</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT FIND_IN_SET('b','a,b,c,d');
++---------------------------------------------------------+
+| SELECT FIND_IN_SET('b','a,b,c,d')                       |
++---------------------------------------------------------+
+| 2                                                       |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_format"></a>
+<h2>FORMAT(X,D)</h2>
+<p>Formats the number X to a format like '#,###,###.##', rounded to D decimal places, and returns the result as a string. If D is 0, the result has no decimal point or fractional part.</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT FORMAT(12332.123456, 4);
++---------------------------------------------------------+
+| FORMAT(12332.123456, 4)                                 |
++---------------------------------------------------------+
+| 12,332.1235                                             |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_hex"></a>
+<h2>HEX(N_or_S)</h2>
+<p>If N_or_S is a number, returns a string representation of the hexadecimal value of N, where N is a longlong (BIGINT) number. This is equivalent to CONV(N,10,16). </p>
+<p>If N_or_S is a string, returns a hexadecimal string representation of N_or_S where each character in N_or_S is converted to two hexadecimal digits.</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT HEX(255);
++---------------------------------------------------------+
+| HEX(255)                                                |
++---------------------------------------------------------+
+| FF                                                      |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql&gt; SELECT 0x616263;
++---------------------------------------------------------+
+| 0x616263                                                |
++---------------------------------------------------------+
+| abc                                                     |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_insert"></a>
+<h2>INSERT(str,pos,len,newstr)</h2>
+<p>Returns the string str, with the substring beginning at position pos and len characters long replaced by the string newstr. Returns the original string if pos is not within the length of the string. Replaces the rest of the string from position pos if len is not within the length of the rest of the string. Returns NULL if any argument is NULL.</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT INSERT('Quadratic', 3, 4, 'What');
++---------------------------------------------------------+
+| INSERT('Quadratic', 3, 4, 'What')                       |
++---------------------------------------------------------+
+| QuWhattic                                               |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_instr"></a>
+<h2>INSTR(str,substr)</h2>
+<p>Returns the position of the first occurrence of substring substr in string str. This is the same as the two-argument form of LOCATE(), except that the order of the arguments is reversed.</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT INSTR('foobarbar', 'bar');
++---------------------------------------------------------+
+| INSTR('foobarbar', 'bar')                               |
++---------------------------------------------------------+
+| 4                                                       |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_lcase"></a>
+<h2>LCASE(str)</h2>
+<p>LCASE() is a synonym for LOWER().</p>
+<a name="function_left"></a>
+<p>LEFT(str,len)</h2>
+<p>Returns the leftmost len characters from the string str, or NULL if any argument is NULL.</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT LEFT('foobarbar', 5);
++---------------------------------------------------------+
+| LEFT('foobarbar', 5)                                    |
++---------------------------------------------------------+
+| fooba                                                   |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre></td></tr></table>
+<a name="function_length"></a>
+<h2>LENGTH(str)</h2>
+<p>Returns the length of the string str, measured in bytes. A multi-byte character counts as multiple bytes. This means that for a string containing five two-byte characters, LENGTH() returns 10, whereas CHAR_LENGTH() returns 5.</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT LENGTH('text');
++---------------------------------------------------------+
+| LENGTH('text')                                          |
++---------------------------------------------------------+
+| 4                                                       |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+ <a name="function_load-file"></a>
+ <h2>LOAD_FILE(file_name)</h2>
+ <p>Reads the file and returns the file contents as a string. To use this function, the file must be located on the server host, you must specify the full pathname to the file, and you must have the FILE privilege. The file must be readable by all and its size less than max_allowed_packet bytes.</p>
+ <p>If the file does not exist or cannot be read because one of the preceding conditions is not satisfied, the function returns NULL.</p>
+ <p>As of MySQL 5.0.19, the character_set_filesystem system variable controls interpretation of filenames that are given as literal strings.</p>
+<pre class="prettyprint notramslate">
+mysql&gt; UPDATE table_test
+    -&gt; SET blob_col=LOAD_FILE('/tmp/picture')
+	-&gt; WHERE id=1;
+...........................................................
+</pre>
+<a name="function_locate"></a>
+<h2>LOCATE(substr,str), LOCATE(substr,str,pos)</h2>
+<p>The first syntax returns the position of the first occurrence of substring substr in string str. The second syntax returns the position of the first occurrence of substring substr in string str, starting at position pos. Returns 0 if substr is not in str.</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT LOCATE('bar', 'foobarbar');
++---------------------------------------------------------+
+| LOCATE('bar', 'foobarbar')                              |
++---------------------------------------------------------+
+| 4                                                       |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_lower"></a>
+<h2>LOWER(str)</h2>
+<p>Returns the string str with all characters changed to lowercase according to the current character set mapping.</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT LOWER('QUADRATICALLY');
++---------------------------------------------------------+
+| LOWER('QUADRATICALLY')                                  |
++---------------------------------------------------------+
+| quadratically                                           |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_lpad"></a>
+<h2>LPAD(str,len,padstr)</h2>
+<p>Returns the string str, left-padded with the string padstr to a length of len characters. If str is longer than len, the return value is shortened to len characters.</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT LPAD('hi',4,'??');
++---------------------------------------------------------+
+| LPAD('hi',4,'??')                                       |
++---------------------------------------------------------+
+| ??hi                                                    |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_ltrim"></a>
+<h2>LTRIM(str)</h2>
+<p>Returns the string str with leading space characters removed.</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT LTRIM('  barbar');
++---------------------------------------------------------+
+| LTRIM('  barbar')                                       |
++---------------------------------------------------------+
+| barbar                                                  |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_make-set"></a>
+<h2>MAKE_SET(bits,str1,str2,...)</h2>
+<p>Returns a set value (a string containing substrings separated by .,. characters) consisting of the strings that have the corresponding bit in bits set. str1 corresponds to bit 0, str2 to bit 1, and so on. NULL values in str1, str2, ... are not appended to the result.</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT MAKE_SET(1,'a','b','c');
++---------------------------------------------------------+
+| MAKE_SET(1,'a','b','c')                                 |
++---------------------------------------------------------+
+| a                                                       |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_mid"></a>
+<h2>MID(str,pos,len)</h2>
+<p>MID(str,pos,len) is a synonym for SUBSTRING(str,pos,len).</p>
+<a name="function_oct"></a>
+<h2>OCT(N)</h2>
+<p>Returns a string representation of the octal value of N, where N is a longlong (BIGINT) number. This is equivalent to CONV(N,10,8). Returns NULL if N is NULL.</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT OCT(12);
++---------------------------------------------------------+
+| OCT(12)                                                 |
++---------------------------------------------------------+
+| 14                                                      |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_octet-length"></a>
+<h2>OCTET_LENGTH(str)</h2>
+<p>OCTET_LENGTH() is a synonym for LENGTH().</p>
+<a name="function_ord"></a>
+<h2>ORD(str)</h2>
+<p>If the leftmost character of the string str is a multi-byte character, returns the code for that character, calculated from the numeric values of its constituent bytes using this formula:</p>
+<pre class="prettyprint notramslate">
+  (1st byte code)
++ (2nd byte code � 256)
++ (3rd byte code � 2562) ...
+</pre>
+<p>If the leftmost character is not a multi-byte character, ORD() returns the same value as the ASCII() function.</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT ORD('2');
++---------------------------------------------------------+
+| ORD('2')                                                |
++---------------------------------------------------------+
+| 50                                                      |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_position"></a>
+<h2>POSITION(substr IN str)</h2>
+<p>POSITION(substr IN str) is a synonym for LOCATE(substr,str). </p>
+<a name="function_quote"></a>
+<h2>QUOTE(str)</h2>
+<p>Quotes a string to produce a result that can be used as a properly escaped data value in an SQL statement. The string is returned enclosed by single quotes and with each instance of single quote (','), backslash ('\'), ASCII NUL, and Control-Z preceded by a backslash. If the argument is NULL, the return value is the word 'NULL' without enclosing single quotes.</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT QUOTE('Don\'t!');
++---------------------------------------------------------+
+| QUOTE('Don\'t!')                                        |
++---------------------------------------------------------+
+| 'Don\'t!'                                               |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<p><b>NOTE:</b> Please check if your installation has any bug with this function, then don't use this function.</p>
+<a name="operator_regexp"></a>
+<h2>expr REGEXP pattern</h2>
+<p>This function performs a pattern match of expr against pattern. Returns 1 if expr matches pat; otherwise it returns 0. If either expr or pat is NULL, the result is NULL. REGEXP is not case sensitive, except when used with binary strings.</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT 'ABCDEF' REGEXP 'A%C%%';
++---------------------------------------------------------+
+| 'ABCDEF' REGEXP 'A%C%%'                                 |
++---------------------------------------------------------+
+| 0                                                       |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<p>Another example is:</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT 'ABCDE' REGEXP '.*';
++---------------------------------------------------------+
+|  'ABCDE' REGEXP '.*'                                    |
++---------------------------------------------------------+
+| 1                                                       |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<p>Let's see one more example:</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT 'new*\n*line' REGEXP 'new\\*.\\*line';
++---------------------------------------------------------+
+| 'new*\n*line' REGEXP 'new\\*.\\*line'                   |
++---------------------------------------------------------+
+| 1                                                       |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+ <a name="function_repeat"></a>
+ <h2>REPEAT(str,count)</h2>
+ <p>Returns a string consisting of the string str repeated count times. If count is less than 1, returns an empty string. Returns NULL if str or count are NULL.</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT REPEAT('MySQL', 3);
++---------------------------------------------------------+
+| REPEAT('MySQL', 3)                                      |
++---------------------------------------------------------+
+| MySQLMySQLMySQL                                         |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_replace"></a>
+<h2>REPLACE(str,from_str,to_str)</h2>
+<p>Returns the string str with all occurrences of the string from_str replaced by the string to_str. REPLACE() performs a case-sensitive match when searching for from_str.</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT REPLACE('www.mysql.com', 'w', 'Ww');
++---------------------------------------------------------+
+| REPLACE('www.mysql.com', 'w', 'Ww')                     |
++---------------------------------------------------------+
+| WwWwWw.mysql.com                                        |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_reverse"></a>
+<h2>REVERSE(str)</h2>
+<p>Returns the string str with the order of the characters reversed.</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT REVERSE('abcd');
++---------------------------------------------------------+
+| REVERSE('abcd')                                         |
++---------------------------------------------------------+
+| dcba                                                    |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_right"></a>
+<h2>RIGHT(str,len)</h2>
+<p>Returns the rightmost len characters from the string str, or NULL if any argument is NULL. </p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT RIGHT('foobarbar', 4);
++---------------------------------------------------------+
+| RIGHT('foobarbar', 4)                                   |
++---------------------------------------------------------+
+| rbar                                                    |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_rpad"></a>
+<h2>RPAD(str,len,padstr) </h2>
+<p>Returns the string str, right-padded with the string padstr to a length of len characters. If str is longer than len, the return value is shortened to len characters.</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT RPAD('hi',5,'?');
++---------------------------------------------------------+
+| RPAD('hi',5,'?')                                        |
++---------------------------------------------------------+
+| hi???                                                   |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_rtrim"></a>
+<h2>RTRIM(str)</h2>
+<p>Returns the string str with trailing space characters removed.</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT RTRIM('barbar   ');
++---------------------------------------------------------+
+| RTRIM('barbar   ')                                      |
++---------------------------------------------------------+
+| barbar                                                  |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_soundex"></a>
+<h2>SOUNDEX(str)</h2>
+<p>Returns a soundex string from str. Two strings that sound almost the same should have identical soundex strings. A standard soundex string is four characters long, but the SOUNDEX() function returns an arbitrarily long string. You can use SUBSTRING() on the result to get a standard soundex string. All non-alphabetic characters in str are ignored. All international alphabetic characters outside the A-Z range are treated as vowels.</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT SOUNDEX('Hello');
++---------------------------------------------------------+
+| SOUNDEX('Hello')                                        |
++---------------------------------------------------------+
+| H400                                                    |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="operator_sounds-like"></a>
+<h2>expr1 SOUNDS LIKE expr2</h2>
+<p>This is the same as SOUNDEX(expr1) = SOUNDEX(expr2).</h2>
+<a name="function_space"></a>
+<h2>SPACE(N)</h2>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT SPACE(6);
++---------------------------------------------------------+
+| SELECT SPACE(6)                                         |
++---------------------------------------------------------+
+| '      '                                                |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_strcmp"></a>
+<h2>STRCMP(str1, str2)</h2>
+<p>Compares two strings and returns 0 if both strings are equal, it returns -1 if the first argument is smaller than the second according to the current sort order otherwise it returns 1.</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT STRCMP('MOHD', 'MOHD');
++---------------------------------------------------------+
+| STRCMP('MOHD', 'MOHD')                                  |
++---------------------------------------------------------+
+| 0                                                       |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<p>Another example is:</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT STRCMP('AMOHD', 'MOHD');
++---------------------------------------------------------+
+| STRCMP('AMOHD', 'MOHD')                                 |
++---------------------------------------------------------+
+| -1                                                      |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<p>Let's see one more example:</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT STRCMP('MOHD', 'AMOHD');
++---------------------------------------------------------+
+| STRCMP('MOHD', 'AMOHD')                                 |
++---------------------------------------------------------+
+| 1                                                       |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_substring"></a>
+<h2>SUBSTRING(str,pos)</h2>
+<h2>SUBSTRING(str FROM pos)</h2>
+<h2>SUBSTRING(str,pos,len)</h2>
+<h2>SUBSTRING(str FROM pos FOR len)</h2>
+<p>The forms without a len argument return a substring from string str starting at position pos. The forms with a len argument return a substring len characters long from string str, starting at position pos. The forms that use FROM are standard SQL syntax. It is also possible to use a negative value for pos. In this case, the beginning of the substring is pos characters from the end of the string, rather than the beginning. A negative value may be used for pos in any of the forms of this function.</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT SUBSTRING('Quadratically',5);
++---------------------------------------------------------+
+| SSUBSTRING('Quadratically',5)                           |
++---------------------------------------------------------+
+| ratically                                               |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql&gt; SELECT SUBSTRING('foobarbar' FROM 4);
++---------------------------------------------------------+
+| SUBSTRING('foobarbar' FROM 4)                           |
++---------------------------------------------------------+
+| barbar                                                  |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql&gt; SELECT SUBSTRING('Quadratically',5,6);
++---------------------------------------------------------+
+| SUBSTRING('Quadratically',5,6)                          |
++---------------------------------------------------------+
+| ratica                                                  |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_substring-index"></a>
+<h2>SUBSTRING_INDEX(str,delim,count)</h2>
+<p>Returns the substring from string str before count occurrences of the delimiter delim. If count is positive, everything to the left of the final delimiter (counting from the left) is returned. If count is negative, everything to the right of the final delimiter (counting from the right) is returned. SUBSTRING_INDEX() performs a case-sensitive match when searching for delim.</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT SUBSTRING_INDEX('www.mysql.com', '.', 2);
++---------------------------------------------------------+
+| SUBSTRING_INDEX('www.mysql.com', '.', 2)                |
++---------------------------------------------------------+
+| www.mysql                                               |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_trim"></a>
+<h2>TRIM([{BOTH | LEADING | TRAILING} [remstr] FROM] str)</h2>
+<h2>TRIM([remstr FROM] str)</h2>
+<p>Returns the string str with all remstr prefixes or suffixes removed. If none of the specifiers BOTH, LEADING, or TRAILING is given, BOTH is assumed. remstr is optional and, if not specified, spaces are removed.</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT TRIM('  bar   ');
++---------------------------------------------------------+
+| TRIM('  bar   ')                                        |
++---------------------------------------------------------+
+| bar                                                     |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql&gt; SELECT TRIM(LEADING 'x' FROM 'xxxbarxxx');
++---------------------------------------------------------+
+| TRIM(LEADING 'x' FROM 'xxxbarxxx')                      |
++---------------------------------------------------------+
+| barxxx                                                  |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql&gt; SELECT TRIM(BOTH 'x' FROM 'xxxbarxxx');
++---------------------------------------------------------+
+| TRIM(BOTH 'x' FROM 'xxxbarxxx')                         |
++---------------------------------------------------------+
+| bar                                                     |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql&gt; SELECT TRIM(TRAILING 'xyz' FROM 'barxxyz');
++---------------------------------------------------------+
+| TRIM(TRAILING 'xyz' FROM 'barxxyz')                     |
++---------------------------------------------------------+
+| barx                                                    |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_ucase"></a>
+<h2>UCASE(str)</h2>
+<p>UCASE() is a synonym for UPPER().</p>
+<a name="function_unhex"></a>
+<h2>UNHEX(str)</h2>
+<p>Performs the inverse operation of HEX(str). That is, it interprets each pair of hexadecimal digits in the argument as a number and converts it to the character represented by the number. The resulting characters are returned as a binary string.</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT UNHEX('4D7953514C');
++---------------------------------------------------------+
+| UNHEX('4D7953514C')                                     |
++---------------------------------------------------------+
+| MySQL                                                   |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<p>The characters in the argument string must be legal hexadecimal digits: '0' .. '9', 'A' .. 'F', 'a' .. 'f'. If UNHEX() encounters any non-hexadecimal digits in the argument, it returns NULL.</p>
+<a name="function_upper"></a>
+<h2>UPPER(str)</h2>
+<p>Returns the string str with all characters changed to uppercase according to the current character set mapping.</p>
+<pre class="prettyprint notramslate">
+mysql&gt; SELECT UPPER('Allah-hus-samad');
++---------------------------------------------------------+
+| UPPER('Allah-hus-samad')                                |
++---------------------------------------------------------+
+| ALLAH-HUS-SAMAD                                         |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<p>For more information, check <a target="_blank"  href="http://dev.mysql.com/doc/en/string-functions.html">MySQL Official Website - String Functions</a>
+<hr />
+<div class="pre-btn">
+<a href="mysql-useful-functions.html"><i class="icon icon-arrow-circle-o-left big-font"></i> Previous Page</a>
+</div>
+<div class="print-btn center">
+<a href="http://www.tutorialspoint.com/cgi-bin/printpage.cgi" target="_blank"><i class="icon icon-print big-font"></i> Print</a>
+</div>
+<div class="nxt-btn">
+<a href="mysql-useful-functions.html">Next Page <i class="icon icon-arrow-circle-o-right big-font"></i>&nbsp;</a>
+</div>
+<div class="parent-file">mysql-useful-functions.htm</div>
+<hr />
+<!-- PRINTING ENDS HERE -->
+<div class="bottomgooglead">
+<div class="bottomadtag">Advertisements</div>
+<script type="text/javascript"><!--
+google_ad_client = "pub-7133395778201029";
+google_ad_width = 580;
+google_ad_height = 400;
+google_ad_format = "580x400_as";
+google_ad_type = "image";
+google_ad_channel ="";
+//--></script>
+<script type="text/javascript"
+src="../../pagead2.googlesyndication.com/pagead/f.txt">
+</script>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-3" id="rightbar">
+<!-- AddThis Button BEGIN -->
+<div class="simple-ad">
+<div class="addthis_sharing_toolbox"></div>
+<script type="text/javascript" src="../../s7.addthis.com/js/300/addthis_widget.js#pubid=ra-4f661ec623a400f0"></script>
+</div>
+<!-- AddThis Button END -->
+<div class="google-ad" style="position:relative; left:20px;">Advertisements</div>
+<div class="rightgooglead">
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-2537027957187252";
+/* Right Side Ad */
+google_ad_slot = "right_side_ad";
+google_ad_width = 300;
+google_ad_height = 250;
+//-->
+</script>
+<script type="text/javascript"
+src="../../pagead2.googlesyndication.com/pagead/f.txt">
+</script>
+</div>
+<div class="rightgooglead">
+<script type="text/javascript"><!--
+google_ad_client = "pub-7133395778201029";
+google_ad_width = 300;
+google_ad_height = 600;
+google_ad_format = "300x600_as";
+google_ad_type = "image";
+google_ad_channel ="";
+//--></script>
+<script type="text/javascript"
+src="../../pagead2.googlesyndication.com/pagead/f.txt">
+</script>
+</div>
+<div class="rightgooglead">
+<script type="text/javascript"><!--
+google_ad_client = "pub-7133395778201029";
+google_ad_width = 300;
+google_ad_height = 250;
+google_ad_format = "300x250_as";
+google_ad_type = "image";
+google_ad_channel ="";
+//--></script>
+<script type="text/javascript"
+src="../../pagead2.googlesyndication.com/pagead/f.txt"> 
+</script>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<footer class="inner">
+<div class="container">
+<div class="row">
+<div class="footer-ribon">
+<span>Extras</span>
+</div>
+<div class="col-md-2">
+<h4>Mobile First</h4>
+<ul class="list icons list-unstyled">
+<li><a id="iphone" href="https://itunes.apple.com/om/app/tutorials-point/id914891263?mt=8" target="_blank" rel="nofollow"><img alt="tutorialspoint iPhone App" src="../../cdn.tutorialspoint.com/images/apple_store.png" class="mobile-apps"/></a></li>
+<li><a id="android" href="https://play.google.com/store/apps/details?id=com.tutorialspoint.onlineviewer" target="_blank" rel="nofollow"><img alt="tutorialspoint Android app" src="../../cdn.tutorialspoint.com/images/google_play.png" class="mobile-apps"/></a></li>
+<li><a id="microsoft" href="http://www.windowsphone.com/s?appid=91249671-7184-4ad6-8a5f-d11847946b09" target="_blank" rel="nofollow"><img alt="tutorialspoint Windows app" src="../../cdn.tutorialspoint.com/images/windows_store.png" class="mobile-apps"/></a></li>
+</ul>
+</div>
+<div class="col-md-2">
+<h4>About us</h4>
+<ul class="list icons list-unstyled">
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/about/index.htm">Company</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/about/about_team.htm">Team</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/about/about_careers.htm">Careers</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/about/about_privacy.htm">Privacy Policy</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/about/about_terms_of_use.htm">Terms of use</a></li>
+</ul>
+</div>
+<div class="col-md-2">
+<h4>Extra Links</h4>
+<ul class="list icons list-unstyled">
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/forums/index.php">Forums</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/shorttutorials/">Articles</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/shared-tutorials.php">Shared</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/seo_tools.htm">Seo Tools</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/about/contact_us.htm">Contact</a></li>
+</ul>
+</div>
+<div class="col-md-3">
+<div class="contact-details">
+<h4>Contact Us</h4>
+<ul class="contact">
+<li><p><i class="icon icon-map-marker"></i> <strong>Address:</strong> 388-A , Road no 22, Jubilee Hills, Hyderabad Telangana, INDIA-500033</p></li>
+<li><p><i class="icon icon-envelope"></i> <strong>Email:</strong> <a href="http://www.tutorialspoint.com/about/contact_us.htm">Click Here</a></p></li>
+<li><p><i class="icon icon-dribbble"></i> <strong>Website:</strong> <a href="http://www.tutorialspoint.com/">www.tutorialspoint.com</a></p></li>
+</ul>
+</div>
+<div class="social-icons">
+<ul class="social-icons">
+<li class="facebook"><a href="https://www.facebook.com/tutorialspointindia" target="_blank" data-placement="bottom" title="tutorialspoint @ Facebook">Facebook</a></li>
+<li class="googleplus"><a href="https://plus.google.com/u/0/116678774017490391259/posts" target="_blank" data-placement="bottom" title="tutorialspoint @ Google+">Google+</a></li>
+<li class="twitter"><a href="http://www.twitter.com/tutorialspoint" target="_blank" data-placement="bottom"  title="tutorialspoint @ Twitter">Twitter</a></li>
+<li class="linkedin"><a href="http://www.linkedin.com/company/tutorialspoint" target="_blank" data-placement="bottom"  title="tutorialspoint @ Linkedin">Linkedin</a></li>
+<li class="rss"><a href="http://feeds.feedburner.com/SharedTutorials" target="_blank" data-placement="bottom" title="tutorialspoint RSS">RSS</a></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="footer-copyright">
+<div class="container">
+<div class="row">
+<div class="col-md-1">
+<a href="http://www.tutorialspoint.com/index.htm" class="logo">
+<img alt="Tutorials Point" class="img-responsive" src="../../cdn.tutorialspoint.com/scripts/img/logo-footer.png">
+</a>
+</div>
+<div class="col-md-6">
+<p>&copy; Copyright 2015. All Rights Reserved.</p>
+</div>
+<div class="col-md-4">
+<nav id="sub-menu">
+<ul>
+<li><a href="http://www.tutorialspoint.com/about/tutorials_writing.htm">Write for us</a></li>
+<li><a href="http://www.tutorialspoint.com/about/faq.htm">FAQ's</a></li>
+<li><a href="http://www.tutorialspoint.com/about/about_helping.htm">Helping</a></li>
+<li><a href="http://www.tutorialspoint.com/about/contact_us.htm">Contact</a></li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<!-- Libs -->
+<script type="text/javascript" src="../../cdn.tutorialspoint.com/theme/js/custom-mini.js"></script>
+<script src="../../www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-232293-6";
+urchinTracker();
+$('.pg-icon').click(function(){
+   $('.wrapLoader').show();
+});
+</script>
+</div>
+</body>
+
+<!-- Mirrored from www.tutorialspoint.com/mysql/mysql-string-functions.htm by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 20 Apr 2015 05:35:11 GMT -->
+</html>

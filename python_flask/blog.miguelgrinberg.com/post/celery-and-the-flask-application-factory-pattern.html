@@ -1,0 +1,774 @@
+﻿<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from blog.miguelgrinberg.com/post/celery-and-the-flask-application-factory-pattern by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:44:42 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    
+    <title>
+    
+        Celery and the Flask Application Factory Pattern - miguelgrinberg.com
+    
+</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="description" content="miguelgrinberg.com">
+	<meta name="copyright" content="Copyright (c) 2012-2015 Miguel Grinberg">
+	<meta name="author" content="Miguel Grinberg">
+    
+    <meta name="keywords" content="flask, python, programming, celery, asynchronous, background, web development, app factory">
+    
+
+    
+    <!-- Bootstrap -->
+    <link href="../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../static/prettify.css" type="text/css" rel="stylesheet" />
+    <link href="../static/colorbox/colorbox.css" rel="stylesheet" type="text/css" />
+    <link href="../static/style.css" rel="stylesheet" type="text/css" />
+
+    <link rel="shortcut icon" href="../static/favicon.ico">
+	<link rel="alternate" type="application/rss+xml" href="../feed" title="miguelgrinberg.com RSS feed">
+
+  </head>
+  <body>
+    
+    <!-- facebook sdk -->
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "../../connect.facebook.net/en_US/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    <!-- google plus sdk -->
+    <script type="text/javascript" src="../../apis.google.com/js/plusone.js"></script>
+    <!-- twitter sdk -->
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="../../platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <!-- linkedin sdk -->
+    <script src="../../platform.linkedin.com/in.js" type="text/javascript"></script>
+
+    
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://blog.miguelgrinberg.com/index">miguelgrinberg.com</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="http://blog.miguelgrinberg.com/index">Home</a></li>
+                        <li><a href="about-me.html">About Me</a></li>
+                        <li><a href="about-this-blog.html">About This Blog</a></li>
+                        
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <p class="navbar-text" style="margin-top: 10px; margin-bottom: 0px;">
+                                <a type="application/rss+xml" href="../feed"><img src="../static/rss.png" alt="RSS Feed" title="RSS Feed" /></a>
+                                <a href="https://www.facebook.com/miguelgrinbergblog"><img src="../static/facebook.png" alt="Facebook" title="Facebook" /></a>
+                                <a href="https://plus.google.com/u/0/117786742456929977820"><img src="../static/googleplus.png" alt="Google+" title="Google+" /></a>
+                                <a href="http://www.linkedin.com/in/miguelgrinberg"><img src="../static/linkedin.png" alt="LinkedIn" title="LinkedIn" /></a>
+                                <a href="http://github.com/miguelgrinberg"><img src="../static/github.png" alt="GitHub" title="GitHub" /></a>
+                                <a href="https://twitter.com/#!/miguelgrinberg"><img src="../static/twitter.png" alt="Twitter" title="Twitter" /></a>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </nav>
+
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-push-9 sidebar-bg">
+                <div id="sidebar">
+                    
+
+                    
+                    <h1>Building Web APIs with Flask</h1>
+                    <p>Flask is the ideal Python framework for building REST APIs that are flexible, easy to maintain and efficient. I have created a training video with O'Reilly in which I show all my techniques:</p>
+                    <p><center><a href="http://bit.ly/flaskapi"><img style="border: 1px solid black;" src="../static/flask-api-cover-tiny.png"></a></center></p>
+                    <p>Visit <a href="http://flaskbook.com/">http://flaskbook.com</a> for information about this and other Flask training products I have created!</p>
+                    
+
+                    <h1>About Miguel</h1>
+                    <img style="float: right; margin: 0px 8px 8px 0px; padding: 4px; border: 1px solid #ccc;" src="../static/miguel.jpg" />
+                    <p>Welcome to my blog!</p>
+                    <p>I'm a software engineer, photographer and filmmaker in Portland, Oregon, USA.</p>
+                    <p>You can also find me on <a href="https://www.facebook.com/miguelgrinbergblog">Facebook</a>, <a href="https://plus.google.com/u/0/117786742456929977820">Google+</a>, <a href="http://www.linkedin.com/in/miguelgrinberg">LinkedIn</a>, <a href="https://github.com/miguelgrinberg">Github</a> and <a href="https://twitter.com/#!/miguelgrinberg">Twitter</a>.</p>
+                    <p>Thank you for visiting!</p>
+
+                    
+
+                    
+                    <h1>Categories</h1>
+<ul>
+
+	<li>
+		<a href="../category/Arduino/feed">
+			<img src="../static/rss-small.png" title="Arduino RSS Feed" label="Arduino RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Arduino.html">Arduino</a></span> (7)
+	</li>
+
+	<li>
+		<a href="../category/Authentication/feed">
+			<img src="../static/rss-small.png" title="Authentication RSS Feed" label="Authentication RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Authentication.html">Authentication</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../category/Blog/feed">
+			<img src="../static/rss-small.png" title="Blog RSS Feed" label="Blog RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Blog.html">Blog</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/C%2b%2b/feed">
+			<img src="../static/rss-small.png" title="C++ RSS Feed" label="C++ RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/C%2b%2b.html">C++</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Cloud/feed">
+			<img src="../static/rss-small.png" title="Cloud RSS Feed" label="Cloud RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Cloud.html">Cloud</a></span> (2)
+	</li>
+
+	<li>
+		<a href="../category/Filmmaking/feed">
+			<img src="../static/rss-small.png" title="Filmmaking RSS Feed" label="Filmmaking RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Filmmaking.html">Filmmaking</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Flask/feed">
+			<img src="../static/rss-small.png" title="Flask RSS Feed" label="Flask RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Flask.html">Flask</a></span> (39)
+	</li>
+
+	<li>
+		<a href="../category/Games/feed">
+			<img src="../static/rss-small.png" title="Games RSS Feed" label="Games RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Games.html">Games</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Gear/feed">
+			<img src="../static/rss-small.png" title="Gear RSS Feed" label="Gear RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Gear.html">Gear</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/HTML5/feed">
+			<img src="../static/rss-small.png" title="HTML5 RSS Feed" label="HTML5 RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/HTML5.html">HTML5</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Heroku/feed">
+			<img src="../static/rss-small.png" title="Heroku RSS Feed" label="Heroku RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Heroku.html">Heroku</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Javascript/feed">
+			<img src="../static/rss-small.png" title="Javascript RSS Feed" label="Javascript RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Javascript.html">Javascript</a></span> (3)
+	</li>
+
+	<li>
+		<a href="../category/Movie%20Reviews/feed">
+			<img src="../static/rss-small.png" title="Movie Reviews RSS Feed" label="Movie Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Movie%20Reviews.html">Movie Reviews</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Netflix/feed">
+			<img src="../static/rss-small.png" title="Netflix RSS Feed" label="Netflix RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Netflix.html">Netflix</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Node.js/feed">
+			<img src="../static/rss-small.png" title="Node.js RSS Feed" label="Node.js RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Node.html">Node.js</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/OpenStack/feed">
+			<img src="../static/rss-small.png" title="OpenStack RSS Feed" label="OpenStack RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/OpenStack.html">OpenStack</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Personal/feed">
+			<img src="../static/rss-small.png" title="Personal RSS Feed" label="Personal RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Personal.html">Personal</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Photography/feed">
+			<img src="../static/rss-small.png" title="Photography RSS Feed" label="Photography RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Photography.html">Photography</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Product%20Reviews/feed">
+			<img src="../static/rss-small.png" title="Product Reviews RSS Feed" label="Product Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Product%20Reviews.html">Product Reviews</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Programming/feed">
+			<img src="../static/rss-small.png" title="Programming RSS Feed" label="Programming RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Programming.html">Programming</a></span> (47)
+	</li>
+
+	<li>
+		<a href="../category/Project%20Management/feed">
+			<img src="../static/rss-small.png" title="Project Management RSS Feed" label="Project Management RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Project%20Management.html">Project Management</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Python/feed">
+			<img src="../static/rss-small.png" title="Python RSS Feed" label="Python RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Python.html">Python</a></span> (43)
+	</li>
+
+	<li>
+		<a href="../category/REST/feed">
+			<img src="../static/rss-small.png" title="REST RSS Feed" label="REST RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/REST.html">REST</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Rackspace/feed">
+			<img src="../static/rss-small.png" title="Rackspace RSS Feed" label="Rackspace RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Rackspace.html">Rackspace</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Raspberry%20Pi/feed">
+			<img src="../static/rss-small.png" title="Raspberry Pi RSS Feed" label="Raspberry Pi RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Raspberry%20Pi.html">Raspberry Pi</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/RhinoSteady/feed">
+			<img src="../static/rss-small.png" title="RhinoSteady RSS Feed" label="RhinoSteady RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/RhinoSteady.html">RhinoSteady</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Robotics/feed">
+			<img src="../static/rss-small.png" title="Robotics RSS Feed" label="Robotics RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Robotics.html">Robotics</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Video/feed">
+			<img src="../static/rss-small.png" title="Video RSS Feed" label="Video RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Video.html">Video</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../category/Windows/feed">
+			<img src="../static/rss-small.png" title="Windows RSS Feed" label="Windows RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Windows.html">Windows</a></span> (1)
+	</li>
+
+</ul>
+                    
+                </div>
+            </div>
+            <div class="col-md-8 col-md-pull-4">
+                <div id="main">
+                    
+                    
+                    
+                    
+                    
+
+<div class="post">
+
+<p class="date"><span class="flask-moment" data-timestamp="2015-05-16T02:09:49Z" data-format="format('LL')" data-refresh="0">2015-05-16T02:09:49Z</span></p>
+<h1 class="post-title"><a href="celery-and-the-flask-application-factory-pattern.html">Celery and the Flask Application Factory Pattern</a></h1>
+<div class="posted">Posted by <span class="label label-danger"><a href="http://blog.miguelgrinberg.com/author/Miguel Grinberg">Miguel Grinberg</a></span> under <span class="label label-primary"><a href="../category/Programming.html">Programming</a></span>, <span class="label label-primary"><a href="../category/Flask.html">Flask</a></span>, <span class="label label-primary"><a href="../category/Python.html">Python</a></span>. </div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/celery-and-the-flask-application-factory-pattern" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/celery-and-the-flask-application-factory-pattern" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="celery-and-the-flask-application-factory-pattern.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/celery-and-the-flask-application-factory-pattern" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+<div class="post_body"><p>After I published my article on using <a href="using-celery-with-flask.html">Celery with Flask</a>, several readers asked how this integration can be done when using a large Flask application organized around the <a href="http://flask.pocoo.org/docs/0.10/patterns/appfactories/">application factory</a> pattern. It's a very good question, as it is non-trivial to make Celery, which does not have a dedicated Flask extension, delay access to the application until the factory function is invoked.</p>
+<p>In this article I'm going to describe in detail how I added Celery to <a href="http://github.com/miguelgrinberg/flasky">Flasky</a>, the application featured in my <a href="http://flaskbook.com/">Flask book</a>.</p>
+<h2>The Code</h2>
+<p>I know some of you are impatient, so let me direct you to the Github repository that has the modified Flasky application described in this article: <a href="http://github.com/miguelgrinberg/flasky-with-celery">http://github.com/miguelgrinberg/flasky-with-celery</a>.</p>
+<p>The first two commits in this repository import the Flasky application, as featured in my book. The changes to add Celery are all contained in the third and last commit.</p>
+<h2>Creating the Celery instance</h2>
+<p>The first problem that presents is how to create the <code>celery</code> object, which provides the <code>celery.task</code> decorator. The fact that it provides the decorator means that it has to be created as a global variable, and that implies that the Flask application instance is not going to be around when it is created.</p>
+<p>Here is how I initialized the Celery instance in the single file application:</p>
+<pre><code>celery = Celery(app.name, broker=app.config['CELERY_BROKER_URL'])
+celery.conf.update(app.config)
+</code></pre>
+<p>So this is a big problem, as I'm using <code>app</code> all over the place here. To adapt this bit of code to Flasky I had to get a bit creative. Here is what I did:</p>
+<pre><code>from celery import Celery
+from config import config, Config
+
+celery = Celery(__name__, broker=Config.CELERY_BROKER_URL)
+
+def create_app(config_name):
+    # ...
+    celery.conf.update(app.config)
+    # ...
+    return app
+</code></pre>
+<p>The solution involves separating the creation and the configuration of the <code>celery</code> instance. I create the object as a global variable, but I delay its configuration until <code>create_app()</code> is invoked. </p>
+<p>To make this work, I had to remove all references to <code>app</code> in the object creation. Instead of <code>app.name</code> I used <code>__name__</code>, which is what <code>app.name</code> will be initialized to later when the app factory function is called. The only configuration item that needs to be passed during creation is the URL of the broker, so to get that item before the application exists I had to import it directly from the <code>Config</code> class. The one problem that this creates is that it is not possible to have different brokers in different configurations, this item is fixed for all configurations.</p>
+<p>The configuration portion is very easy. In the application factory function the application is available, so configuration works exactly as in the single file case.</p>
+<h2>Sending Asynchronous Emails Through Celery</h2>
+<p>To test this setup I converted the thread based email sending function to use Celery. This was surprisingly easy to do. Here is the relevant code:</p>
+<pre><code>from . import celery
+
+@celery.task
+def send_async_email(msg):
+    mail.send(msg)
+
+def send_email(to, subject, template, **kwargs):
+app = current_app._get_current_object()
+    msg = Message(app.config['FLASKY_MAIL_SUBJECT_PREFIX'] + ' ' + subject,
+                  sender=app.config['FLASKY_MAIL_SENDER'], recipients=[to])
+    msg.body = render_template(template + '.txt', **kwargs)
+    msg.html = render_template(template + '.html', **kwargs)
+    send_async_email.delay(msg)
+</code></pre>
+<p>Here I simply decorate the function that sends the email with <code>celery.task</code>, and then invoke it using the <code>delay()</code> method. In the thread based version the main thread passed the <code>app</code> variable to the background thread so that it can set up an application context (required by Flask-Mail), but I have removed that here because passing an application instance to the Celery worker process doesn't make much sense. Instead I want the worker to have its own Flask application, like I did in the single file example.</p>
+<h2>Setting Up The Celery Worker</h2>
+<p>The only remaining task is to launch a Celery worker. This process needs to have its own Flask application instance that can be used to create the context necessary for the Flask background tasks to run. For this I used a separate starter script, which I called <code>celery_worker.py</code>:</p>
+<pre><code>#!/usr/bin/env python
+import os
+from app import celery, create_app
+
+app = create_app(os.getenv('FLASK_CONFIG') or 'default')
+app.app_context().push()
+</code></pre>
+<p>This little script creates a Flask application and pushes an application context, which will remain set through the entire life of the process. Celery also needs access to the <code>celery</code> instance, so I imported it from the <code>app</code> package.</p>
+<p>If you have an activated virtual environment, now you can start the Celery worker with the following command:</p>
+<pre><code>(venv) $ celery worker -A celery_worker.celery --loglevel=info
+</code></pre>
+<p>If you now start a Redis service and the Flasky application, everything should be working.</p>
+<h2>Conclusion</h2>
+<p>I hope this clarifies the setup of Celery, but if there are any remaining questions feel free to let me know below in the comments. If you want step-by-step instructions on how to run the example code, see the README file on the <a href="http://github.com/miguelgrinberg/flasky-with-celery">github repository</a>.</p>
+<p>Miguel</p></div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/celery-and-the-flask-application-factory-pattern" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/celery-and-the-flask-application-factory-pattern" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="celery-and-the-flask-application-factory-pattern.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/celery-and-the-flask-application-factory-pattern" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+
+
+<h4 style="text-align: right"><a name="comments"></a>10 comments</h4>
+
+
+<div class="comment">
+    <ul>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/6035a60d03cdb04ce964538f8938d23ace2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#1</span> <span class="label label-primary">Rahul</span> said
+                    <span class="flask-moment" data-timestamp="2015-05-20T15:14:32Z" data-format="fromNow(0)" data-refresh="0">2015-05-20T15:14:32Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I get the following error whenever I try to start the Celery worker 
+
+ -------------- celery@qasim v3.1.18 (Cipater)
+---- **** ----- 
+--- * ***  * -- Linux-3.16.0-30-generic-x86_64-with-Ubuntu-14.04-trusty
+-- * - **** --- 
+- ** ---------- [config]
+- ** ---------- .&gt; app:         app:0x7f0a461c5bd0
+- ** ---------- .&gt; transport:   redis://localhost:6379/0
+- ** ---------- .&gt; results:     redis://localhost:6379/0
+- *** --- * --- .&gt; concurrency: 8 (prefork)
+-- ******* ---- 
+--- ***** ----- [queues]
+ -------------- .&gt; celery           exchange=celery(direct) key=celery
+                
+
+[tasks]
+  . app.email.send_async_email
+
+[2015-05-20 17:09:41,091: ERROR/MainProcess] consumer: Cannot connect to redis://localhost:6379/0: Error 111 connecting to localhost:6379. Connection refused..
+Trying again in 2.00 seconds...
+
+and If I ignore it and go and try to register a new user I get ConnectionError: Error 111 connecting to localhost:6379. Connection refused.
+
+I am using the Flasky app while doing your book. 
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#2</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2015-05-21T06:29:45Z" data-format="fromNow(0)" data-refresh="0">2015-05-21T06:29:45Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Rahul: did you install Redis? That&#39;s required for the application to communicate with the Celery worker.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/26a4e8be0a97fcc96ba503841a9fcd95ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#3</span> <span class="label label-primary">Patricio</span> said
+                    <span class="flask-moment" data-timestamp="2015-06-17T20:24:33Z" data-format="fromNow(0)" data-refresh="0">2015-06-17T20:24:33Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel !
+I have a short deadline to develop a web application to perform civil data registration and document emission, coupled with external biometric systems and some local quality control steps.
+On the app will reside some processes which should be defined by some workflow layer.
+On the workers or tasks I should be able to have really different stuff like operator input (enter data and capture biometrics), long unmanaged operations (like the biometric identification performed on external system which should return in some way the id of the record) and local specific stuff, like quality controls, printing of documentation, etc...
+I&#39;ve been reading on the internet, and would hopefully use a combination of Flask, Celery/RabbitMQ and some Workflow basic lib. However I don&#39;t have any experience with these technologies and would like to know if you see something blocking, or have some recommendations or libs ? 
+I have read that Celery via Canvas can implement simple workflow task sequences with basic control ?
+I also dont know if a Celery task could be a user input or sequence of input and validations ?
+Thank you a lot for any clues !</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#4</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2015-06-22T22:20:30Z" data-format="fromNow(0)" data-refresh="0">2015-06-22T22:20:30Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Patricio: Celery tasks are usually things that can be done unattended in the background, not tasks that require user input. Your main application should talk to users.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/6e967d0cc250f58500dd2a4a23c43041ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#5</span> <span class="label label-primary">Julien</span> said
+                    <span class="flask-moment" data-timestamp="2015-06-29T15:32:06Z" data-format="fromNow(0)" data-refresh="0">2015-06-29T15:32:06Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel !
+
+I have a question regarding celery and global variables. How can you access one from the celery app ? I&#39;m trying to pass a global variable Queue() to the task. Inside the task it seems to work as the Queue() grows, but when I try to access the same variable from outside the Queue() to consume it I always find that the Queue() is empty.
+
+Do you have any thoughts on that problem ? Cheers !</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#6</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2015-07-01T19:08:09Z" data-format="fromNow(0)" data-refresh="0">2015-07-01T19:08:09Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Julien: the Celery workers live in their own process, so you can&#39;t share global variables with your Flask application. You can pass values back to the application as return values, or set up a shared storage that works across processes, maybe something like Redis or a SQL database might work.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/5103d41b3cec2515c0ae4856db1e961ece2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#7</span> <span class="label label-primary">Patricio</span> said
+                    <span class="flask-moment" data-timestamp="2015-07-06T03:58:51Z" data-format="fromNow(0)" data-refresh="0">2015-07-06T03:58:51Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Miguel: given the fact that a user input is not to be seen as a celery task, then using Canvas to create a kind of workflow wouldnt work ? Will I need a library that sequences the successive tasks without using Canvas ?
+Thank you again ! </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#8</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2015-07-06T05:56:54Z" data-format="fromNow(0)" data-refresh="0">2015-07-06T05:56:54Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Patricio: unfortunately I don&#39;t understand what you need to do, so I can&#39;t answer your question. Sorry.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/dd68d24c0f3e81bdafd1b29e14b17f7bce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#9</span> <span class="label label-primary">Elmer</span> said
+                    <span class="flask-moment" data-timestamp="2015-07-09T23:41:05Z" data-format="fromNow(0)" data-refresh="0">2015-07-09T23:41:05Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">  I have this error on running:
+return self.__local()
+  File &#34;C:\Python27\lib\site-packages\flask\globals.py&#34;, line 34, in _find_app
+    raise RuntimeError(&#39;working outside of application context&#39;)
+How solve this?
+Thanks
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#10</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2015-07-16T05:55:39Z" data-format="fromNow(0)" data-refresh="0">2015-07-16T05:55:39Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Elmer: look at my previous Celery article. The email task is also one that needs an application context, you can use the same solution for your problem.</p>
+                </div>
+            </div>
+        </li>
+        
+    </ul>
+</div>
+
+<div class="page">
+<ul class="pager">
+  <li class="previous disabled">
+    <a href="#">&laquo;&laquo;</a>
+  </li>
+  <li class="previous disabled">
+    <a href="#">&laquo;</a>
+  </li>
+  <li class="next disabled">
+    <a href="#">&raquo;&raquo;</a>
+  </li>
+  <li class="next disabled">
+    <a href="#">&raquo;</a>
+  </li>
+</ul>
+</div>
+
+<h3><a name="commentform"></a>Leave a Comment</h3>
+
+<form action="#commentform" method="post"
+  class="form" role="form">
+  <div style="display:none;"><input id="csrf_token" name="csrf_token" type="hidden" value="1439536743.42##a3f88125537c7f07b572d83a2e3f75a23db42572"></div>
+  
+    
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="name">Name</label>
+        <input class="form-control" id="name" name="name" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="url">URL</label>
+        <input class="form-control" id="url" name="url" type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="email">Email</label>
+        <input class="form-control" id="email" name="email" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="comment">Comment</label>
+        <textarea class="form-control" id="comment" name="comment" required></textarea>
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="captcha">Captcha</label>
+        
+<script type="text/javascript">var RecaptchaOptions = {"custom_translations": {"audio_challenge": "Get an audio challenge", "cant_hear_this": "Download sound as MP3", "help_btn": "Help", "image_alt_text": "reCAPTCHA challenge image", "incorrect_try_again": "Incorrect. Try again.", "instructions_audio": "Type what you hear", "instructions_visual": "Type the text", "play_again": "Play sound again", "privacy_and_terms": "Privacy & Terms", "refresh_btn": "Get a new challenge", "visual_challenge": "Get a visual challenge"}, "theme": "white"};</script>
+<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S"></script>
+<noscript>
+  <iframe src="http://www.google.com/recaptcha/api/noscript?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S" height="300" width="500" frameborder="0"></iframe><br>
+  <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+  <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
+</noscript>
+
+  </div>
+
+
+    
+
+
+
+
+
+  
+
+
+    <input class="btn btn-default" id="submit" name="submit" type="submit" value="Submit">
+  
+
+
+
+
+
+</form>
+
+
+</div>
+
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <p class="elapsed">This page was generated in None seconds.</p>
+            <p>&copy; 2014 by Miguel Grinberg. All rights reserved. <a href="mailto:webmaster _at_ miguelgrinberg _dot_ com">Questions?</a></p>
+        </div>
+    </div>
+
+
+    
+    
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.33/jquery.colorbox-min.js"></script>
+    <script type="text/javascript" src="../static/prettify.js"></script>
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment-with-langs.min.js"></script>
+<script>
+function flask_moment_render(elem) {
+    $(elem).text(eval('moment("' + $(elem).data('timestamp') + '").' + $(elem).data('format') + ';'));
+    $(elem).removeClass('flask-moment');
+}
+function flask_moment_render_all() {
+    $('.flask-moment').each(function() {
+        flask_moment_render(this);
+        if ($(this).data('refresh')) {
+            (function(elem, interval) { setInterval(function() { flask_moment_render(elem) }, interval); })(this, $(this).data('refresh'));
+        }
+    })
+}
+$(document).ready(function() {
+    flask_moment_render_all();
+});
+</script>
+    
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4777284-15']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".gallery").colorbox({rel:".gallery",maxWidth:"95%",maxHeight:"95%",scalePhotos:true});
+            // add prettyprint class to all <pre><code></code></pre> blocks
+            var prettify = false;
+            $("pre code").parent().each(function() {
+                $(this).addClass('prettyprint');
+                prettify = true;
+            });
+            prettyPrint();
+        });
+    </script>
+
+
+  </body>
+
+<!-- Mirrored from blog.miguelgrinberg.com/post/celery-and-the-flask-application-factory-pattern by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:44:45 GMT -->
+</html>

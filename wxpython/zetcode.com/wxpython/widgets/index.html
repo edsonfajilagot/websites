@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from zetcode.com/wxpython/widgets/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Aug 2015 19:21:42 GMT -->
+<head>
+<title>wxPython widgets</title>
+<link rel="stylesheet" href="../../cfg/format2.css" type="text/css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="wxPython, widgets, Python, Linux, programming">
+<meta name="description" content="This part of the wxPython tutorial covers multiple 
+basic wxPython widgets, including wx.Button, wx.ComboBox, wx.Slider, wx.RadioButton, wx.StaticText, and wx.CheckBox.">
+<meta name="author" content="Jan Bodnar">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div id="wide_ad" class="ltow">
+<script async src="../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- 160x600, August 2011 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:600px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="2484182563"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<div class="content">
+
+
+<header>
+
+<nav>
+<a href="http://zetcode.com/" title="Home">Home</a>&#160;
+<a href="../index.html">Contents</a>
+</nav>
+
+</header>
+
+
+<h1>Widgets</h1>
+
+<p>
+In this section, we will introduce basic widgets in wxPython. 
+Each widget will have a small code example. Widgets are basic building 
+blocks of an application. wxPythont has a wide range of various widgets: 
+buttons, check boxes, sliders, list boxes etc.
+</p>
+
+<div class="med_rec">
+<script async src="../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- NewSquare -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:250px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="0364418177"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div> 
+
+<nav>
+<ul>
+  <li><a href="#button">wx.Button</a></li>
+  <li><a href="#togglebutton"> wx.ToggleButton</a></li>
+  <li><a href="#staticline">wx.StaticLine</a></li>
+  <li><a href="#statictext">wx.StaticText</a></li>
+  <li><a href="#staticbox">wx.StaticBox</a></li>
+  <li><a href="#combobox">wx.ComboBox</a></li>
+  <li><a href="#checkbox">wx.CheckBox</a></li>
+  <li><a href="#statusbar">wx.StatusBar</a></li>
+  <li><a href="#radiobutton">wx.RadioButton</a></li>
+  <li><a href="#gauge">wx.Gauge</a></li>
+  <li><a href="#slider">wx.Slider</a></li>
+  <li><a href="#spinctrl">wx.SpinCtrl</a></li>
+</ul>
+</nav>
+
+<h2 id="button">wx.Button</h2>
+
+<p>
+<code>wx.Button</code> is a simple widget. It contains a text string. 
+It is used to trigger an action. 
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+import wx
+
+
+class Example(wx.Frame):
+           
+    def __init__(self, *args, **kw):
+        super(Example, self).__init__(*args, **kw) 
+        
+        self.InitUI()
+        
+    def InitUI(self):   
+
+        pnl = wx.Panel(self)
+        cbtn = wx.Button(pnl, label='Close', pos=(20, 30))
+
+        cbtn.Bind(wx.EVT_BUTTON, self.OnClose)
+
+        self.SetSize((250, 200))
+        self.SetTitle('wx.Button')
+        self.Centre()
+        self.Show(True)          
+        
+    def OnClose(self, e):
+        
+        self.Close(True)                  
+        
+def main():
+    
+    ex = wx.App()
+    Example(None)
+    ex.MainLoop()    
+
+
+if __name__ == '__main__':
+    main()   
+</pre>
+
+<p>
+In the code example we create a Close button which terminates the application
+when pressed.
+</p>
+
+<pre class="explanation">
+cbtn = wx.Button(pnl, label='Close', pos=(20, 30))
+</pre>
+
+<p>
+A <code>wx.Button</code> widget is created. In the constructor of
+the widget we provide the label for the button and the position
+on the panel. 
+</p>
+
+<pre class="explanation">
+cbtn.Bind(wx.EVT_BUTTON, self.OnClose)
+</pre>
+
+<p>
+The <code>wx.EVT_BUTTON</code> event is triggered when we click on the button. 
+We specify the event handler for the event. 
+</p>
+
+<pre class="explanation">
+def OnClose(self, e):
+    
+    self.Close(True)   
+</pre>
+
+<p>
+In the <code>OnClose()</code> method we terminate the application with
+the <code>Close()</code> method.
+</p>
+
+
+<figure>
+<img src="../../img/gui/wxpython/button.png" alt="wx.Button">
+<figcaption>Figure: wx.Button</figcaption>
+</figure>
+
+
+<h2 id="togglebutton">wx.ToggleButton</h2>
+
+<p>
+<code>wx.ToggleButton</code> is a button that has two states: pressed and not pressed. 
+You toggle between these two states by clicking on it. There are 
+situations where this functionality fits well.
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+import wx
+
+
+class Example(wx.Frame):
+           
+    def __init__(self, *args, **kw):
+        super(Example, self).__init__(*args, **kw) 
+        
+        self.InitUI()
+        
+    def InitUI(self):   
+
+        pnl = wx.Panel(self)
+        
+        self.col = wx.Colour(0, 0, 0)
+
+        rtb = wx.ToggleButton(pnl, label='red', pos=(20, 25))
+        gtb = wx.ToggleButton(pnl, label='green', pos=(20, 60))
+        btb = wx.ToggleButton(pnl, label='blue', pos=(20, 100))
+
+        self.cpnl  = wx.Panel(pnl, pos=(150, 20), size=(110, 110))
+        self.cpnl.SetBackgroundColour(self.col)
+
+        rtb.Bind(wx.EVT_TOGGLEBUTTON, self.ToggleRed)
+        gtb.Bind(wx.EVT_TOGGLEBUTTON, self.ToggleGreen)
+        btb.Bind(wx.EVT_TOGGLEBUTTON, self.ToggleBlue)
+
+        self.SetSize((300, 200))
+        self.SetTitle('Toggle buttons')
+        self.Centre()
+        self.Show(True)     
+
+    def ToggleRed(self, e):
+        
+        obj = e.GetEventObject()
+        isPressed = obj.GetValue()
+        
+        green = self.col.Green()
+        blue = self.col.Blue()
+        
+        if isPressed:
+            self.col.Set(255, green, blue)
+        else:
+            self.col.Set(0, green, blue)
+            
+        self.cpnl.SetBackgroundColour(self.col)
+        self.cpnl.Refresh()
+
+    def ToggleGreen(self, e):
+        
+        obj = e.GetEventObject()
+        isPressed = obj.GetValue()
+        
+        red = self.col.Red()
+        blue = self.col.Blue()        
+        
+        if isPressed:
+            self.col.Set(red, 255, blue)
+        else:
+            self.col.Set(red, 0, blue)
+            
+        self.cpnl.SetBackgroundColour(self.col)
+        self.cpnl.Refresh()
+
+    def ToggleBlue(self, e):
+        
+        obj = e.GetEventObject()
+        isPressed = obj.GetValue()
+        
+        red = self.col.Red()
+        green = self.col.Green()        
+        
+        if isPressed:
+            self.col.Set(red, green, 255)
+        else:
+            self.col.Set(red, green, 0)
+            
+        self.cpnl.SetBackgroundColour(self.col)     
+        self.cpnl.Refresh()  
+                                   
+        
+def main():
+    
+    ex = wx.App()
+    Example(None)
+    ex.MainLoop()    
+
+
+if __name__ == '__main__':
+    main()    
+</pre>
+
+<p>
+We have red, green, and blue toggle buttons and a panel. We change the colour
+of the panel by clicking on the toggle buttons. 
+</p>
+
+<pre class="explanation">
+rtb = wx.ToggleButton(pnl, label='red', pos=(20, 25)) 
+</pre>
+
+<p>
+A <code>wx.ToggleButton</code> widget is created. 
+</p>
+
+<pre class="explanation">
+self.cpnl  = wx.Panel(pnl, pos=(150, 20), size=(110, 110))
+self.cpnl.SetBackgroundColour(self.col) 
+</pre>
+
+<p>
+This is a panel whose colour we will modify with the toggle buttons.
+</p>
+
+<pre class="explanation">
+rtb.Bind(wx.EVT_TOGGLEBUTTON, self.ToggleRed) 
+</pre>
+
+<p>
+The <code>ToggleRed()</code> event handler is called, when we click on 
+the <code>rtb</code> toggle button. 
+</p>
+
+<pre class="explanation">
+def ToggleRed(self, e):
+    
+    obj = e.GetEventObject()
+    isPressed = obj.GetValue()
+    
+    green = self.col.Green()
+    blue = self.col.Blue()
+    
+    if isPressed:
+        self.col.Set(255, green, blue)
+    else:
+        self.col.Set(0, green, blue)
+        
+    self.cpnl.SetBackgroundColour(self.col)
+</pre>
+
+<p>
+In the <code>ToggleRed()</code> method we react to the fact that the 
+<code>rtb</code> button was pressed. We figure out the colour parts and update the 
+colour of the colour panel.
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/togglebuttons.png" alt="Toggle buttons">
+<figcaption>Figure: Toggle buttons</figcaption>
+</figure>
+
+
+<h2 id="staticline">wx.StaticLine</h2>
+
+<p>
+This widget displays a simple line on the window. It can be horizontal or vertical. 
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+import wx
+
+
+class Example(wx.Frame):
+           
+    def __init__(self, *args, **kw):
+        super(Example, self).__init__(*args, **kw) 
+        
+        self.InitUI()
+        
+    def InitUI(self):   
+
+        pnl = wx.Panel(self)
+
+        font = wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.BOLD)
+        heading = wx.StaticText(self, label='The Central Europe', pos=(130, 15))
+        heading.SetFont(font)
+
+        wx.StaticLine(self, pos=(25, 50), size=(300,1))
+
+        wx.StaticText(self, label='Slovakia', pos=(25, 80))
+        wx.StaticText(self, label='Hungary', pos=(25, 100))
+        wx.StaticText(self, label='Poland', pos=(25, 120))
+        wx.StaticText(self, label='Czech Republic', pos=(25, 140))
+        wx.StaticText(self, label='Germany', pos=(25, 160))
+        wx.StaticText(self, label='Slovenia', pos=(25, 180))
+        wx.StaticText(self, label='Austria', pos=(25, 200))
+        wx.StaticText(self, label='Switzerland', pos=(25, 220))
+
+        wx.StaticText(self, label='5 445 000', pos=(250, 80))
+        wx.StaticText(self, label='10 014 000', pos=(250, 100))
+        wx.StaticText(self, label='38 186 000', pos=(250, 120))
+        wx.StaticText(self, label='10 562 000', pos=(250, 140))
+        wx.StaticText(self, label='81 799 000', pos=(250, 160))
+        wx.StaticText(self, label='2 050 000', pos=(250, 180))
+        wx.StaticText(self, label='8 414 000', pos=(250, 200))
+        wx.StaticText(self, label='7 866 000', pos=(250, 220))
+
+        wx.StaticLine(self, pos=(25, 260), size=(300,1))
+
+        tsum = wx.StaticText(self, label='164 336 000', pos=(240, 280))
+        sum_font = tsum.GetFont()
+        sum_font.SetWeight(wx.BOLD)
+        tsum.SetFont(sum_font)
+
+        btn = wx.Button(self, label='Close', pos=(140, 310))
+
+        btn.Bind(wx.EVT_BUTTON, self.OnClose)        
+        
+        self.SetSize((360, 380))
+        self.SetTitle('wx.StaticLine')
+        self.Centre()
+        self.Show(True)      
+        
+    def OnClose(self, e):
+        
+        self.Close(True)    
+                      
+def main():
+    
+    ex = wx.App()
+    Example(None)
+    ex.MainLoop()    
+
+if __name__ == '__main__':
+    main()   
+</pre>
+
+<p>
+The script displays central european countries and their population. 
+The <code>wx.StatLine</code> makes it look more visually attractive.
+</p>
+
+<pre class="explanation">
+wx.StaticLine(self, pos=(25, 50), size=(300,1))
+</pre>
+
+<p>
+This is the constructor of the <code>wx.StaticLine</code>
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/staticline.png" alt="wx.StaticLine">
+<figcaption>Figure: wx.StaticLine</figcaption>
+</figure>
+
+
+<h2 id="statictext">wx.StaticText</h2>
+
+<p>
+A wx.StaticText widget displays one or more lines of read-only text.
+</p>
+
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+import wx
+
+
+class Example(wx.Frame):
+           
+    def __init__(self, *args, **kw):
+        super(Example, self).__init__(*args, **kw) 
+        
+        self.InitUI()
+        
+    def InitUI(self):   
+
+        txt1 = '''I'm giving up the ghost of love
+in the shadows cast on devotion
+She is the one that I adore
+creed of my silent suffocation
+Break this bittersweet spell on me
+lost in the arms of destiny'''
+
+        txt2 = '''There is something in the way
+You're always somewhere else
+Feelings have deserted me
+To a point of no return
+I don't believe in God
+But I pray for you'''
+
+        pnl = wx.Panel(self)
+        vbox = wx.BoxSizer(wx.VERTICAL)
+        
+        st1 = wx.StaticText(pnl, label=txt1, style=wx.ALIGN_CENTRE)
+        st2 = wx.StaticText(pnl, label=txt2, style=wx.ALIGN_CENTRE)
+        
+        vbox.Add(st1, flag=wx.ALL, border=5)
+        vbox.Add(st2, flag=wx.ALL, border=5)
+        pnl.SetSizer(vbox)
+        
+        self.SetSize((250, 260))
+        self.SetTitle('Bittersweet')
+        self.Centre()
+        self.Show(True)          
+                        
+def main():
+    
+    ex = wx.App()
+    Example(None)
+    ex.MainLoop()    
+
+if __name__ == '__main__':
+    main()   
+</pre>
+
+<p>
+In the example we show two strophes of a Bittersweet song using the
+<code>wx.StaticText</code> widget. 
+</p>
+
+<pre class="explanation">
+        txt1 = '''I'm giving up the ghost of love
+in the shadows cast on devotion
+She is the one that I adore
+creed of my silent suffocation
+Break this bittersweet spell on me
+lost in the arms of destiny'''
+</pre>
+
+<p>
+This is a string to be shown in the <code>wx.StaticText</code> widget.
+</p>
+
+<pre class="explanation">
+st1 = wx.StaticText(pnl, label=txt1, style=wx.ALIGN_CENTRE)
+</pre>
+
+<p>
+We create the <code>wx.StaticText</code> widget. The text will be aligned
+to the center. 
+</p>
+
+
+<figure>
+<img src="../../img/gui/wxpython/statictext.png" alt="wx.StaticText">
+<figcaption>Figure: wx.StaticText</figcaption>
+</figure>
+
+
+<h2 id="staticbox">wx.StaticBox</h2>
+
+<p>
+This is a kind of a decorator widget. It is used to logically group 
+various widgets. Note that this widget must be created before the widgets 
+that it contains, and that those widgets should be siblings, 
+not children, of the static box.
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+import wx
+
+
+class Example(wx.Frame):
+           
+    def __init__(self, *args, **kw):
+        super(Example, self).__init__(*args, **kw) 
+        
+        self.InitUI()
+        
+    def InitUI(self):   
+
+        pnl = wx.Panel(self)
+        
+        wx.StaticBox(pnl, label='Personal Info', pos=(5, 5), size=(240, 170))
+        wx.CheckBox(pnl, label='Male', pos=(15, 30))
+        wx.CheckBox(pnl, label='Married', pos=(15, 55))
+        wx.StaticText(pnl, label='Age', pos=(15, 95))
+        wx.SpinCtrl(pnl, value='1', pos=(55, 90), size=(60, -1), min=1, max=120)
+        
+        btn = wx.Button(pnl, label='Ok', pos=(90, 185), size=(60, -1))
+
+        btn.Bind(wx.EVT_BUTTON, self.OnClose)
+
+        self.SetSize((270, 250))
+        self.SetTitle('Static box')
+        self.Centre()
+        self.Show(True)          
+        
+    def OnClose(self, e):
+        
+        self.Close(True)    
+               
+        
+def main():
+    
+    ex = wx.App()
+    Example(None)
+    ex.MainLoop()    
+
+
+if __name__ == '__main__':
+    main()   
+</pre>
+
+<p>
+We have a <code>wx.StaticBox</code> which decorates other four widgets.
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/staticbox.png" alt="Static box">
+<figcaption>Figure: Static box</figcaption>
+</figure>
+
+
+<h2 id="combobox">wx.ComboBox</h2>
+
+<p>
+<code>wx.ComboBox</code> is a combination of a single line text field, a button with a 
+down arrow image and a listbox. When you press the button, a listbox 
+appears. A user can select only one option from the supplied string list. 
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+import wx
+
+
+class Example(wx.Frame):
+           
+    def __init__(self, *args, **kw):
+        super(Example, self).__init__(*args, **kw) 
+        
+        self.InitUI()
+        
+    def InitUI(self):   
+
+        pnl = wx.Panel(self)
+        
+        distros = ['Ubuntu', 'Arch', 'Fedora', 'Debian', 'Mint']
+        cb = wx.ComboBox(pnl, pos=(50, 30), choices=distros, 
+            style=wx.CB_READONLY)
+
+        self.st = wx.StaticText(pnl, label='', pos=(50, 140))
+        cb.Bind(wx.EVT_COMBOBOX, self.OnSelect)
+        
+        self.SetSize((250, 230))
+        self.SetTitle('wx.ComboBox')
+        self.Centre()
+        self.Show(True)          
+        
+    def OnSelect(self, e):
+        
+        i = e.GetString()
+        self.st.SetLabel(i)
+        
+def main():
+    
+    ex = wx.App()
+    Example(None)
+    ex.MainLoop()    
+
+if __name__ == '__main__':
+    main()   
+</pre>
+
+<p>
+Selected option from the combo box is shown in the label below. 
+</p>
+
+<pre class="explanation">
+distros = ['Ubuntu', 'Arch', 'Fedora', 'Debian', 'Mint']
+</pre>
+
+<p>
+The combo box will contain this list of strings.
+</p>
+
+<pre class="explanation">
+cb = wx.ComboBox(pnl, pos=(50, 30), choices=distros, 
+            style=wx.CB_READONLY)
+</pre>
+
+<p>
+A <code>wx.ComboBox</code> widget is created. The choices parameter takes
+a list of strings to display by the combo box. The <code>wx.CB_READONLY</code>
+style makes the strings of the list read-only. 
+</p>
+
+<pre class="explanation">
+cb.Bind(wx.EVT_COMBOBOX, self.OnSelect)
+</pre>
+
+<p>
+When we select an option from the combo box, the <code>wx.EVT_COMBOBOX</code> event 
+is triggered. We plug the <code>OnSelect()</code> event handler to this event. 
+</p>
+
+<pre class="explanation">
+def OnSelect(self, e):
+    
+    i = e.GetString()
+    self.st.SetLabel(i)
+</pre>
+
+<p>
+We get the selected item from the combo box and set it to
+the label. 
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/combobox.png" alt="wx.ComboBox">
+<figcaption>Figure: wx.ComboBox</figcaption>
+</figure>
+
+
+<h2 id="checkbox">wx.CheckBox</h2>
+
+<p>
+A <code>wx.CheckBox</code> is a widget that has two states: on and off. It is 
+a box with a label. The label can be set to the right or to the left of the box. 
+If a <code>wx.CheckBox</code> is checked, it is represented by a tick in a box. 
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+import wx
+
+
+class Example(wx.Frame):
+           
+    def __init__(self, *args, **kw):
+        super(Example, self).__init__(*args, **kw) 
+        
+        self.InitUI()
+        
+    def InitUI(self):   
+
+        pnl = wx.Panel(self)
+
+        cb = wx.CheckBox(pnl, label='Show title', pos=(20, 20))
+        cb.SetValue(True)
+
+        cb.Bind(wx.EVT_CHECKBOX, self.ShowOrHideTitle)
+
+        self.SetSize((250, 170))
+        self.SetTitle('wx.CheckBox')
+        self.Centre()
+        self.Show(True)    
+
+    def ShowOrHideTitle(self, e):
+        
+        sender = e.GetEventObject()
+        isChecked = sender.GetValue()
+        
+        if isChecked:
+            self.SetTitle('wx.CheckBox')            
+        else: 
+            self.SetTitle('')        
+                       
+def main():
+    
+    ex = wx.App()
+    Example(None)
+    ex.MainLoop()    
+
+if __name__ == '__main__':
+    main()   
+</pre>
+
+<p>
+In the above example we show or hide the window title with the 
+<code>wx.CheckBox</code> widget.
+</p>
+
+<pre class="explanation">
+cb = wx.CheckBox(pnl, label='Show title', pos=(20, 20))
+</pre>
+
+<p>
+This is the constructor of the <code>wx.CheckBox</code> widget. 
+</p>
+
+<pre class="explanation">
+cb.SetValue(True)
+</pre>
+
+<p>
+The title of the frame window is shown by default, so we check 
+the <code>wx.CheckBox</code> widget with the <code>SetValue()</code>
+method.
+</p>
+
+<pre class="explanation">
+cb.Bind(wx.EVT_CHECKBOX, self.ShowOrHideTitle)
+</pre>
+
+<p>
+The <code>wx.EVT_CHECKBOX</code> event is triggered when we click on the 
+<code>wx.CheckBox</code> widget. The <code>ShowOrHideTitle()</code> event handler 
+is called upon this event. 
+</p>
+
+<pre class="explanation">
+def ShowOrHideTitle(self, e):
+    
+    sender = e.GetEventObject()
+    isChecked = sender.GetValue()
+    
+    if isChecked:
+        self.SetTitle('wx.CheckBox')            
+    else: 
+        self.SetTitle('')   
+</pre>
+
+<p>
+In the ShowOrHideTitle() method we show or hide the title
+based on the state of the <code>wx.CheckBox</code> widget. 
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/checkbox.png" alt="wx.CheckBox">
+<figcaption>Figure: wx.CheckBox</figcaption>
+</figure>
+
+
+<h2 id="statusbar">wx.StatusBar</h2>
+
+<p>
+The <code>wx.StatusBar</code> widget is used to display 
+application status information. It can be divided into several parts 
+to show different kind of information. We can insert other widgets 
+into the <code>wx.StatusBar</code>. It can be used as an alternative to dialogs, 
+since dialogs are ofted abused and they are disliked by most users. 
+We can create a <code>wx.StatusBar</code> in two ways. We can manually create our 
+own <code>wx.StatusBar</code> and call <code>SetStatusBar()</code> method or we can simply call 
+the CreateStatusBar() method. The latter method creates a default 
+<code>wx.StatusBar</code> for us. 
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+import wx
+
+
+class Example(wx.Frame):
+           
+    def __init__(self, *args, **kw):
+        super(Example, self).__init__(*args, **kw) 
+        
+        self.InitUI()
+        
+    def InitUI(self):   
+
+        pnl = wx.Panel(self)
+
+        button = wx.Button(pnl, label='Button', pos=(20, 20))
+        text = wx.CheckBox(pnl, label='CheckBox', pos=(20, 90))
+        combo = wx.ComboBox(pnl, pos=(120, 22), choices=['Python', 'Ruby'])
+        slider = wx.Slider(pnl, 5, 6, 1, 10, (120, 90), (110, -1))        
+
+        pnl.Bind(wx.EVT_ENTER_WINDOW, self.OnWidgetEnter)
+        button.Bind(wx.EVT_ENTER_WINDOW, self.OnWidgetEnter)
+        text.Bind(wx.EVT_ENTER_WINDOW, self.OnWidgetEnter)
+        combo.Bind(wx.EVT_ENTER_WINDOW, self.OnWidgetEnter)
+        slider.Bind(wx.EVT_ENTER_WINDOW, self.OnWidgetEnter)
+
+        self.sb = self.CreateStatusBar()
+
+        self.SetSize((250, 230))
+        self.SetTitle('wx.Statusbar')
+        self.Centre()
+        self.Show(True)     
+
+    def OnWidgetEnter(self, e):
+        
+        name = e.GetEventObject().GetClassName()
+        self.sb.SetStatusText(name + ' widget')
+        e.Skip()               
+        
+def main():
+    
+    ex = wx.App()
+    Example(None)
+    ex.MainLoop()    
+
+if __name__ == '__main__':
+    main()   
+</pre>
+
+<p>
+In our example, we have a <code>wx.Frame</code> widget and five other widgets. 
+If we hover a mouse pointer over a widget, its name is shown in the 
+<code>wx.StatusBar</code>.
+</p>
+
+<pre class="explanation">
+pnl.Bind(wx.EVT_ENTER_WINDOW, self.OnWidgetEnter)
+</pre>
+
+<p>
+The <code>EVT_ENTER_WINDOW</code> event is generated if we enter the area of a widget.
+</p>
+
+<pre class="explanation">
+self.sb = self.CreateStatusBar()
+</pre>
+
+<p>
+A statusbar is created with the <code>CreateStatusBar()</code> method.
+</p>
+
+<pre class="explanation">
+def OnWidgetEnter(self, e):
+    
+    name = e.GetEventObject().GetClassName()
+    self.sb.SetStatusText(name + ' widget')
+    e.Skip()  
+</pre>
+
+<p>
+Inside the <code>OnWidgetEnter()</code> method we figure out the name of the widget that
+we enter with the mouse pointer. We set a status text with the <code>SetStatusText()</code>
+method.
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/statusbar.png" alt="StatusBar">
+<figcaption>Figure: wx.StatusBar</figcaption>
+</figure>
+
+
+<h2 id="radiobutton">wx.RadioButton</h2>
+
+<p>
+<code>wx.RadioButton</code>  is a widget that allows the user to select a 
+single exclusive choice from a group of options. A group of 
+radio buttons is defined by having the first radio button in 
+the group contain the <code>wx.RB_GROUP</code> style. All other radio buttons 
+defined after the first radio button with this style flag
+will be added to the function group of the first radio button. 
+Declaring another radio button with the <code>wx.RB_GROUP</code> flag will 
+start a new radio button group. 
+</p>
+
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+import wx
+
+
+class Example(wx.Frame):
+           
+    def __init__(self, *args, **kw):
+        super(Example, self).__init__(*args, **kw) 
+        
+        self.InitUI()
+        
+    def InitUI(self):   
+            
+        pnl = wx.Panel(self)
+
+        self.rb1 = wx.RadioButton(pnl, label='Value A', pos=(10, 10), 
+            style=wx.RB_GROUP)
+        self.rb2 = wx.RadioButton(pnl, label='Value B', pos=(10, 30))
+        self.rb3 = wx.RadioButton(pnl, label='Value C', pos=(10, 50))
+        
+        self.rb1.Bind(wx.EVT_RADIOBUTTON, self.SetVal)
+        self.rb2.Bind(wx.EVT_RADIOBUTTON, self.SetVal)
+        self.rb3.Bind(wx.EVT_RADIOBUTTON, self.SetVal)
+
+        self.sb = self.CreateStatusBar(3)
+        
+        self.sb.SetStatusText("True", 0)
+        self.sb.SetStatusText("False", 1)
+        self.sb.SetStatusText("False", 2)   
+
+        self.SetSize((210, 210))
+        self.SetTitle('wx.RadioButton')
+        self.Centre()
+        self.Show(True)     
+
+    def SetVal(self, e):
+        
+        state1 = str(self.rb1.GetValue())
+        state2 = str(self.rb2.GetValue())
+        state3 = str(self.rb3.GetValue())
+
+        self.sb.SetStatusText(state1, 0)
+        self.sb.SetStatusText(state2, 1)
+        self.sb.SetStatusText(state3, 2)            
+        
+def main():
+    
+    ex = wx.App()
+    Example(None)
+    ex.MainLoop()    
+
+if __name__ == '__main__':
+    main()   
+</pre>
+
+<p>
+We have a group of three radio buttons. The state of each of the 
+radio buttons is displayed in the statusbar. 
+</p>
+
+<pre class="explanation">
+self.rb1 = wx.RadioButton(pnl, label='Value A', pos=(10, 10), 
+    style=wx.RB_GROUP)
+self.rb2 = wx.RadioButton(pnl, label='Value B', pos=(10, 30))
+self.rb3 = wx.RadioButton(pnl, label='Value C', pos=(10, 50))
+</pre>
+
+<p>
+We create three radio buttons. The first radio button has the <code>wx.RB_GROUP</code>
+style set. It starts a new radio group. 
+</p>
+
+<pre class="explanation">
+self.rb1.Bind(wx.EVT_RADIOBUTTON, self.SetVal)
+</pre>
+
+<p>
+We bind the <code>wx.EVT_RADIOBUTTON</code> event to the 
+<code>SetVal()</code> event handler.
+</p>
+
+<pre class="explanation">
+self.sb = self.CreateStatusBar(3)
+
+self.sb.SetStatusText("True", 0)
+self.sb.SetStatusText("False", 1)
+self.sb.SetStatusText("False", 2) 
+</pre>
+
+<p>
+We create a statusbar with three fields. We set initial text to the 
+statusbar corresponding with the radio button states. 
+</p>
+
+<pre class="explanation">
+def SetVal(self, e):
+    
+    state1 = str(self.rb1.GetValue())
+    state2 = str(self.rb2.GetValue())
+    state3 = str(self.rb3.GetValue())
+
+    self.sb.SetStatusText(state1, 0)
+    self.sb.SetStatusText(state2, 1)
+    self.sb.SetStatusText(state3, 2)  
+</pre>
+
+<p>
+Inside the <code>SetVal()</code> method we find out the states of the radio buttons.
+We update the statusbar fields to the current radio button values.
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/radiobutton.png" alt="wx.RadioButton">
+<figcaption>Figure: wx.RadioButton</figcaption>
+</figure>
+
+
+<h2 id="gauge">wx.Gauge</h2>
+
+<p>
+<code>wx.Gauge</code> is a widget that is used, when we process lengthy tasks. 
+It has an indicator to show the current state of a task. 
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+import wx
+
+TASK_RANGE = 50
+
+class Example(wx.Frame):
+           
+    def __init__(self, *args, **kw):
+        super(Example, self).__init__(*args, **kw) 
+        
+        self.InitUI()
+        
+    def InitUI(self):   
+        
+        self.timer = wx.Timer(self, 1)
+        self.count = 0
+
+        self.Bind(wx.EVT_TIMER, self.OnTimer, self.timer)
+
+        pnl = wx.Panel(self)
+        vbox = wx.BoxSizer(wx.VERTICAL)
+        hbox1 = wx.BoxSizer(wx.HORIZONTAL)
+        hbox2 = wx.BoxSizer(wx.HORIZONTAL)
+        hbox3 = wx.BoxSizer(wx.HORIZONTAL)
+
+        self.gauge = wx.Gauge(pnl, range=TASK_RANGE, size=(250, 25))
+        self.btn1 = wx.Button(pnl, wx.ID_OK)
+        self.btn2 = wx.Button(pnl, wx.ID_STOP)
+        self.text = wx.StaticText(pnl, label='Task to be done')
+
+        self.Bind(wx.EVT_BUTTON, self.OnOk, self.btn1)
+        self.Bind(wx.EVT_BUTTON, self.OnStop, self.btn2)
+
+        hbox1.Add(self.gauge, proportion=1, flag=wx.ALIGN_CENTRE)
+        hbox2.Add(self.btn1, proportion=1, flag=wx.RIGHT, border=10)
+        hbox2.Add(self.btn2, proportion=1)
+        hbox3.Add(self.text, proportion=1)
+        vbox.Add((0, 30))
+        vbox.Add(hbox1, flag=wx.ALIGN_CENTRE)
+        vbox.Add((0, 20))
+        vbox.Add(hbox2, proportion=1, flag=wx.ALIGN_CENTRE)
+        vbox.Add(hbox3, proportion=1, flag=wx.ALIGN_CENTRE)
+
+        pnl.SetSizer(vbox)
+        
+        self.SetSize((300, 200))
+        self.SetTitle('wx.Gauge')
+        self.Centre()
+        self.Show(True)     
+
+    def OnOk(self, e):
+        
+        if self.count >= TASK_RANGE:
+            return
+
+        self.timer.Start(100)
+        self.text.SetLabel('Task in Progress')
+
+    def OnStop(self, e):
+        
+        if self.count == 0 or self.count >= TASK_RANGE or not self.timer.IsRunning():
+            return
+
+        self.timer.Stop()
+        self.text.SetLabel('Task Interrupted')
+        
+    def OnTimer(self, e):
+        
+        self.count = self.count + 1
+        self.gauge.SetValue(self.count)
+        
+        if self.count == TASK_RANGE:
+
+            self.timer.Stop()
+            self.text.SetLabel('Task Completed')
+                      
+def main():
+    
+    ex = wx.App()
+    Example(None)
+    ex.MainLoop()    
+
+if __name__ == '__main__':
+    main()                 
+</pre>
+
+<p>
+We have a gauge and two buttons. One button starts the gauge, the other
+button stops the gauge. 
+</p>
+
+<pre class="explanation">
+self.timer = wx.Timer(self, 1)
+self.count = 0
+</pre>
+
+<p>
+We use the <code>wx.Timer</code> to execute code at specific intervals. 
+We will update the gauge at those moments. The count variable is used
+to determine the portion of the task already done. 
+</p>
+
+<pre class="explanation">
+self.gauge = wx.Gauge(pnl, range=TASK_RANGE, size=(250, 25))
+</pre>
+
+<p>
+This is the constructor of the <code>wx.Gauge</code> widget. The
+range parameter sets the maximum integer value of the widget. 
+</p>
+
+<pre class="explanation">
+def OnOk(self, e):
+    
+    if self.count >= TASK_RANGE:
+        return
+
+    self.timer.Start(100)
+    self.text.SetLabel('Task in Progress')
+</pre>
+
+<p>
+When we click on the OK button, the <code>OnOk()</code> method is called. 
+We first check if the count variable is within the range of the task. 
+If not, we return from the method. If the task is not yet completed, we 
+start the timer and update the static text.
+</p>
+
+<pre class="explanation">
+def OnStop(self, e):
+    
+    if self.count == 0 or self.count >= TASK_RANGE or not self.timer.IsRunning():
+        return
+
+    self.timer.Stop()
+    self.text.SetLabel('Task Interrupted')
+</pre>
+
+<p>
+The <code>OnStop()</code> method is called, when we click on the stop button. 
+We check the conditions for stopping the task. If we have met them, we stop the
+timer and update the static text. 
+</p>
+
+<pre class="explanation">
+def OnTimer(self, e):
+    
+    self.count = self.count + 1
+    self.gauge.SetValue(self.count)
+    
+    if self.count == TASK_RANGE:
+
+        self.timer.Stop()
+        self.text.SetLabel('Task Completed')
+</pre>
+
+<p>
+The <code>OnTimer()</code> method is called periodically after starting the timer. 
+In the method we update the cout variable and the gauge widget. 
+If the count variable is equal to the <code>TASK_RANGE</code>, we stop the
+timer and update the static text. 
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/gauge.png" alt="wx.Gauge">
+<figcaption>Figure: wx.Gauge</figcaption>
+</figure>
+
+
+<h2 id="slider">wx.Slider</h2>
+
+<p>
+<code>wx.Slider</code> is a widget that has a simple handle. This handle can be 
+pulled back and forth. This way we can choose a specific task. 
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+import wx
+
+
+class Example(wx.Frame):
+           
+    def __init__(self, *args, **kw):
+        super(Example, self).__init__(*args, **kw) 
+        
+        self.InitUI()
+        
+    def InitUI(self):   
+
+        pnl = wx.Panel(self)
+
+        sld = wx.Slider(pnl, value=200, minValue=150, maxValue=500, pos=(20, 20), 
+            size=(250, -1), style=wx.SL_HORIZONTAL)
+        
+        sld.Bind(wx.EVT_SCROLL, self.OnSliderScroll)
+        
+        self.txt = wx.StaticText(pnl, label='200', pos=(20, 90))               
+        
+        self.SetSize((290, 200))
+        self.SetTitle('wx.Slider')
+        self.Centre()
+        self.Show(True)    
+
+    def OnSliderScroll(self, e):
+        
+        obj = e.GetEventObject()
+        val = obj.GetValue()
+        
+        self.txt.SetLabel(str(val))        
+
+                      
+def main():
+    
+    ex = wx.App()
+    Example(None)
+    ex.MainLoop()    
+
+if __name__ == '__main__':
+    main()   
+</pre>
+
+<p>
+A value selected in the slider is shown in the static text below. 
+</p>
+
+<pre class="explanation">
+sld = wx.Slider(pnl, value=200, minValue=150, maxValue=500, pos=(20, 20), 
+            size=(250, -1), style=wx.SL_HORIZONTAL)
+</pre>
+
+<p>
+A <code>wx.Slider</code> is created. We provide the initial position of the
+slider with the value parameter and the minimum and maximum slider positions
+with the minValue and maxValue parameters. The <code>wx.SL_HORIZONTAL</code>
+makes the slider to be horizontal.
+</p>
+
+<pre class="explanation">
+sld.Bind(wx.EVT_SCROLL, self.OnSliderScroll)
+</pre>
+
+<p>
+When the <code>wx.EVT_SCROLL</code> event is encountered, the 
+<code>OnSliderScroll()</code> method is called.
+</p>
+
+<pre class="explanation">
+self.txt = wx.StaticText(pnl, label='200', pos=(20, 90)) 
+</pre>
+
+<p>
+The currently selected slider value is displayed in the static text, which we
+position below the slider. 
+</p>
+
+<pre class="explanation">
+def OnSliderScroll(self, e):
+    
+    obj = e.GetEventObject()
+    val = obj.GetValue()
+    
+    self.txt.SetLabel(str(val)) 
+</pre>
+
+<p>
+In the <code>OnSliderScroll()</code> method we get the sender of the event. We get the 
+current value of the slider and set it to the static text. 
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/slider.png" alt="wx.Slider">
+<figcaption>Figure: wx.Slider</figcaption>
+</figure>
+
+
+<h2 id="spinctrl">wx.SpinCtrl</h2>
+
+<p>
+The <code>wx.SpinCtrl</code> widget lets us increment and decrement a value. 
+It has two up and down arrow buttons for this purpose. User can enter a value into a box 
+or increment/decrement it by these two arrows. 
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+import wx
+
+
+class Example(wx.Frame):
+           
+    def __init__(self, *args, **kw):
+        super(Example, self).__init__(*args, **kw) 
+        
+        self.InitUI()
+        
+    def InitUI(self):   
+
+        pnl = wx.Panel(self)
+
+        
+        wx.StaticText(self, label='Convert Fahrenheit temperature to Celsius', 
+            pos=(20,20))
+        wx.StaticText(self, label='Fahrenheit: ', pos=(20, 80))
+        wx.StaticText(self, label='Celsius: ', pos=(20, 150))
+        
+        self.celsius = wx.StaticText(self, label='', pos=(150, 150))
+        self.sc = wx.SpinCtrl(self, value='0', pos=(150, 75), size=(60, -1))
+        self.sc.SetRange(-459, 1000)
+        
+        btn = wx.Button(self, label='Compute', pos=(70, 230))
+        btn.SetFocus()
+        cbtn = wx.Button(self, label='Close', pos=(185, 230))
+
+        btn.Bind(wx.EVT_BUTTON, self.OnCompute)
+        cbtn.Bind(wx.EVT_BUTTON, self.OnClose)
+           
+        self.SetSize((350, 310))
+        self.SetTitle('wx.SpinCtrl')
+        self.Centre()
+        self.Show(True)          
+        
+    def OnClose(self, e):
+        
+        self.Close(True)    
+        
+    def OnCompute(self, e):
+        
+        fahr = self.sc.GetValue()
+        cels = round((fahr - 32) * 5 / 9.0, 2)
+        self.celsius.SetLabel(str(cels))        
+                      
+def main():
+    
+    ex = wx.App()
+    Example(None)
+    ex.MainLoop()    
+
+if __name__ == '__main__':
+    main()          
+</pre>
+
+<p>
+The script converts Fahrenheit temperature to Celsius. We use
+the <code>wx.SpinCtrl</code> widget to select a value for the 
+Fahrenheit temperature.
+</p>
+
+<pre class="explanation">
+self.sc = wx.SpinCtrl(self, value='0', pos=(150, 75), size=(60, -1))
+self.sc.SetRange(-459, 1000)
+</pre>
+
+<p>
+We create a <code>wx.SpinCtrl</code> widget with initial value 0. 
+The <code>SetRange()</code> sets a range of values for the widget.
+</p>
+
+<pre class="explanation">
+def OnCompute(self, e):
+    
+    fahr = self.sc.GetValue()
+    cels = round((fahr - 32) * 5 / 9.0, 2)
+    self.celsius.SetLabel(str(cels)) 
+</pre>
+
+<p>
+When we click on the compute button the <code>OnCompute()</code> method is called.
+In the body of the method we get the current value from the spin control. 
+We compute the Celsius temperature and set the computed temperature to 
+the static text widget. 
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/spinctrl.png" alt="wx.SpinCtrl">
+<figcaption>Figure: wx.SpinCtrl</figcaption>
+</figure>
+
+<p>
+This part of the wxPython tutorial was dedicated to core wxPython widgets. 
+</p>
+
+<footer>
+
+<nav class="center">
+<span class="botNavItem"><a href="http://zetcode.com/">Home</a></span> ‡ <span class="botNavItem"><a href="../index.html">Contents</a></span> ‡ 
+<span class="botNavItem"><a href="#">Top of Page</a></span>
+</nav>
+
+<div class="signature">
+<a href="http://zetcode.com/">ZetCode</a> last modified May 25, 2014  <span class="copyright">&copy; 2007 - 2015 Jan Bodnar</span>
+</div>
+
+</footer>
+
+</div> <!-- content -->
+
+</div> <!-- container -->
+
+</body>
+
+<!-- Mirrored from zetcode.com/wxpython/widgets/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Aug 2015 19:21:48 GMT -->
+</html>

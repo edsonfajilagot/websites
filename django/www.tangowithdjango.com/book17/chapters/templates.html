@@ -1,0 +1,392 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+<!-- Mirrored from www.tangowithdjango.com/book17/chapters/templates.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 10 Jan 2016 04:10:00 GMT -->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>10. Working with Templates &mdash; How to Tango with Django 1.7</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/twd.ico"/>
+    <link rel="top" title="How to Tango with Django 1.7" href="../index-2.html" />
+    <link rel="next" title="11. Cookies and Sessions" href="cookie.html" />
+    <link rel="prev" title="9. User Authentication" href="login.html" />
+ <style type="text/css">
+	img{
+	    width: 85%; /* you can use % */
+	    height: auto;
+	}
+	
+	table {
+		margin: auto;
+	}
+	
+	p.caption {
+		font-size: 10pt;
+		font-style: italic;
+	}
+ </style>
+ <script type="text/javascript">
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','../../../www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-44397330-1', 'tangowithdjango.com');
+  ga('send', 'pageview');
+     
+
+  </script>      
+
+  </head>
+  <body role="document">
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        
+        <li class="right" >
+          <a href="cookie.html" title="11. Cookies and Sessions"
+             accesskey="N">next</a>
+          </li>
+		
+        <li class="right" >
+          <a href="login.html" title="9. User Authentication"
+             accesskey="P">previous</a>
+          </li>
+		
+        <li><a href="../index-2.html">How to Tango with Django 1.7</a> &raquo;</li> 
+
+      </ul>
+
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index-2.html">
+              <img class="logo" src="../_static/twd200x200.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index-2.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">10. Working with Templates</a><ul>
+<li><a class="reference internal" href="#reoccurring-html-and-the-base-template">10.1. Reoccurring HTML and The Base Template</a></li>
+<li><a class="reference internal" href="#template-blocks">10.2. Template Blocks</a><ul>
+<li><a class="reference internal" href="#abstracting-further">10.2.1. Abstracting Further</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#template-inheritance">10.3. Template Inheritance</a></li>
+<li><a class="reference internal" href="#referring-to-urls-in-templates">10.4. Referring to URLs in Templates</a></li>
+<li><a class="reference internal" href="#exercises">10.5. Exercises</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="login.html"
+                        title="previous chapter">9. User Authentication</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="cookie.html"
+                        title="next chapter">11. Cookies and Sessions</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/chapters/templates.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="http://www.tangowithdjango.com/book17/search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="working-with-templates">
+<h1>10. Working with Templates<a class="headerlink" href="#working-with-templates" title="Permalink to this headline">¶</a></h1>
+<p>So far we&#8217;ve created several Django HTML templates for different pages in the application. You&#8217;ve probably already noticed that there is a lot of repeated HTML code in these templates.</p>
+<p>While most sites will have lots of repeated structure (i.e. headers, sidebars, footers, etc) repeating the HTML in each template is a not good way to handle this. So instead of doing the same cut and paste hack job, we can minimize the amount of repetition in our code base by employing <em>template inheritance</em> provided by Django&#8217;s Template Language.</p>
+<p>The basic approach to using inheritance in templates is as follows.</p>
+<ol class="arabic simple">
+<li>Identify the re-occurring parts of each page that are repeated across your application (i.e. header bar, sidebar, footer, content pane)</li>
+<li>In a <em>base template</em>, provide the skeleton structure of a standard page along with any common content (i.e. the copyright notice that goes in the footer, the logo and title that appears in the section), and then define a number of <em>blocks</em> which are subject to change depending on which page the user is viewing.</li>
+<li>Create specific templates - all of which inherit from the base template - and specify the contents of each block.</li>
+</ol>
+<div class="section" id="reoccurring-html-and-the-base-template">
+<h2>10.1. Reoccurring HTML and The Base Template<a class="headerlink" href="#reoccurring-html-and-the-base-template" title="Permalink to this headline">¶</a></h2>
+<p>Given the templates that we have created so far it should be pretty obvious that we have been repeating a fair bit of HTML code. Below we have abstracted away any page specific details to show the skeleton structure that we have been repeating within each template.</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="cp">&lt;!DOCTYPE html&gt;</span>
+
+<span class="nt">&lt;html&gt;</span>
+    <span class="nt">&lt;head&gt;</span>
+        <span class="nt">&lt;title&gt;</span>Rango<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;/head&gt;</span>
+
+    <span class="nt">&lt;body&gt;</span>
+        <span class="c">&lt;!-- Page specific content goes here --&gt;</span>
+    <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
+</div>
+<p>Let&#8217;s make this our base template, for the time being, and save it as <code class="docutils literal"><span class="pre">base.html</span></code> in the <code class="docutils literal"><span class="pre">templates</span></code> directory (e.g. <code class="docutils literal"><span class="pre">templates/base.html</span></code>).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You should always aim to extract as much reoccurring content for your base templates. While it may be a bit more of a challenge for you to do initially, the time you will save in maintenance of your templates in the future far outweighs the initial overhead. Think about it: would you rather maintain one copy of your markup or multiple copies?</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Remember that your page <code class="docutils literal"><span class="pre">&lt;!DOCTYPE</span> <span class="pre">html&gt;</span></code> declaration absolutely must be placed on the first line for your page! Not doing so will mean your markup will not comply with the W3C HTML5 guidelines.</p>
+</div>
+</div>
+<div class="section" id="template-blocks">
+<h2>10.2. Template Blocks<a class="headerlink" href="#template-blocks" title="Permalink to this headline">¶</a></h2>
+<p>Now that we&#8217;ve identified our base template, we can prepare it for our inheriting templates. To do this, we need to include a Template Tag to indicate what can be overridden in the base template - this is done through the use of <em>blocks</em>.</p>
+<p>Add a <code class="docutils literal"><span class="pre">body_block</span></code> to the base template as follows:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="cp">&lt;!DOCTYPE html&gt;</span>
+
+<span class="nt">&lt;html&gt;</span>
+    <span class="nt">&lt;head</span> <span class="na">lang=</span><span class="s">&quot;en&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">&quot;UTF-8&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;title&gt;</span>Rango<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;/head&gt;</span>
+
+    <span class="nt">&lt;body&gt;</span>
+        {% block body_block %}{% endblock %}
+    <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
+</div>
+<p>Recall that standard Django template commands are denoted by <code class="docutils literal"><span class="pre">{%</span></code> and <code class="docutils literal"><span class="pre">%}</span></code> tags. To start a block, the command is <code class="docutils literal"><span class="pre">block</span> <span class="pre">&lt;NAME&gt;</span></code>, where <code class="docutils literal"><span class="pre">&lt;NAME&gt;</span></code> is the name of the block you wish to create. You must also ensure that you close the block with the <code class="docutils literal"><span class="pre">endblock</span></code> command, again enclosed within Django template tags.</p>
+<p>You can also specify &#8216;default content&#8217; for your blocks, for example:</p>
+<div class="highlight-html"><div class="highlight"><pre>{% block body_block %}This is body_block&#39;s default content.{% endblock %}
+</pre></div>
+</div>
+<p>When we create templates for each page we will inherit from <code class="docutils literal"><span class="pre">base.html</span></code> and override the contents of the <code class="docutils literal"><span class="pre">body_block</span></code>. However, you can place as many blocks in your templates as you so desire. For example, you could create a block for the page title, a footer, a sidebar, etc. Blocks are a really powerful feature of Django&#8217;s template system to learn more about them check out the <a class="reference external" href="https://docs.djangoproject.com/en/1.7/topics/templates/#id1">official Django documentation on templates</a>.</p>
+<div class="section" id="abstracting-further">
+<h3>10.2.1. Abstracting Further<a class="headerlink" href="#abstracting-further" title="Permalink to this headline">¶</a></h3>
+<p>Now that you have an understanding of Django blocks, let&#8217;s take the opportunity to abstract our base template a little bit further. Reopen the <code class="docutils literal"><span class="pre">base.html</span></code> template and modify it to look like the following.</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="cp">&lt;!DOCTYPE html&gt;</span>
+
+<span class="nt">&lt;html&gt;</span>
+    <span class="nt">&lt;head&gt;</span>
+        <span class="nt">&lt;title&gt;</span>Rango - {% block title %}How to Tango with Django!{% endblock %}<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;/head&gt;</span>
+
+    <span class="nt">&lt;body&gt;</span>
+        <span class="nt">&lt;div&gt;</span>
+            {% block body_block %}{% endblock %}
+        <span class="nt">&lt;/div&gt;</span>
+
+        <span class="nt">&lt;hr</span> <span class="nt">/&gt;</span>
+
+        <span class="nt">&lt;div&gt;</span>
+            <span class="nt">&lt;ul&gt;</span>
+            {% if user.is_authenticated %}
+                <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;/rango/restricted/&quot;</span><span class="nt">&gt;</span>Restricted Page<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+                <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;/rango/logout/&quot;</span><span class="nt">&gt;</span>Logout<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+                <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;/rango/add_category/&quot;</span><span class="nt">&gt;</span>Add a New Category<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+            {% else %}
+                <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;/rango/register/&quot;</span><span class="nt">&gt;</span>Register Here<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+                <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;/rango/login/&quot;</span><span class="nt">&gt;</span>Login<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+            {% endif %}
+
+                <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;/rango/about/&quot;</span><span class="nt">&gt;</span>About<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+            <span class="nt">&lt;/ul&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
+</div>
+<p>We have introduced two new features into the template.</p>
+<ul class="simple">
+<li>The first is a new Django template block, <code class="docutils literal"><span class="pre">title</span></code>. This will allow us to specify a custom page title for each page inheriting from our base template. If an inheriting page does not make use of this feature, the title is defaulted to <code class="docutils literal"><span class="pre">Rango</span> <span class="pre">-</span> <span class="pre">How</span> <span class="pre">to</span> <span class="pre">Tango</span> <span class="pre">with</span> <span class="pre">Django!</span></code></li>
+<li>We also bring across the list of links from our current <code class="docutils literal"><span class="pre">index.html</span></code> template and place them into a HTML <code class="docutils literal"><span class="pre">&lt;div&gt;</span></code> tag underneath our <code class="docutils literal"><span class="pre">body_block</span></code> block. This will ensure the links are present across all pages inheriting from the base template. The links are preceded by a <em>horizontal rule</em> (<code class="docutils literal"><span class="pre">&lt;hr</span> <span class="pre">/&gt;</span></code>) which provides a visual separation between the <code class="docutils literal"><span class="pre">body_block</span></code> content and the links.</li>
+</ul>
+<p>Also note that we enclose the <code class="docutils literal"><span class="pre">body_block</span></code> within a HTML <code class="docutils literal"><span class="pre">&lt;div&gt;</span></code> tag - we&#8217;ll be explaining the meaning of the <code class="docutils literal"><span class="pre">&lt;div&gt;</span></code> tag in Chapter <a class="reference internal" href="css_intro.html#css-course-label">24</a>. Our links are also converted to an unordered HTML list through use of the <code class="docutils literal"><span class="pre">&lt;ul&gt;</span></code> and <code class="docutils literal"><span class="pre">&lt;li&gt;</span></code> tags.</p>
+</div>
+</div>
+<div class="section" id="template-inheritance">
+<h2>10.3. Template Inheritance<a class="headerlink" href="#template-inheritance" title="Permalink to this headline">¶</a></h2>
+<p>Now that we&#8217;ve created a base template with a block, we can now update the templates we have created to inherit from the base template. For example, let&#8217;s refactor the template <code class="docutils literal"><span class="pre">rango/category.html</span></code>.</p>
+<p>To do this, first remove all the repeated HTML code leaving only the HTML and Template Tags/Commands specific to the page. Then at the beginning of the template add the following line of code:</p>
+<div class="highlight-html"><div class="highlight"><pre>{% extends &#39;base.html&#39; %}
+</pre></div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">extends</span></code> command takes one parameter, the template which is to be extended/inherited from (i.e. <code class="docutils literal"><span class="pre">rango/base.html</span></code>). We can then modify the <code class="docutils literal"><span class="pre">category.html</span></code> template so it looks like the following complete example.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The parameter you supply to the <code class="docutils literal"><span class="pre">extends</span></code> command should be relative from your project&#8217;s <code class="docutils literal"><span class="pre">templates</span></code> directory. For example, all templates we use for Rango should extend from <code class="docutils literal"><span class="pre">rango/base.html</span></code>, not <code class="docutils literal"><span class="pre">base.html</span></code>.</p>
+</div>
+<div class="highlight-html"><div class="highlight"><pre>{% extends &#39;base.html&#39; %}
+
+{% load staticfiles %}
+
+{% block title %}{{ category_name }}{% endblock %}
+
+{% block body_block %}
+    <span class="nt">&lt;h1&gt;</span>{{ category_name }}<span class="nt">&lt;/h1&gt;</span>
+    {% if category %}
+        {% if pages %}
+        <span class="nt">&lt;ul&gt;</span>
+                {% for page in pages %}
+                <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;{{ page.url }}&quot;</span><span class="nt">&gt;</span>{{ page.title }}<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+                {% endfor %}
+                <span class="nt">&lt;/ul&gt;</span>
+        {% else %}
+                <span class="nt">&lt;strong&gt;</span>No pages currently in category.<span class="nt">&lt;/strong&gt;</span>
+                {% endif %}
+
+        {% if user.is_authenticated %}
+                <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/rango/category/{{category.slug}}/add_page/&quot;</span><span class="nt">&gt;</span>Add a Page<span class="nt">&lt;/a&gt;</span>
+                {% endif %}
+        {% else %}
+                 The specified category {{ category_name }} does not exist!
+    {% endif %}
+
+{% endblock %}
+</pre></div>
+</div>
+<p>Now that we inherit from <code class="docutils literal"><span class="pre">base.html</span></code>, all that exists within the <code class="docutils literal"><span class="pre">category.html</span></code> template is the <code class="docutils literal"><span class="pre">extends</span></code> command, the <code class="docutils literal"><span class="pre">title</span></code> block and the <code class="docutils literal"><span class="pre">body_block</span></code> block. You don&#8217;t need a well-formatted HTML document because <code class="docutils literal"><span class="pre">base.html</span></code> provides all the groundwork for you. All you&#8217;re doing is plugging in additional content to the base template to create the complete HTML document which is sent to the client&#8217;s browser.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Templates are very powerful and you can even create your own template tags. Here we have shown how we can minimise the repetition of structure HTML in our templates.</p>
+<p>However, templates can also be used to minimise code within your application&#8217;s views. For example, if you wanted to include the same database-driven content on each page of your application, you could construct a template that calls a specific view to handle the repeating portion of your webpages. This then saves you from having to call the Django ORM functions which gather the required data for the template in every view that renders it.</p>
+<p class="last">To learn more about the extensive functionality offered by Django&#8217;s template language, check out the official <a class="reference external" href="https://docs.djangoproject.com/en/1.7/topics/templates/">Django documentation on templates</a>.</p>
+</div>
+</div>
+<div class="section" id="referring-to-urls-in-templates">
+<h2>10.4. Referring to URLs in Templates<a class="headerlink" href="#referring-to-urls-in-templates" title="Permalink to this headline">¶</a></h2>
+<p>So far we have been directly coding the URL of the page/view we want to show within the template, i.e. <code class="docutils literal"><span class="pre">&lt;a</span> <span class="pre">href=&quot;/rango/about/&quot;&gt;</span> <span class="pre">About</span>&nbsp; <span class="pre">&lt;/a&gt;</span></code>. However, the preferred way is to use the template tag <code class="docutils literal"><span class="pre">url</span></code> to look up the url in the <code class="docutils literal"><span class="pre">urls.py</span></code> files. To do this we can change the way we reference the URL as follows:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;{% url &#39;about&#39; %}&quot;</span><span class="nt">&gt;</span>About<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+</pre></div>
+</div>
+<p>The Django template engine will look up the <code class="docutils literal"><span class="pre">urls.py</span></code> files for a url with the <code class="docutils literal"><span class="pre">name='about'</span></code> (and then reverse match the actual url). This means if we change the url mappings in <code class="docutils literal"><span class="pre">urls.py</span></code> then we do not have to go through all the templates and update them. If we had not given our urlpattern a name, we could directly reference it as follows:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;{% url &#39;rango.views.about&#39; %}&quot;</span><span class="nt">&gt;</span>About<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+</pre></div>
+</div>
+<p>Here we need to specify the application, and the view about.</p>
+<p>You can now update the base template with the <code class="docutils literal"><span class="pre">url</span></code> template tag so that links in base template are rendered using the following code:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;div&gt;</span>
+        <span class="nt">&lt;ul&gt;</span>
+    {% if user.is_authenticated %}
+        <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;{% url &#39;restricted&#39; %}&quot;</span><span class="nt">&gt;</span>Restricted Page<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+        <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;{% url &#39;logout&#39; %}&quot;</span><span class="nt">&gt;</span>Logout<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+        <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;{% url &#39;add_category&#39; %}&quot;</span><span class="nt">&gt;</span>Add a New Category<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+    {% else %}
+        <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;{% url &#39;register&#39; %}&quot;</span><span class="nt">&gt;</span>Register Here<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+        <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;{% url &#39;login&#39; %}&quot;</span><span class="nt">&gt;</span>Login<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+    {% endif %}
+
+    <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;{% url &#39;about&#39; %}&quot;</span><span class="nt">&gt;</span>About<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+    <span class="nt">&lt;/ul&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+</div>
+<p>In your <code class="docutils literal"><span class="pre">index.html</span></code> template you will notice that you have a parameterized url pattern, i.e. the <code class="docutils literal"><span class="pre">category</span></code> url/view takes the <code class="docutils literal"><span class="pre">category.slug</span></code> as a parameter. To handle this you can pass the url template tag the name of the url/view and the slug, i.e. {% url &#8216;category&#8217;  category.slug %} within the template, as follows:</p>
+<div class="highlight-html"><div class="highlight"><pre>{% for category in categories %}
+    <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;{% url &#39;category&#39;  category.slug %}&quot;</span><span class="nt">&gt;</span>{{ category.name }}<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+{% endfor %}
+</pre></div>
+</div>
+<p>#TODO(leifos): The official tutorial provides an overview of how to use the url template tag, <a class="reference external" href="http://django.readthedocs.org/en/latest/intro/tutorial03.html">http://django.readthedocs.org/en/latest/intro/tutorial03.html</a> and the answer at stackoverflow was helpful too: <a class="reference external" href="http://stackoverflow.com/questions/4599423/using-url-in-django-templates">http://stackoverflow.com/questions/4599423/using-url-in-django-templates</a></p>
+<p>#TODO(leifos): Also point out how the urls can be placed in a namespace and referenced accordingly, see <a class="reference external" href="http://django.readthedocs.org/en/latest/intro/tutorial03.html">http://django.readthedocs.org/en/latest/intro/tutorial03.html</a></p>
+</div>
+<div class="section" id="exercises">
+<h2>10.5. Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline">¶</a></h2>
+<p>Now that you&#8217;ve worked through this chapter, we&#8217;ve got several exercises for you to work through. After completing them, you&#8217;ll be a Django templating pro.</p>
+<ul class="simple">
+<li>Update all other existing templates within Rango&#8217;s repertoire to extend from the <code class="docutils literal"><span class="pre">base.html</span></code> template. Follow the same process as we demonstrated above. Once completed, your templates should all inherit from <code class="docutils literal"><span class="pre">base.html</span></code>, as demonstrated in Figure <a class="pageref" href="#fig-rango-template-inheritance">1</a>. While you&#8217;re at it, make sure you remove the links from our <code class="docutils literal"><span class="pre">index.html</span></code> template. We don&#8217;t need them anymore! You can also remove the link to Rango&#8217;s homepage within the <code class="docutils literal"><span class="pre">about.html</span></code> template.</li>
+<li>Convert the restricted page to use a template. Call the template <code class="docutils literal"><span class="pre">restricted.html</span></code>, and ensure that it too extends from our <code class="docutils literal"><span class="pre">base.html</span></code> template.</li>
+<li>Change all the references to rango urls to use the url template tag.</li>
+<li>Add another link to our growing link collection that allows users to navigate back to Rango&#8217;s homepage from anywhere on the website.</li>
+</ul>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Remember to add <code class="docutils literal"><span class="pre">{%</span> <span class="pre">load</span> <span class="pre">static</span> <span class="pre">%}</span></code> to the top of each template that makes use of static media. If you don&#8217;t, you&#8217;ll get an error! Django template modules must be imported individually for each template that requires them - <em>you can&#8217;t make use of modules included in templates you extend from!</em></p>
+</div>
+<div class="align-center figure" id="id1">
+<span id="fig-rango-template-inheritance"></span><img src="../_images/rango-template-inheritance.svg" /><p class="caption"><span class="caption-text">Figure 1: A class diagram demonstrating how your templates should inherit from <code class="docutils literal"><span class="pre">base.html</span></code>.</span></p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Upon completion of these exercises, all of Rango&#8217;s templates should inherit from <code class="docutils literal"><span class="pre">base.html</span></code>. Looking back at the contents of <code class="docutils literal"><span class="pre">base.html</span></code>, the <code class="docutils literal"><span class="pre">user</span></code> object - found within the context of a given Django request - is used to determine if the current user of Rango is logged in (through use of <code class="docutils literal"><span class="pre">user.is_authenticated</span></code>). As all of Rango&#8217;s templates should inherit from this base template, we can say that <em>all of Rango&#8217;s templates now depend on having access to the context of a given request.</em></p>
+<p>Due to this new dependency, you must check each of Rango&#8217;s Django views. For each view, ensure that the context for each request is made available to the Django template engine. Throughout this tutorial, we&#8217;ve been using <code class="docutils literal"><span class="pre">render()</span></code> to achieve this, passing the request as a parameter. If you don&#8217;t ensure this happens, your views may be rendered incorrectly - users may appear to be not logged in, even though Django thinks that they are!</p>
+<p>As a quick example of the checks you must carry out, have a look at the <code class="docutils literal"><span class="pre">about</span></code> view. Initially, this was implemented with a hard-coded string response, as shown below. Note that we only send the string - we don&#8217;t make use of the request passed as the <code class="docutils literal"><span class="pre">request</span></code> parameter.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">about</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s">&#39;Rango says: Here is the about page. &lt;a href=&quot;/rango/&quot;&gt;Index&lt;/a&gt;&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To employ the use of a template, we call the <code class="docutils literal"><span class="pre">render()</span></code> function and pass through the <code class="docutils literal"><span class="pre">request</span></code> object. This will allow the template engine access to objects such as <code class="docutils literal"><span class="pre">user</span></code>, which will allow the template engine to determine if the user is logged in (ie. authenticated).</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">about</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&#39;rango/about.html&#39;</span><span class="p">,</span> <span class="p">{})</span>
+</pre></div>
+</div>
+<p class="last">Remember, the last parameter of <code class="docutils literal"><span class="pre">render()</span></code> is a dictionary with which you can use to pass additional data to the Django template engine. As we have no additional data to pass through we pass through an empty dictionary. Have a look at Section <a class="reference internal" href="templates_static.html#adding-a-template-label">5.1.3</a> to refresh your memory on <code class="docutils literal"><span class="pre">render()</span></code>.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        
+        <li class="right" >
+          <a href="cookie.html" title="11. Cookies and Sessions"
+             >next</a>
+          </li>
+		
+        <li class="right" >
+          <a href="login.html" title="9. User Authentication"
+             >previous</a>
+          </li>
+		
+        <li><a href="../index-2.html">How to Tango with Django 1.7</a> &raquo;</li> 
+
+      </ul>
+
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2013, Leif Azzopardi and David Maxwell.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+
+<!-- Mirrored from www.tangowithdjango.com/book17/chapters/templates.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 10 Jan 2016 04:10:03 GMT -->
+</html>

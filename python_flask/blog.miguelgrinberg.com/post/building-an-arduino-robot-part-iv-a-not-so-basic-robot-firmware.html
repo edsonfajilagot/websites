@@ -1,0 +1,1515 @@
+﻿<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from blog.miguelgrinberg.com/post/building-an-arduino-robot-part-iv-a-not-so-basic-robot-firmware by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:40:36 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    
+    <title>
+    
+        Building an Arduino Robot, Part IV: A (Not So) Basic Robot Firmware - miguelgrinberg.com
+    
+</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="description" content="miguelgrinberg.com">
+	<meta name="copyright" content="Copyright (c) 2012-2015 Miguel Grinberg">
+	<meta name="author" content="Miguel Grinberg">
+    
+    <meta name="keywords" content="robotics, arduino, robot, hardware, android, bluetooth, hc-sr04, ultrasonic sensor, dc motor, motor">
+    
+
+    
+    <!-- Bootstrap -->
+    <link href="../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../static/prettify.css" type="text/css" rel="stylesheet" />
+    <link href="../static/colorbox/colorbox.css" rel="stylesheet" type="text/css" />
+    <link href="../static/style.css" rel="stylesheet" type="text/css" />
+
+    <link rel="shortcut icon" href="../static/favicon.ico">
+	<link rel="alternate" type="application/rss+xml" href="../feed" title="miguelgrinberg.com RSS feed">
+
+  </head>
+  <body>
+    
+    <!-- facebook sdk -->
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "../../connect.facebook.net/en_US/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    <!-- google plus sdk -->
+    <script type="text/javascript" src="../../apis.google.com/js/plusone.js"></script>
+    <!-- twitter sdk -->
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="../../platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <!-- linkedin sdk -->
+    <script src="../../platform.linkedin.com/in.js" type="text/javascript"></script>
+
+    
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://blog.miguelgrinberg.com/index">miguelgrinberg.com</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="http://blog.miguelgrinberg.com/index">Home</a></li>
+                        <li><a href="about-me.html">About Me</a></li>
+                        <li><a href="about-this-blog.html">About This Blog</a></li>
+                        
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <p class="navbar-text" style="margin-top: 10px; margin-bottom: 0px;">
+                                <a type="application/rss+xml" href="../feed"><img src="../static/rss.png" alt="RSS Feed" title="RSS Feed" /></a>
+                                <a href="https://www.facebook.com/miguelgrinbergblog"><img src="../static/facebook.png" alt="Facebook" title="Facebook" /></a>
+                                <a href="https://plus.google.com/u/0/117786742456929977820"><img src="../static/googleplus.png" alt="Google+" title="Google+" /></a>
+                                <a href="http://www.linkedin.com/in/miguelgrinberg"><img src="../static/linkedin.png" alt="LinkedIn" title="LinkedIn" /></a>
+                                <a href="http://github.com/miguelgrinberg"><img src="../static/github.png" alt="GitHub" title="GitHub" /></a>
+                                <a href="https://twitter.com/#!/miguelgrinberg"><img src="../static/twitter.png" alt="Twitter" title="Twitter" /></a>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </nav>
+
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-push-9 sidebar-bg">
+                <div id="sidebar">
+                    
+
+                    
+                    <h1>Flask Web Development</h1>
+                    <p>If you want to learn modern web development techniques with Python and Flask, you may find my O'Reilly book useful:</p>
+                    <p><center><a href="http://bit.ly/flaskbook"><img style="border: 1px solid black;" src="../static/flask-book-cover-tiny.png"></a></center></p>
+                    <p>Visit <a href="http://flaskbook.com/">http://flaskbook.com</a> for information about this and other Flask training products I have created!</p>
+                    
+
+                    <h1>About Miguel</h1>
+                    <img style="float: right; margin: 0px 8px 8px 0px; padding: 4px; border: 1px solid #ccc;" src="../static/miguel.jpg" />
+                    <p>Welcome to my blog!</p>
+                    <p>I'm a software engineer, photographer and filmmaker in Portland, Oregon, USA.</p>
+                    <p>You can also find me on <a href="https://www.facebook.com/miguelgrinbergblog">Facebook</a>, <a href="https://plus.google.com/u/0/117786742456929977820">Google+</a>, <a href="http://www.linkedin.com/in/miguelgrinberg">LinkedIn</a>, <a href="https://github.com/miguelgrinberg">Github</a> and <a href="https://twitter.com/#!/miguelgrinberg">Twitter</a>.</p>
+                    <p>Thank you for visiting!</p>
+
+                    
+
+                    
+                    <h1>Categories</h1>
+<ul>
+
+	<li>
+		<a href="../category/Arduino/feed">
+			<img src="../static/rss-small.png" title="Arduino RSS Feed" label="Arduino RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Arduino.html">Arduino</a></span> (7)
+	</li>
+
+	<li>
+		<a href="../category/Authentication/feed">
+			<img src="../static/rss-small.png" title="Authentication RSS Feed" label="Authentication RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Authentication.html">Authentication</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../category/Blog/feed">
+			<img src="../static/rss-small.png" title="Blog RSS Feed" label="Blog RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Blog.html">Blog</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/C%2b%2b/feed">
+			<img src="../static/rss-small.png" title="C++ RSS Feed" label="C++ RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/C%2b%2b.html">C++</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Cloud/feed">
+			<img src="../static/rss-small.png" title="Cloud RSS Feed" label="Cloud RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Cloud.html">Cloud</a></span> (2)
+	</li>
+
+	<li>
+		<a href="../category/Filmmaking/feed">
+			<img src="../static/rss-small.png" title="Filmmaking RSS Feed" label="Filmmaking RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Filmmaking.html">Filmmaking</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Flask/feed">
+			<img src="../static/rss-small.png" title="Flask RSS Feed" label="Flask RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Flask.html">Flask</a></span> (39)
+	</li>
+
+	<li>
+		<a href="../category/Games/feed">
+			<img src="../static/rss-small.png" title="Games RSS Feed" label="Games RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Games.html">Games</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Gear/feed">
+			<img src="../static/rss-small.png" title="Gear RSS Feed" label="Gear RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Gear.html">Gear</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/HTML5/feed">
+			<img src="../static/rss-small.png" title="HTML5 RSS Feed" label="HTML5 RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/HTML5.html">HTML5</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Heroku/feed">
+			<img src="../static/rss-small.png" title="Heroku RSS Feed" label="Heroku RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Heroku.html">Heroku</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Javascript/feed">
+			<img src="../static/rss-small.png" title="Javascript RSS Feed" label="Javascript RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Javascript.html">Javascript</a></span> (3)
+	</li>
+
+	<li>
+		<a href="../category/Movie%20Reviews/feed">
+			<img src="../static/rss-small.png" title="Movie Reviews RSS Feed" label="Movie Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Movie%20Reviews.html">Movie Reviews</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Netflix/feed">
+			<img src="../static/rss-small.png" title="Netflix RSS Feed" label="Netflix RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Netflix.html">Netflix</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Node.js/feed">
+			<img src="../static/rss-small.png" title="Node.js RSS Feed" label="Node.js RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Node.html">Node.js</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/OpenStack/feed">
+			<img src="../static/rss-small.png" title="OpenStack RSS Feed" label="OpenStack RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/OpenStack.html">OpenStack</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Personal/feed">
+			<img src="../static/rss-small.png" title="Personal RSS Feed" label="Personal RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Personal.html">Personal</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Photography/feed">
+			<img src="../static/rss-small.png" title="Photography RSS Feed" label="Photography RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Photography.html">Photography</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Product%20Reviews/feed">
+			<img src="../static/rss-small.png" title="Product Reviews RSS Feed" label="Product Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Product%20Reviews.html">Product Reviews</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Programming/feed">
+			<img src="../static/rss-small.png" title="Programming RSS Feed" label="Programming RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Programming.html">Programming</a></span> (47)
+	</li>
+
+	<li>
+		<a href="../category/Project%20Management/feed">
+			<img src="../static/rss-small.png" title="Project Management RSS Feed" label="Project Management RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Project%20Management.html">Project Management</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Python/feed">
+			<img src="../static/rss-small.png" title="Python RSS Feed" label="Python RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Python.html">Python</a></span> (43)
+	</li>
+
+	<li>
+		<a href="../category/REST/feed">
+			<img src="../static/rss-small.png" title="REST RSS Feed" label="REST RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/REST.html">REST</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Rackspace/feed">
+			<img src="../static/rss-small.png" title="Rackspace RSS Feed" label="Rackspace RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Rackspace.html">Rackspace</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Raspberry%20Pi/feed">
+			<img src="../static/rss-small.png" title="Raspberry Pi RSS Feed" label="Raspberry Pi RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Raspberry%20Pi.html">Raspberry Pi</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/RhinoSteady/feed">
+			<img src="../static/rss-small.png" title="RhinoSteady RSS Feed" label="RhinoSteady RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/RhinoSteady.html">RhinoSteady</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Robotics/feed">
+			<img src="../static/rss-small.png" title="Robotics RSS Feed" label="Robotics RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Robotics.html">Robotics</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Video/feed">
+			<img src="../static/rss-small.png" title="Video RSS Feed" label="Video RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Video.html">Video</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../category/Windows/feed">
+			<img src="../static/rss-small.png" title="Windows RSS Feed" label="Windows RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Windows.html">Windows</a></span> (1)
+	</li>
+
+</ul>
+                    
+                </div>
+            </div>
+            <div class="col-md-8 col-md-pull-4">
+                <div id="main">
+                    
+                    
+                    
+                    
+                    
+
+<div class="post">
+
+<p class="date"><span class="flask-moment" data-timestamp="2013-02-01T07:32:05Z" data-format="format('LL')" data-refresh="0">2013-02-01T07:32:05Z</span></p>
+<h1 class="post-title"><a href="building-an-arduino-robot-part-iv-a-not-so-basic-robot-firmware.html">Building an Arduino Robot, Part IV: A (Not So) Basic Robot Firmware</a></h1>
+<div class="posted">Posted by <span class="label label-danger"><a href="http://blog.miguelgrinberg.com/author/Miguel Grinberg">Miguel Grinberg</a></span> under <span class="label label-primary"><a href="../category/Arduino.html">Arduino</a></span>, <span class="label label-primary"><a href="../category/Robotics.html">Robotics</a></span>, <span class="label label-primary"><a href="../category/C%2b%2b.html">C++</a></span>, <span class="label label-primary"><a href="../category/Programming.html">Programming</a></span>. </div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/building-an-arduino-robot-part-iv-a-not-so-basic-robot-firmware" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/building-an-arduino-robot-part-iv-a-not-so-basic-robot-firmware" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="building-an-arduino-robot-part-iv-a-not-so-basic-robot-firmware.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/building-an-arduino-robot-part-iv-a-not-so-basic-robot-firmware" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+<div class="post_body"><p><center><img alt="Arduino Robot" src="../static/images/arduino-robot-27.jpg" /></center></p>
+<p>Welcome to the fourth article in the tutorial series in which I'm building a remote controlled Arduino based vehicle robot.</p>
+<p>Here is the list of articles I have published:</p>
+<ul>
+<li><a href="building-an-arduino-robot-part-i-hardware-components.html">Part I: Hardware Components</a></li>
+<li><a href="building-an-arduino-robot-part-ii-programming-the-arduino.html">Part II: Programming the Arduino</a></li>
+<li><a href="building-an-arduino-robot-part-iii-assembling-the-robot.html">Part III: Assembling the Robot</a></li>
+<li><a href="building-an-arduino-robot-part-iv-a-not-so-basic-robot-firmware.html">Part IV: A (Not So) Basic Robot Firmware</a> (this article)</li>
+<li><a href="building-an-arduino-robot-part-v-avoiding-obstacles.html">Part V: Avoiding Obstacles</a></li>
+<li><a href="building-an-arduino-robot-part-vi-remote-control.html">Part VI: Remote Control</a></li>
+</ul>
+<p>In the <a href="building-an-arduino-robot-part-iii-assembling-the-robot.html">previous article</a> I completed the assembly of my robot vehicle.  Today, I'm going to write an Arduino sketch for it that makes the robot go forward.</p>
+<p><em>"Just to move the robot forward?"</em>, you may ask. What's so interesting about simply making the robot run forward?</p>
+<p>Well, the idea is to not only make the robot move forward, but to write the sketch in such a way that allows me to later add more complex functionality without having to start over from scratch. I'm basically laying out a solid foundation on which I will stack the more complex pieces later.</p>
+<p>Once again I want to say that it is not my intention to do a full and detailed coverage of the C++ programming language in these articles. I will share my experience and provide a few pointers, but I recommend you read up on C++ on your own if you have no experience with the language.</p>
+<h2>Goals</h2>
+<p>I mentioned what functionality I want my robot to have in past articles, but I did not discuss the goals I have for my project from a software engineering point of view.</p>
+<h3>Scalable Structure</h3>
+<p>For simple sketches the default sketch structure based on the <code>setup()</code> and <code>loop()</code> functions is sufficient. The sketches I wrote a couple of articles ago to test all the components of my robot fit in this category, I needed to test and learn to program these components and was able to accomplish both goals quickly and with very low effort.</p>
+<p>The problem is that this structure does not <a href="http://en.wikipedia.org/wiki/Scalability">scale</a> well. For my robot project I will need to control two motors, the distance sensor and react to remote commands coming over bluetooth all at the same time. In the future I may want to extend it with even more controlled devices. Maybe additional distance sensors on the sides and back, or one looking down to detect when the vehicle reaches the end of a table. I may want to mount a wireless camera, or add sound capabilities. The possibilities are endless, and each new device added will increase the complexity of the sketch.</p>
+<p>The <code>loop()</code> function would need to get pretty long and complex to do everything, and then making changes to it would become a nightmare, with any changes I make I could risk inadvertently breaking existing functionality. The sketch would end up being <a href="http://en.wikipedia.org/wiki/Spaghetti_code">spaghetti code</a>.</p>
+<p>For this project I will use <a href="http://en.wikipedia.org/wiki/Object-oriented_programming">object oriented</a> techniques to organize the code of my sketch and make it easier to write, test, maintain and modify.</p>
+<h3>Device Abstractions</h3>
+<p>I mentioned before that I will be releasing my sketch as open source. It is safe to assume that other people will build their own robot vehicles using different parts than those I put in mine. For example, someone may use a different motor driver board, or may want to use wi-fi for the remote control instead of bluetooth. If I build my sketch with the assumption that the components of the robot are just those that I'm using on mine then only a small few would be able to benefit right away and most will have to hack on it to make it work for them.</p>
+<p>So instead, I will think about the functionality I want to implement in general terms, and then will write <a href="http://en.wikipedia.org/wiki/Device_driver">device drivers</a> for the modules that I need.</p>
+<p>This will give me or others the freedom to replace parts in the robot without having to modify the main sketch. Switching from bluetooth to wi-fi will then just require writing a new remote communications driver. The main sketch will talk to either the bluetooth or wi-fi drivers and will not know the difference!</p>
+<h3>Configuration</h3>
+<p>I spoke about configuration before. The idea here is that it should be easy to configure the robot software for the actual hardware. The best example is the use of pins in the Arduino board. I will not <a href="http://en.wikipedia.org/wiki/Hard_coding">hard code</a> any pin numbers. Instead, I will add <code>#define</code> constants at the top of the sketch with all the pins, so that changing the pin assignments becomes a trivial task.</p>
+<p>But configuration is not limited to pin numbers. There are also some operational defaults (like the distance to a wall or obstacle when the robot stops and turns) that can also be considered part of the configuration and will be represented by constants at the top of the sketch for users to easily modify.</p>
+<h3>Smarter Timing</h3>
+<p>In simple sketches one tends to overuse the <code>delay()</code> function as an easy way to make actions last a certain amount of time. I'm guilty of this myself, as I've used <code>delay()</code> in all my test sketches.</p>
+<p>But for a real project that needs to do many things at once this is impractical. For example, what happens if the robot approaches a wall while in the middle of a <code>delay()</code> call? I can tell you what happens, nothing happens! The robot will crash into the wall without having a chance to "see" the wall and act accordingly.</p>
+<p>Unfortunately the Arduino board does not support multithreading, which is the ideal way to make a program do many things at once. In a multithreaded environment a thread calling <code>delay()</code> would not prevent other threads from running. But on the Arduino platform there is a single thread of execution, so calling <code>delay()</code> makes the entire program go to sleep, and that is not good for my needs.</p>
+<p>So I will not be using <code>delay()</code> for anything except throw away tests. But how can I keep track of time without <code>delay()</code>?</p>
+<p>Part of the secret is in making the <code>loop()</code> function do only a small amount of work and return. The <code>loop()</code> function will then get called at a really fast rate (remember that it gets called repeatedly until the board is powered off). Each time <code>loop()</code> is called I can find out what's the <a href="http://en.wikipedia.org/wiki/Uptime">up time</a>. Knowing the current time will enable me to implement my own <em>non-blocking</em> <code>delay()</code> equivalent, as you will see soon.</p>
+<h2>Enough talk... let's write a device driver!</h2>
+<p>I said earlier that today I'm making the robot move forward, so I'm going to start by writing a device driver that knows how to control motors.</p>
+<p>A device driver is simply an <em>abstraction</em> for the intended device. I'm now writing one for a motor, so the basic operation that this driver should know how to do is to set the speed of the motor.</p>
+<p>I will store my device drivers in <em>header files</em>, which are files that have a <code>.h</code> extension. For small modules using a header file is a good choice. For larger modules the norm is to store the code in a <em>source file</em> with extension .cpp and then write a small header file that only contains the declaration of the public functions from the source file. Header files work for me at this time, if in the future a module grows to a decent size I can always move the code to a .cpp file.</p>
+<p>The intention is that the motor device driver will allow the main sketch to work with different motor controllers using the same function calls, so the first task when defining a driver is to decide what the common functions of the driver will be.</p>
+<p>Here is the code for my motor device driver, which I will store in a file called <code>motor_driver.h</code>:</p>
+<pre><code>/**
+ * @file motor_driver.h
+ * @brief Motor device driver definition for the Michelino robot.
+ * @author Miguel Grinberg
+ */
+
+namespace Michelino
+{
+    class MotorDriver
+    {
+    public:
+        /**
+         * @brief Change the speed of the motor.
+         * @param speed The new speed of the motor.
+         *  Valid values are between -255 and 255. 
+         *  Use positive values to run the motor forward, 
+         *  negative values to run it backward and zero to stop the motor.
+         */
+        virtual void setSpeed(int speed) = 0;
+
+        /**
+         * @brief Return the current speed of the motor.
+         * @return The current speed of the motor with range -255 to 255.
+         */
+        virtual int getSpeed() const = 0;            
+    };
+};
+</code></pre>
+<p>If you are unfamiliar with C++ then there are a number of things here that need an explanation.</p>
+<p>Any text that appears between <code>/*</code> and <code>*/</code> is considered a comment, so it will be ignored by the C++ compiler. There is an alternative format for comments that you may have seen, those use a <code>//</code> prefix and go through the end of the line. Both formats are valid, but in this case since I'm writing multi-line comments I'm using the <code>/* ... */</code> format.</p>
+<p>The comments that I'm writing follow a standard comment format that can be used to produce automatic documentation with a tool called <a href="http://www.stack.nl/~dimitri/doxygen/">doxygen</a>. It is always good practice to write class documentation in this format for any classes that others may need to use. This class defines the format for motor drivers, so those who want to implement other motor drivers will find the documentation useful.</p>
+<p>I have inserted a comment block at the top to describe the contents of the file, and then one before each function to describe the function. Each comment line is prefixed with a keyword, for example <code>@file</code> for the name of the file, <code>@brief</code> for a brief description, <code>@param</code> for documenting a function parameter and <code>@return</code> for documenting the return value of a function.</p>
+<p>The <a href="http://www.cplusplus.com/doc/tutorial/namespaces/"><code>namespace</code></a> keyword groups all the definitions inside the <code>{</code> and <code>}</code> under a user defined name. This is helpful to avoid name collisions with other modules, so it is always a good idea to enclose your own code in a namespace. I will put all my code under the <code>Michelino</code> namespace.</p>
+<p>The <a href="http://www.cplusplus.com/doc/tutorial/classes/"><code>class</code></a> keyword defines a structure that groups data and functions together into an entity called <em>object</em>. My motor driver class is called <code>MotorDriver</code> and just contains two functions, which in the context of a class are called <em>methods</em>. The <code>setSpeed</code> and <code>getSpeed</code> methods will control a motor, but note that unlike the <code>AF_Motor</code> library that I used before here I'm not defining what kind of motor controller is used for the task. The main sketch will just call these methods without knowing how they are implemented, so to switch from one controller to another one just needs to re-implement these two functions for the selected controller.</p>
+<p>The <code>public:</code> keyword that appears before the methods indicates that the declarations that follow are accessible to anyone. You will see later that some classes have contents that are hidden from the outside world.</p>
+<p>The <code>virtual</code> keyword that starts each method declaration indicates that these methods may be <em>overwritten</em> by a <em>subclass</em>, and the <code>= 0</code> at the end of the declarations indicates that the methods do not have an implementation. These two attributes combined are used to make sure that the only way to provide an implementation for these methods is in a <em>subclass</em>. I will show what this means in a moment.</p>
+<p>Finally, the <code>const</code> keyword that appears in the <code>getSpeed</code> method indicates that this method is <em>constant</em>, meaning that this method does not change the internal state of the object.</p>
+<p>Setting the technical details of writing a C++ class aside, the important point is that device drivers that adopt the above <em>interface</em> should be able to control a DC motor with two operations, <code>setSpeed()</code> and <code>getSpeed()</code>. The speed values are given in the -255 to 255 range, with positive speeds moving forward, negative speeds moving backward and zero making the motor stop.</p>
+<h2>The Adafruit motor shield device driver</h2>
+<p>Now I have a very clear idea of what motor drivers for my robot need to do, so I'm ready to write a specific implementation for my Adafruit motor shield.</p>
+<p>I will store the Adafruit motor shield driver in a file called <code>adafruit_motor_driver.h</code>. Here is the code:</p>
+<pre><code>/**
+ * @file adafruit_motor_driver.h
+ * @brief Motor device driver for the Adafruit motor shield.
+ * @author Miguel Grinberg
+ */
+
+#include "motor_driver.h"
+
+namespace Michelino
+{
+    class Motor : public MotorDriver
+    {
+    public:
+        /*
+         * @brief Class constructor.
+         * @param number the DC motor number to control, from 1 to 4.
+         */
+        Motor(int number)
+            : MotorDriver(), motor(number), currentSpeed(0)
+        {
+        }
+
+        void setSpeed(int speed)
+        {
+            currentSpeed = speed;
+            if (speed &gt;= 0) {
+                motor.setSpeed(speed);
+                motor.run(FORWARD);
+            }
+            else {
+                motor.setSpeed(-speed);
+                motor.run(BACKWARD);
+            }
+        }
+
+        int getSpeed() const
+        {
+            return currentSpeed;
+        }
+
+    private:
+        AF_DCMotor motor;
+        int currentSpeed;
+    };
+};
+</code></pre>
+<p>So what's new here? I start by including the motor driver header file. The Adafruit driver <em>derives</em> from the generic driver definition I wrote above so that definition needs to be accessible.</p>
+<p>The <code>class</code> definition in this file looks a bit different:</p>
+<pre><code>class Motor : public MotorDriver
+</code></pre>
+<p>This says that I'm creating a class called <code>Motor</code> that <em>derives</em> from class <code>MotorDriver</code>. This means that class <code>Motor</code> will follow the protocol established by class <code>MotorDriver</code>.</p>
+<p>The class has a <code>public</code> section that starts with a <code>constructor</code>:</p>
+<pre><code>Motor(int number)
+</code></pre>
+<p>This is a method with the same name as the class (<code>Motor</code> in this case). Constructor methods are called when an object is created and are intended to set the initial state of the object. This constructor takes the motor number as an argument.</p>
+<p>The <code>Motor</code> constructor has an <em>initializer list</em>:</p>
+<pre><code>: MotorDriver(), motor(number), currentSpeed(0)
+</code></pre>
+<p>This is a list of items that will be initialized when an object of this class is created. The first item just invokes the constructor of the parent class, the generic driver <code>MotorDriver</code>. I did not include a constructor in this class, but the compiler will generate an empty one for me. It is good practice to always initialize the parent class even when there isn't a constructor there, because in the future a constructor might be added.</p>
+<p>The two remaining items in the initializer list are <em>member variables</em> of this class. If you look at the bottom of the class there is a <code>private</code> block that defines two variables named <code>motor</code> and <code>currentSpeed</code>. The <code>motor</code> variable is of type <code>AF_DCMotor</code>, the class defined by the Adafruit motor shield library. To initialize this variable I have to invoke its constructor, which if you recall from a previous article takes the motor number as argument. I received the motor number as an argument to my own constructor, so I just pass it on here. The <code>currentSpeed</code> variable is of type <code>int</code>, so I just initialize it to 0 so that it has a known starting value.</p>
+<p>The body of the <code>Motor</code> constructor is empty, since the only thing I need is to initialize the member variables.</p>
+<p>What follows is the implementation of the <code>setSpeed</code> and <code>getSpeed</code> methods for this specific motor controller, using the open source AF_Motor library from Adafruit, which must be installed separately (see my <a href="building-an-arduino-robot-part-ii-programming-the-arduino.html">previous article</a> for instructions). This library requires two functions to be called to configure a motor, one to set the speed and another one to set the mode. I have defined my motor driver to use a simpler way to configure the motor, with just a speed that can be positive, negative or zero. The implementation of <code>setSpeed</code> translates my format to the one required by the Adafruit motor shield library. I also store the current speed in a member variable, so that I can then return it in <code>getSpeed</code>.</p>
+<p>At the bottom there are the two private member variables that this class uses. These variables are declared as private because I do not want them to be accessible from outside the object that owns them. I want any changes the motor or its speed to be accomplished via the public functions of the driver (following the <a href="http://en.wikipedia.org/wiki/Encapsulation_(object-oriented_programming)">encapsulation</a> principle), so a good way to prevent me from accidentally using the member variables directly is to make them private. A private member variable can only be modified from methods that belong to the object, but it is not accessible from any other place in the code. A good reason to hide these member variables is that other motor drivers will need different ones, so as long as the code outside of this class only calls <code>setSpeed()</code> and <code>getSpeed()</code> swapping out this driver for another one should not be a problem.</p>
+<p>If you are using a different motor controller than mine on your robot, then all you need to do is copy the <code>adafruit_motor_driver.h</code> file to <code>&lt;your_controller&gt;_motor_driver.h</code> and implement the class as appropriate for your controller. The only requirement is that the new class is also called <code>Motor</code> and has the same two public functions. The two classes will then be conceptually equivalent, so the main sketch can use either one of them.</p>
+<h2>Using the device driver</h2>
+<p>Now I have a completed device driver for my Adafruit motor shield. But how do I use it on a sketch?</p>
+<p>This is actually simpler than you may think. Here is an example sketch that starts a motor at full speed using the Adafruit driver that I just built:</p>
+<pre><code>#include &lt;AFMotor.h&gt;
+#include "adafruit_motor_driver.h"
+#define MOTOR_INIT 1
+
+Michelino::Motor motor(MOTOR_INIT);
+
+void setup()
+{
+    motor.setSpeed(255);
+}
+
+void loop()
+{
+}
+</code></pre>
+<p>The <code>#includes</code> at the top bring in the Adafruit motor library and my driver for it.</p>
+<p>Note how the motor object is created:</p>
+<pre><code>Michelino::Motor motor(MOTOR_INIT);
+</code></pre>
+<p>The notation <code>Michelino::Motor</code> tells the compiler to locate the <code>Motor</code> class inside the <code>Michelino</code> namespace.</p>
+<p>Once the motor object is created it can be controlled using the driver functions <code>setSpeed</code> and <code>getSpeed</code>.</p>
+<p>Now let's assume that later you want to make the above sketch work with another motor shield, say one that is called "x", for which you have written a device driver. Then you can just add a few lines of code to the sketch, as follows:</p>
+<pre><code>// enable one of the motor shields below
+//#define ENABLE_ADAFRUIT_MOTOR_DRIVER
+#define ENABLE_X_MOTOR_DRIVER
+
+#ifdef ENABLE_ADAFRUIT_MOTOR_DRIVER
+#include &lt;AFMotor.h&gt;
+#include "adafruit_motor_driver.h"
+#define MOTOR_INIT 1
+#endif
+
+#ifdef ENABLE_X_MOTOR_DRIVER
+#include &lt;XMotor.h&gt;
+#include "x_motor_driver.h"
+#define MOTOR_INIT 2
+#endif
+
+Michelino::Motor motor(MOTOR_INIT);
+
+void setup()
+{
+    motor.setSpeed(255);
+}
+
+void loop()
+{
+}
+</code></pre>
+<p>At the top I'm defining two <code>#define</code> constants, but one of the is <em>commented out</em>. This is a pretty easy way to provide configuration, you just uncomment the one constant that corresponds to the part that you have.</p>
+<p>An <code>#ifdef ... #endif</code> block will only be seen by the compiler if the constant that follows the <code>#ifdef</code> is defined. Since only one of the motor shield constants will be defined I'm effectively loading only one of the device drivers into the sketch.</p>
+<p>In the example above the sketch can be switched between the Adafruit shield using motor #1 and the X motor shield using motor #2 just by changing which of the <code>#define</code> statements at the top is used!</p>
+<h2>The main sketch</h2>
+<p>Now that I have a really good solution for controlling my hardware parts I need to think about how the main sketch will be structured.</p>
+<p>As I mentioned before, having a large piece of code in the <code>loop()</code> function is not ideal because large and complex functions difficult to maintain. If I created a class to represent a motor, then why not also create a class to represent the whole robot?</p>
+<p>Here is a sketch that defines a starting point class for the robot. This file will be named <code>michelino.ino</code> (Arduino sketches use the <code>.ino</code> extension):</p>
+<pre><code>/**
+ * @file michelino.ino
+ * @brief Arduino robot vehicle firmware.
+ * @author Miguel Grinberg
+ */
+
+#define ENABLE_ADAFRUIT_MOTOR_DRIVER
+
+#ifdef ENABLE_ADAFRUIT_MOTOR_DRIVER
+#include &lt;AFMotor.h&gt;
+#include "adafruit_motor_driver.h"
+#define LEFT_MOTOR_INIT 1
+#define RIGHT_MOTOR_INIT 3
+#endif
+
+namespace Michelino
+{
+    class Robot
+    {
+    public:
+        /*
+         * @brief Class constructor.
+         */
+        Robot()
+            : leftMotor(LEFT_MOTOR_INIT), rightMotor(RIGHT_MOTOR_INIT)
+        {
+            initialize();
+        }
+
+        /*
+         * @brief Initialize the robot state.
+         */
+        void initialize()
+        {
+            leftMotor.setSpeed(255);
+            rightMotor.setSpeed(255);
+        }
+
+        /*
+         * @brief Update the state of the robot based on input from sensor and remote control.
+         *  Must be called repeatedly while the robot is in operation.
+         */
+        void run()
+        {
+        }
+
+    private:
+        Motor leftMotor;
+        Motor rightMotor;
+    };
+};
+
+Michelino::Robot robot;
+
+void setup()
+{
+    robot.initialize();
+}
+
+void loop()
+{
+    robot.run();
+}
+</code></pre>
+<p>The sketch should not present any surprises. I begin by loading my motor shield driver, using the <code>#ifdef</code> technique I showed before. When and if I write new motor drivers I will add new constants and <code>#ifdef</code> blocks to load them.</p>
+<p>My robot class will be appropriately named <code>Robot</code> and will be inside the <code>Michelino</code> namespace. It will initially have two private data members that represent the two motors named <code>leftMotor</code> and <code>rightMotor</code>. These will be initialized in the <code>Robot</code> class constructor's initializer list. The class has two public methods, <code>initialize()</code> and <code>run()</code> that will be the class counterparts to <code>setup()</code> and <code>loop()</code>. In this early version of the class the <code>initialize()</code> method starts the two motors at full speed forward, and <code>run()</code> does nothing.</p>
+<p>After the class is defined an instance is created in the global scope, and the <code>setup()</code> and <code>loop()</code> methods simply call the <code>initialize()</code> and <code>run()</code> methods of this object.</p>
+<p>What do you think will happen when you run this sketch? The robot will move forward! I took a few turns and twists, but I finally delivered on my promise.</p>
+<h2>How to implement delays</h2>
+<p>Before I end this article I'm going to show you how delays can be implemented without actually using the <code>delay()</code> function, so that the robot can do other things while it waits, like receiving and executing remote commands.</p>
+<p>To show you how this is done, I'm going to modify the above sketch to make the robot start by waiting for five seconds, then moving forward for eight seconds, then repeating the cycle.</p>
+<p>First, I'm going to add the concept of <em>state</em> to the robot. For this example I will have two possible states, <em>stopped</em> and <em>running</em>. To define these states in the sketch I'm going to use a C++ <a href="http://cplusplus.com/doc/tutorial/other_data_types/#enum">enumeration</a>:</p>
+<pre><code>private:
+    enum state_t { stateStopped, stateRunning };
+    state_t state;
+</code></pre>
+<p>The <code>enum</code> statement creates a user defined enumerated type named <code>state_t</code>. The second statements defines a new member variable named <code>state</code> of that type. The <code>state</code> member variable wil have one of two possible values, <code>stateStopped</code> or <code>stateRunning</code>. I could have easily used an <code>int</code> variable and call state 0 the stopped state and state 1 the running state, but after you see me using this variable I'm sure you will agree with me that using enumerated types makes the code a lot more readable and easier to understand.</p>
+<p>I'm going to add yet another member variable to the <code>Robot</code> class that will help me count time:</p>
+<pre><code>private:
+    unsigned long startTime;
+</code></pre>
+<p>The type of the <code>startTime</code> variable is <code>unsigned long</code>. This is the type in which time units are returned by the function <a href="http://arduino.cc/en/Reference/Millis"><code>millis()</code></a> provided by the Arduino software libraries.</p>
+<p>Next, in the <code>initialize()</code> method instead of starting the motors I'm now going to initialize the robot state and record the current time:</p>
+<pre><code>    void initialize()
+    {
+        state = stateStopped;
+        startTime = millis();
+    }
+</code></pre>
+<p>And finally, in the <code>run()</code> method is where all the magic happens:</p>
+<pre><code>    void run()
+    {
+        unsigned long currentTime = millis();
+        unsigned long elapsedTime = currentTime - startTime;
+        switch (state) {
+        case stateStopped:
+            if (elapsedTime &gt;= 5000) {
+                leftMotor.setSpeed(255);
+                rightMotor.setSpeed(255);
+                state = stateRunning;
+                startTime = currentTime;
+            }
+            break;
+        case stateRunning:
+            if (elapsedTime &gt;= 8000) {
+                leftMotor.setSpeed(0);
+                rightMotor.setSpeed(0);
+                state = stateStopped;
+                startTime = currentTime;
+            }
+            break;
+        }
+    }
+</code></pre>
+<p>The <code>run()</code> method is repeatedly called through the <code>loop()</code> function, so here I can easily check how much time has passed by substracting the <code>startTime</code> that I initialized in <code>initialize()</code> from the current time provided by the <code>millis()</code> function. I'm storing both the current and elapsed time in two local variables that I named <code>currentTime</code> and <code>elapsedTime</code>. </p>
+<p>What's left is to check if I'm done waiting, and if I am, then change the state of the robot. Since the wait period is different depending on which state the robot is in, I've decided to use a <a href="http://cplusplus.com/doc/tutorial/control/#switch"><code>switch</code></a> statement, which looks at the value of an expression and then executes the block of code that begins at the matching <code>case</code> statement and ends with the <code>break</code> statement.</p>
+<p>So, when the robot is in the stopped state the following code will execute:</p>
+<pre><code>            if (elapsedTime &gt;= 5000) {
+                leftMotor.setSpeed(255);
+                rightMotor.setSpeed(255);
+                state = stateRunning;
+                startTime = currentTime;
+            }
+</code></pre>
+<p>This code is hopefully self-explanatory. If the elapsed time did not reach five seconds then nothing will happen, the <code>run()</code> function will return without making any changes, and a little bit later will be called again. Eventually, the <code>elapsedTime</code> will become 5000 milliseconds or more, so the code inside the <code>if</code> statement will execute. And those statements start the motors, change the state to <code>stateRunning</code> and reset the <code>startTime</code> to the <code>currentTime</code>, so that elapsed time is reset to zero.</p>
+<p>The next time <code>run()</code> executes the state will be <code>stateRunning</code>, so the other block in the <code>switch</code> statement will execute:</p>
+<pre><code>            if (elapsedTime &gt;= 8000) {
+                leftMotor.setSpeed(0);
+                rightMotor.setSpeed(0);
+                state = stateStopped;
+                startTime = currentTime;
+            }
+</code></pre>
+<p>And this works exactly like above but waits eight seconds instead of five.</p>
+<p>Doing things in this certainly more complicated than using <code>delay()</code>:</p>
+<pre><code>        void run()
+        {
+            leftMotor.setSpeed(0);
+            rightMotor.setSpeed(0);
+            delay(5000);
+            leftMotor.setSpeed(255);
+            rightMotor.setSpeed(255);
+            delay(8000);
+         }
+</code></pre>
+<p>But the <code>delay()</code> solution pictured above is limited in that nothing happens during those five and eight second waits. With the elapsed time solution it will be easy for me to make the robot do other things while waiting, like stopping when it gets too close to a wall or responding to remote commands sends over bluetooth.</p>
+<h2>Final words</h2>
+<p>To close this article, here is a video that shows my robot running the above <code>michelino</code> sketch:</p>
+<p><center><iframe width="450" height="253" src="http://www.youtube-nocookie.com/embed/kPUN-GPCXJ4?rel=0" frameborder="0" allowfullscreen></iframe></center></p>
+<p>In the next article I will incorporate the distance sensor into the firmware to prevent the robot from running into walls or other obstacles.</p>
+<p>As always, you are welcome to send me your questions in the comments below. If you wish to download or review my sketch I have uploaded it to github as version 0.1 (<a href="https://codeload.github.com/miguelgrinberg/michelino/zip/v0.1">download</a> or <a href="https://github.com/miguelgrinberg/michelino/tree/v0.1">browse</a>).</p>
+<p>I hope to see you in the next article!</p>
+<p>Miguel</p></div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/building-an-arduino-robot-part-iv-a-not-so-basic-robot-firmware" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/building-an-arduino-robot-part-iv-a-not-so-basic-robot-firmware" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="building-an-arduino-robot-part-iv-a-not-so-basic-robot-firmware.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/building-an-arduino-robot-part-iv-a-not-so-basic-robot-firmware" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+
+
+<h4 style="text-align: right"><a name="comments"></a>72 comments</h4>
+
+
+<div class="comment">
+    <ul>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/05b68190e98a2e0618a92299734aa6a9ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#1</span> <span class="label label-primary">Lukewarm</span> said
+                    <span class="flask-moment" data-timestamp="2013-02-22T10:35:12Z" data-format="fromNow(0)" data-refresh="0">2013-02-22T10:35:12Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">It&#39;s been so wonderful of you to share so much useful info, in so much detail with others...:)
+Waiting for the next parts of the series for a long time....</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#2</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-02-22T17:02:00Z" data-format="fromNow(0)" data-refresh="0">2013-02-22T17:02:00Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Lukewarm: thanks. The next installment of this series will be up in a day or two!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/aefe59c58e9e9a60985eda02291ab70fce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#3</span> <span class="label label-primary">salem</span> said
+                    <span class="flask-moment" data-timestamp="2013-03-23T04:06:31Z" data-format="fromNow(0)" data-refresh="0">2013-03-23T04:06:31Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">this tutorial is the best dude , u are the best 
+i like everything you said , you shared just wonderfully </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/c0d2478e84deed28fa290f797e05720dce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#4</span> <span class="label label-primary"><a href="http://myrobot.civray-software.com/">Steve</a></span> said
+                    <span class="flask-moment" data-timestamp="2013-04-10T20:54:35Z" data-format="fromNow(0)" data-refresh="0">2013-04-10T20:54:35Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">This is great. Your blogs are very well detailed and you explain everything. I will be changing my robot sketch to follow the principles you have defined here. I&#39;m finding it difficult to manage my sketch as it grows and your advice should help tame the beast.
+
+Thanks and keep writing.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/313b0f4105c7f4a0af767b8984f8ca34ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#5</span> <span class="label label-primary">Arnaldo Armida</span> said
+                    <span class="flask-moment" data-timestamp="2013-07-09T14:37:27Z" data-format="fromNow(0)" data-refresh="0">2013-07-09T14:37:27Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel, following my previous stupid question....the problem was that I used the name &#34; michelino &#34; and not &#34;Michelino&#34;...Am I right?
+Sorry....but just ensure me that I&#39;m in the right way....
+Arnaldo</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/118061d0c78aeef88be2763fed8a3497ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#6</span> <span class="label label-primary">jeff hamlin</span> said
+                    <span class="flask-moment" data-timestamp="2013-07-29T13:47:56Z" data-format="fromNow(0)" data-refresh="0">2013-07-29T13:47:56Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Miguel, Awesome code.  Thanks so much - I used it as a foundation for my first 4 wheel bot.  </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/c79c789392edc6193aab74ad695fca0dce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#7</span> <span class="label label-primary">Nilesh</span> said
+                    <span class="flask-moment" data-timestamp="2013-08-25T13:41:10Z" data-format="fromNow(0)" data-refresh="0">2013-08-25T13:41:10Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel
+I am using the Arduino Motor Shield with Arduino Uno R3 and have written a device driver for it. It follows your style so that the main sketch is not affected.
+
+Here is my device driver. Please check and let me know if all looks well. I am not too sure about the motor (int number) method as Arduino Motor Shield uses pin numbers.
+
+Code:
+
+/**
+ * @file arduino_motor_driver.h
+ * @brief Motor device driver for the Arduino motor shield.
+ * @author Nilesh Gulrajani
+ */
+
+#include &#34;motor_driver.h&#34;
+
+namespace Kiara
+{
+    class Motor : public MotorDriver
+    {
+    public:
+        /*
+         * @brief Class constructor.
+         * @param number the DC motor number to control, from 12 to 13.
+         */
+        Motor(int number): MotorDriver(), currentSpeed(0)
+        {
+	     if (number==1){
+		MotorSpeedPin = 3;
+		MotorDirPin = 12;
+		brakePin = 9;
+		}
+	     else if (number==3){
+		MotorSpeedPin = 11;
+		MotorDirPin = 13;
+		brakePin = 8;
+		}
+	     else
+		{
+		}
+		     
+        }
+
+        void setSpeed(int speed)
+        {
+            currentSpeed = speed; 
+
+            if (speed&gt;0) {  //check the direction
+                digitalWrite(MotorDirPin,HIGH); //set direction pin to forward
+		digitalWrite(brakePin,LOW); //disengage brake
+		analogWrite(MotorSpeedPin,currentSpeed); //set speed pin to current speed
+		
+            }
+
+            else  if (speed&lt;0){ //check the direction
+                digitalWrite(MotorDirPin,LOW);// set direction pin to backward
+		digitalWrite(brakePin,LOW); //disengage brake
+		analogWrite(MotorSpeedPin,currentSpeed); //set speed pin to current speed
+            }
+	    else { //check the direction
+                
+		digitalWrite(brakePin,HIGH); //engage brake
+		analogWrite(MotorSpeedPin,0); //set speed pin to 0
+            }
+
+	    
+        }
+
+        int getSpeed() const
+        {
+            return currentSpeed;
+        }
+
+    private:
+       	unsigned MotorSpeedPin;
+	unsigned MotorDirPin;
+	unsigned brakePin;
+        int currentSpeed;
+    };
+};
+
+Any advice will be really helpful.
+
+Thanks</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/fb9eab44813b0fc3930f21cfa0d5a801ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#8</span> <span class="label label-primary">Will Ezell</span> said
+                    <span class="flask-moment" data-timestamp="2013-08-28T19:09:07Z" data-format="fromNow(0)" data-refresh="0">2013-08-28T19:09:07Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I used Nilesh&#39;s Arduino Motor Shield with Arduino Uno R3 device driver and made the following changes, and got it working!! Extra thanks to Miguel and a thanks to Nilesh, both who got my robot out of the stone age as far as coding goes.
+
+/**
+ * @file motorshield_motor_driver.h
+ * @brief Motor device driver for the Arduino motor shield.
+ * @author Nilesh Gulrajani edit by Will Ezell
+ */
+#include &lt;Arduino.h&gt;
+#include &#34;motor_driver.h&#34;
+
+namespace Michelino
+{
+    class Motor : public MotorDriver
+    {
+    public:
+        /*
+         * @brief Class constructor.
+         * @param number the DC motor number to control, from 12 to 13.
+         */
+        Motor(int number) : MotorDriver(), currentSpeed(0)
+        {
+          if (number==1){
+             MotorSpeedPin = 3;
+             MotorDirPin = 12;
+             brakePin = 9;
+	     }
+	   else if (number==3){
+              MotorSpeedPin = 11;
+              MotorDirPin = 13;
+              brakePin = 8;
+              }
+	    else
+              {
+              }
+        }
+
+        void setSpeed(int speed)
+        {
+          currentSpeed = speed;
+          if (speed&gt;0) {  //check the direction
+              digitalWrite(MotorDirPin,HIGH); //set direction pin to forward
+	      digitalWrite(brakePin,LOW); //disengage brake
+	      analogWrite(MotorSpeedPin,currentSpeed); //set speed pin to current speed
+          }
+          else  if (speed&lt;0){ //check the direction
+              digitalWrite(MotorDirPin,LOW);// set direction pin to backward
+              digitalWrite(brakePin,LOW); //disengage brake
+              analogWrite(MotorSpeedPin,(currentSpeed*(-1))); //set speed pin to current speed
+              }
+	  else { //check the direction
+              digitalWrite(brakePin,HIGH); //engage brake
+              analogWrite(MotorSpeedPin,0); //set speed pin to 0
+              }
+       }
+        
+        int getSpeed() const
+        {
+            return currentSpeed;
+        }
+        
+private:
+       	unsigned MotorSpeedPin;
+	unsigned MotorDirPin;
+	unsigned brakePin;
+        int currentSpeed;
+    };
+};
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/293e461c924e64cf69e08aee53ea98f9ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#9</span> <span class="label label-primary"><a href="https://sites.google.com/site/mateusmendelson/">Mateus Mendelson</a></span> said
+                    <span class="flask-moment" data-timestamp="2013-08-29T03:09:24Z" data-format="fromNow(0)" data-refresh="0">2013-08-29T03:09:24Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Thank you for this tutorial! I&#39;m studying all these codes, congrats!
+
+I&#39;m facing just one problem:
+
+There is one extra LED in my project, so I had to make one more &#34;.h&#34; file. In the main sketche, it is written:
+
+...
+#include &#34;lights.h&#34;
+...
+
+but it never works. The files lights.h and lights.cpp are there, in the same folder. This is the message I get:
+
+&#34;Robot.ino:2:20: error: lights.h: No such file or directory&#34;
+
+could you give this little help?
+
+Thanks! And, again, congrats for this tutorial!!!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#10</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-08-29T04:37:16Z" data-format="fromNow(0)" data-refresh="0">2013-08-29T04:37:16Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Nilesh and @Will: Thanks for sharing the code! I did a few minor tweaks and added it to the project on github.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#11</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-08-29T04:42:02Z" data-format="fromNow(0)" data-refresh="0">2013-08-29T04:42:02Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Mateus: I don&#39;t know what the problem can be. If you are doing this on Linux or Mac keep in mind that filenames are case sensitive, you have to write them exactly as they exist on disk, so lights.h is not the same as Lights.h or LIGHTS.H. That&#39;s my only guess, sorry.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/c79c789392edc6193aab74ad695fca0dce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#12</span> <span class="label label-primary">Nilesh</span> said
+                    <span class="flask-moment" data-timestamp="2013-08-29T13:17:34Z" data-format="fromNow(0)" data-refresh="0">2013-08-29T13:17:34Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Thanks Will. I see what you did there. Got mine working too. I have written another device driver library for Arduino Motor Shield in a more traditional manner. I will share it soon.
+
+Miguel, can you let me know what tweaks have you made to the code?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#13</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-08-29T16:12:25Z" data-format="fromNow(0)" data-refresh="0">2013-08-29T16:12:25Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Nilesh: you can look at the file on github: https://github.com/miguelgrinberg/michelino/blob/master/arduino_motor_driver.h</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/c79c789392edc6193aab74ad695fca0dce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#14</span> <span class="label label-primary">Nilesh</span> said
+                    <span class="flask-moment" data-timestamp="2013-08-30T08:10:34Z" data-format="fromNow(0)" data-refresh="0">2013-08-30T08:10:34Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Thanks Miguel. When I use this driver or even the one modified by Will, both positive and negative motor pins go HIGH and the motor does not move. I am not able to figure out what could be wrong. Any clue?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#15</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-08-30T08:18:39Z" data-format="fromNow(0)" data-refresh="0">2013-08-30T08:18:39Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Nilesh: I don&#39;t see any significant different without your version and the other ones. Does your version work? I will get a motor shield to test myself.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/c79c789392edc6193aab74ad695fca0dce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#16</span> <span class="label label-primary">Nilesh</span> said
+                    <span class="flask-moment" data-timestamp="2013-09-01T04:42:59Z" data-format="fromNow(0)" data-refresh="0">2013-09-01T04:42:59Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel. The edited version does compile. But when I upload the code both the positive and negative motor pins go high and the motor does not move.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/c79c789392edc6193aab74ad695fca0dce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#17</span> <span class="label label-primary">Nilesh</span> said
+                    <span class="flask-moment" data-timestamp="2013-09-06T08:12:49Z" data-format="fromNow(0)" data-refresh="0">2013-09-06T08:12:49Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel. I found out the error. We need to define pinMode without which the Motor Shield does not recognize whether to OUTPUT on that pin or not. 
+
+I also noticed that in your modified Motor Shield library we need to pass 4 parameters in order to run the motor. But as per your motor_driver.h we need to pass only 1 parameter. I have modified the library again and tested it and now it works perfectly.
+
+Have a look and see if you can further improve it.
+
+/**
+ * @file motorshield_motor_driver.h
+ * @brief Motor device driver for the Arduino motor shield.
+ * @author Nilesh Gulrajani edit by Will Ezell
+ */
+#include &lt;Arduino.h&gt;
+#include &#34;motor_driver.h&#34;
+
+namespace Kiara
+{
+    class Motor : public MotorDriver
+    {
+    public:
+        /*
+         * @brief Class constructor.
+         * @param number the DC motor number to control, from 12 to 13.
+         */
+        Motor(int number) : MotorDriver(), currentSpeed(0)
+        {
+          if (number==1){
+             
+	     MotorSpeedPin = 3;
+             MotorDirPin = 12;
+             brakePin = 9;
+	     pinMode(MotorDirPin, OUTPUT);
+	     pinMode(brakePin,OUTPUT);
+	     
+	     }
+	   else if (number==3){
+              
+	      MotorSpeedPin = 11;
+              MotorDirPin = 13;
+              brakePin = 8;
+	      pinMode(MotorDirPin, OUTPUT);
+	      pinMode(brakePin,OUTPUT);
+	     }
+	    else
+              {
+              }
+        }
+
+        void setSpeed(int speed)
+        {
+          currentSpeed = speed;
+          
+              if (speed&gt;0){
+	      digitalWrite(MotorDirPin,HIGH); //set direction pin to forward
+	      digitalWrite(brakePin,LOW); //disengage brake
+	      analogWrite(MotorSpeedPin,currentSpeed); //set speed pin to current speed
+          }
+	      else if (speed&lt;0){
+	      digitalWrite(MotorDirPin,LOW); //set direction pin to reverse
+	      digitalWrite(brakePin,LOW); //disengage brake
+	      analogWrite(MotorSpeedPin,-currentSpeed); //set speed pin to current speed
+          }
+	      else {
+	      digitalWrite(brakePin,HIGH); //engage brake
+	      analogWrite(MotorSpeedPin,0); //set speed pin to current speed
+          }
+       }
+        
+        int getSpeed() const
+        {
+            return currentSpeed;
+        }
+        
+private:
+       	unsigned MotorSpeedPin;
+	unsigned MotorDirPin;
+	unsigned brakePin;
+        int currentSpeed;
+    };
+};</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/f0c032426022112942bf362e70c6db1cce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#18</span> <span class="label label-primary">TTHom</span> said
+                    <span class="flask-moment" data-timestamp="2013-09-08T05:03:34Z" data-format="fromNow(0)" data-refresh="0">2013-09-08T05:03:34Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">dont know how to create a header file could you help?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#19</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-09-08T05:15:08Z" data-format="fromNow(0)" data-refresh="0">2013-09-08T05:15:08Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@TTHom: what do you need to do?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/3c4e149c89fdf1c3dfed6e672f1b7ba1ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#20</span> <span class="label label-primary">Marcel</span> said
+                    <span class="flask-moment" data-timestamp="2013-09-23T15:56:32Z" data-format="fromNow(0)" data-refresh="0">2013-09-23T15:56:32Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Can you upload a motor driver for L293 N ? I have not an Adafruit shield, beside that, i think Adafruit shield use too much pins, so i think is more reliable to use only L293 N IC to drive motors. Also, can you tell me what changes will occur in the main code(michelino.ino)? I am beginner in programming and i think this is a great tutorial, i learnt a lot of things from you. Thank you very much!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#21</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-09-23T16:04:41Z" data-format="fromNow(0)" data-refresh="0">2013-09-23T16:04:41Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Marcel: I have acquired a L293N, but haven&#39;t got the time yet to write the driver for it. It&#39;s actually simple, and the michelino code does not need to change, as all the hardware specific behavior is encapsulated in the driver. If you figure out how to write and make it work please share it, if not, I will eventually get to it and publish it. Thanks!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/682e6ae9d732cf85090b7923e6332a95ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#22</span> <span class="label label-primary">sagith kumur senanayake</span> said
+                    <span class="flask-moment" data-timestamp="2013-09-24T02:36:17Z" data-format="fromNow(0)" data-refresh="0">2013-09-24T02:36:17Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Great website. I need to know how to upload and use these files in the Arduino environment. I having a hard trying to figure that out.  I know that you put the files on sketch and where do I name and save it to where I can used it.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/cdf8686797e6f010f0b9f49cd4a0cc9cce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#23</span> <span class="label label-primary">Kevin Barlow</span> said
+                    <span class="flask-moment" data-timestamp="2013-10-04T19:36:11Z" data-format="fromNow(0)" data-refresh="0">2013-10-04T19:36:11Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hello Miguel,
+First let me also say, great tutorial, very detailed.  I am thinking of building a similar robot with my daughter and this tutorial is very helpful.
+I do have a comment, however.
+I can see from the Motor class that you have taken great care to follow OOP standards, using const for the getSpeed() function to ensure that it does not change the class state and making the motor and currentSpeed members private so they are hidden from the object users.  I am guessing that it is just an oversight that you did not add parameter validation to setSpeed.  While it may be that motor.setSpeed will do the right thing if the speed parameter is outside the 0-255 range (for motor.setSpeed), this may not be the case if another library is used and the result could be unpredictable (for example only the low byte might be used such that a speed of 256 would be functionally equivalent to 0), I would recommend updating this post, adding parameter validation to ensure that the input speed is in the range -255 to 255 and either throwing a exception (if they are supported) or returning an error, or limiting the value to the minimum/maximum before calling the motor.setSpeed function.  This is because I can see from the comments that there are a number of people implementing motor drivers based on your design and they may be using other motor libraries (if they have different motor driver boards) that behave differently.
+This is just a minor point, and I probably wouldn&#39;t be making it if I did not see that you have gone out of your way to explain to non-programmers what you are doing, and to show them proper programming style and the reasons for it.
+Great tutorial!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/9da141c21a82261ba5539f5dba664706ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#24</span> <span class="label label-primary">Janushanth</span> said
+                    <span class="flask-moment" data-timestamp="2013-10-05T09:51:02Z" data-format="fromNow(0)" data-refresh="0">2013-10-05T09:51:02Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi MR. 
+private:
+    enum state_t { stateStopped, stateRunning };
+    state_t state;
+
+how to add this coding under the michelino.ino or adafruit_motor_driver.h or motor_driver.h:
+
+and this coding also how to add under the michelino.ino or adafruit_motor_driver.h or motor_driver.h: iam confused i try every but showing error message plz help me 
+
+// enable one of the motor shields below
+//#define ENABLE_ADAFRUIT_MOTOR_DRIVER
+#define ENABLE_X_MOTOR_DRIVER
+
+#ifdef ENABLE_ADAFRUIT_MOTOR_DRIVER
+#include &lt;AFMotor.h&gt;
+#include &#34;adafruit_motor_driver.h&#34;
+#define MOTOR_INIT 1
+#endif
+
+#ifdef ENABLE_X_MOTOR_DRIVER
+#include &lt;XMotor.h&gt;
+#include &#34;x_motor_driver.h&#34;
+#define MOTOR_INIT 2
+#endif
+
+Michelino::Motor motor(MOTOR_INIT);
+
+void setup()
+{
+    motor.setSpeed(255);
+}
+
+void loop()
+{
+}
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#25</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-10-05T18:00:47Z" data-format="fromNow(0)" data-refresh="0">2013-10-05T18:00:47Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Janushanth: you can look at my github project if you need help with the coding. The link is at the bottom of the article.</p>
+                </div>
+            </div>
+        </li>
+        
+    </ul>
+</div>
+
+<div class="page">
+<ul class="pager">
+  <li class="previous disabled">
+    <a href="#">&laquo;&laquo;</a>
+  </li>
+  <li class="previous disabled">
+    <a href="#">&laquo;</a>
+  </li>
+  <li class="next">
+    <a href="building-an-arduino-robot-part-iv-a-not-so-basic-robot-firmware/page/0.html#comments">&raquo;&raquo;</a>
+  </li>
+  <li class="next">
+    <a href="building-an-arduino-robot-part-iv-a-not-so-basic-robot-firmware/page/2.html#comments">&raquo;</a>
+  </li>
+</ul>
+</div>
+
+<h3><a name="commentform"></a>Leave a Comment</h3>
+
+<form action="#commentform" method="post"
+  class="form" role="form">
+  <div style="display:none;"><input id="csrf_token" name="csrf_token" type="hidden" value="1439536713.83##cec7d1407e8544d2a3d8cc9870e953461a12e20f"></div>
+  
+    
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="name">Name</label>
+        <input class="form-control" id="name" name="name" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="url">URL</label>
+        <input class="form-control" id="url" name="url" type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="email">Email</label>
+        <input class="form-control" id="email" name="email" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="comment">Comment</label>
+        <textarea class="form-control" id="comment" name="comment" required></textarea>
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="captcha">Captcha</label>
+        
+<script type="text/javascript">var RecaptchaOptions = {"custom_translations": {"audio_challenge": "Get an audio challenge", "cant_hear_this": "Download sound as MP3", "help_btn": "Help", "image_alt_text": "reCAPTCHA challenge image", "incorrect_try_again": "Incorrect. Try again.", "instructions_audio": "Type what you hear", "instructions_visual": "Type the text", "play_again": "Play sound again", "privacy_and_terms": "Privacy & Terms", "refresh_btn": "Get a new challenge", "visual_challenge": "Get a visual challenge"}, "theme": "white"};</script>
+<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S"></script>
+<noscript>
+  <iframe src="http://www.google.com/recaptcha/api/noscript?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S" height="300" width="500" frameborder="0"></iframe><br>
+  <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+  <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
+</noscript>
+
+  </div>
+
+
+    
+
+
+
+
+
+  
+
+
+    <input class="btn btn-default" id="submit" name="submit" type="submit" value="Submit">
+  
+
+
+
+
+
+</form>
+
+
+</div>
+
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <p class="elapsed">This page was generated in None seconds.</p>
+            <p>&copy; 2014 by Miguel Grinberg. All rights reserved. <a href="mailto:webmaster _at_ miguelgrinberg _dot_ com">Questions?</a></p>
+        </div>
+    </div>
+
+
+    
+    
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.33/jquery.colorbox-min.js"></script>
+    <script type="text/javascript" src="../static/prettify.js"></script>
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment-with-langs.min.js"></script>
+<script>
+function flask_moment_render(elem) {
+    $(elem).text(eval('moment("' + $(elem).data('timestamp') + '").' + $(elem).data('format') + ';'));
+    $(elem).removeClass('flask-moment');
+}
+function flask_moment_render_all() {
+    $('.flask-moment').each(function() {
+        flask_moment_render(this);
+        if ($(this).data('refresh')) {
+            (function(elem, interval) { setInterval(function() { flask_moment_render(elem) }, interval); })(this, $(this).data('refresh'));
+        }
+    })
+}
+$(document).ready(function() {
+    flask_moment_render_all();
+});
+</script>
+    
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4777284-15']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".gallery").colorbox({rel:".gallery",maxWidth:"95%",maxHeight:"95%",scalePhotos:true});
+            // add prettyprint class to all <pre><code></code></pre> blocks
+            var prettify = false;
+            $("pre code").parent().each(function() {
+                $(this).addClass('prettyprint');
+                prettify = true;
+            });
+            prettyPrint();
+        });
+    </script>
+
+
+  </body>
+
+<!-- Mirrored from blog.miguelgrinberg.com/post/building-an-arduino-robot-part-iv-a-not-so-basic-robot-firmware by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:40:50 GMT -->
+</html>

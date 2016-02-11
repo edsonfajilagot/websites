@@ -1,0 +1,273 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+<!-- Mirrored from www.tangowithdjango.com/book17/chapters/tango.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 10 Jan 2016 04:11:34 GMT -->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>16. Making Rango Tango! Exercises &mdash; How to Tango with Django 1.7</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/twd.ico"/>
+    <link rel="top" title="How to Tango with Django 1.7" href="../index-2.html" />
+    <link rel="next" title="17. Making Rango Tango! Code and Hints" href="tango_too.html" />
+    <link rel="prev" title="15. Adding External Search Functionality" href="bing_search.html" />
+ <style type="text/css">
+	img{
+	    width: 85%; /* you can use % */
+	    height: auto;
+	}
+	
+	table {
+		margin: auto;
+	}
+	
+	p.caption {
+		font-size: 10pt;
+		font-style: italic;
+	}
+ </style>
+ <script type="text/javascript">
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','../../../www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-44397330-1', 'tangowithdjango.com');
+  ga('send', 'pageview');
+     
+
+  </script>      
+
+  </head>
+  <body role="document">
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        
+        <li class="right" >
+          <a href="tango_too.html" title="17. Making Rango Tango! Code and Hints"
+             accesskey="N">next</a>
+          </li>
+		
+        <li class="right" >
+          <a href="bing_search.html" title="15. Adding External Search Functionality"
+             accesskey="P">previous</a>
+          </li>
+		
+        <li><a href="../index-2.html">How to Tango with Django 1.7</a> &raquo;</li> 
+
+      </ul>
+
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index-2.html">
+              <img class="logo" src="../_static/twd200x200.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index-2.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">16. Making Rango Tango! Exercises</a><ul>
+<li><a class="reference internal" href="#track-page-click-throughs">16.1. Track Page Click Throughs</a><ul>
+<li><a class="reference internal" href="#hint">16.1.1. Hint</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#searching-within-a-category-page">16.2. Searching Within a Category Page</a></li>
+<li><a class="reference internal" href="#create-and-view-profiles">16.3. Create and View Profiles</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="bing_search.html"
+                        title="previous chapter">15. Adding External Search Functionality</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="tango_too.html"
+                        title="next chapter">17. Making Rango Tango! Code and Hints</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/chapters/tango.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="http://www.tangowithdjango.com/book17/search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="making-rango-tango-exercises">
+<span id="tango-chapter"></span><span id="tango-label"></span><h1>16. Making Rango Tango! Exercises<a class="headerlink" href="#making-rango-tango-exercises" title="Permalink to this headline">¶</a></h1>
+<p>So far we have been adding in different pieces of functionality to Rango. We&#8217;ve been building up the application in this manner to get you familiar with the Django Framework, and to learn about how to construct the various parts of a website that you are likely to make in your own projects. Rango however at the present moment is not very cohesive. In this chapter, we challenge you to improve the application and its user experience by bringing together functionality that we&#8217;ve already implemented alongside some awesome new additions.</p>
+<p>To make Rango more coherent and integrated it would be nice to add the following functionality.</p>
+<ul>
+<li><dl class="first docutils">
+<dt>Track the click throughs of Categories and Pages, i.e.:</dt>
+<dd><ul class="first last simple">
+<li>count the number of times a category is viewed;</li>
+<li>count the number of times a page is viewed via Rango; and</li>
+<li>collect likes for categories (see Chapter <a class="reference internal" href="ajax.html#ajax-label">19</a>).</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Integrate the browsing and searching within categories, i.e.:</dt>
+<dd><ul class="first last simple">
+<li>instead of having a disconnected search page, let users search for pages on each specific category page</li>
+<li>let users filter the set of categories shown in the side bar (see Chapter <a class="reference internal" href="ajax.html#ajax-label">19</a>); and</li>
+<li>instead of refreshing the entire page, when users search, it only updates the results (see Chapter <a class="reference internal" href="ajax.html#ajax-label">19</a>)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Provide services for Registered Users, i.e.:</dt>
+<dd><ul class="first last simple">
+<li>Assuming you have switched the django-registration-redux, we need to setup the registration form to collect the additional information (i.e. website, profile picture)</li>
+<li>let users view their profile;</li>
+<li>let users edit their profile; and</li>
+<li>let users see the list of users and their profiles.</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">We won&#8217;t be working through all of these tasks right now. Some will be taken care of in Chapter <a class="reference internal" href="ajax.html#ajax-label">19</a>, while some will be left to you to complete as additional exercises.</p>
+</div>
+<p>Before we start to add this additional functionality we will make a todo list to plan our workflow for each task. Breaking tasks down into sub-tasks will greatly simplify the implementation so that we are attacking each one with a clear plan. In this chapter, we will provide you with the workflow for a number of the above tasks. From what you have learnt so far, you should be able to fill in the gaps and implement most of it on your own (except those requiring AJAX). In the next chapter, we have included code snipets and elaborated on how to implement these features.</p>
+<div class="section" id="track-page-click-throughs">
+<h2>16.1. Track Page Click Throughs<a class="headerlink" href="#track-page-click-throughs" title="Permalink to this headline">¶</a></h2>
+<p>Currently, Rango provides a direct link to external pages. This is not very good if you want to track the number of times each page is clicked and viewed. To count the number of times a page is viewed via Rango you will need to perform the following steps.</p>
+<ul>
+<li><p class="first">Create a new view called <code class="docutils literal"><span class="pre">track_url()</span></code>, and map it to URL <code class="docutils literal"><span class="pre">/rango/goto/</span></code> and name it <code class="docutils literal"><span class="pre">'name=goto'</span></code>.</p>
+</li>
+<li><dl class="first docutils">
+<dt>The <code class="docutils literal"><span class="pre">track_url()</span></code> view will examine the HTTP <code class="docutils literal"><span class="pre">GET</span></code> request parameters and pull out the <code class="docutils literal"><span class="pre">page_id</span></code>. The HTTP <code class="docutils literal"><span class="pre">GET</span></code> requests will look something like <code class="docutils literal"><span class="pre">/rango/goto/?page_id=1</span></code>.</dt>
+<dd><ul class="first last simple">
+<li>In the view, select/get the <code class="docutils literal"><span class="pre">page</span></code> with <code class="docutils literal"><span class="pre">page_id</span></code> and then increment the associated <code class="docutils literal"><span class="pre">views</span></code> field, and <code class="docutils literal"><span class="pre">save()</span></code> it.</li>
+<li>Have the view redirect the user to the specified URL using Django&#8217;s <code class="docutils literal"><span class="pre">redirect</span></code> method.</li>
+<li>If no parameters are in the HTTP <code class="docutils literal"><span class="pre">GET</span></code> request for <code class="docutils literal"><span class="pre">page_id</span></code>, or the parameters do not return a <code class="docutils literal"><span class="pre">Page</span></code> object, redirect the user to Rango&#8217;s homepage.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">Update the <code class="docutils literal"><span class="pre">category.html</span></code> so that it uses <code class="docutils literal"><span class="pre">/rango/goto/?page_id=XXX</span></code> instead of using the direct URL, remember to use the <code class="docutils literal"><span class="pre">url</span></code> templatetag (i.e. &lt;a href=&#8221;{% url &#8216;goto&#8217; %}?pageid={{page.id}}&#8221;&gt;)</p>
+</li>
+</ul>
+<div class="section" id="hint">
+<h3>16.1.1. Hint<a class="headerlink" href="#hint" title="Permalink to this headline">¶</a></h3>
+<p>If you&#8217;re unsure of how to retrieve the <code class="docutils literal"><span class="pre">page_id</span></code> <em>querystring</em> from the HTTP <code class="docutils literal"><span class="pre">GET</span></code> request, the following code sample should help you.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;GET&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s">&#39;page_id&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="p">:</span>
+        <span class="n">page_id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="p">[</span><span class="s">&#39;page_id&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Always check the request method is of type <code class="docutils literal"><span class="pre">GET</span></code> first, then you can access the dictionary <code class="docutils literal"><span class="pre">request.GET</span></code> which contains values passed as part of the request. If <code class="docutils literal"><span class="pre">page_id</span></code> exists within the dictionary, you can pull the required value out with <code class="docutils literal"><span class="pre">request.GET['page_id']</span></code>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You could also do this without using a querystring, but through the URL instead, i.e. <code class="docutils literal"><span class="pre">/rango/goto/&lt;page_id&gt;/</span></code>. In which case you would need to create a urlpattern that pulls out the page_id.</p>
+</div>
+</div>
+</div>
+<div class="section" id="searching-within-a-category-page">
+<h2>16.2. Searching Within a Category Page<a class="headerlink" href="#searching-within-a-category-page" title="Permalink to this headline">¶</a></h2>
+<p>Rango aims to provide users with a helpful directory of page links. At the moment, the search functionality is essentially independent of the categories. It would be nicer to have search integrated into category browsing. Let&#8217;s assume that a user will first browse their category of interest first. If they can&#8217;t find the page that they want, they can then search for it. If they find a page that is suitable, then they can add it to the category that they are in. Let&#8217;s focus on the first problem, of putting search on the category page. To do this, perform the following steps:</p>
+<ul class="simple">
+<li>Remove the generic <em>Search</em> link from the menu bar, i.e. we are decommissioning the global search function.</li>
+<li>Take the search form and results template markup from <code class="docutils literal"><span class="pre">search.html</span></code> and place it into <code class="docutils literal"><span class="pre">category.html</span></code>.</li>
+<li>Update the search form so that that action refers back to the category page, i.e.: <code class="docutils literal"><span class="pre">&lt;form</span> <span class="pre">class=&quot;form-inline&quot;</span> <span class="pre">id=&quot;user_form&quot;</span> <span class="pre">method=&quot;post&quot;</span> <span class="pre">action=&quot;{%</span> <span class="pre">url</span> <span class="pre">'category'</span>&nbsp; <span class="pre">category.slug</span> <span class="pre">%}&quot;&gt;</span></code></li>
+<li>Update the category view to handle a HTTP <code class="docutils literal"><span class="pre">POST</span></code> request. The view must then include any search results in the context dictionary for the template to render.</li>
+<li>Also, lets make it so that only authenticated users can search. So include <code class="docutils literal"><span class="pre">{%</span> <span class="pre">if</span> <span class="pre">user.authenticated</span> <span class="pre">%}</span></code> to the <code class="docutils literal"><span class="pre">category.html</span></code> template to restrict access.</li>
+</ul>
+</div>
+<div class="section" id="create-and-view-profiles">
+<h2>16.3. Create and View Profiles<a class="headerlink" href="#create-and-view-profiles" title="Permalink to this headline">¶</a></h2>
+<p>If you have swapped over to the <code class="docutils literal"><span class="pre">django-registration-redux</span></code> package, then you&#8217;ll have to collect the <code class="docutils literal"><span class="pre">UserProfile</span></code> data.
+To do this, instead of re-directed the user to the rango index page, you will need re-direct them to a new form, to collect the website and url details. To add the UserProfile registration functionality:</p>
+<ul class="simple">
+<li>Create a <code class="docutils literal"><span class="pre">profile_registration.html</span></code> which will display the <code class="docutils literal"><span class="pre">UserProfileForm</span></code>.</li>
+<li>Create a <code class="docutils literal"><span class="pre">register_profile()</span></code> view to capture the profile detials</li>
+<li>Map the view to a url, i.e. <code class="docutils literal"><span class="pre">rango/add_profile/</span></code>.</li>
+<li>In the <code class="docutils literal"><span class="pre">MyRegistrationView</span></code> update the <code class="docutils literal"><span class="pre">get_success_url()</span></code> to point to <code class="docutils literal"><span class="pre">rango/add_profile/</span></code></li>
+</ul>
+<p>Another useful feature to let users inspect and edit their own profile. Undertake the following steps to add this functionality.</p>
+<ul class="simple">
+<li>First, create a template called <code class="docutils literal"><span class="pre">profile.html</span></code>. In this template, add in the fields associated with the user profile and the user (i.e. username, email, website and picture).</li>
+<li>Create a view called <code class="docutils literal"><span class="pre">profile()</span></code>. This view will obtain the data required to render the user profile template.</li>
+<li>Map the URL <code class="docutils literal"><span class="pre">/rango/profile/</span></code> to your new <code class="docutils literal"><span class="pre">profile()</span></code> view.</li>
+<li>In the base template add a link called <em>Profile</em> into the menu bar, preferably on the right-hand side with other user-related links. This should only be available to users who are logged in (i.e. <code class="docutils literal"><span class="pre">{%</span> <span class="pre">if</span> <span class="pre">user.is_authenticated</span> <span class="pre">%}</span></code>).</li>
+</ul>
+<p>To let users browse through user profiles, you can create a users page, that lists all the users. If you click on a user page, then you can see their profile (but the user can only edit their own page).</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        
+        <li class="right" >
+          <a href="tango_too.html" title="17. Making Rango Tango! Code and Hints"
+             >next</a>
+          </li>
+		
+        <li class="right" >
+          <a href="bing_search.html" title="15. Adding External Search Functionality"
+             >previous</a>
+          </li>
+		
+        <li><a href="../index-2.html">How to Tango with Django 1.7</a> &raquo;</li> 
+
+      </ul>
+
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2013, Leif Azzopardi and David Maxwell.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+
+<!-- Mirrored from www.tangowithdjango.com/book17/chapters/tango.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 10 Jan 2016 04:11:36 GMT -->
+</html>

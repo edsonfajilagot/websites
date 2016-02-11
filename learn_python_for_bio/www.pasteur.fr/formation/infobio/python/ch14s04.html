@@ -1,0 +1,289 @@
+<html>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch14s04.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:33 GMT -->
+<head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>14.4. Designing a module</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><meta name="keywords" content="python, biology, bioinformatics, programming, computational biology"><link rel="home" href="index-2.html" title="Introduction to Programming using Python"><link rel="up" href="ch14.html" title="Chapter 14. Modules and packages in Python"><link rel="previous" href="ch14s03.html" title="14.3. Getting information on available modules and packages"><link rel="next" href="ch15.html" title="Chapter 15. Recursive functions"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">14.4. Designing a module</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch14s03.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><th width="60%" align="center">Chapter 14. Modules and packages in Python</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch15.html"><img src="images/next.png" alt="Next"></a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="sect_design_module"></a>14.4. Designing a module</h2></div></div><p>
+	Modules in Python are a nice construct to put definitions
+	together in a single file that you will be able to reuse at
+	any time alter on. In order to get a good module it's a good
+	idea to follow some principles and to think about it before.
+      </p><div class="example"><p class="title"><b>Example 14.3. A genealogy module</b></p><p>
+	    As an example, we want to design a module to process
+	    genealogical trees (pedigrees). This module should provide
+	    functions to build the tree and to create individuals, to
+	    register marriages and births. So first we must list the
+	    necessary operations or functions. This list should be as
+	    <span class="emphasis"><em>abstract</em></span> as possible. This means that at this stage, you
+	    don't need to specify the way it will be programmed.  
+	  </p><p>
+	    Let' start by listing the operations that we need to
+	    construct the tree and idividuals.
+	    </p><div class="itemizedlist"><ul type="disc"><li>
+		Create person: this will produces a data structure
+		containing the information related to an individual:
+		his/her name, gender, spouse, parents and children. 
+	      </li><li>
+		Register a marriage: after checking that the persons
+		are not already married, this will update the
+		information about their respective spouse.
+	      </li><li>
+		Register a birth: this will create the child as a
+		person and update information in the father's and
+		mother's data structures about their children. 
+	      </li><li>
+		Create a family: this creates a list of persons
+		together with their descendants. 
+	      </li></ul></div><p>
+	  </p><p>
+	    Now we need operations to query and display our tree.
+	    </p><div class="itemizedlist"><ul type="disc"><li>
+		 Search for a person given his/her name.
+	      </li><li>
+		 Check whether a person is a family member.
+	      </li><li>
+		 Test whether two persons are identical. Our module
+		 is illustrative and basic, so we will define the
+		 identity by the fact that two persons have the same
+		 name. 
+	      </li><li>
+		Get the list of grandsons, granddaughters,
+		grandparents, brothers, sisters,...
+	      </li><li>
+		Display the data related to a person (name, gender, spouse,
+		parents and children).
+	      </li><li>
+		Display a family (a list of individuals).
+	      </li><li>
+		Get the names of the members of a family.
+	      </li></ul></div><p>
+	  </p><p>
+	    We can start to build our module. We do not need to
+	    write code; we will just define the functions and
+	    their parameters, and add a docstring to these
+	    definitions. Each definition will just contain a
+	    single <b>pass</b> statement in order to have
+	    an executable file, that can be used for instance by
+	    the <b>pydoc</b> to display the whole
+	    documentation of the module. A header docstring will
+	    contain the general description of the module.
+
+	  <pre class="programlisting">
+"""
+
+A module to handle genealogy trees and families.
+
+"""
+
+def create_person(name, gender, spouse=None, children=[], father=None, mother=None):
+    """
+    Returns: a dictionary (keys: 'name', 'gender', 'spouse', 'father', 'mother', 'children').
+    """
+    pass
+
+def register_marriage(husband, wife):
+    """
+    If one of the person is already married, raises an error.
+    Updates information of each spouse.
+    """
+    pass
+
+def register_birth(father=None, mother=None, child_name, gender):
+    """
+    Creates a person of name child_name and gender.
+    Updates information of each parents, if given.
+    Returns the child.
+    """
+    pass
+
+def grand_fathers(person):
+    """
+    Returns the list of grand fathers.
+    """
+    pass
+
+def grand_mothers(person):
+    """
+    Return the list of grand mothers.
+    """
+    pass
+
+def sibchip(person):
+    """
+    Returns the list of brothers and sisters. 
+    """
+    pass
+
+def identical(p1, p2):
+    """
+    Boolean function: returns True if p1 and p2 are the same person,
+    i.e have the same name.
+    """
+
+def create_family(family, *persons):
+    """
+    Create a list of persons, built from persons together with their
+    complete set of descendants.
+    """
+    pass
+
+def is_family_member(family, person):
+    """
+    Boolean function that returns True if the person belongs to the family.
+    The test is based on the name.
+    """
+    pass
+
+def lookup_person(name, family):
+    """
+    Search for a person named name in the family.
+    Returns None if not found.
+    """
+    pass
+
+def name_list(family):
+    """
+    Returns the names of the family members as a list.
+    """
+
+
+def display(person):
+    """
+    Returns a printable character strings describing the person (name,
+    gender, spouse, parents and children).
+    """
+
+def display_family(family):
+    """
+    Returns a printable character strings describig the persons
+    belonging to the family.
+    """
+	  </pre>
+
+	  </p><p>
+	    Let's now look at the implementation.
+	  <pre class="programlisting">
+def create_person(name, gender, children=[], father=None, mother=None, spouse=None):
+    l_children = children[:]
+    return {'name': name, 'children': l_children, 'father': father, 'mother': mother, 'spouse': spouse}
+
+def register_marriage(husband, wife):
+    if husband['spouse'] is not None:
+        raise Exception, husband['name'] + " is already married"
+    if wife['spouse'] is not None:
+        raise Exception, wife['name'] + " is already married"
+    husband['spouse'] = wife
+    wife['spouse'] = husband
+
+def register_birth(father, mother, child_name, gender):
+    child = create_person(child_name, gender)
+    father['children'].append(child)
+    mother['children'].append(child)
+    child['father'] = father
+    child['mother'] = mother
+    return child
+
+def parents(person):
+    return [person['father'], person['mother']]
+
+def grand_fathers(person):
+    l = []
+    father = person['father']
+    mother = person['mother']
+    if father is not None:
+        if father['father'] is not None:
+            l.append(father['father'])
+    if mother is not None:
+        if mother['father'] is not None:
+            l.append(mother['father'])
+    return l
+
+def grand_mothers(person):
+    l = []
+    if person['father'] is not None:
+        if person['father']['mother'] is not None:
+            l.append(person['father']['mother'])
+    if person['mother'] is not None:
+        if person['mother']['mother'] is not None:
+            l.append(person['mother']['mother'])
+    return l
+
+def sibchip(person):
+    l = []
+    father = person['father']
+    mother = person['mother']
+    if father is not None:
+        for child in father['children']:
+            l.append(child)
+    if mother is not None:
+        for child in mother['children']:
+            if l.count(child) == 0:
+                l.append(child)
+    return l
+
+def identity(p1, p2):
+    return p1['name'] == p2['name']
+
+def create_family(family, *persons):
+    for person in persons:
+        if not family_member(family, person):
+            family.append(person)
+            for child in person['children']:
+                create_family(family, child)
+
+def family_member(family, person):
+    for member in family:
+        if identity(person, member):
+            return True
+    return False
+
+def lookup_person(name, family):
+    for member in family:
+        if name == member['name']:
+            return member
+
+def list_names(family):
+    return [member['name'] for member in family]
+
+
+def display(person):
+    if person is None:
+        return ""
+    s = "Name: " + person['name']
+    if person['spouse'] is not None:
+        s = s + "\n\t" + "spouse: " + person['spouse']['name']
+    if person['father'] is not None:
+        s = s + "\n\t" + "father: " + person['father']['name']
+    if person['mother'] is not None:
+        s = s + "\n\t" + "father: " + person['mother']['name']
+    if len(person['children']) &gt; 0:
+        s = s + "\n\t" + "children: " 
+        for e in person['children']:
+            s = s + e['name'] + " "
+    return s
+
+def display_family(family):
+    s = ""
+    done = {}
+    for member in family:
+        if not done.has_key(member['name']):
+            s = s + display(member) + "\n"
+            done[member['name']] = True
+    return s
+
+if __name__ == "__main__":
+    print "----------- test code --------------"
+    henri = create_person("Henri", "male")
+    marianne = create_person("Marianne", "female")
+    register_marriage(henri, marianne)
+    jeanne = register_birth(henri, marianne, "Jeanne", "female")
+    print display(jeanne)
+    oscar = create_person("Oscar", "male")
+    try:
+        register_marriage(oscar, marianne)
+    except Exception, e:
+        print "\n---- marriage is not possible: " + str(e) + " ----"
+
+	  </pre>
+	  </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch14s03.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch14.html"><img src="images/up.png" alt="Up"></a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch15.html"><img src="images/next.png" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">14.3. Getting information on available modules and packages&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index-2.html"><img src="images/home.png" alt="Home"></a></td><td width="40%" align="right" valign="top">&nbsp;Chapter 15. Recursive functions</td></tr></table></div></body>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch14s04.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:33 GMT -->
+</html>

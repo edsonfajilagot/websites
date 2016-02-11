@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from zetcode.com/wxpython/advanced/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Aug 2015 19:21:48 GMT -->
+<head>
+<title>Advanced widgets in wxPython</title>
+<link rel="stylesheet" href="../../cfg/format2.css" type="text/css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="wxPython, advanced widgets, wx.ListBox, wx.HtmlWindow, wx.ListCtrl, mixins">
+<meta name="description" content="This part of the wxPython tutorial covers advanced widgets, including wx.ListBox,
+wx.html.HtmlWindow, and wx.ListCtrl.">
+<meta name="author" content="Jan Bodnar">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div id="wide_ad" class="ltow">
+<script async src="../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- 160x600, August 2011 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:600px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="2484182563"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<div class="content">
+
+
+<header>
+
+<nav>
+<a href="http://zetcode.com/" title="Home">Home</a>&#160;
+<a href="../index.html">Contents</a>
+</nav>
+
+</header>
+
+
+<h1>Advanced widgets in wxPython</h1>
+
+<p>
+In the following chapters we will talk about advanced widgets.  wxPython is a 
+layer over wxWidgets, a C++ based toolkit. wxWidgets consists of a 
+large group of widgets. All this widgets are created in C++. wxPython 
+is a glue that combines Python language with this toolkit. 
+</p>
+
+<div class="med_rec">
+<script async src="../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- NewSquare -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:250px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="0364418177"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div> 
+
+<p>
+Dynamic languages are great in various areas. They are simple to use. 
+They are great for prototyping, in house developing or for studying 
+computer programming. If we need a quick solution or we need an application, 
+that will change rapidly over a short period of time, dynamic languages 
+are superior to compiled languages. 
+On the other hand, if we develop resource intensive applications, games, 
+high quality multimedia applications, there is no competition to C++.
+</p>
+
+<p>
+wxPython has several well known advanced widgets. For example a tree widget, 
+an HTML window, a grid widget, a listbox widget, a list widget, or an editor 
+with advanced styling capabilities. 
+</p>
+
+
+<h2>A wx.ListBox widget</h2>
+
+<p>
+A <code>wx.ListBox</code> widget is used for displaying and working with a 
+list of items. As its name indicates, it is a rectangle that has a 
+list of strings inside. We could use it for displaying a list of MP3 
+files, book names, module names of a larger project or names of our 
+friends.  A <code>wx.ListBox</code> can be created in two different states: 
+In a single selection state or a multiple selection state. The single 
+selection state is the default state. 
+There are two significant events in <code>wx.ListBox</code>. The first one 
+is the <code>wx.EVT_COMMAND_LISTBOX_SELECTED</code> event. This event is 
+generated when we select a string in a <code>wx.ListBox</code>. The second 
+one is the <code>wx.EVT_COMMAND_LISTBOX_DOUBLE_CLICKED</code> event. It is 
+generated when we double click an item in a <code>wx.ListBox</code>. 
+The number of elements inside a <code>wx.ListBox</code> is limited on GTK platform. 
+According to the documentation, it is currently around 2000
+elements. The elements are numbered from zero. Scrollbars are displayed automatically 
+if needed. 
+</p>
+
+<p>
+The constructor of a <code>wx.ListBox</code> widget is as follows:
+</p>
+
+<pre>
+ wx.ListBox(wx.Window parent, int id=-1, wx.Point pos=wx.DefaultPosition, 
+     wx.Size size=wx.DefaultSize, list choices=[], long style=0, 
+     wx.Validator validator=wx.DefaultValidator, string name=wx.ListBoxNameStr)
+</pre>
+
+<p>
+There is a choices parameter. If we put some values there, they will 
+be displayed from the construction of the widget. 
+This parameter is empty by default. 
+</p>
+
+<p>
+In our code example we have a listbox and four buttons. Each of them 
+calls a different method of our listbox. 
+If we want to append a new item, we call the <code>Append()</code> method. 
+If we want to delete an item, we call the <code>Delete()</code>
+method. To clear all strings in a listbox, we call the <code>Clear()</code> method. 
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+
+# listbox.py
+
+import wx
+
+ID_NEW = 1
+ID_RENAME = 2
+ID_CLEAR = 3
+ID_DELETE = 4
+
+
+class ListBox(wx.Frame):
+    def __init__(self, parent, id, title):
+        wx.Frame.__init__(self, parent, id, title, size=(350, 220))
+
+        panel = wx.Panel(self, -1)
+        hbox = wx.BoxSizer(wx.HORIZONTAL)
+
+        self.listbox = wx.ListBox(panel, -1)
+        hbox.Add(self.listbox, 1, wx.EXPAND | wx.ALL, 20)
+
+        btnPanel = wx.Panel(panel, -1)
+        vbox = wx.BoxSizer(wx.VERTICAL)
+        new = wx.Button(btnPanel, ID_NEW, 'New', size=(90, 30))
+        ren = wx.Button(btnPanel, ID_RENAME, 'Rename', size=(90, 30))
+        dlt = wx.Button(btnPanel, ID_DELETE, 'Delete', size=(90, 30))
+        clr = wx.Button(btnPanel, ID_CLEAR, 'Clear', size=(90, 30))
+
+        self.Bind(wx.EVT_BUTTON, self.NewItem, id=ID_NEW)
+        self.Bind(wx.EVT_BUTTON, self.OnRename, id=ID_RENAME)
+        self.Bind(wx.EVT_BUTTON, self.OnDelete, id=ID_DELETE)
+        self.Bind(wx.EVT_BUTTON, self.OnClear, id=ID_CLEAR)
+        self.Bind(wx.EVT_LISTBOX_DCLICK, self.OnRename)
+
+        vbox.Add((-1, 20))
+        vbox.Add(new)
+        vbox.Add(ren, 0, wx.TOP, 5)
+        vbox.Add(dlt, 0, wx.TOP, 5)
+        vbox.Add(clr, 0, wx.TOP, 5)
+
+        btnPanel.SetSizer(vbox)
+        hbox.Add(btnPanel, 0.6, wx.EXPAND | wx.RIGHT, 20)
+        panel.SetSizer(hbox)
+
+        self.Centre()
+        self.Show(True)
+
+    def NewItem(self, event):
+        text = wx.GetTextFromUser('Enter a new item', 'Insert dialog')
+        if text != '':
+            self.listbox.Append(text)
+
+    def OnRename(self, event):
+        sel = self.listbox.GetSelection()
+        text = self.listbox.GetString(sel)
+        renamed = wx.GetTextFromUser('Rename item', 'Rename dialog', text)
+        if renamed != '':
+            self.listbox.Delete(sel)
+            self.listbox.Insert(renamed, sel)
+
+
+    def OnDelete(self, event):
+        sel = self.listbox.GetSelection()
+        if sel != -1:
+            self.listbox.Delete(sel)
+
+    def OnClear(self, event):
+        self.listbox.Clear()
+
+
+app = wx.App()
+ListBox(None, -1, 'ListBox')
+app.MainLoop()
+</pre>
+
+
+<pre class="explanation">
+self.listbox = wx.ListBox(panel, -1)
+hbox.Add(self.listbox, 1, wx.EXPAND | wx.ALL, 20)
+</pre>
+
+<p>
+We create an empty <code>wx.ListBox</code>. We put a 20px border 
+around the listbox. 
+</p>
+
+<pre class="explanation">
+self.Bind(wx.EVT_LISTBOX_DCLICK, self.OnRename)
+</pre>
+
+<p>
+We bind a <code>wx.EVT_COMMAND_LISTBOX_DOUBLE_CLICKED</code> event type with the 
+<code>OnRename()</code> method using the <code>wx.EVT_LISTBOX_DCLICK</code> event binder. 
+This way we show a rename dialog if we double click on a specific element
+in the listbox. 
+</p>
+
+<pre class="explanation">
+def NewItem(self, event):
+    text = wx.GetTextFromUser('Enter a new item', 'Insert dialog')
+    if text != '':
+        self.listbox.Append(text)
+</pre>
+
+<p>
+We call the <code>NewItem()</code> method by clicking on the New button. This 
+method shows a <code>wx.GetTextFromUser</code> dialog window.
+The text that we enter is returned to the text variable. If the text 
+is not empty, we append it to the listbox with 
+the <code>Append()</code> method.
+</p>
+
+<pre class="explanation">
+def OnDelete(self, event):
+    sel = self.listbox.GetSelection()
+    if sel != -1:
+        self.listbox.Delete(sel)
+</pre>
+
+<p>
+Deleting an item is done in two steps. First we find the index of the 
+selected item by calling the <code>GetSelection()</code> method.
+Then we delete the item with the <code>Delete()</code> method. The parameter 
+to the <code>Delete()</code> method is the selected index.
+</p>
+
+<pre class="explanation">
+self.listbox.Delete(sel)
+self.listbox.Insert(renamed, sel)
+</pre>
+
+<p>
+Notice, how we managed to rename a string. <code>wx.ListBox</code> widget has no 
+<code>Rename()</code> method. We did this functionality by deleting the previously 
+selected string and inserting a new string into the predecessor's position. 
+</p>
+
+<pre class="explanation">
+def OnClear(self, event):
+    self.listbox.Clear()
+</pre>
+
+<p>
+The easiest thing is to clear the whole listbox. We simply call the 
+<code>Clear()</code> method. 
+</p>
+
+
+<figure>
+<img src="../../img/gui/wxpython/listbox2.png" alt="wx.ListBox widget">
+<figcaption>Figure: A wx.ListBox widget</figcaption>
+</figure>
+
+
+<h2>A wx.html.HtmlWindow widget</h2>
+
+
+<p>
+The <code>wx.html.HtmlWindow</code> widget displays HTML pages. It is not 
+a full-fledged browser. We can do
+interesting things with <code>wx.html.HtmlWindow</code> widget.
+</p>
+
+
+<h3>Special formatting</h3>
+
+<p>
+For example in the following script we will create a window that will 
+display basic statistics.
+This formatting would be very hard if possible to create without 
+<code>wx.html.HtmlWindow</code> widget.
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+
+import wx
+import wx.html as html
+
+ID_CLOSE = 1
+
+page = '&lt;html&gt;&lt;body bgcolor="#8e8e95"&gt;&lt;table cellspacing="5" border="0" width="250"> \
+&lt;tr width="200" align="left"&gt; \
+&lt;td bgcolor="#e7e7e7">&amp;nbsp;&amp;nbsp;Maximum&lt;/td&gt; \
+&lt;td bgcolor="#aaaaaa"&gt;&amp;nbsp;&amp;nbsp;&lt;b&gt;9000&lt;/b&gt;&lt;/td&gt; \
+&lt;/tr&gt; \
+&lt;tr align="left"&gt; \
+&lt;td bgcolor="#e7e7e7"&gt;&amp;nbsp;&amp;nbsp;Mean&lt;/td&gt; \
+&lt;td bgcolor="#aaaaaa">&amp;nbsp;&amp;nbsp;&lt;b&gt;6076&lt;/b&gt;&lt;/td&gt; \
+&lt;/tr&gt; \
+&lt;tr align="left"> \
+&lt;td bgcolor="#e7e7e7">&amp;nbsp;&amp;nbsp;Minimum&lt;/td&gt; \
+&lt;td bgcolor="#aaaaaa"&gt;&amp;nbsp;&amp;nbsp;&lt;b&gt;3800&lt;/b&gt;&lt;/td&gt; \
+&lt;/tr&gt; \
+&lt;tr align="left"&gt; \
+&lt;td bgcolor="#e7e7e7"&gt;&amp;nbsp;&amp;nbsp;Median&lt;/td&gt; \
+&lt;td bgcolor="#aaaaaa"&gt;&amp;nbsp;&amp;nbsp;&lt;b&gt;6000&lt;/b&gt;&lt;/td&gt; \
+&lt;/tr&gt; \
+&lt;tr align="left"&gt; \
+&lt;td bgcolor="#e7e7e7"&gt;&amp;nbsp;&amp;nbsp;Standard Deviation&lt;/td&gt; \
+&lt;td bgcolor="#aaaaaa"&gt;&amp;nbsp;&amp;nbsp;&lt;b&gt;6076&lt;/b&gt;&lt;/td&gt; \
+&lt;/tr&gt; \
+&lt;/body&gt;&lt;/table&gt;&lt;/html&gt;'
+
+
+class MyFrame(wx.Frame):
+    def __init__(self, parent, id, title):
+        wx.Frame.__init__(self, parent, id, title, size=(400, 290))
+
+        panel = wx.Panel(self, -1)
+
+        vbox = wx.BoxSizer(wx.VERTICAL)
+        hbox = wx.BoxSizer(wx.HORIZONTAL)
+
+        htmlwin = html.HtmlWindow(panel, -1, style=wx.NO_BORDER)
+        htmlwin.SetBackgroundColour(wx.RED)
+        htmlwin.SetStandardFonts()
+        htmlwin.SetPage(page)
+
+        vbox.Add((-1, 10), 0)
+        vbox.Add(htmlwin, 1, wx.EXPAND | wx.ALL, 9)
+
+        bitmap = wx.StaticBitmap(panel, -1, wx.Bitmap('images/newt.png'))
+        hbox.Add(bitmap, 1, wx.LEFT | wx.BOTTOM | wx.TOP, 10)
+        buttonOk = wx.Button(panel, ID_CLOSE, 'Ok')
+
+        self.Bind(wx.EVT_BUTTON, self.OnClose, id=ID_CLOSE)
+
+        hbox.Add((100, -1), 1, wx.EXPAND | wx.ALIGN_RIGHT)
+        hbox.Add(buttonOk, flag=wx.TOP | wx.BOTTOM | wx.RIGHT, border=10)
+        vbox.Add(hbox, 0, wx.EXPAND)
+
+        panel.SetSizer(vbox)
+        self.Centre()
+        self.Show(True)
+
+    def OnClose(self, event):
+        self.Close()
+
+app = wx.App(0)
+MyFrame(None, -1, 'Basic Statistics')
+app.MainLoop()
+</pre>
+
+
+<figure>
+<img src="../../img/gui/wxpython/basicw.jpg">
+<figcaption>Figure: Html window example</figcaption>
+</figure>
+
+
+<h2>Help window</h2>
+
+<p>
+We can use <code>wx.html.HtmlWindow</code> to provide help in our application. We can 
+create a standalone window or we can create a window that is going to be a part 
+of the application.  The following script will create a help window using the 
+latter idea. 
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+
+# helpwindow.py
+
+import wx
+import wx.html as html
+
+class HelpWindow(wx.Frame):
+    def __init__(self, parent, id, title):
+        wx.Frame.__init__(self, parent, id, title, size=(570, 400))
+
+        toolbar = self.CreateToolBar()
+        toolbar.AddLabelTool(1, 'Exit', wx.Bitmap('icons/exit.png'))
+        toolbar.AddLabelTool(2, 'Help', wx.Bitmap('icons/help.png'))
+        toolbar.Realize()
+
+        self.splitter = wx.SplitterWindow(self, -1)
+        self.panelLeft = wx.Panel(self.splitter, -1, style=wx.BORDER_SUNKEN)
+
+        self.panelRight = wx.Panel(self.splitter, -1)
+        vbox2 = wx.BoxSizer(wx.VERTICAL)
+        header = wx.Panel(self.panelRight, -1, size=(-1, 20))
+        header.SetBackgroundColour('#6f6a59')
+        header.SetForegroundColour('WHITE')
+        hbox = wx.BoxSizer(wx.HORIZONTAL)
+
+        st = wx.StaticText(header, -1, 'Help', (5, 5))
+        font = st.GetFont()
+        font.SetPointSize(9)
+        st.SetFont(font)
+        hbox.Add(st, 1, wx.TOP | wx.BOTTOM | wx.LEFT, 5)
+
+        close = wx.BitmapButton(header, -1, wx.Bitmap('icons/fileclose.png', wx.BITMAP_TYPE_PNG), 
+		style=wx.NO_BORDER)
+        close.SetBackgroundColour('#6f6a59')
+        hbox.Add(close, 0)
+        header.SetSizer(hbox)
+
+        vbox2.Add(header, 0, wx.EXPAND)
+
+        help = html.HtmlWindow(self.panelRight, -1, style=wx.NO_BORDER)
+        help.LoadPage('help.html')
+        vbox2.Add(help, 1, wx.EXPAND)
+        self.panelRight.SetSizer(vbox2)
+        self.panelLeft.SetFocus()
+
+        self.splitter.SplitVertically(self.panelLeft, self.panelRight)
+        self.splitter.Unsplit()
+
+        self.Bind(wx.EVT_BUTTON, self.CloseHelp, id=close.GetId())
+        self.Bind(wx.EVT_TOOL, self.OnClose, id=1)
+        self.Bind(wx.EVT_TOOL, self.OnHelp, id=2)
+
+        self.Bind(wx.EVT_KEY_DOWN, self.OnKeyPressed)
+
+        self.CreateStatusBar()
+
+        self.Centre()
+        self.Show(True)
+
+    def OnClose(self, event):
+        self.Close()
+
+    def OnHelp(self, event):
+        self.splitter.SplitVertically(self.panelLeft, self.panelRight)
+        self.panelLeft.SetFocus()
+
+    def CloseHelp(self, event):
+        self.splitter.Unsplit()
+        self.panelLeft.SetFocus()
+
+    def OnKeyPressed(self, event):
+        keycode = event.GetKeyCode()
+        if keycode == wx.WXK_F1:
+            self.splitter.SplitVertically(self.panelLeft, self.panelRight)
+            self.panelLeft.SetFocus()
+
+
+app = wx.App()
+HelpWindow(None, -1, 'HelpWindow')
+app.MainLoop()
+</pre>
+
+<p>
+The help window is hidden in the beginning. We can show it by clicking 
+on the help button on the toolbar or by pressing <kbd>F1</kbd>.
+The help window appears on the right side of the application. To hide 
+the help window, we click on the close button.
+</p>
+
+<pre class="explanation">
+self.splitter.SplitVertically(self.panelLeft, self.panelRight)
+self.splitter.Unsplit()
+</pre>
+
+<p>
+We create left a right panels and split them vertically. After that, we 
+call the <code>Unsplit()</code> method. By default the method hides the right 
+or bottom panes. 
+</p>
+
+<p>
+We divide the right panel into two parts. The header and the body of the 
+panel. The header is an adjusted <code>wx.Panel</code>. The header consists of a 
+static text and a bitmap button. We put <code>wx.html.Window</code> into the body of the panel. 
+</p>
+
+<pre class="explanation">
+close = wx.BitmapButton(header, -1, wx.Bitmap('icons/fileclose.png', wx.BITMAP_TYPE_PNG), 
+    style=wx.NO_BORDER)
+close.SetBackgroundColour('#6f6a59')
+</pre>
+
+<p>
+The bitmap button style is set to <code>wx.NO_BORDER</code>. The background colour 
+is set to the colour of the header panel. This is done in order to make the
+button appear as a part of the header.
+</p>
+
+
+<pre class="explanation">
+help = html.HtmlWindow(self.panelRight, -1, style=wx.NO_BORDER)
+help.LoadPage('help.html')
+</pre>
+
+<p>
+We create a <a>wx.html.HtmlWindow</a> widget on the right panel. We have 
+our HTML code in a separate file. This time we call the <code>LoadPage()</code> 
+method to obtain the HTML code.  
+</p>
+
+<pre class="explanation">
+self.panelLeft.SetFocus()
+</pre>
+
+<p>
+We set focus on the left panel. We can launch the help window with the F1 key. 
+In order to control a window with a keyboard, it must have the focus. If we 
+did not set the focus, we would have to first click on the panel and only 
+then we could launch the help window with the <kbd>F1</kbd> key press. 
+</p>
+
+<pre class="explanation">
+def OnHelp(self, event):
+    self.splitter.SplitVertically(self.panelLeft, self.panelRight)
+    self.panelLeft.SetFocus()
+</pre>
+
+<p>
+To show the help window, we call the <code>OnHelp()</code> method. It splits the 
+two panels vertically. We must not forget to 
+set the focus again, because the initial focus is lost by splitting. 
+</p>
+
+<p>
+The following is the html file that we load in our application.
+</p>
+
+<pre class="code">
+&lt;html&gt;
+
+&lt;body bgcolor="#ababab"&gt;
+&lt;h4&gt;Table of Contents&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="#basic"&gt;Basic statistics&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#advanced"&gt;Advanced statistics&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#intro"&gt;Introducing Newt&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#charts"&gt;Working with charts&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#pred"&gt;Predicting values&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#neural"&gt;Neural networks&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#glos"&gt;Glossary&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;
+&lt;a name="basic"&gt;
+&lt;h6&gt;Basic Statistics&lt;/h6&gt;
+Overview of elementary concepts in statistics.
+Variables. Correlation. Measurement scales. Statistical significance. 
+Distributions. Normality assumption.
+&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;a name="advanced"&gt;
+&lt;h6&gt;Advanced Statistics&lt;/h6&gt;
+Overview of advanced concepts in statistics. Anova. Linear regression. 
+Estimation and  hypothesis testing.
+Error terms.
+&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;a name="intro"&gt;
+&lt;h6&gt;Introducing Newt&lt;/h6&gt;
+Introducing the basic functionality of the Newt application. Creating sheets. 
+Charts. Menus and Toolbars. Importing data. Saving data in various formats. 
+Exporting data. Shortcuts. List of methods.
+&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;a name="charts"&gt;
+&lt;h6&gt;Charts&lt;/h6&gt;
+Working with charts. 2D charts. 3D charts. Bar, line, box, pie, range charts. 
+Scatterplots. Histograms.
+&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;a name="pred"&gt;
+&lt;h6&gt;Predicting values&lt;/h6&gt;
+Time series and forecasting. Trend Analysis. Seasonality. Moving averages. 
+Univariate methods. Multivariate methods. Holt-Winters smoothing. 
+Exponential smoothing. ARIMA. Fourier analysis.
+&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;a name="neural"&gt;
+&lt;h6&gt;Neural networks&lt;/h6&gt;
+Overview of neural networks. Biology behind neural networks.
+Basic artificial Model. Training. Preprocessing. Postprocessing. 
+Types of neural networks.
+&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;a name="glos"&gt;
+&lt;h6&gt;Glossary&lt;/h6&gt;
+Terms and definitions in statistics.
+&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+
+<pre class="explanation">
+&lt;li&gt;&lt;a href="#basic"&gt;Basic statistics&lt;/a&gt;&lt;/li&gt;
+...
+&lt;a name="basic"&gt;
+</pre>
+
+<p>
+Normally I would write &lt;div id="basic"&gt; ... &lt;/div&gt;. Both are 
+correct HTML notations. But <code>wx.html.HtmlWindow</code> supports only the first one. 
+<code>wx.html.HtmlWindow</code> supports only a subset of the HTML markup language.
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/helpwindow.png">
+<figcaption>Figure: Help window</figcaption>
+</figure>
+
+
+
+<h2>A wx.ListCtrl widget</h2>
+
+
+<p>
+A <code>wx.ListCtrl</code> is a graphical representation of a list of items. A 
+<code>wx.ListBox</code> can only have one column. <code>wx.ListCtrl</code> can have 
+more than one column. 
+<code>wx.ListCtrl</code> is a very common and useful widget.
+For example a file manager uses a <code>wx.ListCtrl</code> to display 
+directories and files on the file system. A cd burner application 
+displays files to be burned inside a <code>wx.ListCtrl</code>. 
+</p>
+
+<p>
+A <code>wx.ListCtrl</code> can be used in three different formats. In a list view, 
+report view or a icon view. These formats are controled by the <code>wx.ListCtrl</code> 
+window styles. <code>wx.LC_REPORT</code>, <code>wx.LC_LIST</code> and <code>wx.LC_ICON</code>.
+</p>
+
+<pre>
+wx.ListCtrl(wx.Window parent, int id, wx.Point pos = (-1, -1), wx.Size size = (-1, -1), 
+int style = wx.LC_ICON, wx.Validator validator = wx.DefaultValidator, string name = wx.ListCtrlNameStr)
+</pre>
+
+<p>
+
+</p>
+
+
+<h2>wx.ListCtrl styles </h2>
+
+<ul>
+<li>wx.LC_LIST</li>
+<li>wx.LC_REPORT</li>
+<li>wx.LC_VIRTUAL</li>
+<li>wx.LC_ICON</li>
+<li>wx.LC_SMALL_ICON</li>
+<li>wx.LC_ALIGN_LEFT</li>
+<li>wx.LC_EDIT_LABELS</li>
+<li>wx.LC_NO_HEADER</li>
+<li>wx.LC_SORT_ASCENDING</li>
+<li>wx.LC_SORT_DESCENDING</li>
+<li>wx.LC_HRULES </li>
+<li>wx.LC_VRULES</li>
+</ul>
+
+
+
+<h3>Simple example</h3>
+
+<p>
+In the first example we will introduce basic functionality of 
+a <code>wx.ListCtrl</code>. 
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+
+# actresses.py
+
+import wx
+import sys
+
+packages = [('jessica alba', 'pomona', '1981'), ('sigourney weaver', 'new york', '1949'),
+    ('angelina jolie', 'los angeles', '1975'), ('natalie portman', 'jerusalem', '1981'),
+    ('rachel weiss', 'london', '1971'), ('scarlett johansson', 'new york', '1984' )]
+
+
+
+class Actresses(wx.Frame):
+    def __init__(self, parent, id, title):
+        wx.Frame.__init__(self, parent, id, title, size=(380, 230))
+
+        hbox = wx.BoxSizer(wx.HORIZONTAL)
+        panel = wx.Panel(self, -1)
+
+        self.list = wx.ListCtrl(panel, -1, style=wx.LC_REPORT)
+        self.list.InsertColumn(0, 'name', width=140)
+        self.list.InsertColumn(1, 'place', width=130)
+        self.list.InsertColumn(2, 'year', wx.LIST_FORMAT_RIGHT, 90)
+
+        for i in packages:
+            index = self.list.InsertStringItem(sys.maxint, i[0])
+            self.list.SetStringItem(index, 1, i[1])
+            self.list.SetStringItem(index, 2, i[2])
+
+        hbox.Add(self.list, 1, wx.EXPAND)
+        panel.SetSizer(hbox)
+
+        self.Centre()
+        self.Show(True)
+
+app = wx.App()
+Actresses(None, -1, 'actresses')
+app.MainLoop()
+</pre>
+
+
+<pre class="explanation">
+self.list = wx.ListCtrl(panel, -1, style=wx.LC_REPORT)
+</pre>
+
+<p>
+We create a <code>wx.ListCtrl</code> with a wx.LC_REPORT style.
+</p>
+
+<pre class="explanation">
+self.list.InsertColumn(0, 'name', width=140)
+self.list.InsertColumn(1, 'place', width=130)
+self.list.InsertColumn(2, 'year', wx.LIST_FORMAT_RIGHT, 90)
+</pre>
+
+<p>
+We insert three columns. We can specify the <code>width</code> of the column and 
+the <code>format</code> of the column. The default format is <code>wx.LIST_FORMAT_LEFT</code>.
+</p>
+
+<pre class="explanation">
+for i in packages:
+    index = self.list.InsertStringItem(sys.maxint, i[0])
+    self.list.SetStringItem(index, 1, i[1])
+    self.list.SetStringItem(index, 2, i[2])
+</pre>
+
+<p>
+We insert data into the <code>wx.ListCtrl</code> using two methods. 
+Each row begins with a <code>InsertStringItem()</code> method. The first 
+parameter of the method specifies the row number. By giving a sys.maxint 
+we ensure that each call will insert data after the last row. The method 
+returns the row index. The <code>SetStringItem()</code> method adds data to the 
+consecutive columns of the current row.
+</p>
+
+
+<h3>Mixins</h3>
+
+<p>
+Mixins are classes that further enhance the functionality of a 
+<code>wx.ListCtrl</code>. Mixin classes are so called helper classes. 
+They are located in <code>wx.lib.mixins.listctrl</code> module. In 
+order to use them, the programmer has to inherit from these classes.
+</p>
+
+<p>
+As of 2.8.1.1, there are five available mixins. 
+</p>
+
+<ul>
+<li>wx.ColumnSorterMixin</li>
+<li>wx.ListCtrlAutoWidthMixin</li>
+<li>wx.ListCtrlSelectionManagerMix</li>
+<li>wx.TextEditMixin</li>
+<li>wx.CheckListCtrlMixin</li>
+</ul>
+
+<p>
+<code>wx.ColumnSorterMixin</code> is a mixin that enables sorting of columns 
+in a report view. <code>wx.ListCtrlAutoWidthMixin</code> class automatically 
+resizes the last column to the end of the <code>wx.ListCtrl</code>. By default, 
+the last column does not take the remaining space. See the previous 
+example. <code>wx.ListCtrlSelectionManagerMix</code> defines platform 
+independent selection policy. <code>wx.TextEditMixin</code> enables text to be 
+edited. <code>wx.CheckListCtrlMixin</code> adds a check box to each row. This 
+way we can control rows. We can set every row to be checked or unchecked. 
+</p>
+
+<p>
+The following code shows, how we can use <code>ListCtrlAutoWidthMixin</code> 
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+
+# autowidth.py
+
+import wx
+import sys
+from wx.lib.mixins.listctrl import ListCtrlAutoWidthMixin
+
+actresses = [('jessica alba', 'pomona', '1981'), ('sigourney weaver', 'new york', '1949'),
+    ('angelina jolie', 'los angeles', '1975'), ('natalie portman', 'jerusalem', '1981'),
+    ('rachel weiss', 'london', '1971'), ('scarlett johansson', 'new york', '1984' )]
+
+
+class AutoWidthListCtrl(wx.ListCtrl, ListCtrlAutoWidthMixin):
+    def __init__(self, parent):
+        wx.ListCtrl.__init__(self, parent, -1, style=wx.LC_REPORT)
+        ListCtrlAutoWidthMixin.__init__(self)
+
+
+class Actresses(wx.Frame):
+    def __init__(self, parent, id, title):
+        wx.Frame.__init__(self, parent, id, title, size=(380, 230))
+
+        hbox = wx.BoxSizer(wx.HORIZONTAL)
+
+        panel = wx.Panel(self, -1)
+
+        self.list = AutoWidthListCtrl(panel)
+        self.list.InsertColumn(0, 'name', width=140)
+        self.list.InsertColumn(1, 'place', width=130)
+        self.list.InsertColumn(2, 'year', wx.LIST_FORMAT_RIGHT, 90)
+
+        for i in actresses:
+            index = self.list.InsertStringItem(sys.maxint, i[0])
+            self.list.SetStringItem(index, 1, i[1])
+            self.list.SetStringItem(index, 2, i[2])
+
+        hbox.Add(self.list, 1, wx.EXPAND)
+        panel.SetSizer(hbox)
+
+        self.Centre()
+        self.Show(True)
+
+app = wx.App()
+Actresses(None, -1, 'actresses')
+app.MainLoop()
+</pre>
+
+<p>
+We change the previous example a bit.
+</p>
+
+<pre class="explanation">
+from wx.lib.mixins.listctrl import ListCtrlAutoWidthMixin
+</pre>
+
+<p>
+Here we import the mixin.
+</p>
+
+
+<pre class="explanation">
+class AutoWidthListCtrl(wx.ListCtrl, ListCtrlAutoWidthMixin):
+    def __init__(self, parent):
+        wx.ListCtrl.__init__(self, parent, -1, style=wx.LC_REPORT)
+        ListCtrlAutoWidthMixin.__init__(self)
+</pre>
+
+<p>
+We create a new <code>AutoWidthListCtrl</code> class. This class will inherit 
+from <code>wx.ListCtrl</code> and <code>ListCtrlAutoWidthMixin</code>. This is 
+called <em>multiple inheritance</em>.
+The last column will automatically resize to take up the remaining 
+width of a <code>wx.ListCtrl</code>. 
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/autowidthl.jpg"> <img style="margin-left:15px" src="../../img/gui/wxpython/autowidthw.jpg">
+<figcaption>Figure: AutoWidth example</figcaption>
+</figure>
+
+
+<p>
+In the following example we will show, how we can create sortable columns. If we 
+click on the column header, the corresponding rows in a column are sorted.
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+
+# sorted.py
+
+import wx
+import sys
+from wx.lib.mixins.listctrl import ColumnSorterMixin
+
+actresses = {
+1 : ('jessica alba', 'pomona', '1981'), 
+2 : ('sigourney weaver', 'new york', '1949'),
+3 : ('angelina jolie', 'los angeles', '1975'), 
+4 : ('natalie portman', 'jerusalem', '1981'),
+5 : ('rachel weiss', 'london', '1971'), 
+6 : ('scarlett johansson', 'new york', '1984') 
+}
+
+
+class SortedListCtrl(wx.ListCtrl, ColumnSorterMixin):
+    def __init__(self, parent):
+        wx.ListCtrl.__init__(self, parent, -1, style=wx.LC_REPORT)
+        ColumnSorterMixin.__init__(self, len(actresses))
+        self.itemDataMap = actresses
+
+    def GetListCtrl(self):
+        return self
+
+class Actresses(wx.Frame):
+    def __init__(self, parent, id, title):
+        wx.Frame.__init__(self, parent, id, title, size=(380, 230))
+
+        hbox = wx.BoxSizer(wx.HORIZONTAL)
+
+        panel = wx.Panel(self, -1)
+
+        self.list = SortedListCtrl(panel)
+        self.list.InsertColumn(0, 'name', width=140)
+        self.list.InsertColumn(1, 'place', width=130)
+        self.list.InsertColumn(2, 'year', wx.LIST_FORMAT_RIGHT, 90)
+
+        items = actresses.items()
+
+        for key, data in items:
+            index = self.list.InsertStringItem(sys.maxint, data[0])
+            self.list.SetStringItem(index, 1, data[1])
+            self.list.SetStringItem(index, 2, data[2])
+            self.list.SetItemData(index, key)
+
+        hbox.Add(self.list, 1, wx.EXPAND)
+        panel.SetSizer(hbox)
+
+        self.Centre()
+        self.Show(True)
+
+app = wx.App()
+Actresses(None, -1, 'actresses')
+app.MainLoop()
+</pre>
+
+<p>
+We will again use the example with actresses.
+</p>
+
+<pre class="explanation">
+ColumnSorterMixin.__init__(self, len(actresses))
+</pre>
+
+<p>
+The <code>ColumnSorterMixin</code> accepts one argument. It is the number of columns to be sorted. 
+</p>
+
+<pre class="explanation">
+self.itemDataMap = actresses
+</pre>
+
+<p>
+We must map our data to be displayed in a list control to the 
+<code>itemDataMap</code> attribute. The data must be in a dictionary data type.
+</p>
+
+<pre class="explanation">
+def GetListCtrl(self):
+    return self
+</pre>
+
+<p>
+We must create a <code>GetListCtrl()</code> method. This method returns the 
+<code>wx.ListCtrl</code> widget that is going to be sorted.
+</p>
+
+<pre class="explanation">
+self.list.SetItemData(index, key)
+</pre>
+
+<p>
+We must assosiate each row with a special index. This is done with the 
+<code>SetItemData</code> method. 
+</p>
+
+
+<h3>Reader</h3>
+
+<p>
+A reader is a complex example showing two list controls in a report view.
+</p>
+
+
+<pre class="code">
+#!/usr/bin/python
+
+# reader.py
+
+
+import wx
+
+articles = [['Mozilla rocks', 'The year of the Mozilla', 'Earth on Fire'],
+            ['Gnome pretty, Gnome Slow', 'Gnome, KDE, Icewm, XFCE', 'Where is Gnome heading?'],
+            ['Java number one language', 'Compiled languages, intrepreted Languages', 'Java on Desktop?']]
+
+
+
+class ListCtrlLeft(wx.ListCtrl):
+    def __init__(self, parent, id):
+        wx.ListCtrl.__init__(self, parent, id, style=wx.LC_REPORT | wx.LC_HRULES | 
+		wx.LC_NO_HEADER | wx.LC_SINGLE_SEL)
+        images = ['icons/java.png', 'icons/gnome.png', 'icons/mozilla.png']
+
+        self.parent = parent
+
+        self.Bind(wx.EVT_SIZE, self.OnSize)
+        self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnSelect)
+
+        self.il = wx.ImageList(32, 32)
+        for i in images:
+            self.il.Add(wx.Bitmap(i))
+
+        self.SetImageList(self.il, wx.IMAGE_LIST_SMALL)
+        self.InsertColumn(0, '')
+
+        for i in range(3):
+            self.InsertStringItem(0, '')
+            self.SetItemImage(0, i)
+
+    def OnSize(self, event):
+        size = self.parent.GetSize()
+        self.SetColumnWidth(0, size.x-5)
+        event.Skip()
+
+    def OnSelect(self, event):
+        window = self.parent.GetGrandParent().FindWindowByName('ListControlOnRight')
+        index = event.GetIndex()
+        window.LoadData(index)
+
+    def OnDeSelect(self, event):
+        index = event.GetIndex()
+        self.SetItemBackgroundColour(index, 'WHITE')
+
+    def OnFocus(self, event):
+        self.SetItemBackgroundColour(0, 'red')
+
+class ListCtrlRight(wx.ListCtrl):
+    def __init__(self, parent, id):
+        wx.ListCtrl.__init__(self, parent, id, style=wx.LC_REPORT | wx.LC_HRULES | 
+		wx.LC_NO_HEADER | wx.LC_SINGLE_SEL)
+
+        self.parent = parent
+
+        self.Bind(wx.EVT_SIZE, self.OnSize)
+
+        self.InsertColumn(0, '')
+
+
+    def OnSize(self, event):
+        size = self.parent.GetSize()
+        self.SetColumnWidth(0, size.x-5)
+        event.Skip()
+
+    def LoadData(self, index):
+        self.DeleteAllItems()
+        for i in range(3):
+            self.InsertStringItem(0, articles[index][i])
+
+
+class Reader(wx.Frame):
+    def __init__(self, parent, id, title):
+        wx.Frame.__init__(self, parent, id, title)
+
+        hbox = wx.BoxSizer(wx.HORIZONTAL)
+        splitter = wx.SplitterWindow(self, -1, style=wx.SP_LIVE_UPDATE|wx.SP_NOBORDER)
+
+        vbox1 = wx.BoxSizer(wx.VERTICAL)
+        panel1 = wx.Panel(splitter, -1)
+        panel11 = wx.Panel(panel1, -1, size=(-1, 40))
+        panel11.SetBackgroundColour('#53728c')
+        st1 = wx.StaticText(panel11, -1, 'Feeds', (5, 5))
+        st1.SetForegroundColour('WHITE')
+
+        panel12 = wx.Panel(panel1, -1, style=wx.BORDER_SUNKEN)
+        vbox = wx.BoxSizer(wx.VERTICAL)
+        list1 = ListCtrlLeft(panel12, -1)
+
+        vbox.Add(list1, 1, wx.EXPAND)
+        panel12.SetSizer(vbox)
+        panel12.SetBackgroundColour('WHITE')
+
+
+        vbox1.Add(panel11, 0, wx.EXPAND)
+        vbox1.Add(panel12, 1, wx.EXPAND)
+
+        panel1.SetSizer(vbox1)
+
+        vbox2 = wx.BoxSizer(wx.VERTICAL)
+        panel2 = wx.Panel(splitter, -1)
+        panel21 = wx.Panel(panel2, -1, size=(-1, 40), style=wx.NO_BORDER)
+        st2 = wx.StaticText(panel21, -1, 'Articles', (5, 5))
+        st2.SetForegroundColour('WHITE')
+
+        panel21.SetBackgroundColour('#53728c')
+        panel22 = wx.Panel(panel2, -1, style=wx.BORDER_RAISED)
+        vbox3 = wx.BoxSizer(wx.VERTICAL)
+        list2 = ListCtrlRight(panel22, -1)
+        list2.SetName('ListControlOnRight')
+        vbox3.Add(list2, 1, wx.EXPAND)
+        panel22.SetSizer(vbox3)
+
+
+        panel22.SetBackgroundColour('WHITE')
+        vbox2.Add(panel21, 0, wx.EXPAND)
+        vbox2.Add(panel22, 1, wx.EXPAND)
+
+        panel2.SetSizer(vbox2)
+
+        toolbar = self.CreateToolBar()
+        toolbar.AddLabelTool(1, 'Exit', wx.Bitmap('icons/stock_exit.png'))
+        toolbar.Realize()
+
+        self.Bind(wx.EVT_TOOL, self.ExitApp, id=1)
+
+        hbox.Add(splitter, 1, wx.EXPAND | wx.TOP | wx.BOTTOM, 5)
+        self.SetSizer(hbox)
+        self.CreateStatusBar()
+        splitter.SplitVertically(panel1, panel2)
+        self.Centre()
+        self.Show(True)
+
+
+    def ExitApp(self, event):
+        self.Close()
+
+
+app = wx.App()
+Reader(None, -1, 'Reader')
+app.MainLoop()
+</pre>
+
+<p>
+The previous example showed a <code>wx.ListCtrl</code> in a report view. With no 
+headers. We shall create our own headers. We show two <code>wx.ListCtrl</code> 
+widgets. One is on the right side and the other one on the left side of the application. 
+</p>
+
+<pre class="explanation">
+splitter = wx.SplitterWindow(self, -1, style=wx.SP_LIVE_UPDATE|wx.SP_NOBORDER)
+...
+splitter.SplitVertically(panel1, panel2)
+</pre>
+
+<p>
+The splitter will split the main window into two vertical parts. The 
+splitter will show two panels. Those two panels will have another 
+two panels. They create <code>Feeds</code> and <code>Articles</code> headers. 
+The rest of the space will be occupied by our two <code>wx.ListCtrl</code> widgets.
+</p>
+
+<pre class="explanation">
+list2 = ListCtrlRight(panel22, -1)
+list2.SetName('ListControlOnRight')
+</pre>
+
+<p>
+When we create <code>ListCtrlRight</code> object, we  give it a name 
+<code>ListControlOnRight</code>. This is because we need <code>ListCtrlRight</code>  
+and <code>ListCtrlLeft</code> two widgets to communicate. 
+</p>
+
+<pre class="explanation">
+def OnSelect(self, event):
+    window = self.parent.GetGrandParent().FindWindowByName('ListControlOnRight')
+    index = event.GetIndex()
+    window.LoadData(index)
+</pre>
+
+<p>
+This code is in  <code>ListCtrlLeft</code> class. Here we locate the 
+<code>ListCtrlRight</code> object and call its <code>LoadData()</code> method.
+</p>
+
+<pre class="explanation">
+def LoadData(self, index):
+    self.DeleteAllItems()
+    for i in range(3):
+        self.InsertStringItem(0, articles[index][i])
+</pre>
+
+<p>
+The <code>LoadData()</code> method first clears all items. Then it inserts the 
+article names from the globally defined articles list. The index has been passed. 
+</p>
+
+<pre class="explanation">
+def OnSize(self, event):
+    size = self.parent.GetSize()
+    self.SetColumnWidth(0, size.x-5)
+    event.Skip()
+</pre>
+
+<p>
+Both <code>wx.ListCtrl</code>s have only one column. Here we ensure that the size 
+of the column equals to size of the parent panel. 
+The application would not look nice otherwise. Why do we extract 5px? This 
+number is a kind of magic number. If we extract exactly 5px, the horizotal 
+scrollbars do not appear. On other platforms, the number might be different.
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/reader.png">
+<figcaption>Figure: Reader</figcaption>
+</figure>
+
+
+
+<h2>CheckListCtrl</h2>
+
+<p>
+It is quite common to see applications having check boxes inside list 
+controls. For example a packaging application like Synaptic or KYUM.
+</p>
+
+<p>
+From the programmer's point of view, those checkboxes are simple images. 
+There are two states. Checked and unchecked. For both situations we have a 
+unique image. We do not have to implement the functionality. It has been 
+already coded. The code is in <code>CheckListCtrlMixin</code>. 
+</p>
+
+
+<pre class="code">
+#!/usr/bin/python
+
+# repository.py
+
+import wx
+import sys
+from wx.lib.mixins.listctrl import CheckListCtrlMixin, ListCtrlAutoWidthMixin
+
+packages = [('abiword', '5.8M', 'base'), ('adie', '145k', 'base'),
+    ('airsnort', '71k', 'base'), ('ara', '717k', 'base'), ('arc', '139k', 'base'),
+    ('asc', '5.8M', 'base'), ('ascii', '74k', 'base'), ('ash', '74k', 'base')]
+
+class CheckListCtrl(wx.ListCtrl, CheckListCtrlMixin, ListCtrlAutoWidthMixin):
+    def __init__(self, parent):
+        wx.ListCtrl.__init__(self, parent, -1, style=wx.LC_REPORT | wx.SUNKEN_BORDER)
+        CheckListCtrlMixin.__init__(self)
+        ListCtrlAutoWidthMixin.__init__(self)
+
+
+class Repository(wx.Frame):
+    def __init__(self, parent, id, title):
+        wx.Frame.__init__(self, parent, id, title, size=(450, 400))
+
+        panel = wx.Panel(self, -1)
+
+        vbox = wx.BoxSizer(wx.VERTICAL)
+        hbox = wx.BoxSizer(wx.HORIZONTAL)
+
+        leftPanel = wx.Panel(panel, -1)
+        rightPanel = wx.Panel(panel, -1)
+
+        self.log = wx.TextCtrl(rightPanel, -1, style=wx.TE_MULTILINE)
+        self.list = CheckListCtrl(rightPanel)
+        self.list.InsertColumn(0, 'Package', width=140)
+        self.list.InsertColumn(1, 'Size')
+        self.list.InsertColumn(2, 'Repository')
+
+        for i in packages:
+            index = self.list.InsertStringItem(sys.maxint, i[0])
+            self.list.SetStringItem(index, 1, i[1])
+            self.list.SetStringItem(index, 2, i[2])
+
+        vbox2 = wx.BoxSizer(wx.VERTICAL)
+
+        sel = wx.Button(leftPanel, -1, 'Select All', size=(100, -1))
+        des = wx.Button(leftPanel, -1, 'Deselect All', size=(100, -1))
+        apply = wx.Button(leftPanel, -1, 'Apply', size=(100, -1))
+
+
+        self.Bind(wx.EVT_BUTTON, self.OnSelectAll, id=sel.GetId())
+        self.Bind(wx.EVT_BUTTON, self.OnDeselectAll, id=des.GetId())
+        self.Bind(wx.EVT_BUTTON, self.OnApply, id=apply.GetId())
+
+        vbox2.Add(sel, 0, wx.TOP, 5)
+        vbox2.Add(des)
+        vbox2.Add(apply)
+
+        leftPanel.SetSizer(vbox2)
+
+        vbox.Add(self.list, 1, wx.EXPAND | wx.TOP, 3)
+        vbox.Add((-1, 10))
+        vbox.Add(self.log, 0.5, wx.EXPAND)
+        vbox.Add((-1, 10))
+
+        rightPanel.SetSizer(vbox)
+
+        hbox.Add(leftPanel, 0, wx.EXPAND | wx.RIGHT, 5)
+        hbox.Add(rightPanel, 1, wx.EXPAND)
+        hbox.Add((3, -1))
+
+        panel.SetSizer(hbox)
+
+        self.Centre()
+        self.Show(True)
+
+    def OnSelectAll(self, event):
+        num = self.list.GetItemCount()
+        for i in range(num):
+            self.list.CheckItem(i)
+
+    def OnDeselectAll(self, event):
+        num = self.list.GetItemCount()
+        for i in range(num):
+            self.list.CheckItem(i, False)
+
+    def OnApply(self, event):
+        num = self.list.GetItemCount()
+        for i in range(num):
+            if i == 0: self.log.Clear()
+            if self.list.IsChecked(i):
+                self.log.AppendText(self.list.GetItemText(i) + '\n')
+
+app = wx.App()
+Repository(None, -1, 'Repository')
+app.MainLoop()
+</pre>
+
+
+<figure>
+<img src="../../img/gui/wxpython/repository.png">
+<figcaption>Figure: Repository</figcaption>
+</figure>
+
+
+<pre class="explanation">
+class CheckListCtrl(wx.ListCtrl, CheckListCtrlMixin, ListCtrlAutoWidthMixin):
+    def __init__(self, parent):
+        wx.ListCtrl.__init__(self, parent, -1, style=wx.LC_REPORT | wx.SUNKEN_BORDER)
+        CheckListCtrlMixin.__init__(self)
+        ListCtrlAutoWidthMixin.__init__(self)
+</pre>
+
+<p>
+wxPython enables multiple inheritance. Here we inherit from three different classes.
+</p>
+
+<pre class="explanation">
+def OnSelectAll(self, event):
+    num = self.list.GetItemCount()
+    for i in range(num):
+        self.list.CheckItem(i)
+</pre>
+
+<p>
+Here we can see multiple inheritance in action. We can call two methods from 
+two different classes on our <code>self.list</code> object. The <code>GetItemCount()</code> 
+method is located in <code>CheckListCtrl</code> class and the <code>CheckItem()</code> method 
+is in <code>CheckListCtrlMixin</code> class.
+</p>
+
+
+<p>
+In this part of the wxPython tutorial, we covered several advanced widgets.
+</p>
+
+<div class="hor">
+<script async src="../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- horizontal -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:468px;height:60px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="1734478269"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<footer>
+
+<nav class="center">
+<span class="botNavItem"><a href="http://zetcode.com/">Home</a></span> ‡ <span class="botNavItem"><a href="../index.html">Contents</a></span> ‡ 
+<span class="botNavItem"><a href="#Top">Top of Page</a></span>
+</nav>
+
+<div class="signature">
+<a href="http://zetcode.com/">ZetCode</a> last modified June 3, 2007  <span class="copyright">&copy; 2007 - 2015 Jan Bodnar</span>
+</div>
+
+</footer>
+
+</div> <!-- content -->
+
+</div> <!-- container -->
+
+</body>
+
+<!-- Mirrored from zetcode.com/wxpython/advanced/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Aug 2015 19:21:52 GMT -->
+</html>
+

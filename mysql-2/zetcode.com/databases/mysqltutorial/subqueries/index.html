@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from zetcode.com/databases/mysqltutorial/subqueries/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Jul 2015 02:47:03 GMT -->
+<head>
+<title>MySQL subqueries</title>
+<link rel="stylesheet" href="../../../cfg/format2.css" type="text/css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="MySQL, subquery, tutorial, databases, SQL">
+<meta name="description" content="This part of the MySQL tutorial covers subqueries.">
+<meta name="author" content="Jan Bodnar">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div id="wide_ad" class="ltow">
+<script async src="../../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- 160x600, August 2011 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:600px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="2484182563"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<div class="content">
+
+
+<header>
+
+<nav>
+<a href="http://zetcode.com/" title="Home">Home</a>&#160;
+<a href="../index.html">Contents</a>
+</nav>
+
+</header>
+
+
+<h1>MySQL subqueries</h1>
+
+
+<p>
+In this part of the MySQL tutorial, we will mention subqueries in MySQL. 
+</p>
+
+<div class="med_rec">
+<script async src="../../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- NewSquare -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:250px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="0364418177"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<p>
+A <em>subquery</em> is a query in a query. It is also called an inner query or 
+a nested query. A subquery can be used anywhere an expression is allowed. 
+It is a query expression enclosed in parentheses. Subqueries can be used
+with <code>SELECT</code>, <code>INSERT</code>, <code>UPDATE</code>, or 
+<code>DELETE</code> statements.
+</p>
+
+
+<p>
+There is more than one way to execute an SQL task. Many subqueries can be 
+replaced by SQL joins. SQL joins are usually faster. 
+</p>
+
+<p>
+In this chapter, we will be using the following tables:
+</p>
+
+
+<pre class="code">
+mysql> SELECT * FROM Cars;
++----+------------+--------+
+| Id | Name       | Cost   |
++----+------------+--------+
+|  1 | Audi       |  52642 |
+|  2 | Mercedes   |  57127 |
+|  3 | Skoda      |   9000 |
+|  4 | Volvo      |  29000 |
+|  5 | Bentley    | 350000 |
+|  6 | Citroen    |  21000 |
+|  7 | Hummer     |  41400 |
+|  8 | Volkswagen |  21600 |
++----+------------+--------+
+</pre>
+
+<p>
+The data from the <code>Cars</code> table.
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM Customers; SELECT * FROM Reservations;
++------------+-------------+
+| CustomerId | Name        |
++------------+-------------+
+|          1 | Paul Novak  |
+|          2 | Terry Neils |
+|          3 | Jack Fonda  |
+|          4 | Tom Willis  |
++------------+-------------+
+4 rows in set (0.00 sec)
+
++----+------------+------------+
+| Id | CustomerId | Day        |
++----+------------+------------+
+|  1 |          1 | 2009-11-22 |
+|  2 |          2 | 2009-11-28 |
+|  3 |          2 | 2009-11-29 |
+|  4 |          1 | 2009-11-29 |
+|  5 |          3 | 2009-12-02 |
++----+------------+------------+
+5 rows in set (0.00 sec)
+</pre>
+
+<p>
+We recapitulate what we have in the <code>Customers</code> and 
+<code>Reservations</code> tables. Subqueries are often performed 
+on tables, which have some relationship. 
+</p>
+
+
+<h3>Subquery with the INSERT statement</h3>
+
+<p>
+We want to create a copy of the <code>Cars</code> table. Into another 
+table called Cars2. We will create a subquery for this.
+</p>
+
+<pre class="code">
+mysql> CREATE TABLE Cars2(Id INT NOT NULL PRIMARY KEY, 
+    -> Name VARCHAR(50) NOT NULL, Cost INT NOT NULL);
+</pre>
+
+<p>
+We create a new <code>Cars2</code> table with the same columns and 
+datatypes as the <code>Cars</code> table. To find out how a table was 
+created, we can use the <code>SHOW CREATE TABLE</code> statement. 
+</p>
+
+<pre class="code">
+mysql> INSERT INTO Cars2 SELECT * FROM Cars;
+</pre>
+
+<p>
+This is a simple subquery. We insert all rows from the 
+<code>Cars</code> table into the <code>Cars2</code> table. 
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM Cars2;
++----+------------+--------+
+| Id | Name       | Cost   |
++----+------------+--------+
+|  1 | Audi       |  52642 |
+|  2 | Mercedes   |  57127 |
+|  3 | Skoda      |   9000 |
+|  4 | Volvo      |  29000 |
+|  5 | Bentley    | 350000 |
+|  6 | Citroen    |  21000 |
+|  7 | Hummer     |  41400 |
+|  8 | Volkswagen |  21600 |
++----+------------+--------+
+</pre>
+
+<p>
+The data was copied to a new <code>Cars2</code> table. 
+</p>
+
+
+<h3>Scalar subqueries</h3>
+
+<p>
+A scalar subquery returns a single value. 
+</p>
+
+
+<pre class="code">
+mysql> SELECT Name FROM Customers WHERE 
+    -> CustomerId=(SELECT CustomerId FROM Reservations WHERE Id=5);
++------------+
+| Name       |
++------------+
+| Jack Fonda |
++------------+
+</pre>
+
+<p>
+The query enclosed in parentheses is the subquery. It returns one 
+single scalar value. The returned value is then used in the outer query. 
+In this scalar subquery, we return the name of the customer from the 
+<code>Customers</code> table, whose reservation has Id equal to 5 in the 
+<code>Reservations</code> table. 
+</p>
+
+
+<h3>Table subqueries</h3>
+
+<p>
+A table subquery returns a result table of zero or more rows. 
+</p>
+
+<pre class="code">
+mysql> SELECT Name FROM Customers WHERE CustomerId IN    
+    -> (SELECT DISTINCT CustomerId FROM Reservations);
++-------------+
+| Name        |
++-------------+
+| Paul Novak  |
+| Terry Neils |
+| Jack Fonda  |
++-------------+
+</pre>
+
+<p>
+The above query returns the names of the customers, who made some
+reservations. The inner query returns customer Ids from the 
+<code>Reservations</code> table. We use the <code>IN</code> predicate 
+to select those names of customers, who have their <code>CustomerId</code> 
+returned from the inner select query. 
+</p>
+
+<pre class="code">
+mysql> SELECT DISTINCT Name FROM Customers JOIN Reservations
+    -> ON Customers.CustomerId=Reservations.CustomerId;
++-------------+
+| Name        |
++-------------+
+| Paul Novak  |
+| Terry Neils |
+| Jack Fonda  |
++-------------+
+</pre>
+
+<p>
+The previous subquery can be rewritten using SQL join. 
+</p>
+
+
+<h3>Correlated subqueries</h3>
+
+<p>
+A correlated subquery is a subquery that uses values from the outer query in 
+its <code>WHERE</code> clause. The subquery is evaluated once for each row 
+processed by the outer query.
+</p>
+
+<pre class="code">
+mysql> SELECT Name FROM Cars WHERE Cost &lt;
+    -> (SELECT AVG(Cost) FROM Cars);
++------------+
+| Name       |
++------------+
+| Audi       |
+| Mercedes   |
+| Skoda      |
+| Volvo      |
+| Citroen    |
+| Hummer     |
+| Volkswagen |
++------------+
+</pre>
+
+<p>
+In the above correlated subquery, we return all cars that cost below the
+average price of all cars in the table. 
+</p>
+
+
+<h3>Subqueries with EXISTS, NOT EXISTS</h3>
+
+<p>
+If a subquery returns any values, then the predicate <code>EXISTS</code> returns
+<code>TRUE</code>, and <code>NOT EXISTS</code> <code>FALSE</code>. 
+</p>
+
+<pre class="code">
+mysql> SELECT Name FROM Customers WHERE EXISTS
+    -> (SELECT * FROM Reservations WHERE
+    -> Customers.CustomerId=Reservations.CustomerId);
++-------------+
+| Name        |
++-------------+
+| Paul Novak  |
+| Terry Neils |
+| Jack Fonda  |
++-------------+
+</pre>
+
+<p>
+In the above SQL statement we select all customers' names, which 
+have an entry in the <code>Reservations</code> table. 
+</p>
+
+<pre class="code">
+mysql> SELECT Name FROM Customers WHERE NOT EXISTS    
+    -> (SELECT * FROM Reservations WHERE 
+    -> Customers.CustomerId=Reservations.CustomerId);
++------------+
+| Name       |
++------------+
+| Tom Willis |
++------------+
+</pre>
+
+<p>
+In this query, we return all customers that do not have an 
+entry in the Reservations table. Both SQL queries are
+correlated queries. 
+</p>
+
+
+<p>
+This part of the MySQL tutorial was dedicated to MySQL subqueries.
+</p>
+
+
+<footer>
+
+<nav class="center">
+<span class="botNavItem"><a href="http://zetcode.com/">Home</a></span> ‡ <span class="botNavItem"><a href="../index.html">Contents</a></span> ‡ 
+<span class="botNavItem"><a href="#">Top of Page</a></span>
+</nav>
+
+<div class="signature">
+<a href="http://zetcode.com/">ZetCode</a> last modified February 1, 2011  <span class="copyright">&copy; 2007 - 2015 Jan Bodnar</span>
+</div>
+
+</footer>
+
+</div> <!-- content -->
+
+</div> <!-- container -->
+
+</body>
+
+<!-- Mirrored from zetcode.com/databases/mysqltutorial/subqueries/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Jul 2015 02:47:03 GMT -->
+</html>
+
+

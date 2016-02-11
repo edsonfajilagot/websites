@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from zetcode.com/wxpython/customwidgets/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Aug 2015 19:22:12 GMT -->
+<head>
+<title>Creating custom widgets in wxPython</title>
+<link rel="stylesheet" href="../../cfg/format2.css" type="text/css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="wxPython, creating custom widgets">
+<meta name="description" content="In this part of the wxPython tutorial,
+we create custom widgets.">
+<meta name="author" content="Jan Bodnar">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div id="wide_ad" class="ltow">
+<script async src="../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- 160x600, August 2011 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:600px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="2484182563"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<div class="content">
+
+
+<header>
+
+<nav>
+<a href="http://zetcode.com/" title="Home">Home</a>&#160;
+<a href="../index.html">Contents</a>
+</nav>
+
+</header>
+
+
+<h1>Creating custom widgets</h1>
+
+
+<p>
+Toolkits usually provide only the most common widgets like buttons, 
+text widgets, scrollbars, sliders etc. No toolkit can provide all 
+possible widgets. wxPython has many widgets; more specialised 
+widgets are created by client programmers.
+</p>
+
+<div class="med_rec">
+<script async src="../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- NewSquare -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:250px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="0364418177"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div> 
+
+
+<p>
+Custom widgets are created in two ways: either we modify or enhance an existing 
+widget, or we create a custom widget from scratch.
+</p>
+
+
+<h2>A hyperlink widget</h2>
+
+<p>
+The first example will create a hyperlink. The hyperlink widget will be based 
+on an existing <code>wx.lib.stattext.GenStaticText</code> widget. 
+</p> 
+
+<pre class="code">
+#!/usr/bin/python
+
+
+import wx
+from wx.lib.stattext import GenStaticText
+import webbrowser
+
+        
+class Link(GenStaticText):
+           
+    def __init__(self, *args, **kw):
+        super(Link, self).__init__(*args, **kw)         
+
+        self.font1 = wx.Font(9, wx.SWISS, wx.NORMAL, wx.BOLD, True, 'Verdana')
+        self.font2 = wx.Font(9, wx.SWISS, wx.NORMAL, wx.BOLD, False, 'Verdana')
+
+        self.SetFont(self.font2)
+        self.SetForegroundColour('#0000ff')
+
+        self.Bind(wx.EVT_MOUSE_EVENTS, self.OnMouseEvent)
+        self.Bind(wx.EVT_MOTION, self.OnMouseEvent)
+        
+    def SetUrl(self, url):
+        
+        self.url = url
+
+
+    def OnMouseEvent(self, e):
+        
+        if e.Moving():
+            
+            self.SetCursor(wx.StockCursor(wx.CURSOR_HAND))
+            self.SetFont(self.font1)
+
+        elif e.LeftUp():
+            
+            webbrowser.open_new(self.url)
+
+        else:
+            self.SetCursor(wx.NullCursor)
+            self.SetFont(self.font2)
+
+        e.Skip()
+
+
+class Example(wx.Frame):
+           
+    def __init__(self, *args, **kw):
+        super(Example, self).__init__(*args, **kw) 
+        
+        self.InitUI()
+        
+    def InitUI(self):    
+
+        panel = wx.Panel(self)
+        lnk = Link(panel, label='ZetCode', pos=(10, 60))
+        lnk.SetUrl('http://www.zetcode.com')
+        
+        motto = GenStaticText(panel, label='Knowledge only matters', pos=(10, 30))
+        motto.SetFont(wx.Font(9, wx.SWISS, wx.NORMAL, wx.BOLD, False, 'Verdana'))
+
+        self.SetSize((220, 150))
+        self.SetTitle('A Hyperlink')
+        self.Centre()
+        self.Show(True)
+
+
+def main():
+    
+    ex = wx.App()
+    Example(None)
+    ex.MainLoop()    
+
+
+if __name__ == '__main__':
+    main()   
+</pre>
+
+<p>
+This hyperlink widget is based on an existing widget. In this example we do not 
+draw anything, we just use an existing widget, which we modify a bit.
+</p>
+
+<pre class="explanation">
+from wx.lib.stattext import GenStaticText
+import webbrowser
+</pre>
+
+<p>
+Here we import the base widget from which we derive our hyperlink widget and 
+the webbrowser module. The webbrowser module is a standard Python module. 
+We will use it to open links in a default browser. 
+</p>
+
+<pre class="explanation">
+self.SetFont(self.font2)
+self.SetForegroundColour('#0000ff')
+</pre>
+
+<p>
+The idea behind creating a hyperlink widget is simple. We inherit from a 
+base <code>wx.lib.stattext.GenStaticText</code> widget class. So we have a text 
+widget. Then we modify it a bit. We change the font and the colour of the text. 
+</p>
+
+<pre class="explanation">
+if e.Moving():
+    
+    self.SetCursor(wx.StockCursor(wx.CURSOR_HAND))
+    self.SetFont(self.font1)
+</pre>
+
+<p>
+If we hover a mouse pointer over the link, we change the font to underlined 
+and also change the mouse pointer to a hand cursor. 
+</p>
+
+
+<pre class="explanation">
+elif e.LeftUp():
+    
+    webbrowser.open_new(self.url)
+</pre>
+
+<p>
+If we left click on the link, we open the link in a default browser.
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/link.png" alt="Link widget">
+<figcaption>Figure: A Hyperlink widget</figcaption>
+</figure>
+
+
+
+<h2>Burning widget</h2>
+
+<p>
+This is an example of a widget that we create from a ground up. We put a 
+<code>wx.Panel</code> on the bottom of the window and draw the entire widget manually.
+If you have ever burned a CD or a DVD, you already saw this kind of widget. 
+</p>
+
+<p>
+To avoid flicker on Windows, use need to use double buffering. 
+</p>
+
+
+<pre class="code">
+#!/usr/bin/python
+
+# burning.py
+
+import wx
+
+class Widget(wx.Panel):
+    def __init__(self, parent, id):
+        wx.Panel.__init__(self, parent, id, size=(-1, 30), style=wx.SUNKEN_BORDER)
+        
+        self.parent = parent
+        self.font = wx.Font(9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL,
+            wx.FONTWEIGHT_NORMAL, False, 'Courier 10 Pitch')
+
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
+        self.Bind(wx.EVT_SIZE, self.OnSize)
+
+
+    def OnPaint(self, event):
+    
+        num = range(75, 700, 75)
+        dc = wx.PaintDC(self)
+        dc.SetFont(self.font)
+        w, h = self.GetSize()
+
+        self.cw = self.parent.GetParent().cw
+
+        step = int(round(w / 10.0))
+
+        j = 0
+
+        till = (w / 750.0) * self.cw
+        full = (w / 750.0) * 700
+
+
+        if self.cw >= 700:
+            dc.SetPen(wx.Pen('#FFFFB8')) 
+            dc.SetBrush(wx.Brush('#FFFFB8'))
+            dc.DrawRectangle(0, 0, full, 30)
+            dc.SetPen(wx.Pen('#ffafaf'))
+            dc.SetBrush(wx.Brush('#ffafaf'))
+            dc.DrawRectangle(full, 0, till-full, 30)
+        else: 
+            dc.SetPen(wx.Pen('#FFFFB8'))
+            dc.SetBrush(wx.Brush('#FFFFB8'))
+            dc.DrawRectangle(0, 0, till, 30)
+
+
+        dc.SetPen(wx.Pen('#5C5142'))
+        
+        for i in range(step, 10*step, step):
+        
+            dc.DrawLine(i, 0, i, 6)
+            width, height = dc.GetTextExtent(str(num[j]))
+            dc.DrawText(str(num[j]), i-width/2, 8)
+            j = j + 1
+
+    def OnSize(self, event):
+        self.Refresh()
+
+
+class Burning(wx.Frame):
+    def __init__(self, parent, id, title):
+        wx.Frame.__init__(self, parent, id, title, size=(330, 200))
+
+        self.cw = 75
+
+        panel = wx.Panel(self, -1)
+        CenterPanel = wx.Panel(panel, -1)
+        self.sld = wx.Slider(CenterPanel, -1, 75, 0, 750, (-1, -1), 
+            (150, -1), wx.SL_LABELS)
+
+        vbox = wx.BoxSizer(wx.VERTICAL)
+        hbox = wx.BoxSizer(wx.HORIZONTAL)
+        hbox2 = wx.BoxSizer(wx.HORIZONTAL)
+        hbox3 = wx.BoxSizer(wx.HORIZONTAL)
+
+        self.wid = Widget(panel, -1)
+        hbox.Add(self.wid, 1, wx.EXPAND)
+
+        hbox2.Add(CenterPanel, 1, wx.EXPAND)
+        hbox3.Add(self.sld, 0, wx.TOP, 35)
+
+        CenterPanel.SetSizer(hbox3)
+
+        vbox.Add(hbox2, 1, wx.EXPAND)
+        vbox.Add(hbox, 0, wx.EXPAND)
+
+
+        self.Bind(wx.EVT_SCROLL, self.OnScroll)
+
+        panel.SetSizer(vbox)
+
+        self.sld.SetFocus()
+
+        self.Centre()
+        self.Show(True)
+
+    def OnScroll(self, event):
+        self.cw = self.sld.GetValue()
+        self.wid.Refresh()
+
+
+app = wx.App()
+Burning(None, -1, 'Burning widget')
+app.MainLoop()
+</pre>
+
+
+<p>
+All the important code resides in the <code>OnPaint()</code> method of the Widget class. 
+This widget shows graphically the total capacity of a medium and the free space 
+available to us. The widget is controlled by a slider widget. The minimum value 
+of our custom widget is 0, the maximum is 750. If we reach value 700, we began 
+drawing in red colour. This normally indicates overburning.
+</p>
+
+<pre class="explanation">
+w, h = self.GetSize()
+self.cw = self.parent.GetParent().cw
+...
+till = (w / 750.0) * self.cw
+full = (w / 750.0) * 700
+</pre>
+
+<p>
+We draw the widget dynamically. The greater the window, the greater the 
+burning widget. And vice versa. That is why we must calculate the size of 
+the <code>wx.Panel</code> onto which we draw the custom widget.
+The till parameter determines the total size to be drawn. This value comes from 
+the slider widget. It is a proportion of the whole area. The full parameter 
+determines the point, where we begin to draw in red colour. 
+Notice the use of floating point arithmetics. This is to achieve greater precision. 
+</p>
+
+<p>
+The actual drawing consists of three steps. We draw the yellow or red and 
+yellow rectangle. Then we draw the vertical lines, which divide the widget 
+into several parts. Finally, we draw the numbers, which indicate the capacity 
+of the medium.
+</p>
+
+<pre class="explanation">
+def OnSize(self, event):
+    self.Refresh()
+</pre>
+
+<p>
+Every time the window is resized, we refresh the widget. This causes the 
+widget to repaint itself. 
+</p>
+
+<pre class="explanation">
+def OnScroll(self, event):
+    self.cw = self.sld.GetValue()
+    self.wid.Refresh()
+</pre>
+
+<p>
+If we scroll the thumb of the slider, we get the actual value and save it into the 
+<code>self.cw</code> parameter. This value is used, when the burning widget is drawn. 
+Then we cause the widget to be redrawn. 
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/burning.jpg" alt="Burning widget on Linux"> 
+<figcaption>Figure: Burning widget on Linux</figcaption>
+</figure>
+
+<figure>
+<img src="../../img/gui/wxpython/burningw.jpg" alt="Burning widget on Windows">
+<figcaption>Figure: Burning widget on Windows</figcaption>
+</figure>
+
+
+<h2>The CPU widget</h2>
+
+<p>
+There are system applications that measure system resources. The temperature, 
+memory and CPU consuption etc. By displaying 
+a simple text like CPU 54% you probably won't impress your users. Specialized 
+widgets are created to make the application more appealing. 
+</p>
+
+<p>
+The following widget is often used in system applications.
+</p>
+
+<p>
+A remark for windows users: to avoid flicker, we use double buffering. We change 
+the size of the application and the width of the slider. 
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+
+# cpu.py
+
+import wx
+
+
+class CPU(wx.Panel):
+    def __init__(self, parent, id):
+        wx.Panel.__init__(self, parent, id, size=(80, 110))
+
+        self.parent = parent
+        self.SetBackgroundColour('#000000')
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
+
+
+    def OnPaint(self, event):
+
+        dc = wx.PaintDC(self)
+
+        dc.SetDeviceOrigin(0, 100)
+        dc.SetAxisOrientation(True, True)
+
+        pos = self.parent.GetParent().GetParent().sel
+        rect = pos / 5
+
+        for i in range(1, 21):
+            if i > rect:
+                dc.SetBrush(wx.Brush('#075100'))
+                dc.DrawRectangle(10, i*4, 30, 5)
+                dc.DrawRectangle(41, i*4, 30, 5)
+            else:
+                dc.SetBrush(wx.Brush('#36ff27'))
+                dc.DrawRectangle(10, i*4, 30, 5)
+                dc.DrawRectangle(41, i*4, 30, 5)
+
+
+class CPUWidget(wx.Frame):
+    def __init__(self, parent, id, title):
+        wx.Frame.__init__(self, parent, id, title, size=(190, 140))
+
+        self.sel = 0
+
+        panel = wx.Panel(self, -1)
+        centerPanel = wx.Panel(panel, -1)
+
+        self.cpu = CPU(centerPanel, -1)
+
+        hbox = wx.BoxSizer(wx.HORIZONTAL)
+        self.slider = wx.Slider(panel, -1, self.sel, 0, 100, (-1, -1), (25, 90), 
+		wx.VERTICAL | wx.SL_LABELS | wx.SL_INVERSE)
+        self.slider.SetFocus()
+
+        hbox.Add(centerPanel, 0,  wx.LEFT | wx.TOP, 20)
+        hbox.Add(self.slider, 0, wx.LEFT | wx.TOP, 23)
+
+
+        self.Bind(wx.EVT_SCROLL, self.OnScroll)
+
+        panel.SetSizer(hbox)
+
+        self.Centre()
+        self.Show(True)
+
+
+    def OnScroll(self, event):
+        self.sel = event.GetInt()
+        self.cpu.Refresh()
+
+
+app = wx.App()
+CPUWidget(None, -1, 'cpu')
+app.MainLoop()
+</pre>
+
+<p>
+Creating this widget is quite simple. We create a black panel. 
+Then we draw small rectangles onto this panel.
+The colour of the rectangles depend on the value of the slider. 
+The colour can be dark green or bright green.
+</p>
+
+<pre class="explanation">
+dc.SetDeviceOrigin(0, 100)
+dc.SetAxisOrientation(True, True)
+</pre>
+
+<p>
+Here we change the default coordinate system to cartesian. This is 
+to make the drawing intuitive. 
+</p>
+
+<pre class="explanation">
+pos = self.parent.GetParent().GetParent().sel
+rect = pos / 5
+</pre>
+
+<p>
+Here we get the value of the sizer.  We have 20 rectangles in each column. 
+The slider has 100 numbers. The rect parameter makes a convertion from slider 
+values into rectangles that will be drawn in bright green colour. 
+</p>
+
+<pre class="explanation">
+for i in range(1, 21):
+    if i > rect:
+        dc.SetBrush(wx.Brush('#075100'))
+        dc.DrawRectangle(10, i*4, 30, 5)
+        dc.DrawRectangle(41, i*4, 30, 5)
+    else:
+        dc.SetBrush(wx.Brush('#36ff27'))
+        dc.DrawRectangle(10, i*4, 30, 5)
+        dc.DrawRectangle(41, i*4, 30, 5)
+</pre>
+
+<p>
+Here we draw 40 rectangles, 20 in each column. If the number of the rectangle 
+being drawn is greater than the converted rect value, we draw it in a dark 
+green colour. Otherwise in bright green.
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/cpuwidget.png" alt="CPU widget"> 
+<figcaption>Figure: CPU widget</figcaption>
+</figure>
+
+
+<p>
+In this chapter, we have created custom widgets in wxPython.
+</p>
+
+<footer>
+
+<nav class="center">
+<span class="botNavItem"><a href="http://zetcode.com/">Home</a></span> ‡ <span class="botNavItem"><a href="../index.html">Contents</a></span> ‡ 
+<span class="botNavItem"><a href="#">Top of Page</a></span>
+</nav>
+
+<div class="signature">
+<a href="http://zetcode.com/">ZetCode</a> last modified November 2, 2012  <span class="copyright">&copy; 2007 - 2015 Jan Bodnar</span>
+</div>
+
+</footer>
+
+</div> <!-- content -->
+
+</div> <!-- container -->
+
+</body>
+
+<!-- Mirrored from zetcode.com/wxpython/customwidgets/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Aug 2015 19:22:15 GMT -->
+</html>

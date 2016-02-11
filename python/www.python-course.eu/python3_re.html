@@ -1,0 +1,951 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from www.python-course.eu/python3_re.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:09:03 GMT -->
+<head>
+
+<!-- Dieses Tag in den Head-Bereich oder direkt vor dem schlieÃŸenden Body-Tag einfÃ¼gen -->
+<script type="text/javascript" src="../apis.google.com/js/plusone.js"></script>
+
+
+
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "../connect.facebook.net/en_GB/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script><title>Python3 Tutorial: Regular Expression</title>
+<meta http-equiv="content-type" content="text/html; charset="ISO-8859-1">
+<meta name="Description" content="General introduction into Regular Expression and their usage in Python" />
+<meta name="Keywords" content="Python, introduction, regular expression, usage" />
+
+<link href="favicon.ico" rel="shortcut icon">
+
+<link href="moderna.css" rel="stylesheet" type="text/css" />
+<link href="moderna_print.css" media="print" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+<div id="container">
+
+<div id="banner">
+<!-- <a href="impressum.php">Impressum</a> | <a href="mailto:">contact</a> | --><h1>Python Course</h1>
+
+</div>
+
+	<!-- Begin Top Menu -->
+<ul id="navlist">
+<li><a href="index-2.html" >Home</a></li><li><a href="course.html" >Python 2 Tutorial</a></li><li class="active"><a id="current" href="python3_course.html" >Python 3 Tutorial</a></li><li><a href="advanced_topics.html" >Advanced Topics</a></li><li><a href="python_books.html" >Python Books</a></li><li><a href="python_tkinter.html" >Tkinter Tutorial</a></li><li><a href="contact.html" rel="nofollow">Contact</a></li>                          
+</ul>
+	<!-- End Top Menu -->
+<div id="sidebar-a">
+<img class="border" src="images/RE_110.png" alt="box" />    <h2>Python 3 Tutorial</h2>
+
+<div class="menu">
+
+<ul>
+<li><a href="python3_history_and_philosophy.html">The Origins of Python</a></li><li><a href="python3_interactive.html">Starting with Python: The Interactive Shell</a></li><li><a href="python3_execute_script.html">Executing a Script</a></li><li><a href="python3_blocks.html">Indentation</a></li><li><a href="python3_variables.html">Data Types and Variables</a></li><li><a href="python3_operators.html">Operators</a></li><li><a href="python3_sequential_data_types.html">Sequential Data Types: Lists and Strings</a></li><li><a href="python3_deep_copy.html">Shallow and Deep Copy</a></li><li><a href="python3_dictionaries.html">Dictionaries</a></li><li><a href="python3_sets_frozensets.html">Sets and Frozen Sets</a></li><li><a href="python3_input.html">input via the keyboard</a></li><li><a href="python3_conditional_statements.html">Conditional Statements</a></li><li><a href="python3_loops.html">Loops, while Loop</a></li><li><a href="python3_for_loop.html">For Loops</a></li><li><a href="python3_print.html">Output with Print</a></li><li><a href="python3_formatted_output.html">Formatted output with string modulo and the format method</a></li><li><a href="python3_functions.html">Functions</a></li><li><a href="python3_recursive_functions.html">Recursion and Recursive Functions</a></li><li><a href="python3_tests.html">Tests, DocTests, UnitTests</a></li><li><a href="python3_memoization.html">Memoization and Decorators</a></li><li><a href="python3_passing_arguments.html">Parameter Passing in Functions</a></li><li><a href="python3_namespaces.html">Namespaces</a></li><li><a href="python3_global_vs_local_variables.html">Global and Local Variables</a></li><li><a href="python3_file_management.html">Read and Write Files</a></li><li><a href="python3_modules_and_modular_programming.html">Modular Programming and Modules</a></li><li><a href="python3_re.html">Regular Expressions</a></li><li><a href="python3_re_advanced.html">Regular Expressions, Advanced</a></li><li><a href="python3_lambda.html">Lambda Operator, Filter, Reduce and Map</a></li><li><a href="python3_list_comprehension.html">List Comprehension</a></li><li><a href="python3_generators.html">Iterators and Generators</a></li><li><a href="python3_exception_handling.html">Exception Handling</a></li><li><a href="python3_object_oriented_programming.html">Object Oriented Programming</a></li><li><a href="python3_class_and_instance_attributes.html">Class and Instance Attributes</a></li><li><a href="python3_properties.html">Properties vs. getters and setters</a></li><li><a href="python3_inheritance.html">Inheritance</a></li><li><a href="python3_multiple_inheritance.html">Multiple Inheritance</a></li><li><a href="python3_magic_methods.html">Magic Methods and Operator Overloading</a></li><li><a href="python3_inheritance_example.html">OOP, Inheritance Example</a></li></ul>
+
+</div>
+
+<p>
+<br>
+<hr>
+<br>
+<h3>Patterns and Expressions</h3>
+<i>"I want freedom for the full expression of my personality."</i>
+<br>
+(Mahatma Gandhi)
+<br><br>
+<i>"Existence is random. Has no pattern save what we imagine after staring at 
+it for too long. No meaning save what we choose to impose."</i>
+<br>
+(Alan Moore)
+<br><br>
+<i>"Life is like an ever-shifting kaleidoscope - a slight change, and all patterns alter."</i>
+<br>
+(Sharon Salzberg)
+<br>
+<h3>A Problem</h3>
+"Some people, when confronted with a problem, think 'I know, I'll use regular
+expressions.'<br>
+Now they have two problems."
+<br>
+(Jamie Zawinski)
+<h3>Another Wisdom</h3>
+"Regular expressions tend to be easier to write than they are to read. 
+This is less of a problem if you are the only one who ever needs to maintain the 
+program (or sed routine, or shell script, or what have you), but if several people 
+need to watch over it, the syntax can turn into more of a hindrance than an aid."
+<br>
+(Stephen Ramsay, University of Virginia)
+<br>
+<hr>
+This website is created by:<br><br>
+<a href="http://www.python-training-courses.com/"><img style="width: 150px;" alt="Python Training Courses"
+		     src="images/toronto_building.jpg"><br><br>Python Training Courses in Toronto, Canada</a>
+<br>
+On site trainings in Europe, Canada and the US.
+<br>
+		     <br><br>		     
+
+</div><div id="sidebar-b"><img style="width: 150px;" alt="Python-Logo"
+		     src="images/python-logo.png"><!-- Dieses Tag dort einfügen, wo die +1-Schaltfläche dargestellt werden soll -->
+<g:plusone></g:plusone>
+<br><br>
+
+<div class="fb-like" data-href="www.python-course.eu" data-send="false" data-layout="button_count" 
+data-width="130" data-show-faces="true" data-action="recommend"></div>
+
+<br><br>
+This topic in German / Deutsche Übersetzung:
+    <a href="http://www.python-kurs.eu/python3_re.php">Reguläre Ausdrücke</a><h3>Python3</h3>This is a tutorial in Python3, but this chapter of our course is available in a version for Python 2.x as well: <a href="re.html">Regular Expression in Python 2.x</a><p>
+<h3>Classroom Training Courses</h3>
+The goal of this website is to provide educational material, 
+allowing you to learn Python on your own.
+Nevertheless, it is faster and more efficient to attend a "real" 
+Python course in a classroom, with
+an experienced trainer. So why not attend one of the live 
+<a href="python_classes.html">Python courses</a> in Paris, London, Berlin, Munich
+or Lake Constance by Bernd Klein, the author of this tutorial?
+<br><br>
+You can also check the   
+<a href="http://www.bodenseo.com/courses.php?topic=Python">Python Training courses
+<img style="width: 150px;" alt="Bodenseo Kurse in Python"
+		     src="images/bodenseo_stairs_to_python.png"></a>
+		     delivered by Bodenseo and Bernd Klein.
+<br><br>
+You can book on-site classes at your company or organization, e.g. in England, Switzerland, Austria, Germany,
+France, Belgium, the Netherlands, Luxembourg, Poland, UK, Italy and other locations in Europe.
+<br><br>
+<h3>Python3</h3>This is a tutorial in Python3, but this chapter of our course is available in a version for Python 2.x as well: <a href="re.html">Regular Expression in Python 2.x</a>
+ </p>
+
+
+
+
+    
+</p></div>
+<div id="content">
+
+<div id="contextlinks">Previous Chapter: <a href="python3_modules_and_modular_programming.html">Modular Programming and Modules</a><br>
+<LINK rel="prev" href="python3_modules_and_modular_programming.html">Next Chapter: <a href="python3_re_advanced.html">Regular Expressions, Advanced</a><br>
+<LINK rel="next" href="python3_re_advanced.html"></div>
+<h2>Regular Expressions</h2>
+<p>
+<img class="imgright" src="images/RE.png" alt="Text with RE" />  
+<br>
+The aim of this chapter of our Python tutorial is to present a detailled and descriptive
+introduction into regular expressions. This introduction will explain the theoretical aspects
+of regular expressions and will show you how to use them in Python scripts.
+<br><br>
+The term "regular expression", sometimes also called regex or regexp, is originated in 
+theoretical computer science. In theoretical computer science they are used to define a language
+family with certain characteristics, the so-called regular languages. A finite state machine (FSM), 
+which accept language defined by a regular expression, 
+exists for every regular expression. You can find an implementation of a 
+(<a href="finite_state_machine.html">Finite State Machine in Python</a>) on our website. 
+<br><br>
+Regular Expressions are used in programming languages to filter texts or textstrings. It's possible 
+to check, if a text or a string matches a regular expression. A great thing about regular expressions:
+The syntax of regular expressions is the same for all programming and script languages, e.g. Python, Perl, 
+Java, SED, AWK and even X#.
+<br><br>
+The first programs which had incorporated the capability to use regular expressions were the Unix
+tools ed (editor), the stream editor sed and the filter grep. 
+<br><br>
+There is another mechanism in operating systems, which shouldn't be mistaken for regular expressions.
+Wildcards, also known as globbing, look very similiar in their syntax to regular expressions. But the
+semantics differs considerably. Globbing is known from many command line shells, like the Bourne shell,
+the Bash shell or even DOS. In Bash e.g. the command "ls *.txt" lists all files (or even directories)
+ending with the suffix .txt; in regular expression notation "*.txt" wouldn't make sense, it would
+have to be written as ".*.txt"
+<br><br>
+<h3>Introduction</h3>
+When we introduced the sequential data types, we got to know the "in" operator. We check in the 
+following example, if the string "easily" is a substring of the string 
+"Regular expressions easily explained!":
+<pre class="small400">
+>>> s = "Regular expressions easily explained!"
+>>> "easily" in s
+True
+>>> 
+</pre>
+
+We show step by step with the following diagrams how this matching is performed:
+<br>We check if the string sub = "abc" 
+<br><br>
+<img src="images/regular_expression2.png" height="30" alt="Substring bzw. Regulärer Ausdruck" />  
+<br><br>
+is contained in the string s = "xaababcbcd"
+<br><br>
+<img src="images/regular_expression1.png" height="30" alt="Ein String in dem ein RE gesucht wird" />
+<br><br>
+By the way, the string sub = "abc" can be seen as a regular expression, just a very simple
+one.
+ <br><br>
+In the first place, we check, if the first positions of the two string match, 
+i.e. s[0] == sub[0].
+<br>
+This is not satisfied in our example. We mark this fact by the colour red: 
+ <br><br>
+<img src="images/regular_expression3.png" height="60" alt="Comparisons of the first positions" />  
+<br><br>
+Then we check, if s[1:4] == sub. This means that we have to check at first, if 
+sub[0] is equal to s[1].
+This is true and we mark it with the colour green. Then we have to compare the next positions.
+s[2] is not equal to sub[1], so we don't have to proceed further with the next position of sub and s:
+<br><br>
+<img src="images/regular_expression4.png" height="60" alt="Nächster Schritt" />  
+<br><br>
+Now we have to check if s[2:5] and sub are equal. The first two positions are equal but not the third:
+<br><br>
+<img src="images/regular_expression5.png" height="60" alt="" />  
+<br><br>
+The following steps should be clear without any explanations:
+<br><br>
+<img src="images/regular_expression6.png" height="60" alt="" />  
+<br><br>
+Finally, we have a complete match with s[4:7] == sub :
+<br><br>
+<img src="images/regular_expression7.png" height="60" alt="" />  
+<br><br>
+<h3>A Simple Regular Expression</h3>
+We already said in the previous section, that we can see the variable "sub" from the introduction 
+as a very simple regular expression.
+<br>
+If you want to use regular expressions in Python, you have to import the re module, which 
+provides methods and functions to deal with regular expressions.
+<br><br>
+<h3>Representing Regular Expressions in Python</h3>
+From other languages you might be used to represent regular expressions within Slashes "/", e.g. 
+that's the way Perl, SED or AWK deals with them. In Python there is no special notation. 
+Regular expressions are represented as normal strings. 
+<br><br>
+But this convenience brings along a small problem: The backslash is a special character used
+in regular expressions, but is also used as an escape character in strings. This implies, that
+Python would first evaluate every backslash of a string and after this - without the necessary
+backslashes - it would be used as a regular expression. One way to prevent this consists in 
+writing every backslash as "\\" and this way keep it for the evaluation of the regular expression.
+This can give rise to extremely clumsy expressions. E.g. a backslash in a regular expression 
+has to be written as a double backslash, because the backslash functions as an escape character
+in regular expressions. Therefore it has to be quoted. The same is true for Python strings. The 
+backslah has to be quoted by a backslash. So, a regular expression to match the Windows path
+"C:\programs" corresponds to a string in regular expression natation with four backslashes, i.e.
+"C:\\\\programs".
+<br><br>
+The best way to overcome this problem consists in marking regular expressions as raw strings. The 
+soluation to our Windows path example looks like as a raw string:
+<br><br>
+<code>r"C:\\programs"</code> 
+<br><br>
+Let's look at another example, which might be quite disturbing for people used to wildcards:
+<br><br>
+<code>r"^a.*\.html$"</code>
+<br><br>
+The regular example of our previous example matches all file names (strings) which start with 
+an "a" and and with ".html". We will explain in the further sections the structure of the 
+example above in detail.  
+<br><br>
+<h3>Syntax of Regular Expressions</h3>
+<img class="imgright" src="images/re_matching_problem.png" alt="Matching Problem" />
+<br>
+<code>r"cat"</code> is a regular expression, though a very simple one without any metacharacters.
+Our RE <code>r"cat"</code> matches for example the following string: 
+"A cat and a rat can't be friends." 
+<br><br>
+Interestingly, the previous example shows already a "favorite" example for a mistake, frequently made
+not only by beginners and novices but also by advanced users of regular expressions. 
+The idea of this example is to match strings containing the word "cat". We are successful 
+with this, but unfortunately we are matching a lot of other words as well. If we match "cats" in a 
+string, that might be still okay, but what about all those words containing ths character sequence
+"cat"? We match words like "education", "communicate", "falsification", "ramifications", "cattle" 
+and many more. This is a case of "over matching", i.e. we receive positive results, which are wrong
+according to the problem we want to solve.
+<br><br>We have illustrated this problem in the diagram on the right side. The dark green Circle C 
+corresponds to the set of "objects" we want to recognize. But instead we match all the elements
+of the set O (blue circle). C is a subset of O.<br> 
+The set U (lightgreen circle) in this diagram is a subset og C. U is a case of "under matching", i.e.
+if the regular expression is not matching all the intended strings. If we try to fix the previous
+RE, so that is don't create over matching, we might try the expression <code>r" cat "</code>.
+These blanks prevent the matching of the above mentioned words like "education", "falsification" 
+and "rammification", but we fall prey to another mistake. What about the string "The cat, called 
+Oscar, climbed on the roof."? The problem is, that we don't expect a comma but only a blank behind
+the word "cat".
+<br><br>
+Before we go on with the description of the syntax of regular expressions, we want to explain 
+how to use them in Python:
+<pre>
+>>> import re
+>>> x = re.search("cat","A cat and a rat can't be friends.")
+>>> print(x)
+<_sre.SRE_Match object at 0x7fd4bf238238>
+>>> x = re.search("cow","A cat and a rat can't be friends.")
+>>> print(x)
+None
+</pre>
+
+In the previous example we had to import the module re to be able to work with regular expressions.
+Then we used the methode search from the re module. This is most probably the most important and the
+most often used methode of this module.
+re.search(expr,s) checks a string s for an occurrence of a substring which matches the regular expression
+expr. The first substring (from left), which satisfies this condition will be returned. If a match has 
+been possible, we get a so-called match object as a result, otherwise the value None.
+This methode is already enough to use regular expressions in Python programs:
+<pre>
+>>> if re.search("cat","A cat and a rat can't be friends."):
+...     print("Some kind of cat has been found :-)")
+... else:
+...     print("Some kind of cat has been found :-)")
+... 
+Some kind of cat has been found :-)
+>>> if re.search("cow","A cat and a rat can't be friends."):
+...     print("Cats and Rats and a cow.")
+... else:
+...     print("No cow around.")
+... 
+No cow around.
+</pre>  
+
+<br><br>
+<h4>Any Character</h4>
+Let's assume, that we havent' been interested in the previous example to recognize the word cat, 
+but all three letter words, which end with "at". 
+<br>
+The syntax of regular expressions supplies a metacharacter ".", which is used like a placeholder
+for "any character". The regular expression of our example can be written like this:
+<br>
+<code>r" .at "</code>
+<br>
+This RE matches three letter words, isolated by blanks, which end in "at". Now we get words like
+"rat", "cat", "bat", "eat", "sat" and many others.
+<br><br>
+But what, if the text contains "words" like "@at" or "3at"? These words match as well and this means
+that we have created over matching again. We will learn a solution in the following section:
+<h4>Character Classes</h4>
+Square brackets, "[" and "]", are used to include a character class. <code>[xyz]</code> means e.g. either an "x", 
+an "y" or a "z".
+<br>Let's look at a more practical example:
+<pre>
+r"M[ae][iy]er"
+</pre>
+This is a regular expression, which matches a surname which is quite common in German. A name with the same 
+pronunciation and four different spellings: Maier, Mayer, Meier, Meyer
+<br>
+A finite state automata to recognize this expression can be build like this:
+<br><br>
+<img src="images/finite_state_machine_mayer.png" alt="Finite State Machine, Mayer" />
+<br><br>
+The graph of the finite state machine (FSM) is simplified to keep the design easy. There should be an arrow in the 
+start node pointing back on its own, i.e. if a character other than an upper case "M" has been processed,
+the machine should stay in the start condition. Furthermore, there should be an arrow pointing back from all nodes
+except the final nodes (the green ones) to the start node, if not the expected letter has been processed. E.g. if 
+the machine is in state Ma, after having processed an "M" and an "a", the machine has to go back to state "Start",
+if any character except "i" or "y" can be read. 
+Those who have problems with this FSM, shouldn't be bothered, because it is not necessary to understand it for the
+things to come.
+<br><br>
+Instead of a choice between two characters, we often need a choice between larger character classes.
+We might need e.g. a class of letters between "a" and "e" or between "0" and "5"<br>
+To manage such such character classes the syntax of regular expressions supplies a metacharacter "-".
+<code>[a-e]</code> a simplified writing for <code>[abcde]</code> or <code>[0-5]</code> denotes 
+<code>[012345]</code>.
+<br><br>
+The advantage is obvious and even more impressive, if we have to coint expressions like "any uppercase letter"
+into regular expressions. So instead of <code>[ABCDEFGHIJKLMNOPQRSTUVWXYZ]</code> we can write <code>[A-Z]</code>.
+If this is not convincing: Write an expression for the character class "any lower case or uppercase letter" 
+<code>[A-Za-z]</code><br>
+<br><br>There is something more about the dash, we used to mark the begin and the end of a character class. The dash 
+has only a special meaning if it is used within square brackets and in this case only if it isn't positioned directly
+after an opening or immediately in front of a closing bracket.
+<br>So the expression <code>[-az</code> is only the choice between the three characters "-", "a" and "z", but no other
+characters. The same is true for <code>[az-</code>.
+<br><br>
+<b>Exercise:</b><br>
+What character class is described by <code>[-a-z]</code>?
+<br><br>
+<b>Answer</b>
+The character "-" and all the characters "a", "b", "c" all the way up to "z".
+<br><br> 
+The only other special character inside square brackets (character class choice) is the caret "^". If it is used directly
+after an opening sqare bracket, it negates the choice. <code>[^0-9]</code> denotes the choice "any character 
+but a digit". The position of the caret within the square brackets is crucial. If it is not positioned as the first
+character following the opening square bracket, it has no special meaing. 
+<br>
+<code>[^abc]</code> means anything but an "a", "b" or "c"
+<br>
+<code>[a^bc]</code> means an "a", "b", "c" or a "^"
+
+<h4>A Practical Exercise in Python</h4>
+Before we go on with our introduction into regular expressions, we want to insert a practical exercise with Python.
+<br>We have a <a href="simpsons_phone_book.txt" target="phone_list">phone list</a> of the Simpsons, yes, the famous Simpsons from the 
+American animated TV series. There are some people with the surname Neu. We are looking for a Neu, but we don't
+know the first name, we just know that it starts with a J. Let's write a Python script, which finds all the lines
+of the phone book, which contain a person with the described surname and a first name starting with J. If you
+don't know how to read and work with files, you should work through our chapter File Management. So here is our
+example script:
+
+<pre>
+import re
+
+fh = open("simpsons_phone_book.txt")
+for line in fh:
+    if re.search(r"J.*Neu",line):
+        print(line.rstrip())
+fh.close()
+</pre>
+
+<h4>Predefined Character Classes</h4>
+
+You might have realized, that it can be quite cumbersome to construe certain character classes.
+A good example is the character class,  which describes a valid word character. These are all lower
+case and uppercase characters plut all the digits and the underscore, corresponding to the following
+regular expression: <code>r"[a-zA-Z0-9_]"</code>
+<br><br>
+The special sequences consist of "\\" and a character from the following list:
+<table>
+<tr>
+<td>\d</td>
+<td>Matches any decimal digit; equivalent to the set [0-9].</td>
+</tr>
+<tr>
+<td>\D</td>
+<td>The complement of \d. It matches any non-digit character; equivalent to the set [^0-9].</td>
+</tr>
+<tr>
+<td>\s</td>
+<td>Matches any whitespace character; equivalent to [ \t\n\r\f\v].</td>
+</tr>
+<tr>
+<td>\S</td>
+<td>The complement of \s. It matches any non-whitespace character; equiv. to [^ \t\n\r\f\v].</td>
+</tr>
+<tr>
+<td>\w</td>
+<td>Matches any alphanumeric character; equivalent to [a-zA-Z0-9_].  With LOCALE, it will match 
+the set [a-zA-Z0-9_] plus characters defined as letters for the current locale.</td>
+</tr>
+<tr>
+<td>\W</td>
+<td>Matches the complement of \w.</td>
+</tr>
+<tr>
+<td>\b</td>
+<td>Matches the empty string, but only at the start or end of a word.</td>
+</tr>
+<tr>
+<td>\B</td>
+<td>Matches the empty string, but not at the start or end of a word.</td>
+</tr>
+<tr>
+<td>\\</td>
+<td>Matches a literal backslash.</td>
+</tr>
+</table>
+<br><br>
+<h4>Word boundaries</h4>
+
+The \b and \B of the previous overview of special sequences, is often not properly 
+understood or even misunderstood especially by novices. While the other sequences match
+characters, - e.g. \w matches characters like "a", "b", "m", "3" and so on, - \b and \B
+don't match a character. They match empty strings depending on their neighbourhood, i.e. 
+what kind of a character the predecessor and the successor is. So \b matches any
+empty string between a \W and a \w character and also between a \w and a \W character.
+\B is the complement, i.e empty strings between \W and \W or empty strings between \w and \w.
+We illustrate this in the following example:
+<br><br>
+<img src="images/word_boundary.png" alt="word boundaries: \b and \B illustrated" />
+<br><br>
+<br><br>
+
+We will get to know further "virtual" matching character, i.e. the caret (^), which is 
+used to mark the beginning of a string, and the dollar sign ($), which is used to mark the 
+end of a string, respectively. 
+\A and \Z, which can also be found in our previous diagram, are very seldom used alternatives 
+to the caret and the dollar sign.
+
+<br><br>
+
+
+<h4>Matching Beginning and End</h4>
+As we have carried out previously in this introduction, the expression <code>r"M[ae][iy]er"</code> is capable of
+matching various spellings of the name Mayer and the name can be anywhere in the string:
+
+<pre>
+>>> import re
+>>> line = "He is a German called Mayer."
+>>> if re.search(r"M[ae][iy]er",line): print("I found one!")
+... 
+I found one!
+>>> 
+</pre>
+
+But what, if we want to match a regular expression at the beginning of a string and only at the beginning?
+<br>
+The re module of Python provides two functions to match regular expressions. We have met already one of them, i.e.
+search(). The other has in our opinion a misleading name: match()
+<br>Misleading, because match(re_str, s) checks for a match of re_str merely at the beginning of the string. 
+<br>But anyway, match() is the solution to our question, as we can see in the following example:
+
+<pre>
+>>> import re
+>>> s1 = "Mayer is a very common Name"
+>>> s2 = "He is called Meyer but he isn't German."
+>>> print(re.search(r"M[ae][iy]er", s1))
+<_sre.SRE_Match object at 0x7fc59c5f26b0>
+>>> print(re.search(r"M[ae][iy]er", s2))
+<_sre.SRE_Match object at 0x7fc59c5f26b0>
+>>> print(re.match(r"M[ae][iy]er", s1))
+<_sre.SRE_Match object at 0x7fc59c5f26b0>
+>>> print(re.match(r"M[ae][iy]er", s2))
+None
+>>> 
+</pre>
+
+So, this is a way to match the start of a string, but it's a Python specific method, i.e. it can't be used in
+other languages like Perl, AWK and so on. There is a general solution which is a standard for regular expressions:
+<br><br>
+The caret '^' Matches the start of the string, and in MULTILINE (will be explained further down) mode also 
+matches immediately after each newline, which the Python method match() doesn't do.
+<br>The caret has to be the first character of a regular expression:
+<pre>
+>>> import re
+>>> s1 = "Mayer is a very common Name"
+>>> s2 = "He is called Meyer but he isn't German."
+>>> print(re.search(r"^M[ae][iy]er", s1))
+<_sre.SRE_Match object at 0x7fc59c5f26b0>
+>>> print(re.search(r"^M[ae][iy]er", s2))
+None
+</pre>
+But what happens if we concatenate the two strings s1 and s2 in the following way:
+<pre>
+s = s2 + "\n" + s1
+</pre>
+Now the string doesn't start with a Maier of any kind, but the name is following a newline character:
+
+<pre>
+>>> s = s2 + "\n" + s1
+>>> print(re.search(r"^M[ae][iy]er", s))
+None
+>>> 
+</pre>
+The name hasn't been found, because only the beginning of the string is checked. It changes, if we use the multiline
+mode, which can be activated by adding the following third parameters to search:
+<pre>
+>>> print(re.search(r"^M[ae][iy]er", s, re.MULTILINE))
+<_sre.SRE_Match object at 0x7fc59c5f26b0>
+>>> print(re.search(r"^M[ae][iy]er", s, re.M))
+<_sre.SRE_Match object at 0x7fc59c5f26b0>
+>>> print(re.match(r"^M[ae][iy]er", s, re.M))
+None
+>>> 
+</pre>
+
+The previous example also shows, that the multiline mode doesn't affect the match method. match() never checks 
+anything but the beginning of the string for a match.
+
+<br><br>
+We have learnt how to match the beginning of a string. What about the end? Of course, that's possible to. The 
+dollar sign "$" is used as a metacharacter for this purpose. '$' matches the end of a string or just before 
+the newline at the end of the string. If in MULTILINE mode, it also matches before a newline. 
+
+We demonstrate the usage of the "$" character in the following example:
+
+<pre>
+>>> print(re.search(r"Python\.$","I like Python."))
+<_sre.SRE_Match object at 0x7fc59c5f26b0>
+>>> print(re.search(r"Python\.$","I like Python and Perl."))
+None
+>>> print(re.search(r"Python\.$","I like Python.\nSome prefer Java or Perl."))
+None
+>>> print(re.search(r"Python\.$","I like Python.\nSome prefer Java or Perl.", re.M))
+<_sre.SRE_Match object at 0x7fc59c5f26b0>
+>>> 
+</pre>
+
+
+<br><br>
+<h4>Optional Items</h4>
+If you thought that our collection of Mayer names was complete, you were wrong. There are other 
+ones all over the world, e.g. London and Paris, who dropped their "e". So we have four more names 
+["Mayr", "Meyr", "Meir", "Mair"] plus our old set ["Mayr", "Meyr", "Meir", "Mair"].
+<br><br>
+If we try to figure out a fitting regular expression, we realize, that we miss something. A way to 
+tell the computer "this "e" may or may not occur". A question mark is used as a notation for this. 
+A question mark declares that the preceding character or expression is optional.
+<br><br>
+The final Mayer-Recognizer looks now like this:
+<br><br>
+<pre>
+r"M[ae][iy]e?r"
+</pre>
+A subexpression is grouped by round brackets and a 
+question mark following such a group means, that this group may or may not exist. With the following
+expression we can match dates like "Feb 2011" or February 2011":
+<pre>
+r"Feb(ruary)? 2011"
+</pre> 
+
+<h4>Quantifiers</h4>
+If you just use, what we have introduced so far, you will still need a lot of things, above all some way 
+of repeating characters or regular expressions. For this purpose, quantifiers are used. We have encountered
+one in the previous paragraph, i.e. the question mark. 
+<br><br>
+A quantifier after a token, which can be a single character or group in brackets, specifies how often 
+that preceding element is allowed to occur. The most common quantifiers are 
+<ul>
+<li>the question mark ?</li>
+<li>the asterisk or star character *, which is derived from the Kleene star</li>
+<li>and the plus sign +, derived from the Kleene cross</li>
+</ul>
+<br><br>
+We have already used previously one of these quantifiers without explaining it, i.e. the asterisk. 
+A star following a character or a subexpression group means, that this expression or character may 
+be repeated arbitrarily, even zero times.
+
+<pre>
+r"[0-9].*"
+</pre>
+
+The above expression matches any sequence of digits, even the empty string. <code>r".*"</code> matches any
+sequence of characters and the empty string.
+<br><br>
+<b>Exercise:</b>
+<br>
+Write a regular expression which matches strings which starts with a sequence of digits - at least one digit -
+followed by a blank and after this arbitrary characters.
+<br><br>
+<b>Solution:</b>
+<pre>
+r"[0-9][0-9] .*"
+</pre>
+<br>
+So, you used the plus character "+". That's fine, but in this case you have either cheated by going ahead in the 
+text or you know already more about regular expressions than we have covered in our course :-)
+
+<br><br>Now that we mentioned it: The plus operator is very convenient to solve the previous exercise. The plus
+operator is very similiar to the star operator, except that the character or subexpression followed by a "+"
+sign has to be repeated at least one time. Here follows the solution to our exercise with the plus quantifier:
+<br><br>
+<b>Solution with the plus quantifier:</b>
+<pre>
+r"[0-9]+ .*"
+</pre>
+If you work for a while with this arsenal of operators, you will miss inevitably at some point the possibility to
+repeat expressions for an exact number of times. Let's assume you want to recognize the last lines of addresses
+on envelopes in Switzerland. These lines usually contain a four digits long post code followed by a blank and a 
+city name. Using + or * are too unspecific for our purpose  and the following expression seems to be too clumsy: 
+<pre>
+r"^[0-9][0-9][0-9][0-9] [A-Za-z]+"
+</pre>
+
+Fortunately, there is an alternative available:
+<pre>
+r"^[0-9]{4} [A-Za-z]*"
+</pre>
+
+Now we want to improve our regular expression. Let's assume that there is no city name in Switzerland, which consists
+of less than 3 letters, at least 3 letters. We can denote this by [A-Za-z]{3,}. Now we have to recognize lines with
+German post code (5 digits) lines as well, i.e. the post code can now consist of either four or five digits:
+
+<pre>
+r"^[0-9]{4,5} [A-Z][a-z]{2,}"
+</pre>
+
+The general syntax is {from, to}: this means that the expression has to appear at least "from" times and not more
+than "to" times. {, to} is an abbreviated spelling for {0,to} and {from,} is an abbreviation for "at least from times
+but no upper limit"
+
+<h4>Grouping</h4>
+We can group a part of a regular expression by surrounding it with parenthesis (round brackets). This way we 
+can apply operators to the complete group instead of a single character. 
+
+<h4>Capturing Groups and Backreferences</h4>
+Parenthesis (round brackets, braces) not only group subexpressions but they create backreferences as well. The
+part of the string matched by the grouped part of the regular expression, i.e. the subexpression in parenthesis,
+is stored in a backreference. With the aid of backreferences we can reuse parts of regular expressions. 
+These stored values can be both reused inside the expression itself and afterwards, when the regexpr will have been
+executed.
+
+Before we continue with our treatise about backreferences, we want to strew in a paragraph about match objects,
+which is important for our next examples with backreferences.
+
+<br><br>
+
+<h4>A Closer Look at the Match Objects</h4>
+So far we have just checked, if an expression matched or not. We used the fact the re.search() returns a match 
+object if it matches and None otherwise. We haven't been interested e.g. in what has been matched. The match object
+contains a lot of data about what has been matched, positions and so on.
+<br><br>
+A match object contains the methods group(), span(), start() and end(), as can be seen in the following
+application:
+<pre>
+>>> import re
+>>> mo = re.search("[0-9]+", "Customer number: 232454, Date: February 12, 2011")
+>>> mo.group()
+'232454'
+>>> mo.span()
+(17, 23)
+>>> mo.start()
+17
+>>> mo.end()
+23
+>>> mo.span()[0]
+17
+>>> mo.span()[1]
+23
+>>> 
+</pre> 
+These methods are not difficult to understand.  
+span() returns a tuple with the start and end position, i.e. the string index where the regular expression
+started matching in the string and ended matching. The methods start() and end() are in a way superfluous
+as the informtion is contained in span(), i.e. span()[0] is equal to start() and span()[1] is equal to end().
+group(), if called without argument, returns the substring,
+which had been matched by the complete regular expression. With the help of group() we are also capable of
+accessing the matched substring by grouping parentheses, to get the matched substring of the n-th group, we call
+group() with the argument n: group(n).<br>
+We can also call group with more than integer argument, e.g. group(n,m). group(n,m) - provided there exists a subgoup
+n and m - returns a tuple with the matched substrings. group(n,m) is equal to (group(n), group(m)):
+<pre>
+>>> import re
+>>> mo = re.search("([0-9]+).*: (.*)", "Customer number: 232454, Date: February 12, 2011")
+>>> mo.group()
+'232454, Date: February 12, 2011'
+>>> mo.group(1)
+'232454'
+>>> mo.group(2)
+'February 12, 2011'
+>>> mo.group(1,2)
+('232454', 'February 12, 2011')
+>>> 
+</pre>
+
+A very intuitive example are XML or HTML tags. E.g. let's assume we have a file (called "tags.txt") 
+with content like this:
+<pre>
+&lt;composer&gt;Wolfgang Amadeus Mozart&lt;/composer&gt;
+&lt;author&gt;Samuel Beckett&lt;/author&gt;
+&lt;city&gt;London&lt;/city&gt;
+</pre>
+We want to rewrite this text automatically to 
+<pre>
+composer: Wolfgang Amadeus Mozart
+author: Samuel Beckett
+city: London
+</pre>
+The following little Python script does the trick. The core of this script is the regular expression.
+This regular expression works like this: It tries to match a less than symbol "&lt;". After this it is reading
+lower case letters until it reaches the greater than symbol. Everything encountered within "&lt;" and "&gt;" has 
+been stored in a backreference which can be accessed within the expression by writing \1. Let's assume
+\1 contains the value "composer": When the expression has
+reached the first "&gt;", it continues matching, as the original expression had been 
+ <code>"&lt;composer&gt;(.*)&lt;/composer&gt;"</code>:
+ 
+<pre>
+import re
+fh = open("tags.txt")
+for i in fh:
+     res = re.search(r"<([a-z]+)>(.*)&lt;/\1&gt;",i)
+     print(res.group(1) + ": " + res.group(2))
+</pre>
+If there are more than one pair of parenthesis (round brackets) inside the expression, the backreferences are
+numbered \1, \2, \3, in the order of the pairs of parenthesis. 
+<br><br>
+<b>Exercise:</b>
+<br>
+The next Python example makes use of three backreferences. We have an imaginary phone list of the Simpsons in a list.
+Not all entries contain a phone number, but if a phone number exists it is the first part of an entry. Then 
+follows separated by a blank a surname, which is followed by first names. Surname and firstname are separated by a 
+comma. The task is to rewrite this example in the following way:
+<pre>
+Allison Neu 555-8396
+C. Montgomery Burns 
+Lionel Putz 555-5299
+Homer Jay Simpson 555-7334
+</pre>
+
+Python script solving the rearrangement problem:
+<br>
+<pre>
+import re
+
+l = ["555-8396 Neu, Allison", 
+     "Burns, C. Montgomery", 
+     "555-5299 Putz, Lionel",
+     "555-7334 Simpson, Homer Jay"]
+
+for i in l:
+    res = re.search(r"([0-9-]*)\s*([A-Za-z]+),\s+(.*)", i)
+    print(res.group(3) + " " + res.group(2) + " " + res.group(1))
+</pre>
+
+<br><br>
+
+<h4>Named Backreferences</h4>
+In the previous paragraph we introduced "Capturing Groups" and "Backreferences". More precisely, we could have 
+called them "Numbered Capturing Groups" and "Numbered Backreferences".  
+<br>
+Using capturing groups instead of "numbered" capturing groups allows you to assign descriptive names instead 
+of automatic numbers to the groups. In the following example, we demonstrate this approach by catching the hours,
+minutes and seconds from a UNIX date string. 
+
+<pre>
+>>> import re
+>>> s = "Sun Oct 14 13:47:03 CEST 2012"
+>>> expr = r"\b(?P&lt;hours&gt;\d\d):(?P&lt;minutes&gt;\d\d):(?P&lt;seconds&gt;\d\d)\b"
+>>> x = re.search(expr,s)
+>>> x.group('hours')
+'13'
+>>> x.group('minutes')
+'47'
+>>> x.start('minutes')
+14
+>>> x.end('minutes')
+16
+>>> x.span('seconds')
+(17, 19)
+>>> 
+</pre>
+
+<br><br>
+
+<h4>Comprehensive Python Exercise</h4>
+In this comprehensive exercise, we have to bring together the information of two files. In the first file, we have 
+a list of nearly 15000 lines of post codes with the corresponding city names plus additional information.
+Here are some arbitrary lines of this file:
+<pre>
+68309,"Mannheim",8222,"Mannheim",8,"Baden-Wrttemberg"
+68519,"Viernheim",6431,"Bergstraße",6,"Hessen"
+68526,"Ladenburg",8226,"Rhein-Neckar-Kreis",8,"Baden-Württemberg"
+68535,"Edingen-Neckarhausen",8226,"Rhein-Neckar-Kreis",8,"Baden-Württemberg"
+</pre>
+The other file contains a list of the 19 largest German cities. Each line consists of the rank,
+the name of the city, the population, and the state (Bundesland):
+<pre>
+1.  Berlin          3.382.169 Berlin
+2.  Hamburg         1.715.392 Hamburg
+3.  München         1.210.223 Bayern
+4.  Köln              962.884 Nordrhein-Westfalen
+5.  Frankfurt am Main 646.550 Hessen
+6.  Essen             595.243 Nordrhein-Westfalen
+7.  Dortmund          588.994 Nordrhein-Westfalen
+8.  Stuttgart         583.874 Baden-Württemberg
+9.  Düsseldorf        569.364 Nordrhein-Westfalen
+10. Bremen            539.403 Bremen
+11. Hannover          515.001 Niedersachsen
+12. Duisburg          514.915 Nordrhein-Westfalen
+13. Leipzig           493.208 Sachsen
+14. Nürnberg          488.400 Bayern
+15. Dresden           477.807 Sachsen
+16. Bochum            391.147 Nordrhein-Westfalen
+17. Wuppertal         366.434 Nordrhein-Westfalen
+18. Bielefeld         321.758 Nordrhein-Westfalen
+19. Mannheim          306.729 Baden-Württemberg
+</pre>
+
+Our task is to create a list with the top 19 cities, with the city names accompanied by the postal code.
+If you want to test the following program, you have to save the list above in a file called 
+largest_cities_germany.txt and you have to download and save the <a href="post_codes_germany.txt" target="post_codes">list of
+German post codes</a>
+<br>
+
+<pre>
+# -*- coding: iso-8859-15 -*-
+
+import re
+
+
+fh_post_codes = open("post_codes_germany.txt")
+PLZ = {}
+for line in fh_post_codes:
+    (post_code, city, rest) = line.split(",",2)
+    PLZ[city.strip("\"")] =  post_code
+
+
+fh_largest_cities = open("largest_cities_germany.txt")
+
+for line in fh_largest_cities:
+    re_obj = re.search(r"^[0-9]{1,2}\.\s+([\wÄÖÜäöüß\s]+\w)\s+[0-9]",line)
+    city = re_obj.group(1)
+    print(city, PLZ[city])
+
+</pre>
+
+<h4>Another Comprehensive Example</h4>
+We want to present another real life example in our Python course. A regular expression for UK postcodes. 
+<br>
+We write an expression, which is capable of recognizing the postal codes or postcodes of the UK.
+<br><br>
+Postcode units consist of between five and seven characters, which are separated into two parts by 
+a space. The two to four characters before the space represent the so-called outward code or out code 
+intended to direct mail from the sorting office to the delivery office. The part following the space,
+which consists of a digit followed by two uppercase characters, comprises the so-called inward code, 
+which is needed to sort mail at the final delivery office. The last two uppercase characters can be only one
+of these ABDHJLNPUWZ
+<br><br>
+The outward code can have the form: One or two uppercase characters, followed by either a digit or the letter
+R, optionally followed by an uppercase character or a digit.
+(We do not consider all the detailled rules for postcodes, i.e only certain character sets are
+valid depending on the position and the context.)
+
+<br>
+A regular expression for matching this superset of UK postcodes looks like this:
+<pre>
+r"\b[A-z]{1,2}[0-9R][0-9A-Z]? [0-9][ABD-HJLNP-UW-Z]{2}\b"
+</pre>
+
+The following Python program uses the regexp above:
+<pre>
+import re
+
+example_codes = ["SW1A 0AA", # House of Commons
+                 "SW1A 1AA", # Buckingham Palace
+                 "SW1A 2AA", # Downing Street
+                 "BX3 2BB", # Barclays Bank
+                 "DH98 1BT", # British Telecom
+                 "N1 9GU", # Guardian Newspaper
+                 "E98 1TT", # The Times
+                 "TIM E22", # a fake postcode
+                 "A B1 A22", # not a valid postcode
+                 "EC2N 2DB", # Deutsche Bank
+                 "SE9 2UG", # University of Greenwhich
+                 "N1 0UY", # Islington, London
+                 "EC1V 8DS", # Clerkenwell, London
+                 "WC1X 9DT", # WC1X 9DT
+                 "B42 1LG", # Birmingham
+                 "B28 9AD", # Birmingham
+                 "W12 7RJ", # London, BBC News Centre
+                 "BBC 007" # a fake postcode
+                ]
+
+pc_re = r"[A-z]{1,2}[0-9R][0-9A-Z]? [0-9][ABD-HJLNP-UW-Z]{2}"
+
+for postcode in example_codes:
+    r = re.search(pc_re, postcode)
+    if r:
+        print(postcode + " matched!")
+    else:
+        print(postcode + " is not a valid postcode!")
+
+</pre>
+
+
+
+<br><br>
+<div id="contextlinks">Previous Chapter: <a href="python3_modules_and_modular_programming.html">Modular Programming and Modules</a><br>
+<LINK rel="prev" href="python3_modules_and_modular_programming.html">Next Chapter: <a href="python3_re_advanced.html">Regular Expressions, Advanced</a><br>
+<LINK rel="next" href="python3_re_advanced.html"></div><br><br><br>
+
+</div>
+<div id="footer">  &copy; 2011 - 2014 <a href="http://www.bklein.de/">Bernd Klein</a>,
+Bodenseo; 
+Design by Denise Mitchinson adapted for python-course.eu by Bernd Klein</div>
+</div>
+</body>
+
+<!-- Mirrored from www.python-course.eu/python3_re.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:09:03 GMT -->
+</html>

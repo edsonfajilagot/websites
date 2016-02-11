@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from zetcode.com/wxpython/thetetrisgame/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Aug 2015 19:22:19 GMT -->
+<head>
+<title>The Tetris game in wxPython</title>
+<link rel="stylesheet" href="../../cfg/format2.css" type="text/css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="wxPython, the Tetris game, programming, Linux, Python">
+<meta name="description" content="In this part of the wxPython tutorial, we create a tetris game clone.">
+<meta name="author" content="Jan Bodnar">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div id="wide_ad" class="ltow">
+<script async src="../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- 160x600, August 2011 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:600px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="2484182563"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<div class="content">
+
+
+<header>
+
+<nav>
+<a href="http://zetcode.com/" title="Home">Home</a>&#160;
+<a href="../index.html">Contents</a>
+</nav>
+
+</header>
+
+
+<h1>The Tetris game in wxPython</h1>
+
+
+<p>
+The Tetris game is one of the most popular computer games ever created. 
+The original game was designed and programmed
+by a Russian programmer <em>Alexey Pajitnov</em> in 1985. Since then, 
+Tetris is available on almost every computer platform in lots of variations. 
+</p>
+
+<div class="med_rec">
+<script async src="../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- NewSquare -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:250px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="0364418177"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div> 
+
+<p>
+Tetris is called a falling block puzzle game. In this game, we have 
+seven different shapes called <em>tetrominoes</em>: S-shape, Z-shape, 
+T-shape, L-shape, Line-shape, MirroredL-shape and a Square-shape.
+Each of these shapes is formed with four squares. The shapes are falling 
+down the board. The object of the Tetris game is to move and rotate the shapes, so that 
+they fit as much as possible. If we manage to form a row, the row is destroyed 
+and we score. We play the Tetris game until we top out.
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/tetrominoes.png" alt="Tetrominoes">
+<figcaption>Figure: Tetrominoes</figcaption>
+</figure>
+
+<p>
+wxPython is a toolkit designed to create applications. There are other 
+libraries which are targeted at creating computer games.
+Nevertheless, wxPython and other application toolkits can be used to 
+create games.
+</p>
+
+
+<h2>The development</h2>
+
+<p>
+We do not have images for our Tetris game, we draw the tetrominoes using the 
+drawing API available in the wxPython programming toolkit. Behind every computer 
+game, there is a mathematical model. So it is in Tetris. 
+</p>
+
+<p>
+Some ideas behind the game.
+</p>
+
+<ul>
+  <li>We use <code>wx.Timer</code> to create a game cycle</li>
+  <li>The tetrominoes are drawn</li>
+  <li>The shapes move on a square by square basis (not pixel by pixel)</li>
+  <li>Mathematically a board is a simple list of numbers</li>
+</ul>
+
+<p>
+The following example is a modified version of the tetris game, available 
+with PyQt4 installation files.
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+
+# tetris.py
+
+import wx
+import random
+
+class Tetris(wx.Frame):
+    def __init__(self, parent, id, title):
+        wx.Frame.__init__(self, parent, id, title, size=(180, 380))
+
+        self.statusbar = self.CreateStatusBar()
+        self.statusbar.SetStatusText('0')
+        self.board = Board(self)
+        self.board.SetFocus()
+        self.board.start()
+
+        self.Centre()
+        self.Show(True)
+       
+
+class Board(wx.Panel):
+    BoardWidth = 10
+    BoardHeight = 22
+    Speed = 300
+    ID_TIMER = 1
+
+    def __init__(self, parent):
+        wx.Panel.__init__(self, parent)
+
+        self.timer = wx.Timer(self, Board.ID_TIMER)
+        self.isWaitingAfterLine = False
+        self.curPiece = Shape()
+        self.nextPiece = Shape()
+        self.curX = 0
+        self.curY = 0
+        self.numLinesRemoved = 0
+        self.board = []
+
+        self.isStarted = False
+        self.isPaused = False
+
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
+        self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
+        self.Bind(wx.EVT_TIMER, self.OnTimer, id=Board.ID_TIMER)
+
+        self.clearBoard()
+
+    def shapeAt(self, x, y):
+        return self.board[(y * Board.BoardWidth) + x]
+
+    def setShapeAt(self, x, y, shape):
+        self.board[(y * Board.BoardWidth) + x] = shape
+
+    def squareWidth(self):
+        return self.GetClientSize().GetWidth() / Board.BoardWidth
+
+    def squareHeight(self):
+        return self.GetClientSize().GetHeight() / Board.BoardHeight
+
+    def start(self):
+        if self.isPaused:
+            return
+
+        self.isStarted = True
+        self.isWaitingAfterLine = False
+        self.numLinesRemoved = 0
+        self.clearBoard()
+
+        self.newPiece()
+        self.timer.Start(Board.Speed)
+
+    def pause(self):
+        if not self.isStarted:
+            return
+
+        self.isPaused = not self.isPaused
+        statusbar = self.GetParent().statusbar
+
+        if self.isPaused:
+            self.timer.Stop()
+            statusbar.SetStatusText('paused')
+        else:
+            self.timer.Start(Board.Speed)
+            statusbar.SetStatusText(str(self.numLinesRemoved))
+
+        self.Refresh()
+
+    def clearBoard(self):
+        for i in range(Board.BoardHeight * Board.BoardWidth):
+            self.board.append(Tetrominoes.NoShape)
+
+    def OnPaint(self, event):
+
+        dc = wx.PaintDC(self)        
+
+        size = self.GetClientSize()
+        boardTop = size.GetHeight() - Board.BoardHeight * self.squareHeight()
+        
+        for i in range(Board.BoardHeight):
+            for j in range(Board.BoardWidth):
+                shape = self.shapeAt(j, Board.BoardHeight - i - 1)
+                if shape != Tetrominoes.NoShape:
+                    self.drawSquare(dc,
+                        0 + j * self.squareWidth(),
+                        boardTop + i * self.squareHeight(), shape)
+
+        if self.curPiece.shape() != Tetrominoes.NoShape:
+            for i in range(4):
+                x = self.curX + self.curPiece.x(i)
+                y = self.curY - self.curPiece.y(i)
+                self.drawSquare(dc, 0 + x * self.squareWidth(),
+                    boardTop + (Board.BoardHeight - y - 1) * self.squareHeight(),
+                    self.curPiece.shape())
+
+
+    def OnKeyDown(self, event):
+        if not self.isStarted or self.curPiece.shape() == Tetrominoes.NoShape:
+            event.Skip()
+            return
+
+        keycode = event.GetKeyCode()
+
+        if keycode == ord('P') or keycode == ord('p'):
+            self.pause()
+            return
+        if self.isPaused:
+            return
+        elif keycode == wx.WXK_LEFT:
+            self.tryMove(self.curPiece, self.curX - 1, self.curY)
+        elif keycode == wx.WXK_RIGHT:
+            self.tryMove(self.curPiece, self.curX + 1, self.curY)
+        elif keycode == wx.WXK_DOWN:
+            self.tryMove(self.curPiece.rotatedRight(), self.curX, self.curY)
+        elif keycode == wx.WXK_UP:
+            self.tryMove(self.curPiece.rotatedLeft(), self.curX, self.curY)
+        elif keycode == wx.WXK_SPACE:
+            self.dropDown()
+        elif keycode == ord('D') or keycode == ord('d'):
+            self.oneLineDown()
+        else:
+            event.Skip()
+
+
+    def OnTimer(self, event):
+        if event.GetId() == Board.ID_TIMER:
+            if self.isWaitingAfterLine:
+                self.isWaitingAfterLine = False
+                self.newPiece()
+            else:
+                self.oneLineDown()
+        else:
+            event.Skip()
+
+
+    def dropDown(self):
+        newY = self.curY
+        while newY > 0:
+            if not self.tryMove(self.curPiece, self.curX, newY - 1):
+                break
+            newY -= 1
+
+        self.pieceDropped()
+
+    def oneLineDown(self):
+        if not self.tryMove(self.curPiece, self.curX, self.curY - 1):
+            self.pieceDropped()
+
+
+    def pieceDropped(self):
+        for i in range(4):
+            x = self.curX + self.curPiece.x(i)
+            y = self.curY - self.curPiece.y(i)
+            self.setShapeAt(x, y, self.curPiece.shape())
+
+        self.removeFullLines()
+
+        if not self.isWaitingAfterLine:
+            self.newPiece()
+
+
+    def removeFullLines(self):
+        numFullLines = 0
+
+        statusbar = self.GetParent().statusbar
+
+        rowsToRemove = []
+
+        for i in range(Board.BoardHeight):
+            n = 0
+            for j in range(Board.BoardWidth):
+                if not self.shapeAt(j, i) == Tetrominoes.NoShape:
+                    n = n + 1
+
+            if n == 10:
+                rowsToRemove.append(i)
+
+        rowsToRemove.reverse()
+
+        for m in rowsToRemove:
+            for k in range(m, Board.BoardHeight):
+                for l in range(Board.BoardWidth):
+                        self.setShapeAt(l, k, self.shapeAt(l, k + 1))
+
+            numFullLines = numFullLines + len(rowsToRemove)
+
+            if numFullLines > 0:
+                self.numLinesRemoved = self.numLinesRemoved + numFullLines
+                statusbar.SetStatusText(str(self.numLinesRemoved)) 
+                self.isWaitingAfterLine = True
+                self.curPiece.setShape(Tetrominoes.NoShape)
+                self.Refresh()
+
+
+    def newPiece(self):
+        self.curPiece = self.nextPiece
+        statusbar = self.GetParent().statusbar
+        self.nextPiece.setRandomShape()
+        self.curX = Board.BoardWidth / 2 + 1
+        self.curY = Board.BoardHeight - 1 + self.curPiece.minY()
+
+        if not self.tryMove(self.curPiece, self.curX, self.curY):
+            self.curPiece.setShape(Tetrominoes.NoShape)
+            self.timer.Stop()
+            self.isStarted = False
+            statusbar.SetStatusText('Game over')
+
+    def tryMove(self, newPiece, newX, newY):
+        for i in range(4):
+            x = newX + newPiece.x(i)
+            y = newY - newPiece.y(i)
+            if x &lt; 0 or x >= Board.BoardWidth or y &lt; 0 or y >= Board.BoardHeight:
+                return False
+            if self.shapeAt(x, y) != Tetrominoes.NoShape:
+                return False
+
+        self.curPiece = newPiece
+        self.curX = newX
+        self.curY = newY
+        self.Refresh()
+        return True
+
+
+    def drawSquare(self, dc, x, y, shape):
+        colors = ['#000000', '#CC6666', '#66CC66', '#6666CC',
+                  '#CCCC66', '#CC66CC', '#66CCCC', '#DAAA00']
+
+        light = ['#000000', '#F89FAB', '#79FC79', '#7979FC', 
+                 '#FCFC79', '#FC79FC', '#79FCFC', '#FCC600']
+
+        dark = ['#000000', '#803C3B', '#3B803B', '#3B3B80', 
+                 '#80803B', '#803B80', '#3B8080', '#806200']
+
+        pen = wx.Pen(light[shape])
+        pen.SetCap(wx.CAP_PROJECTING)
+        dc.SetPen(pen)
+
+        dc.DrawLine(x, y + self.squareHeight() - 1, x, y)
+        dc.DrawLine(x, y, x + self.squareWidth() - 1, y)
+
+        darkpen = wx.Pen(dark[shape])
+        darkpen.SetCap(wx.CAP_PROJECTING)
+        dc.SetPen(darkpen)
+
+        dc.DrawLine(x + 1, y + self.squareHeight() - 1,
+            x + self.squareWidth() - 1, y + self.squareHeight() - 1)
+        dc.DrawLine(x + self.squareWidth() - 1, 
+        y + self.squareHeight() - 1, x + self.squareWidth() - 1, y + 1)
+
+        dc.SetPen(wx.TRANSPARENT_PEN)
+        dc.SetBrush(wx.Brush(colors[shape]))
+        dc.DrawRectangle(x + 1, y + 1, self.squareWidth() - 2, 
+        self.squareHeight() - 2)
+
+
+class Tetrominoes(object):
+    NoShape = 0
+    ZShape = 1
+    SShape = 2
+    LineShape = 3
+    TShape = 4
+    SquareShape = 5
+    LShape = 6
+    MirroredLShape = 7
+
+
+class Shape(object):
+    coordsTable = (
+        ((0, 0),     (0, 0),     (0, 0),     (0, 0)),
+        ((0, -1),    (0, 0),     (-1, 0),    (-1, 1)),
+        ((0, -1),    (0, 0),     (1, 0),     (1, 1)),
+        ((0, -1),    (0, 0),     (0, 1),     (0, 2)),
+        ((-1, 0),    (0, 0),     (1, 0),     (0, 1)),
+        ((0, 0),     (1, 0),     (0, 1),     (1, 1)),
+        ((-1, -1),   (0, -1),    (0, 0),     (0, 1)),
+        ((1, -1),    (0, -1),    (0, 0),     (0, 1))
+    )
+
+    def __init__(self):
+        self.coords = [[0,0] for i in range(4)]
+        self.pieceShape = Tetrominoes.NoShape
+
+        self.setShape(Tetrominoes.NoShape)
+
+    def shape(self):
+        return self.pieceShape
+
+    def setShape(self, shape):
+        table = Shape.coordsTable[shape]
+        for i in range(4):
+            for j in range(2):
+                self.coords[i][j] = table[i][j]
+
+        self.pieceShape = shape
+
+    def setRandomShape(self):
+        self.setShape(random.randint(1, 7))
+
+    def x(self, index):
+        return self.coords[index][0]
+
+    def y(self, index):
+        return self.coords[index][1]
+
+    def setX(self, index, x):
+        self.coords[index][0] = x
+
+    def setY(self, index, y):
+        self.coords[index][1] = y
+
+    def minX(self):
+        m = self.coords[0][0]
+        for i in range(4):
+            m = min(m, self.coords[i][0])
+
+        return m
+
+    def maxX(self):
+        m = self.coords[0][0]
+        for i in range(4):
+            m = max(m, self.coords[i][0])
+
+        return m
+
+    def minY(self):
+        m = self.coords[0][1]
+        for i in range(4):
+            m = min(m, self.coords[i][1])
+
+        return m
+
+    def maxY(self):
+        m = self.coords[0][1]
+        for i in range(4):
+            m = max(m, self.coords[i][1])
+
+        return m
+
+    def rotatedLeft(self):
+        if self.pieceShape == Tetrominoes.SquareShape:
+            return self
+
+        result = Shape()
+        result.pieceShape = self.pieceShape
+        for i in range(4):
+            result.setX(i, self.y(i))
+            result.setY(i, -self.x(i))
+
+        return result
+
+    def rotatedRight(self):
+        if self.pieceShape == Tetrominoes.SquareShape:
+            return self
+
+        result = Shape()
+        result.pieceShape = self.pieceShape
+        for i in range(4):
+            result.setX(i, -self.y(i))
+            result.setY(i, self.x(i))
+
+        return result
+
+
+app = wx.App()
+Tetris(None, -1, 'Tetris')
+app.MainLoop()
+</pre>
+
+<p>
+I have simplified the game a bit, so that it is easier to understand. 
+The game starts immediately, after it is launched.
+We can pause the game by pressing the p key. The space key will drop 
+the tetris piece immediately to the bottom. The d key will drop the 
+piece one line down. (It can be used to speed up the falling a bit.)
+The game goes at constant speed, no acceleration is implemented. The 
+score is the number of lines that we have removed.
+</p>
+
+<pre class="explanation">
+def __init__(self, parent):
+    wx.Panel.__init__(self, parent)
+</pre>
+
+<p>
+A note for Windows users. If you cannot use the arrow keys, add
+<code>style=wx.WANTS_CHARS</code> to the panel constructor. 
+</p>
+
+
+<pre class="explanation">
+...
+self.curX = 0
+self.curY = 0
+self.numLinesRemoved = 0
+self.board = []
+...
+</pre>
+
+<p>
+Before we start the game cycle, we initialize some important variables. 
+The <code>self.board</code> variable is a list of numbers from 0 ... 7. It represents 
+the position of various shapes and remains of the shapes on the board.
+</p>
+
+<pre class="explanation">
+for i in range(Board.BoardHeight):
+    for j in range(Board.BoardWidth):
+        shape = self.shapeAt(j, Board.BoardHeight - i - 1)
+        if shape != Tetrominoes.NoShape:
+            self.drawSquare(dc,
+                0 + j * self.squareWidth(),
+                boardTop + i * self.squareHeight(), shape)
+</pre>
+
+<p>
+The painting of the game is divided into two steps. In the first step, we 
+draw all the shapes, or remains of the shapes that
+have been dropped to the bottom of the board. All the squares are rememberd 
+in the <code>self.board</code> list variable.
+We access it using the <code>shapeAt()</code> method.
+</p>
+
+<pre class="explanation">
+if self.curPiece.shape() != Tetrominoes.NoShape:
+    for i in range(4):
+        x = self.curX + self.curPiece.x(i)
+        y = self.curY - self.curPiece.y(i)
+        self.drawSquare(dc, 0 + x * self.squareWidth(),
+            boardTop + (Board.BoardHeight - y - 1) * self.squareHeight(),
+            self.curPiece.shape())
+</pre>
+
+<p>
+The next step is drawing of the actual piece that is falling down.
+</p>
+
+<pre class="explanation">
+elif keycode == wx.WXK_LEFT:
+    self.tryMove(self.curPiece, self.curX - 1, self.curY)
+</pre>
+
+<p>
+In the <code>OnKeyDown()</code> method we check for pressed keys. If we 
+press the left arrow key, we try to move the piece to the left. We say 
+try, because the piece might not be able to move. 
+</p>
+
+<pre class="explanation">
+def tryMove(self, newPiece, newX, newY):
+    for i in range(4):
+        x = newX + newPiece.x(i)
+        y = newY - newPiece.y(i)
+        if x &lt; 0 or x >= Board.BoardWidth or y &lt; 0 or y >= Board.BoardHeight:
+            return False
+        if self.shapeAt(x, y) != Tetrominoes.NoShape:
+            return False
+
+    self.curPiece = newPiece
+    self.curX = newX
+    self.curY = newY
+    self.Refresh()
+    return True
+</pre>
+
+<p>
+In the <code>tryMove()</code> method we try to move our shapes. If the shape 
+is at the edge of the board or is adjacent to some
+other piece, we return false. Otherwise we place the current falling 
+piece to a new position and return true.
+</p>
+
+<pre class="explanation">
+def OnTimer(self, event):
+    if event.GetId() == Board.ID_TIMER:
+        if self.isWaitingAfterLine:
+            self.isWaitingAfterLine = False
+            self.newPiece()
+        else:
+            self.oneLineDown()
+    else:
+        event.Skip()
+</pre>
+
+<p>
+In the <code>OnTimer()</code> method we either create a new piece, after the 
+previous one was dropped to the bottom, or we move a falling piece one line down. 
+</p>
+
+<pre class="explanation">
+def removeFullLines(self):
+    numFullLines = 0
+
+    rowsToRemove = []
+
+    for i in range(Board.BoardHeight):
+        n = 0
+        for j in range(Board.BoardWidth):
+            if not self.shapeAt(j, i) == Tetrominoes.NoShape:
+                n = n + 1
+
+        if n == 10:
+            rowsToRemove.append(i)
+
+    rowsToRemove.reverse()
+
+    for m in rowsToRemove:
+        for k in range(m, Board.BoardHeight):
+            for l in range(Board.BoardWidth):
+                self.setShapeAt(l, k, self.shapeAt(l, k + 1))
+...
+</pre>
+
+<p>
+If the piece hits the bottom, we call the <code>removeFullLines()</code> method. 
+First we find out all full lines. And we remove them. We do it by moving all 
+lines above the current full line to be removed one line down. Notice, 
+that we reverse the order of the lines to be removed. Otherwise, it would not work correctly.
+In our case we use a <em>naive gravity</em>. This means that the pieces may 
+be floating above empty gaps.
+</p>
+
+<pre class="explanation">
+def newPiece(self):
+    self.curPiece = self.nextPiece
+    statusbar = self.GetParent().statusbar
+    self.nextPiece.setRandomShape()
+    self.curX = Board.BoardWidth / 2 + 1
+    self.curY = Board.BoardHeight - 1 + self.curPiece.minY()
+
+    if not self.tryMove(self.curPiece, self.curX, self.curY):
+        self.curPiece.setShape(Tetrominoes.NoShape)
+        self.timer.Stop()
+        self.isStarted = False
+        statusbar.SetStatusText('Game over')
+</pre>
+
+<p>
+The <code>newPiece()</code> method creates randomly a new tetris piece. 
+If the piece cannot go into its initial position, the game is over. 
+</p>
+
+<p>
+The <code>Shape</code> class saves information about the tetris piece. 
+</p>
+
+<pre class="explanation">
+self.coords = [[0,0] for i in range(4)]
+</pre>
+
+<p>
+Upon creation we create an empty coordinates list. The list will save 
+the coordinates of the tetris piece. For example, these tuples (0, -1), 
+(0, 0), (1, 0), (1, 1) represent a rotated S-shape. The following diagram 
+illustrates the shape.
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/coordinates.png" alt="Coordinates">
+<figcaption>Figure: Coordinates</figcaption>
+</figure>
+
+<p>
+When we draw the current falling piece, we draw it at <code>self.curX</code>, 
+<code>self.curY position</code>. Then we look at the coordinates table and draw 
+all the four squares. 
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/tetris.png" alt="Tetris">
+<figcaption>Figure: Tetris</figcaption>
+</figure>
+
+<p>
+This was a Tetris game in wxPython.
+</p>
+
+<div class="hor">
+<script async src="../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- horizontal -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:468px;height:60px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="1734478269"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div> 
+
+
+<footer>
+
+<nav class="center">
+<span class="botNavItem"><a href="http://zetcode.com/">Home</a></span> ‡ <span class="botNavItem"><a href="../index.html">Contents</a></span> ‡
+<span class="botNavItem"><a href="#">Top of Page</a></span>
+</nav>
+
+<div class="signature">
+<a href="http://zetcode.com/">ZetCode</a> last modified November 25, 2007  <span class="copyright">&copy; 2007 - 2015 Jan Bodnar</span>
+</div>
+
+</footer>
+
+</div> <!-- content -->
+
+</div> <!-- container -->
+
+</body> 
+
+<!-- Mirrored from zetcode.com/wxpython/thetetrisgame/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Aug 2015 19:22:21 GMT -->
+</html>
+

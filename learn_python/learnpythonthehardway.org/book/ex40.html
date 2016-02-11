@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+    
+<!-- Mirrored from learnpythonthehardway.org/book/ex40.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 03 Sep 2014 17:52:40 GMT -->
+<head>
+        <link href='stylesheets/fonts.css' rel='stylesheet' type='text/css'>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="twitter:creator" content="@lzsthw">
+        <title>Learn Python</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href='stylesheets/pure.css' rel='stylesheet'>
+        <link href='stylesheets/pygments.css' rel='stylesheet'>
+        <link href='stylesheets/main.css' rel='stylesheet'>
+        <link href='stylesheets/nav.css' rel='stylesheet'>
+        <style>
+        </style>
+ 
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.11: http://docutils.sourceforge.net/" />
+<title>Exercise 40: Modules, Classes, and Objects</title>
+    </head>
+    <body id='wrapper'>
+        <div class='master-logo-wrapper clearfix'>
+            <a href='index-2.html'>
+                <div class='python-logo-sprite'></div>
+            </a>
+                <span class='edition-3'><img src='images/3rd-edition-cloud.png' /></span>
+        </div><!-- /.master-logo-wrapper -->
+
+        <div style='clear: both;'>
+
+        <div id="main">
+            <div class='chapters-wrapper'>
+                  <nav id='chapters'>
+                      <div class='masthead-title'></div>
+                      <ul class='masthead'>
+                          <li>
+                              <a href='index.html'>
+                                  <div class='nav-tcontents'>
+                                      <img src='images/nav-contents.png' /></br>
+                                  main
+                                  </div>
+                              </a>
+                          </li>
+                          <li>
+                              <a href='#video'>
+                                  <div class='nav-play-video' id="#video_toggle_icon">
+                                      <img src='images/nav-play.png' /><br/>
+                                      play video
+                                      <div class='line-2'>(this chapter)</div>
+                                  </div>
+                              </a>
+                          </li>
+                          <li>
+                              <a href='#' id='prev_link'>
+                                  <div class='nav-previous'>
+                                      <img src='images/nav-previous.png' /></br>
+                                      previous
+                                  </div>
+                              </a>
+                          </li>
+                          <li>
+                              <a href='#' id='next_link'>
+                                  <div class='nav-next'>
+                                      <img src='images/nav-next.png' /></br>
+                                      next
+                                  </div>
+                              </a>
+                          </li>
+                          <li><!-- AMBULANCE ICON -->
+                              <a href='help.html' id=''>
+                                  <div class='ambulance'>
+                                      <img src='images/help-ambulance.png' /></br>
+                                      help
+                                  </div>
+                              </a>
+                          </li>
+                          <li id="follow">
+                                <a href="https://twitter.com/lzsthw" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false" data-dnt="true">Follow @lzsthw</a>
+                                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                           </li>
+
+                      </ul><!-- /.masthead -->
+                      <!--<img src='images/fa-bullhorn.png' />-->
+                  </nav><!-- /.chapters -->
+            </div><!-- /.chapters-wrapper -->
+
+        <!--- RST STARTS -->
+            <h1 class="title">Exercise 40: Modules, Classes, and Objects</h1>
+            <p>Python is called an &quot;object-oriented programming language.&quot;  This means there is a construct in Python called a class that lets you structure your software in a particular way.  Using classes, you can add consistency to your programs so that they can be used in a cleaner way. At least that's the theory.</p>
+<p>I am now going to teach you the beginnings of object-oriented programming, classes, and objects using what you already know about dictionaries and modules.  My problem is that Object-Oriented Programming (OOP) is just plain weird.  You have to struggle with this, try to understand what I say here, type in the code, and in the next exercise I'll hammer it in.</p>
+<p>Here we go.</p>
+<div class="section" id="modules-are-like-dictionaries">
+<h1>Modules Are Like Dictionaries</h1>
+<p>You know how a dictionary is created and used and that it is a way to map one thing to another.  That means if you have a dictionary with a key &quot;apple&quot; and you want to get it then you do this:</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="highlight"><pre><a name="python--ex40a.py-idio.html-1"></a><span class="n">mystuff</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;apple&#39;</span><span class="p">:</span> <span class="s">&quot;I AM APPLES!&quot;</span><span class="p">}</span>
+<a name="python--ex40a.py-idio.html-2"></a><span class="k">print</span> <span class="n">mystuff</span><span class="p">[</span><span class="s">&#39;apple&#39;</span><span class="p">]</span>
+</pre></div>
+</td></tr></table><p>Keep this idea of &quot;get X from Y&quot; in your head, and now think about modules.  You've made a few so far, and you should know they are:</p>
+<ol class="arabic simple">
+<li>A Python file with some functions or variables in it ..</li>
+<li>You import that file.</li>
+<li>And you can access the functions or variables in that module with the <tt class="docutils literal">.</tt> (dot) operator.</li>
+</ol>
+<p>Imagine I have a module that I decide to name <tt class="docutils literal">mystuff.py</tt> and I put a function in it called <tt class="docutils literal">apple</tt>.  Here's the module <tt class="docutils literal">mystuff.py</tt>:</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><a name="python--ex40a.py-idio.html-1"></a><span class="c"># this goes in mystuff.py</span>
+<a name="python--ex40a.py-idio.html-2"></a><span class="k">def</span> <span class="nf">apple</span><span class="p">():</span>
+<a name="python--ex40a.py-idio.html-3"></a>    <span class="k">print</span> <span class="s">&quot;I AM APPLES!&quot;</span>
+</pre></div>
+</td></tr></table><p>Once I have this code, I can use the module <tt class="docutils literal">MyStuff</tt> with <tt class="docutils literal">import</tt> and then access the <tt class="docutils literal">apple</tt> function:</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="highlight"><pre><a name="python--ex40a.py-idio.html-1"></a><span class="kn">import</span> <span class="nn">mystuff</span>
+<a name="python--ex40a.py-idio.html-2"></a><span class="n">mystuff</span><span class="o">.</span><span class="n">apple</span><span class="p">()</span>
+</pre></div>
+</td></tr></table><p>I could also put a variable in it named <tt class="docutils literal">tangerine</tt>:</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="highlight"><pre><a name="python--ex40a.py-idio.html-1"></a><span class="k">def</span> <span class="nf">apple</span><span class="p">():</span>
+<a name="python--ex40a.py-idio.html-2"></a>    <span class="k">print</span> <span class="s">&quot;I AM APPLES!&quot;</span>
+<a name="python--ex40a.py-idio.html-3"></a>
+<a name="python--ex40a.py-idio.html-4"></a><span class="c"># this is just a variable</span>
+<a name="python--ex40a.py-idio.html-5"></a><span class="n">tangerine</span> <span class="o">=</span> <span class="s">&quot;Living reflection of a dream&quot;</span>
+</pre></div>
+</td></tr></table><p>I can access that the same way:</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><a name="python--ex40a.py-idio.html-1"></a><span class="kn">import</span> <span class="nn">mystuff</span>
+<a name="python--ex40a.py-idio.html-2"></a>
+<a name="python--ex40a.py-idio.html-3"></a><span class="n">mystuff</span><span class="o">.</span><span class="n">apple</span><span class="p">()</span>
+<a name="python--ex40a.py-idio.html-4"></a><span class="k">print</span> <span class="n">mystuff</span><span class="o">.</span><span class="n">tangerine</span>
+</pre></div>
+</td></tr></table><p>Refer back to the dictionary, and you should start to see how this is similar to using a dictionary, but the syntax is different.  Let's compare:</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><a name="python--ex40a.py-idio.html-1"></a><span class="n">mystuff</span><span class="p">[</span><span class="s">&#39;apple&#39;</span><span class="p">]</span> <span class="c"># get apple from dict</span>
+<a name="python--ex40a.py-idio.html-2"></a><span class="n">mystuff</span><span class="o">.</span><span class="n">apple</span><span class="p">()</span> <span class="c"># get apple from the module</span>
+<a name="python--ex40a.py-idio.html-3"></a><span class="n">mystuff</span><span class="o">.</span><span class="n">tangerine</span> <span class="c"># same thing, it&#39;s just a variable</span>
+</pre></div>
+</td></tr></table><p>This means we have a <em>very</em> common pattern in Python:</p>
+<ol class="arabic simple">
+<li>Take a key=value style container.</li>
+<li>Get something out of it by the key's name.</li>
+</ol>
+<p>In the case of the dictionary, the key is a string and the syntax is <tt class="docutils literal">[key]</tt>.  In the case of the module, the key is an identifier, and the syntax is <tt class="docutils literal">.key</tt>.  Other than that they are nearly the same thing.</p>
+<div class="section" id="classes-are-like-modules">
+<h2>Classes Are Like Modules</h2>
+<p>You can think about a module as a specialized dictionary that can store Python code so you can access it with the <tt class="docutils literal">.</tt> operator.  Python also has another construct that serves a similar purpose called a class.  A class is a way to take a grouping of functions and data and place them inside a container so you can access them with the <tt class="docutils literal">.</tt> (dot) operator.</p>
+<p>If I were to create a class just like the <tt class="docutils literal">mystuff</tt> module, I'd do something like this:</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7</pre></div></td><td class="code"><div class="highlight"><pre><a name="python--ex40a.py-idio.html-1"></a><span class="k">class</span> <span class="nc">MyStuff</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<a name="python--ex40a.py-idio.html-2"></a>
+<a name="python--ex40a.py-idio.html-3"></a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a name="python--ex40a.py-idio.html-4"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">tangerine</span> <span class="o">=</span> <span class="s">&quot;And now a thousand years between&quot;</span>
+<a name="python--ex40a.py-idio.html-5"></a>
+<a name="python--ex40a.py-idio.html-6"></a>    <span class="k">def</span> <span class="nf">apple</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a name="python--ex40a.py-idio.html-7"></a>        <span class="k">print</span> <span class="s">&quot;I AM CLASSY APPLES!&quot;</span>
+</pre></div>
+</td></tr></table><p>That looks complicated compared to modules, and there is definitely a lot going on by comparison, but you should be able to make out how this is like a &quot;mini-module&quot; with <tt class="docutils literal">MyStuff</tt> having an <tt class="docutils literal">apple()</tt> function in it.  What is probably confusing is the <tt class="docutils literal">__init__()</tt> function and use of <tt class="docutils literal">self.tangerine</tt> for setting the <tt class="docutils literal">tangerine</tt> variable.</p>
+<p>Here's why classes are used instead of modules:  You can take this <tt class="docutils literal">MyStuff</tt> class and use it to craft many of them, millions at a time if you want, and each one won't interfere with each other.  When you import a module there is only one for the entire program unless you do some monster hacks.</p>
+<p>Before you can understand this though, you need to know what an &quot;object&quot; is and how to work with <tt class="docutils literal">MyStuff</tt> just like you do with the <tt class="docutils literal">mystuff.py</tt> module.</p>
+</div>
+<div class="section" id="objects-are-like-import">
+<h2>Objects are Like Import</h2>
+<p>If a class is like a &quot;mini-module,&quot; then there has to be a similar concept to <tt class="docutils literal">import</tt> but for classes.  That concept is called &quot;instantiate&quot;, which is just a fancy, obnoxious, overly smart way to say &quot;create.&quot;  When you instantiate a class what you get is called an object.</p>
+<p>You instantiate (create) a class by calling the class like it's a function, like this:</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><a name="python--ex40a.py-idio.html-1"></a><span class="n">thing</span> <span class="o">=</span> <span class="n">MyStuff</span><span class="p">()</span>
+<a name="python--ex40a.py-idio.html-2"></a><span class="n">thing</span><span class="o">.</span><span class="n">apple</span><span class="p">()</span>
+<a name="python--ex40a.py-idio.html-3"></a><span class="k">print</span> <span class="n">thing</span><span class="o">.</span><span class="n">tangerine</span>
+</pre></div>
+</td></tr></table><p>The first line is the &quot;instantiate&quot; operation, and it's a lot like calling a function.  However, Python coordinates a sequence of events for you behind the scenes.  I'll go through these steps using the above code for <tt class="docutils literal">MyStuff</tt>:</p>
+<ol class="arabic simple">
+<li>Python looks for <tt class="docutils literal">MyStuff()</tt> and sees that it is a class you've defined.</li>
+<li>Python crafts an empty object with all the functions you've specified in the class using <tt class="docutils literal">def</tt>.</li>
+<li>Python then looks to see if you made a &quot;magic&quot; <tt class="docutils literal">__init__</tt> function, and if you have it calls that function to initialize your newly created empty object.</li>
+<li>In the <tt class="docutils literal">MyStuff</tt> function <tt class="docutils literal">__init__</tt> I then get this extra variable <tt class="docutils literal">self</tt>, which is that empty object Python made for me, and I can set variables on it just like you would with a module, dictionary, or other object.</li>
+<li>In this case, I set <tt class="docutils literal">self.tangerine</tt> to a song lyric and then I've initialized this object.</li>
+<li>Now Python can take this newly minted object and assign it to the <tt class="docutils literal">thing</tt> variable for me to work with.</li>
+</ol>
+<p>That's the basics of how Python does this &quot;mini-import&quot; when you call a class like a function.  Remember that this is <em>not</em> giving you the class, but instead is using the class as a <em>blueprint</em> for building a copy of that type of thing.</p>
+<p>Keep in mind that I'm giving you a slightly inaccurate idea for how these work so that you can start to build up an understanding of classes based on what you know about modules.  The truth is, classes and objects suddenly diverge from modules at this point.  If I were being totally honest, I'd say something more like this:</p>
+<ul class="simple">
+<li>Classes are like blueprints or definitions for creating new mini-modules.</li>
+<li>Instantiation is how you make one of these mini-modules <em>and</em> import it at the same time.  &quot;Instantiate&quot; just means to create an object from the class.</li>
+<li>The resulting created mini-module is called an object and you then assign it to a variable to work with it.</li>
+</ul>
+<p>At this point objects behave differently from modules and this should only serve as a way for you to bridge over to understanding classes and objects.</p>
+</div>
+<div class="section" id="getting-things-from-things">
+<h2>Getting Things from Things</h2>
+<p>I now have three ways to get things from things:</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></div></td><td class="code"><div class="highlight"><pre><a name="python--ex40a.py-idio.html-1"></a><span class="c"># dict style</span>
+<a name="python--ex40a.py-idio.html-2"></a><span class="n">mystuff</span><span class="p">[</span><span class="s">&#39;apples&#39;</span><span class="p">]</span>
+<a name="python--ex40a.py-idio.html-3"></a>
+<a name="python--ex40a.py-idio.html-4"></a><span class="c"># module style</span>
+<a name="python--ex40a.py-idio.html-5"></a><span class="n">mystuff</span><span class="o">.</span><span class="n">apples</span><span class="p">()</span>
+<a name="python--ex40a.py-idio.html-6"></a><span class="k">print</span> <span class="n">mystuff</span><span class="o">.</span><span class="n">tangerine</span>
+<a name="python--ex40a.py-idio.html-7"></a>
+<a name="python--ex40a.py-idio.html-8"></a><span class="c"># class style</span>
+<a name="python--ex40a.py-idio.html-9"></a><span class="n">thing</span> <span class="o">=</span> <span class="n">MyStuff</span><span class="p">()</span>
+<a name="python--ex40a.py-idio.html-10"></a><span class="n">thing</span><span class="o">.</span><span class="n">apples</span><span class="p">()</span>
+<a name="python--ex40a.py-idio.html-11"></a><span class="k">print</span> <span class="n">thing</span><span class="o">.</span><span class="n">tangerine</span>
+</pre></div>
+</td></tr></table></div>
+<div class="section" id="a-first-class-example">
+<h2>A First Class Example</h2>
+<p>You should start seeing the similarities in these three key=value container types and probably have a bunch of questions.  Hang on with the questions, as the next exercise will hammer home your &quot;object-oriented vocabulary.&quot; In this exercise, I just want you to type in this code and get it working so that you have some experience before moving on.</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19</pre></div></td><td class="code"><div class="highlight"><pre><a name="python--ex40.py-idio.html-1"></a><span class="k">class</span> <span class="nc">Song</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<a name="python--ex40.py-idio.html-2"></a>
+<a name="python--ex40.py-idio.html-3"></a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lyrics</span><span class="p">):</span>
+<a name="python--ex40.py-idio.html-4"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">lyrics</span> <span class="o">=</span> <span class="n">lyrics</span>
+<a name="python--ex40.py-idio.html-5"></a>
+<a name="python--ex40.py-idio.html-6"></a>    <span class="k">def</span> <span class="nf">sing_me_a_song</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a name="python--ex40.py-idio.html-7"></a>        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">lyrics</span><span class="p">:</span>
+<a name="python--ex40.py-idio.html-8"></a>            <span class="k">print</span> <span class="n">line</span>
+<a name="python--ex40.py-idio.html-9"></a>
+<a name="python--ex40.py-idio.html-10"></a><span class="n">happy_bday</span> <span class="o">=</span> <span class="n">Song</span><span class="p">([</span><span class="s">&quot;Happy birthday to you&quot;</span><span class="p">,</span>
+<a name="python--ex40.py-idio.html-11"></a>                   <span class="s">&quot;I don&#39;t want to get sued&quot;</span><span class="p">,</span>
+<a name="python--ex40.py-idio.html-12"></a>                   <span class="s">&quot;So I&#39;ll stop right there&quot;</span><span class="p">])</span>
+<a name="python--ex40.py-idio.html-13"></a>
+<a name="python--ex40.py-idio.html-14"></a><span class="n">bulls_on_parade</span> <span class="o">=</span> <span class="n">Song</span><span class="p">([</span><span class="s">&quot;They rally around tha family&quot;</span><span class="p">,</span>
+<a name="python--ex40.py-idio.html-15"></a>                        <span class="s">&quot;With pockets full of shells&quot;</span><span class="p">])</span>
+<a name="python--ex40.py-idio.html-16"></a>
+<a name="python--ex40.py-idio.html-17"></a><span class="n">happy_bday</span><span class="o">.</span><span class="n">sing_me_a_song</span><span class="p">()</span>
+<a name="python--ex40.py-idio.html-18"></a>
+<a name="python--ex40.py-idio.html-19"></a><span class="n">bulls_on_parade</span><span class="o">.</span><span class="n">sing_me_a_song</span><span class="p">()</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="what-you-should-see">
+<h1>What You Should See</h1>
+<div class="highlight"><pre><a name="python--ex40.sh-idio-shint-pyg.html-1"></a><span class="gp">$</span> python ex40.py
+<a name="python--ex40.sh-idio-shint-pyg.html-2"></a><span class="go">Happy birthday to you</span>
+<a name="python--ex40.sh-idio-shint-pyg.html-3"></a><span class="go">I don&#39;t want to get sued</span>
+<a name="python--ex40.sh-idio-shint-pyg.html-4"></a><span class="go">So I&#39;ll stop right there</span>
+<a name="python--ex40.sh-idio-shint-pyg.html-5"></a><span class="go">They rally around tha family</span>
+<a name="python--ex40.sh-idio-shint-pyg.html-6"></a><span class="go">With pockets full of shells</span>
+</pre></div></div>
+<div class="section" id="study-drills">
+<h1>Study Drills</h1>
+<ol class="arabic simple">
+<li>Write some more songs using this and make sure you understand that you're passing a list of strings as the lyrics.</li>
+<li>Put the lyrics in a separate variable, then pass that variable to the class to use instead.</li>
+<li>See if you can hack on this and make it do more things.  Don't worry if you have no idea how, just give it a try, see what happens.  Break it, trash it, thrash it, you can't hurt it.</li>
+<li>Search online for &quot;object-oriented programming&quot; and try to overflow your brain with what you read.  Don't worry if it makes absolutely no sense to you.  Half of that stuff makes no sense to me too.</li>
+</ol>
+</div>
+<div class="section" id="common-student-questions">
+<h1>Common Student Questions</h1>
+<dl class="docutils">
+<dt>Why do I need <tt class="docutils literal">self</tt> when I make <tt class="docutils literal">__init__</tt> or other functions for classes?</dt>
+<dd>If you don't have <tt class="docutils literal">self</tt>, then code like <tt class="docutils literal">cheese = 'Frank'</tt> is ambiguous.  That code isn't clear about whether you mean the <em>instance's</em> <tt class="docutils literal">cheese</tt> attribute, <em>or</em> a local variable named <tt class="docutils literal">cheese</tt>.  With <tt class="docutils literal">self.cheese = 'Frank'</tt> it's very clear you mean the instance attribute <tt class="docutils literal">self.cheese</tt>.</dd>
+</dl>
+</div>
+        <!-- RST ENDS -->
+
+            <!-- /.help-icon -->
+        <div id="video_holder">
+            <h1>Video</h1>
+            <div id="video" class="row inner">
+                <div class="small-12 small-centered columns">
+                    <div data-paydiv_product="2" id='paydiv'>
+                        &nbsp;
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        </div><!-- /#main -->
+
+        <div class='ad-deck gold' id="footer">
+            <ul class='retailers clearfix'>
+                <li>
+                    <a href='https://paydiv.io/access/buy/2/'>
+                        <div class='retailer-name'>Zed Shaw</div>
+                        <div class='book-type'>PDF + Videos + Updates</div>
+                        <div class='book-price'>$29.95</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.amazon.com/gp/product/0321884914/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0321884914&amp;linkCode=as2&amp;tag=lepythhawa-20'>
+                        <div class='retailer-name'>Amazon</div>
+                        <div class='book-type'>Paper + DVD</div>
+                        <div class='book-price'>$29.95</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.amazon.com/gp/product/B00FGUS948/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=B00FGUS948&amp;linkCode=as2&amp;tag=lepythhawa-20'>
+                        <div class='retailer-name'>Amazon</div>
+                        <div class='book-type'>Kindle (No Videos)</div>
+                        <div class='book-price'>$17.27</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.barnesandnoble.com/w/learn-python-the-hard-way-zed-shaw/1112055406?ean=9780321884916'>
+                        <div class='retailer-name'>B&amp;N</div>
+                        <div class='book-type'>Paper + DVD</div>
+                        <div class='book-price'>$17.27</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.barnesandnoble.com/w/learn-python-the-hard-way-zed-shaw/1112055406?ean=9780133124347&amp;itm=1&amp;usri=learn+python+the+hard+way'>
+                        <div class='retailer-name'>B&amp;N</div>
+                        <div class='book-type'>Nook (No Video)</div>
+                        <div class='book-price'>$17.27</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.informit.com/store/learn-python-the-hard-way-a-very-simple-introduction-9780321884916'>
+                        <div class='retailer-name'>InformIT</div>
+                        <div class='book-type'>eBook + Paper</div>
+                        <div class='book-price'>$43.19</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://ruby.learncodethehardway.org/book/'>
+                        <div class='retailer-name'>Interested In Ruby?</div>
+                        <div class='book-type'>Ruby is also a great language.</div>
+                        <div class='book-price'>Learn Ruby The Hard Way</div>
+                    </a>
+                </li>
+
+            </ul><!-- /.places -->
+        </div><!-- /#ad-deck -->
+
+        <script src="javascripts/jquery.js"></script>
+        <script src="index.js"></script>
+        <script src="../../paydiv.io/static/jzed.js"></script>
+        <script src="../../paydiv.io/static/js/videojs/video.js"></script>
+        <link rel="stylesheet" href="../../paydiv.io/static/js/videojs/video-js.css">
+        <script src="../../paydiv.io/static/api/v1/paydiv.js"></script>
+        <script src="javascripts/app.js"></script>
+        <script src="javascripts/littools.js"></script>
+        <script type="text/javascript">
+        
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-24168052-1']);
+        _gaq.push(['_trackPageview']);
+        
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+        
+        </script>
+
+
+        <script src="javascripts/littools.js"></script>
+
+        </body>
+
+<!-- Mirrored from learnpythonthehardway.org/book/ex40.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 03 Sep 2014 17:52:40 GMT -->
+</html>
+

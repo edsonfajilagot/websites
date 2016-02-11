@@ -1,0 +1,542 @@
+<!doctype html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]> <html lang="en" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]> <html lang="en" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]> <html lang="en" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html lang="en"><!--<![endif]-->
+
+<!-- Mirrored from www.tutorialspoint.com/postgresql/postgresql_data_types.htm by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 03 Sep 2014 18:07:33 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="utf-8">
+<title>PostgreSQL - Data Type</title>
+<link rel="shortcut icon" href="http://www.tutorialspoint.com/favicon.ico" type="image/x-icon" />
+<meta name="Keywords" content="Learning, PostgreSQL, Programming, Database, Clauses, Commands, Functions, Administration, Queries, Simple, Steps, Basic, Advanced, Concepts" />
+<meta name="description" content="PostgreSQL Data Type - Learn PostgreSQL from basic to advanced convering database programming, select, insert, update,  like, with, having, group by, limit, like, distinct clauses, operators, expressions,  functions administration queries and usage along with php, perl, c, c++ and java in simple steps." />
+<base  />
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=yes">
+<script type="text/javascript" src="../scripts/jquery.min.js"></script>
+<script type="text/javascript" src="../scripts/mobile.js"></script>
+<link rel="stylesheet" type="text/css" href="../scripts/style.css" />
+<link rel="stylesheet" type="text/css" href="../scripts/prettify.css" />
+<script type="text/javascript" src="../scripts/prettify.js"></script>
+<style media="screen" type="text/css">
+/* PostgreSQL Scheme */
+#topmenu a:hover {text-decoration:none;color:#336791 !important;background-color:transparent;font-weight:bold;}
+#header{
+background:#336791 !important;
+}
+#topmenu
+{
+background-color:#252525 !important;
+}
+#leftcol ul.menu li.heading
+{
+background:#336791 !important;
+border:1px solid #252525 !important;
+}
+#middlecol  {min-height:1900px; padding:0px;}
+</style>
+<script src="../../www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-232293-6";
+urchinTracker();
+</script>
+</head>
+<body onload="prettyPrint()">
+<div id="header">
+<div class="wrapper">
+<h1 class="logo"><a href="http://www.tutorialspoint.com/index.htm">Tutorials Point - Simply Easy Learning</a></h1>
+<div id="search">
+<form method="get" id="searchform" name="searchform" action="http://www.google.com/search" target="_blank">
+<input type="hidden" name="sitesearch" value="www.tutorialspoint.com"/>
+<input type="text" name="as_q" id="s" value="Search this site..." onfocus="if (this.value == 'Search this site...') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search this site...';}"/>
+<input value="FORID:11" name="cof" type="hidden"/>
+<input type="hidden" name="ie" value="ISO-8859-1" />
+<input class="submit btn" type="image" src="../images/icon-search.png" alt="Go"/>
+</form>
+</div>
+</div>
+</div>
+<div id="topmenu">
+<div class="wrapper">
+<div id="mobileleft">
+<a href="http://www.tutorialspoint.com/index.htm" id="home"><img src="../images/home-icon.png" /></a>
+</div>
+<div id="left">
+<a href="http://www.tutorialspoint.com/index.htm" target="_top">Home </a>
+<a href="http://www.tutorialspoint.com/computer_programming_tutorials.htm">Programming </a>
+<a href="http://www.tutorialspoint.com/java_technology_tutorials.htm">Java </a>
+<a href="http://www.tutorialspoint.com/web_development_tutorials.htm">Web </a>
+<a href="http://www.tutorialspoint.com/database_tutorials.htm">Databases </a>
+<a href="http://www.tutorialspoint.com/academic_tutorials.htm">Academic</a>
+<a href="http://www.tutorialspoint.com/management_tutorials.htm" title="Management Tutorials">Management</a>
+<a href="http://www.tutorialspoint.com/software_quality_tutorials.htm" title="Software Quality Tutorials">Quality</a>
+<a href="http://www.tutorialspoint.com/telecom_tutorials.htm" title="Telecom Tutorials">Telecom</a>
+<a href="http://www.tutorialspoint.com/misc_tutorials.htm">More...</a>
+</div>
+<div id="mobileright">
+<a href="#" id="pull"><img src="../images/nav-icon.png" /></a>
+</div>
+<div id="right">
+<a href="http://www.tutorialspoint.com/references.htm" target="_top">REFERENCES</a> |
+<a href="http://www.tutorialspoint.com/forums/index.php" target="_top">FORUM</a> |
+<a href="http://www.tutorialspoint.com/about/index.htm" target="_top">ABOUT</a> |
+<a href="http://www.tutorialspoint.com/about/contact_us.htm" target="_top">CONTACT</a>
+</div>
+</div>
+</div>
+<div class="wrapper">
+<div id="leftcol">
+<div class="mini-logo">
+<img src="../images/postgresql-mini-logo.png" alt="PostgreSQL Tutorial" />
+</div>
+<ul class="menu">
+<li class="heading">Learn PostgreSQL</li>
+<li><a target="_top" href="index-2.html" >PostgreSQL - Home</a></li>
+<li><a target="_top" href="postgresql_overview.html" >PostgreSQL - Overview</a></li>
+<li><a target="_top" href="postgresql_environment.html" >PostgreSQL - Environment</a></li>
+<li><a target="_top" href="postgresql_syntax.html" >PostgreSQL - Syntax</a></li>
+<li><a target="_top" href="postgresql_data_types.html" ><b>PostgreSQL - Data Types</b></a></li>
+<li><a target="_top" href="postgresql_create_database.html" >PostgreSQL - Create Database</a></li>
+<li><a target="_top" href="postgresql_select_database.html" >PostgreSQL - Select Database</a></li>
+<li><a target="_top" href="postgresql_drop_database.html" >PostgreSQL - Drop Database</a></li>
+<li><a target="_top" href="postgresql_create_table.html" >PostgreSQL - Create Table</a></li>
+<li><a target="_top" href="postgresql_drop_table.html" >PostgreSQL - Drop Table</a></li>
+<li><a target="_top" href="postgresql_schema.html" >PostgreSQL - Schema</a></li>
+<li><a target="_top" href="postgresql_insert_query.html" >PostgreSQL - Insert Query</a></li>
+<li><a target="_top" href="postgresql_select_query.html" >PostgreSQL - Select Query</a></li>
+<li><a target="_top" href="postgresql_operators.html" >PostgreSQL - Operators</a></li>
+<li><a target="_top" href="postgresql_expressions.html" >PostgreSQL - Expressions</a></li>
+<li><a target="_top" href="postgresql_where_clause.html" >PostgreSQL - Where Clause</a></li>
+<li><a target="_top" href="postgresql_and_or_clauses.html" >PostgreSQL - AND &amp; OR Clauses</a></li>
+<li><a target="_top" href="postgresql_update_query.html" >PostgreSQL - Update Query</a></li>
+<li><a target="_top" href="postgresql_delete_query.html" >PostgreSQL - Delete Query</a></li>
+<li><a target="_top" href="postgresql_like_clause.html" >PostgreSQL - Like Clause</a></li>
+<li><a target="_top" href="postgresql_limit_clause.html" >PostgreSQL - Limit Clause</a></li>
+<li><a target="_top" href="postgresql_order_by.html" >PostgreSQL - Order By</a></li>
+<li><a target="_top" href="postgresql_group_by.html" >PostgreSQL - Group By</a></li>
+<li><a target="_top" href="postgresql_with_clause.html" >PostgreSQL - With Clause</a></li>
+<li><a target="_top" href="postgresql_having_clause.html" >PostgreSQL - Having Clause</a></li>
+<li><a target="_top" href="postgresql_distinct_keyword.html" >PostgreSQL - Distinct Keyword</a></li>
+</ul>
+<ul class="menu">
+<li class="heading">Advanced PostgreSQL</li>
+<li><a target="_top" href="postgresql_constraints.html" >PostgreSQL - Constraints</a></li>
+<li><a target="_top" href="postgresql_using_joins.html" >PostgreSQL - Joins</a></li>
+<li><a target="_top" href="postgresql_unions_clause.html" >PostgreSQL - Unions Clause</a></li>
+<li><a target="_top" href="postgresql_null_values.html" >PostgreSQL - NULL Values</a></li>
+<li><a target="_top" href="postgresql_alias_syntax.html" >PostgreSQL - Alias Syntax</a></li>
+<li><a target="_top" href="postgresql_triggers.html" >PostgreSQL - Triggers</a></li>
+<li><a target="_top" href="postgresql_indexes.html" >PostgreSQL - Indexes</a></li>
+<li><a target="_top" href="postgresql_alter_command.html" >PostgreSQL - Alter Command</a></li>
+<li><a target="_top" href="postgresql_truncate_table.html" >PostgreSQL - Truncate Table</a></li>
+<li><a target="_top" href="postgresql_views.html" >PostgreSQL - Views</a></li>
+<li><a target="_top" href="postgresql_transactions.html" >PostgreSQL - Transactions</a></li>
+<li><a target="_top" href="postgresql_locks.html" >PostgreSQL - Locks</a></li>
+<li><a target="_top" href="postgresql_sub_queries.html" >PostgreSQL - Sub Queries</a></li>
+<li><a target="_top" href="postgresql_using_autoincrement.html" >PostgreSQL -  Autoincrement</a></li>
+<li><a target="_top" href="postgresql_privileges.html" >PostgreSQL - Privileges</a></li>
+<li><a target="_top" href="postgresql_date_time.html" >PostgreSQL - Date &amp; Time</a></li>
+<li><a target="_top" href="postgresql_functions.html" >PostgreSQL - Functions</a></li>
+<li><a target="_top" href="postgresql_useful_functions.html" >PostgreSQL - Useful Functions</a></li>
+</ul>
+<ul class="menu">
+<li class="heading">PostgreSQL Interfaces</li>
+<li><a target="_top" href="postgresql_c_cpp.html" >PostgreSQL - C/C++</a></li>
+<li><a target="_top" href="postgresql_java.html" >PostgreSQL - Java</a></li>
+<li><a target="_top" href="postgresql_php.html" >PostgreSQL - PHP</a></li>
+<li><a target="_top" href="postgresql_perl.html" >PostgreSQL - Perl</a></li>
+<li><a target="_top" href="postgresql_python.html" >PostgreSQL - Python</a></li>
+</ul>
+<ul class="menu">
+<li class="heading">SQL Useful Resources</li>
+<li><a target="_top" href="postgresql_quick_guide.html" >PostgreSQL - Quick Guide</a></li>
+<li><a target="_top" href="postgresql_useful_resources.html" >PostgreSQL - Useful Resources</a></li>
+</ul>
+<ul class="menu">
+<li class="sreading">Selected Reading</li>
+<li><a target="_top" href="http://www.tutorialspoint.com/developers_best_practices/index.htm">Developer's Best Practices</a></li>
+<li><a target="_top" href="http://www.tutorialspoint.com/computer_glossary.htm">Computer Glossary</a></li>
+<li><a target="_top" href="http://www.tutorialspoint.com/computer_whoiswho.htm">Who is Who</a></li>
+</ul>
+</div><!-- leftcol -->
+<div id="middlecol">
+<!-- PRINTING STARTS HERE -->
+<div class="content">
+<h1>PostgreSQL - Data Type</h1>
+<div class="topgooglead">
+<div class="topadtag">Advertisements</div>
+<script async src="../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<ins class="adsbygoogle top_ad_slot"
+     style="display:inline-block;"
+     data-ad-client="ca-pub-7133395778201029"
+     data-ad-slot="2813390526">
+</ins>
+<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+<hr />
+<div class="pre-btn">
+<a href="postgresql_syntax.html">Previous Page</a>
+</div>
+<div class="nxt-btn">
+<a href="postgresql_create_database.html">Next Page</a>
+</div>
+<div class="clearer"></div>
+<hr />
+<p>This chapter discusses PostgreSQL Data Types. While creating table, for each column, you specify a data type, i.e., what kind of data you want to store in the table fields.</p>
+
+<p>This enables several benefits:<p>
+<ul class="list" >
+<li><p><b>Consistency: </b>Operations against columns of same data type give consistent results and are usually the fastest.</p>
+</li>
+<li><p><b>Validation: </b>Proper use of data types implies format validation of data and rejection of data outside the scope of data type. </p></li>
+<li><p><b>Compactness: </b>As a column can store a single type of value, it is stored in a compact way.</p></li>
+<li><p><b>Performance: </b>Proper use of data types gives the most efficient storage of data. The values stored can be processed quickly, which enhances the performance.</p></li>
+</ul>
+<p>PostgreSQL supports a wide set of Data Types. Besides, users can create their own custom data type using <i>CREATE TYPE</i> SQL command. There are different categories of data types in PostgreSQL. They are discussed as below:</p>
+<h2>Numeric Types</h2>
+<p>Numeric types consist of two-byte, four-byte, and eight-byte integers, four-byte and eight-byte floating-point numbers, and selectable-precision decimals. Table below lists the available types.</p>
+<table class="src">
+<tr><th>Name</th><th style="width:75px;">Storage Size</th><th style="width:175px;">Description</th><th>Range</th></tr>
+<tr><td>smallint</td><td>2 bytes</td><td>small-range integer</td><td>-32768 to +32767</td></tr>
+<tr><td>integer</td><td>4 bytes</td><td>typical choice for integer</td><td>-2147483648 to +2147483647</td></tr>
+<tr><td>bigint</td><td>8 bytes</td><td>large-range integer</td><td>-9223372036854775808 to 9223372036854775807</td></tr>
+<tr><td>decimal</td><td>variable</td><td>user-specified precision,exact</td><td>up to 131072 digits before the decimal
+point; up to 16383 digits after the decimal point</td></tr>
+<tr><td>numeric</td><td>variable</td><td>user-specified precision,exact</td><td>up to 131072 digits before the decimal
+point; up to 16383 digits after the decimal point</td></tr>
+<tr><td>real</td><td>4 bytes</td><td>variable-precision,inexact</td><td>6 decimal digits precision</td></tr>
+<tr><td>double precision</td><td>8 bytes</td><td>variable-precision,inexact</td><td>15 decimal digits precision</td></tr>
+<tr><td>smallserial</td><td>2 bytes</td><td>small autoincrementing integer</td><td>1 to 32767</td></tr>
+<tr><td>serial</td><td>4 bytes</td><td>autoincrementing integer</td><td>1 to 2147483647</td></tr>
+<tr><td>bigserial</td><td>8 bytes</td><td>large autoincrementing integer</td><td>1 to
+9223372036854775807</td></tr>
+</table>
+<h2>Monetary Types</h2>
+<p>The <i>money</i> type stores a currency amount with a fixed fractional precision. Values of the <i>numeric, int, and bigint</i> data types can be cast to <i>money</i>. Using Floating point numbers is not recommended to handle money due to the potential for rounding errors.</p>
+<table class="src">
+<tr><th>Name</th><th>Storage Size</th><th>Description</th><th>Range</th></tr>
+<tr><td>money</td><td>8 bytes</td><td>currency amount</td><td>-92233720368547758.08 to +92233720368547758.07</td></tr>
+</table>
+<h2>Character Types</h2>
+<p>The table below lists general-purpose character types available in PostgreSQL.</p>
+<table class="src">
+<tr><th>Name</th><th style="width:50%">Description</th></tr>
+<tr><td>character varying(n), varchar(n)</td><td>variable-length with limit</td></tr>
+<tr><td>character(n), char(n)</td><td>fixed-length, blank padded</td></tr>
+<tr><td>text</td><td>variable unlimited length</td></tr>
+</table>
+<h2>Binary Data Types</h2>
+<p>The <i>bytea</i> data type allows storage of binary strings as in the table below.</p>
+<table class="src">
+<tr><th style="width:100px;">Name</th><th>Storage Size</th><th>Description</th></tr>
+<tr><td>bytea</td><td>1 or 4 bytes plus the actual binary string</td><td>variable-length binary string</td></tr>
+</table>
+<h2>Date/Time Types</h2>
+<p>PostgreSQL supports the full set of SQL date and time types, as shown in table below. Dates are counted according to the Gregorian calendar. Here, all the types have resolution of <b>1 microsecond / 14 digits</b> except <b>date</b> type, whose resolution is <b>day</b>.</p>
+<table class="src">
+<tr><th>Name</th><th style="width:75px;">Storage Size</th><th>Description</th><th>Low Value</th><th>High Value</th></tr>
+<tr><td>timestamp [(p)] [without time zone ]</td><td>8 bytes</td><td>both date and time (no time zone)</td><td>4713 BC</td><td>294276 AD</td></tr>
+<tr><td>timestamp [(p) ] with time zone</td><td>8 bytes</td><td>both date and time, with time zone</td><td>4713 BC</td><td>294276 AD</td></tr>
+<tr><td>date</td><td>4 bytes</td><td>date (no time of day)</td><td>4713 BC</td><td>5874897 AD</td></tr>
+<tr><td>time [ (p)] [ without time zone ]</td><td>8 bytes</td><td>time of day (no date)</td><td>00:00:00</td><td>24:00:00</td></tr>
+<tr><td>time [ (p)] with time zone</td><td>12 bytes</td><td>times of day only, with time zone</td><td>00:00:00+1459</td><td>24:00:00-1459</td></tr>
+<tr><td>interval [fields ] [(p) ]</td><td>12 bytes</td><td>time interval</td><td>-178000000 years</td><td>178000000 years</td></tr>
+</table>
+<h2>Boolean Type</h2>
+<p>PostgreSQL provides the standard SQL type boolean. The boolean type can have several states: <i>true</i>, <i>false</i>, and a third state, <i>unknown</i>, which is represented by the SQL null value.</p>
+<table class="src">
+<tr><th style="width:100px;">Name</th><th>Storage Size</th><th>Description</th></tr>
+<tr><td>boolean</td><td>1 byte</td><td>state of true or false</td></tr>
+</table>
+<h2>Enumerated Type</h2>
+<p>Enumerated (enum) types are data types that comprise a static, ordered set of values. They are equivalent to the enum types supported in a number of programming languages.</p>
+<p>Unlike other types, Enumerated Types need to be created using CREATE TYPE command. This type is used to store a static, ordered set of values, for example compass directions, i.e., NORTH, SOUTH, EAST, and WEST or days of the week as below:</p>
+<pre class="prettyprint">
+CREATE TYPE week AS ENUM ('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun');
+</pre>
+<p>Enumerated once created, they can be used like any other types.</p>
+<h2>Geometric Type</h2>
+<p>Geometric data types represent two-dimensional spatial objects. The most fundamental type, the point, forms the basis for all of the other types.</p>
+<table class="src">
+<tr><th>Name</th><th>Storage Size</th><th>Representation</th><th>Description</th></tr>
+<tr><td>point</td><td>16 bytes</td><td>Point on a plane</td><td>(x,y)</td></tr>
+<tr><td>line</td><td>32 bytes</td><td>Infinite line (not fully implemented)</td><td>((x1,y1),(x2,y2))</td></tr>
+<tr><td>lseg</td><td>32 bytes</td><td>Finite line segment</td><td>((x1,y1),(x2,y2))</td></tr>
+<tr><td>box</td><td>32 bytes</td><td>Rectangular box</td><td>((x1,y1),(x2,y2))</td></tr>
+<tr><td>path</td><td>16+16n bytes</td><td>Closed path (similar to polygon)</td><td>((x1,y1),...)</td></tr>
+<tr><td>path</td><td>16+16n bytes</td><td>Open path</td><td>[(x1,y1),...]</td></tr>
+<tr><td>polygon</td><td>40+16n</td><td>Polygon (similar to closed path)</td><td>((x1,y1),...)</td></tr>
+<tr><td>circle</td><td>24 bytes</td><td>Circle</td><td>&lt;(x,y),r&gt; (center point and radius) </td></tr>
+</table>
+<h2>Network Address Type</h2>
+<p>PostgreSQL offers data types to store IPv4, IPv6, and MAC addresses. It is better to use these types instead of plain text types to store network addresses, because these types offer input error checking and specialized operators and functions.</p>
+<table class="src">
+<tr><th>Name</th><th>Storage Size</th><th>Description</th></tr>
+<tr><td>cidr</td><td>7 or 19 bytes</td><td>IPv4 and IPv6 networks</td></tr>
+<tr><td>inet</td><td>7 or 19 bytes</td><td>IPv4 and IPv6 hosts and networks</td></tr>
+<tr><td>macaddr</td><td>6 bytes</td><td>MAC addresses</td></tr>
+</table>
+<h2>Bit String Type</h2>
+<p>Bit String Types are used to store bit masks. They are either 0 or 1. There are two SQL bit types: <b>bit(n)</b> and <b>bit varying(n)</b>, where n is a positive integer.</p>
+<h2>Text Search Type</h2>
+<p>This type supports full text search, which is the activity of searching through a collection of natural-language documents to locate those that best match a query. There are two Data Types for this :</p>
+<table class="src">
+<tr><th>Name</th><th>Description</th></tr>
+<tr><td>tsvector</td><td>This is a sorted list of distinct words that have been normalized to merge different variants of the same word, called as "lexemes".</td></tr>
+<tr><td>tsquery</td><td>This stores lexemes that are to be searched for, and combines them honoring the Boolean operators & (AND), | (OR), and ! (NOT). Parentheses can be used to enforce grouping of the operators.</td></tr>
+</table>
+<h2>UUID Type</h2>
+<p>A UUID (Universally Unique Identifiers) is written as a sequence of lower-case hexadecimal digits, in several groups separated by hyphens, specifically a group of 8 digits followed by three groups of 4 digits followed by a group of 12 digits, for a total of 32 digits representing the 128 bits. </p>
+<p>An example of a UUID is:  <b>550e8400-e29b-41d4-a716-446655440000</b></p>
+<h2>XML Type</h2>
+<p>The xml data type can be used to store XML data. For storing XML data, first you create XML values using function xmlparse as follows:</p>
+<pre class="prettyprint">
+XMLPARSE (DOCUMENT '&lt;?xml version="1.0"?&gt;
+&lt;tutorial&gt;
+&lt;title&gt;PostgreSQL Tutorial &lt;/title&gt;
+   &lt;topics&gt;...&lt;/topics&gt;
+&lt;/tutorial&gt;')
+
+XMLPARSE (CONTENT 'xyz&lt;foo&gt;bar&lt;/foo&gt;&lt;bar&gt;foo&lt;/bar&gt;')
+</pre>
+<h2>JSON Type</h2>
+<p>The <i>json</i> data type can be used to store JSON (JavaScript Object Notation) data. Such data can also be stored as <i>text</i>, but the <i>json</i> data type has the advantage of checking that each stored value is a valid JSON value. There are also related support functions available which can be used directly to handle JSON data type as follows:</p>
+<table class="src">
+<tr><th>Example</th><th>Example Result</th></tr>
+<tr><td style="width:50%;">array_to_json('{{1,5},{99,100}}'::int[])</td><td>[[1,5],[99,100]]</td></tr>
+<tr><td>row_to_json(row(1,'foo'))</td><td>{"f1":1,"f2":"foo"}</td></tr>
+</table>
+<h2>Array Type</h2>
+<p>PostgreSQL gives opportunity to define a column of a table as a variable length multidimensional array. Arrays of any built-in or user-defined base type, enum type, or composite type can be created.</p>
+<h3>Declaration of Arrays</h3>
+<p>Array type can be declared as :</p>
+<pre class="prettyprint">
+CREATE TABLE monthly_savings (
+   name text,
+   saving_per_quarter integer[],
+   scheme text[][]
+);
+</pre>
+<p>or by using keyword "ARRAY" as:</p>
+<pre class="prettyprint">
+CREATE TABLE monthly_savings (
+   name text,
+   saving_per_quarter integer ARRAY[4],
+   scheme text[][]
+);
+</pre>
+<h3>Inserting values </h3>
+<p>Array values can be inserted as a literal constant, enclosing the element values within curly braces and separating them by commas. An example is as below:</p>
+<pre class="prettyprint">
+INSERT INTO monthly_savings
+VALUES ('Manisha',
+'{20000, 14600, 23500, 13250}',
+'{{"FD", "MF"}, {"FD", "Property"}}');
+</pre>
+<h3>Accessing Arrays </h3>
+<p>An example for accessing Arrays is shown below. The command below will select persons whose savings are more in second quarter than fourth quarter.</p>
+<pre class="prettyprint">
+SELECT name FROM monhly_savings WHERE saving_per_quarter[2] &gt; saving_per_quarter[4];
+</pre>
+<h3>Modifying Arrays </h3>
+<p>An example of modifying arrays is as shown below.</p>
+<pre class="prettyprint">
+UPDATE monthly_savings SET saving_per_quarter = '{25000,25000,27000,27000}'
+WHERE name = 'Manisha';
+</pre>
+<p>or using the ARRAY expression syntax:</p>
+<pre class="prettyprint">
+UPDATE monthly_savings SET saving_per_quarter = ARRAY[25000,25000,27000,27000]
+WHERE name = 'Manisha';
+</pre>
+<h3>Searching Arrays </h3>
+<p>An example of searching arrays is as shown below.</p>
+<pre class="prettyprint">
+SELECT * FROM monthly_savings WHERE saving_per_quarter[1] = 10000 OR
+saving_per_quarter[2] = 10000 OR
+saving_per_quarter[3] = 10000 OR
+saving_per_quarter[4] = 10000;
+</pre>
+<p>If the size of array is known above search method can be used. Else, the following example shows how to search when size is not known.</p>
+<pre class="prettyprint">
+SELECT * FROM monthly_savings WHERE 10000 = ANY (saving_per_quarter);
+</pre>
+<h2>Composite Types</h2>
+<p>This type represents a list of field names and their data types, i.e., structure of a row or record of a table.</p>
+<h3>Declaration of Composite Types</h3>
+<p>The following example shows how to declare a composite type:</p>
+<pre class="prettyprint">
+CREATE TYPE inventory_item AS (
+   name text,
+   supplier_id integer,
+   price numeric
+);
+</pre>
+<p>This data type can be used in the create tables as below:</p>
+<pre class="prettyprint">
+CREATE TABLE on_hand (
+   item inventory_item,
+   count integer
+);
+</pre>
+<h3>Composite Value Input</h3>
+<p>Composite values can be inserted as a literal constant, enclosing the field values within parentheses and separating them by commas. An example is as below:</p>
+<pre class="prettyprint">
+INSERT INTO on_hand VALUES (ROW('fuzzy dice', 42, 1.99), 1000);
+</pre>
+<p>This is valid for the <i>inventory_item</i> defined above. The ROW keyword is actually optional as long as you have more than one field in the expression.</p>
+<h3>Accessing Composite Types</h3>
+<p>To access a field of a composite column, use a dot followed by the field name, much like selecting a field from a table name. For example, to select some subfields from our on_hand example table, the query would be as shown below:
+<pre class="prettyprint">
+SELECT (item).name FROM on_hand WHERE (item).price > 9.99;
+</pre>
+<p>you can even use the table name as well (for instance in a multitable query), like this:
+<pre class="prettyprint">
+SELECT (on_hand.item).name FROM on_hand WHERE (on_hand.item).price &gt; 9.99;
+</pre>
+<h2>Range Types</h2>
+<p>Range types represent data type that uses a range of data. Range type can be discrete ranges (e.g., all integer values 1 to 10) or continuous ranges (e.g., any point in time between 10:00am and 11:00am).</p>
+<p>The built-in range types available include ranges:</p>
+<ul class="list">
+<li><p>int4range - Range of integer</p></li>
+<li><p>int8range - Range of bigint</p></li>
+<li><p>numrange - Range of numeric</p></li>
+<li><p>tsrange - Range of timestamp without time zone</p></li>
+<li><p>tstzrange - Range of timestamp with time zone</p></li>
+<li><p>daterange - Range of date</p></li>
+</ul>
+<p>Custom range types can be created to make new types of ranges available, such as IP address ranges using the inet type as a base, or float ranges using the float data type as a base.</p>
+<p>Range types support inclusive and exclusive range boundaries using the [ ] and ( ) characters, respectively, e.g., '[4,9]' represents all integers starting from and including 4 up to but not including 9.</p>
+<h2>Object Identifier Types</h2>
+<p>Object identifiers (OIDs) are used internally by PostgreSQL as primary keys for various system tables. If <i> WITH OIDS</i> is specified or <i>default_with_oids</i> configuration variable is enabled, only in such cases OIDs are added to user-created tables. The following table lists several alias types. The OID alias types have no operations of their own except for specialized input and output routines.</p>
+<table class="src">
+<tr><th>Name</th><th>References</th><th>Description</th><th>Value Example</th></tr>
+<tr><td>oid</td><td>any</td><td>numeric object identifier</td><td>564182</td></tr>
+<tr><td>regproc</td><td>pg_proc</td><td>function name</td><td>sum</td></tr>
+<tr><td>regprocedure</td><td>pg_proc</td><td>function with argument types</td><td>sum(int4)</td></tr>
+<tr><td>regoper</td><td>pg_operator</td><td>operator name</td><td>+</td></tr>
+<tr><td>regoperator</td><td>pg_operator</td><td>operator with argument types</td><td>*(integer,integer) or -(NONE,integer)</td></tr>
+<tr><td>regclass</td><td>pg_class</td><td>relation name</td><td>pg_type</td></tr>
+<tr><td>regtype</td><td>pg_type</td><td>data type name</td><td>integer</td></tr>
+<tr><td>regconfig</td><td>pg_ts_config</td><td>text search configuration</td><td>english</td></tr>
+<tr><td>regdictionary</td><td>pg_ts_dict</td><td>text search dictionary</td><td>simple</td></tr>
+</table>
+<h2>Pseudo Types</h2>
+<p>The PostgreSQL type system contains a number of special-purpose entries that are collectively called pseudo-types. A pseudo-type cannot be used as a column data type, but it can be used to declare a function's argument or result type. The table below lists the existing pseudo-types.</p>
+<table class="src">
+<tr><th>Name</th><th>Description</th></tr>
+<tr><td>any </td><td>Indicates that a function accepts any input data type.</td></tr>
+<tr><td>anyelement</td><td>Indicates that a function accepts any data type.</td></tr>
+<tr><td>anyarray </td><td>Indicates that a function accepts any array data type.</td></tr>
+<tr><td>anynonarray</td><td>Indicates that a function accepts any non-array data type.</td></tr>
+<tr><td>anyenum </td><td>Indicates that a function accepts any enum data type.</td></tr>
+<tr><td>anyrange</td><td>Indicates that a function accepts any range data type.</td></tr>
+<tr><td>cstring</td><td>Indicates that a function accepts or returns a null-terminated C string.</td></tr>
+<tr><td>internal</td><td>Indicates that a function accepts or returns a server-internal data type.</td></tr>
+<tr><td>language_handler</td><td>A procedural language call handler is declared to return language_handler.</td></tr>
+<tr><td>fdw_handler</td><td>A foreign-data wrapper handler is declared to return fdw_handler.</td></tr>
+<tr><td>record</td><td>Identifies a function returning an unspecified row type.</td></tr>
+<tr><td>trigger</td><td>A trigger function is declared to return trigger.</td></tr>
+<tr><td>void</td><td>Indicates that a function returns no value.</td></tr>
+</table>
+<hr />
+<div class="pre-btn">
+<a href="postgresql_syntax.html">Previous Page</a>
+</div>
+<div class="print-btn">
+<a href="http://www.tutorialspoint.com/cgi-bin/printpage.cgi" target="_blank">Print Version</a>
+</div>
+<div class="pdf-btn">
+<a href="pdf/postgresql_data_types.pdf" alt="PostgreSQL - Data Type" target="_blank">PDF Version</a>
+</div>
+<div class="nxt-btn">
+<a href="postgresql_create_database.html">Next Page</a>
+</div>
+<div class="clearer"></div>
+<hr />
+</div>
+<!-- PRINTING ENDS HERE -->
+<div class="bottomgooglead">
+<div class="bottomadtag">Advertisements</div>
+<script async src="../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<ins class="adsbygoogle bottom_ad_slot"
+     style="display:inline-block;"
+     data-ad-client="ca-pub-7133395778201029"
+     data-ad-slot="2952991323">
+</ins>
+<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+</div><!-- middlecol -->
+<div id="rightcol">
+<!-- AddThis Button BEGIN -->
+<div class="addthis">
+<div class="addthis_toolbox addthis_default_style">
+<a class="addthis_button_facebook"></a>
+<a class="addthis_button_twitter"></a>
+<script type="text/javascript">
+<!--
+ document.write('<a class="addthis_button_google_plusone" g:plusone:count="false"></a>');
+//-->
+</script>
+<a class="addthis_button_linkedin"></a>
+<a class="addthis_button_email"></a>
+<a class="addthis_button_compact"></a>
+</div>
+<script type="text/javascript" src="../../s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4f661ec623a400f0"></script>
+</div>
+<!-- AddThis Button END -->
+<div class="localad">
+<a rel="nofollow" href="http://www.modernindianbabynames.com/" target="_blank" title="Modern Baby Names">Modern Baby Names</a>
+</div>
+<div class="localad">
+<a rel="nofollow" href="http://www.photofuntoos.com/" target="_blank" title="Online Photo Editing">Online Photo Editing</a>
+</div>
+<div class="rightgooglead">
+<div style="padding-bottom:5px;padding-left:10px;">Advertisements</div>
+<script type="text/javascript"><!--
+google_ad_client = "pub-7133395778201029";
+google_ad_width = 160;
+google_ad_height = 600;
+google_ad_format = "160x600_as";
+google_ad_type = "image";
+google_ad_channel ="";
+//--></script>
+<script type="text/javascript"
+src="../../pagead2.googlesyndication.com/pagead/f.txt">
+</script>
+</div>
+</div><!-- rightcol -->
+<div style="clear:both;"></div>
+</div><!-- wrapper -->
+<div id="footer">
+<div class="wrapper">
+<div id="bottommenu">
+<a href="http://www.tutorialspoint.com/asp.net/index.htm" target="_top">ASP.NET </a> |
+<a href="http://www.tutorialspoint.com/jquery/index.htm" target="_top">jQuery </a> |
+<a href="http://www.tutorialspoint.com/ajax/index.htm" target="_top">AJAX </a> |
+<a href="http://www.tutorialspoint.com/ant/index.htm" target="_top">ANT</a> |
+<a href="http://www.tutorialspoint.com/jsp/index.htm" target="_top">JSP </a> |
+<a href="http://www.tutorialspoint.com/servlets/index.htm" target="_top">Servlets </a> |
+<a href="http://www.tutorialspoint.com/log4j/index.htm" target="_top">log4j </a> |
+<a href="http://www.tutorialspoint.com/ibatis/index.htm" target="_top">iBATIS </a> |
+<a href="http://www.tutorialspoint.com/hibernate/index.htm" target="_top">Hibernate </a> |
+<a href="http://www.tutorialspoint.com/jdbc/index.htm" target="_top">JDBC </a> |
+<a href="http://www.tutorialspoint.com/struts_2/index.htm" target="_top">Struts </a> |
+<a href="http://www.tutorialspoint.com/html5/index.htm" target="_top">HTML5 </a> |
+<a href="http://www.tutorialspoint.com/sql/index.htm" target="_top">SQL </a> |
+<a href="http://www.tutorialspoint.com/mysql/index.htm" target="_top">MySQL </a> |
+<a href="http://www.tutorialspoint.com/cplusplus/index.htm" target="_top">C++ </a> |
+<a href="http://www.tutorialspoint.com/unix/index.htm" target="_top">UNIX </a>
+</div>
+<div id="copyright">
+<p>Copyright &copy; 2014 by tutorialspoint. All Rights Reserved.</p>
+</div>
+</div>
+</div>
+</body>
+
+<!-- Mirrored from www.tutorialspoint.com/postgresql/postgresql_data_types.htm by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 03 Sep 2014 18:07:34 GMT -->
+</html>

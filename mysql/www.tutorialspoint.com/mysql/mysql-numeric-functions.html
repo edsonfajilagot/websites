@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="ie ie8"> <![endif]-->
+<!--[if IE 9]><html class="ie ie9"> <![endif]-->
+<!--[if gt IE 9]><!-->	<html> <!--<![endif]-->
+
+<!-- Mirrored from www.tutorialspoint.com/mysql/mysql-numeric-functions.htm by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 20 Apr 2015 05:35:11 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<!-- Basic -->
+<meta charset="utf-8">
+<title>MySQL Numeric Functions</title>
+<meta name="description" content="MySQL Numeric Functions- Learn MySQL from basic to advanced covering database programming clauses command functions administration queries and usage along with PHP in simple steps. This tutorial takes you starting from basic to advance MySQL concepts." />
+<meta name="keywords" content="Learning, MySQL, Programming, Database, Clauses, Commands, Functions, MySQL Between Clause, Queries, Simple, Steps, Basic, Advanced, Concepts." />
+<base  />
+<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
+<meta name="author" content="tutorialspoint.com">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=yes">
+<meta property="fb:app_id" content="471319149685276" />
+<!-- Web Fonts  -->
+<link href="../../fonts.googleapis.com/cssf1e9.css?family=Open+Sans:300,400,600,700,800|Shadows+Into+Light" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="../../cdn.tutorialspoint.com/theme/css/fonts/font-awesome/css/font-awesome.css">
+<link rel="stylesheet" href="../../cdn.tutorialspoint.com/theme/css/custom-mini.css"/>
+<script type="text/javascript" src="../../cdn.tutorialspoint.com/theme/js/jquery.js"></script>
+<script type="text/javascript" src="../../cdn.tutorialspoint.com/theme/prettify.js"></script>
+<!-- Head Libs -->
+<script src="../../cdn.tutorialspoint.com/theme/vendor/modernizr.js"></script>
+<!--[if IE]>
+<link rel="stylesheet" href="http://cdn.tutorialspoint.com/theme/css/ie.css">
+<![endif]-->
+<!--[if lte IE 8]>
+<script src="http://cdn.tutorialspoint.com/theme/vendor/respond.js"></script>
+<![endif]-->
+<!--[if IE]>
+<link rel="stylesheet" href="http://cdn.tutorialspoint.com/theme/css/ie.css">
+<![endif]-->
+<!--[if lte IE 8]>
+<script src="http://cdn.tutorialspoint.com/theme/vendor/respond.js"></script>
+<![endif]-->
+<!--[if IE 8]>
+<link rel="stylesheet" type="text/css" href="http://cdn.tutorialspoint.com/theme/css/ie8.css">
+<![endif]-->
+<!--[if IE 9]>
+<link rel="stylesheet" type="text/css" href="http://cdn.tutorialspoint.com/theme/css/ie9.css">
+<![endif]-->
+<!-- Front Page related changes -->
+<style>
+div.feature-box div.feature-box-icon, .col-md-3 .course-box, li.heading, footer div.footer-ribon, div.footer-copyright { background: #004e61 url(../images/pattern.png) repeat center center !important; }
+header nav ul.nav-main li a:hover, header nav ul.nav-main li.dropdown:hover a.dropdown-toggle { background: #004e61;} 
+header nav ul.nav-main li.dropdown:hover > ul{ border:2px solid #004e61}
+header nav ul.nav-main ul.dropdown-menu > li > a:hover, #mainMenu > li:hover, header nav.mega-menu ul.nav-main .mega-menu-content ul.sub-menu li:hover{ background: #004e61 !important;}
+img.mobile-apps { border: 1px solid #004e61 !important; }
+footer i.icon, footer ul.list.icons li i { color: #004e61 !important; }
+</style>
+</head>
+<body onload="prettyPrint()">
+<div class="wrapLoader">
+   <div class="imgLoader">
+      <img  src="../../cdn.tutorialspoint.com/images/loading-cg.gif" alt="" width="70" height="70" />
+   </div>
+</div>
+<div id="divGoogle"></div>
+<div class="body">
+<header>
+   <div class="container">			
+      <h1 class="logo">
+      <a href="http://www.tutorialspoint.com/index.htm" title="tutorialspoint">
+      <img alt="tutorialspoint" src="images/logo.png">
+      </a>
+      </h1>			
+      <div class="search" id="searchBar">
+         <form method="get" id="searchform" name="searchform" action="http://www.google.com/search" target="_blank">
+            <input type="hidden" name="sitesearch" value="www.tutorialspoint.com">
+            <div class="input-group">
+               <input type="text" class="form-control search" name="q" id="q" placeholder="Search your tutorials..." onfocus="if (this.value == 'Search your tutorials...') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search your tutorials...';}">
+               <input value="FORID:11" name="cof" type="hidden">
+               <input type="hidden" name="ie" value="ISO-8859-1">
+               <span class="input-group-btn"> <button class="btn btn-default" type="submit"><i class="icon icon-search"></i></button> </span>
+            </div>
+         </form>
+      </div>
+      <nav>
+         <ul class="nav nav-pills nav-top">
+            <li><a href="http://www.tutorialspoint.com/absoluteclasses.htm"><img src="../images/free-training.png" style="width:100px; position:absolute;left:-158px; top:-7px; z-index:99;" title="Free Online Training"></a></li>
+            <li> <a href="http://www.tutorialspoint.com/shared-tutorials.php"><i class="icon icon-user"></i> &nbsp;Shared</a> </li>
+            <li> <a href="http://www.tutorialspoint.com/shorttutorials"><i class="icon icon-file-text-o"></i> &nbsp;Articles</a> </li>
+            <div class="social-icons">
+               <ul class="social-icons">
+               <li class="facebook"><a href="http://www.facebook.com/tutorialspointindia" target="_blank" title="Facebook">Facebook</a></li>
+               <li class="twitter"><a href="http://www.twitter.com/tutorialspoint" target="_blank" title="Twitter">Twitter</a></li>
+               <li class="googleplus"><a href="https://plus.google.com/u/0/116678774017490391259/posts" target="_blank" data-placement="bottom" title="tutorialspoint @ Google+">Google+</a></li>
+               <li class="linkedin"><a href="http://www.linkedin.com/company/tutorialspoint" target="_blank" title="tutorialspoint @ Linkedin">Linkedin</a></li>
+               </ul>
+            </div>
+            </li>
+         </ul>
+      </nav>
+         <!-- search code here  --> 
+      <button class="btn btn-responsive-nav btn-inverse" data-toggle="collapse" data-target=".nav-main-collapse" id="pull"> <i class="icon icon-bars"></i> </button>
+   </div>
+   <div class="navbar-collapse nav-main-collapse collapse">
+      <div class="container">
+         <nav class="nav-main mega-menu">
+            <ul class="nav nav-pills nav-main" id="mainMenu">
+               <li class="dropdown"> <a class="dropdown" href="http://www.tutorialspoint.com/index.htm"><i class="icon icon-home"></i> Home</a> </li>   
+               <li class="dropdown"><a class="dropdown-toggle tut-lib" href="http://www.tutorialspoint.com/tutorialslibrary.htm"> Tutorials Library <i class="fa-angle-down"></i> </a>
+      <ul class="dropdown-menu" id="submenu">
+         <li>
+            <div class="mega-menu-content">
+              <div class="row">
+                 <div class="col-md-6">
+                    <ul class="sub-menu">
+                     <li><a href="http://www.tutorialspoint.com/academic_tutorials.htm">Academic</a></li>
+                     <li><a href="http://www.tutorialspoint.com/big_data_tutorials.htm">Big Data</a></li>
+                     <li><a href="http://www.tutorialspoint.com/database_tutorials.htm">Databases</a></li>
+                     <li><a href="http://www.tutorialspoint.com/java_technology_tutorials.htm">Java Technologies</a></li>
+                     <li><a href="http://www.tutorialspoint.com/mainframe_tutorials.htm">Mainframe</a></li>
+                     <li><a href="http://www.tutorialspoint.com/management_tutorials.htm">Management</a></li>
+                     <li><a href="http://www.tutorialspoint.com/microsoft_technologies_tutorials.htm">Microsoft Technologies</a></li>
+                     <li><a href="http://www.tutorialspoint.com/misc_tutorials.htm">Miscellaneous</a></li>
+                   </ul>
+                 </div>
+                 <div class="col-md-6">
+                  <ul class="sub-menu">
+                     <li><a href="http://www.tutorialspoint.com/mobile_development_tutorials.htm">Mobile Development</a></li>
+                     <li><a href="http://www.tutorialspoint.com/computer_programming_tutorials.htm">Programming</a></li>
+                     <li><a href="http://www.tutorialspoint.com/scripting_lnaguage_tutorials.htm">Scripts</a></li>
+                     <li><a href="http://www.tutorialspoint.com/software_quality_tutorials.htm">Software Quality</a></li>
+                     <li><a href="http://www.tutorialspoint.com/telecom_tutorials.htm">Telecom</a></li>
+                     <li><a href="http://www.tutorialspoint.com/web_development_tutorials.htm">Web Development</a></li>
+                     <li><a href="http://www.tutorialspoint.com/xml_technologies_tutorials.htm">XML Technologies</a></li>
+                     <li><a href="http://www.tutorialspoint.com/multi_language_tutorials.htm">Multi Language Tutorials</a></li>
+                  </ul>
+                 </div>
+              </div>
+            </div>
+         </li>
+       </ul>
+               </li>
+               <li class="dropdown"><a class="dropdown" href="http://www.tutorialspoint.com/codingground.htm"><i class="fa-code"></i> Coding Ground</a> </li>
+                  <li class="dropdown"> 							
+                     <a class="dropdown-toggle tut-plus" href="http://www.tutorialspoint.com/absoluteclasses.htm">Absolute Classes <i class="fa-angle-down"></i></a>                     <ul class="dropdown-menu" id="submenu1">
+                                                <li class="current-menu-ancestor current-menu-parent active dropdown-submenu" style="border-bottom:none;">
+                        <li style="border-bottom:none;"><a href="http://www.tutorialspoint.com/absoluteclasses/userlogin.htm"><i class="fa-sign-in"></i>&nbsp;Login</a></li>
+                        <li style="border-bottom:1px dashed #ccc; height:1px; padding:0px; margin:0px 10px 0px 10px" class="stickyhide">&nbsp;</li>
+                        <li><a href="http://www.tutorialspoint.com/absoluteclasses/usersignup.htm"><i class="fa-pencil-square-o"></i>&nbsp;Sign Up&nbsp;</a></li>
+                        <li style="border-bottom:none;"><a href="http://www.tutorialspoint.com/absoluteclasses/upcomingclasses.htm" style="border-bottom:none;"><i class="fa-book book-head"></i> Upcoming Classes </a></li>
+                        <li style="border-bottom:1px dashed #ccc; height:1px; padding:0px; margin:0px 10px 0px 10px">&nbsp;</li>
+                        <li style="border-bottom:1px dashed #ccc; height:1px; padding:0px; margin:0px 10px 0px 10px">&nbsp;</li>
+                        <li style="border-bottom:1px dashed #ccc;;"><a href="http://www.tutorialspoint.com/absoluteclasses/allcourses.htm" style="border-bottom:none;"><i class="fa-book book-head"></i> All Courses </a></li>
+                        <li style="border-bottom:1px dashed #ccc;;"><a href="http://www.tutorialspoint.com/absoluteclasses/help.htm" style="border-bottom:none;"><i class="fa-question book-head"></i> Help/FAQ</a></li>
+                        <li style="border-bottom:none;"><a href="http://www.tutorialspoint.com/absoluteclasses/contact_abc.htm" style="border-bottom:none;"><i class="fa fa-envelope-o"></i> Contact</a></li>
+                                             
+                     </ul>
+                  </li>
+            </ul>
+         </nav>
+      </div>
+   </div>	
+</header>
+<div style="clear:both;"></div>
+<div role="main" class="main">
+<div class="container">
+<div class="row">
+<div class="col-md-2">
+<aside class="sidebar">
+<div class="mini-logo">
+<img src="images/mysql-mini-logo.jpg" alt="MySQL Tutorial" />
+</div>
+<ul class="nav nav-list primary left-menu" >
+<li class="heading">Learn MySQL</li>
+<li><a target="_top" href="index.html">MySQL - Home</a></li>
+<li><a target="_top" href="mysql-introduction.html">MySQL - Introduction</a></li>
+<li><a target="_top" href="mysql-installation.html">MySQL - Installation</a></li>
+<li><a target="_top" href="mysql-administration.html" >MySQL - Administration</a></li>
+<li><a target="_top" href="mysql-php-syntax.html">MySQL - PHP Syntax</a></li>
+<li><a target="_top" href="mysql-connection.html">MySQL - Connection</a></li>
+<li><a target="_top" href="mysql-create-database.html">MySQL - Create Database</a></li>
+<li><a target="_top" href="mysql-drop-database.html">MySQL - Drop Database</a></li>
+<li><a target="_top" href="mysql-select-database.html">MySQL - Select Database</a></li>
+<li><a target="_top" href="mysql-data-types.html">MySQL - Data Types</a></li>
+<li><a target="_top" href="mysql-create-tables.html">MySQL - Create Tables</a></li>
+<li><a target="_top" href="mysql-drop-tables.html">MySQL - Drop Tables</a></li>
+<li><a target="_top" href="mysql-insert-query.html">MySQL - Insert Query</a></li>
+<li><a target="_top" href="mysql-select-query.html">MySQL - Select Query</a></li>
+<li><a target="_top" href="mysql-where-clause.html">MySQL - Where Clause</a></li>
+<li><a target="_top" href="mysql-update-query.html">MySQL - Update Query</a></li>
+<li><a target="_top" href="mysql-delete-query.html">MySQL - Delete Query</a></li>
+<li><a target="_top" href="mysql-like-clause.html">MySQL - Like Clause</a></li>
+<li><a target="_top" href="mysql-sorting-results.html">MySQL - Sorting Results</a></li>
+<li><a target="_top" href="mysql-using-joins.html">MySQL - Using Join</a></li>
+<li><a target="_top" href="mysql-null-values.html">MySQL - NULL Values</a></li>
+<li><a target="_top" href="mysql-regexps.html">MySQL - Regexps</a></li>
+<li><a target="_top" href="mysql-transactions.html">MySQL - Transactions</a></li>
+<li><a target="_top" href="mysql-alter-command.html">MySQL - Alter Command</a></li>
+<li><a target="_top" href="mysql-indexes.html">MySQL - Indexes</a></li>
+<li><a target="_top" href="mysql-temporary-tables.html">MySQL - Temporary Tables</a></li>
+<li><a target="_top" href="mysql-clone-tables.html">MySQL - Clone Tables</a></li>
+<li><a target="_top" href="mysql-database-info.html">MySQL - Database Info</a></li>
+<li><a target="_top" href="mysql-using-sequences.html">MySQL - Using Sequences</a></li>
+<li><a target="_top" href="mysql-handling-duplicates.html">MySQL - Handling Duplicates</a></li>
+<li><a target="_top" href="mysql-sql-injection.html">MySQL - SQL Injection</a></li>
+<li><a target="_top" href="mysql-database-export.html">MySQL - Database Export</a></li>
+<li><a target="_top" href="mysql-database-import.html">MySQL - Database Import</a></li>
+</ul>
+<ul class="nav nav-list primary left-menu" >
+<li class="heading">MySQL Useful Resources</li>
+<li><a target="_top" href="mysql-useful-functions.html">MySQL - Useful Functions</a></li>
+<li><a target="_top" href="mysql-quick-guide.html">MySQL - Quick Guide</a></li>
+<li><a target="_top" href="mysql-useful-resources.html">MySQL - Useful Resources</a></li>
+<li><a target="_top" href="mysql-discussion.html">MySQL - Discussion</a></li>
+</ul>
+<ul class="nav nav-list primary push-bottom left-menu special">
+<li class="sreading">Selected Reading</li>
+<li><a target="_top" href="http://www.tutorialspoint.com/developers_best_practices/index.htm">Developer's Best Practices</a></li>
+<li><a target="_top" href="http://www.tutorialspoint.com/effective_resume_writing.htm">Effective Resume Writing</a></li>
+<li><a target="_top" href="http://www.tutorialspoint.com/computer_glossary.htm">Computer Glossary</a></li>
+<li><a target="_top" href="http://www.tutorialspoint.com/computer_whoiswho.htm">Who is Who</a></li>
+</ul>
+</aside>
+</div>
+<!-- PRINTING STARTS HERE -->
+<div class="row">
+<div class="content">
+<div class="col-md-7 middle-col">
+<h1>MySQL Numeric Functions</h1>
+<div class="topgooglead">
+<hr />
+<div style="padding-bottom:5px;padding-left:10px;">Advertisements</div>
+<script type="text/javascript"><!--
+google_ad_client = "pub-7133395778201029";
+google_ad_width = 468;
+google_ad_height = 60;
+google_ad_format = "468x60_as";
+google_ad_type = "image";
+google_ad_channel = "";
+//--></script>
+<script type="text/javascript"
+src="../../pagead2.googlesyndication.com/pagead/f.txt"> 
+</script>
+</div>
+<hr />
+<div class="pre-btn">
+<a href="mysql-useful-functions.html"><i class="icon icon-arrow-circle-o-left big-font"></i> Previous Page</a>
+</div>
+<div class="nxt-btn">
+<a href="mysql-useful-functions.html">Next Page <i class="icon icon-arrow-circle-o-right big-font"></i>&nbsp;</a>
+</div>
+<div class="clearer"></div>
+<hr />
+<p>MySQL numeric functions are used primarily for numeric manipulation and/or mathematical calculations. The following table details the numeric functions that are available in the MySQL implementation.</p>
+<table class="table table-bordered">
+<tr>
+<th><strong>Name</strong></span></th>
+<th><strong>Description</strong></th>
+</tr>
+<tr>
+<td><a href="mysql-numeric-functions.html#function_abs">ABS()</a></td>
+<td>Returns the absolute value of numeric expression.</td>
+</tr>
+<tr>
+<td><a href="mysql-numeric-functions.html#function_acos">ACOS()</a></td>
+<td>Returns the arccosine of numeric expression. Returns NULL if the value is not in the range -1 to 1.</td>
+</tr>
+<tr>
+<td><a href="mysql-numeric-functions.html#function_asin">ASIN()</a></td>
+<td>Returns the arcsine of numeric expression. Returns NULL if value is not in the range -1 to 1</td>
+</tr>
+<tr>
+<td><a href="mysql-numeric-functions.html#function_atan">ATAN()</a></td>
+<td>Returns the arctangent of numeric expression.</td>
+</tr>
+<tr>
+<td><a href="mysql-numeric-functions.html#function_atan2">ATAN2()</a></td>
+<td>Returns the arctangent of the two variables passed to it.</td>
+</tr>
+<tr>
+<td><a href="mysql-numeric-functions.html#function_bit_and">BIT_AND()</a></td>
+<td>Returns the bitwise AND all the bits in expression.</td>
+</tr>
+<tr>
+<td><a href="mysql-numeric-functions.html#function_bit_count">BIT_COUNT()</a></td>
+<td>Returns the string representation of the binary value passed to it.</td>
+</tr>
+<tr>
+<td><a href="mysql-numeric-functions.html#function_bit_or">BIT_OR()</a></td>
+<td>Returns the bitwise OR of all the bits in the passed expression.</td>
+</tr>
+<tr>
+<td><a href="mysql-numeric-functions.html#function_ceil">CEIL()</a></td>
+<td>Returns the smallest integer value that is not less than passed numeric expression</td>
+</tr>
+<tr>
+<td><a href="mysql-numeric-functions.html#function_ceiling">CEILING()</a></td>
+<td>Returns the smallest integer value that is not less than passed numeric expression</td>
+</tr>
+<tr>
+<td><a href="mysql-numeric-functions.html#function_conv">CONV()</a></td>
+<td>Converts numeric expression from one base to another.</td>
+</tr>
+<tr>
+<td><a href="mysql-numeric-functions.html#function_cos">COS()</a></td>
+<td>Returns the cosine  of passed numeric expression. The numeric expression should be expressed in radians.</td>
+</tr>
+<tr>
+<td><a href="mysql-numeric-functions.html#function_cot">COT()</a></td>
+<td>Returns the cotangent  of passed numeric expression.</td>
+</tr>
+<tr>
+<td><a href="mysql-numeric-functions.html#function_degrees">DEGREES()</a></td>
+<td>Returns numeric expression converted from radians to degrees.</td>
+</tr>
+<tr>
+<td><a href="mysql-numeric-functions.html#function_exp">EXP()</a></td>
+<td>Returns the base of the natural logarithm (e) raised to the power of passed numeric expression.</td>
+</tr>
+<tr>
+<td><a href="mysql-numeric-functions.html#function_floor">FLOOR()</a></td>
+<td>Returns the largest integer value that is not greater than passed numeric expression.</td>
+</tr>
+<tr>
+<td><a href="mysql-numeric-functions.html#function_format">FORMAT()</a></td>
+<td>Returns a numeric expression rounded  to a number of  decimal places.</td>
+</tr>
+<tr>
+<td><a href="mysql-numeric-functions.html#function_greatest">GREATEST()</a></td>
+<td>Returns the largest value of the input expressions.</td>
+</tr>
+<tr>
+<td><a href="mysql-numeric-functions.html#function_interval">INTERVAL()</a></td>
+<td>Takes multiple expressions exp1, exp2 and exp3 so on.. and returns 0 if exp1 is less than exp2, returns 1 if exp1 is less than exp3 and so on.</td>
+</tr>
+<tr>
+<td><a href="mysql-numeric-functions.html#function_least">LEAST()</a></td>
+<td>Returns the minimum-valued input when given two or more.</td>
+</tr>
+<tr>
+<td><a href="mysql-numeric-functions.html#function_least">LOG()</a></td>
+<td>Returns the natural logarithm of the passed numeric expression.</td>
+</tr>
+<tr>
+<td><a href="mysql-numeric-functions.html#function_log10">LOG10()</a></td>
+<td>Returns the base-10 logarithm of the passed numeric expression.</td>
+</tr>
+<tr>
+<td><a href="mysql-numeric-functions.html#function_mod">MOD()</a></td>
+<td>Returns the remainder of one expression by diving by another expression.</td>
+</tr>
+<tr>
+<td><a href="mysql-numeric-functions.html#function_oct">OCT()</a></td>
+<td>Returns the string representation of the octal value of the passed numeric expression. Returns NULL if passed value is NULL.</td>
+</tr>
+<tr>
+<td><a href="mysql-numeric-functions.html#function_pi">PI()</a></td>
+<td>Returns the value of pi</td>
+</tr>
+<tr>
+<td><a href="mysql-numeric-functions.html#function_pow">POW()</a></td>
+<td>Returns the value of one expression raised to the power of another expression</td>
+</tr>
+<tr>
+<td><a href="mysql-numeric-functions.html#function_power">POWER()</a></td>
+<td>Returns the value of one expression raised to the power of another expression</td>
+</tr>
+<tr>
+<td><a href="mysql-numeric-functions.html#function_radians">RADIANS()</a></td>
+<td>Returns the value of passed expression converted from degrees to radians.</td>
+</tr>
+<tr>
+<td><a href="mysql-numeric-functions.html#function_round">ROUND()</a></td>
+<td>Returns numeric expression rounded to an integer. Can be used to round an expression to a number of decimal points</td>
+</tr>
+<tr>
+<td><a href="mysql-numeric-functions.html#function_round">SIN()</a></td>
+<td>Returns the sine of numeric expression given in radians.</td>
+</tr>
+<tr>
+<td><a href="mysql-numeric-functions.html#function_sqrt">SQRT()</a></td>
+<td>Returns the non-negative square root of numeric expression.</td>
+</tr>
+<tr>
+<td><a href="mysql-numeric-functions.html#function_std">STD()</a></td>
+<td>Returns the standard deviation of the numeric expression.</td>
+</tr>
+<tr>
+<td><a href="mysql-numeric-functions.html#function_stddev">STDDEV()</a></td>
+<td>Returns the standard deviation of the numeric expression.</td>
+</tr>
+<tr>
+<td><a href="mysql-numeric-functions.html#function_tan">TAN()</a></td>
+<td>Returns the tangent of numeric expression expressed in radians.</td>
+</tr>
+<tr>
+<td><a href="mysql-numeric-functions.html#function_truncate">TRUNCATE()</a></td>
+<td>Returns numeric exp1 truncated to exp2 decimal places. If exp2 is 0, then the result will have no decimal point.</td>
+</tr>
+</table>
+<a name="function_abs"></a>
+<h2>ABS(X)</h2>
+<p>The ABS() function returns the absolute value of X. Consider the following example:</p>
+<pre class="prettyprint notranslate">
+mysql&gt; SELECT ABS(2);
++---------------------------------------------------------+
+| ABS(2)                                                  |
++---------------------------------------------------------+
+| 2                                                       |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql&gt; SELECT ABS(-2);
++---------------------------------------------------------+
+| ABS(2)                                                  |
++---------------------------------------------------------+
+| 2                                                       |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_acos"></a>
+<h2>ACOS(X)</h2>
+<p>This function returns the arccosine of X. The value of X must range between .1 and 1 or NULL will be returned. Consider the following example:</p>
+<pre class="prettyprint notranslate">
+mysql&gt; SELECT ACOS(1);
++---------------------------------------------------------+
+| ACOS(1)                                                 |
++---------------------------------------------------------+
+| 0.000000                                                |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_asin"></a>
+<h2>ASIN(X)</h2>
+<p>The ASIN() function returns the arcsine of X. The value of X must be in the range of .1 to 1 or NULL is returned.</p>
+<pre class="prettyprint notranslate">
+mysql&gt; SELECT ASIN(1);
++---------------------------------------------------------+
+| ASIN(1)                                                 |
++---------------------------------------------------------+
+| 1.5707963267949                                         |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_atan"></a>
+<h2>ATAN(X)</h2>
+<p>This function returns the arctangent of X.</p>
+<pre class="prettyprint notranslate">
+mysql&gt; SELECT ATAN(1);
++---------------------------------------------------------+
+| ATAN(1)                                                 |
++---------------------------------------------------------+
+| 0.78539816339745                                        |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_atan2"></a>
+<h2>ATAN2(Y,X)</h2>
+<p>This function returns the arctangent of the two arguments: X and Y. It is similar to the arctangent of Y/X, except that the signs of both are used to find the quadrant of the result.</p>
+<pre class="prettyprint notranslate">
+mysql&gt; SELECT ATAN2(3,6);
++---------------------------------------------------------+
+| ATAN2(3,6)                                              |
++---------------------------------------------------------+
+| 0.46364760900081                                        |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_bit_and"></a>
+<h2>BIT_AND(expression)</h2>
+<p>The BIT_AND function returns the bitwise AND of all bits in expression. The basic premise is that if two corresponding bits are the same, then a bitwise AND operation will return 1, while if they are different, a bitwise AND operation will return 0. The function itself returns a 64-bit integer value. If there are no matches, then it will return 18446744073709551615. The following example performs the BIT_AND function on the PRICE column grouped by the MAKER of the car:</p>
+<pre class="prettyprint notranslate">
+mysql&gt; SELECT 
+          MAKER, BIT_AND(PRICE) BITS
+          FROM CARS GROUP BY MAKER
++---------------------------------------------------------+
+|MAKER           BITS                                     |
++---------------------------------------------------------+
+|CHRYSLER        512                                      |
+|FORD            12488                                    |
+|HONDA           2144                                     |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_bit_count"></a>
+<h2>BIT_COUNT(numeric_value)</h2>
+<p>The BIT_COUNT() function returns the number of bits that are active in numeric_value. The following example demonstrates using the BIT_COUNT() function to return the number of active bits for a range of numbers:</p>
+<pre class="prettyprint notranslate">
+mysql&gt; SELECT
+          BIT_COUNT(2) AS TWO,
+          BIT_COUNT(4) AS FOUR,
+          BIT_COUNT(7) AS SEVEN
++-----+------+-------+
+| TWO | FOUR | SEVEN |
++-----+------+-------+
+|   1 |    1 |     3 |
++-----+------+-------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_bit_or"></a>
+<h2>BIT_OR(expression)</h2>
+<p>The BIT_OR() function returns the bitwise OR of all the bits in expression. The basic premise of the bitwise
+OR function is that it returns 0 if the corresponding bits match, and 1 if they do not. The function returns a
+64-bit integer, and, if there are no matching rows, then it returns 0. The following example performs the
+BIT_OR() function on the PRICE column of the CARS table, grouped by the MAKER:</p>
+<pre class="prettyprint notranslate">
+mysql&gt; SELECT 
+          MAKER, BIT_OR(PRICE) BITS
+          FROM CARS GROUP BY MAKER
++---------------------------------------------------------+
+|MAKER           BITS                                     |
++---------------------------------------------------------+
+|CHRYSLER        62293                                    |
+|FORD            16127                                    |
+|HONDA           32766                                    |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_ceil"></a>
+<a name="function_ceiling"></a>
+<h2>CEIL(X)</h2>
+<h2>CEILING(X)</h2>
+<p>This function returns the smallest integer value that is not smaller than X. Consider the following example:</p>
+<pre class="prettyprint notranslate">
+mysql&gt; SELECT CEILING(3.46);
++---------------------------------------------------------+
+| CEILING(3.46)                                           |
++---------------------------------------------------------+
+| 4                                                       |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql&gt; SELECT CEIL(-6.43);
++---------------------------------------------------------+
+| CEIL(-6.43)                                             |
++---------------------------------------------------------+
+| -6                                                      |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_conv"></a>
+<h2>CONV(N,from_base,to_base)</h2>
+<p>The purpose of the CONV() function is to convert numbers between different number bases. The function returns a string of the value N converted from from_base to to_base. The minimum base value is 2 and the maximum is 36. If any of the arguments are NULL, then the function returns NULL. Consider the following example, which converts the number 5 from base 16 to base 2:</p>
+<pre class="prettyprint notranslate">
+mysql&gt; SELECT CONV(5,16,2);
++---------------------------------------------------------+
+| CONV(5,16,2)                                            |
++---------------------------------------------------------+
+| 101                                                     |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_cos"></a>
+<h2>COS(X)</h2>
+<p>This function returns the cosine of X. The value of X is given in radians.</p>
+<pre class="prettyprint notranslate">
+mysql&gt;SELECT COS(90);
++---------------------------------------------------------+
+| COS(90)                                                 |
++---------------------------------------------------------+
+| -0.44807361612917                                       |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_cot"></a>
+<h2>COT(X)</h2>
+<p>This function returns the cotangent of X. Consider the following example:</p>
+<pre class="prettyprint notranslate">
+mysql&gt;SELECT COT(1);
++---------------------------------------------------------+
+| COT(1)                                                  |
++---------------------------------------------------------+
+| 0.64209261593433                                        |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_degrees"></a>
+<h2>DEGREES(X)</h2>
+<p>This function returns the value of X converted from radians to degrees.</p>
+<pre class="prettyprint notranslate">
+mysql&gt;SELECT DEGREES(PI());
++---------------------------------------------------------+
+| DEGREES(PI())                                           |
++---------------------------------------------------------+
+| 180.000000                                              |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_exp"></a>
+<h2>EXP(X)</h2>
+<p>This function returns the value of e (the base of the natural logarithm) raised to the power of X.</p>
+<pre class="prettyprint notranslate">
+mysql&gt;SELECT EXP(3);
++---------------------------------------------------------+
+| EXP(3)                                                  |
++---------------------------------------------------------+
+| 20.085537                                               |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_floor"></a>
+<h2>FLOOR(X)</h2>
+<p>This function returns the largest integer value that is not greater than X.</p>
+<pre class="prettyprint notranslate">
+mysql&gt;SELECT FLOOR(7.55);
++---------------------------------------------------------+
+| FLOOR(7.55)                                             |
++---------------------------------------------------------+
+| 7                                                       |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_format"></a>
+<h2>FORMAT(X,D)</h2>
+<p>The FORMAT() function is used to format the number X in the following format: ###,###,###.## truncated
+to D decimal places. The following example demonstrates the use and output of the FORMAT() function:</p>
+<pre class="prettyprint notranslate">
+mysql&gt;SELECT FORMAT(423423234.65434453,2);
++---------------------------------------------------------+
+| FORMAT(423423234.65434453,2)                            |
++---------------------------------------------------------+
+| 423,423,234.65                                          |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_greatest"></a>
+<h2>GREATEST(n1,n2,n3,..........)</h2>
+<p>The GREATEST() function returns the greatest value in the set of input parameters (n1, n2, n3, a nd so on). The following example uses the GREATEST() function to return the largest number from a set of numeric values:</p>
+<pre class="prettyprint notranslate">
+mysql&gt;SELECT GREATEST(3,5,1,8,33,99,34,55,67,43);
++---------------------------------------------------------+
+| GREATEST(3,5,1,8,33,99,34,55,67,43)                     |
++---------------------------------------------------------+
+| 99                                                      |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_interval"></a>
+<h2>INTERVAL(N,N1,N2,N3,..........)</h2>
+<p>The INTERVAL() function compares the value of N to the value list (N1, N2, N3, and so on ). The function returns 0 if N &lt; N1, 1 if N &lt; N2, 2 if N &lt;N3, and so on. It will return .1 if N is NULL. The value list must be in the form N1 &lt; N2 &lt; N3 in order to work properly. The following code is a simple example of how the INTERVAL() function works:</p>
+<pre class="prettyprint notranslate">
+mysql&gt;SELECT INTERVAL(6,1,2,3,4,5,6,7,8,9,10);
++---------------------------------------------------------+
+| INTERVAL(6,1,2,3,4,5,6,7,8,9,10)                        |
++---------------------------------------------------------+
+| 6                                                       |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_interval"></a>
+<h2>INTERVAL(N,N1,N2,N3,..........)</h2>
+<p>The INTERVAL() function compares the value of N to the value list (N1, N2, N3, and so on ). The function returns 0 if N &lt; N1, 1 if N &lt; N2, 2 if N &lt;N3, and so on. It will return .1 if N is NULL. The value list must be in the form N1 &lt; N2 &lt; N3 in order to work properly. The following code is a simple example of how the INTERVAL() function works:</p>
+<pre class="prettyprint notranslate">
+mysql&gt;SELECT INTERVAL(6,1,2,3,4,5,6,7,8,9,10);
++---------------------------------------------------------+
+| INTERVAL(6,1,2,3,4,5,6,7,8,9,10)                        |
++---------------------------------------------------------+
+| 6                                                       |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<p>Remember that 6 is the zero-based index in the value list of the first value that was greater than N. In our case, 7 was the offending value and is located in the sixth index slot.</p>
+<a name="function_least"></a>
+<h2>LEAST(N1,N2,N3,N4,......)</h2>
+<p>The LEAST() function is the opposite of the GREATEST() function. Its purpose is to return the least-valued item from the value list (N1, N2, N3, and so on). The following example shows the proper usage and output for the LEAST() function:</p>
+<pre class="prettyprint notranslate">
+mysql&gt;SELECT LEAST(3,5,1,8,33,99,34,55,67,43);
++---------------------------------------------------------+
+| LEAST(3,5,1,8,33,99,34,55,67,43)                        |
++---------------------------------------------------------+
+| 1                                                       |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_log"></a>
+<h2>LOG(X)</h2>
+<h2>LOG(B,X)</h2>
+<p>The single argument version of the function will return the natural logarithm of X. If it is called with two arguments, it returns the logarithm of X for an arbitrary base B. Consider the following example:</p>
+<pre class="prettyprint notranslate">
+mysql&gt;SELECT LOG(45);
++---------------------------------------------------------+
+| LOG(45)                                                 |
++---------------------------------------------------------+
+| 3.806662                                                |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql&gt;SELECT LOG(2,65536);
++---------------------------------------------------------+
+| LOG(2,65536)                                            |
++---------------------------------------------------------+
+| 16.000000                                               |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_log10"></a>
+<h2>LOG10(X)</h2>
+<p>This function returns the base-10 logarithm of X.</p>
+<pre class="prettyprint notranslate">
+mysql&gt;SELECT LOG10(100);
++---------------------------------------------------------+
+| LOG10(100)                                              |
++---------------------------------------------------------+
+| 2.000000                                                |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_mod"></a>
+<h2>MOD(N,M)</h2>
+<p>This function returns the remainder of N divided by M. Consider the following example:</p>
+<pre class="prettyprint notranslate">
+mysql&gt;SELECT MOD(29,3);
++---------------------------------------------------------+
+| MOD(29,3)                                               |
++---------------------------------------------------------+
+| 2                                                       |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_oct"></a>
+<h2>OCT(N)</h2>
+<p>The OCT() function returns the string representation of the octal number N. This is equivalent to using CONV(N,10,8). </p>
+<pre class="prettyprint notranslate">
+mysql&gt;SELECT OCT(12);
++---------------------------------------------------------+
+| OCT(12)                                                 |
++---------------------------------------------------------+
+| 14                                                      |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_pi"></a>
+<h2>PI()</h2>
+<p>This function simply returns the value of pi. MySQL internally stores the full double-precision value of pi. </p>
+<pre class="prettyprint notranslate">
+mysql&gt;SELECT PI();
++---------------------------------------------------------+
+| PI()                                                    |
++---------------------------------------------------------+
+| 3.141593                                                |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_pow"></a>
+<a name="function_power"></a>
+<h2>POW(X,Y)</h2>
+<h2>POWER(X,Y)</h2>
+<p>These two functions return the value of X raised to the power of Y.</p>
+<pre class="prettyprint notranslate">
+mysql&gt; SELECT POWER(3,3);
++---------------------------------------------------------+
+| POWER(3,3)                                              |
++---------------------------------------------------------+
+| 27                                                      |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_radians"></a>
+<h2>RADIANS(X)</h2>
+<p>This function returns the value of X, converted from degrees to radians.</p>
+<pre class="prettyprint notranslate">
+mysql&gt;SELECT RADIANS(90);
++---------------------------------------------------------+
+| RADIANS(90)                                             |
++---------------------------------------------------------+
+|1.570796                                                 |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_round"></a>
+<h2>ROUND(X)</h2>
+<h2>ROUND(X,D)</h2>
+<p>This function returns X rounded to the nearest integer. If a second argument, D, is supplied, then the function returns X rounded to D decimal places. D must be positive or all digits to the right of the decimal point will be removed. Consider the following example:</p>
+<pre class="prettyprint notranslate">
+mysql&gt;SELECT ROUND(5.693893);
++---------------------------------------------------------+
+| ROUND(5.693893)                                         |
++---------------------------------------------------------+
+| 6                                                       |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql&gt;SELECT ROUND(5.693893,2);
++---------------------------------------------------------+
+| ROUND(5.693893,2)                                       |
++---------------------------------------------------------+
+| 5.69                                                    |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_sign"></a>
+<h2>SIGN(X)</h2>
+<p>This function returns the sign of X (negative, zero, or positive) as .1, 0, or 1.</p>
+<pre class="prettyprint notranslate">
+mysql&gt;SELECT SIGN(-4.65);
++---------------------------------------------------------+
+| SIGN(-4.65)                                             |
++---------------------------------------------------------+
+| -1                                                      |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql&gt;SELECT SIGN(0);
++---------------------------------------------------------+
+| SIGN(0)                                                 |
++---------------------------------------------------------+
+| 0                                                       |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql&gt;SELECT SIGN(4.65);
++---------------------------------------------------------+
+| SIGN(4.65)                                              |
++---------------------------------------------------------+
+| 1                                                       |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_sin"></a>
+<h2>SIN(X)</h2>
+<p>This function returns the sine of X. Consider the following example:</p>
+<pre class="prettyprint notranslate">
+mysql&gt;SELECT SIN(90);
++---------------------------------------------------------+
+| SIN(90)                                                 |
++---------------------------------------------------------+
+| 0.893997                                                |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_sqrt"></a>
+<h2>SQRT(X)</h2>
+<p>This function returns the non-negative square root of X. Consider the following example:</p>
+<pre class="prettyprint notranslate">
+mysql&gt;SELECT SQRT(49);
++---------------------------------------------------------+
+| SQRT(49)                                                |
++---------------------------------------------------------+
+| 7                                                       |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+
+<a name="function_std"></a>
+<a name="function_stddev"></a>
+<h2>STD(expression)</h2>
+<h2>STDDEV(expression)</h2>
+<p>The STD() function is used to return the standard deviation of expression. This is equivalent to taking the square root of the VARIANCE() of expression. The following example computes the standard deviation of the PRICE column in our CARS table:</p>
+<pre class="prettyprint notranslate">
+mysql&gt;SELECT STD(PRICE) STD_DEVIATION FROM CARS;
++---------------------------------------------------------+
+| STD_DEVIATION                                           |
++---------------------------------------------------------+
+| 7650.2146                                               |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_tan"></a>
+<h2>TAN(X)</h2>
+<p>This function returns the tangent of the argument X, which is expressed in radians.</p>
+<pre class="prettyprint notranslate">
+mysql&gt;SELECT TAN(45);
++---------------------------------------------------------+
+| TAN(45)                                                 |
++---------------------------------------------------------+
+| 1.619775                                                |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<a name="function_truncate"></a>
+<h2>TRUNCATE(X,D)</h2>
+<p>This function is used to return the value of X truncated to D number of decimal places. If D is 0, then the decimal point is removed. If D is negative, then D number of values in the integer part of the value is truncated. Consider the following example:</p>
+<pre class="prettyprint notranslate">
+mysql&gt;SELECT TRUNCATE(7.536432,2);
++---------------------------------------------------------+
+| TRUNCATE(7.536432,2)                                    |
++---------------------------------------------------------+
+| 7.53                                                    |
++---------------------------------------------------------+
+1 row in set (0.00 sec)
+</pre>
+<hr />
+<div class="pre-btn">
+<a href="mysql-useful-functions.html"><i class="icon icon-arrow-circle-o-left big-font"></i> Previous Page</a>
+</div>
+<div class="print-btn center">
+<a href="http://www.tutorialspoint.com/cgi-bin/printpage.cgi" target="_blank"><i class="icon icon-print big-font"></i> Print</a>
+</div>
+<div class="nxt-btn">
+<a href="mysql-useful-functions.html">Next Page <i class="icon icon-arrow-circle-o-right big-font"></i>&nbsp;</a>
+</div>
+<div class="parent-file">mysql-useful-functions.htm</div>
+<hr />
+<!-- PRINTING ENDS HERE -->
+<div class="bottomgooglead">
+<div class="bottomadtag">Advertisements</div>
+<script type="text/javascript"><!--
+google_ad_client = "pub-7133395778201029";
+google_ad_width = 580;
+google_ad_height = 400;
+google_ad_format = "580x400_as";
+google_ad_type = "image";
+google_ad_channel ="";
+//--></script>
+<script type="text/javascript"
+src="../../pagead2.googlesyndication.com/pagead/f.txt">
+</script>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-3" id="rightbar">
+<!-- AddThis Button BEGIN -->
+<div class="simple-ad">
+<div class="addthis_sharing_toolbox"></div>
+<script type="text/javascript" src="../../s7.addthis.com/js/300/addthis_widget.js#pubid=ra-4f661ec623a400f0"></script>
+</div>
+<!-- AddThis Button END -->
+<div class="google-ad" style="position:relative; left:20px;">Advertisements</div>
+<div class="rightgooglead">
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-2537027957187252";
+/* Right Side Ad */
+google_ad_slot = "right_side_ad";
+google_ad_width = 300;
+google_ad_height = 250;
+//-->
+</script>
+<script type="text/javascript"
+src="../../pagead2.googlesyndication.com/pagead/f.txt">
+</script>
+</div>
+<div class="rightgooglead">
+<script type="text/javascript"><!--
+google_ad_client = "pub-7133395778201029";
+google_ad_width = 300;
+google_ad_height = 600;
+google_ad_format = "300x600_as";
+google_ad_type = "image";
+google_ad_channel ="";
+//--></script>
+<script type="text/javascript"
+src="../../pagead2.googlesyndication.com/pagead/f.txt">
+</script>
+</div>
+<div class="rightgooglead">
+<script type="text/javascript"><!--
+google_ad_client = "pub-7133395778201029";
+google_ad_width = 300;
+google_ad_height = 250;
+google_ad_format = "300x250_as";
+google_ad_type = "image";
+google_ad_channel ="";
+//--></script>
+<script type="text/javascript"
+src="../../pagead2.googlesyndication.com/pagead/f.txt"> 
+</script>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<footer class="inner">
+<div class="container">
+<div class="row">
+<div class="footer-ribon">
+<span>Extras</span>
+</div>
+<div class="col-md-2">
+<h4>Mobile First</h4>
+<ul class="list icons list-unstyled">
+<li><a id="iphone" href="https://itunes.apple.com/om/app/tutorials-point/id914891263?mt=8" target="_blank" rel="nofollow"><img alt="tutorialspoint iPhone App" src="../../cdn.tutorialspoint.com/images/apple_store.png" class="mobile-apps"/></a></li>
+<li><a id="android" href="https://play.google.com/store/apps/details?id=com.tutorialspoint.onlineviewer" target="_blank" rel="nofollow"><img alt="tutorialspoint Android app" src="../../cdn.tutorialspoint.com/images/google_play.png" class="mobile-apps"/></a></li>
+<li><a id="microsoft" href="http://www.windowsphone.com/s?appid=91249671-7184-4ad6-8a5f-d11847946b09" target="_blank" rel="nofollow"><img alt="tutorialspoint Windows app" src="../../cdn.tutorialspoint.com/images/windows_store.png" class="mobile-apps"/></a></li>
+</ul>
+</div>
+<div class="col-md-2">
+<h4>About us</h4>
+<ul class="list icons list-unstyled">
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/about/index.htm">Company</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/about/about_team.htm">Team</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/about/about_careers.htm">Careers</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/about/about_privacy.htm">Privacy Policy</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/about/about_terms_of_use.htm">Terms of use</a></li>
+</ul>
+</div>
+<div class="col-md-2">
+<h4>Extra Links</h4>
+<ul class="list icons list-unstyled">
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/forums/index.php">Forums</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/shorttutorials/">Articles</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/shared-tutorials.php">Shared</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/seo_tools.htm">Seo Tools</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/about/contact_us.htm">Contact</a></li>
+</ul>
+</div>
+<div class="col-md-3">
+<div class="contact-details">
+<h4>Contact Us</h4>
+<ul class="contact">
+<li><p><i class="icon icon-map-marker"></i> <strong>Address:</strong> 388-A , Road no 22, Jubilee Hills, Hyderabad Telangana, INDIA-500033</p></li>
+<li><p><i class="icon icon-envelope"></i> <strong>Email:</strong> <a href="http://www.tutorialspoint.com/about/contact_us.htm">Click Here</a></p></li>
+<li><p><i class="icon icon-dribbble"></i> <strong>Website:</strong> <a href="http://www.tutorialspoint.com/">www.tutorialspoint.com</a></p></li>
+</ul>
+</div>
+<div class="social-icons">
+<ul class="social-icons">
+<li class="facebook"><a href="https://www.facebook.com/tutorialspointindia" target="_blank" data-placement="bottom" title="tutorialspoint @ Facebook">Facebook</a></li>
+<li class="googleplus"><a href="https://plus.google.com/u/0/116678774017490391259/posts" target="_blank" data-placement="bottom" title="tutorialspoint @ Google+">Google+</a></li>
+<li class="twitter"><a href="http://www.twitter.com/tutorialspoint" target="_blank" data-placement="bottom"  title="tutorialspoint @ Twitter">Twitter</a></li>
+<li class="linkedin"><a href="http://www.linkedin.com/company/tutorialspoint" target="_blank" data-placement="bottom"  title="tutorialspoint @ Linkedin">Linkedin</a></li>
+<li class="rss"><a href="http://feeds.feedburner.com/SharedTutorials" target="_blank" data-placement="bottom" title="tutorialspoint RSS">RSS</a></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="footer-copyright">
+<div class="container">
+<div class="row">
+<div class="col-md-1">
+<a href="http://www.tutorialspoint.com/index.htm" class="logo">
+<img alt="Tutorials Point" class="img-responsive" src="../../cdn.tutorialspoint.com/scripts/img/logo-footer.png">
+</a>
+</div>
+<div class="col-md-6">
+<p>&copy; Copyright 2015. All Rights Reserved.</p>
+</div>
+<div class="col-md-4">
+<nav id="sub-menu">
+<ul>
+<li><a href="http://www.tutorialspoint.com/about/tutorials_writing.htm">Write for us</a></li>
+<li><a href="http://www.tutorialspoint.com/about/faq.htm">FAQ's</a></li>
+<li><a href="http://www.tutorialspoint.com/about/about_helping.htm">Helping</a></li>
+<li><a href="http://www.tutorialspoint.com/about/contact_us.htm">Contact</a></li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<!-- Libs -->
+<script type="text/javascript" src="../../cdn.tutorialspoint.com/theme/js/custom-mini.js"></script>
+<script src="../../www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-232293-6";
+urchinTracker();
+$('.pg-icon').click(function(){
+   $('.wrapLoader').show();
+});
+</script>
+</div>
+</body>
+
+<!-- Mirrored from www.tutorialspoint.com/mysql/mysql-numeric-functions.htm by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 20 Apr 2015 05:35:11 GMT -->
+</html>

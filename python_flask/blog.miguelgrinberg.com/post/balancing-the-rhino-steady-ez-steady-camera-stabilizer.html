@@ -1,0 +1,600 @@
+﻿<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from blog.miguelgrinberg.com/post/balancing-the-rhino-steady-ez-steady-camera-stabilizer by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:43:57 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    
+    <title>
+    
+        Balancing the Rhino Steady (EZ Steady) Camera Stabilizer - miguelgrinberg.com
+    
+</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="description" content="miguelgrinberg.com">
+	<meta name="copyright" content="Copyright (c) 2012-2015 Miguel Grinberg">
+	<meta name="author" content="Miguel Grinberg">
+    
+    <meta name="keywords" content="balance, gimbal, ez steady, rhino steady, rhino camera gear, steadicam">
+    
+
+    
+    <!-- Bootstrap -->
+    <link href="../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../static/prettify.css" type="text/css" rel="stylesheet" />
+    <link href="../static/colorbox/colorbox.css" rel="stylesheet" type="text/css" />
+    <link href="../static/style.css" rel="stylesheet" type="text/css" />
+
+    <link rel="shortcut icon" href="../static/favicon.ico">
+	<link rel="alternate" type="application/rss+xml" href="../feed" title="miguelgrinberg.com RSS feed">
+
+  </head>
+  <body>
+    
+    <!-- facebook sdk -->
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "../../connect.facebook.net/en_US/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    <!-- google plus sdk -->
+    <script type="text/javascript" src="../../apis.google.com/js/plusone.js"></script>
+    <!-- twitter sdk -->
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="../../platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <!-- linkedin sdk -->
+    <script src="../../platform.linkedin.com/in.js" type="text/javascript"></script>
+
+    
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://blog.miguelgrinberg.com/index">miguelgrinberg.com</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="http://blog.miguelgrinberg.com/index">Home</a></li>
+                        <li><a href="about-me.html">About Me</a></li>
+                        <li><a href="about-this-blog.html">About This Blog</a></li>
+                        
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <p class="navbar-text" style="margin-top: 10px; margin-bottom: 0px;">
+                                <a type="application/rss+xml" href="../feed"><img src="../static/rss.png" alt="RSS Feed" title="RSS Feed" /></a>
+                                <a href="https://www.facebook.com/miguelgrinbergblog"><img src="../static/facebook.png" alt="Facebook" title="Facebook" /></a>
+                                <a href="https://plus.google.com/u/0/117786742456929977820"><img src="../static/googleplus.png" alt="Google+" title="Google+" /></a>
+                                <a href="http://www.linkedin.com/in/miguelgrinberg"><img src="../static/linkedin.png" alt="LinkedIn" title="LinkedIn" /></a>
+                                <a href="http://github.com/miguelgrinberg"><img src="../static/github.png" alt="GitHub" title="GitHub" /></a>
+                                <a href="https://twitter.com/#!/miguelgrinberg"><img src="../static/twitter.png" alt="Twitter" title="Twitter" /></a>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </nav>
+
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-push-9 sidebar-bg">
+                <div id="sidebar">
+                    
+
+                    
+                    <h1>Building Web APIs with Flask</h1>
+                    <p>Flask is the ideal Python framework for building REST APIs that are flexible, easy to maintain and efficient. I have created a training video with O'Reilly in which I show all my techniques:</p>
+                    <p><center><a href="http://bit.ly/flaskapi"><img style="border: 1px solid black;" src="../static/flask-api-cover-tiny.png"></a></center></p>
+                    <p>Visit <a href="http://flaskbook.com/">http://flaskbook.com</a> for information about this and other Flask training products I have created!</p>
+                    
+
+                    <h1>About Miguel</h1>
+                    <img style="float: right; margin: 0px 8px 8px 0px; padding: 4px; border: 1px solid #ccc;" src="../static/miguel.jpg" />
+                    <p>Welcome to my blog!</p>
+                    <p>I'm a software engineer, photographer and filmmaker in Portland, Oregon, USA.</p>
+                    <p>You can also find me on <a href="https://www.facebook.com/miguelgrinbergblog">Facebook</a>, <a href="https://plus.google.com/u/0/117786742456929977820">Google+</a>, <a href="http://www.linkedin.com/in/miguelgrinberg">LinkedIn</a>, <a href="https://github.com/miguelgrinberg">Github</a> and <a href="https://twitter.com/#!/miguelgrinberg">Twitter</a>.</p>
+                    <p>Thank you for visiting!</p>
+
+                    
+
+                    
+                    <h1>Categories</h1>
+<ul>
+
+	<li>
+		<a href="../category/Arduino/feed">
+			<img src="../static/rss-small.png" title="Arduino RSS Feed" label="Arduino RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Arduino.html">Arduino</a></span> (7)
+	</li>
+
+	<li>
+		<a href="../category/Authentication/feed">
+			<img src="../static/rss-small.png" title="Authentication RSS Feed" label="Authentication RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Authentication.html">Authentication</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../category/Blog/feed">
+			<img src="../static/rss-small.png" title="Blog RSS Feed" label="Blog RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Blog.html">Blog</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/C%2b%2b/feed">
+			<img src="../static/rss-small.png" title="C++ RSS Feed" label="C++ RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/C%2b%2b.html">C++</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Cloud/feed">
+			<img src="../static/rss-small.png" title="Cloud RSS Feed" label="Cloud RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Cloud.html">Cloud</a></span> (2)
+	</li>
+
+	<li>
+		<a href="../category/Filmmaking/feed">
+			<img src="../static/rss-small.png" title="Filmmaking RSS Feed" label="Filmmaking RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Filmmaking.html">Filmmaking</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Flask/feed">
+			<img src="../static/rss-small.png" title="Flask RSS Feed" label="Flask RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Flask.html">Flask</a></span> (39)
+	</li>
+
+	<li>
+		<a href="../category/Games/feed">
+			<img src="../static/rss-small.png" title="Games RSS Feed" label="Games RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Games.html">Games</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Gear/feed">
+			<img src="../static/rss-small.png" title="Gear RSS Feed" label="Gear RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Gear.html">Gear</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/HTML5/feed">
+			<img src="../static/rss-small.png" title="HTML5 RSS Feed" label="HTML5 RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/HTML5.html">HTML5</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Heroku/feed">
+			<img src="../static/rss-small.png" title="Heroku RSS Feed" label="Heroku RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Heroku.html">Heroku</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Javascript/feed">
+			<img src="../static/rss-small.png" title="Javascript RSS Feed" label="Javascript RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Javascript.html">Javascript</a></span> (3)
+	</li>
+
+	<li>
+		<a href="../category/Movie%20Reviews/feed">
+			<img src="../static/rss-small.png" title="Movie Reviews RSS Feed" label="Movie Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Movie%20Reviews.html">Movie Reviews</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Netflix/feed">
+			<img src="../static/rss-small.png" title="Netflix RSS Feed" label="Netflix RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Netflix.html">Netflix</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Node.js/feed">
+			<img src="../static/rss-small.png" title="Node.js RSS Feed" label="Node.js RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Node.html">Node.js</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/OpenStack/feed">
+			<img src="../static/rss-small.png" title="OpenStack RSS Feed" label="OpenStack RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/OpenStack.html">OpenStack</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Personal/feed">
+			<img src="../static/rss-small.png" title="Personal RSS Feed" label="Personal RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Personal.html">Personal</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Photography/feed">
+			<img src="../static/rss-small.png" title="Photography RSS Feed" label="Photography RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Photography.html">Photography</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Product%20Reviews/feed">
+			<img src="../static/rss-small.png" title="Product Reviews RSS Feed" label="Product Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Product%20Reviews.html">Product Reviews</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Programming/feed">
+			<img src="../static/rss-small.png" title="Programming RSS Feed" label="Programming RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Programming.html">Programming</a></span> (47)
+	</li>
+
+	<li>
+		<a href="../category/Project%20Management/feed">
+			<img src="../static/rss-small.png" title="Project Management RSS Feed" label="Project Management RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Project%20Management.html">Project Management</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Python/feed">
+			<img src="../static/rss-small.png" title="Python RSS Feed" label="Python RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Python.html">Python</a></span> (43)
+	</li>
+
+	<li>
+		<a href="../category/REST/feed">
+			<img src="../static/rss-small.png" title="REST RSS Feed" label="REST RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/REST.html">REST</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Rackspace/feed">
+			<img src="../static/rss-small.png" title="Rackspace RSS Feed" label="Rackspace RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Rackspace.html">Rackspace</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Raspberry%20Pi/feed">
+			<img src="../static/rss-small.png" title="Raspberry Pi RSS Feed" label="Raspberry Pi RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Raspberry%20Pi.html">Raspberry Pi</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/RhinoSteady/feed">
+			<img src="../static/rss-small.png" title="RhinoSteady RSS Feed" label="RhinoSteady RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/RhinoSteady.html">RhinoSteady</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Robotics/feed">
+			<img src="../static/rss-small.png" title="Robotics RSS Feed" label="Robotics RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Robotics.html">Robotics</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Video/feed">
+			<img src="../static/rss-small.png" title="Video RSS Feed" label="Video RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Video.html">Video</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../category/Windows/feed">
+			<img src="../static/rss-small.png" title="Windows RSS Feed" label="Windows RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Windows.html">Windows</a></span> (1)
+	</li>
+
+</ul>
+                    
+                </div>
+            </div>
+            <div class="col-md-8 col-md-pull-4">
+                <div id="main">
+                    
+                    
+                    
+                    
+                    
+
+<div class="post">
+
+<p class="date"><span class="flask-moment" data-timestamp="2012-07-23T07:02:30Z" data-format="format('LL')" data-refresh="0">2012-07-23T07:02:30Z</span></p>
+<h1 class="post-title"><a href="balancing-the-rhino-steady-ez-steady-camera-stabilizer.html">Balancing the Rhino Steady (EZ Steady) Camera Stabilizer</a></h1>
+<div class="posted">Posted by <span class="label label-danger"><a href="http://blog.miguelgrinberg.com/author/Miguel Grinberg">Miguel Grinberg</a></span> under <span class="label label-primary"><a href="../category/Filmmaking.html">Filmmaking</a></span>, <span class="label label-primary"><a href="../category/Gear.html">Gear</a></span>, <span class="label label-primary"><a href="../category/RhinoSteady.html">RhinoSteady</a></span>. </div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/balancing-the-rhino-steady-ez-steady-camera-stabilizer" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/balancing-the-rhino-steady-ez-steady-camera-stabilizer" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="balancing-the-rhino-steady-ez-steady-camera-stabilizer.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/balancing-the-rhino-steady-ez-steady-camera-stabilizer" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+<div class="post_body"><p>Have you backed any projects on <a href="http://www.kickstarter.com/">Kickstarter</a>? I have backed just one, the <a href="http://www.kickstarter.com/projects/1851477510/ez-steady-dslr-camera-stabilizer">EZ-Steady</a>, later renamed to <a href="http://www.rhinocameragear.com/RCG EZ-Steady">Rhino Steady</a>.</p>
+<p><center><img alt="Rhino Steady" src="../static/images/balancing-the-rhino-steady-1.jpg" /></center></p>
+<p>This contraption is a camera stabilizer. It helps you shoot professional looking videos where the camera appears to smoothly fly around the scene. It is based on the same principles used by the <a href="http://www.steadicam.com/">Steadicam</a>, only smaller and a few orders of magnitude cheaper.</p>
+<p>The idea is simple. If you walk around with the camera in your hand you can't avoid transferring some of your own body motions to the camera. This class of stabilizers separates the camera from the hand that holds it with the use of a <a href="http://en.wikipedia.org/wiki/Gimbal">gimbal</a>. To ensure that the camera stays upright all the time a set of weights are attached around the frame of the stabilizer, strategically positioned to create a balance. When the camera is perfectly balanced you can freely walk or even run around grabbing the stabilizer by the handle, and the camera will be practically fixed on the three rotation axis, unaware of what's happening on the other side of the gimbal. Note that the left to right orientation can be easily controlled, and the tilting up and down can be done by grabbing the bottom of the stabilizer's frame with the other hand, though this comes at the expense of some lost stability.</p>
+<p>Unfortunately balancing a camera stabilizer is not an easy task. The Rhino Steady web site claims you can balance it in 10 minutes, and that is, in my opinion, not true.</p>
+<p>The problem comes from the fact that there are too many variables that affect the balance, and when you adjust one of them the others need to be readjusted. The process of balancing is then iterative, you start by making big adjustments, and as the balance is improving you have to make smaller and smaller changes. If you have the patience and the time, you will eventually obtain a decent balance and if by that time there is still light outside you can then go out and shoot.</p>
+<h2>Rhino Steady balancing variables</h2>
+<p>Here is a summary of all the things you can change to affect the balance of the Rhino Steady:</p>
+<ol>
+<li>
+<p>Camera left/right position. This one is pretty easy to understand, the camera needs to be attached to the stabilizer in a way that distributes its weight evenly to the left and to the right, so that it is left-to-right leveled. This balance is actually not that hard to obtain because it is relatively independent from the rest, you just move the camera left or right on the stage until balance is achieved, and you can check the level in the back of the stage to know when you get there. For very small adjustments you can also slide a little weight in the back of the stage left or right as necessary.</p>
+</li>
+<li>
+<p>Camera forward/backward position. This is the same as left and right, but in the other direction. The weight of the camera needs to be distributed so that there is no tilting up or down. The camera stage has five different channels to choose from. Note that each time an adjustment is made here you lose your left to right balance.</p>
+</li>
+<li>
+<p>Bottom weights position. The bottom weights can be attached to three different locations in the stabilizer's frame.</p>
+</li>
+<li>
+<p>Bottom weight amount. The stabilizer comes with a selection of weights, some thin and some thick. A thick weight is equivalent to five thin weights.</p>
+</li>
+<li>
+<p>Front weight amount. Like at the bottom, the front of the stabilizer can have different weight configurations. The weights for the front are smaller, but also come in thin and thick formats.</p>
+</li>
+<li>
+<p>Bottom weights up/down position. The weights are mounted on a screw, so turning the screw sends the weights up or down, and that can influence the balance when adding or removing weights does not help anymore.</p>
+</li>
+<li>
+<p>Front weights forward/backward position. Like the bottom weights, the front weights can be moved closer or farther away from the frame to affect the balance in a more subtle way.</p>
+</li>
+</ol>
+<h2>The definition of balance</h2>
+<p>A strict definition of balance would be to say that the mass above and below the gimbal should be equal. We also want the mass left and right of the gimbal, from any point of view to be also equal. </p>
+<p>We can simplify the above by saying that the <em>center of gravity</em> of the whole system must be at the gimbal.</p>
+<p>That sounds good, but unfortunately that is not what we want. If the system is balanced at the gimbal that means that you can put the camera in any position and it will stay there, balanced by the counterweights. For example, you could put the camera upside down at the bottom or all the way to the left, and in both cases there will be no acting forces to bring it back to the upright position.</p>
+<p>This is really inconvenient, because achieving 100% perfect balance is practically impossible. If you fly the camera in this mode the small imbalances that exist in the system will over time make the camera drift to some unwanted orientation.</p>
+<p>Instead, what we want is to have the bottom slightly heavier than the top, so that there is a small force that brings the camera to the correct position when it drifts off a little. This is equivalent to saying that we want the center of gravity of the whole system a bit below the gimbal.</p>
+<p>Now this is tricky, because if the center of gravity is too low, then the system will behave like a pendulum and will be constantly swaying in every direction trying to bring the camera to the upright position but missing and going in the other direction because it is applying too much force. So we want the center of gravity just a tiny bit below the gimbal.</p>
+<p>If you think about this carefully, you'll realize that we are really trying to balance the system in two different ways. First, we need to achieve a balance that puts the camera in the upright position when the system is not moving. This is called <em>static balance</em>. We also need to balance the center of gravity of the system so that when we move around the camera stays upright or quickly corrects to the upright position if it drifts away. This is called <em>dynamic balance</em>.</p>
+<p>The test for static balance is simple. Just grab the stabilizer by the handle and let its body find the position where it rests in balance. If the camera ends up perfectly upright, then you have achieved static balance. If not, then you have to apply a correction, either by moving the camera in the stage, or by adding or removing weights in the bottom or the front of the stabilizer frame.</p>
+<p>The test for dynamic balance is more complex. The method this and other stabilizers in this class use is called the <em>drop test</em>. You grab the stabilizer from the handle with one hand and with the other hand you bring it to a horizontal position. Like this:</p>
+<p><center><img alt="Drop Test" src="../static/images/balancing-the-rhino-steady-2.jpg" /></center></p>
+<p>Then you let go of the bottom and check the time it takes for the camera to reach the upright position, if it does at all. The outcome of the drop test tells you what to do to improve the dynamic balance:</p>
+<ul>
+<li>
+<p>If the bottom of the stabilizer drops very quickly then the bottom is too heavy. Your only option is to remove weight to make the bottom lighter.</p>
+</li>
+<li>
+<p>If the system remains balanced in the horizontal position, or if the camera drops to the bottom, then the bottom of the stabilizer needs more weight. In this case you don't even have static balance.</p>
+</li>
+<li>
+<p>If the system moves slowly towards the upright position, then you are where you want to be. How slowly is a matter of preference, but one to three seconds until the system passes the vertical position seems to be the generally accepted drop time for a well balanced system.</p>
+</li>
+</ul>
+<p>Unfortunately you can't work on the static and dynamic balancing separately, they are strongly linked and adjustments made to improve one of them will always have an effect on the other.</p>
+<p>I think that is enough theory to take in in one session. While I would definitely not call myself an expert in camera stabilizers or even less in Rhino Steady balancing, I have spent a lot of time balancing different types of cameras on this device, so in the near future I will be posting a few practical examples, with pictures and step by step instructions that show my reasoning and my decisions. For the first one I will be showing how I balanced my Canon 60D DSLR, so stay tuned for the next article in the series!</p>
+<p>Miguel</p>
+<p>Related articles:</p>
+<ul>
+<li><a href="balancing-the-rhino-steady-camera-stabilizer-case-study-medium-size-dslr.html">Balancing a Medium Size DSLR</a></li>
+<li><a href="balancing-the-rhino-steady-camera-stabilizer-case-study-lightweight-dslr.html">Balancing a Lightweight DSLR</a></li>
+<li><a href="balancing-the-rhino-steady-camera-stabilizer-case-study-lightweight-camcorder.html">Balancing a Lightweight Camcorder</a></li>
+<li><a href="balancing-the-rhino-steady-camera-stabilizer-case-study-point--shoot.html">Balancing a Point &amp; Shoot</a></li>
+<li><a href="balancing-the-rhino-steady-camera-stabilizer-case-study-smartphone.html">Balancing a Smartphone</a></li>
+</ul></div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/balancing-the-rhino-steady-ez-steady-camera-stabilizer" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/balancing-the-rhino-steady-ez-steady-camera-stabilizer" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="balancing-the-rhino-steady-ez-steady-camera-stabilizer.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/balancing-the-rhino-steady-ez-steady-camera-stabilizer" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+<div class="page">
+<ul class="pager">
+  <li class="previous disabled">
+    <a href="#">&laquo;&laquo;</a>
+  </li>
+  <li class="previous disabled">
+    <a href="#">&laquo;</a>
+  </li>
+  <li class="next disabled">
+    <a href="#">&raquo;&raquo;</a>
+  </li>
+  <li class="next disabled">
+    <a href="#">&raquo;</a>
+  </li>
+</ul>
+</div>
+
+<h3><a name="commentform"></a>Leave a Comment</h3>
+
+<form action="#commentform" method="post"
+  class="form" role="form">
+  <div style="display:none;"><input id="csrf_token" name="csrf_token" type="hidden" value="1439536735.31##d3e7bebf4346f98cf834677aafe1afa4a7b640d8"></div>
+  
+    
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="name">Name</label>
+        <input class="form-control" id="name" name="name" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="url">URL</label>
+        <input class="form-control" id="url" name="url" type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="email">Email</label>
+        <input class="form-control" id="email" name="email" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="comment">Comment</label>
+        <textarea class="form-control" id="comment" name="comment" required></textarea>
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="captcha">Captcha</label>
+        
+<script type="text/javascript">var RecaptchaOptions = {"custom_translations": {"audio_challenge": "Get an audio challenge", "cant_hear_this": "Download sound as MP3", "help_btn": "Help", "image_alt_text": "reCAPTCHA challenge image", "incorrect_try_again": "Incorrect. Try again.", "instructions_audio": "Type what you hear", "instructions_visual": "Type the text", "play_again": "Play sound again", "privacy_and_terms": "Privacy & Terms", "refresh_btn": "Get a new challenge", "visual_challenge": "Get a visual challenge"}, "theme": "white"};</script>
+<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S"></script>
+<noscript>
+  <iframe src="http://www.google.com/recaptcha/api/noscript?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S" height="300" width="500" frameborder="0"></iframe><br>
+  <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+  <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
+</noscript>
+
+  </div>
+
+
+    
+
+
+
+
+
+  
+
+
+    <input class="btn btn-default" id="submit" name="submit" type="submit" value="Submit">
+  
+
+
+
+
+
+</form>
+
+
+</div>
+
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <p class="elapsed">This page was generated in None seconds.</p>
+            <p>&copy; 2014 by Miguel Grinberg. All rights reserved. <a href="mailto:webmaster _at_ miguelgrinberg _dot_ com">Questions?</a></p>
+        </div>
+    </div>
+
+
+    
+    
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.33/jquery.colorbox-min.js"></script>
+    <script type="text/javascript" src="../static/prettify.js"></script>
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment-with-langs.min.js"></script>
+<script>
+function flask_moment_render(elem) {
+    $(elem).text(eval('moment("' + $(elem).data('timestamp') + '").' + $(elem).data('format') + ';'));
+    $(elem).removeClass('flask-moment');
+}
+function flask_moment_render_all() {
+    $('.flask-moment').each(function() {
+        flask_moment_render(this);
+        if ($(this).data('refresh')) {
+            (function(elem, interval) { setInterval(function() { flask_moment_render(elem) }, interval); })(this, $(this).data('refresh'));
+        }
+    })
+}
+$(document).ready(function() {
+    flask_moment_render_all();
+});
+</script>
+    
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4777284-15']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".gallery").colorbox({rel:".gallery",maxWidth:"95%",maxHeight:"95%",scalePhotos:true});
+            // add prettyprint class to all <pre><code></code></pre> blocks
+            var prettify = false;
+            $("pre code").parent().each(function() {
+                $(this).addClass('prettyprint');
+                prettify = true;
+            });
+            prettyPrint();
+        });
+    </script>
+
+
+  </body>
+
+<!-- Mirrored from blog.miguelgrinberg.com/post/balancing-the-rhino-steady-ez-steady-camera-stabilizer by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:43:58 GMT -->
+</html>

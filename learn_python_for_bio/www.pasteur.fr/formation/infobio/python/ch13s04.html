@@ -1,0 +1,64 @@
+<html>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch13s04.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:32 GMT -->
+<head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>13.4. Functions and namespaces</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><meta name="keywords" content="python, biology, bioinformatics, programming, computational biology"><link rel="home" href="index-2.html" title="Introduction to Programming using Python"><link rel="up" href="ch13.html" title="Chapter 13. Functions II"><link rel="previous" href="ch13s03.html" title="13.3. Variable number of parameters"><link rel="next" href="ch13s05.html" title="13.5. Defining a function as a parameter"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">13.4. Functions and namespaces</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch13s03.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><th width="60%" align="center">Chapter 13. Functions II</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch13s05.html"><img src="images/next.png" alt="Next"></a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="sect_func_ns"></a>13.4. Functions and namespaces</h2></div></div><p>
+There are three different namespaces in Python:  a local namespace, a
+	module namespace (see <a href="ch14.html" title="Chapter 14. Modules and packages in Python">Chapter 14</a>) and a global
+	namespace. A local environment is created at function
+	calls. It includes all the parameters and local 
+      variables of the function. Function definitions can be nested, 
+	and nested functions have their own local namespace.
+	</p><div class="example"><a name="ex_funcnamespace"></a><p class="title"><b>Example 13.2. Function execution namespaces</b></p><pre class="programlisting">
+&gt;&gt;&gt; enz = []
+
+&gt;&gt;&gt; def add_enz(*new):
+...     def verif():
+...             print "enz: ", enz
+...             print "new: ", new
+...     verif()
+...     enz.extend(list(new))
+
+&gt;&gt;&gt; add_enz('EcoRI')
+enz:  []
+new:  ('EcoRI',)
+
+&gt;&gt;&gt; enz
+[ 'EcoRI' ]
+	  </pre></div><p>
+
+	By default, variables are defined in the local namespace. In
+	order to access a global variable, there is nothing to do (see
+	<a href="ch13s04.html#ex_funcnamespace" title="Example 13.2. Function execution namespaces">Example 13.2</a> above). In order
+	to <span class="emphasis"><em>define</em></span> a global variable within a 
+	function (i.e to assign a value to it), it has
+	to be declared explicitly as global variable, using the
+	<b>global</b> statement. 
+	
+	  </p><div class="example"><p class="title"><b>Example 13.3. <tt>Global</tt> statement</b></p><pre class="programlisting">
+&gt;&gt;&gt; def change_global():
+...     global a
+...     a = 10
+... 
+&gt;&gt;&gt; a = 20
+&gt;&gt;&gt; change_global()
+&gt;&gt;&gt; a
+10
+	</pre></div><p>
+
+	  </p><div class="example"><p class="title"><b>Example 13.4. <tt>Global</tt> statement (2)</b></p>
+	  In this example, the global variable is both
+	  accessed and changed.
+	    <pre class="programlisting">
+&gt;&gt;&gt; def add_enz(*new):
+...     global enz
+...     enz = enz + list(new)
+... 
+&gt;&gt;&gt; add_enz('BamHI', 'HindIII')
+&gt;&gt;&gt; enz
+[ 'EcoRI', 'BamHI', 'HindIII']
+	</pre></div><p>
+
+      </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch13s03.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch13.html"><img src="images/up.png" alt="Up"></a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch13s05.html"><img src="images/next.png" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">13.3. Variable number of parameters&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index-2.html"><img src="images/home.png" alt="Home"></a></td><td width="40%" align="right" valign="top">&nbsp;13.5. Defining a function as a parameter</td></tr></table></div></body>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch13s04.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:32 GMT -->
+</html>

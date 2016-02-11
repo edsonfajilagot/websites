@@ -1,0 +1,812 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from www.python-course.eu/python3_recursive_functions.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:08:26 GMT -->
+<head>
+
+<!-- Dieses Tag in den Head-Bereich oder direkt vor dem schlieÃŸenden Body-Tag einfÃ¼gen -->
+<script type="text/javascript" src="../apis.google.com/js/plusone.js"></script>
+
+
+
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "../connect.facebook.net/en_GB/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script><title>Python3 Tutorial: Recursive Functions</title>
+<meta http-equiv="content-type" content="text/html; charset="ISO-8859-1">
+<meta name="Description" content="Introduction into recursive thinking, recursion and recursive functions in Python" />
+<meta name="Keywords" content="Python, python3, recursive definition, recursive acronyms, recursion, recursive, recursive function, Function, Functions" />
+
+<link href="favicon.ico" rel="shortcut icon">
+
+<link href="moderna.css" rel="stylesheet" type="text/css" />
+<link href="moderna_print.css" media="print" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+<div id="container">
+
+<div id="banner">
+<!-- <a href="impressum.php">Impressum</a> | <a href="mailto:">contact</a> | --><h1>Python Course</h1>
+
+</div>
+
+	<!-- Begin Top Menu -->
+<ul id="navlist">
+<li><a href="index-2.html" >Home</a></li><li><a href="course.html" >Python 2 Tutorial</a></li><li class="active"><a id="current" href="python3_course.html" >Python 3 Tutorial</a></li><li><a href="advanced_topics.html" >Advanced Topics</a></li><li><a href="python_books.html" >Python Books</a></li><li><a href="python_tkinter.html" >Tkinter Tutorial</a></li><li><a href="contact.html" rel="nofollow">Contact</a></li>                          
+</ul>
+	<!-- End Top Menu -->
+<div id="sidebar-a">
+<img class="border" src="images/mona_lisa_small.png" alt="box" />    <h2>Python 3 Tutorial</h2>
+
+<div class="menu">
+
+<ul>
+<li><a href="python3_history_and_philosophy.html">The Origins of Python</a></li><li><a href="python3_interactive.html">Starting with Python: The Interactive Shell</a></li><li><a href="python3_execute_script.html">Executing a Script</a></li><li><a href="python3_blocks.html">Indentation</a></li><li><a href="python3_variables.html">Data Types and Variables</a></li><li><a href="python3_operators.html">Operators</a></li><li><a href="python3_sequential_data_types.html">Sequential Data Types: Lists and Strings</a></li><li><a href="python3_deep_copy.html">Shallow and Deep Copy</a></li><li><a href="python3_dictionaries.html">Dictionaries</a></li><li><a href="python3_sets_frozensets.html">Sets and Frozen Sets</a></li><li><a href="python3_input.html">input via the keyboard</a></li><li><a href="python3_conditional_statements.html">Conditional Statements</a></li><li><a href="python3_loops.html">Loops, while Loop</a></li><li><a href="python3_for_loop.html">For Loops</a></li><li><a href="python3_print.html">Output with Print</a></li><li><a href="python3_formatted_output.html">Formatted output with string modulo and the format method</a></li><li><a href="python3_functions.html">Functions</a></li><li><a href="python3_recursive_functions.html">Recursion and Recursive Functions</a></li><li><a href="python3_tests.html">Tests, DocTests, UnitTests</a></li><li><a href="python3_memoization.html">Memoization and Decorators</a></li><li><a href="python3_passing_arguments.html">Parameter Passing in Functions</a></li><li><a href="python3_namespaces.html">Namespaces</a></li><li><a href="python3_global_vs_local_variables.html">Global and Local Variables</a></li><li><a href="python3_file_management.html">Read and Write Files</a></li><li><a href="python3_modules_and_modular_programming.html">Modular Programming and Modules</a></li><li><a href="python3_re.html">Regular Expressions</a></li><li><a href="python3_re_advanced.html">Regular Expressions, Advanced</a></li><li><a href="python3_lambda.html">Lambda Operator, Filter, Reduce and Map</a></li><li><a href="python3_list_comprehension.html">List Comprehension</a></li><li><a href="python3_generators.html">Iterators and Generators</a></li><li><a href="python3_exception_handling.html">Exception Handling</a></li><li><a href="python3_object_oriented_programming.html">Object Oriented Programming</a></li><li><a href="python3_class_and_instance_attributes.html">Class and Instance Attributes</a></li><li><a href="python3_properties.html">Properties vs. getters and setters</a></li><li><a href="python3_inheritance.html">Inheritance</a></li><li><a href="python3_multiple_inheritance.html">Multiple Inheritance</a></li><li><a href="python3_magic_methods.html">Magic Methods and Operator Overloading</a></li><li><a href="python3_inheritance_example.html">OOP, Inheritance Example</a></li></ul>
+
+</div>
+
+<p>
+<hr>
+<br>
+This website is created by:<br><br>
+<a href="http://www.python-training-courses.com/"><img style="width: 150px;" alt="Python Training Courses"
+		     src="images/toronto_building.jpg"><br><br>Python Training Courses in Toronto, Canada</a>
+<br>
+On site trainings in Europe, Canada and the US.
+<br>
+<hr>
+
+<h3>Recursive Acronyms</h3>
+Recursive acronyms and abbreviations refer to themselves. Acronyms are supposed to 
+be an MIT tradition. Once, they had written an editor, which they called "EINE" (which 
+means a/one in German). It's an acronym for "EINE Is Not Emacs", but this editor is Emacs-like
+editor. Its successor was called "ZWEI" (German for two). Let's stick with editors. Have you ever 
+heard about Joe or JOE? Of course, another candidate: Joe stands for Joe's Own Editor. <br><br>
+"And now for something completely different ...": You need to do some mp3 encoding? In this case, 
+you might find LAME very usefull. LAME  is  a  program which can be used to create compressed audio files
+and its letters stand for "LAME Ain't an MP3 Encoder"
+<br><br>
+"And now for something completely different ...": 
+PNG was created to improve upon and replace GIF (Graphics Interchange Format) as an image-file format 
+not requiring a patent license used in GIF. Officially, the acronym stands for Portable Network Graphics
+but we prefer "PNG's Not GIF".
+<br><br>
+Another very famous acronym is GNU, which stands for "GNU's Not Unix".
+<br><br>Have you every heard about the Windows emulator Wine? It means "Wine Is Not an Emulator"!
+<h3>Quotations</h3>
+<i>"To understand recursion you need to understand recursion. Or is it the other way round?"</i>
+<br><hr><br>
+<i>"To Iterate is Human, to Recurse, Divine"</i>
+<br>
+(Attributed to L Peter Deutsch or some quote Robert Heller)
+<br>
+<br>
+</div><div id="sidebar-b"><img style="width: 150px;" alt="Python-Logo"
+		     src="images/python-logo.png"><!-- Dieses Tag dort einfügen, wo die +1-Schaltfläche dargestellt werden soll -->
+<g:plusone></g:plusone>
+<br><br>
+
+<div class="fb-like" data-href="www.python-course.eu" data-send="false" data-layout="button_count" 
+data-width="130" data-show-faces="true" data-action="recommend"></div>
+
+<br><br>
+This topic in German / Deutsche Übersetzung:
+    <a href="http://www.python-kurs.eu/python3_rekursive_funktionen.php">Rekursion und Rekursive Funktionen</a><h3>Python3</h3>This is a tutorial in Python3, but this chapter of our course is available in a version for Python 2.x as well: <a href="recursive_functions.html">Recursive Functions in Python 2.x</a><p>
+<h3>Classroom Training Courses</h3>
+The goal of this website is to provide educational material, 
+allowing you to learn Python on your own.
+Nevertheless, it is faster and more efficient to attend a "real" 
+Python course in a classroom, with
+an experienced trainer. So why not attend one of the live 
+<a href="python_classes.html">Python courses</a> in Paris, London, Berlin, Munich
+or Lake Constance by Bernd Klein, the author of this tutorial?
+<br><br>
+You can also check the   
+<a href="http://www.bodenseo.com/courses.php?topic=Python">Python Training courses
+<img style="width: 150px;" alt="Bodenseo Kurse in Python"
+		     src="images/bodenseo_stairs_to_python.png"></a>
+		     delivered by Bodenseo and Bernd Klein.
+<br><br>
+You can book on-site classes at your company or organization, e.g. in England, Switzerland, Austria, Germany,
+France, Belgium, the Netherlands, Luxembourg, Poland, UK, Italy and other locations in Europe.
+<br><br>
+<h3>Python3</h3>This is a tutorial in Python3, but this chapter of our course is available in a version for Python 2.x as well: <a href="recursive_functions.html">Recursive Functions in Python 2.x</a>
+ </p>
+
+
+
+
+    
+</p></div>
+<div id="content">
+
+<div id="contextlinks">Previous Chapter: <a href="python3_functions.html">Functions</a><br>
+<LINK rel="prev" href="python3_functions.html">Next Chapter: <a href="python3_tests.html">Tests, DocTests, UnitTests</a><br>
+<LINK rel="next" href="python3_tests.html"></div>
+<h2>Recursive Functions</h2>
+<h3>Definition</h3>
+<p>
+<img class="imgright" src="images/mona_lisa.png" alt="Mona Lisa Fractal" />
+<i>
+Recursion has something to do with infinity. I know recursion has something to do with infinity. 
+I think I know recursion has something to do with infinity. He is sure I think I know recursion 
+has something to do with infinity. We doubt he is sure I think I know ...
+</i>
+We think, that you think that we convinced you now, that we can go on forever with this example of a 
+recursion from natural language. Recursion is not only a fundamental feature of natural language, 
+but of the human cognitive capacity. Our way of thinking 
+is based on a recursive thinking processes. Even with a very simple grammar, like "An English sentence
+contains a subject and a predicate, and a predicate contains a verb, an object and a complement", we can 
+demonstrate the infinite possibilities of the natural language. The cognitive scientist and linguist 
+Stephen Pinker phrases it like this: "With a few thousand nouns that can fill the subject slot and a few thousand verbs that can fill the 
+predicate slot, one already has several million ways to open a sentence. The possible combinations 
+quickly multiply out to unimaginably large numbers. Indeed, the repertoire of sentences is theoretically 
+infinite, because the rules of language use a trick called recursion. A recursive rule allows a phrase 
+to contain an example of itself, as in <i>She thinks that he thinks that they think that he knows</i> 
+and so on, ad infinitum. And if the number of sentences is infinite, the number of possible thoughts 
+and intentions is infinite too, because virtually every sentence expresses a different thought or 
+intention."<sup>1</sup>
+<br><br>
+We have to stop our short excursion to the use of recursion in natural language to come back to 
+recursion in computer science and programs and finally to recursion in the programming language Python. 
+<br><br>
+The adjective "recursive" originates from the Latin verb "recurrere", which means "to run back". 
+And this is what a recursive definition or a recursive function does: It is "running back" or returning
+to itself. Most people who have done some mathematics, computer science or read a book about programming
+will have encountered the factorial, which is defined in mathematical terms as 
+<br><br>
+<code>n! = n * (n-1)!, if n &gt; 1 and f(1) = 1</code>
+<br><br>
+It's used so often as an example for recursion because of its simplicity and clarity. 
+We will come back to it in the following.
+<br><br>
+<h3>Definition of Recursion</h3>
+Recursion is a method of programming or coding a problem, in which a function calls itself one or more times
+in its body. Usually, it is returning the return value of this function call. If a function definition 
+satisfies the condition of recursion, we call this function a recursive function.
+<br><br>
+Termination condition:<br>
+A recursive function has to fulfil an important condition to be used in a program: it has
+to terminate. A recursive function terminates, if with every recursive call the solution of the 
+problem is downsized and moves towards a base case. A base case is a case,
+where the problem can be solved without further recursion. A recursion can end up in an infinite loop, if
+the base case is not met in the calls.
+<br><br>
+Example:
+<br><br>
+<code>4! = 4 * 3!<br>3! = 3 * 2!<br>2! = 2 * 1</code>
+<br><br>Replacing the calculated values gives us the following expression
+<br><br>
+<code>4! = 4 * 3 * 2 * 1</code>
+
+<br><br>
+Generally we can say: Recursion in computer science is a method where the solution to a problem is based 
+on solving smaller instances of the same problem.
+
+<br><br>
+<h3>Recursive Functions in Python</h3>
+Now we come to implement the factorial in Python. It's as easy and elegant as the mathematical definition.
+<pre>
+def factorial(n):
+    if n == 1:
+        return 1
+    else:
+        return n * factorial(n-1)
+</pre>
+
+We can track how the function works by adding two print() function to the previous function
+definition:
+
+<pre>
+def factorial(n):
+    print("factorial has been called with n = " + str(n))
+    if n == 1:
+        return 1
+    else:
+        res = n * factorial(n-1)
+        print("intermediate result for ", n, " * factorial(" ,n-1, "): ",res)
+        return res	
+
+print(factorial(5))
+</pre>
+
+This Python script outputs the following results:
+<pre>
+factorial has been called with n = 5
+factorial has been called with n = 4
+factorial has been called with n = 3
+factorial has been called with n = 2
+factorial has been called with n = 1
+intermediate result for  2  * factorial( 1 ):  2
+intermediate result for  3  * factorial( 2 ):  6
+intermediate result for  4  * factorial( 3 ):  24
+intermediate result for  5  * factorial( 4 ):  120
+120
+</pre>
+
+Let's have a look at an iterative version of the factorial function.
+<pre>
+def iterative_factorial(n):
+    result = 1
+    for i in range(2,n+1):
+        result *= i
+    return result
+</pre>
+
+<br>
+<h3>The Pitfalls of Recursion</h3>
+<img class="imgright" src="images/fibonacci_squares.png" alt="Fibonacci Squares" />
+This subchapter of our tutorial on recursion deals with the Fibonacci numbers. 
+What do have sunflowers, the Golden ratio, fir tree cones,  The Da Vinci Code, the song
+"Lateralus" by Tool, and the graphic on the right side in common. Right, the Fibonacci numbers.
+<br><br>
+The Fibonacci numbers are the numbers of the following sequence of integer values:
+<br><br>
+<code>0,1,1,2,3,5,8,13,21,34,55,89, ...</code>
+<br><br>
+The Fibonacci numbers are defined by:
+<br>
+<code>F<sub>n</sub> = F<sub>n-1</sub> + F<sub>n-2</sub></code> 
+<br>with <code>F<sub>0</sub> = 0 
+and F<sub>1</sub> = 1</code>
+<br><br>
+The Fibonacci sequence is named after the mathematician Leonardo of Pisa, who is better known as Fibonacci.
+In his book "Liber Abaci" (publishes 1202) he introduced the sequence as an exercise dealing with bunnies.
+His sequence of the Fibonacci numbers begins with F<sub>1</sub> = 1, while in modern mathematics the sequence 
+starts with F<sub>0</sub> = 0. But this has no effect on the other members of the sequence.
+<br><br>
+The Fibonacci numbers are the result of an artificial rabbit population, satisfying the following conditions:
+<br>
+<ul>
+<li>a newly born pair of rabbits, one male, one female, build the initial population</li>
+<li>these rabbits are able to mate at the age of one month so that at the end of its 
+second month a female can bring forth another pair of rabbits</li>
+<li>these rabbits are immortal</li>
+<li>a mating pair always produces one new pair (one male, one female) every month from the 
+second month onwards</li>
+</ul> 
+ 
+ The Fibonacci numbers are the numbers of rabbit pairs after n months, i.e. after 10 months we will have
+ F<sub>10</sub> rabits.
+<br><br>
+The Fibonacci numbers are easy to write as a Python function. It's more or less a one to one mapping from
+the mathematical definition:
+<pre>
+def fib(n):
+    if n == 0:
+        return 0
+    elif n == 1:
+        return 1
+    else:
+        return fib(n-1) + fib(n-2)
+</pre>
+
+An iterative solution is also easy to write, though the recursive solution looks more like the definition:
+<pre>
+def fibi(n):
+    old, new = 0, 1
+    if n == 0:
+        return 0
+    for i in range(n-1):
+        old, new = new, old + new
+    return new
+</pre>
+
+If you check the functions fib() and fibi(), you will find out, that the iterative version fibi() 
+is a lot faster than the recursive version fib(). To get an idea of how much this "a lot faster" can be,
+we have written a script, which uses the timeit module, to measure the calls. To do this, we save the function definitions
+for fib and fibi in a file <a href="examples/fibonacci.py" target="Fibonacci Module" rel="nofollow">fibonacci.py</a>, 
+which we can umport in the program (<a href="examples/fibonacci_runit.py" target="comparisons of run times: recursive / iterative" rel="nofollow">fibonacci_runit.py</a>) below:
+<br><br>
+<pre>
+from timeit import Timer
+
+t1 = Timer("fib(10)","from fibonacci import fib")
+
+for i in range(1,41):
+	s = "fib(" + str(i) + ")"
+	t1 = Timer(s,"from fibonacci import fib")
+	time1 = t1.timeit(3)
+	s = "fibi(" + str(i) + ")"
+	t2 = Timer(s,"from fibonacci import fibi")
+	time2 = t2.timeit(3)
+	print("n=%2d, fib: %8.6f, fibi:  %7.6f, percent: %10.2f" % (i, time1, time2, time1/time2))
+</pre> 
+
+time1 is the time in seconds it takes for 3 calls to fib(n) and time2 respectively the time for fibi().
+If we look at the results, we can see, that calling fib(20) three times needs about 14 milliseconds.
+fibi(20) needs just 0.011 milliseconds for 3 calls. So fibi(20) is about 1300 times faster then f(20).
+<br>fib(40) needs already 215 seconds for three calls, while fibi(40) can do it in 0.016 milliseconds.
+fibi(40) is more than 13 millions times faster than fib(40).
+<br><br>
+<pre>
+n= 1, fib: 0.000004, fibi:  0.000005, percent:       0.81
+n= 2, fib: 0.000005, fibi:  0.000005, percent:       1.00
+n= 3, fib: 0.000006, fibi:  0.000006, percent:       1.00
+n= 4, fib: 0.000008, fibi:  0.000005, percent:       1.62
+n= 5, fib: 0.000013, fibi:  0.000006, percent:       2.20
+n= 6, fib: 0.000020, fibi:  0.000006, percent:       3.36
+n= 7, fib: 0.000030, fibi:  0.000006, percent:       5.04
+n= 8, fib: 0.000047, fibi:  0.000008, percent:       5.79
+n= 9, fib: 0.000075, fibi:  0.000007, percent:      10.50
+n=10, fib: 0.000118, fibi:  0.000007, percent:      16.50
+n=11, fib: 0.000198, fibi:  0.000007, percent:      27.70
+n=12, fib: 0.000287, fibi:  0.000007, percent:      41.52
+n=13, fib: 0.000480, fibi:  0.000007, percent:      69.45
+n=14, fib: 0.000780, fibi:  0.000007, percent:     112.83
+n=15, fib: 0.001279, fibi:  0.000008, percent:     162.55
+n=16, fib: 0.002059, fibi:  0.000009, percent:     233.41
+n=17, fib: 0.003439, fibi:  0.000011, percent:     313.59
+n=18, fib: 0.005794, fibi:  0.000012, percent:     486.04
+n=19, fib: 0.009219, fibi:  0.000011, percent:     840.59
+n=20, fib: 0.014366, fibi:  0.000011, percent:    1309.89
+n=21, fib: 0.023137, fibi:  0.000013, percent:    1764.42
+n=22, fib: 0.036963, fibi:  0.000013, percent:    2818.80
+n=23, fib: 0.060626, fibi:  0.000012, percent:    4985.96
+n=24, fib: 0.097643, fibi:  0.000013, percent:    7584.17
+n=25, fib: 0.157224, fibi:  0.000013, percent:   11989.91
+n=26, fib: 0.253764, fibi:  0.000013, percent:   19352.05
+n=27, fib: 0.411353, fibi:  0.000012, percent:   34506.80
+n=28, fib: 0.673918, fibi:  0.000014, percent:   47908.76
+n=29, fib: 1.086484, fibi:  0.000015, percent:   72334.03
+n=30, fib: 1.742688, fibi:  0.000014, percent:  123887.51
+n=31, fib: 2.861763, fibi:  0.000014, percent:  203442.44
+n=32, fib: 4.648224, fibi:  0.000015, percent:  309461.33
+n=33, fib: 7.339578, fibi:  0.000014, percent:  521769.86
+n=34, fib: 11.980462, fibi:  0.000014, percent:  851689.83
+n=35, fib: 19.426206, fibi:  0.000016, percent: 1216110.64
+n=36, fib: 30.840097, fibi:  0.000015, percent: 2053218.13
+n=37, fib: 50.519086, fibi:  0.000016, percent: 3116064.78
+n=38, fib: 81.822418, fibi:  0.000015, percent: 5447430.08
+n=39, fib: 132.030006, fibi:  0.000018, percent: 7383653.09
+n=40, fib: 215.091484, fibi:  0.000016, percent: 13465060.78
+</pre>
+<br>
+What's wrong with our recursive implementation?
+<br><br>
+Let's have a look at the calculation tree, i.e. the order in which the functions are called. fib() is
+substituted by fib(). 
+<br><br>
+<img src="images/fib_calculation_tree.png" alt="fib() calculation tree" />
+<br><br>
+We can see, that the subtree f(2) appears 3 times and the subtree for the calculation of f(3) two times.
+If you imagine extending this tree for f(6), you will understand, that f(4) will be called two times, f(3)
+three times and so on. This means, our recursion doesn't remeber previously calculated values.
+<br><br>
+We can implement a "memory" for our recusive version by using a dictionary to save the previously calculated
+values.
+<br><br>
+<pre>
+memo = {0:0, 1:1}
+def fibm(n):
+    if not n in memo:
+        memo[n] = fibm(n-1) + fibm(n-2)
+    return memo[n]
+</pre>
+<br>
+We time it again to compare it with fibi():
+
+<pre>
+from timeit import Timer
+from fibo import fib
+
+t1 = Timer("fib(10)","from fibo import fib")
+
+for i in range(1,41):
+	s = "fibm(" + str(i) + ")"
+	t1 = Timer(s,"from fibo import fibm")
+	time1 = t1.timeit(3)
+	s = "fibi(" + str(i) + ")"
+	t2 = Timer(s,"from fibo import fibi")
+	time2 = t2.timeit(3)
+	print("n=%2d, fib: %8.6f, fibi:  %7.6f, percent: %10.2f" % (i, time1, time2, time1/time2))
+</pre>
+<br>
+We can see, that it is even faster than the iterative version. Of course, the larger the arguments
+the greater the benefit of our memoisation:
+<br>
+<pre>
+n= 1, fib: 0.000011, fibi:  0.000015, percent:       0.73
+n= 2, fib: 0.000011, fibi:  0.000013, percent:       0.85
+n= 3, fib: 0.000012, fibi:  0.000014, percent:       0.86
+n= 4, fib: 0.000012, fibi:  0.000015, percent:       0.79
+n= 5, fib: 0.000012, fibi:  0.000016, percent:       0.75
+n= 6, fib: 0.000011, fibi:  0.000017, percent:       0.65
+n= 7, fib: 0.000012, fibi:  0.000017, percent:       0.72
+n= 8, fib: 0.000011, fibi:  0.000018, percent:       0.61
+n= 9, fib: 0.000011, fibi:  0.000018, percent:       0.61
+n=10, fib: 0.000010, fibi:  0.000020, percent:       0.50
+n=11, fib: 0.000011, fibi:  0.000020, percent:       0.55
+n=12, fib: 0.000004, fibi:  0.000007, percent:       0.59
+n=13, fib: 0.000004, fibi:  0.000007, percent:       0.57
+n=14, fib: 0.000004, fibi:  0.000008, percent:       0.52
+n=15, fib: 0.000004, fibi:  0.000008, percent:       0.50
+n=16, fib: 0.000003, fibi:  0.000008, percent:       0.39
+n=17, fib: 0.000004, fibi:  0.000009, percent:       0.45
+n=18, fib: 0.000004, fibi:  0.000009, percent:       0.45
+n=19, fib: 0.000004, fibi:  0.000009, percent:       0.45
+n=20, fib: 0.000003, fibi:  0.000010, percent:       0.29
+n=21, fib: 0.000004, fibi:  0.000009, percent:       0.45
+n=22, fib: 0.000004, fibi:  0.000010, percent:       0.40
+n=23, fib: 0.000004, fibi:  0.000010, percent:       0.40
+n=24, fib: 0.000004, fibi:  0.000011, percent:       0.35
+n=25, fib: 0.000004, fibi:  0.000012, percent:       0.33
+n=26, fib: 0.000004, fibi:  0.000011, percent:       0.34
+n=27, fib: 0.000004, fibi:  0.000011, percent:       0.35
+n=28, fib: 0.000004, fibi:  0.000012, percent:       0.32
+n=29, fib: 0.000004, fibi:  0.000012, percent:       0.33
+n=30, fib: 0.000004, fibi:  0.000013, percent:       0.31
+n=31, fib: 0.000004, fibi:  0.000012, percent:       0.34
+n=32, fib: 0.000004, fibi:  0.000012, percent:       0.33
+n=33, fib: 0.000004, fibi:  0.000013, percent:       0.30
+n=34, fib: 0.000004, fibi:  0.000012, percent:       0.34
+n=35, fib: 0.000004, fibi:  0.000013, percent:       0.31
+n=36, fib: 0.000004, fibi:  0.000013, percent:       0.31
+n=37, fib: 0.000004, fibi:  0.000014, percent:       0.29
+n=38, fib: 0.000004, fibi:  0.000014, percent:       0.29
+n=39, fib: 0.000004, fibi:  0.000013, percent:       0.31
+n=40, fib: 0.000004, fibi:  0.000014, percent:       0.29
+</pre>
+
+<br><br>
+<h3>More about Recursion in Python</h3>
+<img class="imgright" src="images/towers_of_hanoi_2.jpg" alt="Towers of Hanoi" />
+<br>
+If you want to learn more on recurison, we suggest, that you try to solve the following exercises. 
+Please do not peer at the solutions, before you haven't given your best. If you have thought about 
+a task for a while and you are still not capable of solving the exercise, you may consult 
+our sample solutions.
+<br><br>
+In our section "Advanced Topics" of our tutorial we have a comprehensive treatment of the game or puzzle 
+"<a href="towers_of_hanoi.html">Towers of Hanoi</a>". Of course, we solve it with a function using a 
+recursive function. The "Hanoi problem" is special, because a recursive solution almost forces itself on 
+the programmer, while the iterative solution of the game is hard to find and to grasp.  
+
+
+<br><br>
+<h3>Exercises</h3>
+<ol>
+<li>Think of a recusive version of the function f(n) = 3 * n, i.e. the multiples of 3</li>
+<br>
+<li>Write a recursive Python function that returns the sum of the first <code>n</code> integers.
+<br>(Hint: The function will be similiar to the factorial function!)</li>
+<br><li>Write a function which implements the Pascal's triangle:<br><br>
+<code>
+<center>
+                   1<br>
+                 1 &nbsp;&nbsp; 1<br>
+               1 &nbsp;&nbsp;  2 &nbsp;&nbsp;  1<br>
+             1  &nbsp;&nbsp; 3 &nbsp;&nbsp;  3  &nbsp;&nbsp; 1<br>
+           1  &nbsp;&nbsp; 4 &nbsp;&nbsp;  6 &nbsp;&nbsp;  4 &nbsp;&nbsp;  1<br>
+         1 &nbsp;&nbsp;  5 &nbsp;&nbsp;  10 &nbsp;&nbsp; 10 &nbsp;&nbsp;  5 &nbsp;&nbsp; 1<br>  
+</center>
+</code>
+</li>
+<br>
+
+<li>
+The Fibonacci numbers are hidden inside of Pascal's triangle. If you sum up the coloured
+numbers of the following triangle, you will get the 7th Fibonacci number:
+
+<code>
+<center>
+                   1<br>
+                 1 &nbsp;&nbsp; 1<br>
+               1 &nbsp;&nbsp;  2 &nbsp;&nbsp; 1<br>
+             1  &nbsp;&nbsp; 3 &nbsp;&nbsp;  3  &nbsp;&nbsp; <span style="font-weight: bold; color: rgb(255, 150, 98);">1</span><br>
+           1  &nbsp;&nbsp; 4 &nbsp;&nbsp;  <span style="font-weight: bold; color: rgb(255, 150, 98);">6</span> &nbsp;&nbsp;  4 &nbsp;&nbsp;  1<br>
+         1 &nbsp;&nbsp;  <span style="font-weight: bold; color: rgb(255, 150, 98);">5</span> &nbsp;&nbsp;  10 &nbsp;&nbsp; 10 &nbsp;&nbsp;  5 &nbsp;&nbsp; 1<br>  
+       <span style="font-weight: bold; color: rgb(255, 150, 98);">1</span> &nbsp;&nbsp;  6 &nbsp;&nbsp;  15 &nbsp;&nbsp; 20 &nbsp;&nbsp;  15 &nbsp;&nbsp; 6 &nbsp;&nbsp; 1<br>  
+</center>
+</code>
+<br>Write a recursive program to calculate the Fibonacci numbers, using Pascal's triangle.
+
+</li>
+<br>
+<li>Implement a recursive function in Python for the sieve of Eratosthenes.<br>
+The sieve of Eratosthenes is a simple algorithm for finding all prime numbers up to a 
+specified integer. It was created by the ancient Greek mathematician Eratosthenes.
+<br>
+The algorithm to find all the prime numbers less than or equal to a given integer n:
+<ol>
+<li>Create a list of integers from two to n: 2, 3, 4, ..., n</li>
+<li>Start with a counter i set to 2, i.e. the first prime number</li>
+<li>Starting from i+i, count up by i and remove those numbers from the list, i.e. 2*i, 3*i, 4*i, aso..</li>
+<li>Find the first number of the list following i. This is the next prime number.</li>
+<li>Set i to the number found in the previous step</li>
+<li>Repeat steps 3 and 4 until i is greater than n. (As an improvement: It's enough to go to the square 
+root of n)</li>
+<li>All the numbers, which are still in the list, are prime numbers</li>
+</ol>
+</li>
+You can easily see, that we would be inefficient, if we strictly used this algorithm, e.g. we will try to remove the multiples
+of 4, although they have been already removed by the multiples of 2. 
+So it's enough to produce the multiples of all the prime nummbers up to the square root of n. 
+We can recursively create these sets.
+<br><br>
+<li>Write a recursive function find_index(), which returns the index of a number in the Fibonacci sequence,
+if the number is an element of this sequence and returns -1 if the number is not contained in it, i.e.
+<br>
+<pre>fib(find_index(n)) == n</pre>
+
+</li>
+
+<li>The sum of the squares of two consecutive Fibonacci numbers is also a Fibonacci number, e.g. 2 and 3 
+are elements of the Fibonacci sequence and 2*2 + 3*3 = 13 corresponds to Fib(7).
+<br>
+Use the previous function to find the position of the sum of the squares of two consecutive numbers 
+in the Fibonacci sequence.
+<br><br>Mathematical explanation:<br>
+Let a and b be two successive Fibonacci numbers with a prior to b. The Fibonacci sequence starting with
+the number "a" looks like this:
+<pre>
+0              a
+1              b
+2          a + b	
+3	  a + 2b
+4 	 2a + 3b
+5        3a + 5b
+6        5a + 8b
+</pre>
+
+We can see that the Fibonacci numbers appear as factors
+
+ for a and b. The n-th element in this sequence
+can be calculated with the following formula:
+<br>
+<pre>
+F(n) = Fib(n-1)* a + Fib(n) * b
+</pre>
+
+From this we can conclude that for a natural number n, n>1, the following holds true:
+<pre>
+Fib(2*n + 1) = Fib(n)**2 + Fib(n+1)**2
+</pre>
+</li>
+
+</ol>
+
+<br>
+<h3>Solutions to our Exercises</h3>
+<ol>
+<li> 
+Solution to our first exercise on recursion:
+<br>
+Mathematically, we can write it like this:
+<br>
+<code>
+f(1) = 3, 
+<br>
+f(n+1) = f(n) + 3
+</code>
+<br><br>
+A Python function can be written like this:
+<pre>
+def mult3(n):
+    if n == 1:
+        return 3
+    else:
+        return mult3(n-1) + 3
+Towers of Hanoi
+for i in range(1,10):
+    print(mult3(i))
+</pre>
+</li>
+<li>
+Solution to our second exercise:
+<pre>
+def sum_n(n):
+    if n== 0:
+        return 0
+    else:
+        return n + sum_n(n-1)
+</pre>
+</li>
+<li>
+Solution for creating the Pacal triangle:
+<br>
+<pre>
+def pascal(n):
+    if n == 1:
+        return [1]
+    else:
+        line = [1]
+        previous_line = pascal(n-1)
+        for i in range(len(previous_line)-1):
+            line.append(previous_line[i] + previous_line[i+1])
+        line += [1]
+    return line
+
+print(pascal(6))
+</pre>
+Alternatively, we can write a function using list comprehension:
+<br>
+<pre>
+def pascal(n):
+    if n == 1:
+        return [1]
+    else:
+        p_line = pascal(n-1)
+        line = [ p_line[i]+p_line[i+1] for i in range(len(p_line)-1)]
+        line.insert(0,1)
+        line.append(1)
+    return line
+
+print(pascal(6))
+</pre>
+</li>
+
+<li>
+Producing the Fibonacci numbers out of Pascal's triangle:
+<pre>
+def fib_pascal(n,fib_pos):
+    if n == 1:
+        line = [1]
+        fib_sum = 1 if fib_pos == 0 else 0
+    else:
+        line = [1]
+        (previous_line, fib_sum) = fib_pascal(n-1, fib_pos+1)
+        for i in range(len(previous_line)-1):
+            line.append(previous_line[i] + previous_line[i+1])
+        line += [1]
+        if fib_pos < len(line):
+            fib_sum += line[fib_pos]
+    return (line, fib_sum)
+
+def fib(n):
+    return fib_pascal(n,0)[1]
+
+# and now printing out the first ten Fibonacci numbers:
+for i in range(1,10):
+    print(fib(i))
+</pre>
+
+
+</li>
+
+
+<li>
+The following program implements the sieve of Eratosthenes according to the rules of the task in an iterative way. It will
+print out the first 100 prime numbers.
+<br>
+<pre>
+from math import sqrt
+
+def sieve(n):
+	# returns all primes between 2 and n	
+	primes = list(range(2,n+1))
+	max = sqrt(n)
+	num = 2
+	while num < max:
+		i = num
+		while i <= n:
+			i += num
+			if i in primes:
+				primes.remove(i)
+		for j in primes:
+			if j > num:
+				num = j
+				break			
+	return primes
+	
+print(sieve(100))
+</pre>
+
+<br><br>
+But this chapter of our tutorial is about recursion and recursive functions, and we have demanded a recursive function to calculate the prime numbers. To understand the following solution, you may confer our chapter about<a href="python3_list_comprehension.html"> List Comprehension</a>:
+<pre>
+from math import sqrt
+
+def primes(n):
+    if n == 0:
+        return []
+    elif n == 1:
+        return []
+    else:
+        p = primes(int(sqrt(n)))
+        no_p = [j for i in p for j in range(i*2, n + 1, i)]
+        p = [x for x in range(2, n + 1) if x not in no_p]
+        return p
+
+
+print(primes(100))
+</pre> 
+
+</li>
+
+<li>
+<pre>
+memo = {0:0, 1:1}
+def fib(n):
+    if not n in memo:
+        memo[n] = fib(n-1) + fib(n-2)
+    return memo[n]
+
+def find_index(*x):
+	""" finds the natural number i with fib(i) = n """
+	if len(x) == 1:
+		# started by user
+		# find index starting from 0
+		return find_index(x[0],0)
+	else:
+		n = fib(x[1])
+		m = x[0]
+		if  n > m:
+			return -1
+		elif n == m:
+			return x[1]
+		else:
+			return find_index(m,x[1]+1)
+</pre>
+</li>
+
+<li>
+<pre> 
+# code from the previous example with the functions fib() and find_index()
+
+print(" index of a |    a |     b | sum of squares | index ")	
+print("=====================================================")
+for i in range(15):
+	square = fib(i)**2 + fib(i+1)**2
+	print( " %10d |  %3d |   %3d | %14d | %5d " % (i, fib(i), fib(i+1), square, find_index(square)))
+
+</pre>
+
+The result of the previous program looks like this:
+<pre>
+ index of a |    a |     b | sum of squares | index 
+=====================================================
+          0 |    0 |     1 |              1 |     1 
+          1 |    1 |     1 |              2 |     3 
+          2 |    1 |     2 |              5 |     5 
+          3 |    2 |     3 |             13 |     7 
+          4 |    3 |     5 |             34 |     9 
+          5 |    5 |     8 |             89 |    11 
+          6 |    8 |    13 |            233 |    13 
+          7 |   13 |    21 |            610 |    15 
+          8 |   21 |    34 |           1597 |    17 
+          9 |   34 |    55 |           4181 |    19 
+         10 |   55 |    89 |          10946 |    21 
+         11 |   89 |   144 |          28657 |    23 
+         12 |  144 |   233 |          75025 |    25 
+         13 |  233 |   377 |         196418 |    27 
+         14 |  377 |   610 |         514229 |    29 
+
+
+</pre>
+
+</li>
+
+
+</ol>
+
+
+
+
+<br><br>
+<hr>
+<br>
+<sup>1</sup> Stephen Pinker, The Blank Slate, 2002
+
+</p>
+<br><br>
+<div id="contextlinks">Previous Chapter: <a href="python3_functions.html">Functions</a><br>
+<LINK rel="prev" href="python3_functions.html">Next Chapter: <a href="python3_tests.html">Tests, DocTests, UnitTests</a><br>
+<LINK rel="next" href="python3_tests.html"></div><br><br><br>
+
+</div>
+<div id="footer">  &copy; 2011 - 2014 <a href="http://www.bklein.de/">Bernd Klein</a>,
+Bodenseo; 
+Design by Denise Mitchinson adapted for python-course.eu by Bernd Klein</div>
+</div>
+</body>
+
+<!-- Mirrored from www.python-course.eu/python3_recursive_functions.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:08:32 GMT -->
+</html>

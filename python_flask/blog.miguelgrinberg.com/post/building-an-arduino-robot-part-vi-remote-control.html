@@ -1,0 +1,1497 @@
+﻿<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from blog.miguelgrinberg.com/post/building-an-arduino-robot-part-vi-remote-control by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:39:59 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    
+    <title>
+    
+        Building an Arduino Robot, Part VI: Remote Control - miguelgrinberg.com
+    
+</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="description" content="miguelgrinberg.com">
+	<meta name="copyright" content="Copyright (c) 2012-2015 Miguel Grinberg">
+	<meta name="author" content="Miguel Grinberg">
+    
+    <meta name="keywords" content="robotics, arduino, robot, hardware, android, bluetooth, hc-sr04, ultrasonic sensor, dc motor, motor, bluetooth">
+    
+
+    
+    <!-- Bootstrap -->
+    <link href="../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../static/prettify.css" type="text/css" rel="stylesheet" />
+    <link href="../static/colorbox/colorbox.css" rel="stylesheet" type="text/css" />
+    <link href="../static/style.css" rel="stylesheet" type="text/css" />
+
+    <link rel="shortcut icon" href="../static/favicon.ico">
+	<link rel="alternate" type="application/rss+xml" href="../feed" title="miguelgrinberg.com RSS feed">
+
+  </head>
+  <body>
+    
+    <!-- facebook sdk -->
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "../../connect.facebook.net/en_US/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    <!-- google plus sdk -->
+    <script type="text/javascript" src="../../apis.google.com/js/plusone.js"></script>
+    <!-- twitter sdk -->
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="../../platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <!-- linkedin sdk -->
+    <script src="../../platform.linkedin.com/in.js" type="text/javascript"></script>
+
+    
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://blog.miguelgrinberg.com/index">miguelgrinberg.com</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="http://blog.miguelgrinberg.com/index">Home</a></li>
+                        <li><a href="about-me.html">About Me</a></li>
+                        <li><a href="about-this-blog.html">About This Blog</a></li>
+                        
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <p class="navbar-text" style="margin-top: 10px; margin-bottom: 0px;">
+                                <a type="application/rss+xml" href="../feed"><img src="../static/rss.png" alt="RSS Feed" title="RSS Feed" /></a>
+                                <a href="https://www.facebook.com/miguelgrinbergblog"><img src="../static/facebook.png" alt="Facebook" title="Facebook" /></a>
+                                <a href="https://plus.google.com/u/0/117786742456929977820"><img src="../static/googleplus.png" alt="Google+" title="Google+" /></a>
+                                <a href="http://www.linkedin.com/in/miguelgrinberg"><img src="../static/linkedin.png" alt="LinkedIn" title="LinkedIn" /></a>
+                                <a href="http://github.com/miguelgrinberg"><img src="../static/github.png" alt="GitHub" title="GitHub" /></a>
+                                <a href="https://twitter.com/#!/miguelgrinberg"><img src="../static/twitter.png" alt="Twitter" title="Twitter" /></a>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </nav>
+
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-push-9 sidebar-bg">
+                <div id="sidebar">
+                    
+
+                    
+                    <h1>Building Web APIs with Flask</h1>
+                    <p>Flask is the ideal Python framework for building REST APIs that are flexible, easy to maintain and efficient. I have created a training video with O'Reilly in which I show all my techniques:</p>
+                    <p><center><a href="http://bit.ly/flaskapi"><img style="border: 1px solid black;" src="../static/flask-api-cover-tiny.png"></a></center></p>
+                    <p>Visit <a href="http://flaskbook.com/">http://flaskbook.com</a> for information about this and other Flask training products I have created!</p>
+                    
+
+                    <h1>About Miguel</h1>
+                    <img style="float: right; margin: 0px 8px 8px 0px; padding: 4px; border: 1px solid #ccc;" src="../static/miguel.jpg" />
+                    <p>Welcome to my blog!</p>
+                    <p>I'm a software engineer, photographer and filmmaker in Portland, Oregon, USA.</p>
+                    <p>You can also find me on <a href="https://www.facebook.com/miguelgrinbergblog">Facebook</a>, <a href="https://plus.google.com/u/0/117786742456929977820">Google+</a>, <a href="http://www.linkedin.com/in/miguelgrinberg">LinkedIn</a>, <a href="https://github.com/miguelgrinberg">Github</a> and <a href="https://twitter.com/#!/miguelgrinberg">Twitter</a>.</p>
+                    <p>Thank you for visiting!</p>
+
+                    
+
+                    
+                    <h1>Categories</h1>
+<ul>
+
+	<li>
+		<a href="../category/Arduino/feed">
+			<img src="../static/rss-small.png" title="Arduino RSS Feed" label="Arduino RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Arduino.html">Arduino</a></span> (7)
+	</li>
+
+	<li>
+		<a href="../category/Authentication/feed">
+			<img src="../static/rss-small.png" title="Authentication RSS Feed" label="Authentication RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Authentication.html">Authentication</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../category/Blog/feed">
+			<img src="../static/rss-small.png" title="Blog RSS Feed" label="Blog RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Blog.html">Blog</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/C%2b%2b/feed">
+			<img src="../static/rss-small.png" title="C++ RSS Feed" label="C++ RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/C%2b%2b.html">C++</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Cloud/feed">
+			<img src="../static/rss-small.png" title="Cloud RSS Feed" label="Cloud RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Cloud.html">Cloud</a></span> (2)
+	</li>
+
+	<li>
+		<a href="../category/Filmmaking/feed">
+			<img src="../static/rss-small.png" title="Filmmaking RSS Feed" label="Filmmaking RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Filmmaking.html">Filmmaking</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Flask/feed">
+			<img src="../static/rss-small.png" title="Flask RSS Feed" label="Flask RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Flask.html">Flask</a></span> (39)
+	</li>
+
+	<li>
+		<a href="../category/Games/feed">
+			<img src="../static/rss-small.png" title="Games RSS Feed" label="Games RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Games.html">Games</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Gear/feed">
+			<img src="../static/rss-small.png" title="Gear RSS Feed" label="Gear RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Gear.html">Gear</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/HTML5/feed">
+			<img src="../static/rss-small.png" title="HTML5 RSS Feed" label="HTML5 RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/HTML5.html">HTML5</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Heroku/feed">
+			<img src="../static/rss-small.png" title="Heroku RSS Feed" label="Heroku RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Heroku.html">Heroku</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Javascript/feed">
+			<img src="../static/rss-small.png" title="Javascript RSS Feed" label="Javascript RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Javascript.html">Javascript</a></span> (3)
+	</li>
+
+	<li>
+		<a href="../category/Movie%20Reviews/feed">
+			<img src="../static/rss-small.png" title="Movie Reviews RSS Feed" label="Movie Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Movie%20Reviews.html">Movie Reviews</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Netflix/feed">
+			<img src="../static/rss-small.png" title="Netflix RSS Feed" label="Netflix RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Netflix.html">Netflix</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Node.js/feed">
+			<img src="../static/rss-small.png" title="Node.js RSS Feed" label="Node.js RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Node.html">Node.js</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/OpenStack/feed">
+			<img src="../static/rss-small.png" title="OpenStack RSS Feed" label="OpenStack RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/OpenStack.html">OpenStack</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Personal/feed">
+			<img src="../static/rss-small.png" title="Personal RSS Feed" label="Personal RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Personal.html">Personal</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Photography/feed">
+			<img src="../static/rss-small.png" title="Photography RSS Feed" label="Photography RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Photography.html">Photography</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Product%20Reviews/feed">
+			<img src="../static/rss-small.png" title="Product Reviews RSS Feed" label="Product Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Product%20Reviews.html">Product Reviews</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Programming/feed">
+			<img src="../static/rss-small.png" title="Programming RSS Feed" label="Programming RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Programming.html">Programming</a></span> (47)
+	</li>
+
+	<li>
+		<a href="../category/Project%20Management/feed">
+			<img src="../static/rss-small.png" title="Project Management RSS Feed" label="Project Management RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Project%20Management.html">Project Management</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Python/feed">
+			<img src="../static/rss-small.png" title="Python RSS Feed" label="Python RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Python.html">Python</a></span> (43)
+	</li>
+
+	<li>
+		<a href="../category/REST/feed">
+			<img src="../static/rss-small.png" title="REST RSS Feed" label="REST RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/REST.html">REST</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Rackspace/feed">
+			<img src="../static/rss-small.png" title="Rackspace RSS Feed" label="Rackspace RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Rackspace.html">Rackspace</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Raspberry%20Pi/feed">
+			<img src="../static/rss-small.png" title="Raspberry Pi RSS Feed" label="Raspberry Pi RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Raspberry%20Pi.html">Raspberry Pi</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/RhinoSteady/feed">
+			<img src="../static/rss-small.png" title="RhinoSteady RSS Feed" label="RhinoSteady RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/RhinoSteady.html">RhinoSteady</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Robotics/feed">
+			<img src="../static/rss-small.png" title="Robotics RSS Feed" label="Robotics RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Robotics.html">Robotics</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Video/feed">
+			<img src="../static/rss-small.png" title="Video RSS Feed" label="Video RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Video.html">Video</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../category/Windows/feed">
+			<img src="../static/rss-small.png" title="Windows RSS Feed" label="Windows RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Windows.html">Windows</a></span> (1)
+	</li>
+
+</ul>
+                    
+                </div>
+            </div>
+            <div class="col-md-8 col-md-pull-4">
+                <div id="main">
+                    
+                    
+                    
+                    
+                    
+
+<div class="post">
+
+<p class="date"><span class="flask-moment" data-timestamp="2013-03-27T06:28:30Z" data-format="format('LL')" data-refresh="0">2013-03-27T06:28:30Z</span></p>
+<h1 class="post-title"><a href="building-an-arduino-robot-part-vi-remote-control.html">Building an Arduino Robot, Part VI: Remote Control</a></h1>
+<div class="posted">Posted by <span class="label label-danger"><a href="http://blog.miguelgrinberg.com/author/Miguel Grinberg">Miguel Grinberg</a></span> under <span class="label label-primary"><a href="../category/C%2b%2b.html">C++</a></span>, <span class="label label-primary"><a href="../category/Programming.html">Programming</a></span>, <span class="label label-primary"><a href="../category/Robotics.html">Robotics</a></span>, <span class="label label-primary"><a href="../category/Arduino.html">Arduino</a></span>. </div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/building-an-arduino-robot-part-vi-remote-control" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/building-an-arduino-robot-part-vi-remote-control" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="building-an-arduino-robot-part-vi-remote-control.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/building-an-arduino-robot-part-vi-remote-control" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+<div class="post_body"><p><center><img alt="Arduino Robot" src="../static/images/arduino-robot-27.jpg" /></center></p>
+<p>Welcome to the sixth article in the tutorial series in which I'm building a remote controlled Arduino based vehicle robot.</p>
+<p>Here is the list of articles I have published so far:</p>
+<ul>
+<li><a href="building-an-arduino-robot-part-i-hardware-components.html">Part I: Hardware Components</a></li>
+<li><a href="building-an-arduino-robot-part-ii-programming-the-arduino.html">Part II: Programming the Arduino</a></li>
+<li><a href="building-an-arduino-robot-part-iii-assembling-the-robot.html">Part III: Assembling the Robot</a></li>
+<li><a href="building-an-arduino-robot-part-iv-a-not-so-basic-robot-firmware.html">Part IV: A (Not So) Basic Robot Firmware</a></li>
+<li><a href="building-an-arduino-robot-part-v-avoiding-obstacles.html">Part V: Avoiding Obstacles</a></li>
+<li><a href="building-an-arduino-robot-part-vi-remote-control.html">Part VI: Remote Control</a> (this article)</li>
+</ul>
+<p>In the past two articles I have implemented the motor and distance sensor control for my little robot vehicle, using sound software development techniques that make this project easier to write and to maintain.</p>
+<p>Today I will be implementing the most challenging (and let's admit it, also the most fun) aspect of my project: the ability to remotely control the robot from a smartphone over Bluetooth.</p>
+<h2>A small improvement</h2>
+<p>Before I get into the main topic of this article I'm going to tell you about a small modification I've made to my robot that helps with the remote control functionality.</p>
+<p>If you recall the article in which I showed you how to program the Bluetooth module, it is not possible to upload a sketch over USB while the Bluetooth module is connected to pins 0 and 1, because those pins are used by the USB/serial communication.</p>
+<p>When I started writing the remote control code I became a bit frustrated with having to constantly connect and disconnect Bluetooth and USB. To avoid this hassle I decided to use the <code>SoftwareSerial.h</code> library that comes with the Arduino software to move the Bluetooth connection to a different set of pins.</p>
+<p>The change is pretty simple. I moved the connections from the Bluetooth module going into pins 0 and 1 to analog pins 2 and 3 (numbered 16 and 17), which are unused. Then I created a <code>SoftwareSerial</code> object at the top of the sketch:</p>
+<pre><code>#define BT_RX_PIN 16
+#define BT_TX_PIN 17
+
+#include &lt;SoftwareSerial.h&gt;
+SoftwareSerial BTSerial(BT_RX_PIN, BT_TX_PIN);
+</code></pre>
+<p>And then, instead of using the <code>Serial</code> object like in my previous tests, I used the <code>BTSerial</code> object. The <code>setup()</code> in my sketch then changed to:</p>
+<pre><code>void setup()
+{
+    Serial.begin(9600);
+    BTSerial.begin(9600);
+}
+</code></pre>
+<p>Why keep the <code>Serial.begin()</code> call? Because I elected to keep sending the logging output to the regular serial interface. I now have access to two serial ports, so I will use the Bluetooth connection for remote commands and the USB one for logging and debugging output. Neat!</p>
+<p>With the Bluetooth module connected in this way there is no collision with the USB serial interface so I could keep the USB cable connected at all times while developing and testing.</p>
+<h2>Remote Control device driver</h2>
+<p>Like in the previous articles, I'm going to start by designing a device driver that can abstract the main sketch from having to deal directly with hardware.</p>
+<p>But this case is a little different. We really have two separate pieces to abstract. The most obvious is the communication method. My robot uses Bluetooth, but this is not the only mechanism by which a robot can be controlled. At least I can think of three more, WiFi, RF and infrared. I clearly need a device driver that can read remote commands, regardless of the wireless technology used.</p>
+<p>The second, and less obvious dimension to this problem is the remote <em>protocol</em>. Different remote controllers will use different command codes to mean the same thing. For example, one remote control may send the command to turn left as a byte, maybe the letter "L". Another controller with a numeric keypad configuration may use "4" for the same thing. Another, joystick inspired remote control may not support a direct "go left" command at all and may just send instructions as vectors in a two-dimensional grid, so going left would be given as two numbers, (-1, 0). I do not really want to deal with these differences in the high-level robot code because that will make my code more complex. So clearly a driver that can hide these protocol differences from the main sketch is also needed.</p>
+<p>So do I need two different drivers, then? Let's think about how the main sketch will obtain remote control commands. Ideally I want something simple, like a <code>getCommand()</code> function that just returns the next command if one is available. If that's all I need then it seems all the main sketch requires is access to one remote control driver that somehow knows how to receive remote controls and interpret them.</p>
+<p>There are two ways this could work. If I implement two drivers, for communication and protocol separately, then the main sketch will only talk to the protocol driver, and it will be the protocol driver's job to know what communication driver to talk to. This provides great flexibility, because the same protocol can easily be supported over different communication channels.</p>
+<p>And what would be the alternative? I could embed the communication part inside the protocol driver. This is less flexible because now the remote protocol is tied to a particular communication channel. But on the other side it is simpler to implement because I don't need to define a device driver for communication channels, each protocol driver does its own thing to read remote commands.</p>
+<p>Which of these options is better? It really depends. If I was working with standard protocols that remote controls of different kinds implement, then having separate protocol and communication drivers makes sense. In this case, however, I believe the kinds of remote controls that I will find are mostly using proprietary protocols. My impression is that I will never need to use a protocol driver with more than one communication method.</p>
+<p>Based on this analysis, I'm going to go with the simpler option for now, one driver for the combined protocol and communication handling. I can always break the driver into two in the future if I find the need.</p>
+<h3>The remote control driver interface</h3>
+<p>Given the variety of remote controls out there, I need to find a common format that all the remote drivers can use to represent commands. For the purpose of driving a vehicle, I can think of three types of remote controls that I might ever need to support:</p>
+<ul>
+<li><strong>Keypad based</strong>: the robot is controlled with directional keys or buttons.</li>
+<li><strong>Joystick based</strong>: the robot is controlled with a multi-directional stick that returns <code>(X,Y)</code> coordinates inside a circle.</li>
+<li><strong>Slider based</strong>: the robot is controlled with two sliders, in two possible configurations:<ul>
+<li>each slider controls one side of the vehicle</li>
+<li>one slider controls forward/backward motion, the other controls left and right motion.</li>
+</ul>
+</li>
+</ul>
+<p>In all cases it is safe to assume that in addition to the directional control there are a few function buttons.</p>
+<p>As you can see there are significant differences between the types of remote controls, so the job of defining a common format for all of them is not easy.</p>
+<p>Obviously I cannot indicate direction with simple forward, backward, left and right commands, since many remote controls can provide a finer degree of directional control and it would be a pity to ignore all that extra information.</p>
+<p>So I have to pick one of the more advanced remote control data representations. The one that translates more easily into motor instructions for my vehicle is the one where the controller uses two sliders, each controlling one side of the vehicle. This directly translates into speeds for my two motors, so the application can simply send the data from the remote control into the motors. Since I like to keep the main sketch simple this is the approach that I'm going to take.</p>
+<p>But there is a downside to selecting a single data representation for all types of controllers. For remote controls that don't use the chosen format a conversion will be needed. To help with this task the base driver class will provide the conversion functions for all types of remote controls.</p>
+<p>Let's take a look at the definition of the remote control device driver interface:</p>
+<pre><code>/**
+ * @file remote_control.h
+ * @brief remote control driver definition for the Michelino robot.
+ * @author Miguel Grinberg
+ */
+
+namespace Michelino
+{
+    class RemoteControlDriver
+    {
+    public:
+        /**
+          * @brief abstract representation of a remote command.
+          */
+        struct command_t {
+            enum key_t { keyNone, keyF1, keyF2, keyF3, keyF4 };
+            int left;   /**&lt; left side speed, between -255 and 255. */
+            int right;  /**&lt; right side speed, between -255 and 255. */
+            key_t key;  /**&lt; function key. */
+
+            command_t() : left(0), right(0), key(keyNone) {}
+
+            // conversion functions
+            void goForward();
+            void goBack();
+            void turnLeft();
+            void turnRight();
+            void stop();
+            void leftAndRightSliders(int l, int r);
+            void forwardBackAndLeftRightSliders(int fb, int lf);
+            void joystick(int x, int y);
+        };
+
+        /**
+          * @brief Class constructor.
+          */
+        RemoteControlDriver() {}
+
+        /**
+         * @brief Return the next remote command, if available.
+         * @param cmd a reference to a command_t struct where the command
+         *   information will be stored.
+         * @return true if a remote command is available, false if not.
+         */
+        virtual bool getRemoteCommand(command_t&amp; cmd) = 0;
+    };
+};
+</code></pre>
+<p>For this driver I will use an auxiliary <code>struct</code> that represents a remote command. The representation of a command includes left and right slider values and a possible function key. A remote control driver can provide up to four function keys, all listed in the <code>enum</code> definition.</p>
+<p>The <code>getRemoteCommand()</code> method will be implemented by remote control drivers. It takes a reference to a <code>command_t</code> structure and is expected to fill it out appropriately, using one of the provided conversion functions if necessary.</p>
+<p>As far as conversion functions I know I'm going to need to cover the basic remotes, with four commands to represent the four directions that they provide and one more to make the robot stop. For the more advance remotes I need to handle left and right side sliders (which really require no conversion, but for the sake of abstraction and consistency I will provide a function as well) and forward/back and left/right sliders, which as you will see in a moment also covers the joystick type controllers.</p>
+<p>Let's look at the implementation of the conversions:</p>
+<pre><code>            void goForward()
+            {
+                left = right = 255;
+            }
+            void goBack()
+            {
+                left = right = -255;
+            }
+            void turnLeft()
+            {
+                left = -255;
+                right = 255;
+            }
+            void turnRight()
+            {
+                left = 255;
+                right = -255;
+            }
+            void stop()
+            {
+                left = right = 0;
+            }
+            void leftAndRightSliders(int l, int r)
+            {
+                left = l;
+                right = r;
+            }
+            void forwardBackAndLeftRightSliders(int fb, int lr)
+            {
+                left = fb - lr;
+                right = fb + lr;
+                if (left &lt; -255)
+                    left = -255;
+                else if (left &gt; 255)
+                    left = 255;
+                if (right &lt; -255)
+                    right = -255;
+                else if (right &gt; 255)
+                    right = 255;
+            }
+            void joystick(int x, int y)
+            {
+                forwardBackAndLeftRightSliders(y, x);
+            }
+</code></pre>
+<p>All but one of these are trivial. The first five just set the left and right sides appropriately, while the sixth copies the values given as arguments, since these match the internal data representation.</p>
+<p>The next conversion is the one that requires some thought. Here I have a controller that has two sliders, one vertical to move forward or backward and one horizontal to move left or right. Both sliders can be operated independently, so at any given time the remote control provides forward/backward speed and left/right turn values. Somehow I need to use these two values to derive independent left and right values to power the motors.</p>
+<p>The algorithm that I came up with for this conversion is relatively simple. The forward/backward slider is transferred directly into both sides, so that when there is no left/right motion the vehicle moves straight forward or backward. Then the value of the left/right slider is added to the right motor and subtracted from the left motor. If the left/right slider is positioned towards the left then it's value will be negative, so adding it to the right side will lower the power of that side, while subtracting it from the left side will make the left side stronger. And these changes will just make the robot go towards the left side, which is what I want. Of course, the reverse happens when the left/right slider is moved towards the right.</p>
+<p>The last conversion function is for joystick type controllers. The good news is that I realized that the joystick's <code>(x,y)</code> coordinate values are really the same as the left/right and forward/backward values in the previous conversion functions, so I can use the same function for those.</p>
+<h3>Remote control driver implementation</h3>
+<p>My choice of controller is a free Android app called <a href="https://play.google.com/store/apps/details?id=com.inex.BlueStickControl&amp;hl=en">BlueStick</a>. Here is a screenshot of this app:</p>
+<p><center><img alt="Arduino Robot" src="../static/images/arduino-robot-30.jpg" /></center></p>
+<p>This is a very simple controller with five directional commands and six function buttons. The directional commands can be triggered by touching arrow buttons on the screen or by tilting the phone. The app documentation provides the codes that are sent over Bluetooth for each of the commands:</p>
+<pre><code>'0' = Stop
+'8' = Up
+'2' = Down
+'4' = Left
+'6' = Right
+'A' = Auto Grab
+'B' = Auto Release 
+'C' = Grab
+'D' = Release
+'E' = Rotate Left
+'F' = Rotate Right
+</code></pre>
+<p>Note that while this remote control app gives specific names to its six function keys, I will ignore those names and just define my own meaning for these keys.</p>
+<p>The above list defines the protocol for this remote control, so this is really all I need to know to be able to implement this driver. So here is the code for the BlueStick driver:</p>
+<pre><code>/**
+ * @file bluestick_remote_control.h
+ * @brief remote control driver for the BlueStick Android remote control app.
+ * @author Miguel Grinberg
+ */
+
+#include "remote_control.h"
+
+namespace Michelino
+{
+    class RemoteControl : public RemoteControlDriver
+    {
+    public:
+        /**
+          * @brief Class constructor.
+          */
+        RemoteControl() : RemoteControlDriver(), lastKey(command_t::keyNone) {}
+
+        virtual bool getRemoteCommand(command_t&amp; cmd)
+        {
+            cmd.stop();
+            cmd.key = command_t::keyNone;
+
+            if (BTSerial.available() &lt;= 0)
+                return false; // no commands available
+            char ch = BTSerial.read();
+            switch (ch) {
+                case '8': // up
+                    cmd.goForward();
+                    break;
+                case '2': // down
+                    cmd.goBack();
+                    break;
+                case '4': // left
+                    cmd.turnLeft();
+                    break;
+                case '6': // right
+                    cmd.turnRight();
+                    break;
+                case 'A': // function key #1
+                case 'C':
+                    cmd.key = command_t::keyF1;
+                    break;
+                case 'B': // function key #2
+                case 'D':
+                    cmd.key = command_t::keyF2;
+                    break;
+                case 'E': // function key #3
+                    cmd.key = command_t::keyF3;
+                    break;
+                case 'F': // function key #4
+                    cmd.key = command_t::keyF4;
+                    break;
+                default:
+                    break;
+            }
+            if (cmd.key != command_t::keyNone &amp;&amp; cmd.key == lastKey) {
+                // repeated key, ignore it
+                return false; 
+            }
+            lastKey = cmd.key;
+            return true;
+        }
+
+    private:
+        command_t::key_t lastKey;
+    };
+};
+</code></pre>
+<p>If you need a refresher on how the Bluetooth slave module works feel free to reread my <a href="building-an-arduino-robot-part-ii-programming-the-arduino.html">previous post about the topic</a>.</p>
+<p>This implementation is extremely simple. If the <code>BTSerial</code> class has a character in its queue, then I read it, and depending on what character it is I configure the command, using conversion functions for the directional commands or the key constants for the function keys. I have six function keys in this remote control app, but I decided to just use four in my driver, so I map the two extra keys as duplicates of another two.</p>
+<p>I also need to explain what the <code>lastKey</code> member variable is for. As a test I connected the BlueStick app running on my cell phone to a Bluetooth terminal running on another phone, just to confirm that the commands the app sends are in alignment with the documentation. I found that they did match, but also found that the app is constantly sending commands. There isn't really a point in having to handle repeated keys, so I added the <code>lastKey</code> variable to keep track of the last key received. If I find that the new key is the same as the previous one then I just throw it away as a duplicate.</p>
+<p>Another important thing to note about this implementation is that it tries to be tolerant of unknown codes. At the start I initialize the command structure as a stop with no function keys. If I receive an unknown character then the sketch will receive a stop command, which will make the robot stop and wait for more commands.</p>
+<p>With this basic driver implemented I have enough to incorporate and test the remote control functionality into my sketch, so that's what I'm doing next.</p>
+<h2>Design the Remote Control Feature</h2>
+<p>But before I delve into code again, let's discuss how is the robot going to behave, because in the previous article I ended up with a really nice and neat firmware that made the robot run standalone avoiding obstacles, and I'm not really interested in throwing all that code away!</p>
+<p>My goal for the remote controlled robot is to incorporate the automated mode I wrote in the previous article as an option that can be enabled with a special remote command. In lack of a better name I'm going to call the automatic mode the "Roomba" mode (I hope I don't get sued for copyright infringement!).</p>
+<p>After some consideration I designed the following flow chart for how the robot will operate under remote control:</p>
+<p><center><img alt="Arduino Robot" src="../static/images/arduino-robot-29.png" /></center></p>
+<p>Translating the chart into words this is what I'm going to do:</p>
+<ul>
+<li>The robot will begin by listening for remote commands, without moving.</li>
+<li>If a command is received it will be executed, and then it will go back to listen for more commands.</li>
+<li>There will be a "Roomba" mode command that acts as a toogle.</li>
+<li>Any other commands sent while the robot is in "Roomba" mode will be ignored.</li>
+</ul>
+<h2>Adding remote control to the sketch</h2>
+<p>Okay, now I will move on to the most exciting part, which is to actually write the code to make the robot follow the remote commands.</p>
+<p>Starting from the sketch as I left it in the previous article I begin by adding the remote control driver class to the top of the sketch, where all the drivers are:</p>
+<pre><code>#define ENABLE_BLUESTICK_REMOTE_CONTROL_DRIVER
+
+#ifdef ENABLE_BLUESTICK_REMOTE_CONTROL_DRIVER
+#include "bluestick_remote_control.h"
+#define REMOTE_CONTROL_INIT
+#endif
+</code></pre>
+<p>This class does not take any arguments to initialize, but I can't really be sure other drivers will be the same, so I keep the same style I used in previous drivers and just make the initialization constant empty this time.</p>
+<p>Now I can add a remote control object to the <code>Robot</code> class:</p>
+<pre><code>private:
+    RemoteControl remoteControl;
+</code></pre>
+<p>And I can initialize it in the <code>Robot</code> class constructor:</p>
+<pre><code>    Robot()
+        : leftMotor(LEFT_MOTOR_INIT), rightMotor(RIGHT_MOTOR_INIT),
+          distanceSensor(DISTANCE_SENSOR_INIT),
+          distanceAverage(TOO_CLOSE * 10),
+          remoteControl(REMOTE_CONTROL_INIT)
+    {
+        initialize();
+    }
+</code></pre>
+<p>I had been using the concept of states to know if the robot was moving or turning. I now need to have an additional state for when the robot is under remote control:</p>
+<pre><code>private:
+    enum state_t { stateStopped, stateMoving, stateTurning, stateRemote };
+</code></pre>
+<p>And since I have functions <code>stop()</code>, <code>move()</code> and <code>turn()</code> to enable the other states I should be consistent and have one to enter the remote control state:</p>
+<pre><code>    void remote()
+    {
+        leftMotor.setSpeed(0);
+        rightMotor.setSpeed(0);
+        state = stateRemote;
+    }
+</code></pre>
+<p>I also had the tiny functions that returned true if a given state was enabled, to help make the code a bit more readable. Again, to be consistent I need one for the new state:</p>
+<pre><code>    bool remoteControlled() { return (state == stateRemote); }
+</code></pre>
+<p>To initialize the robot I simply put it in remote mode:</p>
+<pre><code>    void initialize()
+    {
+        randomSeed(analogRead(RANDOM_ANALOG_PIN));
+        remote();
+    }
+</code></pre>
+<p>And finally, I have a new version of my <code>run()</code> method that does all the fun stuff:</p>
+<pre><code>    void run()
+    {
+        unsigned long currentTime = millis();
+        int distance = distanceAverage.add(distanceSensor.getDistance());
+        RemoteControlDriver::command_t remoteCmd;
+        bool haveRemoteCmd = remoteControl.getRemoteCommand(remoteCmd);
+        log("state: %d, currentTime: %lu, distance: %u remote: (%d,l:%d,r:%d,k:%d)\n", 
+            state, currentTime, distance, 
+            haveRemoteCmd, remoteCmd.left, remoteCmd.right, remoteCmd.key);
+
+        if (remoteControlled()) {
+            if (haveRemoteCmd) {
+                switch (remoteCmd.key) {
+                case RemoteControlDriver::command_t::keyF1:
+                    // start "roomba" mode
+                    move();
+                    break;
+                case RemoteControlDriver::command_t::keyNone:
+                    // this is a directional command
+                    leftMotor.setSpeed(remoteCmd.left);
+                    rightMotor.setSpeed(remoteCmd.right);
+                    break;
+                default:
+                    break;
+                }
+            }
+        }
+        else {
+            // "roomba" mode
+            if (haveRemoteCmd &amp;&amp; remoteCmd.key == RemoteControlDriver::command_t::keyF1) {
+                remote();
+            }
+            else {
+                if (moving()) {
+                    if (obstacleAhead(distance))
+                        turn(currentTime);
+                }
+                else if (turning()) {
+                    if (doneTurning(currentTime, distance))
+                        move();
+                }
+            }
+        }
+    }
+</code></pre>
+<p>While this new version of <code>run()</code> may seem scary at first, I assure you that only a small portion is new, a good part of it came from the previous article.</p>
+<p>I begin by getting all the inputs that I'm going to need, which are the current time, averaged distance sensor reading and remote control command. In case I need to do debugging at some point I kept the log statement I had before, enhanced to include remote control data as well.</p>
+<p>For the remote control I have to note if I have received a command or not. This is what <code>haveRemoteCmd</code> does. If this variable is <code>true</code> then the <code>remoteCmd</code> struct holds the command data. If the variable is <code>false</code> then <code>remoteCmd</code> has an undefined value and should not be used.</p>
+<p>Once I gathered all my inputs I move on to control the robot behavior. In this new version of the sketch there are two different operating modes. The "Roomba" mode was introduced in the previous article, while today I'm obviously I'm adding the remote control mode.</p>
+<p>The <code>if (remoteControlled())</code> statement takes care of differentiating between the two modes. The <code>if</code> portion deals with the remote control mode, while the <code>else</code> portion does the "Roomba" mode.</p>
+<p>Let's look at the part that handles the remote control in detail:</p>
+<pre><code>            if (haveRemoteCmd) {
+                switch (remoteCmd.key) {
+                case RemoteControlDriver::command_t::keyF1:
+                    // start "roomba" mode
+                    move();
+                    break;
+                case RemoteControlDriver::command_t::keyNone:
+                    // this is a directional command
+                    leftMotor.setSpeed(remoteCmd.left);
+                    rightMotor.setSpeed(remoteCmd.right);
+                    break;
+                default:
+                    break;
+                }
+            }
+</code></pre>
+<p>This is extremely simple. If there is a remote command available I then look at the <code>key</code> value that came with it. If the key is <code>keyF1</code> value then I enable "Roomba" mode by calling <code>move()</code> (see the previous article for an explanation of this method). If the command came without a key (<code>keyNone</code>) then it is a directional command, so all I do is move the <code>left</code> and <code>right</code> values from the remote command into the motors. That's it! Believe it or not this short piece of code fully handles the remote control of the vehicle!</p>
+<p>The "Roomba" mode handling is mostly the same as in the previous article, with the exception that I removed the 30 second timeout handling that I had in that version and replaced it with this:</p>
+<pre><code>            if (haveRemoteCmd &amp;&amp; remoteCmd.key == RemoteControlDriver::command_t::keyF1) {
+                // switch back to remote mode
+                remote();
+            }
+            else {
+                // ...
+            }
+</code></pre>
+<p>And this code simply switches back to remote mode if a remote command is available and its key is <code>keyF1</code>. The rest of this part deals with the "Roomba" mode logic, and this did not change from the previous version of the sketch.</p>
+<h2>A more advanced remote control driver</h2>
+<p>To end this article I'm going to implement a second remote control driver. My choice is <a href="https://play.google.com/store/apps/details?id=appinventor.ai_rocketbrand.RocketBotControllerV6&amp;hl=en">RocketBot</a>, another Android app. Here is a screenshot of RocketBot:</p>
+<p><center><img alt="Arduino Robot" src="../static/images/arduino-robot-31.png" /></center></p>
+<p>RocketBot offers several different remote control interfaces:</p>
+<ul>
+<li><strong>Keypad</strong>: five buttons for forward, backward, left, right and stop. Exactly like the BlueStick app I implemented above.</li>
+<li><strong>Joystick</strong>: X and Y values obtained from the phone accelerometer.</li>
+<li><strong>Left/Right</strong>: individual controls for left and right motors, calculated from the phone accelerometer input.</li>
+</ul>
+<p>The <a href="https://docs.google.com/document/pub?id=1oqwp7wtfvkA_DKh_Nd_Yz9MfZQdYPRlSUeks43NjOoQ">documentation</a> describes the communication protocol in detail. For this controller all commands have two bytes, an operation byte and a data byte. A quick summary of the control codes I will be implementing (not the full list) is below:</p>
+<ul>
+<li><code>"D1"</code>, <code>"D2"</code>, <code>"D3"</code>, <code>"D4"</code>, <code>"D5"</code>: Forward, Left, Right, Backward, and Stop respectively.</li>
+<li><code>"A1"</code>, <code>"A2"</code>, <code>"A3"</code>, <code>"A4"</code>: Four auxiliary function buttons.</li>
+<li><code>"X&lt;number&gt;"</code>, <code>"Y&lt;number&gt;"</code>: Joystick position. Values come in the 0-200 range, with 100 being the center position, 200 being full speed backward or right and 0 being full speed forward or left.</li>
+<li><code>"L&lt;number&gt;"</code>, <code>"R&lt;number&gt;"</code>: Left/Right controls. Values come in the 0-200 range, with 100 being the center position, 200 being full speed forward and 0 being full speed backward, on each of the sides.</li>
+</ul>
+<p>The implementation is a bit more complex than the BlueTick remote, but follows more or less the same style. Here is the full driver implementation:</p>
+<pre><code>/**
+ * @file rocketbot_remote_control.h
+ * @brief remote control driver for the RocketBot Android remote control app.
+ * @author Miguel Grinberg
+ */
+
+#include "remote_control.h"
+
+namespace Michelino
+{
+    class RemoteControl : public RemoteControlDriver
+    {
+    public:
+        /**
+          * @brief Class constructor.
+          * @param from the value in the 0-100 range that maps to 0 in remote control units.
+              Any values below from will be interpreted as 0.
+          * @param to the value in the 0-100 range that maps to 255 in remote control units.
+              Any values above to will be interpreted as 255.
+          */
+        RemoteControl(int from, int to) : RemoteControlDriver(), 
+            scaleFrom(from), scaleTo(to), 
+            lastKey(command_t::keyNone), lastX(100), lastY(100), lastL(100), lastR(100) {}
+
+        virtual bool getRemoteCommand(command_t&amp; cmd)
+        {
+            cmd.stop();
+            cmd.key = command_t::keyNone;
+
+            if (BTSerial.available() &lt; 2)
+                return false; // no commands available
+            unsigned char ch = BTSerial.read();
+            unsigned char data = BTSerial.read();
+            switch (ch) {
+                case 'D': // keypad
+                    switch (data) {
+                    case 1:
+                        cmd.goForward();
+                        break;
+                    case 2: // down
+                        cmd.turnLeft();
+                        break;
+                    case 3: // left
+                        cmd.turnRight();
+                        break;
+                    case 4: // right
+                        cmd.goBack();
+                        break;
+                    case 5: // stop
+                    default:
+                        cmd.stop();
+                        break;
+                    }
+                    break;
+                case 'X':
+                    lastX = data;
+                    cmd.joystick(scale(lastX), -scale(lastY));
+                    lastL = lastR = 100;
+                    break;
+                case 'Y':
+                    lastY = data;
+                    cmd.joystick(scale(lastX), -scale(lastY));
+                    lastL = lastR = 100;
+                    break;
+                case 'L':
+                    lastL = data;
+                    cmd.leftAndRightSliders(scale(lastL), scale(lastR));
+                    lastX = lastY = 100;
+                    break;
+                case 'R':
+                    lastR = data;
+                    cmd.leftAndRightSliders(scale(lastL), scale(lastR));
+                    lastX = lastY = 100;
+                    break;
+                case 'A': // function keys
+                    switch (data) {
+                    case 1:
+                        cmd.key = command_t::keyF1;
+                        break;
+                    case 2:
+                        cmd.key = command_t::keyF2;
+                        break;
+                    case 3:
+                        cmd.key = command_t::keyF3;
+                        break;
+                    case 4:
+                        cmd.key = command_t::keyF4;
+                        break;
+                    }
+                    break;
+                default:
+                    break;
+            }
+            if (cmd.key != command_t::keyNone &amp;&amp; cmd.key == lastKey) {
+                // repeated key, ignore it
+                return false; 
+            }
+            lastKey = cmd.key;
+            return true;
+        }
+
+    private:
+        int scale(int value)
+        {
+            value -= 100;
+            if (value &gt;= 0) {
+                if (value &lt;= scaleFrom)
+                    return 0;
+                else if (value &gt;= scaleTo)
+                    return 255;
+                return (value - scaleFrom) * 255 / (scaleTo - scaleFrom);
+            }
+            else {
+                if (-value &lt;= scaleFrom)
+                    return 0;
+                else if (-value &gt;= scaleTo)
+                    return -255;
+                return -(-value - scaleFrom) * 255 / (scaleTo - scaleFrom);
+            }
+        }
+
+    private:
+        int scaleFrom;
+        int scaleTo;
+        command_t::key_t lastKey;
+        int lastX;
+        int lastY;
+        int lastL;
+        int lastR;
+    };
+};
+</code></pre>
+<p>Unfortunately the code to handle this remote is pretty long.</p>
+<p>The <code>RemoteControl</code> class constructor for this controller takes two arguments. These are used to scale the values returned by the remote. For example, setting <code>from = 10</code> and <code>to = 50</code> will make this driver report a 0 value for the first 10% of the tilt range in every direction and reach the maximum at the 50% tilt position. This helps in two ways. First, if you hold the phone in your hand it would be impossible to keep it at a perfect zero tilt to make the vehicle stop, so with <code>from = 10</code> there is a small range of tilt that will not affect the motors. Second, with <code>to = 50</code> I can reach the maximum position with the phone at 45 degrees instead of a full 90 degrees in each direction.</p>
+<p>The constructor also initializes a few member variables that remember the last known values for the different controller values. These variables are necessary because the protocol this remote uses does not send the whole information in a single command, instead each command sends only one value, so for example, when I get an updated <code>X</code> value I need to know what <code>Y</code> to use, so I take it from my <code>lastY</code> member variable.</p>
+<p>The <code>getRemoteCommand()</code> method is structured similarly to the previous driver, but here I need to read two bytes from the serial port instead of one and I have a larger number of commands to handle in the <code>switch</code> statement.</p>
+<p>The handling of the <code>D</code> and <code>A</code> commands is similar to the other driver. Here is the snippet that handles the new commands in this controller:</p>
+<pre><code>                case 'X':
+                    lastX = data;
+                    cmd.joystick(scale(lastX), -scale(lastY));
+                    lastL = lastR = 100;
+                    break;
+                case 'Y':
+                    lastY = data;
+                    cmd.joystick(scale(lastX), -scale(lastY));
+                    lastL = lastR = 100;
+                    break;
+                case 'L':
+                    lastL = data;
+                    cmd.leftAndRightSliders(scale(lastL), scale(lastR));
+                    lastX = lastY = 100;
+                    break;
+                case 'R':
+                    lastR = data;
+                    cmd.leftAndRightSliders(scale(lastL), scale(lastR));
+                    lastX = lastY = 100;
+                    break;
+</code></pre>
+<p>The driver could be sending <code>X</code> and <code>Y</code> commands, or it could be sending <code>L</code> and <code>R</code> depending on which mode it is in. Any time I get a command I save it in the proper member variable, and then I use the appropriate conversion function to set the <code>command_t</code> struct.</p>
+<p>Note that I have an auxiliary function called <code>scale()</code> that takes care of the scaling using the <code>from</code> and <code>to</code> values given in the constructor.</p>
+<p>Also interesting to note that when I get an <code>X</code> or <code>Y</code> command I reset both the <code>lastL</code> and <code>lastR</code>, to make sure I don't keep any older values these two may have had before. Likewise, when I get an <code>L</code> or <code>R</code> I reset the <code>lastX</code> and <code>lastY</code>.</p>
+<h2>Final words</h2>
+<!--
+For those that expect a video proof, below you can see me proudly driving my little robot using the RocketBot controller:
+
+<center><iframe width="450" height="253" src="http://www.youtube-nocookie.com/embed/PMR-cwbZecQ?rel=0" frameborder="0" allowfullscreen></iframe></center>
+-->
+
+<p>The updated firmware can be downloaded from github:</p>
+<p>Download <a href="https://codeload.github.com/miguelgrinberg/michelino/zip/v0.3">michelino v0.3</a>, or <a href="https://github.com/miguelgrinberg/michelino/tree/v0.3">clone it</a>.</p>
+<p>As always, I welcome your questions. Feel free to drop a comment below if there is anything you did not understand or need clarification on.</p>
+<p>With the last major piece of my robot firmware completed I could call the project done. Unfortunately I'm not satisfied that easily, even though I have fully achieved the goals I stated at the start of this tutorial series I now have the itch to try other vehicle designs, which I will try to incorporate into my <code>michelino</code> firmware.</p>
+<p>You may also want to keep track of the <a href="https://github.com/miguelgrinberg/michelino">"master" branch</a> of the project on github, as that's where updates will show up.</p>
+<p>I'm particularly interested in supporting other motor controllers and more remote controls. If you have any you would like to see implemented let me know, or better yet, fork my project on github, implement it yourself and send me a pull request to get it included in the official project.</p>
+<p>Thank you for following me on this tutorial, I hope my articles were of help to you. Best of luck with your Arduino based projects!</p>
+<p>Miguel</p></div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/building-an-arduino-robot-part-vi-remote-control" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/building-an-arduino-robot-part-vi-remote-control" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="building-an-arduino-robot-part-vi-remote-control.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/building-an-arduino-robot-part-vi-remote-control" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+
+
+<h4 style="text-align: right"><a name="comments"></a>160 comments</h4>
+
+
+<div class="comment">
+    <ul>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/f5fccd87a7ee0731c230e2023627f514ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#1</span> <span class="label label-primary"><a href="http://blog.miguelgrinberg.com/index">Oleh</a></span> said
+                    <span class="flask-moment" data-timestamp="2013-03-27T17:17:38Z" data-format="fromNow(0)" data-refresh="0">2013-03-27T17:17:38Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Miguel, thank you very much for sharing this project online. It is not just well crafted code but wonderful and thoughtful explanation of object oriented concept and Arduino platform. I will use this tutorial to teach my kids. Very well done!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/05b68190e98a2e0618a92299734aa6a9ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#2</span> <span class="label label-primary">Lance</span> said
+                    <span class="flask-moment" data-timestamp="2013-03-28T00:06:57Z" data-format="fromNow(0)" data-refresh="0">2013-03-28T00:06:57Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">There can truly be no way to thank you for the pain you have taken in compiling out such useful content for the common man.
+I will be soon starting to working on the project, after I receive the motor controller.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/1d62568f332421968ce84321c0fc7fdcce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#3</span> <span class="label label-primary">Mark</span> said
+                    <span class="flask-moment" data-timestamp="2013-04-17T20:56:11Z" data-format="fromNow(0)" data-refresh="0">2013-04-17T20:56:11Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Can you please tell me if there are any plans to implement edge avoidance in this robot (preventing it from falling down stairs)?  What other vehicle platforms did you consider?
+
+Thanks,
+Mark</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#4</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-04-18T04:28:13Z" data-format="fromNow(0)" data-refresh="0">2013-04-18T04:28:13Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Mark: this robot does not detect edges, but that would be awfully simple to implement. You should just mount the distance sensor looking down at the ground in front of the robot and then reverse the logic that I have implemented to detect walls.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/1d62568f332421968ce84321c0fc7fdcce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#5</span> <span class="label label-primary">Mark</span> said
+                    <span class="flask-moment" data-timestamp="2013-04-19T14:28:02Z" data-format="fromNow(0)" data-refresh="0">2013-04-19T14:28:02Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Thanks for the reply!  That does sound pretty simple to implement.  I suppose a second sensor could be installed as well to maintain the wall detection functionality?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#6</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-04-19T15:49:13Z" data-format="fromNow(0)" data-refresh="0">2013-04-19T15:49:13Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Mark: Sure, you could use another pair of pins to connect a second distance sensor, then in the Robot class you work with two DistanceSensor drivers.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/0af2c686c46dee2a3018ebeff670fa29ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#7</span> <span class="label label-primary">Mark</span> said
+                    <span class="flask-moment" data-timestamp="2013-04-20T11:27:58Z" data-format="fromNow(0)" data-refresh="0">2013-04-20T11:27:58Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Awesome, thanks again!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/0af2c686c46dee2a3018ebeff670fa29ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#8</span> <span class="label label-primary">Mark</span> said
+                    <span class="flask-moment" data-timestamp="2013-04-22T12:09:49Z" data-format="fromNow(0)" data-refresh="0">2013-04-22T12:09:49Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Miguel,
+
+I&#39;m sorry I&#39;m asking so many questions, but how difficult do you think it will be to implement the, &#34;Don&#39;t drive off a cliff&#34; functionality with just one sensor?  I also think it would be pretty cool if the robot could follow me around the house, but have no idea where to even start on that.
+
+Thanks,
+Mark</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#9</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-04-23T05:00:10Z" data-format="fromNow(0)" data-refresh="0">2013-04-23T05:00:10Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Mark, if you want to change the behavior of the distance sensor from stopping at walls to stopping at cliffs it is pretty easy, you just reverse the distance check. If you are asking about using one sensor to stop and both walls and cliffs then it is a bit trickier but can also be done. You will need to mount the sensor looking down and front at about a 45 degree angle and then you will check what is the average distance   returned by the sensor when looking down at the floor. If the distance gets shorter than that you&#39;ve reached a wall, and if the distance gets longer then you&#39;ve reached a cliff.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/851c5fc71f5542c0a61993b3b0e20ac5ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#10</span> <span class="label label-primary">Mauricio de Abreu</span> said
+                    <span class="flask-moment" data-timestamp="2013-04-28T22:26:33Z" data-format="fromNow(0)" data-refresh="0">2013-04-28T22:26:33Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Could I use Python for programming this robot? I know that there are some experiences with Python + Arduino? Is that a possibility? Thanks for all the info you gave me untill now. :)</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#11</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-04-29T02:51:25Z" data-format="fromNow(0)" data-refresh="0">2013-04-29T02:51:25Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Mauricio: the Python interpreter is too big to fit in the limited program memory the Arduino has (32KB in the Uno).</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/165fe1f4fd8e94a3d6828f0ecda4c784ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#12</span> <span class="label label-primary"><a href="https://sites.google.com/site/mbbackus/robotics/bread-board-bot">Mike</a></span> said
+                    <span class="flask-moment" data-timestamp="2013-05-25T17:26:20Z" data-format="fromNow(0)" data-refresh="0">2013-05-25T17:26:20Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I&#39;m making a robot similar to yours, and have decided to organize my code in a similar fashion. I have a header file for motors, one for sensors, and I&#39;m contemplating one for communication.
+
+Initially I had thought it would be nice to create a single sendMsg function that could be passed arguments, but as I have several different types of messages I&#39;d like to send to different devices and with variable amounts of data, it seems to make more sense to create a separate function for each type of message I&#39;d like to send. For example, sendSerialData2serialMonitor and sendSerialData2cellPhone. However, this looks to be a bit cumbersome, and would still require that I pass data as arguments to these functions. I could place such functions in the main sketch or even in the sensor and motors header files, but then of course things start getting disorganized. What are your thoughts? I can email you a copy of my code if that would help.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#13</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-05-25T17:48:26Z" data-format="fromNow(0)" data-refresh="0">2013-05-25T17:48:26Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Is this serial data meant as logging? Maybe you should have a logging module then, represented by a Logging class. It seems to me sending data to a serial monitor or a cell phone (over Bluetooth I guess?) would be no different, you would instantiate two objects from this Logging class and initialize with the correct pins for each serial recipient. I hope this helps.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/676122775acfbdc8a7ee5c0a327cb9dfce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#14</span> <span class="label label-primary">Yahya</span> said
+                    <span class="flask-moment" data-timestamp="2013-06-02T10:29:39Z" data-format="fromNow(0)" data-refresh="0">2013-06-02T10:29:39Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi
+With this code can control the robot wirlessly with an Xbox remots connected with PC ? can u please address me that i&#39;ll be very thankful to you Sir.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#15</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-06-02T16:51:48Z" data-format="fromNow(0)" data-refresh="0">2013-06-02T16:51:48Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Yahya: in theory it would be possible. For example, you can connect the remote to a PC that has bluetooth, but then you need software on the PC that reads the remote and sends equivalent commands over bluetooth to the Arduino vehicle. You may have better luck with a PS3 controller which talks Bluetooth directly. In either case you may need to write a remote control driver for the vehicle, similar to the ones I wrote above.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/725ba0a0d9d841411b2c6cb5a88f732cce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#16</span> <span class="label label-primary">Tony</span> said
+                    <span class="flask-moment" data-timestamp="2013-06-05T12:43:44Z" data-format="fromNow(0)" data-refresh="0">2013-06-05T12:43:44Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hello Miguel
+Thank You for creating this tutorial. I have no problem with the hardware side of things, and can get the separate sketches to work properly, but when I run the final sketch I get the following errors:
+
+In file included from michelino.ino:63:
+
+c:\Documents and Settings\Tony\My Documents\Arduino\libraries\michelino03/newping_distance_sensor.h:28: error: &#39;NewPing&#39; does not name a type
+
+c:\Documents and Settings\Tony\My Documents\Arduino\libraries\michelino03/newping_distance_sensor.h: In construct 
+&#39;Michelino::DistanceSensor::DistanceSensor(int, int, int)&#39;:
+
+c:\Documents and Settings\Tony\My Documents\Arduino\libraries\michelino03/newping_distance_sensor.h:16: error class &#39;Michelino::DistanceSensor&#39; does not have any field named &#39;sensor&#39;
+
+c:\Documents and Settings\Tony\My Documents\Arduino\libraries\michelino03/newping_distance_sensor.h: In member function &#39;virtual unsigned int Michelino::DistanceSensor::getDistance()&#39;:
+
+c:\Documents and Settings\Tony\My Documents\Arduino\libraries\michelino03/newping_distance_sensor.h:22: error: &#39;sensor&#39; was not declared in this scope
+
+I am new to programming and would appreciate any help
+
+Thank you
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#17</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-06-05T16:21:41Z" data-format="fromNow(0)" data-refresh="0">2013-06-05T16:21:41Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Tony: It appears as if you did not include &lt;NewPing.h&gt; before including &#34;newping_distance_sensor.h&#34;. Is that possible? The distance sensor driver requires the NewPing library to be included before hand. </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/725ba0a0d9d841411b2c6cb5a88f732cce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#18</span> <span class="label label-primary">Tony</span> said
+                    <span class="flask-moment" data-timestamp="2013-06-06T18:15:32Z" data-format="fromNow(0)" data-refresh="0">2013-06-06T18:15:32Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Miguel ,Thank You
+I had not included the NewPing file in the Arduino libraries folder. The issue was resolved once I copied the file to the libraries folder.
+
+Thank You</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/11c1703e8e8ca422cbc4db3e9d2ad6f4ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#19</span> <span class="label label-primary"><a href="http://blog.miguelgrinberg.com/index">Sonia</a></span> said
+                    <span class="flask-moment" data-timestamp="2013-07-10T11:45:38Z" data-format="fromNow(0)" data-refresh="0">2013-07-10T11:45:38Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Thanks miguel it is really a good article ,but i have some doubt related to remote control...</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/851c5fc71f5542c0a61993b3b0e20ac5ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#20</span> <span class="label label-primary">Mauricio de Abreu Antunes</span> said
+                    <span class="flask-moment" data-timestamp="2013-08-27T12:30:30Z" data-format="fromNow(0)" data-refresh="0">2013-08-27T12:30:30Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I assembled my robot like yours and it is not working.
+Actually, the distance sensor is working fine, but I can not figure out why my bluetooth works solely but it is not working when everything is assembled. 
+I can connect to the bluetooth but it seems like it is not sending any signal to the arduino board. I have connected TX-RX (bluetooth) in the 16-17 pins like you and set it into the code. Any tips of how I can debug it? Thanks!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#21</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-08-28T04:06:30Z" data-format="fromNow(0)" data-refresh="0">2013-08-28T04:06:30Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Mauricio: could it be a power problem? If you unplug the motors and suddenly the bluetooth begins to work then you probably need to find a separate power supply for motors.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/9d70a10abda66fbd545b33c5ed3d51eece2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#22</span> <span class="label label-primary">Sean</span> said
+                    <span class="flask-moment" data-timestamp="2013-09-11T13:16:57Z" data-format="fromNow(0)" data-refresh="0">2013-09-11T13:16:57Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hey Miguel, thanks for making this tutorial!
+
+I&#39;m very inexperienced with code and as such have heavily relied on trusting your wisdom and copy/pasting everything. 
+
+I built the robot as instructed, testing the bluetooth slave, motors, and distance sensor (which all worked). I then got it running autonomously avoiding obstacles which was great.
+
+The only issue I have is that now that my bluetooth slave is running, when I control my robot, clicking &#34;forward&#34; works perfectly. Clicking &#34;right&#34; makes the robot turn left, and clicking left makes the robot turn right, but the left side motor does not do anything. Also, clicking reverse makes the right hand side motor work but the left hand side not work. 
+
+Do you have any idea what might be causing this?
+
+Also, my batteries seem to run out extremely quickly, do you have any alternative suggestions for power sources? I&#39;m using 4 x AA in the supplied Magician Chassis battery pack.
+
+Thanks!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#23</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-09-11T15:59:43Z" data-format="fromNow(0)" data-refresh="0">2013-09-11T15:59:43Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Sean: I had better results using two sets of 4xAA batteries. One set to power the Arduino and another set to power the motors. This last set is connected to the motor shield, which has pins to provide an alternative power source to the motors. The motors going in the reverse direction of the expected could be just that you connected the motors with opposite polarity, just swap the cables or change the code to send positive speeds when it is now sending negative and viceversa.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/c79c789392edc6193aab74ad695fca0dce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#24</span> <span class="label label-primary">Nilesh</span> said
+                    <span class="flask-moment" data-timestamp="2013-09-18T13:46:54Z" data-format="fromNow(0)" data-refresh="0">2013-09-18T13:46:54Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel. Any idea what is the counterpart for Bluestick in iOS?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#25</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-09-18T14:13:37Z" data-format="fromNow(0)" data-refresh="0">2013-09-18T14:13:37Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Nilesh: TouchOSC appears to be the leading iOS app for bluetooth control.</p>
+                </div>
+            </div>
+        </li>
+        
+    </ul>
+</div>
+
+<div class="page">
+<ul class="pager">
+  <li class="previous disabled">
+    <a href="#">&laquo;&laquo;</a>
+  </li>
+  <li class="previous disabled">
+    <a href="#">&laquo;</a>
+  </li>
+  <li class="next">
+    <a href="building-an-arduino-robot-part-vi-remote-control/page/0.html#comments">&raquo;&raquo;</a>
+  </li>
+  <li class="next">
+    <a href="building-an-arduino-robot-part-vi-remote-control/page/2.html#comments">&raquo;</a>
+  </li>
+</ul>
+</div>
+
+<h3><a name="commentform"></a>Leave a Comment</h3>
+
+<form action="#commentform" method="post"
+  class="form" role="form">
+  <div style="display:none;"><input id="csrf_token" name="csrf_token" type="hidden" value="1439536708.05##d5c275c2dbf01638e99069914282e6d90fb463dd"></div>
+  
+    
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="name">Name</label>
+        <input class="form-control" id="name" name="name" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="url">URL</label>
+        <input class="form-control" id="url" name="url" type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="email">Email</label>
+        <input class="form-control" id="email" name="email" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="comment">Comment</label>
+        <textarea class="form-control" id="comment" name="comment" required></textarea>
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="captcha">Captcha</label>
+        
+<script type="text/javascript">var RecaptchaOptions = {"custom_translations": {"audio_challenge": "Get an audio challenge", "cant_hear_this": "Download sound as MP3", "help_btn": "Help", "image_alt_text": "reCAPTCHA challenge image", "incorrect_try_again": "Incorrect. Try again.", "instructions_audio": "Type what you hear", "instructions_visual": "Type the text", "play_again": "Play sound again", "privacy_and_terms": "Privacy & Terms", "refresh_btn": "Get a new challenge", "visual_challenge": "Get a visual challenge"}, "theme": "white"};</script>
+<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S"></script>
+<noscript>
+  <iframe src="http://www.google.com/recaptcha/api/noscript?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S" height="300" width="500" frameborder="0"></iframe><br>
+  <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+  <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
+</noscript>
+
+  </div>
+
+
+    
+
+
+
+
+
+  
+
+
+    <input class="btn btn-default" id="submit" name="submit" type="submit" value="Submit">
+  
+
+
+
+
+
+</form>
+
+
+</div>
+
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <p class="elapsed">This page was generated in None seconds.</p>
+            <p>&copy; 2014 by Miguel Grinberg. All rights reserved. <a href="mailto:webmaster _at_ miguelgrinberg _dot_ com">Questions?</a></p>
+        </div>
+    </div>
+
+
+    
+    
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.33/jquery.colorbox-min.js"></script>
+    <script type="text/javascript" src="../static/prettify.js"></script>
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment-with-langs.min.js"></script>
+<script>
+function flask_moment_render(elem) {
+    $(elem).text(eval('moment("' + $(elem).data('timestamp') + '").' + $(elem).data('format') + ';'));
+    $(elem).removeClass('flask-moment');
+}
+function flask_moment_render_all() {
+    $('.flask-moment').each(function() {
+        flask_moment_render(this);
+        if ($(this).data('refresh')) {
+            (function(elem, interval) { setInterval(function() { flask_moment_render(elem) }, interval); })(this, $(this).data('refresh'));
+        }
+    })
+}
+$(document).ready(function() {
+    flask_moment_render_all();
+});
+</script>
+    
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4777284-15']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".gallery").colorbox({rel:".gallery",maxWidth:"95%",maxHeight:"95%",scalePhotos:true});
+            // add prettyprint class to all <pre><code></code></pre> blocks
+            var prettify = false;
+            $("pre code").parent().each(function() {
+                $(this).addClass('prettyprint');
+                prettify = true;
+            });
+            prettyPrint();
+        });
+    </script>
+
+
+  </body>
+
+<!-- Mirrored from blog.miguelgrinberg.com/post/building-an-arduino-robot-part-vi-remote-control by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:40:21 GMT -->
+</html>

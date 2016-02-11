@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from projecteuler.net/problem=315 by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 15:11:03 GMT -->
+<head>
+<meta charset="utf-8" />
+<meta name="author" content="Colin Hughes" />
+<meta name="description" content="A website dedicated to the fascinating world of mathematics and programming" />
+<meta name="keywords" content="programming,mathematics,problems,puzzles" />
+<title>Problem 315 - Project Euler</title>
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="stylesheet" type="text/css" href="themes/default/style_default.css" />
+
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({
+      jax: ["input/TeX", "output/HTML-CSS"],
+      tex2jax: {
+         inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+         displayMath: [ ["$$","$$"], ["\\[","\\]"] ],
+         processEscapes: true
+      },
+      "HTML-CSS": { availableFonts: ["TeX"] }
+   });
+</script>
+
+<script type="text/javascript" src="../cdn.mathjax.org/mathjax/latest/MathJax7b8b.js?config=TeX-AMS_HTML">
+</script>
+</head>
+
+<body>
+<div id="container">
+<div id="header">
+<div id="nav" class="noprint">
+<ul>
+<li><a href="about.html" title="About" accesskey="h">About</a></li>
+<li id="current"><a href="problems.html" title="Problems" accesskey="1">Problems</a></li>
+<li><a href="news.html" title="News" accesskey="2">News</a></li>
+<li><a href="register.html" title="Register" accesskey="3">Register</a></li>
+<li><a href="sign_in.html" title="Sign In" accesskey="4">Sign In</a></li>
+</ul>
+</div>
+
+<div id="logo" class="noprint">
+   <div>Project Euler<span>.net</span></div>
+</div>
+</div>
+
+<div id="info_panel"><a href="rss2_euler.xml"><img src="images/icon_rss.png" alt="RSS Feed" title="RSS Feed" /></a><a href="about.html"><span class="info" style="cursor:pointer;"><img src="images/icon_lock.png" /><span style="text-align:left;width:250px;right:10px;"><div style="color:#070;font-weight:bold;">You are currently using a secure connection</div>Click icon to use a non-secure connection</div></a></div>
+<div id="content">
+<div style="text-align:center;" class="print"><img src="images/print_page_logo.png" alt="projecteuler.net" style="border:none;" /></div>
+<h2>Digital root clocks</h2><div id="problem_info" class="info"><h3>Problem 315</h3><span>Published on Sunday, 19th December 2010, 10:00 am; Solved by 1360</span></div>
+<div class="problem_content" role="problem">
+<p><div align='center'><img src="project/images/p315_clocks.gif" /></div></p>
+
+<p>Sam and Max are asked to transform two digital clocks into two "digital root" clocks.<br />
+A digital root clock is a digital clock that calculates digital roots step by step.</p>
+
+<p>When a clock is fed a number, it will show it and then it will start the calculation, showing all the intermediate values until it gets to the result.<br />
+For example, if the clock is fed the number 137, it will show: "<b>137</b>" &rarr; "<b>11</b>" &rarr; "<b>2</b>" and then it will go black, waiting for the next number.</p>
+
+<p>Every digital number consists of some light segments: three horizontal (top, middle, bottom) and four vertical (top-left, top-right, bottom-left, bottom-right).<br />
+Number "<b>1</b>" is made of vertical top-right and bottom-right, number "<b>4</b>" is made by middle horizontal and vertical top-left, top-right and bottom-right. Number "<b>8</b>" lights them all.</p>
+
+<p>The clocks consume energy only when segments are turned on/off.<br />
+To turn on a "<b>2</b>" will cost 5 transitions, while a "<b>7</b>" will cost only 4 transitions.</p>
+
+<p>Sam and Max built two different clocks.</p>
+
+<p>Sam's clock is fed e.g. number 137: the clock shows "<b>137</b>", then the panel is turned off, then the next number ("<b>11</b>") is turned on, then the panel is turned off again and finally the last number ("<b>2</b>") is turned on and, after some time, off.<br />
+For the example, with number 137, Sam's clock requires:<br />
+<table><tr>
+<td>"<b>137</b>"</td>
+<td>:</td>
+<td>(2 + 5 + 4) &times; 2 = 22 transitions ("<b>137</b>" on/off).</td>
+</tr><tr>
+<td>"<b>11</b>"</td>
+<td>:</td>
+<td>(2 + 2) &times; 2 = 8 transitions ("<b>11</b>" on/off).</td>
+</tr><tr>
+<td>"<b>2</b>"</td>
+<td>:</td>
+<td>(5) &times; 2 = 10 transitions ("<b>2</b>" on/off).</td>
+</tr></table>
+For a grand total of 40 transitions.</p>
+
+<p>Max's clock works differently. Instead of turning off the whole panel, it is smart enough to turn off only those segments that won't be needed for the next number.<br />
+For number 137, Max's clock requires:<br />
+<table><tr>
+<td>"<b>137</b>"<br /><br /></td>
+<td>:<br /><br /></td>
+<td>2 + 5 + 4 = 11 transitions ("<b>137</b>" on)<br />
+7 transitions (to turn off the segments that are not needed for number "<b>11</b>").</td>
+</tr><tr>
+<td>"<b>11</b>"<br /><br /><br /></td>
+<td>:<br /><br /><br /></td>
+<td>0 transitions (number "<b>11</b>" is already turned on correctly)<br />
+3 transitions (to turn off the first "<b>1</b>" and the bottom part of the second "<b>1</b>"; <br />
+the top part is common with number "<b>2</b>").</td>
+</tr><tr>
+<td>"<b>2</b>"<br /><br /></td>
+<td>:<br /><br /></td>
+<td>4 transitions (to turn on the remaining segments in order to get a "<b>2</b>")<br />
+5 transitions (to turn off number "<b>2</b>").</td>
+</tr></table>
+For a grand total of 30 transitions.</p>
+
+<p>Of course, Max's clock consumes less power than Sam's one.<br />
+The two clocks are fed all the prime numbers between A = 10<sup>7</sup> and B = 2&times;10<sup>7</sup>. <br />
+Find the difference between the total number of transitions needed by Sam's clock and that needed by Max's one.</p>
+
+</div><br />
+<br /></div>
+
+<div id="footer" class="noprint">
+Project Euler: <a href="copyright.html">Copyright Information</a> | <a href="privacy.html">Privacy Policy</a>
+<!--/Creative Commons License--><!-- <rdf:RDF xmlns="http://web.resource.org/cc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+   <Work rdf:about="">
+      <license rdf:resource="http://creativecommons.org/licenses/by-nc-sa/2.0/uk/" />
+   <dc:type rdf:resource="http://purl.org/dc/dcmitype/Text" />
+   </Work>
+   <License rdf:about="http://creativecommons.org/licenses/by-nc-sa/2.0/uk/"><permits rdf:resource="http://web.resource.org/cc/Reproduction"/><permits rdf:resource="http://web.resource.org/cc/Distribution"/><requires rdf:resource="http://web.resource.org/cc/Notice"/><requires rdf:resource="http://web.resource.org/cc/Attribution"/><prohibits rdf:resource="http://web.resource.org/cc/CommercialUse"/><permits rdf:resource="http://web.resource.org/cc/DerivativeWorks"/><requires rdf:resource="http://web.resource.org/cc/ShareAlike"/></License></rdf:RDF> -->
+</div>
+</div>
+</body>
+
+<!-- Mirrored from projecteuler.net/problem=315 by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 15:11:04 GMT -->
+</html>

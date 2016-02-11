@@ -1,0 +1,410 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+<!-- Mirrored from www.tangowithdjango.com/book17/chapters/bing_search.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 10 Jan 2016 04:11:13 GMT -->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>15. Adding External Search Functionality &mdash; How to Tango with Django 1.7</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/twd.ico"/>
+    <link rel="top" title="How to Tango with Django 1.7" href="../index-2.html" />
+    <link rel="next" title="16. Making Rango Tango! Exercises" href="tango.html" />
+    <link rel="prev" title="14. Template Tags" href="template_tags.html" />
+ <style type="text/css">
+	img{
+	    width: 85%; /* you can use % */
+	    height: auto;
+	}
+	
+	table {
+		margin: auto;
+	}
+	
+	p.caption {
+		font-size: 10pt;
+		font-style: italic;
+	}
+ </style>
+ <script type="text/javascript">
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','../../../www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-44397330-1', 'tangowithdjango.com');
+  ga('send', 'pageview');
+     
+
+  </script>      
+
+  </head>
+  <body role="document">
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        
+        <li class="right" >
+          <a href="tango.html" title="16. Making Rango Tango! Exercises"
+             accesskey="N">next</a>
+          </li>
+		
+        <li class="right" >
+          <a href="template_tags.html" title="14. Template Tags"
+             accesskey="P">previous</a>
+          </li>
+		
+        <li><a href="../index-2.html">How to Tango with Django 1.7</a> &raquo;</li> 
+
+      </ul>
+
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index-2.html">
+              <img class="logo" src="../_static/twd200x200.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index-2.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">15. Adding External Search Functionality</a><ul>
+<li><a class="reference internal" href="#the-bing-search-api">15.1. The Bing Search API</a><ul>
+<li><a class="reference internal" href="#registering-for-a-bing-api-key">15.1.1. Registering for a Bing API Key</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#adding-search-functionality">15.2. Adding Search Functionality</a></li>
+<li><a class="reference internal" href="#storing-your-api-key-safely">15.3. Storing your API KEY safely</a></li>
+<li><a class="reference internal" href="#exercises">15.4. Exercises</a></li>
+<li><a class="reference internal" href="#putting-search-into-rango">15.5. Putting Search into Rango</a><ul>
+<li><a class="reference internal" href="#adding-a-search-template">15.5.1. Adding a Search Template</a></li>
+<li><a class="reference internal" href="#adding-the-view">15.5.2. Adding the View</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="template_tags.html"
+                        title="previous chapter">14. Template Tags</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="tango.html"
+                        title="next chapter">16. Making Rango Tango! Exercises</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/chapters/bing_search.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="http://www.tangowithdjango.com/book17/search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="adding-external-search-functionality">
+<span id="bing-label"></span><h1>15. Adding External Search Functionality<a class="headerlink" href="#adding-external-search-functionality" title="Permalink to this headline">¶</a></h1>
+<p>At this stage, our Rango application is looking pretty good - a majority of our required functionality is implemented. In this chapter, we will connect Rango up to Bing&#8217;s Search API so that users can also search for pages, rather than just use the categories. First let&#8217;s get started by setting up an account to use Bing&#8217;s Search API, then construct a wrapper to call Bing&#8217;s web search functionality before integrating the search into Rango.</p>
+<div class="section" id="the-bing-search-api">
+<h2>15.1. The Bing Search API<a class="headerlink" href="#the-bing-search-api" title="Permalink to this headline">¶</a></h2>
+<p>The Bing Search API provides you with the ability to embed search results from the Bing search engine within your own applications. Through a straightforward interface, you can request results from Bing&#8217;s servers to be returned in either XML or JSON. The data returned can then be interpreted by a XML or JSON parser, with the results then rendered as part of a template within your application.</p>
+<p>Although the Bing API can handle requests for different kinds of content, we&#8217;ll be focusing on web search only for this tutorial - as well as handling JSON responses. To use the Bing Search API, you will need to sign up for an <em>API key</em>. The key currently provides subscribers with access to 5000 queries per month, which should be more than enough for our purposes.</p>
+<div class="section" id="registering-for-a-bing-api-key">
+<h3>15.1.1. Registering for a Bing API Key<a class="headerlink" href="#registering-for-a-bing-api-key" title="Permalink to this headline">¶</a></h3>
+<p>To register for a Bing API key, you must first register for a free Microsoft account. The account provides you with access to a wide range of Microsoft services. If you already have a Hotmail account, you already have one! You can create your free account and login at <a class="reference external" href="https://account.windowsazure.com/">https://account.windowsazure.com</a>.</p>
+<p>When you account has been created, jump to the <a class="reference external" href="https://datamarket.azure.com/dataset/5BA839F1-12CE-4CCE-BF57-A49D98D29A44">Windows Azure Marketplace Bing Search API page</a>. At the top of the screen, you may first need to click the <em>Sign In</em> button - if you have already signed into your Microsoft account, you won&#8217;t need to provide your account details again. If the text says <em>Sign Out</em>, you&#8217;re already logged in.</p>
+<p>Down the right hand side of the page is a list of transactions per month. At the bottom of the list is <em>5,000 Transactions/month</em>. Click the sign up button to the right - you should be subscribing for a free service. You should then read the <em>Publisher Offer Terms</em>, and if you agree with them click <em>Sign Up</em> to continue. You will  then be presented with a page confirming that you have successfully signed up.</p>
+<p>Once you&#8217;ve signed up, click the <em>Data</em> link at the top of the page. From there, you should be presented with a list of data sources available through the Windows Azure Marketplace. At the top of the list should be <em>Bing Search API</em> - it should also say that you are <em>subscribed</em> to the data source. Click the <em>use</em> link associated with the Bing Search API located on the right of the page. You will then be presented with a screen similar to that shown in Figure <a class="pageref" href="#fig-bing-explore">1</a>.</p>
+<div class="align-center figure" id="id1">
+<span id="fig-bing-explore"></span><img alt="../_images/bing-explore.png" src="../_images/bing-explore.png" />
+<p class="caption"><span class="caption-text">Figure 1: The Bing Search API service explorer page. In this screenshot, the <em>Primary Account Key</em> is deliberately obscured. You should make sure you keep your key secret, too!</span></p>
+</div>
+<p>This page allows you to try out the Bing Search API by filling out the boxes to the left. For example, the <em>Query</em> box allows you to specify a query to send to the API. Ensure that at the bottom of the screen you select <em>Web</em> for web search results only. Note the URL provided in the blue box at the top of the page changes as you alter the settings within the webpage. Take a note of the Web search URL. We&#8217;ll be using part of this URL within our code later on. The following example is a URL to perform a web search using the query <em>rango</em>.</p>
+<div class="highlight-python"><div class="highlight"><pre>https://api.datamarket.azure.com/Bing/Search/v1/Web?Query=%27rango%27
+</pre></div>
+</div>
+<p>We must also retrieve your API key so you can authenticate with the Bing servers when posing requests. To obtain your key, locate the text <em>Primary Account Key</em> at the top of the page and click the <em>Show</em> link next to it. Your key will then be exposed. We&#8217;ll be using it later, so take a note of it - and keep it safe! If someone obtains your key, they&#8217;ll be able to use your free query quota.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The Bing API Service Explorer also keeps a tab of how many queries you have left of your monthly quota. Check out the top of the page to see!</p>
+</div>
+</div>
+</div>
+<div class="section" id="adding-search-functionality">
+<h2>15.2. Adding Search Functionality<a class="headerlink" href="#adding-search-functionality" title="Permalink to this headline">¶</a></h2>
+<p>To add search functionality to Rango, we first must write an additional function to query the Bing API. This code should take in the request from a particular user and return to the calling function a list of results. Any errors that occur during the API querying phase should also be handled gracefully within the function. Spinning off search functionality into an additional function also provides a nice abstraction between Django-related code and search functionality code.</p>
+<p>To start, let&#8217;s create a new Python module called <code class="docutils literal"><span class="pre">bing_search.py</span></code> within our <code class="docutils literal"><span class="pre">rango</span></code> application directory. Add the following code into the file. Check out the inline commentary for a description of what&#8217;s going on throughout the function.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">urllib</span><span class="o">,</span> <span class="nn">urllib2</span>
+
+<span class="c"># Add your BING_API_KEY</span>
+
+<span class="n">BING_API_KEY</span> <span class="o">=</span> <span class="s">&#39;&lt;insert_bing_api_key&gt;&#39;</span>
+
+<span class="k">def</span> <span class="nf">run_query</span><span class="p">(</span><span class="n">search_terms</span><span class="p">):</span>
+    <span class="c"># Specify the base</span>
+    <span class="n">root_url</span> <span class="o">=</span> <span class="s">&#39;https://api.datamarket.azure.com/Bing/Search/&#39;</span>
+    <span class="n">source</span> <span class="o">=</span> <span class="s">&#39;Web&#39;</span>
+
+    <span class="c"># Specify how many results we wish to be returned per page.</span>
+    <span class="c"># Offset specifies where in the results list to start from.</span>
+    <span class="c"># With results_per_page = 10 and offset = 11, this would start from page 2.</span>
+    <span class="n">results_per_page</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">offset</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c"># Wrap quotes around our query terms as required by the Bing API.</span>
+    <span class="c"># The query we will then use is stored within variable query.</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&#39;{0}&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">search_terms</span><span class="p">)</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+
+    <span class="c"># Construct the latter part of our request&#39;s URL.</span>
+    <span class="c"># Sets the format of the response to JSON and sets other properties.</span>
+    <span class="n">search_url</span> <span class="o">=</span> <span class="s">&quot;{0}{1}?$format=json&amp;$top={2}&amp;$skip={3}&amp;Query={4}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">root_url</span><span class="p">,</span>
+        <span class="n">source</span><span class="p">,</span>
+        <span class="n">results_per_page</span><span class="p">,</span>
+        <span class="n">offset</span><span class="p">,</span>
+        <span class="n">query</span><span class="p">)</span>
+
+    <span class="c"># Setup authentication with the Bing servers.</span>
+    <span class="c"># The username MUST be a blank string, and put in your API key!</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+
+
+    <span class="c"># Create a &#39;password manager&#39; which handles authentication for us.</span>
+    <span class="n">password_mgr</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">HTTPPasswordMgrWithDefaultRealm</span><span class="p">()</span>
+    <span class="n">password_mgr</span><span class="o">.</span><span class="n">add_password</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">search_url</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">BING_API_KEY</span><span class="p">)</span>
+
+    <span class="c"># Create our results list which we&#39;ll populate.</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c"># Prepare for connecting to Bing&#39;s servers.</span>
+        <span class="n">handler</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">HTTPBasicAuthHandler</span><span class="p">(</span><span class="n">password_mgr</span><span class="p">)</span>
+        <span class="n">opener</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">build_opener</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
+        <span class="n">urllib2</span><span class="o">.</span><span class="n">install_opener</span><span class="p">(</span><span class="n">opener</span><span class="p">)</span>
+
+        <span class="c"># Connect to the server and read the response generated.</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">search_url</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+        <span class="c"># Convert the string response to a Python dictionary object.</span>
+        <span class="n">json_response</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+        <span class="c"># Loop through each page returned, populating out results list.</span>
+        <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">json_response</span><span class="p">[</span><span class="s">&#39;d&#39;</span><span class="p">][</span><span class="s">&#39;results&#39;</span><span class="p">]:</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s">&#39;title&#39;</span><span class="p">:</span> <span class="n">result</span><span class="p">[</span><span class="s">&#39;Title&#39;</span><span class="p">],</span>
+            <span class="s">&#39;link&#39;</span><span class="p">:</span> <span class="n">result</span><span class="p">[</span><span class="s">&#39;Url&#39;</span><span class="p">],</span>
+            <span class="s">&#39;summary&#39;</span><span class="p">:</span> <span class="n">result</span><span class="p">[</span><span class="s">&#39;Description&#39;</span><span class="p">]})</span>
+
+    <span class="c"># Catch a URLError exception - something went wrong when connecting!</span>
+    <span class="k">except</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">URLError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;Error when querying the Bing API: &quot;</span><span class="p">,</span> <span class="n">e</span>
+
+    <span class="c"># Return the list of results to the calling function.</span>
+    <span class="k">return</span> <span class="n">results</span>
+</pre></div>
+</div>
+<p>The logic of the function above can be broadly split into six main tasks:</p>
+<ul class="simple">
+<li>First, the function prepares for connecting to Bing by preparing the URL that we&#8217;ll be requesting.</li>
+<li>The function then prepares authentication, making use of your Bing API key. Make sure you replace <code class="docutils literal"><span class="pre">&lt;api_key&gt;</span></code> with your actual Bing API key, otherwise you&#8217;ll be going nowhere!</li>
+<li>We then connect to the Bing API through the command <code class="docutils literal"><span class="pre">urllib2.urlopen(search_url)</span></code>. The results from the server are read and saved as a string.</li>
+<li>This string is then parsed into a Python dictionary object using the <code class="docutils literal"><span class="pre">json</span></code> Python package.</li>
+<li>We loop through each of the returned results, populating a <code class="docutils literal"><span class="pre">results</span></code> dictionary. For each result, we take the <code class="docutils literal"><span class="pre">title</span></code> of the page, the <code class="docutils literal"><span class="pre">link</span></code> or URL and a short <code class="docutils literal"><span class="pre">summary</span></code> of each returned result.</li>
+<li>The dictionary is returned by the function.</li>
+</ul>
+<p>Notice that results are passed from Bing&#8217;s servers as JSON. This is because we explicitly specify to use JSON in our initial request - check out the <code class="docutils literal"><span class="pre">search_url</span></code> variable which we define. If an error occurs when attempting to connect to Bing&#8217;s servers, the error is printed to the terminal via the <code class="docutils literal"><span class="pre">print</span></code> statement within the <code class="docutils literal"><span class="pre">except</span></code> block.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">There are many different parameters that the Bing Search API can handle which we don&#8217;t cover here. If you&#8217;re interested in seeing how to tailor your results, check out the <a class="reference external" href="http://datamarket.azure.com/dataset/bing/search">Bing Search API Migration Guide and FAQ</a>.</p>
+</div>
+</div>
+<div class="section" id="storing-your-api-key-safely">
+<h2>15.3. Storing your API KEY safely<a class="headerlink" href="#storing-your-api-key-safely" title="Permalink to this headline">¶</a></h2>
+<p>If you are putting your code into a public repository on GitHub or the like, then you should take some pre-cautions about sharing your API Key. One solution is to create a new file call, <code class="docutils literal"><span class="pre">keys.py</span></code> which has a variable  <code class="docutils literal"><span class="pre">BING_API_KEY</span></code>. Then import the <code class="docutils literal"><span class="pre">BING_API_KEY</span></code> into <code class="docutils literal"><span class="pre">bing_search.py</span></code>.  Update your <code class="docutils literal"><span class="pre">.gitignore</span></code> file to include <code class="docutils literal"><span class="pre">keys.py</span></code>, so that <code class="docutils literal"><span class="pre">keys.py</span></code> is not added to the repository. This way the key will only be stored locally.</p>
+</div>
+<div class="section" id="exercises">
+<h2>15.4. Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline">¶</a></h2>
+<p>Taking the basic Bing Search API function we added above as a baseline, try out the following exercises.
+* If using a public repository, refactor the code so that your API key is not publicly accessible
+* Add a main() function to the <em>bing_search.py</em> to test out the BING Search API
+* Hint: add the following code, so that when you <code class="docutils literal"><span class="pre">python</span> <span class="pre">bing_search.py</span></code> it calls the <code class="docutils literal"><span class="pre">main()</span></code> function:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>The main function should ask a user for a query (from the command line), and then issue the query to the BING API via the run_query method and print out the top ten results returned.</li>
+<li>Print out the rank, title and URL for each result.</li>
+</ul>
+</div>
+<div class="section" id="putting-search-into-rango">
+<h2>15.5. Putting Search into Rango<a class="headerlink" href="#putting-search-into-rango" title="Permalink to this headline">¶</a></h2>
+<p>To add external search functionality, we will need to perform the following steps.</p>
+<ol class="arabic simple">
+<li>We must first create a <code class="docutils literal"><span class="pre">search.html</span></code> template which extends from our <code class="docutils literal"><span class="pre">base.html</span></code> template. The <code class="docutils literal"><span class="pre">search.html</span></code> template will include a HTML <code class="docutils literal"><span class="pre">&lt;form&gt;</span></code> to capture the user&#8217;s query as well as template code to present any results.</li>
+<li>We then create a view to handle the rendering of the <code class="docutils literal"><span class="pre">search.html</span></code> template for us, as well as calling the <code class="docutils literal"><span class="pre">run_query()</span></code> function we defined above.</li>
+</ol>
+<div class="section" id="adding-a-search-template">
+<h3>15.5.1. Adding a Search Template<a class="headerlink" href="#adding-a-search-template" title="Permalink to this headline">¶</a></h3>
+<p>Let&#8217;s first create our <code class="docutils literal"><span class="pre">search.html</span></code> template. Add the following HTML markup and Django template code.</p>
+<div class="highlight-html"><div class="highlight"><pre>{% extends &quot;base.html&quot; %}
+
+{% load staticfiles %}
+
+{% block title %}Search{% endblock %}
+
+{% block body_block %}
+
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;page-header&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;h1&gt;</span>Search with Rango<span class="nt">&lt;/h1&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;row&quot;</span><span class="nt">&gt;</span>
+
+        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;panel panel-primary&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;br/&gt;</span>
+
+            <span class="nt">&lt;form</span> <span class="na">class=</span><span class="s">&quot;form-inline&quot;</span> <span class="na">id=</span><span class="s">&quot;user_form&quot;</span> <span class="na">method=</span><span class="s">&quot;post&quot;</span> <span class="na">action=</span><span class="s">&quot;{% url &#39;search&#39; %}&quot;</span><span class="nt">&gt;</span>
+                {% csrf_token %}
+                <span class="c">&lt;!-- Display the search form elements here --&gt;</span>
+                <span class="nt">&lt;input</span> <span class="na">class=</span><span class="s">&quot;form-control&quot;</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">size=</span><span class="s">&quot;50&quot;</span> <span class="na">name=</span><span class="s">&quot;query&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span> <span class="na">id=</span><span class="s">&quot;query&quot;</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;input</span> <span class="na">class=</span><span class="s">&quot;btn btn-primary&quot;</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span> <span class="na">name=</span><span class="s">&quot;submit&quot;</span> <span class="na">value=</span><span class="s">&quot;Search&quot;</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;br</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;/form&gt;</span>
+
+            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;panel&quot;</span><span class="nt">&gt;</span>
+                {% if result_list %}
+                    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;panel-heading&quot;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;h3</span> <span class="na">class=</span><span class="s">&quot;panel-title&quot;</span><span class="nt">&gt;</span>Results<span class="nt">&lt;/h3&gt;</span>
+                    <span class="c">&lt;!-- Display search results in an ordered list --&gt;</span>
+                    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;panel-body&quot;</span><span class="nt">&gt;</span>
+                        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;list-group&quot;</span><span class="nt">&gt;</span>
+                            {% for result in result_list %}
+                                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;list-group-item&quot;</span><span class="nt">&gt;</span>
+                                    <span class="nt">&lt;h4</span> <span class="na">class=</span><span class="s">&quot;list-group-item-heading&quot;</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;{{ result.link }}&quot;</span><span class="nt">&gt;</span>{{ result.title }}<span class="nt">&lt;/a&gt;&lt;/h4&gt;</span>
+                                    <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">&quot;list-group-item-text&quot;</span><span class="nt">&gt;</span>{{ result.summary }}<span class="nt">&lt;/p&gt;</span>
+                                <span class="nt">&lt;/div&gt;</span>
+                            {% endfor %}
+                        <span class="nt">&lt;/div&gt;</span>
+                    <span class="nt">&lt;/div&gt;</span>
+                {% endif %}
+                <span class="nt">&lt;/div&gt;</span>
+            <span class="nt">&lt;/div&gt;</span>
+ <span class="nt">&lt;/div&gt;</span>
+
+{% endblock %}
+</pre></div>
+</div>
+<p>The template code above performs two key tasks:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>In all scenarios, the template presents a search box and a search buttons within a HTML <code class="docutils literal"><span class="pre">&lt;form&gt;</span></code> for users to enter and submit their search queries.</li>
+<li>If a <code class="docutils literal"><span class="pre">results_list</span></code> object is passed to the template&#8217;s context when being rendered, the template then iterates through the object displaying the results contained within.</li>
+</ol>
+</div></blockquote>
+<p>To style the html we have made use of Bootstrap: panels, <a class="reference external" href="http://getbootstrap.com/components/#panels">http://getbootstrap.com/components/#panels</a>, list groups, <a class="reference external" href="http://getbootstrap.com/components/#list-group">http://getbootstrap.com/components/#list-group</a>, and inline forms, <a class="reference external" href="http://getbootstrap.com/css/#forms-inline">http://getbootstrap.com/css/#forms-inline</a>.</p>
+<p>As you will see from our corresponding view code shortly, a <code class="docutils literal"><span class="pre">results_list</span></code> will only be passed to the template engine when there are results to return. There won&#8217;t be results for example when a user lands on the search page for the first time - they wouldn&#8217;t have posed a query yet!</p>
+</div>
+<div class="section" id="adding-the-view">
+<h3>15.5.2. Adding the View<a class="headerlink" href="#adding-the-view" title="Permalink to this headline">¶</a></h3>
+<p>With our search template added, we can then add the view which prompts the rendering of our template. Add the following <code class="docutils literal"><span class="pre">search()</span></code> view to Rango&#8217;s <code class="docutils literal"><span class="pre">views.py</span></code> module.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">search</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+
+    <span class="n">result_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;POST&#39;</span><span class="p">:</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s">&#39;query&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">query</span><span class="p">:</span>
+            <span class="c"># Run our Bing function to get the results list!</span>
+            <span class="n">result_list</span> <span class="o">=</span> <span class="n">run_query</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&#39;rango/search.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;result_list&#39;</span><span class="p">:</span> <span class="n">result_list</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>By now, the code should be pretty self explanatory to you. The only major addition is the calling of the <code class="docutils literal"><span class="pre">run_query()</span></code> function we defined earlier in this chapter. To call it, we are required to also import the <code class="docutils literal"><span class="pre">bing_search.py</span></code> module, too. Ensure that before you run the script that you add the following import statement at the top of the <code class="docutils literal"><span class="pre">views.py</span></code> module.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">rango.bing_search</span> <span class="kn">import</span> <span class="n">run_query</span>
+</pre></div>
+</div>
+<p>You&#8217;ll also need to ensure you do the following, too.</p>
+<ol class="arabic simple">
+<li>Add a mapping between your <code class="docutils literal"><span class="pre">search()</span></code> view and the <code class="docutils literal"><span class="pre">/rango/search/</span></code> URL calling it <code class="docutils literal"><span class="pre">name='search'</span></code></li>
+<li>Update the <code class="docutils literal"><span class="pre">base.html</span></code> navigation bar to include a link to the search page. Remember to use the <code class="docutils literal"><span class="pre">url</span></code> template tag to reference the link.</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">According to the <a class="reference external" href="http://en.wikipedia.org/wiki/Application_programming_interface">relevant article on Wikipedia</a>, an <em>Application Programming Interface (API)</em> specifies how software components should interact with one another. In the context of web applications, an API is considered as a set of HTTP requests along with a definition of the structures of response messages that each request can return. Any meaningful service that can be offered over the Internet can have its own API - we aren&#8217;t limited to web search. For more information on web APIs, <a class="reference external" href="http://blog.luisrei.com/articles/rest.html">Luis Rei provides an excellent tutorial on APIs</a>.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        
+        <li class="right" >
+          <a href="tango.html" title="16. Making Rango Tango! Exercises"
+             >next</a>
+          </li>
+		
+        <li class="right" >
+          <a href="template_tags.html" title="14. Template Tags"
+             >previous</a>
+          </li>
+		
+        <li><a href="../index-2.html">How to Tango with Django 1.7</a> &raquo;</li> 
+
+      </ul>
+
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2013, Leif Azzopardi and David Maxwell.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+
+<!-- Mirrored from www.tangowithdjango.com/book17/chapters/bing_search.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 10 Jan 2016 04:11:34 GMT -->
+</html>

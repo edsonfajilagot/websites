@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from zetcode.com/databases/mysqltutorial/introduction/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Jul 2015 02:47:06 GMT -->
+<head>
+<title>Introduction to MySQL</title>
+<link rel="stylesheet" href="../../../cfg/format2.css" type="text/css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="Introduction to MySQL, databases, MySQL, SQL">
+<meta name="description" content="This is an introductory chapter of the MySQL
+database.">
+<meta name="author" content="Jan Bodnar">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div id="wide_ad" class="ltow">
+<script async src="../../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- 160x600, August 2011 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:600px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="2484182563"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<div class="content">
+
+
+<header>
+
+<nav>
+<a href="http://zetcode.com/" title="Home">Home</a>&#160;
+<a href="../index.html">Contents</a>
+</nav>
+
+</header>
+
+
+<h1>Introduction to MySQL</h1>
+
+
+<h2 id="about">About this tutorial</h2>
+
+<p>
+This is MySQL tutorial. It covers the MySQL database, various mysql 
+command line tools and the SQL language covered by the database 
+engine. It is an introductory tutorial for the beginners. 
+</p>
+
+<div class="med_rec">
+<script async src="../../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- NewSquare -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:250px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="0364418177"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+
+<h2 id="mysql">MySQL database</h2>
+
+<p>
+MySQL is a leading open source database management system. It is a multi-user, 
+multithreaded database management system. MySQL is especially popular on the web. 
+It is one of the parts of the very popular LAMP platform. Linux, Apache, MySQL and
+PHP. Currently MySQL is owned by Oracle. MySQL database is available on most 
+important OS platforms. It runs on BSD Unix, Linux, Windows or Mac. 
+Wikipedia, YouTube, Facebook use MySQL. These sites manage millions of queries 
+each day. MySQL comes in two versions. MySQL server system and MySQL embedded system.
+</p>
+
+<p>
+The development of MySQL begun in 1994 by a Swedish company MySQL AB. 
+Sun Microsystems acquired MySQL AB in 2008. Sun was bought by Oracle
+in 2010. So today, Oracle corporation is the owner of the MySQL database.
+</p>
+
+<p>
+MySQL, PostgreSQL, Firebird, SQLite, Derby, and HSQLDB are the most well known
+open source database systems. 
+</p>
+
+<p>
+MySQL is developed in C/C++. Except of the C/C++, APIs exist for PHP, Python, Java,
+C#, Eiffel, Ruby, Tcl or Perl. 
+</p>
+
+<h2 id="definitions">Definitions</h2>
+
+<p>
+A <em>relational database</em> is a collection of data organised in tables. There 
+are relations among the tables. The tables are formally described. They consist of 
+rows and columns. <em>SQL</em> (Structured Query Language)  is a database computer 
+language designed for managing data in relational database management systems.
+A <em>table</em> is a set of values that is organised using a model of vertical 
+columns and horizontal rows. The columns are identified by their names. 
+A <em>schema</em> of a database system is its structure described in a formal 
+language. It defines the tables, the fields, relationships, views, indexes, 
+procedures, functions, queues, triggers, and other elements.
+</p>
+
+<p>
+A database <em>row</em> represents a single, implicitly structured data item 
+in a table. It is also called a tuple or a record. A <em>column</em> is a set of 
+data values of a particular simple type, one for each row of the table.
+The columns provide the structure according to which the rows are composed.
+A <em>field</em> is a single item that exists at the intersection between one row 
+and one column. A <em> primary key</em> uniquely identifies each record in the table. 
+A <em>foreign key</em> is a referential constraint between two tables. The foreign 
+key identifies a column or a set of columns in one (referencing) table that refers 
+to a column or set of columns in another (referenced) table.
+</p>
+
+<p>
+A <em>trigger</em> is a procedural code that is automatically executed in response 
+to certain events on a particular table in a database. A <em>view</em> is a specific 
+look on data in from one or more tables. It can arrange data in some specific order, 
+highlight or hide some data. A view consists of a stored query accessible as a virtual 
+table composed of the result set of a query. Unlike ordinary tables a view does not 
+form part of the physical schema. It is a dynamic, virtual table computed or collated 
+from data in the database. 
+</p>
+
+<p>
+A <em>transaction</em> is an atomic unit of database operations against the data in one 
+or more databases. The effects of all the SQL statements in a transaction can be either 
+all committed to the database or all rolled back. 
+<!--Transactions provide an "all-or-nothing" proposition stating that work units performed in 
+a database must be completed in their entirety or take no effect whatsoever.-->
+An SQL <em>result set</em> is a set of rows from a database, returned by the 
+<code>SELECT</code> statement. It also contains meta-information about the query such as 
+the column names, and the types and sizes of each column as well. An <em>index</em> is a 
+data structure that improves the speed of data retrieval operations on a database table. 
+</p>
+
+
+<h2 id="tables">Tables used</h2>
+ 
+<p>
+Here we will list all the tables that are used throughout the tutorial.
+</p>
+
+<pre class="code">
+-- SQL for the Cars table
+
+USE mydb;
+CREATE TABLE IF NOT EXISTS Cars(Id INTEGER PRIMARY KEY, Name VARCHAR(50), 
+Cost INTEGER);
+INSERT INTO Cars VALUES(1,'Audi',52642);
+INSERT INTO Cars VALUES(2,'Mercedes',57127);
+INSERT INTO Cars VALUES(3,'Skoda',9000);
+INSERT INTO Cars VALUES(4,'Volvo',29000);
+INSERT INTO Cars VALUES(5,'Bentley',350000);
+INSERT INTO Cars VALUES(6,'Citroen',21000);
+INSERT INTO Cars VALUES(7,'Hummer',41400);
+INSERT INTO Cars VALUES(8,'Volkswagen',21600);
+</pre>
+
+<p>
+This is a <code>Cars</code> table.
+</p>
+
+
+<pre class="code">
+-- SQL for the Customers, Reservations tables
+
+USE mydb;
+
+CREATE TABLE IF NOT EXISTS Customers(CustomerId INTEGER AUTO_INCREMENT 
+    PRIMARY KEY, Name VARCHAR(55));
+INSERT INTO Customers(Name) VALUES('Paul Novak');
+INSERT INTO Customers(Name) VALUES('Terry Neils');
+INSERT INTO Customers(Name) VALUES('Jack Fonda');
+INSERT INTO Customers(Name) VALUES('Tom Willis');
+
+CREATE TABLE IF NOT EXISTS Reservations(Id INTEGER AUTO_INCREMENT
+    PRIMARY KEY, CustomerId INTEGER, Day DATE);
+INSERT INTO Reservations(CustomerId, Day) VALUES(1, '2009-11-22');
+INSERT INTO Reservations(CustomerId, Day) VALUES(2, '2009-11-28');
+INSERT INTO Reservations(CustomerId, Day) VALUES(2, '2009-11-29');
+INSERT INTO Reservations(CustomerId, Day) VALUES(1, '2009-11-29');
+INSERT INTO Reservations(CustomerId, Day) VALUES(3, '2009-12-2');
+</pre>
+
+<p>
+These are <code>Customers</code> and <code>Reservations</code> tables.
+</p>
+
+<pre class="code">
+-- SQL for the Books table
+
+USE mydb;
+
+CREATE TABLE IF NOT EXISTS Books(Id INTEGER PRIMARY KEY, 
+    Title VARCHAR(100), Author VARCHAR(60));
+INSERT INTO Books VALUES(1,'War and Peace','Leo Tolstoy');
+INSERT INTO Books VALUES(2,'The Brothers Karamazov','Fyodor Dostoyevsky');
+INSERT INTO Books VALUES(3,'Paradise Lost','John Milton');
+INSERT INTO Books VALUES(4,'Crime and Punishment','Fyodor Dostoyevsky');
+INSERT INTO Books VALUES(5,'Cousin Bette','Honore de Balzac');
+</pre>
+
+<p>
+This is a <code>Books</code> table.
+</p>
+
+<h2 id="sources">Sources</h2>
+
+<ul>
+<li><a href="http://dev.mysql.com/doc/refman/5.5/en/">MySQL 5.5 reference manual</a></li>
+<li><a href="http://www.wikipedia.org/">wikipedia.org</a></li>
+</ul>
+
+
+<footer>
+
+<nav class="center">
+<span class="botNavItem"><a href="http://zetcode.com/">Home</a></span> ‡ <span class="botNavItem"><a href="../index.html">Contents</a></span> ‡ 
+<span class="botNavItem"><a href="#">Top of Page</a></span>
+</nav>
+
+<div class="signature">
+<a href="http://zetcode.com/">ZetCode</a> last modified January 18, 2011  <span class="copyright">&copy; 2007 - 2015 Jan Bodnar</span>
+</div>
+
+</footer>
+
+</div> <!-- content -->
+
+</div> <!-- container -->
+
+</body>
+
+<!-- Mirrored from zetcode.com/databases/mysqltutorial/introduction/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Jul 2015 02:47:06 GMT -->
+</html>
+
+

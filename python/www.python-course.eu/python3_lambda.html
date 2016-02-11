@@ -1,0 +1,507 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from www.python-course.eu/python3_lambda.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:09:13 GMT -->
+<head>
+
+<!-- Dieses Tag in den Head-Bereich oder direkt vor dem schlieÃŸenden Body-Tag einfÃ¼gen -->
+<script type="text/javascript" src="../apis.google.com/js/plusone.js"></script>
+
+
+
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "../connect.facebook.net/en_GB/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script><title>Python3 Tutorial: Lambda Operator, filter, reduce and map</title>
+<meta http-equiv="content-type" content="text/html; charset="ISO-8859-1">
+<meta name="Description" content="Chapter on the Lambda Operator and the functions  
+map, filter and reduce" />
+<meta name="Keywords" content="Python, Lambda Operator, lambda, map, filter, reduce" />
+
+<link href="favicon.ico" rel="shortcut icon">
+
+<link href="moderna.css" rel="stylesheet" type="text/css" />
+<link href="moderna_print.css" media="print" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+<div id="container">
+
+<div id="banner">
+<!-- <a href="impressum.php">Impressum</a> | <a href="mailto:">contact</a> | --><h1>Python Course</h1>
+
+</div>
+
+	<!-- Begin Top Menu -->
+<ul id="navlist">
+<li><a href="index-2.html" >Home</a></li><li><a href="course.html" >Python 2 Tutorial</a></li><li class="active"><a id="current" href="python3_course.html" >Python 3 Tutorial</a></li><li><a href="advanced_topics.html" >Advanced Topics</a></li><li><a href="python_books.html" >Python Books</a></li><li><a href="python_tkinter.html" >Tkinter Tutorial</a></li><li><a href="contact.html" rel="nofollow">Contact</a></li>                          
+</ul>
+	<!-- End Top Menu -->
+<div id="sidebar-a">
+<img class="border" src="images/lambda_cubism100.png" alt="box" />    <h2>Python 3 Tutorial</h2>
+
+<div class="menu">
+
+<ul>
+<li><a href="python3_history_and_philosophy.html">The Origins of Python</a></li><li><a href="python3_interactive.html">Starting with Python: The Interactive Shell</a></li><li><a href="python3_execute_script.html">Executing a Script</a></li><li><a href="python3_blocks.html">Indentation</a></li><li><a href="python3_variables.html">Data Types and Variables</a></li><li><a href="python3_operators.html">Operators</a></li><li><a href="python3_sequential_data_types.html">Sequential Data Types: Lists and Strings</a></li><li><a href="python3_deep_copy.html">Shallow and Deep Copy</a></li><li><a href="python3_dictionaries.html">Dictionaries</a></li><li><a href="python3_sets_frozensets.html">Sets and Frozen Sets</a></li><li><a href="python3_input.html">input via the keyboard</a></li><li><a href="python3_conditional_statements.html">Conditional Statements</a></li><li><a href="python3_loops.html">Loops, while Loop</a></li><li><a href="python3_for_loop.html">For Loops</a></li><li><a href="python3_print.html">Output with Print</a></li><li><a href="python3_formatted_output.html">Formatted output with string modulo and the format method</a></li><li><a href="python3_functions.html">Functions</a></li><li><a href="python3_recursive_functions.html">Recursion and Recursive Functions</a></li><li><a href="python3_tests.html">Tests, DocTests, UnitTests</a></li><li><a href="python3_memoization.html">Memoization and Decorators</a></li><li><a href="python3_passing_arguments.html">Parameter Passing in Functions</a></li><li><a href="python3_namespaces.html">Namespaces</a></li><li><a href="python3_global_vs_local_variables.html">Global and Local Variables</a></li><li><a href="python3_file_management.html">Read and Write Files</a></li><li><a href="python3_modules_and_modular_programming.html">Modular Programming and Modules</a></li><li><a href="python3_re.html">Regular Expressions</a></li><li><a href="python3_re_advanced.html">Regular Expressions, Advanced</a></li><li><a href="python3_lambda.html">Lambda Operator, Filter, Reduce and Map</a></li><li><a href="python3_list_comprehension.html">List Comprehension</a></li><li><a href="python3_generators.html">Iterators and Generators</a></li><li><a href="python3_exception_handling.html">Exception Handling</a></li><li><a href="python3_object_oriented_programming.html">Object Oriented Programming</a></li><li><a href="python3_class_and_instance_attributes.html">Class and Instance Attributes</a></li><li><a href="python3_properties.html">Properties vs. getters and setters</a></li><li><a href="python3_inheritance.html">Inheritance</a></li><li><a href="python3_multiple_inheritance.html">Multiple Inheritance</a></li><li><a href="python3_magic_methods.html">Magic Methods and Operator Overloading</a></li><li><a href="python3_inheritance_example.html">OOP, Inheritance Example</a></li></ul>
+
+</div>
+
+<p>
+
+<h3>Usages of the Greek Letter Lambda</h3>
+Both the upper-case letter   and the lower case letter &lambda; are frequently used in 
+science and other areas.
+Though mathematicians prefer the &empty; sign, &Lambda; can denote the empty set. 
+Lambda signifies the set of logical axioms in the axiomatic method of logical deduction 
+in first-order logic. Mathematicians, those working in number theory, found another usage for
+it, the Mangoldt function. statisticians use &Lambda; for Wilks's lambda in multivariate analysis 
+of variance to compare group means on a combination of dependent variables. But that's not all, 
+there is still another good usage in mathematics: lambda indicates the diagonal matrix of the 
+eigenvalues of a matrix.
+<br> 
+Let's turn to the Physicists: They use the capital lambda to name a type of subatomic particle 
+in subatomic particle physics, i.e. the lambda particle. In astrophysics, lambda denotes the 
+likelihood that a small body will encounter a planet or a dwarf planet leading to a deflection
+of a significant magnitude. &Lambda; also represents the period of a lattice. Lambda signifies 
+the grating pitch of a Bragg reflector in optics. 
+<br>
+Finally, lambda denotes the time window over which a process is observed for determining 
+the working memory set for a digital computer's virtual memory management in computer science.
+<br>
+This has only covered the capital lambda. Lover-case &lambda; is even more frequently used:
+It can indicate the wavelength of any wave in physics, electronics engineering, and mathematics.
+&lambda; denotes the radioactivity decay constant in nuclear physics and radioactivity. 
+Lower-case Lambda can also denote 
+the long-term intrinsic growth rate of a population. Lambda is also used to denote the failure 
+rate of devices and systems in reliability theory. 
+<br><br>
+Mostly, lambda is used in mathematics and computer science: 
+Lambda denotes a Lagrange multiplier in multi-dimensional calculus. Lambda stands for the eigenvalue 
+in the mathematics of linear algebra. Lambda denotes the Lebesgue measure in mathematical set theory.
+Lambda &lambda; is used to stand for an empty string in formal language theory in computer science.
+Lambda denotes Christopher Langton's parameter for the classification of Stephen Wolfram's classes 
+of cellular automata. 
+<br><br>
+What's interesting us most in our Python context is its usage for anonymous functions. It's both
+in mathematical logic and computer science used to express the concepts of the lambda calculus. 
+In programming it had become famous through the programming language Lisp. Lisp programmers had been responsible
+for it incorporation into Python.
+
+<br>
+<hr>
+This website is created by:<br><br>
+<a href="http://www.python-training-courses.com/"><img style="width: 150px;" alt="Python Training Courses"
+		     src="images/toronto_building.jpg"><br><br>Python Training Courses in Toronto, Canada</a>
+<br>
+On site trainings in Europe, Canada and the US.
+<br>
+		     <br><br>		     
+
+</div><div id="sidebar-b"><img style="width: 150px;" alt="Python-Logo"
+		     src="images/python-logo.png"><!-- Dieses Tag dort einfügen, wo die +1-Schaltfläche dargestellt werden soll -->
+<g:plusone></g:plusone>
+<br><br>
+
+<div class="fb-like" data-href="www.python-course.eu" data-send="false" data-layout="button_count" 
+data-width="130" data-show-faces="true" data-action="recommend"></div>
+
+<br><br>
+This topic in German / Deutsche Übersetzung:
+    <a href="http://www.python-kurs.eu/python3_lambda.php">Lambda, filter, reduce und map</a><h3>Python3</h3>This is a tutorial in Python3, but this chapter of our course is available in a version for Python 2.x as well: <a href="lambda.html">Lambda Operator, filter, reduce and map in Python 2.x</a><p>
+<h3>Classroom Training Courses</h3>
+The goal of this website is to provide educational material, 
+allowing you to learn Python on your own.
+Nevertheless, it is faster and more efficient to attend a "real" 
+Python course in a classroom, with
+an experienced trainer. So why not attend one of the live 
+<a href="python_classes.html">Python courses</a> in Paris, London, Berlin, Munich
+or Lake Constance by Bernd Klein, the author of this tutorial?
+<br><br>
+You can also check the   
+<a href="http://www.bodenseo.com/courses.php?topic=Python">Python Training courses
+<img style="width: 150px;" alt="Bodenseo Kurse in Python"
+		     src="images/bodenseo_stairs_to_python.png"></a>
+		     delivered by Bodenseo and Bernd Klein.
+<br><br>
+You can book on-site classes at your company or organization, e.g. in England, Switzerland, Austria, Germany,
+France, Belgium, the Netherlands, Luxembourg, Poland, UK, Italy and other locations in Europe.
+<br><br>
+<h3>Python3</h3>This is a tutorial in Python3, but this chapter of our course is available in a version for Python 2.x as well: <a href="lambda.html">Lambda Operator, filter, reduce and map in Python 2.x</a>
+ </p>
+
+
+
+
+    
+</p></div>
+<div id="content">
+
+<div id="contextlinks">Previous Chapter: <a href="python3_re_advanced.html">Regular Expressions, Advanced</a><br>
+<LINK rel="prev" href="python3_re_advanced.html">Next Chapter: <a href="python3_list_comprehension.html">List Comprehension</a><br>
+<LINK rel="next" href="python3_list_comprehension.html"></div><br>
+<h2>Lambda, filter, reduce and map</h2>
+<br>
+<h3>Lambda Operator</h3>
+<img class="imgright" src="images/lambda_cubism.png" 
+alt="Ring als Symbol der for-Schleife" />
+<p>
+If Guido van Rossum, the author of the programming language Python, had got his will, 
+this chapter would be missing in our tutorial. In his article from May 2005 
+<a href="http://www.artima.com/weblogs/viewpost.jsp?thread=98196">"All Things Pythonic:
+The fate of reduce() in Python 3000"</a>, he gives his reasons for dropping lambda, map(), 
+filter() and reduce(). He expected resistance from the Lisp and the scheme "folks". What he
+didn't anticipate was the rigidity of this opposition. Enough, that Guido van Rossum wrote 
+hardly a year later: <i>"After so many attempts to come up with an alternative for lambda,
+perhaps we should admit defeat. I've not had the time to follow the
+most recent rounds, but I propose that we keep lambda, so as to stop
+wasting everybody's talent and time on an impossible quest."</i>
+<br>
+We can see the result: lambda, map() and filter() are still part of core Python.
+Only reduce() had to go; it moved into the module <code>functools</code>.
+<br><br>
+His reasoning for dropping them is like this:
+<ul>
+<li>There is an equally powerful alternative to lambda, filter, map and reduce, i.e. 
+<a href="python3_list_comprehension.html">list comprehension</a></li>
+<li>List comprehension is more evident and easier to understand</li>
+<li>Having both list comprehension and "Filter, map, reduce and lambda" is transgressing the Python motto
+"There should be one obvious way to solve a problem"</li>
+</ul>
+
+
+<br><br>  
+Some like it, others hate it and many are afraid of the lambda operator.
+The lambda operator or lambda function is a way to create small anonymous functions, i.e. functions without 
+a name. These functions are throw-away functions, i.e. they are just needed where they have been created.
+Lambda functions are mainly used in combination with the functions filter(), map() and reduce().
+The lambda feature was added to Python due to the demand from Lisp programmers. 
+<br><br>
+The general syntax of a lambda function is quite simple:
+<br><br>
+<code><b>lambda argument_list: expression</b></code>
+<br><br>
+The argument list consists of a comma separated list of arguments and the expression
+is an arithmetic expression using these arguments. You can assign the 
+function to a variable to give it a name.
+<br><br>
+The following example of a lambda function returns the sum of its two arguments:
+<pre>
+>>> sum = lambda x, y : x + y
+>>> sum(3,4)
+7
+>>> 
+</pre>
+<br>
+The above example might look like a plaything for a mathematician. A formalism which turns an 
+easy to comprehend issue into an abstract harder to grasp formalism. Above all, we could have
+had the same effect by just using the following conventional function definition:
+<br>
+<pre>
+>>> def sum(x,y):
+...     return x + y
+... 
+>>> sum(3,4)
+7
+>>>
+</pre>
+We can assure you, that the advantages of this approach will be apparant, when you will have 
+learnt to use the map() function.
+<br><br>
+<h3>The map() Function</h3>
+As we have mentioned earlier, the advantage of the lambda operator can be seen when it is used 
+in combination with the map() function.
+<br>map() is a function which takes two arguments:
+<br><br>
+<pre>r = map(func, seq)</pre>
+<br>
+The first argument <i>func</i> is the name of a function and the second a sequence 
+(e.g. a list) <i>seq</i>. <i>map()</i> applies the function <i>func</i> to all the elements of
+the sequence <i>seq</i>. Before Python3, map() used to return a list, where each element of the
+result list was the result of the function <i>func</i> applied on the corresponding element of 
+the list or tuple  "seq". With Python 3, map() returns an iterator.
+<br><br>
+The following example illustrates the way of working of map():
+
+<pre>
+>>> def fahrenheit(T):
+...     return ((float(9)/5)*T + 32)
+... 
+>>> def celsius(T):
+...     return (float(5)/9)*(T-32)
+... 
+>>> temperatures = (36.5, 37, 37.5, 38, 39)
+>>> F = map(fahrenheit, temperatures)
+>>> C = map(celsius, F)
+>>>
+>>> temperatures_in_Fahrenheit = list(map(fahrenheit, temperatures))
+>>> temperatures_in_Celsius = list(map(celsius, temperatures_in_Fahrenheit))
+>>> print(temperatures_in_Fahrenheit)
+[97.7, 98.60000000000001, 99.5, 100.4, 102.2]
+>>> print(temperatures_in_Celsius)
+[36.5, 37.00000000000001, 37.5, 38.00000000000001, 39.0]
+>>> 
+</pre>
+In the example above we haven't used lambda. By using lambda, we wouldn't have had to define and name 
+the functions fahrenheit() and celsius(). You can see this in the following interactive session:
+<pre>
+>>> C = [39.2, 36.5, 37.3, 38, 37.8] 
+>>> F = list(map(lambda x: (float(9)/5)*x + 32, C))
+>>> print(F)
+[102.56, 97.7, 99.14, 100.4, 100.03999999999999]
+>>> C = list(map(lambda x: (float(5)/9)*(x-32), F))
+>>> print(C)
+[39.2, 36.5, 37.300000000000004, 38.00000000000001, 37.8]
+>>> 
+</pre>
+map() can be applied to more than one list. The lists have to have the same length. map() will apply
+its lambda function to the elements of the argument lists, i.e. it first applies to the elements with 
+the 0th index, then to the elements with the 1st index until the n-th index is reached:
+<br>
+<pre>
+>>> a = [1,2,3,4]
+>>> b = [17,12,11,10]
+>>> c = [-1,-4,5,9]
+>>> list(map(lambda x,y:x+y, a,b))
+[18, 14, 14, 14]
+>>> list(map(lambda x,y,z:x+y+z, a,b,c))
+[17, 10, 19, 23]
+>>> list(map(lambda x,y,z : 2.5*x + 2*y - z, a,b,c))
+[37.5, 33.0, 24.5, 21.0]
+>>> 
+</pre>
+<br>
+We can see in the example above, that the parameter x gets its values from the list a, while y gets
+its values from b and z from list c.
+<br><br>
+<h3>Filtering</h3>
+The function 
+<br><br>
+<code><b>filter(function, sequence)</b></code> 
+<br><br>
+offers an elegant way to filter out all the elements of a sequence "sequence",
+for which the function <i>function</i> returns True. i.e. an item will be produced by the iterator 
+result of filter(function, sequence) if item is included in the sequence "sequence" and if 
+function(item) returns True.
+<br><br>
+In other words: The function filter(f,l) needs a function f as its first argument. f has to return a 
+Boolean value, i.e. either True or False. 
+This function will be applied to every element of the list <i>l</i>. Only if f returns True 
+will the element be produced by the iterator, which is the return value of filter(function, sequence). 
+<br><br>
+In the following example, we filter out first the odd and then the even elements of the sequence
+of the first 11 Fibonacci numbers: 
+<br><br>
+<pre>
+>>> fibonacci = [0,1,1,2,3,5,8,13,21,34,55]
+>>> odd_numbers = list(filter(lambda x: x % 2, fibonacci))
+>>> print(odd_numbers)
+[1, 1, 3, 5, 13, 21, 55]
+>>> even_numbers = list(filter(lambda x: x % 2 == 0, fibonacci))
+>>> print(even_numbers)
+[0, 2, 8, 34]
+>>> 
+>>> 
+>>> # or alternatively:
+... 
+>>> even_numbers = list(filter(lambda x: x % 2 -1, fibonacci))
+>>> print(even_numbers)
+[0, 2, 8, 34]
+>>> 
+</pre>
+<br>
+<h3>Reducing a List</h3>
+As we mentioned in the introduction of this chapter of our tutorial. reduce() had been dropped from the
+core of Python when migrating to Python 3. Guido van Rossum hates reduce(), as we can learn from
+his statement in a posting, March 10, 2005, in artima.com: 
+<blockquote>
+<i>"So now reduce(). This is actually the one I've always hated most, because, apart from a few examples 
+involving + or *, almost every time I see a reduce() call with a non-trivial function argument, I 
+need to grab pen and paper to diagram what's actually being fed into that function before I 
+understand what the reduce() is supposed to do. So in my mind, the applicability of reduce() is 
+pretty much limited to associative operators, and in all other cases it's better to write out the 
+accumulation loop explicitly."</i>
+</blockquote>
+
+
+The function 
+<br><br>
+<code>reduce(func, seq)</code> 
+<br><br>
+continually applies the function func() to the sequence seq. It returns a
+single value. 
+<br><br>
+If seq = [ s<sub>1</sub>, s<sub>2</sub>, s<sub>3</sub>, ... , s<sub>n</sub> ], calling 
+reduce(func, seq) works like this:<br>
+<ul>
+<li>At first the first two elements of seq will be applied to func, i.e. func(s<sub>1</sub>,s<sub>2</sub>)
+The list on which reduce() works looks now like this:
+[ func(s<sub>1</sub>, s<sub>2</sub>), s<sub>3</sub>, ... , s<sub>n</sub> ]
+</li>
+<li>In the next step func will be applied on the previous result and the third element of the list,
+i.e. func(func(s<sub>1</sub>, s<sub>2</sub>),s<sub>3</sub>)<br>
+The list looks like this now:
+[ func(func(s<sub>1</sub>, s<sub>2</sub>),s<sub>3</sub>), ... , s<sub>n</sub> ]
+</li>
+<li>Continue like this until just one element is left and return this element as the result of reduce()</li>
+</ul>
+<br>
+If n is equal to 4 the previous explanation can be illustrated like this:
+<img class="img" src="images/reduce.png"  alt="Reduce" />
+<br><br>
+We want to illustrate this way of working of reduce() with a simple example. We have to import functools
+to be capable of using reduce:
+<pre>
+>>> import functools
+>>> functools.reduce(lambda x,y: x+y, [47,11,42,13])
+113
+>>> 
+</pre>
+<br>
+The following diagram shows the intermediate steps of the calculation:
+<br><br>
+<img class="img" src="images/reduce_diagram.png" 
+alt="Reduce: Method of operating" />
+<br><br>
+<h3>Examples of reduce()</h3>
+Determining the maximum of a list of numerical values by using reduce:
+<pre>
+>>> from functools import reduce
+>>> f = lambda a,b: a if (a > b) else b
+>>> reduce(f, [47,11,42,102,13])
+102
+>>> 
+</pre>
+Calculating the sum of the numbers from 1 to 100:
+<pre>
+>>> from functools import reduce
+>>> reduce(lambda x, y: x+y, range(1,101))
+5050
+</pre>
+<br>
+It's very simple to change the previous example to calculate the product (the factorial) from
+1 to a number, but do not choose 100. We just have to turn the "+" operator into "*":
+<pre>
+>>> reduce(lambda x, y: x*y, range(1,49))
+12413915592536072670862289047373375038521486354677760000000000
+</pre> 
+If you are into lottery, here are the chances to win a 6 out of 49 drawing:
+<pre>
+>>> reduce(lambda x, y: x*y, range(44,50))/reduce(lambda x, y: x*y, range(1,7))
+13983816.0
+>>> 
+</pre>
+
+<h3>Exercises</h3>
+<ol>
+<li>
+Imagine an accounting routine used in a book shop. It works on a list with sublists, which look like this:
+<center>
+<table width="80%">
+<tr>
+<th align="left">Order NUmber</th>
+<th align="left">Book Title and Author</th>
+<th align="right">Quantity</th>
+<th align="right">Price per Item</th>
+</tr>
+<tr>
+<td align="left">34587</td>
+<td align="left">Learning Python, Mark Lutz</td>
+<td align="right">4</td>
+<td align="right">40.95</td>
+</tr>
+<tr>
+<td align="left">98762</td>
+<td align="left">Programming Python, Mark Lutz"</td>
+<td align="right">5</td>
+<td align="right">56.80</td>
+</tr>
+<tr>
+<td align="left">77226</td>
+<td align="left">Head First Python, Paul Barry</td>
+<td align="right">3</td>
+<td align="right">32.95</td>
+</tr>
+</table>
+</center>
+
+Write a Python program, which returns a list with 2-tuples. 
+Each tuple consists of a the order number and the product of the price pere items and the quantity. 
+The product should be increased by 10,- &euro; if the value of the order is less than 100,00 &euro;.
+<br>
+Write a Python program using lambda and map.
+</li>
+
+<li>
+The same bookshop, but this time we work on a different list. The sublists of our lists look like this:
+<br>
+[ordernumber, (article number, quantity, price per unit), ... (article number, quantity, price per unit) ]
+<br>
+Write a program which returns a list of two tuples with (order number, total amount of order). 
+
+</li>
+
+</ol>
+
+<h3>Solutions to the Exercises</h3>
+<ol>
+<li>
+<pre>
+orders = [ ["34587","Learning Python, Mark Lutz", 4, 40.95], 
+	   ["98762","Programming Python, Mark Lutz", 5, 56.80], 
+           ["77226","Head First Python, Paul Barry",3,32.95]]
+
+min_order = 100
+invoice_totals = list(map(lambda x: x if x[1] >= min_order else (x[0], x[1] + 10) , 
+			  map(lambda x: (x[0],x[2] * x[3]), orders)))
+
+print(invoice_totals)
+</pre>
+</li>
+<li>
+<pre>
+from functools import reduce
+
+orders = [ ["34587",("5464", 4, 9.99), ("8274",18,12.99), ("9744", 9, 44.95)], 
+	   ["34588",("5464", 9, 9.99), ("9744", 9, 44.95)],
+	   ["34588",("5464", 9, 9.99)],
+           ["34587",("8732", 7, 11.99), ("7733",11,18.99), ("9710", 5, 39.95)] ]
+
+min_order = 100
+invoice_totals = list(map(lambda x: [x[0]] + list(map(lambda y: y[1]*y[2], x[1:])), orders))
+invoice_totals = list(map(lambda x: [x[0]] + [reduce(lambda a,b: a + b, x[1:])], invoice_totals))
+invoice_totals = list(map(lambda x: x if x[1] >= min_order else (x[0], x[1] + 10), invoice_totals))
+
+print (invoice_totals)
+
+</pre>
+</li>
+</ol>
+
+
+
+
+
+</p>
+<br><br>
+
+
+<div id="contextlinks">Previous Chapter: <a href="python3_re_advanced.html">Regular Expressions, Advanced</a><br>
+<LINK rel="prev" href="python3_re_advanced.html">Next Chapter: <a href="python3_list_comprehension.html">List Comprehension</a><br>
+<LINK rel="next" href="python3_list_comprehension.html"></div><br><br><br>
+
+</div>
+<div id="footer">  &copy; 2011 - 2014 <a href="http://www.bklein.de/">Bernd Klein</a>,
+Bodenseo; 
+Design by Denise Mitchinson adapted for python-course.eu by Bernd Klein</div>
+</div>
+</body>
+
+<!-- Mirrored from www.python-course.eu/python3_lambda.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:09:16 GMT -->
+</html>

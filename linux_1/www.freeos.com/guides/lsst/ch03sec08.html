@@ -1,0 +1,45 @@
+<html>
+<!-- Mirrored from www.freeos.com/guides/lsst/ch03sec08.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 05 Jun 2015 06:04:11 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head><title>LSST v1.05r3 &gt; Chapter 3 &gt; The case Statement</title>
+
+<!--Google Top Ad BEGIN-->
+<script type="text/javascript"><!--
+google_ad_client = "pub-9961351994700795";
+google_ad_width = 728;
+google_ad_height = 90;
+google_ad_format = "728x90_as";
+google_color_border = "A8DDA0";
+google_color_bg = "EBFFED";
+google_color_link = "0000CC";
+google_color_url = "008000.html";
+google_color_text = "6F6F6F";
+//--></script>
+<script type="text/javascript"
+  src="../../../pagead2.googlesyndication.com/pagead/f.txt">
+</script>
+
+<!--Google Top Ad END-->
+
+ <table width=99% border=0 cellspacing=0 cellpadding=0 align=center><tr><td colspan=3> <div align=center><b>Linux Shell Scripting Tutorial (LSST) v1.05r3</b></div></td></tr><tr><td width=8%> <div align=left><a href=ch03sec07.html>Prev</a></div></td><td width=86%> <div align=center>Chapter 3: Shells (bash) structured Language Constructs</div></td><td width=6%> <div align=right><a href=ch03sec09.html>Next</a></div></td></tr><tr><td colspan=3> <hr align=center></td></tr> </table><h1>The case Statement</h1> The case statement is good alternative to Multilevel if-then-else-fi statement. It enable you to match several values against one variable. Its easier to read and write.<br> <i>Syntax:<br><pre>
+           case  $variable-name  in
+                pattern1)   command
+                                ...
+                                ..
+                                command;;
+                pattern2)   command
+                                ...
+                                ..
+                                command;;
+                patternN)   command
+                                ...
+                                ..
+                                command;;
+                *)             command
+                                ...
+                                ..
+                                command;;
+           esac
+</pre> </i><p>The<i> $variable-name</i> is compared against the patterns until a match is found. The shell then executes all the statements up to the two semicolons that are next to each other. The default is *) and its executed if no match is found. For e.g. write script as follows:</p> <table width=100% border=0 cellspacing=1 cellpadding=1 bgcolor=#CCCCCC><tr><td><code>$ cat &gt; car<br> #<br> # if no vehicle name is given<br> # i.e. -z $1 is defined and it is NULL<br> #<br> # if no command line arg</code><p><code>if [ -z $1 ]<br> then<br> &nbsp;&nbsp;rental=&quot;*** Unknown vehicle ***&quot;<br> elif [ -n $1 ]<br> then<br> # otherwise make first arg as rental<br> &nbsp;&nbsp;rental=$1<br> fi</code></p><p><code>case $rental in<br> &nbsp;&nbsp;&nbsp;&quot;car&quot;) echo &quot;For $rental Rs.20 per k/m&quot;;;<br> &nbsp;&nbsp;&nbsp;&quot;van&quot;) echo &quot;For $rental Rs.10 per k/m&quot;;;<br> &nbsp;&nbsp;&nbsp;&quot;jeep&quot;) echo &quot;For $rental Rs.5 per k/m&quot;;;<br> &nbsp;&nbsp;&nbsp;&quot;bicycle&quot;) echo &quot;For $rental 20 paisa per k/m&quot;;;<br> &nbsp;&nbsp;&nbsp;*) echo &quot;Sorry, I can not gat a $rental for you&quot;;;<br> esac</code></p></td></tr> </table><p>Save it by pressing CTRL+D<i> </i>and run it as follows:<i><br> </i><b>$ chmod +x car<br> $ car van<br> $ car car<br> $ car Maruti-800</b></p><p>First script will check, that if $1(first command line argument) is given or not, if NOT given set value of rental variable to &quot;*** Unknown vehicle ***&quot;,if command line arg is supplied/given set value of rental variable to given value (command line arg). The $rental is compared against the patterns until a match is found.<br> For first test run its match with van and it will show output &quot;<i>For van Rs.10 per k/m.</i>&quot;<br> For second test run it print, &quot;<i>For car Rs.20 per k/m</i>&quot;.<br> And for last run, there is no match for Maruti-800, hence default i.e. *) is executed and it prints, &quot;<i>Sorry, I can not gat a Maruti-800 for you</i>&quot;.<br> <b> Note</b> that esac is always required to indicate end of case statement.</p><p>See the one more <a href=ch04sec14.html#onemorexampleofcase>example of case</a> statement in chapter 4 of section shift command.</p> <table width=99% border=0 cellspacing=0 cellpadding=0 align=center><tr><td height=20 colspan=3> <hr></td></tr><tr><td width=42%> <div align=left><a href=ch03sec07.html>Prev</a></div></td><td width=17%> <div align=center><a href=index-2.html>Home</a></div></td><td width=41%> <div align=right><a href=ch03sec09.html>Next</a></div></td></tr><tr><td width=42%>while loop</td><td width=17%> <div align=center><a href=ch03.html>Up</a></div></td><td width=41%> <div align=right>How to de-bug the shell script?</div></td></tr> </table></body>
+<!-- Mirrored from www.freeos.com/guides/lsst/ch03sec08.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 05 Jun 2015 06:04:11 GMT -->
+</html>

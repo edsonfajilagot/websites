@@ -1,0 +1,130 @@
+<html>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch16s03.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:34 GMT -->
+<head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>16.3. Writing in files</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><meta name="keywords" content="python, biology, bioinformatics, programming, computational biology"><link rel="home" href="index-2.html" title="Introduction to Programming using Python"><link rel="up" href="ch16.html" title="Chapter 16. Files"><link rel="previous" href="ch16s02.html" title="16.2. Reading data from files"><link rel="next" href="ch16s04.html" title="16.4. Design problems"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">16.3. Writing in files</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch16s02.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><th width="60%" align="center">Chapter 16. Files</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch16s04.html"><img src="images/next.png" alt="Next"></a></td></tr></table><hr></div><div class="section"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="d0e6540"></a>16.3. Writing in files</h2></div></div><p>
+      Let us continue our restriction site example. Because we have got
+      the enzyme pattern from the ReBase
+      database, we can now process our sequence with all these
+      patterns using the <tt>findpos</tt> function (<a href="ch11s03.html#exa_restrict" title="Example 11.2. First example of a while loop">Example 11.2</a>). There
+      is only one restriction: at the moment the
+      <tt>findpos</tt> function can only find
+      <span class="emphasis"><em>exact</em></span> restriction patterns, so we have to
+      exclude all patterns containing ambiguous bases.
+    </p><div class="procedure"><p>INPUT: a dictionary <span class="emphasis"><em>enz_dict</em></span>
+      containing all restriction site patterns accessible by
+	enzyme name, a sequence <span class="emphasis"><em>seq</em></span> to search for</p><p>OUTPUT: list of start position of every occurrence for each
+      pattern in the dictionary.
+      </p><ul><li><span class="bold"><b>for each</b></span>
+	key <span class="emphasis"><em>enzname</em></span> in
+	<span class="emphasis"><em>enz_dict</em></span>:
+	<ol type="a"><li><span class="emphasis"><em>pat</em></span> &lt;- pattern of
+	    <span class="emphasis"><em>enzname</em></span> in <span class="emphasis"><em>enz_dict</em></span></li><li><span class="bold"><b>if </b></span><span class="emphasis"><em>pat</em></span> is an  <span class="bold"><b>exact</b></span> pattern
+	    <ol type="i"><li><span class="emphasis"><em>occs</em></span> &lt;- <span class="bold"><b>findpos</b></span>(<span class="emphasis"><em>seq</em></span>,<span class="emphasis"><em>pat</em></span>) 
+	      </li><li>print all <span class="emphasis"><em>occs</em></span></li></ol></li></ol></li></ul></div><p>
+      The <tt>print_matches</tt> in the following listing of
+      functions prints the
+      results of the analysis on the screen.
+    </p><pre class="programlisting">seq = ""
+
+def isexact(pat):
+    for c in pat.upper():
+        if c not in 'ATGC':
+            return 0
+    return 1
+
+def findpos(seq, pat):
+    matches = []
+    current_match = seq.find(pat)
+    while current_match != -1:
+        matches.append(current_match)
+        current_match =seq.find(pat, current_match+1)
+    return matches
+
+
+def print_matches(enz, matches):
+    if matches:
+        print "Enzyme %s matches at:" % enz,
+        for m in matches:
+            print m,
+        print
+    else:
+        print "No match found for enzyme %s." % enz
+        
+for enzname in enz_dict.keys():
+    pat = enz_dict[enzname]
+    if isexact(pat):
+        print_matches(enzname, findpos(seq, pat))
+
+
+</pre><p>
+      In order to store the    
+      results permanently,  we will see now how we can write the
+      information in a file. As for reading, we have to open a file
+      although now in a writing mode, write our results in the file and
+      then close it.
+    </p><pre class="programlisting">def print_matches(enz, matches):
+    ofh = open("rebase.res", "w")
+    if matches:
+        print &gt;&gt;ofh, "Enzyme %s matches at:" % enz,
+        for m in matches:
+            print &gt;&gt;ofh, m,
+        print &gt;&gt;ofh
+    else:
+        print &gt;&gt;ofh, "No match found for enzyme %s." % enz
+    ofh.close()
+</pre><p>
+      The problem with this
+      <tt>print_matches</tt> function is that it prints only the
+      result of <span class="emphasis"><em>last</em></span> enzyme. Because if we close the
+      file after writing the information, the next time we will open
+      the file for writing the next result, we will overwrite the old
+      result. We have two possibilities to solve this. First, we can
+      open the file to <span class="emphasis"><em>append</em></span> at the end of the
+      file. Or second, we can open the file for writing in the main
+      stream of the program and then pass the file object as argument
+      to <tt>print_matches</tt>, and close the file only
+      when all results have been written. We prefer the second solution. 
+    </p><pre class="programlisting">
+seq = ""
+
+def isexact(pat):
+    for c in pat.upper():
+        if c not in 'ATGC':
+            return 0
+    return 1
+
+def findpos(seq, pat):
+    matches = []
+    current_match = seq.find(pat)
+    while current_match != -1:
+        matches.append(current_match)
+        current_match =seq.find(pat, current_match+1)
+    return matches
+				
+def print_matches(ofh, enz, matches):
+    if matches:
+        print &gt;&gt;ofh, "Enzyme %s matches at:" % enz,
+        for m in matches:
+            print &gt;&gt;ofh, m,
+        print &gt;&gt;ofh
+    else:
+        print &gt;&gt;ofh, "No match found for enzyme %s." % enz
+
+ofh = open("rebase.res", "w")       
+for enzname in enz_dict.keys():
+    pat = enz_dict[enzname]
+    if isexact(pat):
+        print_matches(ofh, enzname, findpos(seq, pat))
+ofh.close()
+
+</pre><p>
+      Although it is possible to use the <tt>write</tt>
+      or <tt>writelines</tt> methods of the file object,
+      we have shown in the above example how to pass a file object to
+      the <tt>print</tt> statement. Which syntax you will
+      use in your own code,  is a question of taste. But 
+      the code could be difficult to read if you mix them.
+    </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch16s02.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch16.html"><img src="images/up.png" alt="Up"></a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch16s04.html"><img src="images/next.png" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">16.2. Reading data from files&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index-2.html"><img src="images/home.png" alt="Home"></a></td><td width="40%" align="right" valign="top">&nbsp;16.4. Design problems</td></tr></table></div></body>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch16s03.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:34 GMT -->
+</html>

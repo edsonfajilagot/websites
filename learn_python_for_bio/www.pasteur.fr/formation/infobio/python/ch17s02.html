@@ -1,0 +1,189 @@
+<html>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch17s02.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:34 GMT -->
+<head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>17.2. Running Programs</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><meta name="keywords" content="python, biology, bioinformatics, programming, computational biology"><link rel="home" href="index-2.html" title="Introduction to Programming using Python"><link rel="up" href="ch17.html" title="Chapter 17. Scripting"><link rel="previous" href="ch17.html" title="Chapter 17. Scripting"><link rel="next" href="ch17s03.html" title="17.3. Parsing command line options with&#xA;      getopt"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">17.2. Running Programs</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch17.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><th width="60%" align="center">Chapter 17. Scripting</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch17s03.html"><img src="images/next.png" alt="Next"></a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="d0e6911"></a>17.2. Running Programs</h2></div></div><p>
+      You can run external programs from a Python program. There are
+      three major tasks to perform in order to run programs from a script:
+      </p><div class="itemizedlist"><ul type="disc"><li>
+      Building the command line.
+      </li><li>
+      Testing for success and checking for potential errors.
+      </li><li>
+      Getting results.
+      </li></ul></div><p>
+      
+      </p><div class="example"><a name="exa_run_1"></a><p class="title"><b>Example 17.2. Running a program (1)</b></p>
+	    The simplest way to run a program is by using the
+	    <tt>system</tt> of the
+	    <tt>os</tt> module. The result of the
+	    program will be printed on the standard output, which is
+	    normally the screen. The return value reports about the
+	    success or failure of the execution.
+	    <pre class="programlisting">
+import os
+cmd="golden swissprot:malk_ecoli"
+status = os.system(cmd)
+print "Status: ", status
+	    </pre>
+	  Another Python module, <tt>commands</tt>,
+	  enables to store the result of the execution in a string:
+	    <pre class="programlisting">
+import commands
+cmd="golden swissprot:malk_ecoli"
+output = commands.getoutput(cmd)
+print "Output: ", output
+	    </pre>
+	To get both result and status:
+	    <pre class="programlisting">
+import commands
+cmd="golden swissprot:malk_ecoli"
+status, output = commands.getstatusoutput(cmd)
+print "Output: ", output
+print "Status: ", status
+	    </pre></div><p>
+
+      </p><div class="example"><a name="exa_run_2"></a><p class="title"><b>Example 17.3. Running a program (2)</b></p>
+	  A more elaborate but lower level interface to run commands is
+	  provided by the 
+	  <tt>popen</tt> function from the
+	  <tt>os</tt> module. 
+	    The following script runs a program that fetches a
+	    Swissprot entry given its entry name, and prints it on the
+	    screen. 
+	    <div class="programlistingco"><pre class="programlisting">
+import os
+import string
+cmd="golden swissprot:malk_ecoli"                                         <span class="co"><img src="images/callouts/1.png" alt="(1)"></span>
+handle = os.popen(cmd, 'r')                                               <span class="co"><img src="images/callouts/2.png" alt="(2)"></span>
+print string.join(handle.readlines())                                     <span class="co"><img src="images/callouts/3.png" alt="(3)"></span>
+handle.close()
+	    </pre><div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><img src="images/callouts/1.png" alt="1" border="0"></td><td valign="top" align="left"><p>
+		  Builds the command line with a program name and the
+		  arguments. 
+		  </p></td></tr><tr><td width="5%" valign="top" align="left"><img src="images/callouts/2.png" alt="2" border="0"></td><td valign="top" align="left"><p>
+		  Runs the command and stores a handle in the
+		  <tt>handle</tt> variable. A handle for a
+		  command is the same kind of objects as a file
+		  handle: you open it (with the
+		  <tt>popen</tt> command, read from it,
+		  and close it.
+		  </p></td></tr><tr><td width="5%" valign="top" align="left"><img src="images/callouts/3.png" alt="3" border="0"></td><td valign="top" align="left"><p>
+		  Reads all the lines from the handle, and prints the
+		  joint result.
+		  </p></td></tr></table></div></div>
+
+	  If the program takes time and if you wish to read the result
+	    step by step as long as results show up, you can do like
+	    this:
+	    <pre class="programlisting">
+import os
+import sys
+
+cmd="blastall -i " + sys.argv[1] + " -p blastp -d swissprot"
+handle = os.popen(cmd, 'r', 1)
+for line in handle:
+    print line,
+handle.close()
+	    </pre>
+
+	    What if the entry name does not have a corresponding entry
+	    in the database? Let us try the following code:
+	    <div class="programlistingco"><pre class="programlisting">
+import os
+import sys
+import string
+cmd="golden swissprot:" + sys.argv[1]                                     <span class="co"><img src="images/callouts/1.png" alt="(1)"></span>
+handle = os.popen(cmd, 'r')
+print string.join(handle.readlines())
+status = handle.close()
+if status is not None:
+    print "An error occured: ", status                                    <span class="co"><img src="images/callouts/2.png" alt="(2)"></span>
+	    </pre><div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><img src="images/callouts/1.png" alt="1" border="0"></td><td valign="top" align="left"><p>
+		  Takes the entry name from the Python command line
+		  arguments, by using the <tt>sys</tt>
+		  module <tt>argv</tt> variable.
+		  </p></td></tr><tr><td width="5%" valign="top" align="left"><img src="images/callouts/2.png" alt="2" border="0"></td><td valign="top" align="left"><p>
+		  If the provided entry name is invalid, the program
+		  returns a non zero value, that is returned by the
+		  <tt>close</tt> function.
+		  </p></td></tr></table></div></div>
+	If you wish to get the complete error message from the
+	program, use the <tt>popen3</tt> function:
+	    <pre class="programlisting">
+import os
+import sys
+cmd="golden swissprot:" + sys.argv[1]
+tochild, fromchild, childerror = os.popen3(cmd, 'r')
+err = childerror.readlines()
+if len(err) &gt; 0:
+     print err
+else:
+     print fromchild.readlines()
+	    </pre>
+	In this script, the call returns three objects: one to get
+	results: <tt>fromchild</tt> (<span class="emphasis"><em>standard
+	output</em></span>), one to write to the 
+	program - on its <span class="emphasis"><em>standard input</em></span> - (for
+	instance when the program is prompting for a 
+	value (see <a href="ch17s02.html#exa_run_3" title="Example 17.4. Running a program (3)">Example 17.4</a>):
+	<tt>tochild</tt>, and one to access to the
+	<span class="emphasis"><em>standard error</em></span> file descriptor  
+	of the program.
+	  </div><p>
+
+      </p><div class="example"><a name="exa_run_3"></a><p class="title"><b>Example 17.4. Running a program (3)</b></p>
+	  The next example shows how to run an
+	  <span class="emphasis"><em>interactive</em></span> program, both reading the
+	  output and writing on the standard input to answer program's
+	  questions. The Phylip <b>dnapars</b> program,
+	  once having read the input file containing an alignment,
+	  that is always called <tt>infile</tt>, waits for
+	  the user to enter 'y' and 'Return' to proceed. The following
+	  script runs dnapars after some file cleaning.
+	    <div class="programlistingco"><pre class="programlisting">
+import popen2
+import os.path
+
+cmd = "dnapars"
+
+if os.path.exists('treefile'):                                            <span class="co"><img src="images/callouts/1.png" alt="(1)"></span>
+    os.unlink('treefile')
+if os.path.exists('outfile'):
+    os.unlink('outfile')
+
+child = popen2.Popen3(cmd)                                                <span class="co"><img src="images/callouts/2.png" alt="(2)"></span>
+print "PID: ", child.pid
+child.tochild.write("y\n")                                                <span class="co"><img src="images/callouts/3.png" alt="(3)"></span>
+child.tochild.close()
+child.wait()                                                              <span class="co"><img src="images/callouts/4.png" alt="(4)"></span>
+print "".join(child.fromchild.readlines())                                <span class="co"><img src="images/callouts/5.png" alt="(5)"></span>
+status = child.fromchild.close()
+if status is not None:
+    print "status: ", status
+	    </pre><div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><img src="images/callouts/1.png" alt="1" border="0"></td><td valign="top" align="left"><p>
+		  Removes old <b>dnapars</b> output files.  
+		  </p></td></tr><tr><td width="5%" valign="top" align="left"><img src="images/callouts/2.png" alt="2" border="0"></td><td valign="top" align="left"><p>
+		  Use of the class <tt>Popen3</tt> that
+		  stores the information about the run program. The return
+		  value: <tt>child</tt>, is an object
+		  representing the "child" processus, that
+		  has attributes to get the 
+		  channels to communicate with the processus: a
+		  handle to write to the standard input of the
+		  processus (<tt>child.tochild</tt>), and a
+		  handle to read its output
+		  (<tt>child.fromchild</tt>). See <a href="ch18.html" title="Chapter 18. Object-oriented programming">Chapter 18</a> for more informations on
+		  classes.  
+		  </p></td></tr><tr><td width="5%" valign="top" align="left"><img src="images/callouts/3.png" alt="3" border="0"></td><td valign="top" align="left"><p>
+		  Answers to program prompt.
+		  </p></td></tr><tr><td width="5%" valign="top" align="left"><img src="images/callouts/4.png" alt="4" border="0"></td><td valign="top" align="left"><p>
+		  This statements helps in cleaning the processus
+		  after completion.
+		  </p></td></tr><tr><td width="5%" valign="top" align="left"><img src="images/callouts/3.png" alt="3" border="0"></td><td valign="top" align="left"><p>
+		  Reads results.
+		  </p></td></tr></table></div></div></div><p>
+      </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch17.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch17.html"><img src="images/up.png" alt="Up"></a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch17s03.html"><img src="images/next.png" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 17. Scripting&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index-2.html"><img src="images/home.png" alt="Home"></a></td><td width="40%" align="right" valign="top">&nbsp;17.3. Parsing command line options with
+      getopt</td></tr></table></div></body>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch17s02.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:35 GMT -->
+</html>

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from zetcode.com/databases/mysqltutorial/tables/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Jul 2015 02:47:03 GMT -->
+<head>
+<title>Creating, altering and dropping tables in MySQL</title>
+<link rel="stylesheet" href="../../../cfg/format2.css" type="text/css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="MySQL, tutorial, tables, DDL, data definition language, CREATE, DROP, ALTER">
+<meta name="description" content="In this part of the MySQL tutorial, we will be
+creating, altering and dropping tables.">
+<meta name="author" content="Jan Bodnar">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div id="wide_ad" class="ltow">
+<script async src="../../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- 160x600, August 2011 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:600px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="2484182563"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<div class="content">
+
+
+<header>
+
+<nav>
+<a href="http://zetcode.com/" title="Home">Home</a>&#160;
+<a href="../index.html">Contents</a>
+</nav>
+
+</header>
+
+
+<h1>Creating, altering and dropping tables in MySQL</h1>
+
+
+<p>
+In this part of the MySQL tutorial, we will be creating, altering, 
+and dropping tables. 
+</p>
+
+<div class="med_rec">
+<script async src="../../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- NewSquare -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:250px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="0364418177"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<p>
+We will use the following SQL statements:
+</p>
+
+<ul>
+  <li>CREATE TABLE</li>
+  <li>ALTER TABLE</li>
+  <li>DROP TABLE</li>
+</ul>
+
+<p>
+The <code>CREATE</code>, <code>ALTER</code>, and <code>DROP</code> 
+statements are not limited to tables. We can use them
+to create other database objects like events, triggers, views, functions or
+procedures. These statements are part of the Data Definition Language (DDL) 
+of the SQL specification.
+</p>
+
+
+<h2 id="create">CREATE and DROP statements</h2>
+
+
+<p>
+The <code>CREATE</code> statement is used to create tables. It is also 
+used to create indexes, views, events, routines, and triggers.
+</p>
+
+<p>
+To create a table, we give a name to a table and to its columns. Each column 
+has a data type. We have covered various MySQL data types in the previous 
+chapter. Choosing the correct datatype for the columns is part of the initial 
+design of the database. 
+</p>
+
+<pre class="code">
+mysql> CREATE TABLE Testing(Id INTEGER);
+</pre>
+
+<p>
+We create a simple Testing table with the <code>CREATE TABLE</code> statement. 
+The table name is Testing. The table has one column called <code>Id</code>. 
+And column's datatype is <code>INTEGER</code>.
+</p>
+
+<pre class="code">
+mysql> SHOW CREATE TABLE Testing;
++---------+------------------------------------------
+| Table   | Create Table                                                                                
++---------+------------------------------------------
+| Testing | CREATE TABLE `Testing` (
+  `Id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 |
++---------+------------------------------------------
+1 row in set (0.00 sec)
+</pre>
+
+<p>
+Using the <code>SHOW CREATE TABLE</code> statement, we can see the exact SQL statement
+to create a specific table. There are also some defaults. These are chosen if
+we do not provide some explicit attributes. The default MySQL engine is InnoDB if
+not specified otherwise. (This applies to MySQL 5.5+). The default charset it latin1.
+</p>
+
+<pre class="code">
+mysql> SHOW TABLES LIKE 'T%';
++---------------------+
+| Tables_in_mydb (T%) |
++---------------------+
+| Testing             |
++---------------------+
+</pre>
+
+<p>
+Created, non-temporary tables can be shown using the <code>SHOW TABLES</code>
+syntax. We can restrict the tables shown using the <code>LIKE</code> clause.
+In our case, we show all tables that begin with T.
+</p>
+
+<pre class="code">
+mysql> DROP TABLE Testing;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SHOW TABLES LIKE 'T%';
+Empty set (0.00 sec)
+</pre>
+
+<p>
+The <code>DROP TABLE</code> statement drops a table from the database. 
+</p>
+
+<pre class="code">
+mysql> CREATE TABLE Testing(Id INT NOT NULL) ENGINE=MEMORY CHARACTER SET='utf8'
+    -> COLLATE='utf8_slovak_ci';
+</pre>
+
+<p>
+We recreate the <code>Testing</code> table. The <code>INT</code> is a synonym 
+for <code>INTEGER</code>. The database engine is explicitly set to <code>MEMORY</code>. 
+We also specify the character set and collation. 
+</p>
+
+
+<h2 id="alter">ALTER TABLE statement</h2>
+
+<p>
+The <code>ALTER TABLE</code> statement changes the structure of an 
+existing table. It is possible to add a new column, delete a column, 
+rename column and table or change the type of the table. In the following 
+examples, we will demonstrate some of the possibilities.
+</p>
+
+<pre class="code">
+mysql> ALTER TABLE Testing RENAME TO TestTable;
+
+mysql> SHOW TABLES LIKE 'T%';
++---------------------+
+| Tables_in_mydb (T%) |
++---------------------+
+| TestTable           |
++---------------------+
+</pre>
+
+<p>
+We use the <code>RENAME TO</code> clause to rename the 
+Testing table to TestTable.
+</p>
+
+<pre class="code">
+mysql> ALTER TABLE TestTable ADD iValues INT;
+</pre>
+
+<p>
+We add a new column named iValues to the table. 
+</p>
+
+<pre class="code">
+mysql> SHOW COLUMNS FROM TestTable;
++---------+---------+------+-----+---------+-------+
+| Field   | Type    | Null | Key | Default | Extra |
++---------+---------+------+-----+---------+-------+
+| Id      | int(11) | NO   |     | NULL    |       |
+| iValues | int(11) | YES  |     | NULL    |       |
++---------+---------+------+-----+---------+-------+
+</pre>
+
+<p>
+The statement shows available columns in the table. We see the newly 
+added column. 
+</p>
+
+<p>
+It is possible to add constraints to the table.
+</p>
+
+<pre class="code">
+mysql> ALTER TABLE TestTable ADD PRIMARY KEY (Id);
+</pre>
+
+<p>
+We add a <code>PRIMARY KEY</code> constraint to the <code>TestTable</code>.
+</p>
+
+<pre class="code">
+mysql> DESCRIBE TestTable;
++---------+---------+------+-----+---------+-------+
+| Field   | Type    | Null | Key | Default | Extra |
++---------+---------+------+-----+---------+-------+
+| Id      | int(11) | NO   | PRI | NULL    |       |
+| iValues | int(11) | YES  |     | NULL    |       |
++---------+---------+------+-----+---------+-------+
+</pre>
+
+<p>
+The <code>DESCRIBE</code> is a synonym for <code>SHOW COLUMNS FROM</code>.
+We can see under the Key column that the primary key constraint is set 
+for the Id column. 
+</p>
+
+<pre class="code">
+mysql> ALTER TABLE TestTable CHANGE COLUMN iValues iValues1 INT;
+</pre>
+
+<p>
+In this SQL statement we change the column name from 
+<code>iValues</code> to <code>iValues1</code>.
+</p>
+
+<pre class="code">
+mysql> ALTER TABLE TestTable MODIFY COLUMN iValues1 MEDIUMINT;
+
+mysql> DESCRIBE TestTable;
++----------+--------------+------+-----+---------+-------+
+| Field    | Type         | Null | Key | Default | Extra |
++----------+--------------+------+-----+---------+-------+
+| Id       | int(11)      | NO   | PRI | NULL    |       |
+| iValues1 | mediumint(9) | YES  |     | NULL    |       |
++----------+--------------+------+-----+---------+-------+
+</pre>
+
+<p>
+We use the above SQL statement to modify the column definition. 
+We change the column datatype from <code>INTEGER</code> to 
+<code>MEDIUMINTEGER</code>.
+</p>
+
+<pre class="code">
+mysql> ALTER TABLE TestTable DROP COLUMN iValues1;
+
+mysql> DESCRIBE TestTable;
++-------+---------+------+-----+---------+-------+
+| Field | Type    | Null | Key | Default | Extra |
++-------+---------+------+-----+---------+-------+
+| Id    | int(11) | NO   | PRI | NULL    |       |
++-------+---------+------+-----+---------+-------+
+</pre>
+
+<p>
+In our last example, we drop an existing column from 
+the table. 
+</p>
+
+<p>
+In this part of the MySQL tutorial, we were creating, altering and dropping
+tables. 
+</p>
+
+<footer>
+
+<nav class="center">
+<span class="botNavItem"><a href="http://zetcode.com/">Home</a></span> ‡ <span class="botNavItem"><a href="../index.html">Contents</a></span> ‡
+<span class="botNavItem"><a href="#">Top of Page</a></span>
+</nav>
+
+<div class="signature">
+<a href="http://zetcode.com/">ZetCode</a> last modified February 1, 2011  <span class="copyright">&copy; 2007 - 2015 Jan Bodnar</span>
+</div>
+
+</footer>
+
+</div> <!-- content -->
+
+</div> <!-- container -->
+
+</body>
+
+<!-- Mirrored from zetcode.com/databases/mysqltutorial/tables/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Jul 2015 02:47:03 GMT -->
+</html>

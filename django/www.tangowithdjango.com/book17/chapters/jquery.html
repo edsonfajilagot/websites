@@ -1,0 +1,285 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+<!-- Mirrored from www.tangowithdjango.com/book17/chapters/jquery.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 10 Jan 2016 04:11:36 GMT -->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>18. JQuery and Django &mdash; How to Tango with Django 1.7</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/twd.ico"/>
+    <link rel="top" title="How to Tango with Django 1.7" href="../index-2.html" />
+    <link rel="next" title="19. AJAX in Django with JQuery" href="ajax.html" />
+    <link rel="prev" title="17. Making Rango Tango! Code and Hints" href="tango_too.html" />
+ <style type="text/css">
+	img{
+	    width: 85%; /* you can use % */
+	    height: auto;
+	}
+	
+	table {
+		margin: auto;
+	}
+	
+	p.caption {
+		font-size: 10pt;
+		font-style: italic;
+	}
+ </style>
+ <script type="text/javascript">
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','../../../www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-44397330-1', 'tangowithdjango.com');
+  ga('send', 'pageview');
+     
+
+  </script>      
+
+  </head>
+  <body role="document">
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        
+        <li class="right" >
+          <a href="ajax.html" title="19. AJAX in Django with JQuery"
+             accesskey="N">next</a>
+          </li>
+		
+        <li class="right" >
+          <a href="tango_too.html" title="17. Making Rango Tango! Code and Hints"
+             accesskey="P">previous</a>
+          </li>
+		
+        <li><a href="../index-2.html">How to Tango with Django 1.7</a> &raquo;</li> 
+
+      </ul>
+
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index-2.html">
+              <img class="logo" src="../_static/twd200x200.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index-2.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">18. JQuery and Django</a><ul>
+<li><a class="reference internal" href="#including-jquery-in-your-django-project-application">18.1. Including JQuery in your Django Project/Application</a><ul>
+<li><a class="reference internal" href="#stylistic-note">18.1.1. Stylistic Note</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#example-popup-box-on-click">18.2. Example Popup Box on Click</a></li>
+<li><a class="reference internal" href="#selectors">18.3. Selectors</a></li>
+<li><a class="reference internal" href="#dom-manipulation-example">18.4. DOM Manipulation Example</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="tango_too.html"
+                        title="previous chapter">17. Making Rango Tango! Code and Hints</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ajax.html"
+                        title="next chapter">19. AJAX in Django with JQuery</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/chapters/jquery.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="http://www.tangowithdjango.com/book17/search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="jquery-and-django">
+<span id="jquery"></span><h1>18. JQuery and Django<a class="headerlink" href="#jquery-and-django" title="Permalink to this headline">¶</a></h1>
+<p>JQuery rocks! JQuery is a library written in Javascript that seriously pimps its power and utility. A few lines of JQuery often encapsulates hundreds of lines of javascript. JQuery provides a suite of functionality that is mainly focused on manipulating HTML elements. In this chapter, we will describe:</p>
+<ul class="simple">
+<li>how to incorporate JQuery within your Django Application</li>
+<li>explain how to interpret JQuery code</li>
+<li>and provide a number of small examples</li>
+</ul>
+<div class="section" id="including-jquery-in-your-django-project-application">
+<h2>18.1. Including JQuery in your Django Project/Application<a class="headerlink" href="#including-jquery-in-your-django-project-application" title="Permalink to this headline">¶</a></h2>
+<p>In your <em>base</em> template include a reference to:</p>
+<div class="highlight-html"><div class="highlight"><pre>{% load staticfiles %}
+
+&lt;script src=&quot;{% static &quot;js/jquery-1.11.1.js&quot; %}&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;{% static &quot;js/rango-jquery.js&quot; %}&quot;&gt;&lt;/script&gt;
+</pre></div>
+</div>
+<p>Here we assume you have downloaded a version of the JQuery library, but you can also just directly refer to it:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</pre></div>
+</div>
+<p>Make sure you have your static files set up (see Chapter <a class="reference internal" href="setup.html#setup-label">4</a>)</p>
+<p>In the static folder create a <em>js</em> folder and plonk the JQuery javascript file (<code class="docutils literal"><span class="pre">jquery.js</span></code>) here along with an file called <code class="docutils literal"><span class="pre">rango-jquery.js</span></code>, which will house our javascript code. In <code class="docutils literal"><span class="pre">rango-jquery.js</span></code>, add the following javascript:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+        <span class="c1">// JQuery code to be added in here.</span>
+
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>This piece of JQuery, first selects the document object (with <code class="docutils literal"><span class="pre">$(document)</span></code>), and then makes a call to <code class="docutils literal"><span class="pre">ready()</span></code>. Once the document is ready i.e. the complete page is loaded, then the anonymous function denoted by <code class="docutils literal"><span class="pre">function(){</span> <span class="pre">}</span></code> will be executed. It is pretty typical, if not standard, to wait until the document has been finished loading before running the JQuery functions. Otherwise, the code my try to run, but the HTML elements may not have been downloaded (see <a class="reference external" href="http://api.jquery.com/ready/">http://api.jquery.com/ready/</a>).</p>
+<div class="section" id="stylistic-note">
+<h3>18.1.1. Stylistic Note<a class="headerlink" href="#stylistic-note" title="Permalink to this headline">¶</a></h3>
+<p>JQuery requires you to think in a more <code class="docutils literal"><span class="pre">functional</span></code> programming style, as opposed to the typical Javascript style which is often written in a more <code class="docutils literal"><span class="pre">procedural</span></code> programming style. For all the JQuery commands they follow a similar pattern: Select and Act. Select an element, and then act on the element. So it is good to keep this in mind. There are different selection operators, and various actions that can then be performed/applied. In the next, subsections we will take a few JQuery functions that you can use to manipulate the HTML elements.</p>
+</div>
+</div>
+<div class="section" id="example-popup-box-on-click">
+<h2>18.2. Example Popup Box on Click<a class="headerlink" href="#example-popup-box-on-click" title="Permalink to this headline">¶</a></h2>
+<p>In this example, we want to show you the difference between doing the same functionality in standard Javascript versus JQuery.</p>
+<p>In your <code class="docutils literal"><span class="pre">about.html</span></code> template, add the following piece of code:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;button</span> <span class="na">onClick=</span><span class="s">&quot;alert(&#39;You clicked the button using Javascript.&#39;);&quot;</span><span class="nt">&gt;</span>
+       Click Me - I run Javascript
+<span class="nt">&lt;/button&gt;</span>
+</pre></div>
+</div>
+<p>As you can see, we are assigning the function <code class="docutils literal"><span class="pre">alert()</span></code> to the <code class="docutils literal"><span class="pre">onClick</span></code> handler of the button. Load up the <code class="docutils literal"><span class="pre">about</span></code> page, and try it  out.</p>
+<p>Now lets do it using JQuery, by first adding another button:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">&quot;about-btn&quot;</span><span class="nt">&gt;</span> Click Me - I&#39;m Javascript on Speed<span class="nt">&lt;/button&gt;</span>
+
+<span class="nt">&lt;p&gt;</span>This is a example<span class="nt">&lt;/p&gt;</span>
+
+<span class="nt">&lt;p&gt;</span>This is another example<span class="nt">&lt;/p&gt;</span>
+</pre></div>
+</div>
+<p>Notice that there is not javascript code associated with the button currently. We will be doing that with the following code added to <code class="docutils literal"><span class="pre">rango-jquery.js</span></code>:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+    <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#about-btn&quot;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;You clicked the button using JQuery!&quot;</span><span class="p">);</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>Reload the page, and try it out. Hopefully, you will see that both buttons pop up an alert.</p>
+<p>The JQuery/Javascript code here, first selects the document object, and when it is ready, it executes the functions within its body, i.e. <code class="docutils literal"><span class="pre">$(&quot;#about-btn&quot;).click()</span></code>, which selects the element in the page with id equal to <code class="docutils literal"><span class="pre">about-btn</span></code>, and then it programatically assigns to the on click event, the <code class="docutils literal"><span class="pre">alert()</span></code> function.</p>
+<p>At first you might think that jQuery is rather cumbersome, as it requires us to include  a lot more code to do the same thing. This may be true for a simple function like <code class="docutils literal"><span class="pre">alert()</span></code> but for more complex functions it is much cleaner, as the JQuery/Javascript code is maintained in a separate file (completely!!). This is because we assign the event handler at run-time rather than statically within the code. We achieve separation of concerns between the jquery/javascript code and the html code.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Remember when it comes to CSS, JAVASCRIPT and HTML, you gotta keep them separated!</p>
+</div>
+</div>
+<div class="section" id="selectors">
+<h2>18.3. Selectors<a class="headerlink" href="#selectors" title="Permalink to this headline">¶</a></h2>
+<p>There are different ways to select elements in JQuery. From the above example, shows how the <code class="docutils literal"><span class="pre">#</span></code> can be used to find <code class="docutils literal"><span class="pre">id</span></code> elements in your html document. To find classes, you can use <code class="docutils literal"><span class="pre">.</span></code>, so, for example, if we added the following code:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.ouch&quot;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+           <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;You clicked me! ouch!&quot;</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>Then all elements, that had a <code class="docutils literal"><span class="pre">class=&quot;ouch&quot;</span></code> would be selected, and assigned to its on click handler, the <code class="docutils literal"><span class="pre">alert()</span></code> function. Note that all the elements would be assigned the same function.</p>
+<p>Also, html tags can also be selected by referring to the tag in the selector:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;p&quot;</span><span class="p">).</span><span class="nx">hover</span><span class="p">(</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;color&#39;</span><span class="p">,</span> <span class="s1">&#39;red&#39;</span><span class="p">);</span>
+    <span class="p">},</span>
+    <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;color&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">);</span>
+    <span class="p">});</span>
+</pre></div>
+</div>
+<p>Here, we are selecting all the <code class="docutils literal"><span class="pre">p</span></code> html elements, and on hover we are associated two functions, one for on hover, and the other for hover off. You can see that we are using another selector called, <code class="docutils literal"><span class="pre">this</span></code>, which selects the element in question, and then sets it color to red or blue, respectively.
+Note, the JQuery <code class="docutils literal"><span class="pre">hover()</span></code> function takes two functions (see <a class="reference external" href="http://api.jquery.com/hover/">http://api.jquery.com/hover/</a>), the JQuery <code class="docutils literal"><span class="pre">click()</span></code> requires the event to passed through (see <a class="reference external" href="http://api.jquery.com/click/">http://api.jquery.com/click/</a>).</p>
+<p>Try adding the above code your <code class="docutils literal"><span class="pre">rango-jquery.js</span></code> file, make sure it is within the <code class="docutils literal"><span class="pre">$(document).ready()</span></code> function. What happens if you change the <code class="docutils literal"><span class="pre">$(this)</span></code> to <code class="docutils literal"><span class="pre">$(p)</span></code>?</p>
+<p>Hover, is an example of a mouse move event, for descriptions on other such events, see: <a class="reference external" href="http://api.jquery.com/category/events/mouse-events/">http://api.jquery.com/category/events/mouse-events/</a></p>
+</div>
+<div class="section" id="dom-manipulation-example">
+<h2>18.4. DOM Manipulation Example<a class="headerlink" href="#dom-manipulation-example" title="Permalink to this headline">¶</a></h2>
+<p>In the above example, we used the <code class="docutils literal"><span class="pre">hover</span></code> function to assign an event handler to the on hover event, and then used the <code class="docutils literal"><span class="pre">css</span></code> function to change the color of the element. The <code class="docutils literal"><span class="pre">css</span></code> is one example of DOM manipulation, however, the stand JQuery library provides many other ways to manipulate the DOM. For example,
+we can add classes to elements, with the <code class="docutils literal"><span class="pre">addClass</span></code> function:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#about-btn&quot;</span><span class="p">).</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;btn btn-primary&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This will select the element with id <code class="docutils literal"><span class="pre">#about-btn</span></code>, and assign the classes <code class="docutils literal"><span class="pre">btn</span></code> and <code class="docutils literal"><span class="pre">btn-primary</span></code> to it. By adding these Bootstrap classes will mean the button will now appear in the bootstrap style (assuming you are using the Bootstrap toolkit).</p>
+<p>It is also possible to access the html of a particular element. For example, lets put a <code class="docutils literal"><span class="pre">div</span></code> in the <code class="docutils literal"><span class="pre">about.html</span></code>:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;msg&quot;</span><span class="nt">&gt;</span>Hello<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+</div>
+<p>Then add the following JQuery to <code class="docutils literal"><span class="pre">rango-jquery.js</span></code>:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#about-btn&quot;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+<span class="nx">msgstr</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#msg&quot;</span><span class="p">).</span><span class="nx">html</span><span class="p">()</span>
+        <span class="nx">msgstr</span> <span class="o">=</span> <span class="nx">msgstr</span> <span class="o">+</span> <span class="s2">&quot;o&quot;</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#msg&quot;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">msgstr</span><span class="p">)</span>
+ <span class="p">});</span>
+</pre></div>
+</div>
+<p>On click of the element with id <code class="docutils literal"><span class="pre">#about-btn</span></code>, we first get the html inside the element with id <code class="docutils literal"><span class="pre">msg</span></code> and appeand &#8220;o&#8221; to it. Then we change the html inside the element by calling the <code class="docutils literal"><span class="pre">html</span></code> function again, but this time passing through string <code class="docutils literal"><span class="pre">msgstr</span></code> to replace the html inside that element.</p>
+<p>In this chapter we have provided a very rudimentry guide to using JQuery and incroporating it within your Django Application. From here you should be able to understand how JQuery operates and experiment with the different functions and libraries provided by JQuery and JQuery developers (see  <a class="reference external" href="http://jquery.com/">http://jquery.com</a>). In the next chapter we will be using the JQuery to help provide AJAX functionality within Rango.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        
+        <li class="right" >
+          <a href="ajax.html" title="19. AJAX in Django with JQuery"
+             >next</a>
+          </li>
+		
+        <li class="right" >
+          <a href="tango_too.html" title="17. Making Rango Tango! Code and Hints"
+             >previous</a>
+          </li>
+		
+        <li><a href="../index-2.html">How to Tango with Django 1.7</a> &raquo;</li> 
+
+      </ul>
+
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2013, Leif Azzopardi and David Maxwell.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+
+<!-- Mirrored from www.tangowithdjango.com/book17/chapters/jquery.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 10 Jan 2016 04:11:38 GMT -->
+</html>

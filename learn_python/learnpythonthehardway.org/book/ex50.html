@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+    
+<!-- Mirrored from learnpythonthehardway.org/book/ex50.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 03 Sep 2014 17:52:40 GMT -->
+<head>
+        <link href='stylesheets/fonts.css' rel='stylesheet' type='text/css'>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="twitter:creator" content="@lzsthw">
+        <title>Learn Python</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href='stylesheets/pure.css' rel='stylesheet'>
+        <link href='stylesheets/pygments.css' rel='stylesheet'>
+        <link href='stylesheets/main.css' rel='stylesheet'>
+        <link href='stylesheets/nav.css' rel='stylesheet'>
+        <style>
+        </style>
+ 
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.11: http://docutils.sourceforge.net/" />
+<title>Exercise 50: Your First Website</title>
+    </head>
+    <body id='wrapper'>
+        <div class='master-logo-wrapper clearfix'>
+            <a href='index-2.html'>
+                <div class='python-logo-sprite'></div>
+            </a>
+                <span class='edition-3'><img src='images/3rd-edition-cloud.png' /></span>
+        </div><!-- /.master-logo-wrapper -->
+
+        <div style='clear: both;'>
+
+        <div id="main">
+            <div class='chapters-wrapper'>
+                  <nav id='chapters'>
+                      <div class='masthead-title'></div>
+                      <ul class='masthead'>
+                          <li>
+                              <a href='index.html'>
+                                  <div class='nav-tcontents'>
+                                      <img src='images/nav-contents.png' /></br>
+                                  main
+                                  </div>
+                              </a>
+                          </li>
+                          <li>
+                              <a href='#video'>
+                                  <div class='nav-play-video' id="#video_toggle_icon">
+                                      <img src='images/nav-play.png' /><br/>
+                                      play video
+                                      <div class='line-2'>(this chapter)</div>
+                                  </div>
+                              </a>
+                          </li>
+                          <li>
+                              <a href='#' id='prev_link'>
+                                  <div class='nav-previous'>
+                                      <img src='images/nav-previous.png' /></br>
+                                      previous
+                                  </div>
+                              </a>
+                          </li>
+                          <li>
+                              <a href='#' id='next_link'>
+                                  <div class='nav-next'>
+                                      <img src='images/nav-next.png' /></br>
+                                      next
+                                  </div>
+                              </a>
+                          </li>
+                          <li><!-- AMBULANCE ICON -->
+                              <a href='help.html' id=''>
+                                  <div class='ambulance'>
+                                      <img src='images/help-ambulance.png' /></br>
+                                      help
+                                  </div>
+                              </a>
+                          </li>
+                          <li id="follow">
+                                <a href="https://twitter.com/lzsthw" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false" data-dnt="true">Follow @lzsthw</a>
+                                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                           </li>
+
+                      </ul><!-- /.masthead -->
+                      <!--<img src='images/fa-bullhorn.png' />-->
+                  </nav><!-- /.chapters -->
+            </div><!-- /.chapters-wrapper -->
+
+        <!--- RST STARTS -->
+            <h1 class="title">Exercise 50: Your First Website</h1>
+            <p>These final three exercises will be very hard and you should take your time with them.  In this first one you'll build a simple web version of one of your games.  Before you attempt this exercise you <em>must</em> have completed Exercise 46 successfully and have a working <tt class="docutils literal">pip</tt> installed such that you can install packages and know how to make a skeleton project directory.  If you don't remember how to do this, go back to Exercise 46 and do it all over again.</p>
+<div class="section" id="installing-lpthw-web">
+<h1>Installing lpthw.web</h1>
+<p>Before creating your first web application, you'll first need to install the &quot;web framework&quot; called <tt class="docutils literal">lpthw.web</tt>.  The term &quot;framework&quot; generally means &quot;some package that makes it easier for me to do something.&quot;  In the world of web applications, people create &quot;web frameworks&quot; to compensate for the difficult problems they've encountered when making their own sites.  They share these common solutions in the form of a package you can download to bootstrap your own projects.</p>
+<p>In our case, we'll be using the <tt class="docutils literal">lpthw.web</tt> framework, but there are many, many, <em>many</em> others you can choose from.  For now, learn <tt class="docutils literal">lpthw.web</tt>, then branch out to another one when you're ready (or just keep using <tt class="docutils literal">lpthw.web</tt> since it's good enough).</p>
+<p>Using <tt class="docutils literal">pip</tt>, install <tt class="docutils literal">lpthw.web</tt>:</p>
+<pre class="code console literal-block">
+<span class="generic prompt">$</span> sudo pip install lpthw.web
+<span class="generic output">[sudo] password for zedshaw:
+Downloading/unpacking lpthw.web
+  Running setup.py egg_info for package lpthw.web
+
+Installing collected packages: lpthw.web
+  Running setup.py install for lpthw.web
+
+Successfully installed lpthw.web
+Cleaning up...</span>
+</pre>
+<p>This will work on Linux and Mac OSX computers, but on Windows just drop the <tt class="docutils literal">sudo</tt> part of the <tt class="docutils literal">pip install</tt> command and it should work.  If not, go back to Exercise 46 and make sure you can do it reliably.</p>
+<div class="warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Other Python programmers will warn you that <tt class="docutils literal">lpthw.web</tt> is just a fork of
+another web framework called <tt class="docutils literal">web.py</tt> and that <tt class="docutils literal">web.py</tt> has too much
+&quot;magic.&quot;  If they say this, point out to them that Google App Engine
+originally used <tt class="docutils literal">web.py</tt> and not a single Python programmer complained
+that it had too much magic, because they all worked at Google.  If it's
+good enough for Google, then it's good enough for you to get started.
+Then, just get back to learning to code and ignore their goal of
+indoctrination over education.</p>
+</div>
+</div>
+<div class="section" id="make-a-simple-hello-world-project">
+<h1>Make a Simple &quot;Hello World&quot; Project</h1>
+<p>Now you're going to make an initial very simple &quot;Hello World&quot; web application and project directory using <tt class="docutils literal">lpthw.web</tt>.  First, make your project directory:</p>
+<pre class="code console literal-block">
+<span class="generic prompt">$</span> <span class="name builtin">cd </span>projects
+<span class="generic prompt">$</span> mkdir gothonweb
+<span class="generic prompt">$</span> <span class="name builtin">cd </span>gothonweb
+<span class="generic prompt">$</span> mkdir bin gothonweb tests docs templates
+<span class="generic prompt">$</span> touch gothonweb/__init__.py
+<span class="generic prompt">$</span> touch tests/__init__.py
+</pre>
+<p>You'll be taking the game from Exercise 43 and making it into a web application, so that's why you're calling it <tt class="docutils literal">gothonweb</tt>.  Before you do that, we need to create the most basic <tt class="docutils literal">lpthw.web</tt> application possible.  Put the following code into <tt class="docutils literal">bin/app.py</tt>:</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15</pre></div></td><td class="code"><div class="highlight"><pre><a name="python--ex50.py-idio.html-1"></a><span class="kn">import</span> <span class="nn">web</span>
+<a name="python--ex50.py-idio.html-2"></a>
+<a name="python--ex50.py-idio.html-3"></a><span class="n">urls</span> <span class="o">=</span> <span class="p">(</span>
+<a name="python--ex50.py-idio.html-4"></a>  <span class="s">&#39;/&#39;</span><span class="p">,</span> <span class="s">&#39;index&#39;</span>
+<a name="python--ex50.py-idio.html-5"></a><span class="p">)</span>
+<a name="python--ex50.py-idio.html-6"></a>
+<a name="python--ex50.py-idio.html-7"></a><span class="n">app</span> <span class="o">=</span> <span class="n">web</span><span class="o">.</span><span class="n">application</span><span class="p">(</span><span class="n">urls</span><span class="p">,</span> <span class="nb">globals</span><span class="p">())</span>
+<a name="python--ex50.py-idio.html-8"></a>
+<a name="python--ex50.py-idio.html-9"></a><span class="k">class</span> <span class="nc">index</span><span class="p">:</span>
+<a name="python--ex50.py-idio.html-10"></a>    <span class="k">def</span> <span class="nf">GET</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a name="python--ex50.py-idio.html-11"></a>        <span class="n">greeting</span> <span class="o">=</span> <span class="s">&quot;Hello World&quot;</span>
+<a name="python--ex50.py-idio.html-12"></a>        <span class="k">return</span> <span class="n">greeting</span>
+<a name="python--ex50.py-idio.html-13"></a>
+<a name="python--ex50.py-idio.html-14"></a><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+<a name="python--ex50.py-idio.html-15"></a>    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+</td></tr></table><p>Then run the application like this:</p>
+<pre class="code console literal-block">
+<span class="generic prompt">$</span> python bin/app.py
+<span class="generic output">http://0.0.0.0:8080/</span>
+</pre>
+<p>However, if you did this:</p>
+<pre class="code console literal-block">
+<span class="generic prompt">$</span> <span class="name builtin">cd </span>bin/   <span class="comment"># WRONG! WRONG! WRONG!
+</span><span class="generic prompt">$</span><span class="comment"></span> python app.py  <span class="comment"># WRONG! WRONG! WRONG!</span>
+</pre>
+<p>Then you are doing it <em>wrong</em>.  In all Python projects you do not <tt class="docutils literal">cd</tt> into a lower directory to run things.  You stay at the top and run everything from there so that all of the system can access all the modules and files.  Go reread Exercise 46 to understand a project layout and how to use it if you did this.</p>
+<p>Finally, use your web browser and go to <tt class="docutils literal"><span class="pre">http://localhost:8080/</span></tt> and you should see two things.  First, in your browser you'll see <tt class="docutils literal">Hello, world!</tt>.  Second, you'll see your Terminal with new output like this:</p>
+<pre class="code console literal-block">
+<span class="generic prompt">$</span> python bin/app.py
+<span class="generic output">http://0.0.0.0:8080/
+127.0.0.1:59542 - - [13/Jun/2011 11:44:43] &quot;HTTP/1.1 GET /&quot; - 200 OK
+127.0.0.1:59542 - - [13/Jun/2011 11:44:43] &quot;HTTP/1.1 GET /favicon.ico&quot; - 404 Not Found</span>
+</pre>
+<p>Those are log messages that <tt class="docutils literal">lpthw.web</tt> prints out so you can see that the server is working, and what the browser is doing behind the scenes.  The log messages help you debug and figure out when you have problems.  For example, it's saying that your browser tried to get <tt class="docutils literal">/favicon.ico</tt> but that file didn't exist so it returned <tt class="docutils literal">404 Not Found</tt> status code.</p>
+<p>I haven't explained the way <em>any</em> of this web stuff works yet, because I want to get you setup and ready to roll so that I can explain it better in the next two exercises.  To accomplish this, I'll have you break your lpthw.web application in various ways and then restructure it so that you know how it's setup.</p>
+</div>
+<div class="section" id="what-s-going-on">
+<h1>What's Going On?</h1>
+<p>Here's what's happening when your browser hits your application:</p>
+<ol class="arabic simple">
+<li>Your browser makes a network connection to your own computer, which is called <tt class="docutils literal">localhost</tt> and is a standard way of saying &quot;whatever my own computer is called on the network.&quot;  It also uses port 8080.</li>
+<li>Once it connects, it makes an HTTP request to the <tt class="docutils literal">bin/app.py</tt> application and asks for the <tt class="docutils literal">/</tt> URL, which is commonly the first URL on any website.</li>
+<li>Inside <tt class="docutils literal">bin/app.py</tt> you've got a list of URLs and what classes they match.  The only one we have is the <tt class="docutils literal"><span class="pre">'/',</span> 'index'</tt> mapping.  This means that whenever someone goes to <tt class="docutils literal">/</tt> with a browser, <tt class="docutils literal">lpthw.web</tt> will find the <tt class="docutils literal">class index</tt> and load it to handle the request.</li>
+<li>Now that <tt class="docutils literal">lpthw.web</tt> has found <tt class="docutils literal">class index</tt> it calls the <tt class="docutils literal">index.GET</tt> method on an instance of that class to actually handle the request.  This function runs and simply returns a string for what <tt class="docutils literal">lpthw.web</tt> should send to the browser.</li>
+<li>Finally, <tt class="docutils literal">lpthw.web</tt> has handled the request and sends this response to the browser, which is what you are seeing.</li>
+</ol>
+<p>Make sure you really understand this.  Draw up a diagram of how this information flows from your browser, to <tt class="docutils literal">lpthw.web</tt>, then to <tt class="docutils literal">index.GET</tt> and back to your browser.</p>
+</div>
+<div class="section" id="fixing-errors">
+<h1>Fixing Errors</h1>
+<p>First, delete line 11 where you assign the <tt class="docutils literal">greeting</tt> variable, then hit refresh in your browser.  You should see an error page now that gives you lots of information on how your application just exploded.  You know that the variable <tt class="docutils literal">greeting</tt> is now missing, but <tt class="docutils literal">lpthw.web</tt> gives you this nice error page to track down exactly where.  Do each of the following with this page:</p>
+<ol class="arabic simple">
+<li>Look at each of the <tt class="docutils literal">Local vars</tt> outputs (click on them) and see if you can follow what variables it's talking about and where they are.</li>
+<li>Look at the <tt class="docutils literal">Request Information</tt> section and see if it matches anything you're already familiar with.  This is information that your web browser is sending to your <tt class="docutils literal">gothonweb</tt> application.  You normally don't even know that it's sending this stuff, so now you get to see what it does.</li>
+<li>Try breaking this simple application in other ways and explore what happens.  Don't forget to also look at the logs being printed into your Terminal as <tt class="docutils literal">lpthw.web</tt> will put other stack traces and information there too.</li>
+</ol>
+</div>
+<div class="section" id="create-basic-templates">
+<h1>Create Basic Templates</h1>
+<p>You can break your <tt class="docutils literal">lpthw.web</tt> application, but did you notice that &quot;Hello World&quot; isn't a very good HTML page?  This is a web application, and as such it needs a proper HTML response.  To do that you will create a simple template that says &quot;Hello World&quot; in a big green font.</p>
+<p>The first step is to create a <tt class="docutils literal">templates/index.html</tt> file that looks like this:</p>
+<div class="highlight"><pre><a name="python--ex50--gothonweb--templates--index.html-pyg.html-1"></a>$def with (greeting)
+<a name="python--ex50--gothonweb--templates--index.html-pyg.html-2"></a>
+<a name="python--ex50--gothonweb--templates--index.html-pyg.html-3"></a><span class="nt">&lt;html&gt;</span>
+<a name="python--ex50--gothonweb--templates--index.html-pyg.html-4"></a>    <span class="nt">&lt;head&gt;</span>
+<a name="python--ex50--gothonweb--templates--index.html-pyg.html-5"></a>        <span class="nt">&lt;title&gt;</span>Gothons Of Planet Percal #25<span class="nt">&lt;/title&gt;</span>
+<a name="python--ex50--gothonweb--templates--index.html-pyg.html-6"></a>    <span class="nt">&lt;/head&gt;</span>
+<a name="python--ex50--gothonweb--templates--index.html-pyg.html-7"></a><span class="nt">&lt;body&gt;</span>
+<a name="python--ex50--gothonweb--templates--index.html-pyg.html-8"></a>
+<a name="python--ex50--gothonweb--templates--index.html-pyg.html-9"></a>$if greeting:
+<a name="python--ex50--gothonweb--templates--index.html-pyg.html-10"></a>    I just wanted to say <span class="nt">&lt;em</span> <span class="na">style=</span><span class="s">&quot;color: green; font-size: 2em;&quot;</span><span class="nt">&gt;</span>$greeting<span class="nt">&lt;/em&gt;</span>.
+<a name="python--ex50--gothonweb--templates--index.html-pyg.html-11"></a>$else:
+<a name="python--ex50--gothonweb--templates--index.html-pyg.html-12"></a>    <span class="nt">&lt;em&gt;</span>Hello<span class="nt">&lt;/em&gt;</span>, world!
+<a name="python--ex50--gothonweb--templates--index.html-pyg.html-13"></a>
+<a name="python--ex50--gothonweb--templates--index.html-pyg.html-14"></a><span class="nt">&lt;/body&gt;</span>
+<a name="python--ex50--gothonweb--templates--index.html-pyg.html-15"></a><span class="nt">&lt;/html&gt;</span>
+</pre></div><p>If you know what HTML is, then this should look fairly familiar. If not, research HTML and try writing a few web pages by hand so you know how it works.  This HTML file, however, is a <em>template</em>, which means that <tt class="docutils literal">lpthw.web</tt> will fill in &quot;holes&quot; in the text depending on variables you pass in to the template.  Every place you see <tt class="docutils literal">$greeting</tt> will be a variable you'll pass to the template that alters its contents.</p>
+<p>To make your <tt class="docutils literal">bin/app.py</tt> do this, you need to add some code to tell <tt class="docutils literal">lpthw.web</tt> where to load the template and to render it.  Take that file and change it like this:</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17</pre></div></td><td class="code"><div class="highlight"><pre><a name="python--ex50--gothonweb--bin--app.py-idio.html-1"></a><span class="kn">import</span> <span class="nn">web</span>
+<a name="python--ex50--gothonweb--bin--app.py-idio.html-2"></a>
+<a name="python--ex50--gothonweb--bin--app.py-idio.html-3"></a><span class="n">urls</span> <span class="o">=</span> <span class="p">(</span>
+<a name="python--ex50--gothonweb--bin--app.py-idio.html-4"></a>  <span class="s">&#39;/&#39;</span><span class="p">,</span> <span class="s">&#39;Index&#39;</span>
+<a name="python--ex50--gothonweb--bin--app.py-idio.html-5"></a><span class="p">)</span>
+<a name="python--ex50--gothonweb--bin--app.py-idio.html-6"></a>
+<a name="python--ex50--gothonweb--bin--app.py-idio.html-7"></a><span class="n">app</span> <span class="o">=</span> <span class="n">web</span><span class="o">.</span><span class="n">application</span><span class="p">(</span><span class="n">urls</span><span class="p">,</span> <span class="nb">globals</span><span class="p">())</span>
+<a name="python--ex50--gothonweb--bin--app.py-idio.html-8"></a>
+<a name="python--ex50--gothonweb--bin--app.py-idio.html-9"></a><span class="n">render</span> <span class="o">=</span> <span class="n">web</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s">&#39;templates/&#39;</span><span class="p">)</span>
+<a name="python--ex50--gothonweb--bin--app.py-idio.html-10"></a>
+<a name="python--ex50--gothonweb--bin--app.py-idio.html-11"></a><span class="k">class</span> <span class="nc">Index</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<a name="python--ex50--gothonweb--bin--app.py-idio.html-12"></a>    <span class="k">def</span> <span class="nf">GET</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a name="python--ex50--gothonweb--bin--app.py-idio.html-13"></a>        <span class="n">greeting</span> <span class="o">=</span> <span class="s">&quot;Hello World&quot;</span>
+<a name="python--ex50--gothonweb--bin--app.py-idio.html-14"></a>        <span class="k">return</span> <span class="n">render</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">greeting</span> <span class="o">=</span> <span class="n">greeting</span><span class="p">)</span>
+<a name="python--ex50--gothonweb--bin--app.py-idio.html-15"></a>
+<a name="python--ex50--gothonweb--bin--app.py-idio.html-16"></a><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+<a name="python--ex50--gothonweb--bin--app.py-idio.html-17"></a>    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+</td></tr></table><p>Pay close attention to the new <tt class="docutils literal">render</tt> variable and how I changed the last line of <tt class="docutils literal">index.GET</tt> so it returns <tt class="docutils literal">render.index()</tt> passing in your <tt class="docutils literal">greeting</tt> variable.</p>
+<p>Once you have that in place, reload the web page in your browser and you should see a different message in green.  You should also be able to do a <tt class="docutils literal">View Source</tt> on the page in your browser to see that it is valid HTML.</p>
+<p>This may have flown by you very fast, so let me explain how a template works:</p>
+<ol class="arabic simple">
+<li>In your <tt class="docutils literal">bin/app.py</tt> you've added a new variable, <tt class="docutils literal">render</tt>, which is a <tt class="docutils literal">web.template.render</tt> object.</li>
+<li>This <tt class="docutils literal">render</tt> object knows how to load <tt class="docutils literal">.html</tt> files out of the <tt class="docutils literal">templates/</tt> directory because you passed that to it as a parameter.</li>
+<li>Later in your code, when the browser hits the <tt class="docutils literal">index.GET</tt> like before, instead of just returning the string <tt class="docutils literal">greeting</tt>, you call <tt class="docutils literal">render.index</tt> and pass the greeting to it as a variable.</li>
+<li>This <tt class="docutils literal">render.index</tt> method is kind of a <em>magic</em> function where the <tt class="docutils literal">render</tt> object sees that you're asking for <tt class="docutils literal">index</tt>, goes into the <tt class="docutils literal">templates/</tt> directory, looks for a page named <tt class="docutils literal">index.html</tt>, and then &quot;renders&quot; it, or converts it.</li>
+<li>In the <tt class="docutils literal">templates/index.html</tt> file you see the beginning definition that says this template takes a <tt class="docutils literal">greeting</tt> parameter, just like a function.  Also, just like Python this template is indentation sensitive, so make sure you get them right.</li>
+<li>Finally, you have the HTML in <tt class="docutils literal">templates/index.html</tt> that looks at the <tt class="docutils literal">greeting</tt> variable and, if it's there, prints one message using the <tt class="docutils literal">$greeting</tt>, or a default message.</li>
+</ol>
+<p>To get deeper into this, change the greeting variable and the HTML to see what effect it has.  Also create another template named <tt class="docutils literal">templates/foo.html</tt> and render that using <tt class="docutils literal">render.foo()</tt> instead of <tt class="docutils literal">render.index()</tt> like before. This will show you how the name of the function you call on <tt class="docutils literal">render</tt> is just matched to an <tt class="docutils literal">.html</tt> file in <tt class="docutils literal">templates/</tt>.</p>
+</div>
+<div class="section" id="study-drills">
+<h1>Study Drills</h1>
+<ol class="arabic simple">
+<li>Read the documentation at <a class="reference external" href="http://webpy.org/">http://webpy.org/</a> which is the same as the <tt class="docutils literal">lpthw.web</tt> project.</li>
+<li>Experiment with everything you can find there, including their example code.</li>
+<li>Read about HTML5 and CSS3 and make some other .html and .css files for practice.</li>
+<li>If you have a friend who knows Django and is willing to help you, then consider doing Exercises 50, 51, and 52 in Django instead to see what that's like.</li>
+</ol>
+</div>
+<div class="section" id="common-student-questions">
+<h1>Common Student Questions</h1>
+<dl class="docutils">
+<dt>I can't seem to connect to <tt class="docutils literal"><span class="pre">http://localhost:8080/</span></tt>.</dt>
+<dd>Try going to <tt class="docutils literal"><span class="pre">http://127.0.0.1:8080/</span></tt> instead.</dd>
+<dt>What is the difference betwee <tt class="docutils literal">lpthw.web</tt> and <tt class="docutils literal">web.py</tt>?</dt>
+<dd>No difference.  I simply &quot;locked&quot; <tt class="docutils literal">web.py</tt> at a particular version so that it would be consistent for students, then named it <tt class="docutils literal">lpthw.web</tt>.  Later versions of <tt class="docutils literal">web.py</tt> might be different from this version.</dd>
+<dt>I can't find <tt class="docutils literal">index.html</tt> (or just about anything).</dt>
+<dd>You probably are doing <tt class="docutils literal">cd bin/</tt> first and then trying to work with the project.  Do not do this.  All of the commands and instructions assume you are one directory above <tt class="docutils literal">bin/</tt>, so if you can't type <tt class="docutils literal">python bin/app.py</tt> then you are in the wrong directory.</dd>
+<dt>Why do we assign <tt class="docutils literal">greeting=greeting</tt> when we call the template?</dt>
+<dd>You are not assigning to <tt class="docutils literal">greeting</tt>. You are setting a named parameter to give to the template.  It's sort of an assignment, but it only affects the call to the template function.</dd>
+<dt>I can't use port 8080 on my computer.</dt>
+<dd>You probably have an anti-virus program installed that is using that port.  Try a different port.</dd>
+<dt>After installing <tt class="docutils literal">lpthw.web</tt> I get <tt class="docutils literal">ImportError &quot;No module named web&quot;</tt>.</dt>
+<dd>You most likely have multiple versions of Python installed and are using the wrong one, or you didn't do the install correctly because of an old version of <tt class="docutils literal">pip</tt>.  Try uninstalling <tt class="docutils literal">lpthw.web</tt> and reinstalling it.  If that doesn't work make triple sure you're using the right version of Python.</dd>
+</dl>
+</div>
+        <!-- RST ENDS -->
+
+            <!-- /.help-icon -->
+        <div id="video_holder">
+            <h1>Video</h1>
+            <div id="video" class="row inner">
+                <div class="small-12 small-centered columns">
+                    <div data-paydiv_product="2" id='paydiv'>
+                        &nbsp;
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        </div><!-- /#main -->
+
+        <div class='ad-deck gold' id="footer">
+            <ul class='retailers clearfix'>
+                <li>
+                    <a href='https://paydiv.io/access/buy/2/'>
+                        <div class='retailer-name'>Zed Shaw</div>
+                        <div class='book-type'>PDF + Videos + Updates</div>
+                        <div class='book-price'>$29.95</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.amazon.com/gp/product/0321884914/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0321884914&amp;linkCode=as2&amp;tag=lepythhawa-20'>
+                        <div class='retailer-name'>Amazon</div>
+                        <div class='book-type'>Paper + DVD</div>
+                        <div class='book-price'>$29.95</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.amazon.com/gp/product/B00FGUS948/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=B00FGUS948&amp;linkCode=as2&amp;tag=lepythhawa-20'>
+                        <div class='retailer-name'>Amazon</div>
+                        <div class='book-type'>Kindle (No Videos)</div>
+                        <div class='book-price'>$17.27</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.barnesandnoble.com/w/learn-python-the-hard-way-zed-shaw/1112055406?ean=9780321884916'>
+                        <div class='retailer-name'>B&amp;N</div>
+                        <div class='book-type'>Paper + DVD</div>
+                        <div class='book-price'>$17.27</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.barnesandnoble.com/w/learn-python-the-hard-way-zed-shaw/1112055406?ean=9780133124347&amp;itm=1&amp;usri=learn+python+the+hard+way'>
+                        <div class='retailer-name'>B&amp;N</div>
+                        <div class='book-type'>Nook (No Video)</div>
+                        <div class='book-price'>$17.27</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.informit.com/store/learn-python-the-hard-way-a-very-simple-introduction-9780321884916'>
+                        <div class='retailer-name'>InformIT</div>
+                        <div class='book-type'>eBook + Paper</div>
+                        <div class='book-price'>$43.19</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://ruby.learncodethehardway.org/book/'>
+                        <div class='retailer-name'>Interested In Ruby?</div>
+                        <div class='book-type'>Ruby is also a great language.</div>
+                        <div class='book-price'>Learn Ruby The Hard Way</div>
+                    </a>
+                </li>
+
+            </ul><!-- /.places -->
+        </div><!-- /#ad-deck -->
+
+        <script src="javascripts/jquery.js"></script>
+        <script src="index.js"></script>
+        <script src="../../paydiv.io/static/jzed.js"></script>
+        <script src="../../paydiv.io/static/js/videojs/video.js"></script>
+        <link rel="stylesheet" href="../../paydiv.io/static/js/videojs/video-js.css">
+        <script src="../../paydiv.io/static/api/v1/paydiv.js"></script>
+        <script src="javascripts/app.js"></script>
+        <script src="javascripts/littools.js"></script>
+        <script type="text/javascript">
+        
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-24168052-1']);
+        _gaq.push(['_trackPageview']);
+        
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+        
+        </script>
+
+
+        <script src="javascripts/littools.js"></script>
+
+        </body>
+
+<!-- Mirrored from learnpythonthehardway.org/book/ex50.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 03 Sep 2014 17:52:40 GMT -->
+</html>
+

@@ -1,0 +1,22 @@
+#
+# Linux Shell Scripting Tutorial (LSST) v1.05, March 2001
+# Author: Vivek G Gite
+#
+# Run as:
+# $ chmod +x  kbdfun
+# $ ./kbdfun
+#
+echo -e "\033[0q Turning all kbd -LED lights off" 
+echo  "* * * Press CTRL + C to stop" 
+
+while [ 1 ]
+do
+
+    echo -e "\033[1q Scroll On Other Off"
+    sleep 1
+    echo -e "\033[2q Num On Other Off" 
+    sleep 1
+    echo -e "\033[3q Caps On Other Off"  
+    sleep 1
+    
+done    

@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from zetcode.com/databases/mysqltutorial/quick/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Jul 2015 02:47:03 GMT -->
+<head>
+<title>MySQL quick tutorial</title>
+<link rel="stylesheet" href="../../../cfg/format2.css" type="text/css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="Quick tutorial, MySQL, databases, SQL">
+<meta name="description" content="This chapter is a quick MySQL tutorial. Here we
+go through the most essential MySQL features.">
+<meta name="author" content="Jan Bodnar">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div id="wide_ad" class="ltow">
+<script async src="../../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- 160x600, August 2011 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:600px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="2484182563"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<div class="content">
+
+
+<header>
+
+<nav>
+<a href="http://zetcode.com/" title="Home">Home</a>&#160;
+<a href="../index.html">Contents</a>
+</nav>
+
+</header>
+
+
+<h1>MySQL quick tutorial</h1>
+
+
+<p>
+This chapter will quickly introduce you to the basics of the MySQL database.
+</p>
+
+<div class="med_rec">
+<script async src="../../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- NewSquare -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:250px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="0364418177"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+
+<h2 id="world">The world database</h2>
+
+<p>
+We are going to use a <a href="http://dev.mysql.com/doc/index-other.html">world database</a>, 
+which can be found on the MySQL official website. The data is outdated, but it does not
+affect us. 
+</p>
+
+<p>
+There are two options. A world database with the MyISAM storage engine or with the InnoDB
+engine. We choose the latter.
+</p>
+
+<pre class="code">
+$ ls -sh world_innodb.sql.gz 
+92K world_innodb.sql.gz
+</pre>
+
+<p>
+The compressed file has about 92 KB. 
+</p>
+
+<pre class="code">
+$ gunzip world_innodb.sql.gz
+$ ls
+world_innodb.sql
+</pre>
+
+<p>
+We unzip the file. We have a <code>world_innodb.sql</code> file. 
+</p>
+
+<pre class="code">
+$ mysql -uroot -p
+Enter password: 
+
+mysql> 
+</pre>
+
+<p>
+We connect to the server with the root account. We need the root
+account to create a new database and give permissions to our test 
+account for the new database.
+</p>
+
+<pre class="code">
+mysql> CREATE DATABASE world;
+</pre>
+
+<p>
+The world database is created. 
+</p>
+
+<pre class="code">
+mysql> USE world;
+</pre>
+
+<p>
+We change to the world database. Now the world database is the 
+current database.
+</p>
+
+<pre class="code">
+mysql> source world_innodb.sql
+</pre>
+
+<p>
+We build the tables of the world database by executing
+this SQL script. It takes some time. 
+</p>
+
+<pre class="code">
+mysql> GRANT ALL ON world.* TO user12@localhost;
+</pre>
+
+<p>
+We grant privileges to all objects of the world database to the
+<code>user12</code>. 
+</p>
+
+<pre class="code">
+mysql> quit
+Bye
+
+$ mysql -u user12 -p
+Enter password: 
+
+mysql> USE world;
+</pre>
+
+<p>
+We quit the connection. Reconnect with the <code>user12</code> test account 
+and change to the world database. We are ready for work. 
+</p>
+
+
+<h2 id="examine">Examining the database</h2>
+
+<p>
+In this section, we are going to look at the tables of the world 
+database in general. 
+</p>
+
+<pre class="code">
+mysql> SHOW TABLES;
++-----------------+
+| Tables_in_world |
++-----------------+
+| City            |
+| Country         |
+| CountryLanguage |
++-----------------+
+</pre>
+
+<p>
+We show all available tables with the <code>SHOW TABLES</code> statement. There
+are three. 
+</p>
+
+<pre class="code">
+mysql> DESCRIBE City;
++-------------+----------+------+-----+---------+----------------+
+| Field       | Type     | Null | Key | Default | Extra          |
++-------------+----------+------+-----+---------+----------------+
+| ID          | int(11)  | NO   | PRI | NULL    | auto_increment |
+| Name        | char(35) | NO   |     |         |                |
+| CountryCode | char(3)  | NO   | MUL |         |                |
+| District    | char(20) | NO   |     |         |                |
+| Population  | int(11)  | NO   |     | 0       |                |
++-------------+----------+------+-----+---------+----------------+
+</pre>
+
+<p>
+With the <code>DESCRIBE</code> statement, we can see the table structure
+of the <code>City</code> table. We see the column names and their data 
+types. Plus other important information.
+</p>
+
+<pre class="code">
+mysql> SHOW CREATE TABLE City;
+</pre>
+
+<p>
+If we wanted to find out the SQL to create the <code>City</code> table, we would
+issue the <code>SHOW CREATE TABLE City</code> statement. 
+</p>
+
+
+<pre class="code">
+$ mysqldump -uroot -p world City > city.sql
+</pre>
+
+<p>
+Here we use the <code>mysqldump</code> tool to back up the 
+<code>City</code> table. 
+</p>
+
+<pre class="code">
+mysql> DROP TABLE City;
+
+mysql> SHOW TABLES;
++-----------------+
+| Tables_in_world |
++-----------------+
+| Country         |
+| CountryLanguage |
++-----------------+
+</pre>
+
+<p>
+We use the <code>DROP TABLE</code> statement to drop the 
+<code>City</code> table. Subsequent statement verifies that the table 
+was removed. 
+</p>
+
+<pre class="code">
+mysql> source city.sql
+
+mysql> SHOW TABLES;
++-----------------+
+| Tables_in_world |
++-----------------+
+| City            |
+| Country         |
+| CountryLanguage |
++-----------------+
+</pre>
+
+<p>
+We recreate the <code>City</code> table from the backup. The 
+<kbd>source</kbd> command executes the backup <code>city.sql</code> 
+script. 
+</p>
+
+
+<h2 id="queries">Queries</h2>
+
+<p>
+Queries are used to look up data from the database tables. 
+</p>
+
+
+<h3>Limiting data output</h3>
+
+<p>
+There are thousands of rows in the tables of the database. They
+cannot be displayed all on the screen. We can control the number
+of rows to be displayed with the <code>LIMIT</code> clause. 
+</p>
+
+<pre class="code">
+mysql> SELECT Id, Name, Population FROM City LIMIT 10;
++----+----------------+------------+
+| Id | Name           | Population |
++----+----------------+------------+
+|  1 | Kabul          |    1780000 |
+|  2 | Qandahar       |     237500 |
+|  3 | Herat          |     186800 |
+|  4 | Mazar-e-Sharif |     127800 |
+|  5 | Amsterdam      |     731200 |
+|  6 | Rotterdam      |     593321 |
+|  7 | Haag           |     440900 |
+|  8 | Utrecht        |     234323 |
+|  9 | Eindhoven      |     201843 |
+| 10 | Tilburg        |     193238 |
++----+----------------+------------+
+</pre>
+
+<p>
+In the above query, we show three of the five columns of the 
+<code>City</code> table. There are lots of rows in the table. We limit 
+the query to the first 10 rows. 
+</p>
+
+<pre class="code">
+mysql> SELECT Id, Name, Population FROM City LIMIT 15, 5;
++----+-------------------+------------+
+| Id | Name              | Population |
++----+-------------------+------------+
+| 16 | Haarlem           |     148772 |
+| 17 | Almere            |     142465 |
+| 18 | Arnhem            |     138020 |
+| 19 | Zaanstad          |     135621 |
+| 20 | ´s-Hertogenbosch  |     129170 |
++----+-------------------+------------+
+</pre>
+
+<p>
+The <code>LIMIT</code> clause can be followed by two numbers. The first one 
+is the offset and the second one is the number of rows to display. Our 
+query shows rows 16-20. 
+</p>
+
+<pre class="code">
+mysql> pager less
+PAGER set to 'less'
+mysql> SELECT * FROM City;
++------------------------------------+------------+
+| Name                               | Population |
++------------------------------------+------------+
+| Kabul                              |    1780000 |
+| Qandahar                           |     237500 |
+| Herat                              |     186800 |
+...
+:
+</pre>
+
+<p>
+Since the <code>City</code> table has more than four thousand rows, we 
+cannot see them in one screen. We can use the pager command to show the data in a
+less program. We can navigate through the data with the cursor keys or
+page down, page up keys. If we want to use no pager program, simply 
+hit the pager without an argument. 
+</p>
+
+<pre class="code">
+$ mysql -u user12 -p world -e "SELECT * FROM City" > city
+Enter password: 
+$ ls -sh city
+144K city
+</pre>
+
+<p>
+The <code>mysql</code> command tool can be used in a non-interactive way. 
+We specify the SQL statement after the <code>-e</code> option and redirect 
+the result to the city file. Now we can use any text editor to display the data. 
+</p>
+
+
+<h3>The COUNT(), MAX(), MIN() functions</h3>
+
+<pre class="code">
+mysql> SELECT COUNT(Id) AS 'Number of rows' FROM City;
++----------------+
+| Number of rows |
++----------------+
+|           4079 |
++----------------+
+</pre>
+
+<p>
+There are 4079 cities in the table. We use the built-in 
+<code>COUNT()</code> function to find out the number of rows. 
+</p>
+
+<pre class="code">
+mysql> SELECT Name, Population FROM City
+    -> WHERE Population = (SELECT Max(Population) FROM City);
++-----------------+------------+
+| Name            | Population |
++-----------------+------------+
+| Mumbai (Bombay) |   10500000 |
++-----------------+------------+
+</pre>
+
+<p>
+The above query shows the most populated city in the table. The SQL is 
+a special type of a query called a <em>subquery</em>. The outer query uses
+the data returned by the inner query. The inner query is bounded by parentheses.
+</p>
+
+<pre class="code">
+mysql> SELECT Name, Population FROM City 
+    -> WHERE Population = (SELECT Min(Population) FROM City);
++-----------+------------+
+| Name      | Population |
++-----------+------------+
+| Adamstown |         42 |
++-----------+------------+
+</pre>
+
+<p>
+This subquery shows the least populated city in the table.
+</p>
+
+
+<h3>Selecting specific rows with the WHERE clause</h3>
+
+<p>
+The <code>WHERE</code> clause can be used to filter the results. It provides 
+a selection criteria to select only specific rows from the data. 
+</p>
+
+<pre class="code">
+mysql> SELECT Name, Population FROM City 
+    -> WHERE Population > 1000000;
++--------------------------+------------+
+| Name                     | Population |
++--------------------------+------------+
+| Kabul                    |    1780000 |
+| Alger                    |    2168000 |
+| Luanda                   |    2022000 |
+| Buenos Aires             |    2982146 |
+| La Matanza               |    1266461 |
+| Córdoba                  |    1157507 |
+...
+</pre>
+
+<p>
+The above SQL statement returns all cities with a population above 
+one million people. 
+</p>
+
+<pre class="code">
+mysql> SELECT Name FROM City WHERE Name LIKE 'Kal%';
++-------------+
+| Name        |
++-------------+
+| Kalookan    |
+| Kalyan      |
+| Kalemie     |
+| Kallithea   |
+| Kalisz      |
+| Kaliningrad |
+| Kaluga      |
++-------------+
+7 rows in set (0.00 sec)
+</pre>
+
+<p>
+Here we select all city names which begin with Kal. We have found seven
+cities in the table. We can look for a specific pattern in the column with 
+the <code>LIKE</code> clause. 
+</p>
+
+<pre class="code">
+mysql> SELECT Name, Population FROM City 
+    -> WHERE ID IN (5, 32, 344, 554);
++-------------------+------------+
+| Name              | Population |
++-------------------+------------+
+| Amsterdam         |     731200 |
+| Alkmaar           |      92713 |
+| Guarapuava        |     160510 |
+| Santiago de Chile |    4703954 |
++-------------------+------------+
+4 rows in set (0.00 sec)
+</pre>
+
+<p>
+This SQL code returns cities and their populations for rows
+with Id 5, 32, 344, and 554. 
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM City WHERE Name = 'Bratislava';
++------+------------+-------------+------------+------------+
+| ID   | Name       | CountryCode | District   | Population |
++------+------------+-------------+------------+------------+
+| 3209 | Bratislava | SVK         | Bratislava |     448292 |
++------+------------+-------------+------------+------------+
+1 row in set (0.00 sec)
+</pre>
+
+<p>
+With the above SQL statement we select all columns for one
+specific city, namely Bratislava. 
+</p>
+
+<pre class="code">
+mysql> SELECT Name, Population FROM City 
+    -> WHERE Population BETWEEN 670000 AND 700000;
++----------------+------------+
+| Name           | Population |
++----------------+------------+
+| Teresina       |     691942 |
+| Natal          |     688955 |
+| Bandar Lampung |     680332 |
+| Gwalior        |     690765 |
+| Kermanshah     |     692986 |
+| Palermo        |     683794 |
+| Toronto        |     688275 |
+| Huainan        |     700000 |
+| Jixi           |     683885 |
+| Antananarivo   |     675669 |
+| Chihuahua      |     670208 |
+| Kano           |     674100 |
+| Tunis          |     690600 |
++----------------+------------+
+13 rows in set (0.00 sec)
+</pre>
+
+<p>
+Say we wanted to find out cities with a population between two specific
+values. There is a <code>BETWEEN</code> operator for this. We have found
+13 cities with a population in the range 670,000 and 700,000. 
+</p>
+
+
+<h3>Ordering data</h3>
+
+<p>
+Ordering data can be done with the <code>ORDER BY</code> clause. 
+</p>
+
+<pre class="code">
+mysql> SELECT Name, Population FROM City
+    -> ORDER BY Population DESC LIMIT 10;
++-------------------+------------+
+| Name              | Population |
++-------------------+------------+
+| Mumbai (Bombay)   |   10500000 |
+| Seoul             |    9981619 |
+| São Paulo         |    9968485 |
+| Shanghai          |    9696300 |
+| Jakarta           |    9604900 |
+| Karachi           |    9269265 |
+| Istanbul          |    8787958 |
+| Ciudad de México  |    8591309 |
+| Moscow            |    8389200 |
+| New York          |    8008278 |
++-------------------+------------+
+10 rows in set (0.00 sec)
+</pre>
+
+<p>
+We find the 10 most populated cities. We order the data by population from 
+the most populated to the least populated city. We limit the output with the
+<code>LIMIT</code> clause. 
+</p>
+
+<pre class="code">
+mysql> SELECT Name, Population FROM City 
+    -> ORDER BY Population ASC LIMIT 10;
++---------------------+------------+
+| Name                | Population |
++---------------------+------------+
+| Adamstown           |         42 |
+| West Island         |        167 |
+| Fakaofo             |        300 |
+| Città del Vaticano  |        455 |
+| Bantam              |        503 |
+| Yaren               |        559 |
+| The Valley          |        595 |
+| Alofi               |        682 |
+| Flying Fish Cove    |        700 |
+| Kingston            |        800 |
++---------------------+------------+
+10 rows in set (0.01 sec)
+</pre>
+
+<p>
+Here we get the least populated cities. This time we order the data
+in the ascending order. For this we use the <code>ASC</code> keyword. 
+</p>
+
+<pre class="code">
+mysql> SELECT Name, Population FROM City 
+    -> ORDER BY Name LIMIT 10;
++------------------------+------------+
+| Name                   | Population |
++------------------------+------------+
+| A Coruña (La Coruña)   |     243402 |
+| Aachen                 |     243825 |
+| Aalborg                |     161161 |
+| Aba                    |     298900 |
+| Abadan                 |     206073 |
+| Abaetetuba             |     111258 |
+| Abakan                 |     169200 |
+| Abbotsford             |     105403 |
+| Abeokuta               |     427400 |
+| Aberdeen               |     213070 |
++------------------------+------------+
+10 rows in set (0.01 sec)
+</pre>
+
+<p>
+In the above SQL statement we order data by city name and get the
+first ten cities.
+</p>
+
+
+<h3>Grouping data</h3>
+
+<p>
+The <code>GROUP BY</code> clause is used to combine database records with 
+identical values into a single record. It is often used with the 
+aggregation functions.
+</p>
+
+<pre class="code">
+mysql> SELECT District, SUM(Population) FROM City
+    -> WHERE District = 'New York' GROUP BY District;
++----------+-----------------+
+| District | SUM(Population) |
++----------+-----------------+
+| New York |         8958085 |
++----------+-----------------+
+1 row in set (0.00 sec)
+</pre>
+
+<p>
+The above SQL statement returns the total number of people in the towns
+of the New York district, which are listed in our database. 
+</p>
+
+<pre class="code">
+mysql> SELECT Name, District, Population FROM City
+    -> WHERE District = 'New York';
++-----------+----------+------------+
+| Name      | District | Population |
++-----------+----------+------------+
+| New York  | New York |    8008278 |
+| Buffalo   | New York |     292648 |
+| Rochester | New York |     219773 |
+| Yonkers   | New York |     196086 |
+| Syracuse  | New York |     147306 |
+| Albany    | New York |      93994 |
++-----------+----------+------------+
+6 rows in set (0.01 sec)
+</pre>
+
+<p>
+The previous number is a sum of these six cities. 
+</p>
+
+<pre class="code">
+mysql> SELECT District, SUM(Population) FROM City
+    -> WHERE CountryCode = 'USA' GROUP BY District
+    -> HAVING SUM(Population) > 3000000;
++------------+-----------------+
+| District   | SUM(Population) |
++------------+-----------------+
+| Arizona    |         3178903 |
+| California |        16716706 |
+| Florida    |         3151408 |
+| Illinois   |         3737498 |
+| New York   |         8958085 |
+| Texas      |         9208281 |
++------------+-----------------+
+6 rows in set (0.00 sec)
+</pre>
+
+<p>
+We select all districts which have population over 3 million people. When
+we work with groups of data, we use the <code>HAVING</code> clause instead
+of the <code>WHERE</code> clause.
+</p>
+
+
+<h3>Updating, deleting, and inserting data</h3>
+
+<p>
+Next we will concern ourselves with updating, deleting, and inserting data.
+</p>
+
+<pre class="code">
+mysql> SELECT Name, HeadOfState FROM Country
+    -> WHERE Name = 'United States';
++---------------+----------------+
+| Name          | HeadOfState    |
++---------------+----------------+
+| United States | George W. Bush |
++---------------+----------------+
+1 row in set (0.00 sec)
+</pre>
+
+<p>
+As we have already stated, the world database is outdated. George Bush 
+is not the president of the USA anymore. 
+</p>
+
+<pre class="code">
+mysql> UPDATE Country SET HeadOfState = 'Barack Obama'
+    -> WHERE Name = 'United States';
+</pre>
+
+<p>
+With the <code>UPDATE</code> statement we change the row to the
+actual data. 
+</p>
+
+<pre class="code">
+mysql> SELECT Name, HeadOfState FROM Country WHERE Name = 'United States';
++---------------+--------------+
+| Name          | HeadOfState  |
++---------------+--------------+
+| United States | Barack Obama |
++---------------+--------------+
+1 row in set (0.00 sec)
+</pre>
+
+<p>
+We have successfully updated the row. 
+</p>
+
+<pre class="code">
+mysql> CREATE TABLE First10 engine=MEMORY SELECT * FROM City LIMIT 10;
+</pre>
+
+<p>
+We create a temporary table in the memory. It will contain first ten cities
+from the <code>City</code> table. 
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM First10;
++----+----------------+-------------+---------------+------------+
+| ID | Name           | CountryCode | District      | Population |
++----+----------------+-------------+---------------+------------+
+|  1 | Kabul          | AFG         | Kabol         |    1780000 |
+|  2 | Qandahar       | AFG         | Qandahar      |     237500 |
+|  3 | Herat          | AFG         | Herat         |     186800 |
+|  4 | Mazar-e-Sharif | AFG         | Balkh         |     127800 |
+|  5 | Amsterdam      | NLD         | Noord-Holland |     731200 |
+|  6 | Rotterdam      | NLD         | Zuid-Holland  |     593321 |
+|  7 | Haag           | NLD         | Zuid-Holland  |     440900 |
+|  8 | Utrecht        | NLD         | Utrecht       |     234323 |
+|  9 | Eindhoven      | NLD         | Noord-Brabant |     201843 |
+| 10 | Tilburg        | NLD         | Noord-Brabant |     193238 |
++----+----------------+-------------+---------------+------------+
+10 rows in set (0.00 sec)
+</pre>
+
+<p>
+This is the contents of the <code>First10</code> table. 
+</p>
+
+<pre class="code">
+mysql> DELETE FROM First10 WHERE ID IN (2, 4, 6, 8, 10);
+</pre>
+
+<p>
+With the <code>DELETE FROM</code> statement and the <code>WHERE</code>
+clause we delete every second row from the <code>First10</code> table. 
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM First10;
++----+-----------+-------------+---------------+------------+
+| ID | Name      | CountryCode | District      | Population |
++----+-----------+-------------+---------------+------------+
+|  1 | Kabul     | AFG         | Kabol         |    1780000 |
+|  3 | Herat     | AFG         | Herat         |     186800 |
+|  5 | Amsterdam | NLD         | Noord-Holland |     731200 |
+|  7 | Haag      | NLD         | Zuid-Holland  |     440900 |
+|  9 | Eindhoven | NLD         | Noord-Brabant |     201843 |
++----+-----------+-------------+---------------+------------+
+5 rows in set (0.00 sec)
+</pre>
+
+<p>
+We have five rows left in the table.
+</p>
+
+<pre class="code">
+mysql> TRUNCATE TABLE First10;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SELECT * FROM First10;
+Empty set (0.00 sec)
+</pre>
+
+<p>
+We delete all rows from the table with the <code>TRUNCATE</code> statement. 
+There is no data left. 
+</p>
+
+<pre class="code">
+mysql> INSERT INTO First10 VALUES(1, 'Kabul', 'AFG', 'Kabol', 1780000);
+
+mysql> SELECT * FROM First10;
++----+-------+-------------+----------+------------+
+| ID | Name  | CountryCode | District | Population |
++----+-------+-------------+----------+------------+
+|  1 | Kabul | AFG         | Kabol    |    1780000 |
++----+-------+-------------+----------+------------+
+1 row in set (0.00 sec)
+</pre>
+
+<p>
+With the <code>INSERT INTO</code> statement, we insert one row into the table.
+</p>
+
+<pre class="code">
+mysql> DROP TABLE First10;
+Query OK, 0 rows affected (0.00 sec)
+</pre>
+
+<p>
+We drop the table from the database.
+</p>
+
+<p>
+In this chapter, we have quickly introduced some basics of the MySQL database. 
+We go into more details in the following chapters. 
+</p>
+
+<footer>
+
+<nav class="center">
+<span class="botNavItem"><a href="http://zetcode.com/">Home</a></span> ‡ <span class="botNavItem"><a href="../index.html">Contents</a></span> ‡ 
+<span class="botNavItem"><a href="#">Top of Page</a></span>
+</nav>
+
+<div class="signature">
+<a href="http://zetcode.com/">ZetCode</a> last modified February 19, 2011 <span class="copyright">&copy; 2007 - 2015 Jan Bodnar</span>
+</div>
+
+</footer>
+
+</div> <!-- content -->
+
+</div> <!-- container -->
+
+</body>
+
+<!-- Mirrored from zetcode.com/databases/mysqltutorial/quick/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Jul 2015 02:47:03 GMT -->
+</html>
+
+

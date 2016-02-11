@@ -1,0 +1,1013 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from www.python-course.eu/python3_tests.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:12:05 GMT -->
+<head>
+
+<!-- Dieses Tag in den Head-Bereich oder direkt vor dem schlieÃŸenden Body-Tag einfÃ¼gen -->
+<script type="text/javascript" src="../apis.google.com/js/plusone.js"></script>
+
+
+
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "../connect.facebook.net/en_GB/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script><title>Python3 Tutorial: Tests, DocTests, UnitTests</title>
+<meta http-equiv="content-type" content="text/html; charset="ISO-8859-1">
+<meta name="Description" content="Testing Python-Programs with or without special modules like unit-Test and doctest" />
+<meta name="Keywords" content="Python, Python 3, Test, tests, unit-test, error, errors, Module tests, unittest, unit test, doctest" />
+
+<link href="favicon.ico" rel="shortcut icon">
+
+<link href="moderna.css" rel="stylesheet" type="text/css" />
+<link href="moderna_print.css" media="print" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+<div id="container">
+
+<div id="banner">
+<!-- <a href="impressum.php">Impressum</a> | <a href="mailto:">contact</a> | --><h1>Python Course</h1>
+
+</div>
+
+	<!-- Begin Top Menu -->
+<ul id="navlist">
+<li><a href="index-2.html" >Home</a></li><li><a href="course.html" >Python 2 Tutorial</a></li><li class="active"><a id="current" href="python3_course.html" >Python 3 Tutorial</a></li><li><a href="advanced_topics.html" >Advanced Topics</a></li><li><a href="python_books.html" >Python Books</a></li><li><a href="python_tkinter.html" >Tkinter Tutorial</a></li><li><a href="contact.html" rel="nofollow">Contact</a></li>                          
+</ul>
+	<!-- End Top Menu -->
+<div id="sidebar-a">
+<img class="border" src="images/in.png" alt="box" />    <h2>Python 3 Tutorial</h2>
+
+<div class="menu">
+
+<ul>
+<li><a href="python3_history_and_philosophy.html">The Origins of Python</a></li><li><a href="python3_interactive.html">Starting with Python: The Interactive Shell</a></li><li><a href="python3_execute_script.html">Executing a Script</a></li><li><a href="python3_blocks.html">Indentation</a></li><li><a href="python3_variables.html">Data Types and Variables</a></li><li><a href="python3_operators.html">Operators</a></li><li><a href="python3_sequential_data_types.html">Sequential Data Types: Lists and Strings</a></li><li><a href="python3_deep_copy.html">Shallow and Deep Copy</a></li><li><a href="python3_dictionaries.html">Dictionaries</a></li><li><a href="python3_sets_frozensets.html">Sets and Frozen Sets</a></li><li><a href="python3_input.html">input via the keyboard</a></li><li><a href="python3_conditional_statements.html">Conditional Statements</a></li><li><a href="python3_loops.html">Loops, while Loop</a></li><li><a href="python3_for_loop.html">For Loops</a></li><li><a href="python3_print.html">Output with Print</a></li><li><a href="python3_formatted_output.html">Formatted output with string modulo and the format method</a></li><li><a href="python3_functions.html">Functions</a></li><li><a href="python3_recursive_functions.html">Recursion and Recursive Functions</a></li><li><a href="python3_tests.html">Tests, DocTests, UnitTests</a></li><li><a href="python3_memoization.html">Memoization and Decorators</a></li><li><a href="python3_passing_arguments.html">Parameter Passing in Functions</a></li><li><a href="python3_namespaces.html">Namespaces</a></li><li><a href="python3_global_vs_local_variables.html">Global and Local Variables</a></li><li><a href="python3_file_management.html">Read and Write Files</a></li><li><a href="python3_modules_and_modular_programming.html">Modular Programming and Modules</a></li><li><a href="python3_re.html">Regular Expressions</a></li><li><a href="python3_re_advanced.html">Regular Expressions, Advanced</a></li><li><a href="python3_lambda.html">Lambda Operator, Filter, Reduce and Map</a></li><li><a href="python3_list_comprehension.html">List Comprehension</a></li><li><a href="python3_generators.html">Iterators and Generators</a></li><li><a href="python3_exception_handling.html">Exception Handling</a></li><li><a href="python3_object_oriented_programming.html">Object Oriented Programming</a></li><li><a href="python3_class_and_instance_attributes.html">Class and Instance Attributes</a></li><li><a href="python3_properties.html">Properties vs. getters and setters</a></li><li><a href="python3_inheritance.html">Inheritance</a></li><li><a href="python3_multiple_inheritance.html">Multiple Inheritance</a></li><li><a href="python3_magic_methods.html">Magic Methods and Operator Overloading</a></li><li><a href="python3_inheritance_example.html">OOP, Inheritance Example</a></li></ul>
+
+</div>
+
+<p>
+<br>
+<hr>
+<br>
+<h3>To err is human</h3>
+<br>
+"Errare humanum est, sed perseverare diabolicum!", which means "To err is human, but to persevere in error is diabolic." 
+This proverb is more than two thousand years old. It is menat in a general sense, but it fits to computer programming as well.
+If you dont't test enough, you are persevering in errors, which any large program is full of.
+
+
+<h3>The Benefit of Testing</h3>
+
+Edsger W. Dijkstra wrote "Program testing can be used to show the presence of bugs, but never to show their absence!" (in "Notes On Structured Programming, corollary at the end of section 3, On The Reliability of Mechanisms")
+
+<br>
+<hr>
+Supported by:<br>
+<a href="http://www.bodenseo.ca/courses.php?topic=Python"><img style="width: 150px;" alt="Python Training Courses in Canada, Toronto"
+		     src="images/bodenseo_python_training.gif"><br>Python Training Courses in Toronto, Canada</a>
+	
+</div><div id="sidebar-b"><img style="width: 150px;" alt="Python-Logo"
+		     src="images/python-logo.png"><!-- Dieses Tag dort einfügen, wo die +1-Schaltfläche dargestellt werden soll -->
+<g:plusone></g:plusone>
+<br><br>
+
+<div class="fb-like" data-href="www.python-course.eu" data-send="false" data-layout="button_count" 
+data-width="130" data-show-faces="true" data-action="recommend"></div>
+
+<br><br>
+This topic in German / Deutsche Übersetzung:
+    <a href="http://www.python-kurs.eu/python3_tests.php">Tests, Doctests, UnitTests</a><h3>Python3</h3>This is a tutorial in Python3, but this chapter of our course is available in a version for Python 2.x as well: <a href="tests.html">Tests, DocTests, UnitTests in Python 2.x</a><p>
+<h3>Classroom Training Courses</h3>
+The goal of this website is to provide educational material, 
+allowing you to learn Python on your own.
+Nevertheless, it is faster and more efficient to attend a "real" 
+Python course in a classroom, with
+an experienced trainer. So why not attend one of the live 
+<a href="python_classes.html">Python courses</a> in Paris, London, Berlin, Munich
+or Lake Constance by Bernd Klein, the author of this tutorial?
+<br><br>
+You can also check the   
+<a href="http://www.bodenseo.com/courses.php?topic=Python">Python Training courses
+<img style="width: 150px;" alt="Bodenseo Kurse in Python"
+		     src="images/bodenseo_stairs_to_python.png"></a>
+		     delivered by Bodenseo and Bernd Klein.
+<br><br>
+You can book on-site classes at your company or organization, e.g. in England, Switzerland, Austria, Germany,
+France, Belgium, the Netherlands, Luxembourg, Poland, UK, Italy and other locations in Europe.
+<br><br>
+<h3>Python3</h3>This is a tutorial in Python3, but this chapter of our course is available in a version for Python 2.x as well: <a href="tests.html">Tests, DocTests, UnitTests in Python 2.x</a>
+ </p>
+
+
+
+
+    
+</p></div>
+<div id="content">
+
+<div id="contextlinks">Previous Chapter: <a href="python3_recursive_functions.html">Recursion and Recursive Functions</a><br>
+<LINK rel="prev" href="python3_recursive_functions.html">Next Chapter: <a href="python3_memoization.html">Memoization and Decorators</a><br>
+<LINK rel="next" href="python3_memoization.html"></div>
+<h2>Python Tests</h2>
+<br>
+<h3>Errors and Tests</h3>
+<img class="imgright" src="images/to_err_is_human.png" width="400" alt="To Err is Human" />
+
+Usually, programmers and program developpers spend a great deal of their time with debugging and testing. 
+It's hard to give exact percentages, because it highly depends among other factors on the individual programming 
+style, the problems to be solved and of course on the qualification of a programmer. Of course, the programming 
+language is another important factor. 
+<br><br>
+You don't have to program to get pestered by errors, as even the ancient Romans knew. The philosopher Cicero 
+coined more than 2000 years ago an unforgettable aphorism, which is often quoted: "errare humanum est"<sup>1</sup>
+<br>
+This aphorism is often used as an excuse for failure. Even though it's hardly possible to completely eliminate 
+all errors in a software product, we should always work ambitiously to this end, i.e. to keep the number of errors minimal.
+
+
+<br><br>
+
+<h3>Kinds of Errors</h3>
+
+There are various kinds of errors. During program development there are lots of "small errors", mostly typos. 
+Whether a colon is missing - for example behind an "if" or an "else - or the keyword "True" is wrongly written 
+with a lower case "t". These errors are called syntactical errors.<sup>2</sup> 
+<br>
+In most cases, syntactical errors can be easily found, but another type of errors is harder to be solved. A 
+semantic error is syntactically correct code, but the program doesn't behave in the intended way. Imagine somebody 
+wants to increment the value of a variable x by one, but instead of <tt>"x += 1"</tt> he or she writes <tt>"x = 1"</tt>. 
+<br>
+The following longer code example may harbour another semantic error:
+
+
+<pre>
+x = int(input("x? "))
+y = int(input("y? "))
+
+if x > 10:
+    if y == x:
+        print("Fine")
+else:
+    print("So what?")
+</pre>
+
+We can see two if statements. One nested inside of the other. The code is definitely syntactically correct. But it may be, 
+that the writer of the program only wanted to output  "So what?", if the value of the variable x is both greater than 10 
+and x is not equal to y. In this case, the code should look like this:
+
+<pre>
+x = int(input("x? "))
+y = int(input("y? "))
+
+if x > 10:
+    if y == x:
+        print("Fine")
+    else:
+        print("So what?")
+</pre>
+
+Both code versions are syntactically correct, but one of them violates the intended semantics. 
+
+Let's look at another example:
+
+<pre>
+>>> for i in range(7):
+...     print(i)
+... 
+0
+1
+2
+3
+4
+5
+6
+>>> 
+</pre>
+
+The statement ran without raising an exception, so we know, that it is syntactically correct. Though it is not possible to 
+decide, if the statement is semantically correct, as we don't know the problem. It may be that the programmer wanted to 
+output the numbers from 1 to 7, i.e. 1,2,...7
+<br>
+In this case, he or she does not properly understand the range function. 
+<br><br>
+
+So we can divide semantic errors into two categories.
+
+<ul>
+<li>Errors caused by lack of understanding of a language construct.</li>
+<li>Errors due to logically incorrect code conversion. </li>
+</ul>
+
+
+
+<br><br>
+<h3>Unit Tests</h3>
+
+<img class="imgright" src="images/thermometer.png" alt="Taking the Temperature" />
+
+This paragraph is about unit tests. As the name implies they are used for testing units or components of the code, typically, 
+classes or functions. The underlying concept is to simplify the testing of large programming systems by testing "small" units. 
+To accomplish this the parts of a program have to be isolated into independent  testable "units". One can define "unit testing" 
+as a method whereby individual units of source code are tested to determine if they meet the requirements, i.e. return the 
+expected output for all possible - or defined - input data. A unit can be seen as the smallest testable part of a program, 
+which are often functions or methods from classes. Testing one unit should be independent from the other units. As a unit is 
+"quite" small, i.e. manageable to ensure complete correctness. Usually, this is not possible for large scale systems like 
+large software programs or operating systems. 
+<br><br>
+
+<h3>Module Tests with __name__</h3>
+
+Every module has a name, which is defined in the built-in attribute __name__.
+Let's assume, that we have written a module "xyz" which we have saved as "xyz.py". If we import this module with 
+<tt>"import xyz"</tt>, the string "xyz" will be assigned to __name__. If we call the file xyz.py as a standalone program, 
+i.e. in the following way,
+<br>
+<pre>
+$python3 xyz.py
+</pre>
+the value of __name__ will be the string '__main__'.
+
+<br><br>
+The following module can be used for calculating fibonacci numbers. But it is not important what the module is doing. 
+We want to demonstrate with it, how it is possible to create a simple module test inside of a module file, - in our case 
+the file "xyz.py", - by using an if statement and checking the value of __name__. We check if the module has been started 
+standalone, in which case the value of __name__ will be '__main__'. We assume that you save the following code as "fibonacci.py": 
+
+<pre>
+""" Fibonacci Module """
+
+def fib(n):
+    """ Calculates the n-th Fibonacci number iteratively """
+    a, b = 0, 1
+    for i in range(n):
+        a, b = b, a + b
+    return a
+
+def fiblist(n):
+    """ creates a list of Fibonacci numbers up to the n-th generation """
+    fib = [0,1]
+    for i in range(1,n):
+        fib += [fib[-1]+fib[-2]]
+    return fib
+</pre>
+
+It's possible to test this module manually in the interactive Python shell:
+
+
+<pre>
+>>> from fibonacci import fib, fiblist
+>>> fib(0)
+0
+>>> fib(1)
+1
+>>> fib(10)
+55
+>>> fiblist(10)
+[0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55]
+>>> fiblist(-8)
+[0, 1]
+>>> fib(-1)
+0
+>>> fib(0.5)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "fibonacci.py", line 6, in fib
+    for i in range(n):
+TypeError: 'float' object cannot be interpreted as an integer
+>>> 
+</pre>
+
+We can see, that the functions make only sense, if the input consists of positive integers. The function fib 
+returns 0 for a negative input and fiblist returns always the list [0,1], if the input is a negative integer. 
+Both functions raise a TypeError exception, because the range function is not defined
+for floats.
+<br>
+We can test our module by checking the return values for some characteristic calls to fib() and fiblist().
+<br>
+So we can add e.g. the following if statement to our module:
+
+<pre>
+if fib(0) == 0 and fib(10) == 55 and fib(50) == 12586269025:
+    print("Test for the fib function was successful!")
+else:
+    print("The fib function is returning wrong values!")
+</pre>
+
+If our program will be called standalone, we the the following output:
+
+<pre>
+$ python3 fibonacci.py 
+Test for the fib function was successful!
+</pre>
+
+We will deliberately add an error into our code now.
+<br><br>
+We change the following line   
+
+<pre>
+a, b = 0, 1  
+</pre>
+into
+<pre>
+a, b = 1, 1
+</pre>
+
+Principally, the function fib is still calculating the Fibonacci values, but fib(n) is returning the 
+Fibonacci value for the argument "n+1"
+
+
+If we call our changed module, we receive this error message:
+
+<pre>
+$ python3 fibonacci.py 
+"The fib function is returning wrong values!
+</pre>
+
+
+This approach has a crucial disadvantage. If we import the module, we will get output, saying the the 
+test was okay. Something we don't want to see, when we import the module.
+
+
+
+<pre>
+>>> import fibonacci
+Test for the fib function was successful!
+</pre>
+
+Apart from being disturbing it is not common practice. Modules should be silent when being imported. 
+
+
+<br><br>
+
+Our module should only print out error messages, warnings or other information, if it is started standalone. 
+If it is imported, it should be silent. The solution for this problem consists in using the built-in attribute 
+__name__  in a conditional statement. If the module is started standalone, the value of this attribute is "__main__". 
+Otherwise the value is the filename of the module without the extension.
+
+
+<br>
+Let's rewrite our module in the above mentioned way:
+
+<pre>
+""" Fibonacci Module """
+
+def fib(n):
+    """ Calculates the n-th Fibonacci number iteratively """
+    a, b = 0, 1
+    for i in range(n):
+        a, b = b, a + b
+    return a
+
+def fiblist(n):
+    """ creates a list of Fibonacci numbers up to the n-th generation """
+    fib = [0,1]
+    for i in range(1,n):
+        fib += [fib[-1]+fib[-2]]
+    return fib
+
+if __name__ == "__main__":
+    if fib(0) == 0 and fib(10) == 55 and fib(50) == 12586269025:
+        print("Test for the fib function was successful!")
+    else:
+        print("The fib function is returning wrong values!")
+</pre>
+
+
+We have squelched our module now. There will be no messages, if the module is imported.
+<br>
+The is the simplest and widest used method for unit tests. But it is definitely not the best one.
+<br><br>
+
+
+<h3>doctest Module</h3>
+
+The doctest module is often considered easier to use than the unittest, though the later is more 
+suitable for more complex tests. doctest is a test framework that comes prepackaged with Python. 
+The doctest module searches for pieces of text that look like interactive Python sessions inside 
+of the documentation parts of a module, and then executes (or reexecutes) the commands of those 
+sessions to verify that they work exactly as shown, i.e. that the same results can be achieved. 
+In other words: The help text of the module is parsed for example python sessions. These examples 
+are run and the results are compared against the expected value.  
+ 
+
+<br>
+<br>
+Usage of doctest:
+<br>
+To use "doctest" it has to be imported. The part of an interactive Python sessions with the examples 
+and the output has to be copied inside of the docstring the the corresponding function.  
+<br><br>
+We demonstrate this way of proceeding with the following simple example. We have slimmed down the 
+previous module, so that only the function fib is left: 
+
+<pre>
+import doctest
+
+def fib(n):
+    """ Calculates the n-th Fibonacci number iteratively """
+    a, b = 0, 1
+    for i in range(n):
+        a, b = b, a + b
+    return a
+</pre>
+
+We now call this module in an interactive Python shell and do some calculations: 
+
+<pre>
+>>> from fibonacci import fib
+>>> fib(0)
+0
+>>> fib(1)
+1
+>>> fib(10)
+55
+>>> fib(15)
+610
+>>> 
+</pre>
+
+
+We copy the complete session of the interactive shell into the docstring of our function. To start 
+the module doctest we have to call the method testmod(), but only if the module is called standalone. 
+The complete module looks like this now:
+
+<pre>
+import doctest
+
+def fib(n):
+    """ 
+    Calculates the n-th Fibonacci number iteratively  
+
+    >>> fib(0)
+    0
+    >>> fib(1)
+    1
+    >>> fib(10) 
+    55
+    >>> fib(15)
+    610
+    >>> 
+
+    """
+    a, b = 0, 1
+    for i in range(n):
+        a, b = b, a + b
+    return a
+
+if __name__ == "__main__": 
+    doctest.testmod()
+</pre>
+
+If we start our module directly like this 
+
+<pre>
+$ python3 fibonacci_doctest.py
+</pre>
+
+we get no output, because everything is okay.
+
+<br><br>
+To see how doctest works, if something is wrong, we place an error in our code:
+<br>
+We change again 
+<pre>
+a, b = 0, 1
+</pre>
+into
+<pre>
+a, b = 1, 1
+</pre>
+
+<br><br>
+Now we get the following, if we start our module:
+
+<pre>
+$ python3 fibonacci_doctest.py 
+**********************************************************************
+File "fibonacci_doctest.py", line 8, in __main__.fib
+Failed example:
+    fib(0)
+Expected:
+    0
+Got:
+    1
+**********************************************************************
+File "fibonacci_doctest.py", line 12, in __main__.fib
+Failed example:
+    fib(10) 
+Expected:
+    55
+Got:
+    89
+**********************************************************************
+File "fibonacci_doctest.py", line 14, in __main__.fib
+Failed example:
+    fib(15)
+Expected:
+    610
+Got:
+    987
+**********************************************************************
+1 items had failures:
+   3 of   4 in __main__.fib
+***Test Failed*** 3 failures.
+
+</pre>
+
+
+The output depicts all the calls, which return faulty results. We can see the call with the arguments in the 
+line following "Failed example:". 
+We can see the expected value for the argument in the line following "Expected:". The output shows us the newly 
+calculated value as well. We can find this value behind "Got:"
+
+
+<br><br>
+<h3>Test-driven Development (TDD)</h3>
+
+In the previous chapters, we tested functions, which we had already been finished. What about testing code you 
+haven't yet written? You think, that this is not possible? It is not only possible, it is the un­der­ly­ing idea 
+of test-dri­ven de­vel­op­ment. In the extreme case, you define tests be­fore you start coding the actual source code. 
+The program developer writes an automated test case which defines the desired "behaviour" of a function. This test case will - that's the idea behind the approach - initially fail, because the code has still to be written. 
+
+<br><br>
+The major problem or diffi­culty of this approach is the task of writ­ing suitable tests. Naturally, the per­fect test would 
+check all pos­si­ble in­puts and val­i­date the out­put. Of course, this is generally not always feasible. 
+
+
+<br><br>
+We have set the return value of the fib function to 0 in the following example:
+
+<pre>
+import doctest
+
+def fib(n):
+    """ 
+    Calculates the n-th Fibonacci number iteratively 
+
+    >>> fib(0)
+    0
+    >>> fib(1)
+    1
+    >>> fib(10) 
+    55
+    >>> fib(15)
+    610
+    >>> 
+
+    """
+
+    return 0
+
+if __name__ == "__main__": 
+    doctest.testmod()
+</pre>
+
+It hardly needs mentioning that the function returns except for fib(0) only wrong return values:
+
+<pre>
+$ python3 fibonacci_TDD.py 
+**********************************************************************
+File "fibonacci_TDD.py", line 10, in __main__.fib
+Failed example:
+    fib(1)
+Expected:
+    1
+Got:
+    0
+**********************************************************************
+File "fibonacci_TDD.py", line 12, in __main__.fib
+Failed example:
+    fib(10) 
+Expected:
+    55
+Got:
+    0
+**********************************************************************
+File "fibonacci_TDD.py", line 14, in __main__.fib
+Failed example:
+    fib(15)
+Expected:
+    610
+Got:
+    0
+**********************************************************************
+1 items had failures:
+   3 of   4 in __main__.fib
+***Test Failed*** 3 failures.
+</pre>
+
+
+Now we have to keep on writing and changing the code for the function fib until it passes the test.
+
+
+
+<br><br>
+This test approach is a method of software development, which is called test-driven development. 
+
+
+<br><br>
+<h3>unittest</h3>
+
+The Python module unittest is a unit testing framework, which is based on Erich Gamma's JUnit and Kent Beck's 
+Smalltalk testing framework.
+The module contains the core framework classes that form the basis of the test cases and suites (TestCase, 
+TestSuite and so on), and also a text-based utility class for running the tests and reporting the results 
+(TextTestRunner).
+
+
+<br>
+The most obvious difference to the module "doctest" consists in the fact, that the test cases of the module 
+"unittest" are not defined inside of the module, which has to be tested. The major advantage is clear: 
+program documentation and test descriptions are separate from each other. The price you have to pay on 
+the other hand consists in an increase of work to create the test cases. 
+
+<br><br>
+
+
+
+We will use our module fibonacci once more to create a test case with unittest. To this purpose we create a 
+file fibonacci_unittest.py. In this file we have to import unittest and the module which has to be tested, 
+i.e. fibonacci.
+
+<br><br>
+
+Furthermore, we have to create a class with an arbitrary name - we will call it "FibonacciTest" - 
+which inherits from unittest.TestCase.
+
+The test cases are defined in this class by using methods. The name of these methods is arbitrary, 
+but has to start with test. 
+In our method "testCalculation" we use the method assertEqual from the class TestCase. 
+assertEqual(first, second, msg = None) checks, if expression "first" is equal to the expression "second". If the two expresions are not equal, msg will be output, if msg not not None. 
+
+
+<pre>
+import unittest
+from fibonacci import fib
+
+class FibonacciTest(unittest.TestCase):
+
+    def testCalculation(self):
+        self.assertEqual(fib(0), 0)
+        self.assertEqual(fib(1), 1)
+        self.assertEqual(fib(5), 5)
+        self.assertEqual(fib(10), 55)
+        self.assertEqual(fib(20), 6765)
+
+if __name__ == "__main__": 
+    unittest.main()
+</pre>
+
+If we call this test case, we get the following output:
+
+<pre>
+$ python3 fibonacci_unittest.py 
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+OK
+</pre>
+
+
+This is usually the desired result, but we are now interested what happens in the error case. Therefore we 
+will create our previous error again. We change again the well known line:  
+ 
+
+<pre>
+a, b = 0, 1
+</pre>  
+
+will be changed in 
+
+<pre>
+a, b = 1, 1
+</pre> 
+
+
+<br><br>
+
+Now the test result looks like this:
+
+<pre>
+$ python3 fibonacci_unittest.py 
+F
+======================================================================
+FAIL: testCalculation (__main__.FibonacciTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "fibonacci_unittest.py", line 7, in testCalculation
+    self.assertEqual(fib(0), 0)
+AssertionError: 1 != 0
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (failures=1)
+</pre>
+ 
+The first statement in testCalculation has created an exception. The other assertEqual calls had not been executed. We correct our error and create a new one. Now all the values will be correct, except if the input argument is 20:
+
+
+<pre>
+def fib(n):
+    """ Iterative Fibonacci Function """
+    a, b = 0, 1
+    for i in range(n):
+        a, b = b, a + b
+    if n == 20:
+        a = 42    
+    return a
+</pre>
+
+The output of a test run looks now like this:
+
+
+<pre>
+$ python3 fibonacci_unittest.py 
+blabal
+F
+======================================================================
+FAIL: testCalculation (__main__.FibonacciTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "fibonacci_unittest.py", line 12, in testCalculation
+    self.assertEqual(fib(20), 6765)
+AssertionError: 42 != 6765
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (failures=1)
+</pre>
+
+All the statements of testCalculation have been executed, but we haven't seen any output, because everython was okay:
+
+<pre>
+        self.assertEqual(fib(0), 0)
+        self.assertEqual(fib(1), 1)
+        self.assertEqual(fib(5), 5)
+</pre>
+
+<br><br>
+
+<h3>Methods of the Class TestCase</h3>
+
+We now have a closer look at the class TestCase. 
+
+
+<br><br>
+
+<table  cellpadding="6" cellspacing="0" border="1" bgcolor="#F5F5F5">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Method</th>
+<th class="head">Meaning</th>
+</tr>
+</thead>
+
+<tbody valign="top">
+
+<tr>
+<td><tt><span class="pre">setUp()</span></tt></td>
+<td>Hook method for setting up the test fixture before exercising it. This method is called before calling the implemented test methods.
+</td>
+</tr>
+
+<tr>
+<td><tt><span class="pre">tearDown()</span></tt></td>
+<td>Hook method for deconstructing the class fixture after running all tests in the class.</td>
+</tr>
+
+<tr>
+<td><tt><span class="pre">assertEqual(self, first, second, msg=None)</span></tt></td>
+<td>The test fails if the two objects are not equal as determined by the '==' operator.</td>
+</tr>
+
+<tr>
+<td><tt><span class="pre">assertAlmostEqual(self, first, second, places=None, msg=None, delta=None)</span></tt></td>
+<td>The test fails if the two objects are unequal as determined by their difference rounded to the given number of 
+decimal places (default 7) and comparing to zero, or by comparing that the between the two objects is more than 
+the given delta.
+<br>
+Note that decimal places (from zero) are usually not the same as significant digits (measured from the most significant digit).
+<br>
+If the two objects compare equal then they will automatically compare almost equal.
+</td>
+</tr>
+
+<tr>
+<td><tt><span class="pre">assertCountEqual(self, first, second, msg=None)</span></tt></td>
+<td>An unordered sequence comparison asserting that the same elements, regardless of order.  If the same element occurs more than once, it verifies that the elements occur the same number of times.
+<br><tt> self.assertEqual(Counter(list(first)),
+                      Counter(list(second)))</tt>
+<br>
+Example:
+<br>
+<tt>[0, 1, 1]</tt> and <tt>[1, 0, 1]</tt> compare equal, because the number of ones and zeroes are the same.
+<br>
+<tt>[0, 0, 1]</tt> and <tt>[0, 1]</tt> compare unequal, because zero appears twice in the first list and only once in the second list.
+<br>
+</td>
+</tr>
+
+
+
+<tr>
+<td><tt><span class="pre">assertDictEqual(self, d1, d2, msg=None)</span></tt></td>
+<td>Both arguments are taken as dictionaries and they are checked if they are equal.</td>
+</tr>
+
+<tr>
+<td><tt><span class="pre">assertTrue(self, expr, msg=None)</span></tt></td>
+<td>Checks if the expression "expr" is True.</td>
+</tr>
+
+<tr>
+<td><tt><span class="pre">assertGreater(self, a, b, msg=None)</span></tt></td>
+<td>Checks, if a &gt; b is True.</td>
+</tr>
+
+<tr>
+<td><tt><span class="pre">assertGreaterEqual(self, a, b, msg=None)</span></tt></td>
+<td>Checks if a &ge; b</td>
+</tr>
+
+<tr>
+<td><tt><span class="pre">assertFalse(self, expr, msg=None)</span></tt></td>
+<td>Checks if expression "expr" is True.</td>
+</tr>
+
+<tr>
+<td><tt><span class="pre">assertLess(self, a, b, msg=None)</span></tt></td>
+<td>Checks if a &lt; b</td>
+</tr>
+
+<tr>
+<td><tt><span class="pre">assertLessEqual(self, a, b, msg=None)</span></tt></td>
+<td>Checks if a &le; b</td>
+</tr>
+
+<tr>
+<td><tt><span class="pre">assertIn(self, member, container, msg=None)</span></tt></td>
+<td>Checks if a in b</td>
+</tr>
+
+<tr>
+<td><tt><span class="pre">assertIs(self, expr1, expr2, msg=None)</span></tt></td>
+<td>Checks if "a is b"</td>
+</tr>
+
+<tr>
+<td><tt><span class="pre">assertIsInstance(self, obj, cls, msg=None)</span></tt></td>
+<td>Checks if isinstance(obj, cls).</td>
+</tr>
+
+<tr>
+<td><tt><span class="pre">assertIsNone(self, obj, msg=None)</span></tt></td>
+<td>Checks if "obj is None"</td>
+</tr>
+
+<tr>
+<td><tt><span class="pre">assertIsNot(self, expr1, expr2, msg=None)</span></tt></td>
+<td>Checks if "a is not b"</td>
+</tr>
+
+<tr>
+<td><tt><span class="pre">assertIsNotNone(self, obj, msg=None)</span></tt></td>
+<td>Checks if  obj is not equal to None</td>
+</tr>
+
+
+<tr>
+<td><tt><span class="pre">assertListEqual(self, list1, list2, msg=None)</span></tt></td>
+<td>Lists are checked for equality.</td>
+</tr>
+
+<tr>
+<td><tt><span class="pre">assertMultiLineEqual(self, first, second, msg=None)</span></tt></td>
+<td>Assert that two multi-line strings are equal.q</td>
+</tr>
+
+<tr>
+<td><tt><span class="pre">assertTupleEqual(self, tuple1, tuple2, msg=None)</span></tt></td>
+<td>Analogous to assertListEqual</td>
+</tr>
+
+
+</tbody>
+</table>
+
+<br><br>
+
+We expand our previous example by a setUp and a tearDown method:
+
+<pre>
+import unittest
+from fibonacci import fib
+
+class FibonacciTest(unittest.TestCase):
+
+    def setUp(self):
+        self.fib_elems = ( (0,0), (1,1), (2,1), (3,2), (4,3), (5,5) )
+        print ("setUp executed!")
+
+    def testCalculation(self):
+        for (i,val) in self.fib_elems:
+            self.assertEqual(fib(i), val)
+
+    def tearDown(self):
+        self.fib_elems = None
+        print ("tearDown executed!")
+
+if __name__ == "__main__": 
+    unittest.main()
+</pre>
+
+A call returns the following results:
+
+<pre>
+$ python3 fibonacci_unittest2.py 
+setUp executed!
+tearDown executed!
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+OK
+</pre>
+
+
+Most of the TestCase methods have an optional parameter "msg". It's possible to return an additional description of an error with "msg". 
+
+
+<h3>Exercises</h3>
+
+1. Exercise:
+<br><br>
+
+Can you find a problem in the following code?
+
+<pre>
+     import doctest
+     
+     def fib(n):
+         """ Calculates the n-th Fibonacci number iteratively 
+     
+         >>> fib(0)
+         0
+         >>> fib(1)
+         1
+         >>> fib(10) 
+         55
+         >>> fib(40)
+         102334155
+         >>> 
+     
+         """
+         if n == 0:
+             return 0
+         elif n == 1:
+             return 1
+         else:
+             return fib(n-1) + fib(n-2)
+     
+     if __name__ == "__main__": 
+         doctest.testmod()
+</pre>
+
+<br><br>
+Answer:
+<br><br>
+The doctest is okay. The problem is the implementation of the fibonacci function. This recursive approach is "highly" inefficient.  You need a lot of patience to wait for the termination of the test. The number of hours, days or weeks depend on your computer.&#9786;
+<br><br>
+<hr>
+<br><br>
+Footnotes:
+<br><br>
+<br><br><sup>1</sup>The aphorism in full length: "Errare (Errasse) humanum est, sed in errare (errore) perseverare diabolicum." (To err is human, but to persist in it is diabolic")
+<br><br><sup>2</sup>In computer science, the syntax of a computer language is the set of rules that defines the combinations of symbols that are considered to be a correctly structured document or fragment in that language. Writing "if" as "iff" is an example for syntax error, both in programming and in the English language.  
+</p>
+
+<div id="contextlinks">Previous Chapter: <a href="python3_recursive_functions.html">Recursion and Recursive Functions</a><br>
+<LINK rel="prev" href="python3_recursive_functions.html">Next Chapter: <a href="python3_memoization.html">Memoization and Decorators</a><br>
+<LINK rel="next" href="python3_memoization.html"></div><br><br><br>
+
+</div>
+<div id="footer">  &copy; 2011 - 2014 <a href="http://www.bklein.de/">Bernd Klein</a>,
+Bodenseo; 
+Design by Denise Mitchinson adapted for python-course.eu by Bernd Klein</div>
+</div>
+</body>
+
+<!-- Mirrored from www.python-course.eu/python3_tests.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:12:26 GMT -->
+</html>

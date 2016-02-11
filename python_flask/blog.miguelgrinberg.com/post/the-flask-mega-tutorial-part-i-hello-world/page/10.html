@@ -1,0 +1,974 @@
+﻿<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world/page/10 by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:15:48 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    
+    <title>
+    
+        The Flask Mega-Tutorial, Part I: Hello, World! - miguelgrinberg.com
+    
+</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="description" content="miguelgrinberg.com">
+	<meta name="copyright" content="Copyright (c) 2012-2015 Miguel Grinberg">
+	<meta name="author" content="Miguel Grinberg">
+    
+    <meta name="keywords" content="programming, python, flask, web, tutorial">
+    
+
+    
+    <!-- Bootstrap -->
+    <link href="../../../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../../../static/prettify.css" type="text/css" rel="stylesheet" />
+    <link href="../../../static/colorbox/colorbox.css" rel="stylesheet" type="text/css" />
+    <link href="../../../static/style.css" rel="stylesheet" type="text/css" />
+
+    <link rel="shortcut icon" href="../../../static/favicon.ico">
+	<link rel="alternate" type="application/rss+xml" href="../../../feed" title="miguelgrinberg.com RSS feed">
+
+  </head>
+  <body>
+    
+    <!-- facebook sdk -->
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "../../../../connect.facebook.net/en_US/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    <!-- google plus sdk -->
+    <script type="text/javascript" src="../../../../apis.google.com/js/plusone.js"></script>
+    <!-- twitter sdk -->
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="../../../../platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <!-- linkedin sdk -->
+    <script src="../../../../platform.linkedin.com/in.js" type="text/javascript"></script>
+
+    
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://blog.miguelgrinberg.com/index">miguelgrinberg.com</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="http://blog.miguelgrinberg.com/index">Home</a></li>
+                        <li><a href="../../about-me.html">About Me</a></li>
+                        <li><a href="../../about-this-blog.html">About This Blog</a></li>
+                        
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <p class="navbar-text" style="margin-top: 10px; margin-bottom: 0px;">
+                                <a type="application/rss+xml" href="../../../feed"><img src="../../../static/rss.png" alt="RSS Feed" title="RSS Feed" /></a>
+                                <a href="https://www.facebook.com/miguelgrinbergblog"><img src="../../../static/facebook.png" alt="Facebook" title="Facebook" /></a>
+                                <a href="https://plus.google.com/u/0/117786742456929977820"><img src="../../../static/googleplus.png" alt="Google+" title="Google+" /></a>
+                                <a href="http://www.linkedin.com/in/miguelgrinberg"><img src="../../../static/linkedin.png" alt="LinkedIn" title="LinkedIn" /></a>
+                                <a href="http://github.com/miguelgrinberg"><img src="../../../static/github.png" alt="GitHub" title="GitHub" /></a>
+                                <a href="https://twitter.com/#!/miguelgrinberg"><img src="../../../static/twitter.png" alt="Twitter" title="Twitter" /></a>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </nav>
+
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-push-9 sidebar-bg">
+                <div id="sidebar">
+                    
+
+                    
+                    <h1>An Introduction to Flask</h1>
+                    <p>If you are a beginner giving your first steps in web development, my Flask introductory video is for you:</p>
+                    <p><center><a href="http://bit.ly/flaskintro"><img style="border: 1px solid black;" src="../../../static/flask-intro-cover-tiny.png"></a></center></p>
+                    <p>Visit <a href="http://flaskbook.com/">http://flaskbook.com</a> for information about this and other Flask training products I have created!</p>
+                    
+
+                    <h1>About Miguel</h1>
+                    <img style="float: right; margin: 0px 8px 8px 0px; padding: 4px; border: 1px solid #ccc;" src="../../../static/miguel.jpg" />
+                    <p>Welcome to my blog!</p>
+                    <p>I'm a software engineer, photographer and filmmaker in Portland, Oregon, USA.</p>
+                    <p>You can also find me on <a href="https://www.facebook.com/miguelgrinbergblog">Facebook</a>, <a href="https://plus.google.com/u/0/117786742456929977820">Google+</a>, <a href="http://www.linkedin.com/in/miguelgrinberg">LinkedIn</a>, <a href="https://github.com/miguelgrinberg">Github</a> and <a href="https://twitter.com/#!/miguelgrinberg">Twitter</a>.</p>
+                    <p>Thank you for visiting!</p>
+
+                    
+
+                    
+                    <h1>Categories</h1>
+<ul>
+
+	<li>
+		<a href="../../../category/Arduino/feed">
+			<img src="../../../static/rss-small.png" title="Arduino RSS Feed" label="Arduino RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Arduino.html">Arduino</a></span> (7)
+	</li>
+
+	<li>
+		<a href="../../../category/Authentication/feed">
+			<img src="../../../static/rss-small.png" title="Authentication RSS Feed" label="Authentication RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Authentication.html">Authentication</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../../../category/Blog/feed">
+			<img src="../../../static/rss-small.png" title="Blog RSS Feed" label="Blog RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Blog.html">Blog</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/C%2b%2b/feed">
+			<img src="../../../static/rss-small.png" title="C++ RSS Feed" label="C++ RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/C%2b%2b.html">C++</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../../../category/Cloud/feed">
+			<img src="../../../static/rss-small.png" title="Cloud RSS Feed" label="Cloud RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Cloud.html">Cloud</a></span> (2)
+	</li>
+
+	<li>
+		<a href="../../../category/Filmmaking/feed">
+			<img src="../../../static/rss-small.png" title="Filmmaking RSS Feed" label="Filmmaking RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Filmmaking.html">Filmmaking</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/Flask/feed">
+			<img src="../../../static/rss-small.png" title="Flask RSS Feed" label="Flask RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Flask.html">Flask</a></span> (39)
+	</li>
+
+	<li>
+		<a href="../../../category/Games/feed">
+			<img src="../../../static/rss-small.png" title="Games RSS Feed" label="Games RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Games.html">Games</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Gear/feed">
+			<img src="../../../static/rss-small.png" title="Gear RSS Feed" label="Gear RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Gear.html">Gear</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/HTML5/feed">
+			<img src="../../../static/rss-small.png" title="HTML5 RSS Feed" label="HTML5 RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/HTML5.html">HTML5</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Heroku/feed">
+			<img src="../../../static/rss-small.png" title="Heroku RSS Feed" label="Heroku RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Heroku.html">Heroku</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Javascript/feed">
+			<img src="../../../static/rss-small.png" title="Javascript RSS Feed" label="Javascript RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Javascript.html">Javascript</a></span> (3)
+	</li>
+
+	<li>
+		<a href="../../../category/Movie%20Reviews/feed">
+			<img src="../../../static/rss-small.png" title="Movie Reviews RSS Feed" label="Movie Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Movie%20Reviews.html">Movie Reviews</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../../../category/Netflix/feed">
+			<img src="../../../static/rss-small.png" title="Netflix RSS Feed" label="Netflix RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Netflix.html">Netflix</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../../../category/Node.js/feed">
+			<img src="../../../static/rss-small.png" title="Node.js RSS Feed" label="Node.js RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Node.html">Node.js</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/OpenStack/feed">
+			<img src="../../../static/rss-small.png" title="OpenStack RSS Feed" label="OpenStack RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/OpenStack.html">OpenStack</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Personal/feed">
+			<img src="../../../static/rss-small.png" title="Personal RSS Feed" label="Personal RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Personal.html">Personal</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Photography/feed">
+			<img src="../../../static/rss-small.png" title="Photography RSS Feed" label="Photography RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Photography.html">Photography</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/Product%20Reviews/feed">
+			<img src="../../../static/rss-small.png" title="Product Reviews RSS Feed" label="Product Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Product%20Reviews.html">Product Reviews</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Programming/feed">
+			<img src="../../../static/rss-small.png" title="Programming RSS Feed" label="Programming RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Programming.html">Programming</a></span> (47)
+	</li>
+
+	<li>
+		<a href="../../../category/Project%20Management/feed">
+			<img src="../../../static/rss-small.png" title="Project Management RSS Feed" label="Project Management RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Project%20Management.html">Project Management</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Python/feed">
+			<img src="../../../static/rss-small.png" title="Python RSS Feed" label="Python RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Python.html">Python</a></span> (43)
+	</li>
+
+	<li>
+		<a href="../../../category/REST/feed">
+			<img src="../../../static/rss-small.png" title="REST RSS Feed" label="REST RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/REST.html">REST</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../../../category/Rackspace/feed">
+			<img src="../../../static/rss-small.png" title="Rackspace RSS Feed" label="Rackspace RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Rackspace.html">Rackspace</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Raspberry%20Pi/feed">
+			<img src="../../../static/rss-small.png" title="Raspberry Pi RSS Feed" label="Raspberry Pi RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Raspberry%20Pi.html">Raspberry Pi</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/RhinoSteady/feed">
+			<img src="../../../static/rss-small.png" title="RhinoSteady RSS Feed" label="RhinoSteady RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/RhinoSteady.html">RhinoSteady</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/Robotics/feed">
+			<img src="../../../static/rss-small.png" title="Robotics RSS Feed" label="Robotics RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Robotics.html">Robotics</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/Video/feed">
+			<img src="../../../static/rss-small.png" title="Video RSS Feed" label="Video RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Video.html">Video</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../../../category/Windows/feed">
+			<img src="../../../static/rss-small.png" title="Windows RSS Feed" label="Windows RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Windows.html">Windows</a></span> (1)
+	</li>
+
+</ul>
+                    
+                </div>
+            </div>
+            <div class="col-md-8 col-md-pull-4">
+                <div id="main">
+                    
+                    
+                    
+                    
+                    
+
+<div class="post">
+
+<p class="date"><span class="flask-moment" data-timestamp="2012-05-07T06:05:40Z" data-format="format('LL')" data-refresh="0">2012-05-07T06:05:40Z</span></p>
+<h1 class="post-title"><a href="../../the-flask-mega-tutorial-part-i-hello-world.html">The Flask Mega-Tutorial, Part I: Hello, World!</a></h1>
+<div class="posted">Posted by <span class="label label-danger"><a href="http://blog.miguelgrinberg.com/author/Miguel Grinberg">Miguel Grinberg</a></span> under <span class="label label-primary"><a href="../../../category/Programming.html">Programming</a></span>, <span class="label label-primary"><a href="../../../category/Python.html">Python</a></span>, <span class="label label-primary"><a href="../../../category/Flask.html">Flask</a></span>. </div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="../../the-flask-mega-tutorial-part-i-hello-world.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+<div class="post_body"><p>This is the first article in a series where I will be documenting my experience writing web applications in <a href="http://python.org/">Python</a> using the <a href="http://flask.pocoo.org/">Flask</a> microframework.</p>
+<p><strong>NOTE</strong>: This article was revised in September 2014 to be in sync with current versions of Python and Flask.</p>
+<p>Here is an index of all the articles in the series that have been published to date:</p>
+<ul>
+<li><a href="../../the-flask-mega-tutorial-part-i-hello-world.html">Part I: Hello, World!</a> (this article)</li>
+<li><a href="../../the-flask-mega-tutorial-part-ii-templates.html">Part II: Templates</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-iii-web-forms.html">Part III: Web Forms</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-iv-database.html">Part IV: Database</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-v-user-logins.html">Part V: User Logins</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-vi-profile-page-and-avatars.html">Part VI: Profile Page And Avatars</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-vii-unit-testing.html">Part VII: Unit Testing</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-viii-followers-contacts-and-friends.html">Part VIII: Followers, Contacts And Friends</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-ix-pagination.html">Part IX: Pagination</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-x-full-text-search.html">Part X: Full Text Search</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xi-email-support.html">Part XI: Email Support</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xii-facelift.html">Part XII: Facelift</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xiii-dates-and-times.html">Part XIII: Dates and Times</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xiv-i18n-and-l10n.html">Part XIV: I18n and L10n</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xv-ajax.html">Part XV: Ajax</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xvi-debugging-testing-and-profiling.html">Part XVI: Debugging, Testing and Profiling</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xvii-deployment-on-linux-even-on-the-raspberry-pi.html">Part XVII: Deployment on Linux (even on the Raspberry Pi!)</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xviii-deployment-on-the-heroku-cloud.html">Part XVIII: Deployment on the Heroku Cloud</a></li>
+</ul>
+<h2>My background</h2>
+<p>I'm a software engineer with double digit years of experience developing complex applications in several languages. I first learned Python as part of an effort to create bindings for a C++ library at work.</p>
+<p>In addition to Python, I've written web apps in PHP, Ruby, Smalltalk and believe it or not, also in C++. Of all these, the Python/Flask combination is the one that I've found to be the most flexible.</p>
+<p><strong>UPDATE</strong>: I have written a book titled "Flask Web Development", published in 2014 by O'Reilly Media. The book and the tutorial complement each other, the book presents a more updated usage of Flask and is, in general, more advanced than the tutorial, but some topics are only covered in the tutorial. Visit <a href="http://flaskbook.com/">http://flaskbook.com</a> for more information.</p>
+<h2>The application</h2>
+<p>The application I'm going to develop as part of this tutorial is a decently featured microblogging server that I decided to call <em>microblog</em>. Pretty creative, I know.</p>
+<p>These are some of the topics I will cover as we make progress with this project:</p>
+<ul>
+<li>User management, including managing logins, sessions, user roles, profiles and user avatars.</li>
+<li>Database management, including migration handling.</li>
+<li>Web form support, including field validation.</li>
+<li>Pagination of long lists of items.</li>
+<li>Full text search.</li>
+<li>Email notifications to users.</li>
+<li>HTML templates.</li>
+<li>Support for multiple languages.</li>
+<li>Caching and other performance optimizations.</li>
+<li>Debugging techniques for development and production servers.</li>
+<li>Installation on a production server.</li>
+</ul>
+<p>So as you see, I'm going pretty much for the whole thing. I hope this application, when finished, will serve as a sort of template for writing other web applications.</p>
+<h2>Requirements</h2>
+<p>If you have a computer that runs Python then you are probably good to go. The tutorial application should run just fine on Windows, OS X and Linux. Unless noted, the code presented in these articles has been tested against Python 2.7 and 3.4.</p>
+<p>The tutorial assumes that you are familiar with the terminal window (command prompt for Windows users) and know the basic command line file management functions of your operating system. If you don't, then I recommend that you learn how to create directories, copy files, etc. using the command line before continuing.</p>
+<p>Finally, you should be somewhat comfortable writing Python code. Familiarity with <a href="http://docs.python.org/tutorial/modules.html">Python modules and packages</a> is also recommended.</p>
+<h2>Installing Flask</h2>
+<p>Okay, let's get started!</p>
+<p>If you haven't yet, go ahead and install <a href="http://python.org/download/">Python</a>.</p>
+<p>Now we have to install Flask and several extensions that we will be using. My preferred way to do this is to create a <a href="http://pypi.python.org/pypi/virtualenv">virtual environment</a> where everything gets installed, so that your main Python installation is not affected. As an added benefit, you won't need root access to do the installation in this way.</p>
+<p>So, open up a terminal window, choose a location where you want your application to live and create a new folder there to contain it. Let's call the application folder <code>microblog</code>.</p>
+<p>If you are using Python 3.4, then cd into the <code>microblog</code> folder and then create a virtual environment with the following command:</p>
+<pre><code>$ python -m venv flask
+</code></pre>
+<p>Note that in some operating systems you may need to use <code>python3</code> instead of <code>python</code>. The above command creates a private version of your Python interpreter inside a folder named <code>flask</code>.</p>
+<p>If you are using any other version of Python older than 3.4, then you need to download and install <a href="http://virtualenv.readthedocs.org/en/latest/virtualenv.html#installation">virtualenv.py</a> before you can create a virtual environment. If you are on Mac OS X, then you can install it with the following command:</p>
+<pre><code>$ sudo easy_install virtualenv
+</code></pre>
+<p>On Linux you likely have a package for your distribution. For example, if you use Ubuntu:</p>
+<pre><code>$ sudo apt-get install python-virtualenv
+</code></pre>
+<p>Windows users have the most difficulty in installing virtualenv, so if you want to avoid the trouble then install Python 3.4. If you want to install <code>virtualenv</code> on Windows then the easiest way is by installing <code>pip</code> first, as explaned in <a href="https://pip.pypa.io/en/latest/installing.html">this page</a>. Once <code>pip is installed, the following command installs</code>virtualenv`:</p>
+<pre><code>$ pip install virtualenv
+</code></pre>
+<p>We've seen above how to create a virtual environment in Python 3.4. For older versions of Python that have been expanded with <code>virtualenv</code>, the command that creates a virtual environment is the following:</p>
+<pre><code>$ virtualenv flask
+</code></pre>
+<p>Regardless of the method you use to create the virtual environment, you will end up with a folder named <code>flask</code> that contains a complete Python environment ready to be used for this project.</p>
+<p>Virtual environments can be activated and deactivated, if desired. An activated environment adds the location of its <code>bin</code> folder to the system path, so that for example, when you type <code>python</code> you get the environment's version and not the system's one. But activating a virtual environment is not necessary, it is equally effective to invoke the interpreter by specifying its pathname.</p>
+<p>If you are on Linux, OS X or Cygwin, install flask and extensions by entering the following commands, one after another:</p>
+<pre><code>$ flask/bin/pip install flask
+$ flask/bin/pip install flask-login
+$ flask/bin/pip install flask-openid
+$ flask/bin/pip install flask-mail
+$ flask/bin/pip install flask-sqlalchemy
+$ flask/bin/pip install sqlalchemy-migrate
+$ flask/bin/pip install flask-whooshalchemy
+$ flask/bin/pip install flask-wtf
+$ flask/bin/pip install flask-babel
+$ flask/bin/pip install guess_language
+$ flask/bin/pip install flipflop
+$ flask/bin/pip install coverage
+</code></pre>
+<p>If you are on Windows the commands are slightly different:</p>
+<pre><code>$ flask\Scripts\pip install flask
+$ flask\Scripts\pip install flask-login
+$ flask\Scripts\pip install flask-openid
+$ flask\Scripts\pip install flask-mail
+$ flask\Scripts\pip install flask-sqlalchemy
+$ flask\Scripts\pip install sqlalchemy-migrate
+$ flask\Scripts\pip install flask-whooshalchemy
+$ flask\Scripts\pip install flask-wtf
+$ flask\Scripts\pip install flask-babel
+$ flask\Scripts\pip install guess_language
+$ flask\Scripts\pip install flipflop
+$ flask\Scripts\pip install coverage
+</code></pre>
+<p>These commands will download and install all the packages that we will use for our application.</p>
+<h2>"Hello, World" in Flask</h2>
+<p>You now have a <code>flask</code> sub-folder inside your <code>microblog</code> folder that is populated with a Python interpreter and the Flask framework and extensions that we will use for this application. Now it's time to write our first web application!</p>
+<p>After you <code>cd</code> to the <code>microblog</code> folder, let's create the basic folder structure for our application:</p>
+<pre><code>$ mkdir app
+$ mkdir app/static
+$ mkdir app/templates
+$ mkdir tmp
+</code></pre>
+<p>The <code>app</code> folder will be where we will put our application package. The <code>static</code> sub-folder is where we will store static files like images, javascripts, and cascading style sheets. The <code>templates</code> sub-folder is obviously where our templates will go.</p>
+<p>Let's start by creating a simple init script for our <code>app</code> package (file <code>app/__init__.py</code>):</p>
+<pre><code>from flask import Flask
+
+app = Flask(__name__)
+from app import views
+</code></pre>
+<p>The script above simply creates the application object (of class <code>Flask</code>) and then imports the views module, which we haven't written yet. Do not confuse <code>app</code> the variable (which gets assigned the <code>Flask</code> instance) with <code>app</code> the package (from which we import the <code>views</code> module).</p>
+<p>If you are wondering why the <code>import</code> statement is at the end and not at the beginning of the script as it is always done, the reason is to avoid circular references, because you are going to see that the <code>views</code> module needs to import the <code>app</code> variable defined in this script. Putting the import at the end avoids the circular import error.</p>
+<p>The views are the handlers that respond to requests from web browsers or other clients. In Flask handlers are written as Python functions. Each view function is mapped to one or more request URLs.</p>
+<p>Let's write our first view function (file <code>app/views.py</code>):</p>
+<pre><code>from app import app
+
+@app.route('/')
+@app.route('/index')
+def index():
+    return "Hello, World!"
+</code></pre>
+<p>This view is actually pretty simple, it just returns a string, to be displayed on the client's web browser. The two <code>route</code> decorators above the function create the mappings from URLs <code>/</code> and <code>/index</code> to this function.</p>
+<p>The final step to have a fully working web application is to create a script that starts up the development web server with our application. Let's call this script <code>run.py</code>, and put it in the root folder:</p>
+<pre><code>#!flask/bin/python
+from app import app
+app.run(debug=True)
+</code></pre>
+<p>The script simply imports the <code>app</code> variable from our app package and invokes its <code>run</code> method to start the server. Remember that the <code>app</code> variable holds the <code>Flask</code> instance that we created it above.</p>
+<p>To start the app you just run this script. On OS X, Linux and Cygwin you have to indicate that this is an executable file before you can run it:</p>
+<pre><code>$ chmod a+x run.py
+</code></pre>
+<p>Then the script can simply be executed as follows:</p>
+<pre><code>./run.py
+</code></pre>
+<p>On Windows the process is a bit different. There is no need to indicate the file is executable. Instead you have to run the script as an argument to the Python interpreter from the virtual environment:</p>
+<pre><code>$ flask\Scripts\python run.py
+</code></pre>
+<p>After the server initializes it will listen on port 5000 waiting for connections. Now open up your web browser and enter the following URL in the address field:</p>
+<pre><code>http://localhost:5000
+</code></pre>
+<p>Alternatively you can use the following URL:</p>
+<pre><code>http://localhost:5000/index
+</code></pre>
+<p>Do you see the route mappings in action? The first URL maps to <code>/</code>, while the second maps to <code>/index</code>. Both routes are associated with our view function, so they produce the same result. If you enter any other URL you will get an error, since only these two have been defined.</p>
+<p>When you are done playing with the server you can just hit Ctrl-C to stop it.</p>
+<p>And with this I conclude this first installment of this tutorial. </p>
+<p>For those of you that are lazy typists, you can download the code from this tutorial below:</p>
+<p>Download <a href="https://codeload.github.com/miguelgrinberg/microblog/zip/version-0.1">microblog-0.1.zip</a>.</p>
+<p>Note that you still need to install Flask as indicated above before you can run the application.</p>
+<h2>What's next</h2>
+<p>In the next part of the series we will modify our little application to use HTML templates.</p>
+<p>I hope to see you in the next chapter.</p>
+<p>Miguel</p></div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="../../the-flask-mega-tutorial-part-i-hello-world.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+
+
+<h4 style="text-align: right"><a name="comments"></a>350 comments</h4>
+
+
+<div class="comment">
+    <ul>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#226</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-07-11T02:45:53Z" data-format="fromNow(0)" data-refresh="0">2014-07-11T02:45:53Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Yecid: the run.py script goes in your main application folder, not on flask\Scripts. Also remember to always use backward slashes if you are using the Windows command line.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/b02a78b5a4a8ee65fcbae5297d505a13ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#227</span> <span class="label label-primary"><a href="thecodeinn.blogspot.html">Peter Goldsborough</a></span> said
+                    <span class="flask-moment" data-timestamp="2014-07-12T02:13:39Z" data-format="fromNow(0)" data-refresh="0">2014-07-12T02:13:39Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hey, I was having problems with your code, getting H12 Time out requests all the time. I found the solution and wanted to share this with you, might wanna change your run.py()?: http://stackoverflow.com/questions/16020749/heroku-app-runs-locally-but-gets-h12-timeout-error-uses-a-package</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/efcc7b1f221bcaecbaf8e630f2d307f1ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#228</span> <span class="label label-primary">armash</span> said
+                    <span class="flask-moment" data-timestamp="2014-07-14T09:07:20Z" data-format="fromNow(0)" data-refresh="0">2014-07-14T09:07:20Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">hey..when i execute
+python run.py it shows me error that app
+from app import app
+&#34;NO MODULE NAMED app&#34;
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/b1c85f52019b0c64591765069820021cce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#229</span> <span class="label label-primary">Sergey Smirnov</span> said
+                    <span class="flask-moment" data-timestamp="2014-07-25T14:01:18Z" data-format="fromNow(0)" data-refresh="0">2014-07-25T14:01:18Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">\flask\Scripts\python.exe \tutorial/run.py
+Traceback (most recent call last):
+  File &#34;/tutorial/run.py&#34;, line 1, in &lt;module&gt;
+    from app import app
+  File &#34;\tutorial\app\__init__.py&#34;, line 4, in &lt;module&gt;
+    from app import views
+ImportError: cannot import name views
+
+The file views.py is definitly in /app folder.
+Can you explaine me what are you doing in __init__.py? app in 3rd line is a Flask object. Is it some kind of import from Flask object&amp;</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#230</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-07-25T16:17:56Z" data-format="fromNow(0)" data-refresh="0">2014-07-25T16:17:56Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Sergey: you need to be in the main project folder, you seem to be one directory up. Put your virtual environment inside tutorial and start the app from there.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/9a69681892d6e9a95a5231c1b38db460ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#231</span> <span class="label label-primary"><a href="http://dokuwiki.alu4u.com/">Benny Eggerstedt</a></span> said
+                    <span class="flask-moment" data-timestamp="2014-07-25T23:57:04Z" data-format="fromNow(0)" data-refresh="0">2014-07-25T23:57:04Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel,
+
+I&#39;m planning to let a web application, that after watching your PyCon videos would now be based on Flask, work with another service that has an XML-based API to extract information. Would you still use Flask for that or combine it with e.g. python-requests? I still need to go through your tutorial steps, but I didn&#39;t feel like finding an answer to that question yet. Thanks for all your work and have a good day, Benny</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#232</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-07-26T01:11:00Z" data-format="fromNow(0)" data-refresh="0">2014-07-26T01:11:00Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Benny: these are two different tasks. To request data from an external API you can use requests, that would be my choice. But then you probably have your own API that other clients will consume, and for that you should use Flask.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/4ecb7201fe1a9d0ab60cd67d0d78aea4ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#233</span> <span class="label label-primary"><a href="http://geekalt42.net/">zchumager</a></span> said
+                    <span class="flask-moment" data-timestamp="2014-08-02T04:45:17Z" data-format="fromNow(0)" data-refresh="0">2014-08-02T04:45:17Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I got this error message
+
+ImportError: No module named flask
+
+do you have any idea?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/f4d4b5f7ebe6bd45635c255dd70005cdce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#234</span> <span class="label label-primary"><a href="www.dcgaming.html">Daniel van Flymen</a></span> said
+                    <span class="flask-moment" data-timestamp="2014-08-05T09:10:46Z" data-format="fromNow(0)" data-refresh="0">2014-08-05T09:10:46Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">In views.py why do you have to import app (from app import app) when we are importing views.py to __init__.py which has app already?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#235</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-08-05T17:52:01Z" data-format="fromNow(0)" data-refresh="0">2014-08-05T17:52:01Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Daniel: each Python module needs to import what it needs from other modules or packages. This is confusing between __init__.py and views.py because there is a circular dependency there: views.py needs to import app, so that it can use the app.route decorator. On the other side, __init__.py needs to import all the routes in views.py so that they are registered with Flask.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/a75b1cafa0c581732f8641249b92902cce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#236</span> <span class="label label-primary">Adebayo</span> said
+                    <span class="flask-moment" data-timestamp="2014-08-19T12:54:43Z" data-format="fromNow(0)" data-refresh="0">2014-08-19T12:54:43Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Thank you</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/1fa26bfadd44b048dd22c03c8895daa4ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#237</span> <span class="label label-primary">SK Ko</span> said
+                    <span class="flask-moment" data-timestamp="2014-08-21T02:49:16Z" data-format="fromNow(0)" data-refresh="0">2014-08-21T02:49:16Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I&#39;m a student from South Korea.
+Thank you for good posting!!! 
+I&#39;ve learned a lot!!!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/f4ff19e3914f98a5f85a6ac0fed9f122ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#238</span> <span class="label label-primary">Danny McAlerney</span> said
+                    <span class="flask-moment" data-timestamp="2014-08-27T06:57:21Z" data-format="fromNow(0)" data-refresh="0">2014-08-27T06:57:21Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">This blog post series is an exceptional, potent, and intuitive guide to programming with Python and Flask.  
+
+Mercy, I&#39;m thankful.  I&#39;m probably going to send you some sort of Edible Arrangement...with pineapple and sticks. </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/a14ddb1397681bc0c1c1d2f61caa179ace2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#239</span> <span class="label label-primary">sibusiso</span> said
+                    <span class="flask-moment" data-timestamp="2014-08-29T08:52:33Z" data-format="fromNow(0)" data-refresh="0">2014-08-29T08:52:33Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel,
+Ca i run this code on python interpreter rather than virtual environment. I am working on windows machine and get an error  that there is no module called app. I am very new to python and i am learning along.
+
+thank you</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#240</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-08-30T05:55:47Z" data-format="fromNow(0)" data-refresh="0">2014-08-30T05:55:47Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@sibusiso: you can, but note that the virtual environment has a Python interpreter as well. Running on Windows should not be a problem.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/b8c8a178fa045eac350cab4b12926f4ece2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#241</span> <span class="label label-primary">Bob Brown</span> said
+                    <span class="flask-moment" data-timestamp="2014-08-30T23:35:21Z" data-format="fromNow(0)" data-refresh="0">2014-08-30T23:35:21Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">For the folks who are running their PCs at home and setting up their sandbox in the cloud, they can add &#34;host=&#39;0.0.0.0&#39;&#34; to their app.run() arguments and then they could see the web page from their home browser instead of having to try and get some browser other than lynx to run on their remote server.
+
+BOb
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/6a2a72077fa62e3722b789e7764a1effce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#242</span> <span class="label label-primary">Pranav</span> said
+                    <span class="flask-moment" data-timestamp="2014-09-26T14:19:38Z" data-format="fromNow(0)" data-refresh="0">2014-09-26T14:19:38Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">i am having a little problem in understanding the third code.you wrote &#34;from app import app&#34; while there is no file as app in app-directory.does it has to do something with &#34;__init.py__&#34; .please explain</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#243</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-09-28T06:13:26Z" data-format="fromNow(0)" data-refresh="0">2014-09-28T06:13:26Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Pranav: this is the way packages work in Python. The symbols that a package exports are declared in the __init__.py file. See the official Python documentation for details.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/1733362f312987ee6e66c837705573c9ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#244</span> <span class="label label-primary">Chris</span> said
+                    <span class="flask-moment" data-timestamp="2014-09-30T21:19:18Z" data-format="fromNow(0)" data-refresh="0">2014-09-30T21:19:18Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Miguel, 
+Is it possible to follow this tutorial by using the online environment Runnable? I am trying to build a complete website that uses a database and everything, but I am unable to install flask or bottle personally because I am using a school computer, (I can do it at home, but then there&#39;s no point in me attending the class) and the IT guys who fix these computers have no idea how to install flask. 
+tl;dr: Can&#39;t install flask, can I use Runnable instead?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#245</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-10-01T06:27:09Z" data-format="fromNow(0)" data-refresh="0">2014-10-01T06:27:09Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Chris: this article explains how to install flask, you don&#39;t have to ask the IT guys. In any case, if you wan to try an online service, the one I know that could work is PythonAnywhere. Runnable does not seem to have generic Python support, they only have Django.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/9893385c88b53be675f8e58e9e1c681cce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#246</span> <span class="label label-primary">dave</span> said
+                    <span class="flask-moment" data-timestamp="2014-10-02T21:31:30Z" data-format="fromNow(0)" data-refresh="0">2014-10-02T21:31:30Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Thanks for the tutorial.
+
+You state that &#34;run.py&#34; should be in the root folder.  May I suggest that you be more specific and write exactly which folder that is.  I had to put it in the &#34;flask&#34; folder and modify it slightly to:
+
+#!bin/python
+from app import app
+app.run(debug=True)
+
+dave</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/dcf82df3690a020d4c6d21a810ef6913ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#247</span> <span class="label label-primary">miguelgilrosas</span> said
+                    <span class="flask-moment" data-timestamp="2014-10-05T20:19:20Z" data-format="fromNow(0)" data-refresh="0">2014-10-05T20:19:20Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Thank you for this tutorial!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/738efcdf4684a2f076b07d0c171cb7adce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#248</span> <span class="label label-primary"><a href="http://twitter.com/dynamitedevo">Deven</a></span> said
+                    <span class="flask-moment" data-timestamp="2014-10-08T19:53:39Z" data-format="fromNow(0)" data-refresh="0">2014-10-08T19:53:39Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Miguel, this is the best tutorial I&#39;ve seen for any language I have wanted to learn. It&#39;s detailed enough to help noobs like myself and it explains what&#39;s happening so that i can really understand the underlying mechanisms at work. I can&#39;t thank you enough for the work you&#39;ve put into writing this up.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/f59c8736915b56ce3e9b2a28ba589c5dce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#249</span> <span class="label label-primary"><a href="http://web.stephaniegredell.com/">Stephanie</a></span> said
+                    <span class="flask-moment" data-timestamp="2014-10-17T01:18:49Z" data-format="fromNow(0)" data-refresh="0">2014-10-17T01:18:49Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Why not use a requirements.txt file to install your python packages to make it easier to install packages? Then you could just use pip install -r conf/requirements.txt (for example).</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#250</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-10-17T05:55:15Z" data-format="fromNow(0)" data-refresh="0">2014-10-17T05:55:15Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Stephanie: there is a requirements.txt file in the project, so you are free to use it. But here in the article I prefer to list the packages that are used to give an idea of what the tutorial is about.</p>
+                </div>
+            </div>
+        </li>
+        
+    </ul>
+</div>
+
+<div class="page">
+<ul class="pager">
+  <li class="previous">
+    <a href="1.html#comments">&laquo;&laquo;</a>
+  </li>
+  <li class="previous">
+    <a href="9.html#comments">&laquo;</a>
+  </li>
+  <li class="next">
+    <a href="0.html#comments">&raquo;&raquo;</a>
+  </li>
+  <li class="next">
+    <a href="11.html#comments">&raquo;</a>
+  </li>
+</ul>
+</div>
+
+
+</div>
+
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <p class="elapsed">This page was generated in None seconds.</p>
+            <p>&copy; 2014 by Miguel Grinberg. All rights reserved. <a href="mailto:webmaster _at_ miguelgrinberg _dot_ com">Questions?</a></p>
+        </div>
+    </div>
+
+
+    
+    
+    <script src="../../../../cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="../../../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../../../cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.33/jquery.colorbox-min.js"></script>
+    <script type="text/javascript" src="../../../static/prettify.js"></script>
+    <script src="../../../../cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment-with-langs.min.js"></script>
+<script>
+function flask_moment_render(elem) {
+    $(elem).text(eval('moment("' + $(elem).data('timestamp') + '").' + $(elem).data('format') + ';'));
+    $(elem).removeClass('flask-moment');
+}
+function flask_moment_render_all() {
+    $('.flask-moment').each(function() {
+        flask_moment_render(this);
+        if ($(this).data('refresh')) {
+            (function(elem, interval) { setInterval(function() { flask_moment_render(elem) }, interval); })(this, $(this).data('refresh'));
+        }
+    })
+}
+$(document).ready(function() {
+    flask_moment_render_all();
+});
+</script>
+    
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4777284-15']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".gallery").colorbox({rel:".gallery",maxWidth:"95%",maxHeight:"95%",scalePhotos:true});
+            // add prettyprint class to all <pre><code></code></pre> blocks
+            var prettify = false;
+            $("pre code").parent().each(function() {
+                $(this).addClass('prettyprint');
+                prettify = true;
+            });
+            prettyPrint();
+        });
+    </script>
+
+
+  </body>
+
+<!-- Mirrored from blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world/page/10 by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:15:48 GMT -->
+</html>

@@ -1,0 +1,2561 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en" class="">
+  
+<!-- Mirrored from github.com/mindboards/ev3sources/blame/7357369b6ebae4ee62001f3964f0f5fd0cce3c32/extra/linux-03.20.00.13/arch/arm/mach-davinci/davinci-iic.c by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 01 Jun 2015 09:40:36 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# object: http://ogp.me/ns/object# article: http://ogp.me/ns/article# profile: http://ogp.me/ns/profile#">
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Language" content="en">
+    
+    
+    <title>ev3sources/extra/linux-03.20.00.13/arch/arm/mach-davinci/davinci-iic.c at 7357369b6ebae4ee62001f3964f0f5fd0cce3c32 · mindboards/ev3sources · GitHub</title>
+    <link rel="search" type="application/opensearchdescription+xml" href="../../../../../../../../../opensearch.xml" title="GitHub">
+    <link rel="fluid-icon" href="../../../../../../../../../fluidicon.png" title="GitHub">
+    <link rel="apple-touch-icon" sizes="57x57" href="../../../../../../../../../apple-touch-icon-114.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="../../../../../../../../../apple-touch-icon-114.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="../../../../../../../../../apple-touch-icon-144.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="../../../../../../../../../apple-touch-icon-144.png">
+    <meta property="fb:app_id" content="1401488693436528">
+
+      <meta content="@github" name="twitter:site" /><meta content="summary" name="twitter:card" /><meta content="mindboards/ev3sources" name="twitter:title" /><meta content="LEGO MINDSTORMS EV3 source code. Contribute to ev3sources development by creating an account on GitHub." name="twitter:description" /><meta content="https://avatars3.githubusercontent.com/u/2578456?v=3&amp;s=400" name="twitter:image:src" />
+      <meta content="GitHub" property="og:site_name" /><meta content="object" property="og:type" /><meta content="https://avatars3.githubusercontent.com/u/2578456?v=3&amp;s=400" property="og:image" /><meta content="mindboards/ev3sources" property="og:title" /><meta content="https://github.com/mindboards/ev3sources" property="og:url" /><meta content="LEGO MINDSTORMS EV3 source code. Contribute to ev3sources development by creating an account on GitHub." property="og:description" />
+      <meta name="browser-stats-url" content="https://api.github.com/_private/browser/stats">
+    <meta name="browser-errors-url" content="https://api.github.com/_private/browser/errors">
+    <link rel="assets" href="../../../../../../../../../../assets-cdn.github.com/index.html">
+    
+    <meta name="pjax-timeout" content="1000">
+    
+
+    <meta name="msapplication-TileImage" content="../../../../../../../../../windows-tile.png">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="selected-link" value="repo_source" data-pjax-transient>
+      <meta name="google-analytics" content="UA-3769691-2">
+
+    <meta content="collector.githubapp.com" name="octolytics-host" /><meta content="collector-cdn.github.com" name="octolytics-script-host" /><meta content="github" name="octolytics-app-id" /><meta content="70C64D49:7BA7:471B535:556C27AE" name="octolytics-dimension-request_id" />
+    
+    <meta content="Rails, view, blob#blame" name="analytics-event" />
+    <meta class="js-ga-set" name="dimension1" content="Logged Out">
+    <meta class="js-ga-set" name="dimension2" content="Header v3">
+    <meta name="is-dotcom" content="true">
+      <meta name="hostname" content="github.com">
+    <meta name="user-login" content="">
+
+    
+    <link rel="icon" type="image/x-icon" href="../../../../../../../../../../assets-cdn.github.com/favicon.ico">
+
+
+    <meta content="authenticity_token" name="csrf-param" />
+<meta content="eXpwtxP6wJVa+Fvmrbo8P0DwLCz1j6KYrxafbI/DUbbttlVMHw1Mna6BsQsQMYD0JP8NEPyN7O794o9XYgPJaQ==" name="csrf-token" />
+
+    <link href="../../../../../../../../../../assets-cdn.github.com/assets/github/index-7e77e66f8436e66d6a9791d7a09cec15828e9e04a0ad97cf73e83223f8b9cb3a.css" media="all" rel="stylesheet" />
+    <link href="../../../../../../../../../../assets-cdn.github.com/assets/github2/index-5df271cf586eee5e48a88e30cdb6b5c32413ce1d7337835a905fc8c16294237e.css" media="all" rel="stylesheet" />
+    
+    
+
+
+    <meta http-equiv="x-pjax-version" content="840467a6cd0c672c678f4fd42f529999">
+
+            <meta content="noindex, nofollow" name="robots" />
+
+  <meta name="description" content="LEGO MINDSTORMS EV3 source code. Contribute to ev3sources development by creating an account on GitHub.">
+  <meta name="go-import" content="github.com/mindboards/ev3sources git https://github.com/mindboards/ev3sources.git">
+
+  <meta content="2578456" name="octolytics-dimension-user_id" /><meta content="mindboards" name="octolytics-dimension-user_login" /><meta content="11771262" name="octolytics-dimension-repository_id" /><meta content="mindboards/ev3sources" name="octolytics-dimension-repository_nwo" /><meta content="true" name="octolytics-dimension-repository_public" /><meta content="false" name="octolytics-dimension-repository_is_fork" /><meta content="11771262" name="octolytics-dimension-repository_network_root_id" /><meta content="mindboards/ev3sources" name="octolytics-dimension-repository_network_root_nwo" />
+  <link href="../../../../../../../commits/7357369b6ebae4ee62001f3964f0f5fd0cce3c32.atom" rel="alternate" title="Recent Commits to ev3sources:7357369b6ebae4ee62001f3964f0f5fd0cce3c32" type="application/atom+xml">
+
+  </head>
+
+
+  <body class="logged_out  env-production  vis-public">
+    <a href="#start-of-content" tabindex="1" class="accessibility-aid js-skip-to-content">Skip to content</a>
+    <div class="wrapper">
+      
+      
+      
+
+
+        
+        <div class="header header-logged-out" role="banner">
+  <div class="container clearfix">
+
+    <a class="header-logo-wordmark" href="https://github.com/" data-ga-click="(Logged out) Header, go to homepage, icon:logo-wordmark">
+      <span class="mega-octicon octicon-logo-github"></span>
+    </a>
+
+    <div class="header-actions" role="navigation">
+        <a class="btn btn-primary" href="https://github.com/join" data-ga-click="(Logged out) Header, clicked Sign up, text:sign-up">Sign up</a>
+      <a class="btn" href="https://github.com/login?return_to=%2Fmindboards%2Fev3sources%2Fblame%2F7357369b6ebae4ee62001f3964f0f5fd0cce3c32%2Fextra%2Flinux-03.20.00.13%2Farch%2Farm%2Fmach-davinci%2Fdavinci-iic.c" data-ga-click="(Logged out) Header, clicked Sign in, text:sign-in">Sign in</a>
+    </div>
+
+    <div class="site-search repo-scope js-site-search" role="search">
+      <form accept-charset="UTF-8" action="https://github.com/mindboards/ev3sources/search" class="js-site-search-form" data-global-search-url="/search" data-repo-search-url="/mindboards/ev3sources/search" method="get"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /></div>
+  <label class="js-chromeless-input-container form-control">
+    <div class="scope-badge">This repository</div>
+    <input type="text"
+      class="js-site-search-focus js-site-search-field is-clearable chromeless-input"
+      data-hotkey="s"
+      name="q"
+      placeholder="Search"
+      data-global-scope-placeholder="Search GitHub"
+      data-repo-scope-placeholder="Search"
+      tabindex="1"
+      autocapitalize="off">
+  </label>
+</form>
+    </div>
+
+      <ul class="header-nav left" role="navigation">
+          <li class="header-nav-item">
+            <a class="header-nav-link" href="https://github.com/explore" data-ga-click="(Logged out) Header, go to explore, text:explore">Explore</a>
+          </li>
+          <li class="header-nav-item">
+            <a class="header-nav-link" href="https://github.com/features" data-ga-click="(Logged out) Header, go to features, text:features">Features</a>
+          </li>
+          <li class="header-nav-item">
+            <a class="header-nav-link" href="https://enterprise.github.com/" data-ga-click="(Logged out) Header, go to enterprise, text:enterprise">Enterprise</a>
+          </li>
+          <li class="header-nav-item">
+            <a class="header-nav-link" href="https://github.com/blog" data-ga-click="(Logged out) Header, go to blog, text:blog">Blog</a>
+          </li>
+      </ul>
+
+  </div>
+</div>
+
+
+
+      <div id="start-of-content" class="accessibility-aid"></div>
+          <div class="site" itemscope itemtype="http://schema.org/WebPage">
+    <div id="js-flash-container">
+      
+    </div>
+    <div class="pagehead repohead instapaper_ignore readability-menu">
+      <div class="container">
+        
+<ul class="pagehead-actions">
+
+  <li>
+      <a href="https://github.com/login?return_to=%2Fmindboards%2Fev3sources"
+    class="btn btn-sm btn-with-count tooltipped tooltipped-n"
+    aria-label="You must be signed in to watch a repository" rel="nofollow">
+    <span class="octicon octicon-eye"></span>
+    Watch
+  </a>
+  <a class="social-count" href="https://github.com/mindboards/ev3sources/watchers">
+    82
+  </a>
+
+  </li>
+
+  <li>
+      <a href="https://github.com/login?return_to=%2Fmindboards%2Fev3sources"
+    class="btn btn-sm btn-with-count tooltipped tooltipped-n"
+    aria-label="You must be signed in to star a repository" rel="nofollow">
+    <span class="octicon octicon-star"></span>
+    Star
+  </a>
+
+    <a class="social-count js-social-count" href="https://github.com/mindboards/ev3sources/stargazers">
+      241
+    </a>
+
+  </li>
+
+    <li>
+      <a href="https://github.com/login?return_to=%2Fmindboards%2Fev3sources"
+        class="btn btn-sm btn-with-count tooltipped tooltipped-n"
+        aria-label="You must be signed in to fork a repository" rel="nofollow">
+        <span class="octicon octicon-repo-forked"></span>
+        Fork
+      </a>
+      <a href="https://github.com/mindboards/ev3sources/network" class="social-count">
+        123
+      </a>
+    </li>
+</ul>
+
+        <h1 itemscope itemtype="http://data-vocabulary.org/Breadcrumb" class="entry-title public">
+          <span class="mega-octicon octicon-repo"></span>
+          <span class="author"><a href="https://github.com/mindboards" class="url fn" itemprop="url" rel="author"><span itemprop="title">mindboards</span></a></span><!--
+       --><span class="path-divider">/</span><!--
+       --><strong><a href="https://github.com/mindboards/ev3sources" data-pjax="#js-repo-pjax-container">ev3sources</a></strong>
+
+          <span class="page-context-loader">
+            <img alt="" height="16" src="../../../../../../../../../../assets-cdn.github.com/assets/spinners/octocat-spinner-32-e513294efa576953719e4e2de888dd9cf929b7d62ed8d05f25e731d02452ab6c.gif" width="16" />
+          </span>
+
+        </h1>
+      </div><!-- /.container -->
+    </div><!-- /.repohead -->
+
+    <div class="container">
+      <div class="repository-with-sidebar repo-container new-discussion-timeline  ">
+        <div class="repository-sidebar clearfix">
+            
+<nav class="sunken-menu repo-nav js-repo-nav js-sidenav-container-pjax js-octicon-loaders"
+     role="navigation"
+     data-pjax="#js-repo-pjax-container"
+     data-issue-count-url="/mindboards/ev3sources/issues/counts">
+  <ul class="sunken-menu-group">
+    <li class="tooltipped tooltipped-w" aria-label="Code">
+      <a href="https://github.com/mindboards/ev3sources" aria-label="Code" class="selected js-selected-navigation-item sunken-menu-item" data-hotkey="g c" data-selected-links="repo_source repo_downloads repo_commits repo_releases repo_tags repo_branches /mindboards/ev3sources">
+        <span class="octicon octicon-code"></span> <span class="full-word">Code</span>
+        <img alt="" class="mini-loader" height="16" src="../../../../../../../../../../assets-cdn.github.com/assets/spinners/octocat-spinner-32-e513294efa576953719e4e2de888dd9cf929b7d62ed8d05f25e731d02452ab6c.gif" width="16" />
+</a>    </li>
+
+      <li class="tooltipped tooltipped-w" aria-label="Issues">
+        <a href="https://github.com/mindboards/ev3sources/issues" aria-label="Issues" class="js-selected-navigation-item sunken-menu-item" data-hotkey="g i" data-selected-links="repo_issues repo_labels repo_milestones /mindboards/ev3sources/issues">
+          <span class="octicon octicon-issue-opened"></span> <span class="full-word">Issues</span>
+          <span class="js-issue-replace-counter"></span>
+          <img alt="" class="mini-loader" height="16" src="../../../../../../../../../../assets-cdn.github.com/assets/spinners/octocat-spinner-32-e513294efa576953719e4e2de888dd9cf929b7d62ed8d05f25e731d02452ab6c.gif" width="16" />
+</a>      </li>
+
+    <li class="tooltipped tooltipped-w" aria-label="Pull requests">
+      <a href="https://github.com/mindboards/ev3sources/pulls" aria-label="Pull requests" class="js-selected-navigation-item sunken-menu-item" data-hotkey="g p" data-selected-links="repo_pulls /mindboards/ev3sources/pulls">
+          <span class="octicon octicon-git-pull-request"></span> <span class="full-word">Pull requests</span>
+          <span class="js-pull-replace-counter"></span>
+          <img alt="" class="mini-loader" height="16" src="../../../../../../../../../../assets-cdn.github.com/assets/spinners/octocat-spinner-32-e513294efa576953719e4e2de888dd9cf929b7d62ed8d05f25e731d02452ab6c.gif" width="16" />
+</a>    </li>
+
+      <li class="tooltipped tooltipped-w" aria-label="Wiki">
+        <a href="https://github.com/mindboards/ev3sources/wiki" aria-label="Wiki" class="js-selected-navigation-item sunken-menu-item" data-hotkey="g w" data-selected-links="repo_wiki /mindboards/ev3sources/wiki">
+          <span class="octicon octicon-book"></span> <span class="full-word">Wiki</span>
+          <img alt="" class="mini-loader" height="16" src="../../../../../../../../../../assets-cdn.github.com/assets/spinners/octocat-spinner-32-e513294efa576953719e4e2de888dd9cf929b7d62ed8d05f25e731d02452ab6c.gif" width="16" />
+</a>      </li>
+  </ul>
+  <div class="sunken-menu-separator"></div>
+  <ul class="sunken-menu-group">
+
+    <li class="tooltipped tooltipped-w" aria-label="Pulse">
+      <a href="https://github.com/mindboards/ev3sources/pulse" aria-label="Pulse" class="js-selected-navigation-item sunken-menu-item" data-selected-links="pulse /mindboards/ev3sources/pulse">
+        <span class="octicon octicon-pulse"></span> <span class="full-word">Pulse</span>
+        <img alt="" class="mini-loader" height="16" src="../../../../../../../../../../assets-cdn.github.com/assets/spinners/octocat-spinner-32-e513294efa576953719e4e2de888dd9cf929b7d62ed8d05f25e731d02452ab6c.gif" width="16" />
+</a>    </li>
+
+    <li class="tooltipped tooltipped-w" aria-label="Graphs">
+      <a href="https://github.com/mindboards/ev3sources/graphs" aria-label="Graphs" class="js-selected-navigation-item sunken-menu-item" data-selected-links="repo_graphs repo_contributors /mindboards/ev3sources/graphs">
+        <span class="octicon octicon-graph"></span> <span class="full-word">Graphs</span>
+        <img alt="" class="mini-loader" height="16" src="../../../../../../../../../../assets-cdn.github.com/assets/spinners/octocat-spinner-32-e513294efa576953719e4e2de888dd9cf929b7d62ed8d05f25e731d02452ab6c.gif" width="16" />
+</a>    </li>
+  </ul>
+
+
+</nav>
+
+              <div class="only-with-full-nav">
+                  
+<div class="js-clone-url clone-url open"
+  data-protocol-type="http">
+  <h3><span class="text-emphasized">HTTPS</span> clone URL</h3>
+  <div class="input-group js-zeroclipboard-container">
+    <input type="text" class="input-mini input-monospace js-url-field js-zeroclipboard-target"
+           value="https://github.com/mindboards/ev3sources.git" readonly="readonly">
+    <span class="input-group-button">
+      <button aria-label="Copy to clipboard" class="js-zeroclipboard btn btn-sm zeroclipboard-button tooltipped tooltipped-s" data-copied-hint="Copied!" type="button"><span class="octicon octicon-clippy"></span></button>
+    </span>
+  </div>
+</div>
+
+  
+<div class="js-clone-url clone-url "
+  data-protocol-type="subversion">
+  <h3><span class="text-emphasized">Subversion</span> checkout URL</h3>
+  <div class="input-group js-zeroclipboard-container">
+    <input type="text" class="input-mini input-monospace js-url-field js-zeroclipboard-target"
+           value="https://github.com/mindboards/ev3sources" readonly="readonly">
+    <span class="input-group-button">
+      <button aria-label="Copy to clipboard" class="js-zeroclipboard btn btn-sm zeroclipboard-button tooltipped tooltipped-s" data-copied-hint="Copied!" type="button"><span class="octicon octicon-clippy"></span></button>
+    </span>
+  </div>
+</div>
+
+
+
+<div class="clone-options">You can clone with
+  <form accept-charset="UTF-8" action="https://github.com/users/set_protocol?protocol_selector=http&amp;protocol_type=clone" class="inline-form js-clone-selector-form " data-remote="true" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="ygGvMIYHkKjDhG2cy0VzKt1L1ZMo0GOy0/ypD2rZV1DHPIw8M3WBCmgk2YD9xKcou7jL2hjqOSCNzRTx3D+Z/Q==" /></div><button class="btn-link js-clone-selector" data-protocol="http" type="submit">HTTPS</button></form> or <form accept-charset="UTF-8" action="https://github.com/users/set_protocol?protocol_selector=subversion&amp;protocol_type=clone" class="inline-form js-clone-selector-form " data-remote="true" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="RTMYkEJM05Mv//8SDQLTT01E+XEkL/i/RaJYkxZ/T+mz+N5VabXdxkyi83ygQWU0GoIg0yAmcoedi0Ii4BZjjA==" /></div><button class="btn-link js-clone-selector" data-protocol="subversion" type="submit">Subversion</button></form>.
+  <a href="https://help.github.com/articles/which-remote-url-should-i-use" class="help tooltipped tooltipped-n" aria-label="Get help on which URL is right for you.">
+    <span class="octicon octicon-question"></span>
+  </a>
+</div>
+
+
+
+
+                <a href="https://github.com/mindboards/ev3sources/archive/7357369b6ebae4ee62001f3964f0f5fd0cce3c32.zip"
+                   class="btn btn-sm sidebar-button"
+                   aria-label="Download the contents of mindboards/ev3sources as a zip file"
+                   title="Download the contents of mindboards/ev3sources as a zip file"
+                   rel="nofollow">
+                  <span class="octicon octicon-cloud-download"></span>
+                  Download ZIP
+                </a>
+              </div>
+        </div><!-- /.repository-sidebar -->
+
+        <div id="js-repo-pjax-container" class="repository-content context-loader-container" data-pjax-container>
+
+          
+<a href="davinci-iic.html" class="hidden js-permalink-shortcut" data-hotkey="y">Permalink</a>
+
+<div class="breadcrumb css-truncate blame-breadcrumb js-zeroclipboard-container">
+  <span class="css-truncate-target js-zeroclipboard-target"><span class='repo-root js-repo-root'><span itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="https://github.com/mindboards/ev3sources/tree/7357369b6ebae4ee62001f3964f0f5fd0cce3c32" class="" data-branch="7357369b6ebae4ee62001f3964f0f5fd0cce3c32" data-direction="back" data-pjax="true" itemscope="url" rel="nofollow"><span itemprop="title">ev3sources</span></a></span></span><span class="separator">/</span><span itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="https://github.com/mindboards/ev3sources/tree/7357369b6ebae4ee62001f3964f0f5fd0cce3c32/extra" class="" data-branch="7357369b6ebae4ee62001f3964f0f5fd0cce3c32" data-direction="back" data-pjax="true" itemscope="url" rel="nofollow"><span itemprop="title">extra</span></a></span><span class="separator">/</span><span itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="https://github.com/mindboards/ev3sources/tree/7357369b6ebae4ee62001f3964f0f5fd0cce3c32/extra/linux-03.20.00.13" class="" data-branch="7357369b6ebae4ee62001f3964f0f5fd0cce3c32" data-direction="back" data-pjax="true" itemscope="url" rel="nofollow"><span itemprop="title">linux-03.20.00.13</span></a></span><span class="separator">/</span><span itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="https://github.com/mindboards/ev3sources/tree/7357369b6ebae4ee62001f3964f0f5fd0cce3c32/extra/linux-03.20.00.13/arch" class="" data-branch="7357369b6ebae4ee62001f3964f0f5fd0cce3c32" data-direction="back" data-pjax="true" itemscope="url" rel="nofollow"><span itemprop="title">arch</span></a></span><span class="separator">/</span><span itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="https://github.com/mindboards/ev3sources/tree/7357369b6ebae4ee62001f3964f0f5fd0cce3c32/extra/linux-03.20.00.13/arch/arm" class="" data-branch="7357369b6ebae4ee62001f3964f0f5fd0cce3c32" data-direction="back" data-pjax="true" itemscope="url" rel="nofollow"><span itemprop="title">arm</span></a></span><span class="separator">/</span><span itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="https://github.com/mindboards/ev3sources/tree/7357369b6ebae4ee62001f3964f0f5fd0cce3c32/extra/linux-03.20.00.13/arch/arm/mach-davinci" class="" data-branch="7357369b6ebae4ee62001f3964f0f5fd0cce3c32" data-direction="back" data-pjax="true" itemscope="url" rel="nofollow"><span itemprop="title">mach-davinci</span></a></span><span class="separator">/</span><strong class="final-path">davinci-iic.c</strong></span>
+  <button aria-label="Copy file path to clipboard" class="js-zeroclipboard btn btn-sm zeroclipboard-button tooltipped tooltipped-s" data-copied-hint="Copied!" type="button"><span class="octicon octicon-clippy"></span></button>
+</div>
+
+<div class="line-age-legend">
+  <span>Newer</span>
+  <ol>
+      <li class="heat1"></li>
+      <li class="heat2"></li>
+      <li class="heat3"></li>
+      <li class="heat4"></li>
+      <li class="heat5"></li>
+      <li class="heat6"></li>
+      <li class="heat7"></li>
+      <li class="heat8"></li>
+      <li class="heat9"></li>
+      <li class="heat10"></li>
+  </ol>
+  <span>Older</span>
+</div>
+
+<div class="file">
+  <div class="file-header">
+    <div class="file-actions">
+      <div class="btn-group">
+        <a href="https://github.com/mindboards/ev3sources/raw/7357369b6ebae4ee62001f3964f0f5fd0cce3c32/extra/linux-03.20.00.13/arch/arm/mach-davinci/davinci-iic.c" class="btn btn-sm" id="raw-url">Raw</a>
+        <a href="../../../../../../../blob/7357369b6ebae4ee62001f3964f0f5fd0cce3c32/extra/linux-03.20.00.13/arch/arm/mach-davinci/davinci-iic.html" class="btn btn-sm js-update-url-with-hash">Normal view</a>
+        <a href="../../../../../../../commits/7357369b6ebae4ee62001f3964f0f5fd0cce3c32/extra/linux-03.20.00.13/arch/arm/mach-davinci/davinci-iic.html" class="btn btn-sm" rel="nofollow">History</a>
+      </div>
+    </div>
+
+
+
+    <div class="file-info">
+      <span class="octicon octicon-file-text"></span>
+      <span class="file-mode" title="File Mode">100644</span>
+      <span class="file-info-divider"></span>
+        425 lines (355 sloc)
+        <span class="file-info-divider"></span>
+      14.139 kb
+    </div>
+  </div>
+
+  <div class="blob-wrapper">
+    <table class="blame-container highlight data js-file-line-container">
+        <tr class="blame-commit">
+          <td class="blame-commit-info" rowspan="425">
+            <a href="https://github.com/mindboards/ev3sources/commit/fea79c0e219cd5e43193ce2987b496e04758f3e2" class="blame-sha">fea79c0</a>
+            <img alt="" class="avatar blame-commit-avatar" height="32" src="../../../../../../../../../../1.gravatar.com/avatar/a3114595e89094e76e43ffc615e7655ffc55.jpeg?d=https%3A%2F%2Fassets-cdn.github.com%2Fimages%2Fgravatars%2Fgravatar-user-420.png&amp;r=x&amp;s=140" width="32" />
+            <a href="https://github.com/mindboards/ev3sources/commit/fea79c0e219cd5e43193ce2987b496e04758f3e2" class="blame-commit-title" title="Additional files, like kernel, uboot and device specific lib/includes">Additional files, like kernel, uboot and device specific lib/includes</a>
+            <div class="blame-commit-meta">
+              <span class="muted-link">Xander Soldaat</span> authored
+              <time datetime="2013-07-31T21:58:56Z" is="relative-time">Jul 31, 2013</time>
+            </div>
+          </td>
+        </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L1">1</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC1">#<span class="pl-k">include</span>  <span class="pl-s"><span class="pl-pds">&lt;</span>asm/types.h<span class="pl-pds">&gt;</span></span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L2">2</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC2"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L3">3</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC3"><span class="pl-c">// Placeholder for the two symbolic include files - start</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L4">4</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC4">#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&quot;</span>mach/da8xx.h<span class="pl-pds">&quot;</span></span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L5">5</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC5"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L6">6</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC6">#<span class="pl-k">define</span> <span class="pl-en">FINAL</span> <span class="pl-c1">1</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L7">7</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC7">#<span class="pl-k">define</span> <span class="pl-en">HARDWARE</span> FINAL</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L8">8</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC8">#<span class="pl-k">define</span> <span class="pl-en">INPUTS</span> <span class="pl-c1">4</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L9">9</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC9"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L10">10</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC10"><span class="pl-k">enum</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L11">11</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC11">  {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L12">12</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC12">    GP0_0,GP0_1,GP0_2,GP0_3,GP0_4,GP0_5,GP0_6,GP0_7,GP0_8,GP0_9,GP0_10,GP0_11,GP0_12,GP0_13,GP0_14,GP0_15,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L13">13</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC13">    GP1_0,GP1_1,GP1_2,GP1_3,GP1_4,GP1_5,GP1_6,GP1_7,GP1_8,GP1_9,GP1_10,GP1_11,GP1_12,GP1_13,GP1_14,GP1_15,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L14">14</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC14">    GP2_0,GP2_1,GP2_2,GP2_3,GP2_4,GP2_5,GP2_6,GP2_7,GP2_8,GP2_9,GP2_10,GP2_11,GP2_12,GP2_13,GP2_14,GP2_15,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L15">15</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC15">    GP3_0,GP3_1,GP3_2,GP3_3,GP3_4,GP3_5,GP3_6,GP3_7,GP3_8,GP3_9,GP3_10,GP3_11,GP3_12,GP3_13,GP3_14,GP3_15,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L16">16</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC16">    GP4_0,GP4_1,GP4_2,GP4_3,GP4_4,GP4_5,GP4_6,GP4_7,GP4_8,GP4_9,GP4_10,GP4_11,GP4_12,GP4_13,GP4_14,GP4_15,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L17">17</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC17">    GP5_0,GP5_1,GP5_2,GP5_3,GP5_4,GP5_5,GP5_6,GP5_7,GP5_8,GP5_9,GP5_10,GP5_11,GP5_12,GP5_13,GP5_14,GP5_15,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L18">18</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC18">    GP6_0,GP6_1,GP6_2,GP6_3,GP6_4,GP6_5,GP6_6,GP6_7,GP6_8,GP6_9,GP6_10,GP6_11,GP6_12,GP6_13,GP6_14,GP6_15,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L19">19</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC19">    GP7_0,GP7_1,GP7_2,GP7_3,GP7_4,GP7_5,GP7_6,GP7_7,GP7_8,GP7_9,GP7_10,GP7_11,GP7_12,GP7_13,GP7_14,GP7_15,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L20">20</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC20">    GP8_0,GP8_1,GP8_2,GP8_3,GP8_4,GP8_5,GP8_6,GP8_7,GP8_8,GP8_9,GP8_10,GP8_11,GP8_12,GP8_13,GP8_14,GP8_15,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L21">21</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC21">    NO_OF_GPIOS,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L22">22</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC22">    UART0_TXD,UART0_RXD,UART1_TXD,UART1_RXD,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L23">23</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC23">    SPI1_MOSI,SPI1_MISO,SPI1_SCL,SPI1_CS,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L24">24</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC24">    EPWM1A,EPWM1B,APWM0,APWM1,EPWM0B</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L25">25</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC25">  };</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L26">26</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC26"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L27">27</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC27"><span class="pl-k">typedef</span>   <span class="pl-k">struct</span> gpio_controller *__iomem     GPIOC;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L28">28</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC28"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L29">29</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC29"><span class="pl-k">typedef</span> <span class="pl-k">struct</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L30">30</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC30">{</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L31">31</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC31">  <span class="pl-k">int</span>     Pin;      <span class="pl-c">// GPIO pin number</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L32">32</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC32">  GPIOC   pGpio;    <span class="pl-c">// GPIO bank base address</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L33">33</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC33">  u32     Mask;     <span class="pl-c">// GPIO pin mask</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L34">34</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC34">} INPIN;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L35">35</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC35"><span class="pl-c">// Placeholder for the two symbolic include files - stop</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L36">36</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC36"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L37">37</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC37"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L38">38</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC38">#<span class="pl-k">define</span>   <span class="pl-en">__USE_POSIX</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L39">39</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC39"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L40">40</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC40">#<span class="pl-k">include</span>  <span class="pl-s"><span class="pl-pds">&lt;</span>linux/kernel.h<span class="pl-pds">&gt;</span></span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L41">41</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC41">#<span class="pl-k">include</span>  <span class="pl-s"><span class="pl-pds">&lt;</span>linux/init.h<span class="pl-pds">&gt;</span></span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L42">42</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC42">#<span class="pl-k">include</span>  <span class="pl-s"><span class="pl-pds">&lt;</span>linux/ioport.h<span class="pl-pds">&gt;</span></span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L43">43</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC43">#<span class="pl-k">include</span>  <span class="pl-s"><span class="pl-pds">&lt;</span>linux/delay.h<span class="pl-pds">&gt;</span></span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L44">44</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC44">#<span class="pl-k">include</span>  <span class="pl-s"><span class="pl-pds">&lt;</span>asm/gpio.h<span class="pl-pds">&gt;</span></span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L45">45</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC45">#<span class="pl-k">include</span>  <span class="pl-s"><span class="pl-pds">&lt;</span>asm/io.h<span class="pl-pds">&gt;</span></span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L46">46</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC46">#<span class="pl-k">include</span>  <span class="pl-s"><span class="pl-pds">&lt;</span>linux/circ_buf.h<span class="pl-pds">&gt;</span></span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L47">47</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC47">#<span class="pl-k">include</span>  <span class="pl-s"><span class="pl-pds">&quot;</span>d_iic.h<span class="pl-pds">&quot;</span></span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L48">48</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC48"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L49">49</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC49">#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>asm/fiq.h<span class="pl-pds">&gt;</span></span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L50">50</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC50">#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>mach/irqs.h<span class="pl-pds">&gt;</span></span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L51">51</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC51">#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>linux/err.h<span class="pl-pds">&gt;</span></span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L52">52</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC52"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L53">53</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC53"><span class="pl-k">int</span> <span class="pl-en">iic_fiq_handler</span>(<span class="pl-k">void</span> *data);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L54">54</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC54"><span class="pl-k">void</span> <span class="pl-en">davinci_fiq_disable</span>(<span class="pl-k">void</span>);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L55">55</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC55"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L56">56</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC56"><span class="pl-k">void</span> <span class="pl-en">cp_intc_ack_irq</span>(<span class="pl-k">unsigned</span> <span class="pl-k">int</span> irq);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L57">57</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC57"><span class="pl-k">void</span> <span class="pl-en">cp_intc_fiq_enable</span>(<span class="pl-k">bool</span> enable, <span class="pl-k">unsigned</span> <span class="pl-k">int</span> irq);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L58">58</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC58"><span class="pl-k">void</span> <span class="pl-en">cp_intc_set_channel</span>(<span class="pl-k">unsigned</span> <span class="pl-k">int</span> channel, <span class="pl-k">unsigned</span> <span class="pl-k">int</span> irq);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L59">59</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC59"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L60">60</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC60">#<span class="pl-k">define</span> <span class="pl-en">BUFFER_SIZE</span> <span class="pl-c1">256</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L61">61</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC61"><span class="pl-k">struct</span> IIC_control_t IicCtrl;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L62">62</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC62"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L63">63</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC63"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L64">64</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC64"><span class="pl-c">//*****************************************************************************</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L65">65</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC65">#<span class="pl-k">if</span>       (HARDWARE == FINAL)</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L66">66</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC66"><span class="pl-c">//*****************************************************************************</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L67">67</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC67"><span class="pl-c">//*****************************************************************************</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L68">68</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC68"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L69">69</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC69"><span class="pl-c">/*! \page IicModuleResources Gpios and Resources used for Module</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L70">70</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC70"><span class="pl-c"> *</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L71">71</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC71"><span class="pl-c"> *  Describes use of gpio and resources\n</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L72">72</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC72"><span class="pl-c"> *</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L73">73</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC73"><span class="pl-c"> *  \verbatim</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L74">74</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC74"><span class="pl-c"> */</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L75">75</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC75"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L76">76</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC76">INPIN     IicPortPin[][IIC_PORT_PINS] =</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L77">77</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC77">  {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L78">78</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC78">    { <span class="pl-c">// Input port 1</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L79">79</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC79">      { GP8_11 , <span class="pl-c1">NULL</span>, <span class="pl-c1">0</span> }, <span class="pl-c">// Buffer disable</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L80">80</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC80">      { GP0_2  , <span class="pl-c1">NULL</span>, <span class="pl-c1">0</span> }, <span class="pl-c">// Pin 5  - Digital input   // CLOCK</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L81">81</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC81">      { GP0_15 , <span class="pl-c1">NULL</span>, <span class="pl-c1">0</span> }, <span class="pl-c">// Pin 6  - Digital output  // DATA</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L82">82</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC82">    },</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L83">83</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC83">    { <span class="pl-c">// Input port 2</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L84">84</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC84">      { GP8_14 , <span class="pl-c1">NULL</span>, <span class="pl-c1">0</span> }, <span class="pl-c">// Buffer disable</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L85">85</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC85">      { GP0_14 , <span class="pl-c1">NULL</span>, <span class="pl-c1">0</span> }, <span class="pl-c">// Pin 5  - Digital input   // CLOCK</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L86">86</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC86">      { GP0_13 , <span class="pl-c1">NULL</span>, <span class="pl-c1">0</span> }, <span class="pl-c">// Pin 6  - Digital output  // DATA</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L87">87</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC87">    },</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L88">88</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC88">    { <span class="pl-c">// Input port 3</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L89">89</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC89">      { GP7_9  , <span class="pl-c1">NULL</span>, <span class="pl-c1">0</span> }, <span class="pl-c">// Buffer disable</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L90">90</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC90">      { GP0_12 , <span class="pl-c1">NULL</span>, <span class="pl-c1">0</span> }, <span class="pl-c">// Pin 5  - Digital input   // CLOCK</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L91">91</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC91">      { GP1_14 , <span class="pl-c1">NULL</span>, <span class="pl-c1">0</span> }, <span class="pl-c">// Pin 6  - Digital output  // DATA</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L92">92</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC92">    },</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L93">93</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC93">    { <span class="pl-c">// Input port 4</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L94">94</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC94">      { GP7_10 , <span class="pl-c1">NULL</span>, <span class="pl-c1">0</span> }, <span class="pl-c">// Buffer disable</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L95">95</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC95">      { GP1_13 , <span class="pl-c1">NULL</span>, <span class="pl-c1">0</span> }, <span class="pl-c">// Pin 5  - Digital input   // CLOCK</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L96">96</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC96">      { GP1_15 , <span class="pl-c1">NULL</span>, <span class="pl-c1">0</span> }, <span class="pl-c">// Pin 6  - Digital output  // DATA</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L97">97</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC97">    },</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L98">98</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC98">  };</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L99">99</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC99"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L100">100</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC100"><span class="pl-c">/*  \endverbatim</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L101">101</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC101"><span class="pl-c"> *  \n</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L102">102</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC102"><span class="pl-c"> */</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L103">103</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC103"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L104">104</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC104">#<span class="pl-k">else</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L105">105</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC105">#<span class="pl-k">error</span> Structs only defined for HARDWARE == FINAL</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L106">106</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC106">#<span class="pl-k">endif</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L107">107</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC107"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L108">108</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC108"><span class="pl-k">int</span> t_index, first[<span class="pl-c1">512</span>], last[<span class="pl-c1">512</span>];</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L109">109</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC109"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L110">110</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC110"><span class="pl-c">// Uncomment these defines to time FiQ response time</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L111">111</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC111"><span class="pl-c">//#define TIMING_TOTAL 1</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L112">112</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC112"><span class="pl-c">//#define TIMING_CHANNEL 1</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L113">113</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC113"><span class="pl-c">//#define TIMING_OVERHEAD 1</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L114">114</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC114"><span class="pl-c">//#define TIMING_COLLECT_TIMES 1</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L115">115</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC115"><span class="pl-c">//#define TIMING_COLLECT_TIMES_VERBOSE 1</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L116">116</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC116"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L117">117</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC117">u64 <span class="pl-en">read_cycles_none</span>(<span class="pl-k">void</span>);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L118">118</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC118"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L119">119</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC119"><span class="pl-k">void</span> <span class="pl-en">davinci_fiq_handler</span>(<span class="pl-k">void</span>)</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L120">120</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC120">{</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L121">121</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC121">  <span class="pl-k">int</span> keep_running = <span class="pl-c1">0</span>;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L122">122</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC122">#<span class="pl-k">if</span> defined(TIMING_TOTAL) || defined (TIMING_CHANNEL) </td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L123">123</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC123">  <span class="pl-c1">PINOutput</span>(<span class="pl-c1">2</span>,IIC_PORT_DATA);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L124">124</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC124">#<span class="pl-k">endif</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L125">125</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC125"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L126">126</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC126">#<span class="pl-k">ifdef</span> TIMING_TOTAL</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L127">127</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC127">  <span class="pl-c1">PINHigh</span>(<span class="pl-c1">2</span>,IIC_PORT_DATA);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L128">128</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC128">#<span class="pl-k">endif</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L129">129</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC129"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L130">130</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC130">#<span class="pl-k">ifdef</span> TIMING_COLLECT_TIMES</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L131">131</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC131">  first[t_index] = <span class="pl-c1">read_cycles_none</span>();</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L132">132</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC132">#<span class="pl-k">endif</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L133">133</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC133"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L134">134</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC134">  <span class="pl-c">/* disable further timer interrupts if nobody has any work                                                    </span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L135">135</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC135"><span class="pl-c">   * or adjust rate according to who still has work</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L136">136</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC136"><span class="pl-c">   *</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L137">137</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC137"><span class="pl-c">   * CAUTION: it means forground code must disable FIQ around </span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L138">138</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC138"><span class="pl-c">   * its own non-atomic INTMSK changes... not common </span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L139">139</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC139"><span class="pl-c">   * thankfully and taken care of by the fiq-basis patch                                                        </span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L140">140</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC140"><span class="pl-c">   */</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L141">141</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC141"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L142">142</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC142">  keep_running = <span class="pl-c1">iic_fiq_handler</span>(<span class="pl-c1">NULL</span>);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L143">143</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC143"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L144">144</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC144">  <span class="pl-k">if</span> (!keep_running) {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L145">145</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC145">    <span class="pl-c">/* Disable fiq */</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L146">146</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC146">    <span class="pl-c1">davinci_fiq_disable</span>();</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L147">147</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC147">  }</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L148">148</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC148"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L149">149</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC149">  <span class="pl-c">// Indicate to interrupt controller that fiq has been handled</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L150">150</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC150">  <span class="pl-c1">cp_intc_ack_irq</span>(IRQ_DA8XX_TINT34_1);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L151">151</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC151">#<span class="pl-k">ifdef</span> TIMING_OVERHEAD</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L152">152</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC152">  <span class="pl-c1">PINLow</span>(<span class="pl-c1">2</span>,IIC_PORT_DATA);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L153">153</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC153">  <span class="pl-c1">PINHigh</span>(<span class="pl-c1">2</span>,IIC_PORT_DATA);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L154">154</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC154">  <span class="pl-c1">PINLow</span>(<span class="pl-c1">2</span>,IIC_PORT_DATA);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L155">155</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC155">  <span class="pl-c1">PINHigh</span>(<span class="pl-c1">2</span>,IIC_PORT_DATA);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L156">156</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC156">#<span class="pl-k">endif</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L157">157</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC157">#<span class="pl-k">ifdef</span> TIMING_TOTAL</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L158">158</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC158">  <span class="pl-c1">PINLow</span>(<span class="pl-c1">2</span>,IIC_PORT_DATA);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L159">159</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC159">#<span class="pl-k">endif</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L160">160</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC160"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L161">161</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC161">#<span class="pl-k">ifdef</span> TIMING_COLLECT_TIMES</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L162">162</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC162">  last[t_index++] = <span class="pl-c1">read_cycles_none</span>();</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L163">163</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC163">#<span class="pl-k">endif</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L164">164</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC164">}</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L165">165</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC165"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L166">166</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC166"><span class="pl-k">int</span> <span class="pl-en">davinci_fiq_enable</span>(<span class="pl-k">void</span>)</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L167">167</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC167">{</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L168">168</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC168">  <span class="pl-c">/* Disable fiq and set interrupt handler  */</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L169">169</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC169">  <span class="pl-c1">local_fiq_disable</span>();</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L170">170</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC170">  <span class="pl-c1">set_fiq_c_handler</span>(davinci_fiq_handler);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L171">171</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC171"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L172">172</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC172">  <span class="pl-c">/* Enable fiq  */</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L173">173</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC173">  <span class="pl-c1">cp_intc_set_channel</span>(<span class="pl-c1">0</span>, IRQ_DA8XX_TINT34_1);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L174">174</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC174">  <span class="pl-c1">cp_intc_fiq_enable</span>(<span class="pl-c1">true</span>, IRQ_DA8XX_TINT34_1);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L175">175</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC175">  <span class="pl-c1">local_fiq_enable</span>();</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L176">176</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC176">  <span class="pl-k">return</span> <span class="pl-c1">0</span>;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L177">177</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC177">}</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L178">178</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC178"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L179">179</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC179"><span class="pl-k">void</span> <span class="pl-en">davinci_fiq_disable</span>(<span class="pl-k">void</span>)</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L180">180</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC180">{</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L181">181</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC181">  <span class="pl-c">/* Disable fiq  */</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L182">182</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC182">  <span class="pl-c1">local_fiq_disable</span>();</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L183">183</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC183">  <span class="pl-c1">cp_intc_fiq_enable</span>(<span class="pl-c1">false</span>, IRQ_DA8XX_TINT34_1);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L184">184</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC184">}</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L185">185</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC185"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L186">186</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC186"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L187">187</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC187"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L188">188</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC188"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L189">189</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC189"><span class="pl-k">int</span> <span class="pl-en">iic_fiq_handler</span>(<span class="pl-k">void</span> *data)</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L190">190</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC190">{</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L191">191</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC191">  u8 Port;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L192">192</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC192">  <span class="pl-k">struct</span> IIC_data_package *iic;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L193">193</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC193">  u8 restart_timer = <span class="pl-c1">false</span>;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L194">194</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC194"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L195">195</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC195">  <span class="pl-k">for</span> (Port=<span class="pl-c1">0</span>; Port &lt; INPUTS; Port++) {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L196">196</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC196">#<span class="pl-k">ifdef</span> TIMING_CHANNEL</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L197">197</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC197">    <span class="pl-k">if</span> (Port &amp; <span class="pl-c1">1</span>) <span class="pl-c1">PINHigh</span>(<span class="pl-c1">2</span>,IIC_PORT_DATA)</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L198">198</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC198">    <span class="pl-k">else</span> <span class="pl-c1">PINLow</span>(<span class="pl-c1">2</span>,IIC_PORT_DATA);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L199">199</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC199">#<span class="pl-k">endif</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L200">200</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC200">    iic = &amp;IicCtrl.<span class="pl-smi">data_package</span>[Port];</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L201">201</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC201">    <span class="pl-k">if</span> (iic-&gt;transfer_state != TRANSFER_IDLE) {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L202">202</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC202">      restart_timer = <span class="pl-c1">true</span>;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L203">203</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC203">      </td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L204">204</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC204">      <span class="pl-c">// Check set high in TRANSFER_STOP2 state</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L205">205</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC205">      <span class="pl-k">if</span> (iic-&gt;clock_state)</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L206">206</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC206">	<span class="pl-c1">PINHigh</span>(Port,IIC_PORT_CLOCK)</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L207">207</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC207">      <span class="pl-k">else</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L208">208</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC208">	<span class="pl-c1">PINLow</span>(Port,IIC_PORT_CLOCK);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L209">209</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC209">    }</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L210">210</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC210"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L211">211</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC211">    <span class="pl-k">switch</span> (iic-&gt;transfer_state) {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L212">212</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC212">      <span class="pl-k">case</span> TRANSFER_START  : <span class="pl-c">// Make sure to SYNC into Timer settings </span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L213">213</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC213">	                     <span class="pl-c">// to ensure first bit time having full length </span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L214">214</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC214">                             iic-&gt;transfer_state = TRANSFER_START2;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L215">215</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC215">	                     <span class="pl-k">break</span>;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L216">216</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC216"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L217">217</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC217">      <span class="pl-k">case</span> TRANSFER_START2 : <span class="pl-c">// Generate start condition</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L218">218</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC218">                             <span class="pl-c1">PINLow</span>(Port,IIC_PORT_DATA);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L219">219</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC219">			     <span class="pl-c1">PINOutput</span>(Port,IIC_PORT_DATA);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L220">220</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC220">                             iic-&gt;clock_state = <span class="pl-c1">0</span>;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L221">221</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC221">                             iic-&gt;nacked = <span class="pl-c1">false</span>;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L222">222</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC222">                             iic-&gt;transfer_state = TRANSFER_ADDR;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L223">223</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC223">                             <span class="pl-k">break</span>;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L224">224</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC224">			     </td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L225">225</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC225">      <span class="pl-k">case</span> TRANSFER_ADDR  :  iic-&gt;data_byte = (iic-&gt;addr &lt;&lt; <span class="pl-c1">1</span>);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L226">226</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC226">                             <span class="pl-c">// Check if write_lenght = 0? In given case we are to do a read</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L227">227</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC227">                             <span class="pl-k">if</span> (iic-&gt;write_length)</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L228">228</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC228">                               iic-&gt;read_start_send = <span class="pl-c1">false</span>;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L229">229</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC229">                             <span class="pl-k">else</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L230">230</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC230">                               iic-&gt;data_byte |= <span class="pl-c1">1</span>;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L231">231</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC231"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L232">232</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC232">                             iic-&gt;byte = <span class="pl-c1">0</span>;       <span class="pl-c">// Byte is offset one as it&#39;s increased by writing address</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L233">233</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC233">                             iic-&gt;write_length++; <span class="pl-c">// Need to transfer Address as well</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L234">234</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC234"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L235">235</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC235">      <span class="pl-k">case</span> TRANSFER_DATA :   <span class="pl-k">if</span> (iic-&gt;transfer_state == TRANSFER_DATA)</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L236">236</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC236">                               iic-&gt;data_byte = iic-&gt;data[iic-&gt;byte-<span class="pl-c1">1</span>];</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L237">237</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC237">                             iic-&gt;transfer_state = TRANSFER_WBIT;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L238">238</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC238">                             iic-&gt;bit  = 0x80;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L239">239</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC239">			     <span class="pl-c1">PINOutput</span>(Port,IIC_PORT_DATA);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L240">240</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC240"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L241">241</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC241">      <span class="pl-k">case</span> TRANSFER_WBIT:  <span class="pl-k">if</span> (!iic-&gt;clock_state) {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L242">242</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC242">                               <span class="pl-k">if</span> (iic-&gt;data_byte &amp; iic-&gt;bit)</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L243">243</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC243">                                 <span class="pl-c1">PINHigh</span>(Port,IIC_PORT_DATA)</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L244">244</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC244">                               <span class="pl-k">else</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L245">245</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC245">                                 <span class="pl-c1">PINLow</span>(Port,IIC_PORT_DATA);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L246">246</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC246">                               iic-&gt;bit &gt;&gt;= <span class="pl-c1">1</span>;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L247">247</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC247">                             }</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L248">248</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC248"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L249">249</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC249">                             <span class="pl-k">if</span> ((!iic-&gt;bit) &amp;&amp; (iic-&gt;clock_state))</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L250">250</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC250">                             {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L251">251</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC251">                               iic-&gt;byte++;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L252">252</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC252">                               iic-&gt;write_length--;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L253">253</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC253">                               iic-&gt;transfer_state = TRANSFER_RACK;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L254">254</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC254">                             }</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L255">255</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC255">                             iic-&gt;clock_state ^= <span class="pl-c1">1</span>;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L256">256</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC256">                             <span class="pl-k">break</span>;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L257">257</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC257"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L258">258</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC258">      <span class="pl-k">case</span> TRANSFER_READ  :  <span class="pl-c1">PINInput</span>(Port,IIC_PORT_DATA);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L259">259</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC259">                             iic-&gt;transfer_state = TRANSFER_RBIT;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L260">260</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC260">                             iic-&gt;bit  = 0x80;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L261">261</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC261">                             iic-&gt;data_byte = <span class="pl-c1">0</span>;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L262">262</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC262"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L263">263</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC263">      <span class="pl-k">case</span> TRANSFER_RBIT :   <span class="pl-k">if</span> (iic-&gt;clock_state) {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L264">264</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC264">                               iic-&gt;data_byte |= <span class="pl-c1">PINRead</span>(Port, IIC_PORT_DATA)? iic-&gt;bit:<span class="pl-c1">0</span>;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L265">265</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC265">                               iic-&gt;bit &gt;&gt;= <span class="pl-c1">1</span>;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L266">266</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC266"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L267">267</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC267">                               <span class="pl-k">if</span> (!iic-&gt;bit)</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L268">268</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC268">                               {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L269">269</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC269">                                 iic-&gt;data[iic-&gt;byte-<span class="pl-c1">1</span>] = iic-&gt;data_byte;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L270">270</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC270">                                 iic-&gt;byte++;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L271">271</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC271">                                 iic-&gt;read_length--;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L272">272</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC272">                                 iic-&gt;transfer_state = TRANSFER_WACK;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L273">273</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC273">                               }</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L274">274</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC274">                             }</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L275">275</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC275">                             iic-&gt;clock_state ^= <span class="pl-c1">1</span>;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L276">276</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC276">                             <span class="pl-k">break</span>;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L277">277</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC277"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L278">278</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC278">      <span class="pl-k">case</span> TRANSFER_RACK  :  <span class="pl-k">if</span> (!iic-&gt;clock_state)</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L279">279</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC279">                               <span class="pl-c1">PINInput</span>(Port,IIC_PORT_DATA)</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L280">280</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC280">                             <span class="pl-k">else</span> {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L281">281</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC281"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L282">282</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC282">                               <span class="pl-k">if</span> (<span class="pl-c1">PINRead</span>(Port, IIC_PORT_DATA) == <span class="pl-c1">0</span>) {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L283">283</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC283">                                 <span class="pl-k">if</span> (iic-&gt;write_length) {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L284">284</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC284">				   iic-&gt;wait_cycles = <span class="pl-c1">4</span>;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L285">285</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC285">                                   iic-&gt;transfer_state = TRANSFER_WAIT;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L286">286</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC286">				 }</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L287">287</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC287">                                 <span class="pl-k">else</span> <span class="pl-k">if</span> (iic-&gt;read_start_send) {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L288">288</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC288">				   iic-&gt;wait_cycles = <span class="pl-c1">4</span>;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L289">289</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC289">                                   iic-&gt;transfer_state = TRANSFER_WAIT;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L290">290</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC290">				 }</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L291">291</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC291">                                 <span class="pl-k">else</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L292">292</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC292">                                   iic-&gt;transfer_state = TRANSFER_STOP;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L293">293</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC293">                               }</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L294">294</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC294">                               <span class="pl-k">else</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L295">295</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC295">                               {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L296">296</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC296">                                 iic-&gt;nacked = <span class="pl-c1">true</span>;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L297">297</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC297">                                 iic-&gt;transfer_state = TRANSFER_STOP;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L298">298</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC298">                               }</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L299">299</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC299">                             }</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L300">300</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC300"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L301">301</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC301">                             iic-&gt;clock_state ^= <span class="pl-c1">1</span>;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L302">302</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC302">                             <span class="pl-k">break</span>;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L303">303</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC303"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L304">304</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC304">      <span class="pl-k">case</span> TRANSFER_WACK  :  <span class="pl-k">if</span> (!iic-&gt;clock_state) {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L305">305</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC305">                               <span class="pl-k">if</span> (iic-&gt;read_length)</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L306">306</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC306">                                 <span class="pl-c1">PINLow</span>(Port,IIC_PORT_DATA)  <span class="pl-c">// ACK</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L307">307</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC307">                               <span class="pl-k">else</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L308">308</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC308">                                 <span class="pl-c1">PINHigh</span>(Port,IIC_PORT_DATA);  <span class="pl-c">// NACK the last one</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L309">309</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC309">			       <span class="pl-c1">PINOutput</span>(Port,IIC_PORT_DATA);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L310">310</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC310">                             } <span class="pl-k">else</span> {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L311">311</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC311">                               <span class="pl-k">if</span> (iic-&gt;read_length) {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L312">312</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC312">				 iic-&gt;wait_cycles = <span class="pl-c1">2</span>;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L313">313</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC313">				 iic-&gt;transfer_state = TRANSFER_WAIT;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L314">314</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC314">			       }</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L315">315</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC315">                               <span class="pl-k">else</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L316">316</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC316">                                   iic-&gt;transfer_state = TRANSFER_STOP;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L317">317</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC317">                             }</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L318">318</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC318">                             iic-&gt;clock_state ^= <span class="pl-c1">1</span>;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L319">319</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC319">                             <span class="pl-k">break</span>;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L320">320</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC320"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L321">321</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC321">      <span class="pl-k">case</span> TRANSFER_WAIT  :  <span class="pl-k">if</span> (iic-&gt;wait_cycles--) {}</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L322">322</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC322">	                     <span class="pl-k">else</span> <span class="pl-k">if</span> (iic-&gt;write_length)</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L323">323</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC323">			       iic-&gt;transfer_state = TRANSFER_DATA;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L324">324</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC324">                             <span class="pl-k">else</span> <span class="pl-k">if</span> (iic-&gt;read_length)</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L325">325</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC325">			       iic-&gt;transfer_state = TRANSFER_READ;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L326">326</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC326">	                     <span class="pl-k">break</span>;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L327">327</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC327"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L328">328</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC328">      <span class="pl-k">case</span> TRANSFER_STOP  :  <span class="pl-k">if</span> (iic-&gt;read_length) {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L329">329</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC329">                               <span class="pl-c1">PINLow</span>(Port,IIC_PORT_DATA);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L330">330</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC330"> 			       <span class="pl-c1">PINOutput</span>(Port,IIC_PORT_DATA);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L331">331</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC331">			     }</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L332">332</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC332">                             <span class="pl-k">else</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L333">333</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC333">                               <span class="pl-c1">PINInput</span>(Port,IIC_PORT_DATA);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L334">334</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC334"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L335">335</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC335">                             <span class="pl-k">if</span> (iic-&gt;clock_state)</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L336">336</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC336">                               iic-&gt;transfer_state = TRANSFER_STOP2;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L337">337</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC337">                             iic-&gt;clock_state = <span class="pl-c1">1</span>;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L338">338</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC338">                             <span class="pl-k">break</span>;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L339">339</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC339"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L340">340</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC340">      <span class="pl-k">case</span> TRANSFER_STOP2 :  <span class="pl-c">//PINHigh(Port,IIC_PORT_DATA);</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L341">341</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC341">                             <span class="pl-k">if</span> (iic-&gt;nacked)</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L342">342</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC342">                                 iic-&gt;transfer_state = TRANSFER_STOP3;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L343">343</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC343">                             <span class="pl-k">else</span> <span class="pl-k">if</span> (iic-&gt;read_length) {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L344">344</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC344">                               <span class="pl-c1">PINHigh</span>(Port,IIC_PORT_DATA);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L345">345</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC345">  			       <span class="pl-c1">PINOutput</span>(Port,IIC_PORT_DATA);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L346">346</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC346">                               iic-&gt;clock_state ^= <span class="pl-c1">1</span>;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L347">347</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC347">                               <span class="pl-k">if</span>  (iic-&gt;clock_state) {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L348">348</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC348">                                 iic-&gt;transfer_state = TRANSFER_RESTART;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L349">349</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC349">                                 iic-&gt;read_start_send = <span class="pl-c1">true</span>;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L350">350</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC350">                               }</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L351">351</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC351">                             }</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L352">352</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC352">                             <span class="pl-k">else</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L353">353</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC353">                               iic-&gt;transfer_state = TRANSFER_STOP3;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L354">354</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC354">                             <span class="pl-k">break</span>;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L355">355</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC355"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L356">356</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC356">      <span class="pl-k">case</span> TRANSFER_RESTART: iic-&gt;transfer_state = TRANSFER_START2;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L357">357</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC357">                             <span class="pl-k">break</span>;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L358">358</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC358"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L359">359</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC359">      <span class="pl-k">case</span> TRANSFER_STOP3 :  <span class="pl-c1">PINInput</span>(Port,IIC_PORT_DATA);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L360">360</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC360">	                     <span class="pl-c">//PINHigh(Port,IIC_PORT_DATA);</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L361">361</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC361">	                     <span class="pl-c">//PINOutput(Port,IIC_PORT_DATA);</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L362">362</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC362">			     iic-&gt;transfer_state = TRANSFER_IDLE;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L363">363</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC363">      <span class="pl-k">case</span> TRANSFER_IDLE:</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L364">364</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC364"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L365">365</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC365">      <span class="pl-k">default</span>             :  <span class="pl-k">break</span>;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L366">366</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC366">    }</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L367">367</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC367">  }</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L368">368</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC368"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L369">369</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC369">  <span class="pl-k">return</span> (restart_timer);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L370">370</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC370">}</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L371">371</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC371"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L372">372</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC372"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L373">373</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC373"><span class="pl-k">int</span> <span class="pl-en">fiq_register_callback</span>(<span class="pl-k">int</span> (*func)(<span class="pl-k">void</span> *arg), void *data);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L374">374</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC374"><span class="pl-k">int</span> <span class="pl-en">fiq_set_time</span>(<span class="pl-k">int</span> time);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L375">375</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC375"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L376">376</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC376"><span class="pl-k">void</span> <span class="pl-en">iic_fiq_start_transfer</span>(<span class="pl-k">unsigned</span> <span class="pl-k">int</span> time, <span class="pl-k">bool</span> fiq_nirq)</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L377">377</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC377">{</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L378">378</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC378">#<span class="pl-k">ifdef</span> TIMING_COLLECT_TIMES</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L379">379</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC379">  <span class="pl-k">int</span> i=<span class="pl-c1">0</span>, fiq_cycles=<span class="pl-c1">0</span>, fiq_cycles_total=<span class="pl-c1">0</span>, cycles_total=<span class="pl-c1">0</span>;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L380">380</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC380"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L381">381</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC381">  <span class="pl-c">// Print statistics from last FIQ transfer</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L382">382</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC382">#<span class="pl-k">ifdef</span> TIMING_COLLECT_TIMES_VERBOSE</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L383">383</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC383">  <span class="pl-k">if</span> (first[<span class="pl-c1">0</span>]) <span class="pl-c1">printk</span>(<span class="pl-s"><span class="pl-pds">&quot;</span>UsedInFiqLast: <span class="pl-pds">&quot;</span></span>);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L384">384</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC384">#<span class="pl-k">endif</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L385">385</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC385"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L386">386</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC386">  <span class="pl-k">while</span>(first[i]) {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L387">387</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC387">    fiq_cycles = last[i] - first[i];</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L388">388</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC388">#<span class="pl-k">ifdef</span> TIMING_COLLECT_TIMES_VERBOSE</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L389">389</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC389">    <span class="pl-c1">printk</span>(<span class="pl-s"><span class="pl-pds">&quot;</span><span class="pl-c1">%d</span> <span class="pl-pds">&quot;</span></span>, fiq_cycles);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L390">390</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC390">#<span class="pl-k">endif</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L391">391</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC391">    fiq_cycles_total += fiq_cycles;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L392">392</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC392">    i++;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L393">393</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC393">  }</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L394">394</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC394">#<span class="pl-k">ifdef</span> TIMING_COLLECT_TIMES_VERBOSE</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L395">395</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC395">  <span class="pl-k">if</span> (first[<span class="pl-c1">0</span>]) <span class="pl-c1">printk</span>(<span class="pl-s"><span class="pl-pds">&quot;</span><span class="pl-cce">\n</span><span class="pl-pds">&quot;</span></span>);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L396">396</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC396">#<span class="pl-k">endif</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L397">397</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC397"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L398">398</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC398">  <span class="pl-k">if</span> (first[<span class="pl-c1">0</span>]) {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L399">399</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC399">    cycles_total = last[i-<span class="pl-c1">1</span>] - first[<span class="pl-c1">0</span>];</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L400">400</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC400">    <span class="pl-c1">printk</span>(<span class="pl-s"><span class="pl-pds">&quot;</span>UsedInFiqTotal = <span class="pl-c1">%d</span>, CyclesTotal=<span class="pl-c1">%d</span>, Percentage=<span class="pl-c1">%d</span><span class="pl-cce">\n</span><span class="pl-pds">&quot;</span></span>,</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L401">401</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC401">	   fiq_cycles_total, cycles_total, fiq_cycles_total*<span class="pl-c1">100</span>/cycles_total);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L402">402</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC402">  }</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L403">403</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC403">  <span class="pl-c">// Prepare collecting data in next transfer </span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L404">404</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC404">  t_index = <span class="pl-c1">0</span>;</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L405">405</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC405">  <span class="pl-c1">memset</span>(first,<span class="pl-c1">0</span>, <span class="pl-k">sizeof</span>(first));</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L406">406</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC406">  <span class="pl-c1">memset</span>(last, <span class="pl-c1">0</span>, <span class="pl-k">sizeof</span>(last));</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L407">407</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC407">#<span class="pl-k">endif</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L408">408</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC408"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L409">409</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC409">  <span class="pl-c">// Set FiQ period time</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L410">410</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC410">  <span class="pl-c1">fiq_set_time</span>(<span class="pl-c1">time</span>);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L411">411</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC411">  </td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L412">412</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC412">  <span class="pl-c">// Decide to run FiQ functionality as FIQ or in ordinary IRQ</span></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L413">413</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC413">  <span class="pl-k">if</span> (fiq_nirq) {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L414">414</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC414">    <span class="pl-c1">davinci_fiq_enable</span>();</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L415">415</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC415">  } <span class="pl-k">else</span> {</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L416">416</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC416">    <span class="pl-c1">fiq_register_callback</span>(&amp;iic_fiq_handler, <span class="pl-c1">NULL</span>);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L417">417</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC417">    <span class="pl-c1">cp_intc_set_channel</span>(<span class="pl-c1">2</span>, IRQ_DA8XX_TINT34_1);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L418">418</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC418">    <span class="pl-c1">cp_intc_fiq_enable</span>(<span class="pl-c1">true</span>, IRQ_DA8XX_TINT34_1);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L419">419</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC419">  }</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L420">420</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC420">}</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L421">421</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC421"></td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L422">422</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC422"><span class="pl-en">EXPORT_SYMBOL</span>(iic_fiq_start_transfer);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L423">423</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC423"><span class="pl-en">EXPORT_SYMBOL</span>(IicPortPin);</td>
+          </tr>
+          <tr class="blame-line">
+            <td class="line-age heat10"></td>
+            <td class="blob-num blame-blob-num js-line-number" id="L424">424</td>
+            <td class="blob-code blob-code-inner js-file-line" id="LC424"><span class="pl-en">EXPORT_SYMBOL</span>(IicCtrl);</td>
+          </tr>
+    </table>
+  </div>
+</div>
+
+
+        </div>
+
+      </div><!-- /.repo-container -->
+      <div class="modal-backdrop"></div>
+    </div><!-- /.container -->
+  </div><!-- /.site -->
+
+
+    </div><!-- /.wrapper -->
+
+      <div class="container">
+  <div class="site-footer" role="contentinfo">
+    <ul class="site-footer-links right">
+        <li><a href="https://status.github.com/" data-ga-click="Footer, go to status, text:status">Status</a></li>
+      <li><a href="https://developer.github.com/" data-ga-click="Footer, go to api, text:api">API</a></li>
+      <li><a href="https://training.github.com/" data-ga-click="Footer, go to training, text:training">Training</a></li>
+      <li><a href="https://shop.github.com/" data-ga-click="Footer, go to shop, text:shop">Shop</a></li>
+        <li><a href="https://github.com/blog" data-ga-click="Footer, go to blog, text:blog">Blog</a></li>
+        <li><a href="https://github.com/about" data-ga-click="Footer, go to about, text:about">About</a></li>
+
+    </ul>
+
+    <a href="https://github.com/" aria-label="Homepage">
+      <span class="mega-octicon octicon-mark-github" title="GitHub"></span>
+</a>
+    <ul class="site-footer-links">
+      <li>&copy; 2015 <span title="0.25807s from github-fe133-cp1-prd.iad.github.net">GitHub</span>, Inc.</li>
+        <li><a href="https://github.com/site/terms" data-ga-click="Footer, go to terms, text:terms">Terms</a></li>
+        <li><a href="https://github.com/site/privacy" data-ga-click="Footer, go to privacy, text:privacy">Privacy</a></li>
+        <li><a href="https://github.com/security" data-ga-click="Footer, go to security, text:security">Security</a></li>
+        <li><a href="https://github.com/contact" data-ga-click="Footer, go to contact, text:contact">Contact</a></li>
+    </ul>
+  </div>
+</div>
+
+
+    <div class="fullscreen-overlay js-fullscreen-overlay" id="fullscreen_overlay">
+  <div class="fullscreen-container js-suggester-container">
+    <div class="textarea-wrap">
+      <textarea name="fullscreen-contents" id="fullscreen-contents" class="fullscreen-contents js-fullscreen-contents" placeholder=""></textarea>
+      <div class="suggester-container">
+        <div class="suggester fullscreen-suggester js-suggester js-navigation-container"></div>
+      </div>
+    </div>
+  </div>
+  <div class="fullscreen-sidebar">
+    <a href="#" class="exit-fullscreen js-exit-fullscreen tooltipped tooltipped-w" aria-label="Exit Zen Mode">
+      <span class="mega-octicon octicon-screen-normal"></span>
+    </a>
+    <a href="#" class="theme-switcher js-theme-switcher tooltipped tooltipped-w"
+      aria-label="Switch themes">
+      <span class="octicon octicon-color-mode"></span>
+    </a>
+  </div>
+</div>
+
+
+
+    
+
+    <div id="ajax-error-message" class="flash flash-error">
+      <span class="octicon octicon-alert"></span>
+      <a href="#" class="octicon octicon-x flash-close js-ajax-error-dismiss" aria-label="Dismiss error"></a>
+      Something went wrong with that request. Please try again.
+    </div>
+
+
+      <script crossorigin="anonymous" src="../../../../../../../../../../assets-cdn.github.com/assets/frameworks-447ce66a36506ebddc8e84b4e32a77f6062f3d3482e77dd21a77a01f0643ad98.js"></script>
+      <script async="async" crossorigin="anonymous" src="../../../../../../../../../../assets-cdn.github.com/assets/github/index-83be60956d0d00076a726f0864b49916aae8e7bc6ee140798791be0b6644d661.js"></script>
+      
+      
+  </body>
+
+<!-- Mirrored from github.com/mindboards/ev3sources/blame/7357369b6ebae4ee62001f3964f0f5fd0cce3c32/extra/linux-03.20.00.13/arch/arm/mach-davinci/davinci-iic.c by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 01 Jun 2015 09:40:36 GMT -->
+</html>
+

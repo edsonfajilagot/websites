@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from zetcode.com/databases/mysqltutorial/select/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Jul 2015 02:47:03 GMT -->
+<head>
+<title>The SELECT statement in MySQL</title>
+<link rel="stylesheet" href="../../../cfg/format2.css" type="text/css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="MySQL, tutorial, SQL, SELECT, database">
+<meta name="description" content="In this part of the MySQL tutorial, 
+we cover the SELECT statement.">
+<meta name="author" content="Jan Bodnar">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div id="wide_ad" class="ltow">
+<script async src="../../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- 160x600, August 2011 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:600px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="2484182563"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<div class="content">
+
+
+<header>
+
+<nav>
+<a href="http://zetcode.com/" title="Home">Home</a>&#160;
+<a href="../index.html">Contents</a>
+</nav>
+
+</header>
+
+
+<h1>The SELECT statement in MySQL</h1>
+
+
+<p>
+This part of the MySQL tutorial will be covering the <code>SELECT</code> statement 
+understood by the MySQL in detail.
+</p>
+
+<div class="med_rec">
+<script async src="../../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- NewSquare -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:250px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="0364418177"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+
+<h2 id="retrieve">Retrieving data</h2>
+
+<p>
+The following SQL statement is one of the most common ones. It is also one 
+of the most expensive ones. 
+</p>
+
+
+<pre class="code">
+mysql> SELECT * FROM Cars;
++----+------------+--------+
+| Id | Name       | Cost   |
++----+------------+--------+
+|  1 | Audi       |  52642 |
+|  2 | Mercedes   |  57127 |
+|  3 | Skoda      |   9000 |
+|  4 | Volvo      |  29000 |
+|  5 | Bentley    | 350000 |
+|  6 | Citroen    |  21000 |
+|  7 | Hummer     |  41400 |
+|  8 | Volkswagen |  21600 |
++----+------------+--------+
+8 rows in set (0.00 sec)
+</pre>
+
+<p>
+Here we retrieve all data from the <code>Cars</code> table. 
+</p>
+
+
+<h3>Selecting specific columns</h3>
+
+<p>
+We can use the <code>SELECT</code> statement to retrieve specific columns. 
+The column names follow the <code>SELECT</code> word. 
+</p>
+
+
+<pre class="code">
+mysql> SELECT Name, Cost FROM Cars;
++------------+--------+
+| Name       | Cost   |
++------------+--------+
+| Audi       |  52642 |
+| Mercedes   |  57127 |
+| Skoda      |   9000 |
+| Volvo      |  29000 |
+| Bentley    | 350000 |
+| Citroen    |  21000 |
+| Hummer     |  41400 |
+| Volkswagen |  21600 |
++------------+--------+
+8 rows in set (0.00 sec) 
+</pre>
+
+<p>
+We retrieve the <code>Name</code> and the <code>Cost</code> columns. The column 
+names are separated by commas. 
+</p>
+
+
+<h3>Renaming column names</h3>
+
+<p>
+We can rename the column names of the returned result set. For this, we use the
+<code>AS</code> clause. 
+</p>
+
+<pre class="code">
+mysql> SELECT Name, Cost AS Price FROM Cars;
++------------+--------+
+| Name       | Price  |
++------------+--------+
+| Audi       |  52642 |
+| Mercedes   |  57127 |
+| Skoda      |   9000 |
+| Volvo      |  29000 |
+| Bentley    | 350000 |
+| Citroen    |  21000 |
+| Hummer     |  41400 |
+| Volkswagen |  21600 |
++------------+--------+
+8 rows in set (0.00 sec)
+</pre>
+
+<p>
+Say we wanted to name the column price rather than cost. With the above 
+SQL statement, we have accomplished this. 
+</p>
+
+
+<h2 id="limit">Limiting data output</h2>
+
+<p>
+As we mentioned above, retrieving all data is expensive when dealing with 
+large amounts of data. We can use the <code>LIMIT</code> clause to limit the 
+data amount returned by the statement. 
+</p>
+
+
+<pre class="code">
+mysql> SELECT * FROM Cars LIMIT 4;
++----+----------+-------+
+| Id | Name     | Cost  |
++----+----------+-------+
+|  1 | Audi     | 52642 |
+|  2 | Mercedes | 57127 |
+|  3 | Skoda    |  9000 |
+|  4 | Volvo    | 29000 |
++----+----------+-------+
+4 rows in set (0.00 sec) 
+</pre>
+
+<p>
+The <code>LIMIT</code> clause limits the number of rows returned to 4. 
+</p>
+
+<p>
+With two arguments, the <code>LIMIT</code> returns rows beginning from an
+offset value.
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM Cars LIMIT 2, 4;
++----+---------+--------+
+| Id | Name    | Cost   |
++----+---------+--------+
+|  3 | Skoda   |   9000 |
+|  4 | Volvo   |  29000 |
+|  5 | Bentley | 350000 |
+|  6 | Citroen |  21000 |
++----+---------+--------+
+4 rows in set (0.00 sec)   
+</pre>
+
+<p>
+The first value is the offset and the second is the number of rows to be
+returned. Here we select all data from max four rows, and we begin with 
+the third row. 
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM Cars LIMIT 4 OFFSET 2;
++----+---------+--------+
+| Id | Name    | Cost   |
++----+---------+--------+
+|  3 | Skoda   |   9000 |
+|  4 | Volvo   |  29000 |
+|  5 | Bentley | 350000 |
+|  6 | Citroen |  21000 |
++----+---------+--------+
+4 rows in set (0.00 sec)
+</pre>
+
+<p>
+To be compatible with PostgreSQL database, MySQL has also the <code>OFFSET</code> 
+keyword. The above code is equivalent to the previous example. 
+</p>
+
+
+<h2 id="order">Ordering data</h2>
+
+<p>
+We use the <code>ORDER BY</code> clause to sort the returned data set. 
+The <code>ORDER BY</code> clause is followed by the column on which 
+we do the sorting.  The <code>ASC</code> keyword sorts the data
+in ascending order, the <code>DESC</code> in descending order. 
+</p>
+
+<pre class="code">
+mysql> SELECT Name, Cost FROM Cars ORDER BY Cost DESC;
++------------+--------+
+| Name       | Cost   |
++------------+--------+
+| Bentley    | 350000 |
+| Mercedes   |  57127 |
+| Audi       |  52642 |
+| Hummer     |  41400 |
+| Volvo      |  29000 |
+| Volkswagen |  21600 |
+| Citroen    |  21000 |
+| Skoda      |   9000 |
++------------+--------+
+8 rows in set (0.00 sec)
+</pre>
+
+<p>
+In the above SQL statement, we select name, cost columns from the 
+<code>Cars</code> table and sort it by the cost of the cars in descending 
+order. So the most expensive cars come first. 
+</p>
+
+
+<h2 id="where">Selecting specific rows with the WHERE clause</h2>
+
+<p>
+In the following examples, we are going to use the 
+<code>Orders</code> table. 
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM Orders;
++----+------------+------------+
+| Id | OrderPrice | Customer   |
++----+------------+------------+
+|  1 |       1200 | Williamson |
+|  2 |        200 | Robertson  |
+|  3 |         40 | Robertson  |
+|  4 |       1640 | Smith      |
+|  5 |        100 | Robertson  |
+|  6 |         50 | Williamson |
+|  7 |        150 | Smith      |
+|  8 |        250 | Smith      |
+|  9 |        840 | Brown      |
+| 10 |        440 | Black      |
+| 11 |         20 | Brown      |
++----+------------+------------+
+11 rows in set (0.00 sec)
+</pre>
+
+<p>
+Here we see all the data from the <code>Orders</code> table. 
+</p>
+
+<p>
+Next, we want to select a specific row.
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM Orders WHERE Id=6;
++----+------------+------------+
+| Id | OrderPrice | Customer   |
++----+------------+------------+
+|  6 |         50 | Williamson |
++----+------------+------------+
+1 row in set (0.00 sec)
+</pre>
+
+<p>
+The above SQL statement selects a row which has Id 6.
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM Orders WHERE Customer="Smith";
++----+------------+----------+
+| Id | OrderPrice | Customer |
++----+------------+----------+
+|  4 |       1640 | Smith    |
+|  7 |        150 | Smith    |
+|  8 |        250 | Smith    |
++----+------------+----------+
+3 rows in set (0.00 sec)
+</pre>
+
+<p>
+The above SQL statement selects all orders created by Smith customer. 
+</p>
+
+<p>
+We can use the <code>LIKE</code> keyword to look for a specific pattern 
+in the data.
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM Orders WHERE Customer LIKE "B%";
++----+------------+----------+
+| Id | OrderPrice | Customer |
++----+------------+----------+
+|  9 |        840 | Brown    |
+| 10 |        440 | Black    |
+| 11 |         20 | Brown    |
++----+------------+----------+
+3 rows in set (0.00 sec)
+</pre>
+
+<p>
+This SQL statement selects all orders from customers whose names begin
+with B character. 
+</p>
+
+
+<h2 id="remove">Removing duplicate items</h2>
+
+<p>
+The <code>DISTINCT</code> keyword is used to select only unique items
+from the result set. 
+</p>
+
+<pre class="code">
+mysql> SELECT Customer FROM Orders WHERE Customer LIKE 'B%';
++----------+
+| Customer |
++----------+
+| Brown    |
+| Black    |
+| Brown    |
++----------+
+3 rows in set (0.00 sec)
+</pre>
+
+<p>
+This time we have selected customers whose names begin with B character.
+We can see that Brown is mentioned twice. To remove duplicates, we use the
+<code>DISTINCT</code> keyword.
+</p>
+
+<pre class="code">
+mysql> SELECT DISTINCT Customer FROM Orders WHERE Customer LIKE 'B%';
++----------+
+| Customer |
++----------+
+| Brown    |
+| Black    |
++----------+
+2 rows in set (0.00 sec)
+</pre>
+
+<p>
+This is the correct solution. 
+</p>
+
+<p>
+Say we wanted to figure out, how many orders were placed by Brown customer.
+We would utilize the <code>COUNT()</code> function.
+</p>
+
+<pre class="code">
+mysql> SELECT COUNT(Customer) AS "Orders by Brown" FROM Orders WHERE Customer="Brown";
++-----------------+
+| Orders by Brown |
++-----------------+
+|               2 |
++-----------------+
+1 row in set (0.00 sec)
+</pre>
+
+<p>
+The customer has placed two orders. 
+</p>
+
+
+<h2 id="group">Grouping data</h2>
+
+<p>
+The <code>GROUP BY</code> clause is used to combine database 
+records with identical values into a single record. It is often used 
+with the aggregation functions.
+</p>
+
+<p>
+Say we wanted to find out, the sum of each customers' orders. 
+</p>
+
+<pre class="code">
+mysql> SELECT SUM(OrderPrice) AS Total, Customer FROM Orders GROUP BY Customer;
++-------+------------+
+| Total | Customer   |
++-------+------------+
+|   440 | Black      |
+|   860 | Brown      |
+|   340 | Robertson  |
+|  2040 | Smith      |
+|  1250 | Williamson |
++-------+------------+
+5 rows in set (0.00 sec)
+</pre>
+ 
+<p>
+The <code>SUM()</code> keyword returns the total sum of 
+a numeric column. The <code>GROUP BY</code> clause divides the 
+total sum among the customers. So we can see that Black has ordered items for
+440 or Smith for 2040.
+</p>
+
+<p>
+We cannot use the <code>WHERE</code> clause when aggregate functions were
+used. We use the <code>HAVING</code> clause instead.
+</p>
+
+
+<pre class="code">
+mysql> SELECT SUM(OrderPrice) AS Total, Customer FROM Orders
+    -> GROUP BY Customer HAVING SUM(OrderPrice)>1000;
++-------+------------+
+| Total | Customer   |
++-------+------------+
+|  2040 | Smith      |
+|  1250 | Williamson |
++-------+------------+
+2 rows in set (0.00 sec)
+</pre>
+ 
+<p>
+The above SQL statement selects customers whose total orders where 
+greater than 1000 units. 
+</p>
+
+
+<h2 id="file">Selecting data into a file</h2>
+
+<p>
+The <code>SELECT</code> statement can be used to write data from tables
+to a file. 
+</p>
+
+<pre class="code">
+mysql> SELECT * INTO OUTFILE '/tmp/cars.txt'
+    -> FIELDS TERMINATED BY ','
+    -> LINES TERMINATED BY '\n'
+    -> FROM Cars;
+Query OK, 8 rows affected (0.00 sec)
+</pre>
+
+<p>
+We write data from the <code>Cars</code> table into a <code>cars.txt</code> 
+file. The output file is a CSV (Comma Separated Values) file.
+Note that this operation is error prone, we can easily
+run into permission denied errors. 
+</p>
+
+<pre>
+$ cat /tmp/cars.txt 
+1,Audi,52642
+2,Mercedes,57127
+3,Skoda,9000
+4,Volvo,29000
+5,Bentley,350000
+6,Citroen,21000
+7,Hummer,41400
+8,Volkswagen,21600
+</pre>
+
+<p>
+We can do the opposite operation; load the data from the
+file into the table.
+</p>
+
+<pre>
+mysql> DELETE FROM Cars;
+Query OK, 8 rows affected (0.00 sec)
+
+mysql> SELECT * FROM Cars;
+Empty set (0.00 sec)
+</pre>
+
+<p>
+We delete all the rows from the <code>Cars</code> table.
+</p>
+
+<pre>
+mysql> LOAD DATA INFILE '/tmp/cars.txt' 
+    -> INTO TABLE Cars
+    -> FIELDS TERMINATED BY ','
+    -> LINES TERMINATED BY '\n';
+Query OK, 8 rows affected (0.00 sec)
+Records: 8  Deleted: 0  Skipped: 0  Warnings: 0
+
+mysql> SELECT *  FROM Cars;
++----+------------+--------+
+| Id | Name       | Cost   |
++----+------------+--------+
+|  1 | Audi       |  52642 |
+|  2 | Mercedes   |  57127 |
+|  3 | Skoda      |   9000 |
+|  4 | Volvo      |  29000 |
+|  5 | Bentley    | 350000 |
+|  6 | Citroen    |  21000 |
+|  7 | Hummer     |  41400 |
+|  8 | Volkswagen |  21600 |
++----+------------+--------+
+8 rows in set (0.00 sec)
+
+</pre>
+
+<p>
+We use the <code>LOAD DATA INFILE</code> statement to load
+the data back into the table. We verify that the data was
+loaded correctly.
+</p>
+
+<p>
+In this part of the MySQL tutorial, we mentioned the SQL 
+<code>SELECT</code> statement in more detail. 
+</p>
+
+
+<footer>
+
+<nav class="center">
+<span class="botNavItem"><a href="http://zetcode.com/">Home</a></span> ‡ <span class="botNavItem"><a href="../index.html">Contents</a></span> ‡ 
+<span class="botNavItem"><a href="#">Top of Page</a></span>
+</nav>
+
+<div class="signature">
+<a href="http://zetcode.com/">ZetCode</a> last modified January 15, 2011  <span class="copyright">&copy; 2007 - 2015 Jan Bodnar</span>
+</div>
+
+</footer>
+
+</div> <!-- content -->
+
+</div> <!-- container -->
+
+</body> 
+
+<!-- Mirrored from zetcode.com/databases/mysqltutorial/select/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Jul 2015 02:47:03 GMT -->
+</html>

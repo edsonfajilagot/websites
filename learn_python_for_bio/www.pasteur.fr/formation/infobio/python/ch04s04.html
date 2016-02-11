@@ -1,0 +1,79 @@
+<html>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch04s04.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:22 GMT -->
+<head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>4.4. Files</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><meta name="keywords" content="python, biology, bioinformatics, programming, computational biology"><link rel="home" href="index-2.html" title="Introduction to Programming using Python"><link rel="up" href="ch04.html" title="Chapter 4. Communication with outside"><link rel="previous" href="ch04s03.html" title="4.3. Input"><link rel="next" href="ch05.html" title="Chapter 5. Program execution"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">4.4. Files</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch04s03.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><th width="60%" align="center">Chapter 4. Communication with outside</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch05.html"><img src="images/next.png" alt="Next"></a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="sect_files"></a>4.4. Files</h2></div></div><p>
+    During a program execution data are stored in memory. But if the
+    program ends the data are cleared from memory.  In this 
+    chapter we will explain how programs can communicate data permanently. 
+  </p><p>
+    In the above sections we have seen how we can communicate
+    <span class="emphasis"><em>interactively</em></span> with programs during their
+    execution. However, if we need to store data permanently, we have
+    to store them in <span class="emphasis"><em>files</em></span>.
+  </p><div class="definition"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/definition.png"></td><td><p class="title"><b>Files</b></p></td></tr><tr><td colspan="2" align="left" valign="top">
+    
+    <p>
+      <span class="emphasis"><em>Files</em></span> are entities containing character
+      data which are stored on external devices, such as disks or CD-ROMs. 
+    </p>
+  </td></tr></table></div><p>
+      <span class="emphasis"><em>Files</em></span> are like
+      <span class="emphasis"><em>books</em></span>. You <span class="emphasis"><em>open</em></span> them to
+      start working, then <span class="emphasis"><em>read</em></span> or
+      <span class="emphasis"><em>write</em></span> in them and you
+      <span class="emphasis"><em>close</em></span> them when you have finished your
+      work. However, you have always to know where you are in the
+      book. As children use their fingers when they start to learn
+      reading, you manipulate a <span class="emphasis"><em>file pointer</em></span>
+      which indicates your current position in the file.
+    </p><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="d0e1521"></a>4.4.1. Reading from a file</h3></div></div><p>
+	The following statements are typical statements used to read the 
+content of a file.
+	<pre class="programlisting">
+f = open("myfile")
+for l in f:
+    # do something with the line stored in variable l
+f.close()
+	</pre>
+<tt>f</tt> is a variable associated with the file pointer.
+      </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="d0e1532"></a>4.4.2. Writing into a file</h3></div></div><p>
+	In order to write into a file, you must open it in 'w' (write) mode.
+	<pre class="programlisting">
+f = open("myfile", 'w')
+f.write("hello, this is my new line of data")
+f.close()
+	</pre>
+
+      You might be surprised by the syntax shown above, where functions such as 
+      <tt>write</tt> and <tt>close</tt> are called with a
+      dot ('.') put after the file pointer. This syntax and the related concept
+      will be developed in <a href="ch06.html#sect_string_val_obj" title="6.1. Values as objects">Section 6.1</a>.
+
+
+    </p><div class="exercise"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/exercise.png"></td><td><p class="title"><b>Exercise 4.1. Copying a file</b></p></td></tr><tr><td colspan="2" align="left" valign="top">
+      
+      <p>
+      How would you copy a file? 
+      </p>
+    </td></tr></table></div><p>
+
+      </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="d0e1557"></a>4.4.3. Errors with files</h3></div></div><p>
+	<a href="ch12.html" title="Chapter 12. Exceptions">Chapter 12</a> presents how errors are managed in Python. Let us just look for now at how to deal with file errors, mainly errors with file names. What will happen if your program attempts to open a file that does not exist?
+	<pre class="programlisting">
+f = open("myfileee")
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+IOError: [Errno 2] No such file or directory: 'myfileee'
+	</pre>
+	A common way to let your program handle this type of error properly is to specify what to do in case of errors:
+	<pre class="programlisting">
+try:
+    f = open("myfileee")
+except IOError:
+    print "the file  myfileee does not exist!!"
+	</pre>
+	Handling this type of IO (input/output) error makes your program more robust.
+      </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch04s03.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch04.html"><img src="images/up.png" alt="Up"></a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch05.html"><img src="images/next.png" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">4.3. Input&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index-2.html"><img src="images/home.png" alt="Home"></a></td><td width="40%" align="right" valign="top">&nbsp;Chapter 5. Program execution</td></tr></table></div></body>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch04s04.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:22 GMT -->
+</html>

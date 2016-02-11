@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from zetcode.com/databases/mysqltutorial/datamanipulation/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Jul 2015 02:47:03 GMT -->
+<head>
+<title>Inserting, updating, and deleting data in MySQL</title>
+<link rel="stylesheet" href="../../../cfg/format2.css" type="text/css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="MySQL, SQL, database, INSERT, REPLACE, DELETE, UPDATE">
+<meta name="description" content="In this chapter of the MySQL tutorial, we will
+be inserting, updating and deleting data.">
+<meta name="author" content="Jan Bodnar">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div id="wide_ad" class="ltow">
+<script async src="../../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- 160x600, August 2011 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:600px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="2484182563"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<div class="content">
+
+
+<header>
+
+<nav>
+<a href="http://zetcode.com/" title="Home">Home</a>&#160;
+<a href="../index.html">Contents</a>
+</nav>
+
+</header>
+
+
+<h1>Inserting, updating, and deleting data in MySQL</h1>
+
+
+<p>
+In this part of the MySQL tutorial, we will insert, update and delete 
+data from MySQL tables. We will use the <code>INSERT</code>, 
+<code>DELETE</code> and <code>UPDATE</code> statements. 
+These statements are part of the SQL Data Manipulation Language, <em>DML</em>.
+</p>
+
+<div class="med_rec">
+<script async src="../../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- NewSquare -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:250px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="0364418177"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<h2 id="insert">Inserting data</h2>
+
+<p>
+The <code>INSERT</code> statement is used to insert data into tables. 
+</p>
+
+<p>
+We will create a new table, where we will do our examples. 
+</p>
+
+<pre class="code">
+mysql> CREATE TABLE Books(Id INTEGER PRIMARY KEY, Title VARCHAR(100),
+    -> Author VARCHAR(60));
+</pre>
+
+<p>
+We create a new table <code>Books</code>, with <code>Id</code>, <code>Title</code> 
+and <code>Author</code> columns. 
+</p>
+
+<pre class="code">
+mysql> INSERT INTO Books(Id, Title, Author) VALUES(1, 'War and Peace', 
+    -> 'Leo Tolstoy');
+</pre>
+
+<p>
+This is the classic <code>INSERT</code> SQL statement. We have specified all 
+column names after the table name and all values after the <code>VALUES</code> 
+keyword. We add our first row into the table. 
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM Books;
++----+---------------+-------------+
+| Id | Title         | Author      |
++----+---------------+-------------+
+|  1 | War and Peace | Leo Tolstoy |
++----+---------------+-------------+
+</pre>
+
+<p>
+We have inserted our first row into the <code>Books</code> table. 
+</p>
+
+<pre class="code">
+mysql> INSERT INTO Books(Title, Author) VALUES ('The Brothers Karamazov',
+    -> 'Fyodor Dostoyevsky');
+</pre>
+
+<p>
+We add a new title into the <code>Books</code> table. We have omitted the 
+<code>Id</code> column. The Id column has <code>AUTO_INCREMENT</code> attribute. 
+This means that MySQL will increase the Id column automatically. The value by 
+which the <code>AUTO_INCREMENT</code> column is increased is controlled by 
+<code>auto_increment_increment</code> system variable.
+By default it is 1. 
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM Books;
++----+------------------------+--------------------+
+| Id | Title                  | Author             |
++----+------------------------+--------------------+
+|  1 | War and Peace          | Leo Tolstoy        |
+|  2 | The Brothers Karamazov | Fyodor Dostoyevsky |
++----+------------------------+--------------------+
+</pre>
+
+<p>
+Here is what we have in the Books table. 
+</p>
+
+<pre class="code">
+mysql> INSERT INTO Books VALUES(3, 'Crime and Punishment',
+    -> 'Fyodor Dostoyevsky');
+</pre>
+
+<p>
+In this SQL statement, we did not specify any column names after 
+the table name. In such a case, we have to supply all values.
+</p>
+
+
+<pre class="code">
+mysql> REPLACE INTO Books VALUES(3, 'Paradise Lost', 'John Milton');
+Query OK, 2 rows affected (0.00 sec)
+</pre>
+
+<p>
+The <code>REPLACE</code> statement is a MySQL extension to the SQL
+standard. It inserts a new row or replaces the old row if it collides
+with an existing row. In our table, there is a row with <code>Id=3</code>. 
+So our previous statement replaces it with a new row. There is a message 
+that two rows were affected. One row was deleted and one was inserted. 
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM Books WHERE Id=3;
++----+---------------+-------------+
+| Id | Title         | Author      |
++----+---------------+-------------+
+|  3 | Paradise Lost | John Milton |
++----+---------------+-------------+
+</pre>
+
+<p>
+This is what we have now in the third column. 
+</p>
+
+<p>
+We can use the <code>INSERT</code> and <code>SELECT</code> statements 
+together in one statement. 
+</p>
+
+<pre class="code">
+mysql> CREATE TABLE Books2(Id INTEGER PRIMARY KEY AUTO_INCREMENT, 
+    -> Title VARCHAR(100), Author VARCHAR(60)) type=MEMORY;
+</pre>
+
+<p>
+First, we create a temporary table called <code>Books2</code> in memory.
+</p>
+
+<pre class="code">
+mysql> INSERT INTO Books2 SELECT * FROM Books;
+Query OK, 3 rows affected (0.00 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+</pre>
+
+<p>
+Here we insert all data into the <code>Books2</code> that we select from 
+the <code>Books</code> table. 
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM Books2;
++----+------------------------+--------------------+
+| Id | Title                  | Author             |
++----+------------------------+--------------------+
+|  1 | War and Peace          | Leo Tolstoy        |
+|  2 | The Brothers Karamazov | Fyodor Dostoyevsky |
+|  3 | Paradise Lost          | John Milton        |
++----+------------------------+--------------------+
+</pre>
+
+<p>
+We verify it. All OK.
+</p>
+
+<pre class="code">
+mysql> INSERT INTO Books(Title, Author) VALUES ('The Insulted and Humiliated',
+    -> 'Fyodor Dostoyevsky'), ('Cousin Bette', 'Honore de Balzac');
+Query OK, 2 rows affected (0.00 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+</pre>
+
+<p>
+We can insert more than one row into the table with the <code>INSERT</code> statement.
+Here we show how. 
+</p>
+
+<p>
+We can insert data from a file on the filesystem. First, we dump data from
+the <code>Books</code> table in a <code>books.csv</code> file. 
+</p>
+
+<pre class="code">
+mysql> SELECT * INTO OUTFILE '/tmp/books.csv'
+    -> FIELDS TERMINATED BY ','
+    -> LINES TERMINATED BY '\n'
+    -> FROM Books;
+</pre>
+
+<p>
+We write data from the <code>Books</code> table into the 
+<code>books.csv</code> file. The data will be in a CSV format.
+</p>
+
+<pre class="code">
+$ cat /tmp/books.csv 
+1,War and Peace,Leo Tolstoy
+2,The Brothers Karamazov,Fyodor Dostoyevsky
+3,Paradise Lost,John Milton
+4,The Insulted and Humiliated,Fyodor Dostoyevsky
+5,Cousin Bette,Honore de Balzac
+</pre>
+
+<p>
+We show the contents of the <code>books.csv</code> file. 
+</p>
+
+<pre class="code">
+mysql> TRUNCATE Books;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SELECT * FROM Books;
+Empty set (0.00 sec)
+</pre>
+
+<p>
+We delete all data from the table. 
+</p>
+
+<pre class="code">
+mysql> LOAD DATA INFILE '/tmp/books.csv'    
+    -> INTO TABLE Books    
+    -> FIELDS TERMINATED BY ','    
+    -> LINES TERMINATED BY '\n';
+</pre>
+
+<p>
+We use the <code>LOAD DATA INFILE</code> syntax to populate the 
+Books table from the <code>books.csv</code> file. 
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM Books;
++----+-----------------------------+--------------------+
+| Id | Title                       | Author             |
++----+-----------------------------+--------------------+
+|  1 | War and Peace               | Leo Tolstoy        |
+|  2 | The Brothers Karamazov      | Fyodor Dostoyevsky |
+|  3 | Paradise Lost               | John Milton        |
+|  4 | The Insulted and Humiliated | Fyodor Dostoyevsky |
+|  5 | Cousin Bette                | Honore de Balzac   |
++----+-----------------------------+--------------------+
+</pre>
+
+<p>
+All OK.
+</p>
+
+<p>
+We can load data from XML files as well. First, we write data from the
+Books table into an XML file. 
+</p>
+
+<pre class="code">
+$ mysql -uroot -p --xml -e 'SELECT * FROM mydb.Books' > books.xml
+</pre>
+
+<p>
+The <code>mysql</code> monitor has an <code>--xml</code> option, which 
+enables us to dump data in XML format. The <code>-e</code> option executes 
+a statement and quits the monitor. 
+</p>
+
+<pre>
+$ cat books.xml 
+&lt;?xml version="1.0"?&gt;
+
+&lt;resultset statement="SELECT * FROM mydb.Books
+" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
+  &lt;row&gt;
+    &lt;field name="Id"&gt;1&lt;/field&gt;
+    &lt;field name="Title"&gt;War and Peace&lt;/field&gt;
+    &lt;field name="Author"&gt;Leo Tolstoy&lt;/field&gt;
+  &lt;/row&gt;
+
+  &lt;row&gt;
+    &lt;field name="Id"&gt;2&lt;/field&gt;
+    &lt;field name="Title"&gt;The Brothers Karamazov&lt;/field&gt;
+    &lt;field name="Author"&gt;Fyodor Dostoyevsky&lt;/field&gt;
+  &lt;/row&gt;
+
+  &lt;row&gt;
+    &lt;field name="Id"&gt;3&lt;/field&gt;
+    &lt;field name="Title"&gt;Paradise Lost&lt;/field&gt;
+    &lt;field name="Author"&gt;John Milton&lt;/field&gt;
+  &lt;/row&gt;
+
+  &lt;row&gt;
+    &lt;field name="Id"&gt;4&lt;/field&gt;
+    &lt;field name="Title"&gt;The Insulted and Humiliated&lt;/field&gt;
+    &lt;field name="Author"&gt;Fyodor Dostoyevsky&lt;/field&gt;
+  &lt;/row&gt;
+
+  &lt;row&gt;
+    &lt;field name="Id"&gt;5&lt;/field&gt;
+    &lt;field name="Title"&gt;Cousin Bette&lt;/field&gt;
+    &lt;field name="Author"&gt;Honore de Balzac&lt;/field&gt;
+  &lt;/row&gt;
+&lt;/resultset&gt;
+</pre>
+
+<p>
+This is our XML file. 
+</p>
+
+<pre class="code">
+mysql> LOAD XML INFILE '/home/vronskij/programming/mysql/books.xml' INTO TABLE Books;
+</pre>
+
+<p>
+We load data from the XML file. Note that <code>LOAD XML</code> statement
+is available for MySQL 5.5 and newer.
+</p>
+
+<h2 id="delete">Deleting data</h2>
+
+<p>
+In MySQL, we can delete data using the <code>DELETE</code> and <code>TRUNCATE</code> 
+statements. The <code>TRUNCATE</code> statement is a MySQL extension to the 
+SQL specification. First, we are going to delete one row from a table. 
+We will use the <code>Books2</code> table that we have created previously.
+</p>
+
+<pre class="code">
+mysql> DELETE FROM Books2 WHERE Id=1;
+</pre>
+
+<p>
+We delete a row with <code>Id=1</code>.
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM Books2;
++----+------------------------+--------------------+
+| Id | Title                  | Author             |
++----+------------------------+--------------------+
+|  2 | The Brothers Karamazov | Fyodor Dostoyevsky |
+|  3 | Paradise Lost          | John Milton        |
++----+------------------------+--------------------+
+</pre>
+
+<p>
+We verify the data. 
+</p>
+
+
+<pre class="code">
+mysql> DELETE FROM Books2;
+mysql> TRUNCATE Books2;
+</pre>
+
+<p>
+These two SQL statements delete all data in the table.
+</p>
+
+<h2 id="update">Updating data</h2>
+
+
+<p>
+The <code>UPDATE</code> statement is used to change the value
+of columns in selected rows of a table.
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM Books;
++----+-----------------------------+--------------------+
+| Id | Title                       | Author             |
++----+-----------------------------+--------------------+
+|  1 | War and Peace               | Leo Tolstoy        |
+|  2 | The Brothers Karamazov      | Fyodor Dostoyevsky |
+|  3 | Paradise Lost               | John Milton        |
+|  4 | The Insulted and Humiliated | Fyodor Dostoyevsky |
+|  5 | Cousin Bette                | Honore de Balzac   |
++----+-----------------------------+--------------------+
+</pre>
+
+<p>
+We recreate the table <code>Books</code>. These are the rows. 
+</p>
+
+<p>
+Say we wanted to change 'Leo Tolstoy' to 'Lev Nikolayevich Tolstoy' table.
+The following statement shows, how to accomplish this.
+</p>
+
+<pre class="code">
+mysql> UPDATE Books SET Author='Lev Nikolayevich Tolstoy'
+    -> WHERE Id=1;
+</pre>
+
+<p>
+The SQL statement sets the author column to 'Lev Nikolayevich Tolstoy'
+for the column with <code>Id=1</code>.
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM Books WHERE Id=1;
++----+---------------+--------------------------+
+| Id | Title         | Author                   |
++----+---------------+--------------------------+
+|  1 | War and Peace | Lev Nikolayevich Tolstoy |
++----+---------------+--------------------------+
+</pre>
+
+<p>
+The row is correctly updated. 
+</p>
+
+<p>
+In this part of the MySQL tutorial, we have inserted, deleted, and updated data in 
+database tables. 
+</p>
+
+
+<footer>
+
+<nav class="center">
+<span class="botNavItem"><a href="http://zetcode.com/">Home</a></span> ‡ <span class="botNavItem"><a href="../index.html">Contents</a></span> ‡ 
+<span class="botNavItem"><a href="#">Top of Page</a></span>
+</nav>
+
+<div class="signature">
+<a href="http://zetcode.com/">ZetCode</a> last modified January 23, 2011  <span class="copyright">&copy; 2007 - 2015 Jan Bodnar</span>
+</div>
+
+</footer>
+
+</div> <!-- content -->
+
+</div> <!-- container -->
+
+</body>
+
+<!-- Mirrored from zetcode.com/databases/mysqltutorial/datamanipulation/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Jul 2015 02:47:03 GMT -->
+</html>

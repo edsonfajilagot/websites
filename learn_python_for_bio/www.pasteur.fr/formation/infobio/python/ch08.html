@@ -1,0 +1,144 @@
+<html>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch08.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:26 GMT -->
+<head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Chapter 8. Defining Functions</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><meta name="keywords" content="python, biology, bioinformatics, programming, computational biology"><link rel="home" href="index-2.html" title="Introduction to Programming using Python"><link rel="up" href="index-2.html" title="Introduction to Programming using Python"><link rel="previous" href="ch07s07.html" title="7.7. Solutions"><link rel="next" href="ch08s02.html" title="8.2. Parameters and Arguments or the difference between a function&#xA;      definition and a function call"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 8. Defining Functions</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch07s07.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch08s02.html"><img src="images/next.png" alt="Next"></a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><h2 class="title"><a name="chap_def_func"></a>Chapter 8. Defining Functions</h2></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt>8.1. <a href="ch08.html#sect_funcdef">Defining Functions</a></dt><dt>8.2. <a href="ch08s02.html">Parameters and Arguments or the difference between a function
+      definition and a function call</a></dt><dt>8.3. <a href="ch08s03.html">Functions and namespaces</a></dt><dt>8.4. <a href="ch08s04.html">Boolean functions</a></dt></dl></div><div class="section"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="sect_funcdef"></a>8.1. Defining Functions</h2></div></div><p>
+      In <a href="ch03s05.html" title="3.5. Functions">Section 3.5</a> we have learnt how to apply or
+      call functions. So let's remember the example
+      calculating the GC-percentage of a DNA sequence. 
+
+      <pre class="programlisting">
+&gt;&gt;&gt; float(count(cds, 'G') + count(cds, 'C')) / len(cds)
+      </pre>
+
+      This calculates the gc percentage of the specific DNA sequence
+      <tt>cds</tt>, but we can use the same formula to
+      calculate the gc percentage of other DNA sequences. The only
+      thing to do is to replace <tt>cds</tt> by the new
+      DNA sequence in the formula. But it is not very convenient to
+      remember the formula and retype it all the time. It would be much
+      easier to type the following instead.
+
+      <pre class="programlisting">
+&gt;&gt;&gt; gc('ATGCAT')
+0.33333333333333331
+&gt;&gt;&gt; gc(cds)
+0.54460093896713613
+      </pre>
+
+      The only thing we have to remember is the name of the new
+      <span class="emphasis"><em>function</em></span> and its use.
+    </p><div class="definition"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/definition.png"></td><td><p class="title"><b>Abstraction</b></p></td></tr><tr><td colspan="2" align="left" valign="top">
+      
+      <p>
+	The possibility to define such new
+      <span class="emphasis"><em>function</em></span> executing tasks specified by yourself,
+	is an <span class="emphasis"><em>abstraction</em></span> feature, provided by all
+	high level programming languages. 
+      </p>
+    </td></tr></table></div><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/important.png"></td><th align="left">Important</th></tr><tr><td colspan="2" align="left" valign="top"><p>
+	It is also important to notice that functions have to be
+	defined before they are called. You can not use something that
+	is not defined.
+      </p></td></tr></table></div><p>
+      Here is the syntax of such a new definition in Python:
+
+      <pre class="programlisting">
+&gt;&gt;&gt; from string import *
+
+&gt;&gt;&gt; def gc(seq):
+...     return float(count(seq, 'G') + count(seq, 'C')) / len(seq)
+      </pre>
+    </p><p>
+      Let's have a closer look at this definition. <a href="ch08.html#fig_func_def" title="Figure 8.1. Function definitions">Figure 8.1</a> illustrates the structure of a function
+      definition.   
+    </p><div class="figure"><a name="fig_func_def"></a><p class="title"><b>Figure 8.1. Function definitions</b></p><div class="mediaobject"><img src="images/def_func.png"></div></div><p>
+      <tt>def</tt> and <tt>return</tt> are
+      <span class="emphasis"><em>basic instructions</em></span>.
+    </p><div class="definition"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/definition.png"></td><td><a name="def_statement"></a><p class="title"><b>Basic instruction</b></p></td></tr><tr><td colspan="2" align="left" valign="top">
+	  
+	  <p>
+	  <span class="emphasis"><em>Basic instructions</em></span> are statements that
+	  define the language rules and the semantic of Python. 
+	  They constitute the basic set of instructions of Python.
+	  Each <span class="emphasis"><em>basic instruction</em></span> has
+	  its own syntax that you have to learn in order to master
+	  the programming language.  
+	  </p>
+	</td></tr></table></div><p>
+      The <tt>return</tt> basic instruction is used to return
+      the result of a function back, in our example the value of the GC
+      percentage of the specified DNA sequence.
+    </p><p>
+      The <tt>def</tt> basic instruction indicates to Python
+      that a function 
+      definition follows. It has to be followed by the new function name
+      and a comma separated list of parameter names enclosed into
+      parentheses.
+    </p><div class="definition"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/definition.png"></td><td><a name="def_parameter"></a><p class="title"><b>Parameter</b></p></td></tr><tr><td colspan="2" align="left" valign="top">
+	
+	<p>
+	<span class="emphasis"><em>Parameters</em></span> are <span class="emphasis"><em>variable
+	  names</em></span>. When the function is called they are bound
+	  in the same order to the arguments given. 
+      </p>
+    </td></tr></table></div><p>
+      The body of a function contains the piece of code needed to
+      execute the subtask of the function. In the example above, the
+      body contains only the <tt>return</tt> statement. Here
+      is a more complex
+      example that excludes ambiguous bases from the GC percentage
+      calculation. 
+
+      <pre class="programlisting">
+&gt;&gt;&gt; from string import *
+
+&gt;&gt;&gt; def gc(seq):
+...    nbases = count(seq, 'N')
+...    gcpercent = float(count(seq, 'G') + count(seq, 'C')) / (len(seq) - nbases)
+...    return gcpercent
+      </pre>      
+
+      In this example the body of the function contains three
+      instructions (2 assignments and the return statement). The
+      body of a function follows the definition line and is written
+      as an indented <span class="emphasis"><em>block</em></span>  initiated by a colon.
+    </p><div class="definition"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/definition.png"></td><td><p class="title"><b>Block</b></p></td></tr><tr><td colspan="2" align="left" valign="top">
+      
+      <p>
+	<span class="emphasis"><em>Blocks</em></span> are <span class="emphasis"><em>structure
+	  elements</em></span>  of a
+	  program, that are used to group instructions.
+	  They are initiated by a <span class="emphasis"><em>colon</em></span> and
+	  are separated from the rest of the code by the same 
+	  <span class="emphasis"><em>indentation</em></span> step in Python. 
+      </p>
+    </td></tr></table></div><p>
+      In our example, the function body is written as a
+      <span class="emphasis"><em>block</em></span> to separate it from the rest of the
+      program. The Python interpreter used it to detect where the
+      function body starts and ends.
+    </p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/important.png"></td><th align="left">Important</th></tr><tr><td colspan="2" align="left" valign="top"><p>
+	In other programming languages special words or characters are
+	used to indicate the begin and the end of blocks and the
+	indentation is only used to make the code readable for
+	humans. In Python the indentation is used explicitly to do
+	this. So in the above example of a function definition the end
+	of the body is detected when the next line starts without any
+	indentation step. This is also illustrated in <a href="ch08.html#fig_block" title="Figure 8.2. Blocks and indentation">Figure 8.2</a>.
+	</p><div class="example"><a name="exa_func_def_block"></a><p class="title"><b>Example 8.1. More complex function definition</b></p><pre class="programlisting">
+&gt;&gt;&gt; from string import *
+
+&gt;&gt;&gt; def gc(seq):
+...    nbases = count(seq, 'N')
+...    gcpercent = float(count(seq, 'G') + count(seq, 'C')) /  \
+                   (len(seq) - nbases)
+...    return gcpercent
+...
+&gt;&gt;&gt; gc('ATGCN')
+0.5
+	</pre></div></td></tr></table></div><div class="figure"><a name="fig_block"></a><p class="title"><b>Figure 8.2. Blocks and indentation</b></p><div class="mediaobject"><img src="images/def_func_block.png" width="551.25"></div></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch07s07.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="index-2.html"><img src="images/up.png" alt="Up"></a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch08s02.html"><img src="images/next.png" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">7.7. Solutions&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index-2.html"><img src="images/home.png" alt="Home"></a></td><td width="40%" align="right" valign="top">&nbsp;8.2. Parameters and Arguments or the difference between a function
+      definition and a function call</td></tr></table></div></body>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch08.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:26 GMT -->
+</html>

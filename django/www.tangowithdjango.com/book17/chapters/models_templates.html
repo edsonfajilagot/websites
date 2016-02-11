@@ -1,0 +1,508 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+<!-- Mirrored from www.tangowithdjango.com/book17/chapters/models_templates.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 10 Jan 2016 04:09:19 GMT -->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>7. Models, Templates and Views &mdash; How to Tango with Django 1.7</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/twd.ico"/>
+    <link rel="top" title="How to Tango with Django 1.7" href="../index-2.html" />
+    <link rel="next" title="8. Fun with Forms" href="forms.html" />
+    <link rel="prev" title="6. Models and Databases" href="models.html" />
+ <style type="text/css">
+	img{
+	    width: 85%; /* you can use % */
+	    height: auto;
+	}
+	
+	table {
+		margin: auto;
+	}
+	
+	p.caption {
+		font-size: 10pt;
+		font-style: italic;
+	}
+ </style>
+ <script type="text/javascript">
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','../../../www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-44397330-1', 'tangowithdjango.com');
+  ga('send', 'pageview');
+     
+
+  </script>      
+
+  </head>
+  <body role="document">
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        
+        <li class="right" >
+          <a href="forms.html" title="8. Fun with Forms"
+             accesskey="N">next</a>
+          </li>
+		
+        <li class="right" >
+          <a href="models.html" title="6. Models and Databases"
+             accesskey="P">previous</a>
+          </li>
+		
+        <li><a href="../index-2.html">How to Tango with Django 1.7</a> &raquo;</li> 
+
+      </ul>
+
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index-2.html">
+              <img class="logo" src="../_static/twd200x200.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index-2.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">7. Models, Templates and Views</a><ul>
+<li><a class="reference internal" href="#basic-workflow-data-driven-pages">7.1. Basic Workflow: Data Driven Pages</a></li>
+<li><a class="reference internal" href="#showing-categories-on-rango-s-homepage">7.2. Showing Categories on Rango&#8217;s Homepage</a><ul>
+<li><a class="reference internal" href="#importing-required-models">7.2.1. Importing Required Models</a></li>
+<li><a class="reference internal" href="#modifying-the-index-view">7.2.2. Modifying the Index View</a></li>
+<li><a class="reference internal" href="#modifying-the-index-template">7.2.3. Modifying the Index Template</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#creating-a-details-page">7.3. Creating a Details Page</a><ul>
+<li><a class="reference internal" href="#url-design-and-mapping">7.3.1. URL Design and Mapping</a></li>
+<li><a class="reference internal" href="#update-category-table-with-slug-field">7.3.2. Update Category Table with Slug Field</a></li>
+<li><a class="reference internal" href="#category-page-workflow">7.3.3. Category Page Workflow</a></li>
+<li><a class="reference internal" href="#category-view">7.3.4. Category View</a></li>
+<li><a class="reference internal" href="#category-template">7.3.5. Category Template</a></li>
+<li><a class="reference internal" href="#parameterised-url-mapping">7.3.6. Parameterised URL Mapping</a></li>
+<li><a class="reference internal" href="#id1">7.3.7. Modifying the Index Template</a></li>
+<li><a class="reference internal" href="#demo">7.3.8. Demo</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exercises">7.4. Exercises</a><ul>
+<li><a class="reference internal" href="#hints">7.4.1. Hints</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="models.html"
+                        title="previous chapter">6. Models and Databases</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="forms.html"
+                        title="next chapter">8. Fun with Forms</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/chapters/models_templates.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="http://www.tangowithdjango.com/book17/search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="models-templates-and-views">
+<span id="model-using-label"></span><h1>7. Models, Templates and Views<a class="headerlink" href="#models-templates-and-views" title="Permalink to this headline">¶</a></h1>
+<p>Now that we have the models set up and populated with some data, we can now start putting things together. We&#8217;ll be figuring out how to access data from the models within the views, and how to present this data via the templates.</p>
+<div class="section" id="basic-workflow-data-driven-pages">
+<h2>7.1. Basic Workflow: Data Driven Pages<a class="headerlink" href="#basic-workflow-data-driven-pages" title="Permalink to this headline">¶</a></h2>
+<p>There are five main steps that you must undertake to create a data driven webpage in Django.</p>
+<ol class="arabic simple">
+<li>First, import the models you wish to use into your application&#8217;s <code class="docutils literal"><span class="pre">views.py</span></code> file.</li>
+<li>Within the view you wish to use, query the model to get the data you want to present.</li>
+<li>Pass the results from your model into the template&#8217;s context.</li>
+<li>Setup your template to present the data to the user in whatever way you wish.</li>
+<li>If you have not done so already, map a URL to your view.</li>
+</ol>
+<p>These steps highlight how Django&#8217;s framework separates the concerns between models, views and templates.</p>
+</div>
+<div class="section" id="showing-categories-on-rango-s-homepage">
+<h2>7.2. Showing Categories on Rango&#8217;s Homepage<a class="headerlink" href="#showing-categories-on-rango-s-homepage" title="Permalink to this headline">¶</a></h2>
+<p>One of the requirements regarding the main pages was to show the top five rango&#8217;ed categories.</p>
+<div class="section" id="importing-required-models">
+<h3>7.2.1. Importing Required Models<a class="headerlink" href="#importing-required-models" title="Permalink to this headline">¶</a></h3>
+<p>To fulfil this requirement, we will go through each of the above steps. First, open <code class="docutils literal"><span class="pre">rango/views.py</span></code> and import the <code class="docutils literal"><span class="pre">Category</span></code> model from Rango&#8217;s <code class="docutils literal"><span class="pre">models.py</span></code> file.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Import the Category model</span>
+<span class="kn">from</span> <span class="nn">rango.models</span> <span class="kn">import</span> <span class="n">Category</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="modifying-the-index-view">
+<h3>7.2.2. Modifying the Index View<a class="headerlink" href="#modifying-the-index-view" title="Permalink to this headline">¶</a></h3>
+<p>With the first step out of the way, we then want to modify our <code class="docutils literal"><span class="pre">index()</span></code> function. If we cast our minds back, we should remember the <code class="docutils literal"><span class="pre">index()</span></code> function is responsible for the main page view. Modify the function to look like the example below.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="c"># Query the database for a list of ALL categories currently stored.</span>
+    <span class="c"># Order the categories by no. likes in descending order.</span>
+    <span class="c"># Retrieve the top 5 only - or all if less than 5.</span>
+    <span class="c"># Place the list in our context_dict dictionary which will be passed to the template engine.</span>
+    <span class="n">category_list</span> <span class="o">=</span> <span class="n">Category</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;-likes&#39;</span><span class="p">)[:</span><span class="mi">5</span><span class="p">]</span>
+    <span class="n">context_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;categories&#39;</span><span class="p">:</span> <span class="n">category_list</span><span class="p">}</span>
+
+    <span class="c"># Render the response and send it back!</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&#39;rango/index.html&#39;</span><span class="p">,</span> <span class="n">context_dict</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Here we have performed steps two and three in one go. First, we queried the <code class="docutils literal"><span class="pre">Category</span></code> model to retrieve the top five categories. Here we used the <code class="docutils literal"><span class="pre">order_by()</span></code> method to sort by the number of likes in descending order - hence the inclusion of the <code class="docutils literal"><span class="pre">-</span></code>. We then restricted this list to the first 5 <code class="docutils literal"><span class="pre">Category</span></code> objects in the list.</p>
+<p>With the query complete, we passed a reference to the list (stored as variable <code class="docutils literal"><span class="pre">category_list</span></code>) to the dictionary, <code class="docutils literal"><span class="pre">context_dict</span></code>. This dictionary is then passed as part of the context for the template engine in the <code class="docutils literal"><span class="pre">render()</span></code> call.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Note that the Category Model contains the field <code class="docutils literal"><span class="pre">likes</span></code>. So for this to work you need to have completed the exercises in the previous chapter, i.e. the Category Model needs to be updated to include the <code class="docutils literal"><span class="pre">likes</span></code> field.</p>
+</div>
+</div>
+<div class="section" id="modifying-the-index-template">
+<h3>7.2.3. Modifying the Index Template<a class="headerlink" href="#modifying-the-index-template" title="Permalink to this headline">¶</a></h3>
+<p>With the view updated, all that is left for us to do is update the template <code class="docutils literal"><span class="pre">rango/index.html</span></code>, located within your project&#8217;s <code class="docutils literal"><span class="pre">templates</span></code> directory. Change the HTML code of the file so that it looks like the example shown below.</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+    <span class="nt">&lt;head&gt;</span>
+        <span class="nt">&lt;title&gt;</span>Rango<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;/head&gt;</span>
+
+    <span class="nt">&lt;body&gt;</span>
+        <span class="nt">&lt;h1&gt;</span>Rango says...hello world!<span class="nt">&lt;/h1&gt;</span>
+
+        {% if categories %}
+            <span class="nt">&lt;ul&gt;</span>
+                {% for category in categories %}
+                <span class="nt">&lt;li&gt;</span>{{ category.name }}<span class="nt">&lt;/li&gt;</span>
+                {% endfor %}
+            <span class="nt">&lt;/ul&gt;</span>
+        {% else %}
+            <span class="nt">&lt;strong&gt;</span>There are no categories present.<span class="nt">&lt;/strong&gt;</span>
+        {% endif %}
+
+        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/rango/about/&quot;</span><span class="nt">&gt;</span>About<span class="nt">&lt;/a&gt;</span>
+    <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
+</div>
+<p>Here, we make use of Django&#8217;s template language to present the data using <code class="docutils literal"><span class="pre">if</span></code> and <code class="docutils literal"><span class="pre">for</span></code> control statements. Within the <code class="docutils literal"><span class="pre">&lt;body&gt;</span></code> of the page, we test to see if <code class="docutils literal"><span class="pre">categories</span></code> - the name of the context variable containing our list - actually contains any categories (i.e. <code class="docutils literal"><span class="pre">{%</span> <span class="pre">if</span> <span class="pre">categories</span> <span class="pre">%}</span></code>).</p>
+<p>If so, we proceed to construct an unordered HTML list (within the <code class="docutils literal"><span class="pre">&lt;ul&gt;</span></code> tags). The for loop (<code class="docutils literal"><span class="pre">{%</span> <span class="pre">for</span> <span class="pre">category</span> <span class="pre">in</span> <span class="pre">categories</span> <span class="pre">%}</span></code>) then iterates through the list of results, printing out each category&#8217;s name (<code class="docutils literal"><span class="pre">{{</span> <span class="pre">category.name</span> <span class="pre">}})</span></code> within a pair of <code class="docutils literal"><span class="pre">&lt;li&gt;</span></code> tags to indicate a list element.</p>
+<p>If no categories exist, a message is displayed instead indicating so.</p>
+<p>As the example shows in Django&#8217;s template language, all commands are enclosed within the tags <code class="docutils literal"><span class="pre">{%</span></code> and <code class="docutils literal"><span class="pre">%}</span></code>, while variables are referenced within <code class="docutils literal"><span class="pre">{{</span></code> and <code class="docutils literal"><span class="pre">}}</span></code> brackets.</p>
+<p>If you now visit Rango&#8217;s homepage at <a class="reference external" href="http://127.0.0.1:8000/rango/">http://127.0.0.1:8000/rango/</a>, you should see a list of three categories underneath the page title just like in Figure <a class="pageref" href="#fig-rango-categories-simple">1</a>.</p>
+<div class="align-center figure" id="id2">
+<span id="fig-rango-categories-simple"></span><img alt="../_images/rango-categories-simple.png" src="../_images/rango-categories-simple.png" />
+<p class="caption"><span class="caption-text">Figure 1: The Rango homepage - now dynamically generated - showing a list of categories. How exciting!</span></p>
+</div>
+</div>
+</div>
+<div class="section" id="creating-a-details-page">
+<h2>7.3. Creating a Details Page<a class="headerlink" href="#creating-a-details-page" title="Permalink to this headline">¶</a></h2>
+<p>According to Rango&#8217;s specification, we also need to show a list of pages that are associated with each category.
+We have a number of challenges here to overcome. A new view must be created, which should be parameterised. We also need to create URL patterns and URL strings that encode category names.</p>
+<div class="section" id="url-design-and-mapping">
+<h3>7.3.1. URL Design and Mapping<a class="headerlink" href="#url-design-and-mapping" title="Permalink to this headline">¶</a></h3>
+<p>Let&#8217;s start by considering the URL problem. One way we could handle this problem is to use the unique ID for each category within the URL. For example, we could create URLs like <code class="docutils literal"><span class="pre">/rango/category/1/</span></code> or <code class="docutils literal"><span class="pre">/rango/category/2/</span></code>, where the numbers correspond to the categories with unique IDs 1 and 2 respectively. However, these URLs are not easily understood by humans. Although we could probably infer that the number relates to a category, how would a user know what category relates to unique IDs 1 or 2? The user wouldn&#8217;t know without trying.</p>
+<p>Instead, we could just use the category name as part of the URL. <code class="docutils literal"><span class="pre">/rango/category/Python/</span></code> should give us a list of pages related to the Python category. This is a simple, readable and meaningful URL. If we go with this approach, we&#8217;ll have to handle categories which have multiple words, like &#8216;Other Frameworks&#8217;, etc.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Designing clean URLs is an important aspect of web design. See <a class="reference external" href="http://en.wikipedia.org/wiki/Clean_URL">Wikipedia&#8217;s article on Clean URLs</a> for more details.</p>
+</div>
+<p>To handle this problem we are going to make use of the slugify function provided by Django, based on the answers provided at: <a class="reference external" href="http://stackoverflow.com/questions/837828/how-do-i-create-a-slug-in-django">http://stackoverflow.com/questions/837828/how-do-i-create-a-slug-in-django</a></p>
+</div>
+<div class="section" id="update-category-table-with-slug-field">
+<h3>7.3.2. Update Category Table with Slug Field<a class="headerlink" href="#update-category-table-with-slug-field" title="Permalink to this headline">¶</a></h3>
+<p>To make clean urls we are going to include a slug field in the <code class="docutils literal"><span class="pre">Category</span></code> model. First we need to import the function <code class="docutils literal"><span class="pre">slugify</span></code> from django, which will replace whitespace with hyphens, i.e &#8220;how do i create a slug in django&#8221; turns into &#8220;how-do-i-create-a-slug-in-django&#8221;.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">While you can use spaces in URLs, it is considered to be unsafe to use them. Check out <a class="reference external" href="../../../www.ietf.org/rfc/rfc1738.txt">IETF Memo on URLs</a> to read more.</p>
+</div>
+<p>Then we need to override the <code class="docutils literal"><span class="pre">save</span></code> method of the <code class="docutils literal"><span class="pre">Category</span></code> model, which we will call the <code class="docutils literal"><span class="pre">slugify</span></code> method and update the <code class="docutils literal"><span class="pre">slug</span></code> field with it. Note that every time the category name changes, the slug will also change, causing broken links. You can prevent this, by defining the slug only when creating the object. Update your model, as shown below, and add in the import.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.template.defaultfilters</span> <span class="kn">import</span> <span class="n">slugify</span>
+
+<span class="k">class</span> <span class="nc">Category</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">views</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">likes</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">slug</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">SlugField</span><span class="p">()</span>
+
+        <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                <span class="c"># Uncomment if you don&#39;t want the slug to change every time the name changes</span>
+                <span class="c">#if self.id is None:</span>
+                        <span class="c">#self.slug = slugify(self.name)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">slug</span> <span class="o">=</span> <span class="n">slugify</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="nb">super</span><span class="p">(</span><span class="n">Category</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+</pre></div>
+</div>
+<p>Now that you have performed this update to the Model, you will need to perform the migration.</p>
+<div class="highlight-python"><div class="highlight"><pre>$ python manage.py makemigrations rango
+$ python manage.py migrate
+</pre></div>
+</div>
+<p>Since we did not provide a default value for the slug, and we already have existing data in the model, then the migrate command will give you two options. Select the option to provide a default, and enter &#8216;&#8217;. Dont worry this will get updated shortly. Now re-run your population script. Since the <code class="docutils literal"><span class="pre">save</span></code> method is called for each Category, the overrided <code class="docutils literal"><span class="pre">save</span></code> method will be executed, updating the slug field. Run the server, and inspect the data in the models via the admin interface.</p>
+<p>In the admin interface you may want it to automatically pre-populate the slug field as your type in the category name. To do this you can update <code class="docutils literal"><span class="pre">rango/admin.py</span></code> with the following code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
+<span class="kn">from</span> <span class="nn">rango.models</span> <span class="kn">import</span> <span class="n">Category</span><span class="p">,</span> <span class="n">Page</span>
+
+<span class="c"># Add in this class to customized the Admin Interface</span>
+<span class="k">class</span> <span class="nc">CategoryAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+    <span class="n">prepopulated_fields</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;slug&#39;</span><span class="p">:(</span><span class="s">&#39;name&#39;</span><span class="p">,)}</span>
+
+<span class="c"># Update the registeration to include this customised interface</span>
+<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Category</span><span class="p">,</span> <span class="n">CategoryAdmin</span><span class="p">)</span>
+<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Page</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Try out the admin interface and add in a new category. Pretty cool, hey! Now that we have added in slug fields we can now use them as clean urls :-).</p>
+</div>
+<div class="section" id="category-page-workflow">
+<h3>7.3.3. Category Page Workflow<a class="headerlink" href="#category-page-workflow" title="Permalink to this headline">¶</a></h3>
+<p>With our URLs design chosen, let&#8217;s get started. We&#8217;ll undertake the following steps.</p>
+<ol class="arabic">
+<li><p class="first">Import the Page model into <code class="docutils literal"><span class="pre">rango/views.py</span></code>.</p>
+</li>
+<li><dl class="first docutils">
+<dt>Create a new view in <code class="docutils literal"><span class="pre">rango/views.py</span></code> - called <code class="docutils literal"><span class="pre">category</span></code> - The <code class="docutils literal"><span class="pre">category</span></code> view will take an additional parameter, <code class="docutils literal"><span class="pre">category_name_url</span></code> which will stored the encoded category name.</dt>
+<dd><ul class="first last simple">
+<li>We will need some help functions to encode and decode the <code class="docutils literal"><span class="pre">category_name_url</span></code>.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">Create a new template, <code class="docutils literal"><span class="pre">templates/rango/category.html</span></code>.</p>
+</li>
+<li><p class="first">Update Rango&#8217;s <code class="docutils literal"><span class="pre">urlpatterns</span></code> to map the new <code class="docutils literal"><span class="pre">category</span></code> view to a URL pattern in <code class="docutils literal"><span class="pre">rango/urls.py</span></code>.</p>
+</li>
+</ol>
+<p>We&#8217;ll also need to update the <code class="docutils literal"><span class="pre">index()</span></code> view and <code class="docutils literal"><span class="pre">index.html</span></code> template to provide links to the category page view.</p>
+</div>
+<div class="section" id="category-view">
+<h3>7.3.4. Category View<a class="headerlink" href="#category-view" title="Permalink to this headline">¶</a></h3>
+<p>In <code class="docutils literal"><span class="pre">rango/views.py</span></code>, we first need to import the <code class="docutils literal"><span class="pre">Page</span></code> model. This means we must add the following import statement at the top of the file.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">rango.models</span> <span class="kn">import</span> <span class="n">Page</span>
+</pre></div>
+</div>
+<p>Next, we can add our new view, <code class="docutils literal"><span class="pre">category()</span></code>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">category</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">category_name_slug</span><span class="p">):</span>
+
+    <span class="c"># Create a context dictionary which we can pass to the template rendering engine.</span>
+    <span class="n">context_dict</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c"># Can we find a category name slug with the given name?</span>
+        <span class="c"># If we can&#39;t, the .get() method raises a DoesNotExist exception.</span>
+        <span class="c"># So the .get() method returns one model instance or raises an exception.</span>
+        <span class="n">category</span> <span class="o">=</span> <span class="n">Category</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">slug</span><span class="o">=</span><span class="n">category_name_slug</span><span class="p">)</span>
+        <span class="n">context_dict</span><span class="p">[</span><span class="s">&#39;category_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="n">name</span>
+
+        <span class="c"># Retrieve all of the associated pages.</span>
+        <span class="c"># Note that filter returns &gt;= 1 model instance.</span>
+        <span class="n">pages</span> <span class="o">=</span> <span class="n">Page</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">category</span><span class="o">=</span><span class="n">category</span><span class="p">)</span>
+
+        <span class="c"># Adds our results list to the template context under name pages.</span>
+        <span class="n">context_dict</span><span class="p">[</span><span class="s">&#39;pages&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pages</span>
+        <span class="c"># We also add the category object from the database to the context dictionary.</span>
+        <span class="c"># We&#39;ll use this in the template to verify that the category exists.</span>
+        <span class="n">context_dict</span><span class="p">[</span><span class="s">&#39;category&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">category</span>
+    <span class="k">except</span> <span class="n">Category</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
+        <span class="c"># We get here if we didn&#39;t find the specified category.</span>
+        <span class="c"># Don&#39;t do anything - the template displays the &quot;no category&quot; message for us.</span>
+        <span class="k">pass</span>
+
+    <span class="c"># Go render the response and return it to the client.</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&#39;rango/category.html&#39;</span><span class="p">,</span> <span class="n">context_dict</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Our new view follows the same basic steps as our <code class="docutils literal"><span class="pre">index()</span></code> view. We first define a context dictionary, then we attempt to extract the data from the models, and add in the relevant data to the context dictionary. We determine which category by using the value passed as parameter <code class="docutils literal"><span class="pre">category_name_slug</span></code> to the <code class="docutils literal"><span class="pre">category()</span></code> view function. If the category is found in the Category model, we can then pull out the associated Pages, and add this to the context dictionary, <code class="docutils literal"><span class="pre">context_dict</span></code>.</p>
+</div>
+<div class="section" id="category-template">
+<h3>7.3.5. Category Template<a class="headerlink" href="#category-template" title="Permalink to this headline">¶</a></h3>
+<p>Now let&#8217;s create our template for the new view.  In <code class="docutils literal"><span class="pre">&lt;workspace&gt;/tango_with_django_project/templates/rango/</span></code> directory, create <code class="docutils literal"><span class="pre">category.html</span></code>. In the new file, add the following code.</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+    <span class="nt">&lt;head&gt;</span>
+        <span class="nt">&lt;title&gt;</span>Rango<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;/head&gt;</span>
+
+    <span class="nt">&lt;body&gt;</span>
+        {% if category %}
+        <span class="nt">&lt;h1&gt;</span>{{ category_name }}<span class="nt">&lt;/h1&gt;</span>
+            {% if pages %}
+            <span class="nt">&lt;ul&gt;</span>
+                {% for page in pages %}
+                <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;{{ page.url }}&quot;</span><span class="nt">&gt;</span>{{ page.title }}<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+                {% endfor %}
+            <span class="nt">&lt;/ul&gt;</span>
+            {% else %}
+                <span class="nt">&lt;strong&gt;</span>No pages currently in category.<span class="nt">&lt;/strong&gt;</span>
+            {% endif %}
+        {% else %}
+            The specified category {{ category_name }} does not exist!
+        {% endif %}
+    <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
+</div>
+<p>The HTML code example again demonstrates how we utilise the data passed to the template via its context. We make use of the <code class="docutils literal"><span class="pre">category_name</span></code> variable and our <code class="docutils literal"><span class="pre">category</span></code> and <code class="docutils literal"><span class="pre">pages</span></code> objects. If <code class="docutils literal"><span class="pre">category</span></code> is not defined within our template context, the category was not found within the database, and a friendly error message is displayed stating this fact. If the opposite is true, we then proceed to check for <code class="docutils literal"><span class="pre">pages</span></code>. If <code class="docutils literal"><span class="pre">pages</span></code> is undefined or contains no elements, we display a message stating there are no pages present. Otherwise, the pages within the category are presented in a HTML list. For each page in the <code class="docutils literal"><span class="pre">pages</span></code> list, we present their <code class="docutils literal"><span class="pre">title</span></code> and <code class="docutils literal"><span class="pre">url</span></code> attributes.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>The Django template conditional tag - <code class="docutils literal"><span class="pre">{%</span> <span class="pre">if</span> <span class="pre">%}</span></code> - is a really neat way of determining the existence of an object within the template&#8217;s context. Try getting into the habit of performing these checks to reduce the scope for potential exceptions that could be raised within your code.</p>
+<p class="last">Placing conditional checks in your templates - like <code class="docutils literal"><span class="pre">{%</span> <span class="pre">if</span> <span class="pre">category</span> <span class="pre">%}</span></code> in the example above - also makes sense semantically. The outcome of the conditional check directly affects the way in which the rendered page is presented to the user - and presentational aspects of your Django applications should be encapsulated within templates.</p>
+</div>
+</div>
+<div class="section" id="parameterised-url-mapping">
+<h3>7.3.6. Parameterised URL Mapping<a class="headerlink" href="#parameterised-url-mapping" title="Permalink to this headline">¶</a></h3>
+<p>Now let&#8217;s have a look at how we actually pass the value of the <code class="docutils literal"><span class="pre">category_name_url</span></code> parameter to the <code class="docutils literal"><span class="pre">category()</span></code> function. To do so, we need to modify Rango&#8217;s <code class="docutils literal"><span class="pre">urls.py</span></code> file and update the <code class="docutils literal"><span class="pre">urlpatterns</span></code> tuple as follows.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">urlpatterns</span> <span class="o">=</span> <span class="n">patterns</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;index&#39;</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^about/$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">about</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;about&#39;</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^category/(?P&lt;category_name_slug&gt;[\w\-]+)/$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">category</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;category&#39;</span><span class="p">),)</span>  <span class="c"># New!</span>
+</pre></div>
+</div>
+<p>As you can see, we have added in a rather complex entry that will invoke <code class="docutils literal"><span class="pre">view.category()</span></code> when the regular expression <code class="docutils literal"><span class="pre">r'^(?P&lt;category_name_slug&gt;\w+)/$'</span></code> is matched. We set up our regular expression to look for any sequence of alphanumeric characters (e.g. a-z, A-Z, or 0-9) and the hyphen(-) before the trailing URL slash. This value is then passed to the view <code class="docutils literal"><span class="pre">views.category()</span></code> as parameter <code class="docutils literal"><span class="pre">category_name_slug</span></code>, the only argument after the mandatory <code class="docutils literal"><span class="pre">request</span></code> argument.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>When you wish to parameterise URLs, it&#8217;s important to ensure that your URL pattern matches the parameters that the corresponding view takes in. To elaborate further, let&#8217;s take the example we added above. The pattern added was as follows.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">url</span><span class="p">(</span><span class="s">r&#39;^category/(?P&lt;category_name_slug&gt;[\w\-]+)/$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">category</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;category&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We can from here deduce that the characters (both alphanumeric and underscores) between <code class="docutils literal"><span class="pre">category/</span></code> and the trailing <code class="docutils literal"><span class="pre">/</span></code> at the end of a matching URL are to be passed to method <code class="docutils literal"><span class="pre">views.category()</span></code> as named parameter <code class="docutils literal"><span class="pre">category_name_slug</span></code>. For example, the URL <code class="docutils literal"><span class="pre">category/python-books/</span></code> would yield a <code class="docutils literal"><span class="pre">category_name_slug</span></code> of <code class="docutils literal"><span class="pre">python-books</span></code>.</p>
+<p>As you should remember, all view functions defined as part of a Django project <em>must</em> take at least one parameter. This is typically called <code class="docutils literal"><span class="pre">request</span></code> - and provides access to information related to the given HTTP request made by the user. When parameterising URLs, you supply additional named parameters to the signature for the given view. Using the same example, our <code class="docutils literal"><span class="pre">category</span></code> view signature is altered such that it now looks like the following.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">category</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">category_name_slug</span><span class="p">):</span>
+    <span class="c"># ... code here ...</span>
+</pre></div>
+</div>
+<p class="last">It&#8217;s not the position of the additional parameters that matters, it&#8217;s the <em>name</em> that must match anything defined within the URL pattern. Note how <code class="docutils literal"><span class="pre">category_name_slug</span></code> defined in the URL pattern matches the <code class="docutils literal"><span class="pre">category_name_slug</span></code> parameter defined for our view. Using <code class="docutils literal"><span class="pre">category_name_slug</span></code> in our view will give <code class="docutils literal"><span class="pre">python-books</span></code>, or whatever value was supplied as that part of the URL.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Regular expressions may seem horrible and confusing at first, but there are tons of resources online to help you. <a class="reference external" href="http://cheatography.com/davechild/cheat-sheets/regular-expressions/">This cheat sheet</a> is an excellent resource for fixing regular expression problems.</p>
+</div>
+</div>
+<div class="section" id="id1">
+<h3>7.3.7. Modifying the Index Template<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>Our new view is set up and ready to go - but we need to do one more thing. Our index page template needs to be updated to provide users with a means to view the category pages that are listed. We can update the <code class="docutils literal"><span class="pre">index.html</span></code> template to now include a link to the category page via the slug.</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+    <span class="nt">&lt;head&gt;</span>
+        <span class="nt">&lt;title&gt;</span>Rango<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;/head&gt;</span>
+
+    <span class="nt">&lt;body&gt;</span>
+        <span class="nt">&lt;h1&gt;</span>Rango says..hello world!<span class="nt">&lt;/h1&gt;</span>
+
+        {% if categories %}
+            <span class="nt">&lt;ul&gt;</span>
+                {% for category in categories %}
+                <span class="c">&lt;!-- Following line changed to add an HTML hyperlink --&gt;</span>
+                <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;/rango/category/{{ category.slug }}&quot;</span><span class="nt">&gt;</span>{{ category.name }}<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+                {% endfor %}
+            <span class="nt">&lt;/ul&gt;</span>
+       {% else %}
+            <span class="nt">&lt;strong&gt;</span>There are no categories present.<span class="nt">&lt;/strong&gt;</span>
+       {% endif %}
+
+    <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
+</div>
+<p>Here we have updated each list element (<code class="docutils literal"><span class="pre">&lt;li&gt;</span></code>) adding a HTML hyperlink (<code class="docutils literal"><span class="pre">&lt;a&gt;</span></code>). The hyperlink has an <code class="docutils literal"><span class="pre">href</span></code> attribute, which we use to specify the target URL defined by <code class="docutils literal"><span class="pre">{{</span> <span class="pre">category.slug</span> <span class="pre">}}</span></code>.</p>
+</div>
+<div class="section" id="demo">
+<h3>7.3.8. Demo<a class="headerlink" href="#demo" title="Permalink to this headline">¶</a></h3>
+<p>Let&#8217;s try everything out now by visiting the Rango&#8217;s homepage. You should see your homepage listing all the categories. The categories should now be clickable links. Clicking on <code class="docutils literal"><span class="pre">Python</span></code> should then take you to the <code class="docutils literal"><span class="pre">Python</span></code> detailed category view, as demonstrated in Figure <a class="pageref" href="#fig-rango-links">2</a>. If you see a list of links like <code class="docutils literal"><span class="pre">Official</span> <span class="pre">Python</span> <span class="pre">Tutorial</span></code>, then you&#8217;ve successfully set up the new view. Try navigating a category which doesn&#8217;t exist, like <code class="docutils literal"><span class="pre">/rango/category/computers</span></code>. You should see a message telling you that no pages exist in the category.</p>
+<div class="align-center figure" id="id3">
+<span id="fig-rango-links"></span><img alt="../_images/rango-links.png" src="../_images/rango-links.png" />
+<p class="caption"><span class="caption-text">Figure 2: What your link structure should now look like. Starting with the Rango homepage, you are then presented with the category detail page. Clicking on a page link takes you to the linked website.</span></p>
+</div>
+</div>
+</div>
+<div class="section" id="exercises">
+<h2>7.4. Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline">¶</a></h2>
+<p>Reinforce what you&#8217;ve learnt in this chapter by trying out the following exercises.</p>
+<ul class="simple">
+<li>Modify the index page to also include the top 5 most viewed pages.</li>
+<li>Undertake the <a class="reference external" href="https://docs.djangoproject.com/en/1.7/intro/tutorial03/">part three of official Django tutorial</a> if you have not done so already to further what you&#8217;ve learnt here.</li>
+</ul>
+<div class="section" id="hints">
+<h3>7.4.1. Hints<a class="headerlink" href="#hints" title="Permalink to this headline">¶</a></h3>
+<p>To help you with the exercises above, the following hints may be of some use to you. Good luck!</p>
+<ul class="simple">
+<li>Update the population script to add some value to the views count for each page.</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        
+        <li class="right" >
+          <a href="forms.html" title="8. Fun with Forms"
+             >next</a>
+          </li>
+		
+        <li class="right" >
+          <a href="models.html" title="6. Models and Databases"
+             >previous</a>
+          </li>
+		
+        <li><a href="../index-2.html">How to Tango with Django 1.7</a> &raquo;</li> 
+
+      </ul>
+
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2013, Leif Azzopardi and David Maxwell.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+
+<!-- Mirrored from www.tangowithdjango.com/book17/chapters/models_templates.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 10 Jan 2016 04:09:35 GMT -->
+</html>

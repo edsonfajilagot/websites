@@ -1,0 +1,66 @@
+<html>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch15s02.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:33 GMT -->
+<head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>15.2. Flow of execution of recursive functions</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><meta name="keywords" content="python, biology, bioinformatics, programming, computational biology"><link rel="home" href="index-2.html" title="Introduction to Programming using Python"><link rel="up" href="ch15.html" title="Chapter 15. Recursive functions"><link rel="previous" href="ch15.html" title="Chapter 15. Recursive functions"><link rel="next" href="ch15s03.html" title="15.3. Recursive data structures"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">15.2. Flow of execution of recursive functions</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch15.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><th width="60%" align="center">Chapter 15. Recursive functions</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch15s03.html"><img src="images/next.png" alt="Next"></a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="d0e5945"></a>15.2. Flow of execution of recursive functions</h2></div></div><p>
+    At first glance recursive functions look a little bit strange
+    because it seems that we use something that we have
+    not defined. But remember that the statements in the body of a
+    function are only executed when the function is called. At the
+    definition step, the function is just added in the current
+    namespace.  Therefore it will be defined when we call it in the
+    body. 
+  </p><p>
+    Writing recursive functions is sometimes difficult, because we
+    doubt that we have defined a function executing the specific task,
+    when we call the it . Therefore it is useful to remember this fact
+    during the development of recursive functions.
+  </p><p><b>Stack diagram of recursive functions.&nbsp;</b>
+      Let's have a deeper look at the flow of execution of
+      recursive functions. <a href="ch15s02.html#fig_stack_rec" title="Figure 15.1. Stack diagram of recursive function calls">Figure 15.1</a> shows the
+      stack diagram of function calls.  
+    </p><div class="figure"><a name="fig_stack_rec"></a><p class="title"><b>Figure 15.1. Stack diagram of recursive function calls</b></p><div class="mediaobject"><img src="images/stack_recursive.png"></div></div><p>
+    <a href="ch15s02.html#fig_stack_rec" title="Figure 15.1. Stack diagram of recursive function calls">Figure 15.1</a> shows that the
+    <tt>translate</tt> function is called with a cds
+    sequence of decreasing  length and the local function
+    namespaces are piled up until the terminal condition is reached.
+
+  <pre class="programlisting">
+=&gt; rectranslate("atgattgctggt", code)
+===&gt; rectranslate("attgctggt", code)
+=====&gt; rectranslate("gctggt", code)
+=======&gt; rectranslate("ggt", code)
+=========&gt; rectranslate("", code)
+=========&gt; return ""
+=======&gt; return "G"
+=====&gt; return "AG"
+===&gt; return "IAG"
+=&gt; return "MIAG"
+  </pre>
+  </p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/important.png"></td><th align="left">Important</th></tr><tr><td colspan="2" align="left" valign="top"><p>
+      Recursive function calls can take a lot of memory space because
+      for each recursive call the local namespace for the given
+      function call has to be
+      stored. It is important to pay attention on this fact because memory
+      space is a limited resource on a computer.
+    </p></td></tr></table></div><div class="example"><p class="title"><b>Example 15.1. Factorial</b></p>
+    Factorial is a famous example of a recursive definition. In Python, you would define it as:
+    <pre class="programlisting">
+def fact(n):
+    if n == 0 or n == 1:
+         return 1
+    else:
+         return n * fact(n - 1)      
+    </pre><a href="ch15s02.html#fig_stack_rec_fact" title="Figure 15.2. Stack diagram of recursive function calls for function fact()">Figure 15.2</a> show the stack of the
+    recursive calls with pending return values (you can fill the
+    missing part of these values from top to bottom to follow the
+    successive computations). 
+
+    <div class="figure"><a name="fig_stack_rec_fact"></a><p class="title"><b>Figure 15.2. Stack diagram of recursive function calls for function fact()</b></p><div class="mediaobject"><img src="images/stack_rec_fact.png"></div></div></div><div class="exercise"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/exercise.png"></td><td><a name="quest_recreverse"></a><p class="title"><b>Exercise 15.1. Recursive definition of reverse</b></p></td></tr><tr><td colspan="2" align="left" valign="top">
+    
+    <p>Write the recursive definition of the reverse function and draw the stack diagram
+      for the string "atcg".</p>
+    <p><a href="ch15s04.html#sol_recreverse" title="Solution 15.1. Recursive reverse">Solution 15.1</a></p>
+  </td></tr></table></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch15.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch15.html"><img src="images/up.png" alt="Up"></a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch15s03.html"><img src="images/next.png" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 15. Recursive functions&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index-2.html"><img src="images/home.png" alt="Home"></a></td><td width="40%" align="right" valign="top">&nbsp;15.3. Recursive data structures</td></tr></table></div></body>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch15s02.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:33 GMT -->
+</html>

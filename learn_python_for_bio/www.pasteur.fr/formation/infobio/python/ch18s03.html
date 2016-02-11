@@ -1,0 +1,298 @@
+<html>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch18s03.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:38 GMT -->
+<head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>18.3. Defining classes in Python</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><meta name="keywords" content="python, biology, bioinformatics, programming, computational biology"><link rel="home" href="index-2.html" title="Introduction to Programming using Python"><link rel="up" href="ch18.html" title="Chapter 18. Object-oriented programming"><link rel="previous" href="ch18s02.html" title="18.2. What are objects and classes? An example"><link rel="next" href="ch18s04.html" title="18.4. Combining objects"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">18.3. Defining classes in Python</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch18s02.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><th width="60%" align="center">Chapter 18. Object-oriented programming</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch18s04.html"><img src="images/next.png" alt="Next"></a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="sect_def_class"></a>18.3. Defining classes in Python</h2></div></div><p>
+	  So, how do we actually define classes?
+	  For instance, let us describe  the <tt>DNA</tt>
+	  class. The program listed in <a href="ch18s03.html#exa_class_seq" title="Example 18.1. DNA, a class for DNA&#xA;	    sequences (first version)">Example 18.1</a> defines a 
+	   <tt>DNA</tt> class as defined in  <a href="ch18s02.html#fig_object_repr_mtd" title="Figure 18.2. Representation showing object's methods as counters">Figure 18.2</a>.
+
+      The definition of the class is composed of two main parts: a
+      header, providing the name of the class, and a body, that is
+      composed of a list of definitions, mainly method definitions,
+      but sometimes also assignments (see <a href="ch18s05.html#sect_class_ns" title="18.5.1. Namespaces">Section 18.5.1</a>).
+        </p><p>
+	  </p><div class="example"><a name="exa_class_seq"></a><p class="title"><b>Example 18.1. <tt>DNA</tt>, a class for DNA
+	    sequences (first version)</b></p> 
+	    Les us look at a first version of
+	    our <tt>DNA</tt>, with a limited set of
+	    methods. A complete version will be presented later on.
+	    <div class="programlistingco"><pre class="programlisting">                                                                          <span class="co"><img src="images/callouts/1.png" alt="(1)"></span>
+class DNA:
+    
+    def __init__(self, name=None, seq=None):                              <span class="co"><img src="images/callouts/2.png" alt="(2)"></span>
+        self.name = name
+        self.seq = lower(seq)                                             <span class="co"><img src="images/callouts/3.png" alt="(3)"></span>
+ 
+    def gc(self):
+        count_c = self.seq.count('c')                                     <span class="co"><img src="images/callouts/4.png" alt="(4)"></span>
+        count_g = self.seq.count('g')
+        return float(count_c + count_g) / len(self.seq)
+
+    def setname(self, name):                                              <span class="co"><img src="images/callouts/5.png" alt="(5)"></span>
+        self.name = name
+	      </pre><div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><img src="images/callouts/1.png" alt="1" border="0"></td><td valign="top" align="left"><p>This statement declares and creates
+		  <tt>DNA</tt> as a class.</p></td></tr><tr><td width="5%" valign="top" align="left"><img src="images/callouts/2.png" alt="2" border="0"></td><td valign="top" align="left"><p>The <tt>__init__</tt> method is
+		  automatically called at instance creation (see
+		  below). </p></td></tr><tr><td width="5%" valign="top" align="left"><img src="images/callouts/3.png" alt="3" border="0"></td><td valign="top" align="left"><p>Initialization of instances attributes
+		  (<tt>name</tt> and
+		  <tt>seq</tt>).
+		</p></td></tr><tr><td width="5%" valign="top" align="left"><img src="images/callouts/4.png" alt="4" border="0"></td><td valign="top" align="left"><p>This method defines how to compute the
+		  GC percent of the sequence.
+                </p></td></tr><tr><td width="5%" valign="top" align="left"><img src="images/callouts/5.png" alt="5" border="0"></td><td valign="top" align="left"><p>This method enables to change the name of
+		  the sequence. 
+                </p></td></tr></table></div></div></div><p>
+	</p><p>
+
+      The  <tt>self</tt> parameter represents the object itself. You could of course use any other word
+      like  <tt>carrot</tt> or <tt>ego</tt>, but this would not help 
+      the reading of your code by others... So <tt>self</tt> is present in the Class and
+      methods definitions each time the reference to the object instance is needed.
+      </p><p>
+      Let us first look at one of these methods definitions, the
+      <tt>gc</tt> method, which computes the GC percent of
+      the sequence:
+	  <pre class="programlisting">
+    
+      def gc(self):
+        count_c = self.seq.count('c')
+        count_g = self.seq.count('g')
+        return float(count_c + count_g) / len(self.seq)
+	  </pre>
+
+      Method definitions follow exactly the same pattern as standard
+      function definitions, except that they must have
+      declared a first parameter (here: <tt>self</tt>) <span class="emphasis"><em>for
+      referring to the instance</em></span>.  
+      Indeed, an instance identificator, actually a reference to the instance,
+      is required in order for the 
+      statements within methods to access to the current instance
+      attributes: here,
+      the access to the <tt>seq</tt> attribute is needed
+      in order perform the count. 
+      In fact, Python <span class="emphasis"><em>automatically passes the instance reference as
+      the first argument of a method</em></span>. Hence, it is
+      associated to the first parameter which is the <tt>self</tt> parameter. 
+
+	You don't need to specify the argument for the reference to
+	the instance. This is automatically done by Python. In fact, calling:
+	<pre class="programlisting">
+&gt;&gt;&gt; s2.gc()
+0.66
+ 	</pre>
+	is equivalent to:
+	<pre class="programlisting">
+&gt;&gt;&gt; DNA.gc(s2)
+0.66
+ 	</pre>
+	The interpretor can find which class <tt>s2</tt>
+	belongs to, and handles the passing of the instance reference
+	argument automatically. 
+      </p><p>
+	How does the method computes its result? For this, it needs to access to
+	the character sequence of the DNA object. This is done by
+	using the <tt>seq</tt> attribute, that was defined
+	at instantiation (i.e by the <tt>__init__</tt>
+	method, see below). Within the method, the attribute is available through the object by the
+	dot operator: <tt>self.seq</tt>. This shows that the
+	object attributes are always available, at least as long as
+	the object itself still exists. Attributes are thus accessible
+	from all the methods of the class. They are a way to share
+	data among methods.
+
+	The method also use
+	local variables: <tt>count_c</tt>
+	and <tt>count_g</tt> to compute intermediate
+	results. These variables have a local scope, restricted to the
+	method's namespace, exactly like local variables that are defined in
+	functions.
+      </p><p>
+      Let us now look at the <tt>__init__</tt>
+      method. 
+
+	<pre class="programlisting">
+    def __init__(self, name=None, seq=None):
+        self.name = name
+        self.seq = lower(seq)
+	</pre>
+
+This is a special method, which, when defined, is called at class
+      instantiation, e.g when you run the following statement:
+<pre class="programlisting">
+&gt;&gt;&gt; s2 = DNA(name='seq2', seq='acaagatgccattgtcccccggcctcctgctgctgctgctctccggggcca')
+</pre>
+
+   the <tt>__init__</tt> method defined for
+   the <tt>DNA</tt> class is in fact called with 3 arguments. As
+   for the other methods, the <tt>self</tt> argument is
+   automatically provided by Python as a reference to the newly
+   created instance. You don't have to provide
+   an <tt>__init__</tt> method, but it is usually the good
+   place to put initialization statements. Initial values for
+   attributes can be passed as arguments and associated to
+   attributes. A good practice is to assign them default values, such
+   as None. You can also notice that the <tt>seq</tt>
+   attribute is initialized with the <tt>lower</tt> string
+   function: the other methods will thus not have to check for this in
+   order to perform their computation.
+      </p><p>
+	Attributes ca be changed at any time of course, not only in
+	the <tt>__init__</tt> method.
+	When called with a string argument standing for a new name,
+	the <tt>setname</tt> method changes
+	the <tt>name</tt>
+	attribute of our object:
+	  <pre class="programlisting">
+    
+    def setname(self, name):
+        self.name = name
+	  </pre>
+	  The body of this method is quite straightforward, it
+	  consists in a single statement which assigns a new value,
+	  the one passed as an argument to the method, to the <tt>name</tt>
+	attribute.
+
+      </p><div class="exercise"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/exercise.png"></td><td><a name="quest_class_point"></a><p class="title"><b>Exercise 18.1. A <tt>Point</tt> class</b></p></td></tr><tr><td colspan="2" align="left" valign="top">
+	
+	  <p>
+	    Write the definition of a <tt>Point</tt>
+	    class. Objects from this class should have a
+	    method <tt>show()</tt> to display the
+	    coordinates of the point, and a
+	    method <tt>move()</tt> to change these
+	    coordinates. The following python code provides an example of
+	    the expected behaviour of objects belonging to this class: 
+	  </p>
+	  <pre class="programlisting">
+&gt;&gt;&gt; p1 = Point(2,3)
+&gt;&gt;&gt; p2 = Point(3,3)
+&gt;&gt;&gt; p1.show()
+(2, 3)
+&gt;&gt;&gt; p2.show()
+(3, 3)
+&gt;&gt;&gt; p1.move(10, -10)
+&gt;&gt;&gt; p1.show()
+(12, -7)
+&gt;&gt;&gt; p2.show()
+(3, 3)
+	  </pre>
+	  <p><a href="ch18s06.html#sol_class_point" title="Solution 18.1. A Point class">Solution 18.1</a></p>
+	</td></tr></table></div><p>
+	The following definition is the complete definition of
+	the <tt>DNA</tt>, with two methods added, one
+	for computing the reverse complement, the second one for
+	computing the translated protein sequence.
+	  </p><div class="example"><a name="exa_class_seq2"></a><p class="title"><b>Example 18.2. <tt>DNA</tt>, a class for DNA
+	    sequences (complete version)</b></p><div class="programlistingco"><pre class="programlisting">
+class DNA:
+    
+    def __init__(self, name=None, seq=None):
+        self.name = name
+        self.seq = lower(seq)
+ 
+    def gc(self):
+        count_c = self.seq.count('c')
+        count_g = self.seq.count('g')
+        return float(count_c + count_g) / len(self.seq)
+
+    def revcompl(self):
+        revseq = ''
+        for c in self.seq:
+            revseq = c + revseq                                           <span class="co"><img src="images/callouts/1.png" alt="(1)"></span>
+
+        revcompseq = ''
+        for base in revseq:
+            if base == 'a':
+                revcompseq += 't'
+            elif base == 't':
+                revcompseq += 'a'
+            elif base == 'c':
+                revcompseq += 'g'
+            elif base == 'g':
+                revcompseq += 'c'
+
+        return revcompseq
+
+    def translate(self, frame=0):                                         <span class="co"><img src="images/callouts/2.png" alt="(2)"></span>
+        """
+        frame: 0, 1, 2, -1, -2, -3
+        """
+        if frame &lt; 0 :
+            seq = self.revcompl()
+            frame = abs(frame) - 1
+        else:
+            seq = self.seq
+
+        if frame &gt; 2:
+            return ''
+
+        protseq = ''
+
+        for i in range(frame,len(seq) - 2,3):
+            codon = seq[i:i+3]
+            protseq += Standard_Genetic_Code[codon]                       <span class="co"><img src="images/callouts/3.png" alt="(3)"></span>
+
+        return protseq
+
+    def setname(self, name):
+        self.name = name
+	      </pre><div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><img src="images/callouts/1.png" alt="1" border="0"></td><td valign="top" align="left"><p>This method defines how to compute the
+		  reverse complement of the sequence.
+                </p></td></tr><tr><td width="5%" valign="top" align="left"><img src="images/callouts/2.png" alt="2" border="0"></td><td valign="top" align="left"><p>This method defines how to translate the
+		  DNA sequence into a protein sequence.
+                </p></td></tr><tr><td width="5%" valign="top" align="left"><img src="images/callouts/3.png" alt="3" border="0"></td><td valign="top" align="left"><p>The <tt>Standard_Genetic_Code</tt> dictionary is
+		  defined elsewhere.
+                </p></td></tr></table></div></div></div><p>
+	</p><p>
+	So, let us now look at the <tt>translate</tt> method. 
+
+	  <pre class="programlisting">
+     def translate(self, frame=0):
+        """
+        frame: 0, 1, 2, -1, -2, -3
+        """
+        if frame &lt; 0 :
+            seq = self.revcompl()
+            frame = abs(frame) - 1
+        else:
+            seq = self.seq
+
+        if frame &gt; 2:
+            return ''
+
+        protseq = ''
+        nb_codons = len(seq)/3
+
+        for i in range(frame,len(seq) - 2,3):
+            codon = seq[i:i+3]
+            protseq += Standard_Genetic_Code[codon]
+
+        return protseq
+	  </pre>
+To call this method, you must provide the frame:
+	<pre class="programlisting">
+&gt;&gt;&gt; s2.translate(0)
+TRCHCPPASCCCCSPGP
+	</pre>
+   Indeed, this method has declared a <tt>frame</tt>
+	parameter. It thus takes two arguments: <tt>self</tt>
+	and <tt>frame</tt>. As for
+	the <tt>gc</tt> method, the first parameter does not
+	have to be specified at calling time, only the remaining ones.
+      </p><p>
+	The <tt>translate</tt> method needs to call
+	another method of the class: <tt>revcompl</tt>,
+	which computes the reverse complement. Notice that this method
+	is called without any argument. This is not necessary, because
+	it is called on the object itself, referenced by the
+	variable <tt>self</tt> with the dot operator: 
+	<pre class="programlisting">
+self.revcompl()
+	</pre>
+	<tt>revcompl</tt> will return a character string,
+	that will be used by <tt>translate</tt> to compute
+	a negative frame.
+      </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch18s02.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch18.html"><img src="images/up.png" alt="Up"></a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch18s04.html"><img src="images/next.png" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">18.2. What are objects and classes? An example&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index-2.html"><img src="images/home.png" alt="Home"></a></td><td width="40%" align="right" valign="top">&nbsp;18.4. Combining objects</td></tr></table></div></body>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch18s03.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:38 GMT -->
+</html>

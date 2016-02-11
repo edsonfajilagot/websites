@@ -1,0 +1,973 @@
+﻿<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from blog.miguelgrinberg.com/post/building-an-arduino-robot-part-iii-assembling-the-robot by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:40:50 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    
+    <title>
+    
+        Building an Arduino Robot, Part III: Assembling the Robot - miguelgrinberg.com
+    
+</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="description" content="miguelgrinberg.com">
+	<meta name="copyright" content="Copyright (c) 2012-2015 Miguel Grinberg">
+	<meta name="author" content="Miguel Grinberg">
+    
+    <meta name="keywords" content="robotics, arduino, robot, hardware, android, bluetooth, hc-sr04, ultrasonic sensor, dc motor, motor">
+    
+
+    
+    <!-- Bootstrap -->
+    <link href="../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../static/prettify.css" type="text/css" rel="stylesheet" />
+    <link href="../static/colorbox/colorbox.css" rel="stylesheet" type="text/css" />
+    <link href="../static/style.css" rel="stylesheet" type="text/css" />
+
+    <link rel="shortcut icon" href="../static/favicon.ico">
+	<link rel="alternate" type="application/rss+xml" href="../feed" title="miguelgrinberg.com RSS feed">
+
+  </head>
+  <body>
+    
+    <!-- facebook sdk -->
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "../../connect.facebook.net/en_US/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    <!-- google plus sdk -->
+    <script type="text/javascript" src="../../apis.google.com/js/plusone.js"></script>
+    <!-- twitter sdk -->
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="../../platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <!-- linkedin sdk -->
+    <script src="../../platform.linkedin.com/in.js" type="text/javascript"></script>
+
+    
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://blog.miguelgrinberg.com/index">miguelgrinberg.com</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="http://blog.miguelgrinberg.com/index">Home</a></li>
+                        <li><a href="about-me.html">About Me</a></li>
+                        <li><a href="about-this-blog.html">About This Blog</a></li>
+                        
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <p class="navbar-text" style="margin-top: 10px; margin-bottom: 0px;">
+                                <a type="application/rss+xml" href="../feed"><img src="../static/rss.png" alt="RSS Feed" title="RSS Feed" /></a>
+                                <a href="https://www.facebook.com/miguelgrinbergblog"><img src="../static/facebook.png" alt="Facebook" title="Facebook" /></a>
+                                <a href="https://plus.google.com/u/0/117786742456929977820"><img src="../static/googleplus.png" alt="Google+" title="Google+" /></a>
+                                <a href="http://www.linkedin.com/in/miguelgrinberg"><img src="../static/linkedin.png" alt="LinkedIn" title="LinkedIn" /></a>
+                                <a href="http://github.com/miguelgrinberg"><img src="../static/github.png" alt="GitHub" title="GitHub" /></a>
+                                <a href="https://twitter.com/#!/miguelgrinberg"><img src="../static/twitter.png" alt="Twitter" title="Twitter" /></a>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </nav>
+
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-push-9 sidebar-bg">
+                <div id="sidebar">
+                    
+
+                    
+                    <h1>An Introduction to Flask</h1>
+                    <p>If you are a beginner giving your first steps in web development, my Flask introductory video is for you:</p>
+                    <p><center><a href="http://bit.ly/flaskintro"><img style="border: 1px solid black;" src="../static/flask-intro-cover-tiny.png"></a></center></p>
+                    <p>Visit <a href="http://flaskbook.com/">http://flaskbook.com</a> for information about this and other Flask training products I have created!</p>
+                    
+
+                    <h1>About Miguel</h1>
+                    <img style="float: right; margin: 0px 8px 8px 0px; padding: 4px; border: 1px solid #ccc;" src="../static/miguel.jpg" />
+                    <p>Welcome to my blog!</p>
+                    <p>I'm a software engineer, photographer and filmmaker in Portland, Oregon, USA.</p>
+                    <p>You can also find me on <a href="https://www.facebook.com/miguelgrinbergblog">Facebook</a>, <a href="https://plus.google.com/u/0/117786742456929977820">Google+</a>, <a href="http://www.linkedin.com/in/miguelgrinberg">LinkedIn</a>, <a href="https://github.com/miguelgrinberg">Github</a> and <a href="https://twitter.com/#!/miguelgrinberg">Twitter</a>.</p>
+                    <p>Thank you for visiting!</p>
+
+                    
+
+                    
+                    <h1>Categories</h1>
+<ul>
+
+	<li>
+		<a href="../category/Arduino/feed">
+			<img src="../static/rss-small.png" title="Arduino RSS Feed" label="Arduino RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Arduino.html">Arduino</a></span> (7)
+	</li>
+
+	<li>
+		<a href="../category/Authentication/feed">
+			<img src="../static/rss-small.png" title="Authentication RSS Feed" label="Authentication RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Authentication.html">Authentication</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../category/Blog/feed">
+			<img src="../static/rss-small.png" title="Blog RSS Feed" label="Blog RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Blog.html">Blog</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/C%2b%2b/feed">
+			<img src="../static/rss-small.png" title="C++ RSS Feed" label="C++ RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/C%2b%2b.html">C++</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Cloud/feed">
+			<img src="../static/rss-small.png" title="Cloud RSS Feed" label="Cloud RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Cloud.html">Cloud</a></span> (2)
+	</li>
+
+	<li>
+		<a href="../category/Filmmaking/feed">
+			<img src="../static/rss-small.png" title="Filmmaking RSS Feed" label="Filmmaking RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Filmmaking.html">Filmmaking</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Flask/feed">
+			<img src="../static/rss-small.png" title="Flask RSS Feed" label="Flask RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Flask.html">Flask</a></span> (39)
+	</li>
+
+	<li>
+		<a href="../category/Games/feed">
+			<img src="../static/rss-small.png" title="Games RSS Feed" label="Games RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Games.html">Games</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Gear/feed">
+			<img src="../static/rss-small.png" title="Gear RSS Feed" label="Gear RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Gear.html">Gear</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/HTML5/feed">
+			<img src="../static/rss-small.png" title="HTML5 RSS Feed" label="HTML5 RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/HTML5.html">HTML5</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Heroku/feed">
+			<img src="../static/rss-small.png" title="Heroku RSS Feed" label="Heroku RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Heroku.html">Heroku</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Javascript/feed">
+			<img src="../static/rss-small.png" title="Javascript RSS Feed" label="Javascript RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Javascript.html">Javascript</a></span> (3)
+	</li>
+
+	<li>
+		<a href="../category/Movie%20Reviews/feed">
+			<img src="../static/rss-small.png" title="Movie Reviews RSS Feed" label="Movie Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Movie%20Reviews.html">Movie Reviews</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Netflix/feed">
+			<img src="../static/rss-small.png" title="Netflix RSS Feed" label="Netflix RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Netflix.html">Netflix</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Node.js/feed">
+			<img src="../static/rss-small.png" title="Node.js RSS Feed" label="Node.js RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Node.html">Node.js</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/OpenStack/feed">
+			<img src="../static/rss-small.png" title="OpenStack RSS Feed" label="OpenStack RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/OpenStack.html">OpenStack</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Personal/feed">
+			<img src="../static/rss-small.png" title="Personal RSS Feed" label="Personal RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Personal.html">Personal</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Photography/feed">
+			<img src="../static/rss-small.png" title="Photography RSS Feed" label="Photography RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Photography.html">Photography</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Product%20Reviews/feed">
+			<img src="../static/rss-small.png" title="Product Reviews RSS Feed" label="Product Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Product%20Reviews.html">Product Reviews</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Programming/feed">
+			<img src="../static/rss-small.png" title="Programming RSS Feed" label="Programming RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Programming.html">Programming</a></span> (47)
+	</li>
+
+	<li>
+		<a href="../category/Project%20Management/feed">
+			<img src="../static/rss-small.png" title="Project Management RSS Feed" label="Project Management RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Project%20Management.html">Project Management</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Python/feed">
+			<img src="../static/rss-small.png" title="Python RSS Feed" label="Python RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Python.html">Python</a></span> (43)
+	</li>
+
+	<li>
+		<a href="../category/REST/feed">
+			<img src="../static/rss-small.png" title="REST RSS Feed" label="REST RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/REST.html">REST</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Rackspace/feed">
+			<img src="../static/rss-small.png" title="Rackspace RSS Feed" label="Rackspace RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Rackspace.html">Rackspace</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Raspberry%20Pi/feed">
+			<img src="../static/rss-small.png" title="Raspberry Pi RSS Feed" label="Raspberry Pi RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Raspberry%20Pi.html">Raspberry Pi</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/RhinoSteady/feed">
+			<img src="../static/rss-small.png" title="RhinoSteady RSS Feed" label="RhinoSteady RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/RhinoSteady.html">RhinoSteady</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Robotics/feed">
+			<img src="../static/rss-small.png" title="Robotics RSS Feed" label="Robotics RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Robotics.html">Robotics</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Video/feed">
+			<img src="../static/rss-small.png" title="Video RSS Feed" label="Video RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Video.html">Video</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../category/Windows/feed">
+			<img src="../static/rss-small.png" title="Windows RSS Feed" label="Windows RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Windows.html">Windows</a></span> (1)
+	</li>
+
+</ul>
+                    
+                </div>
+            </div>
+            <div class="col-md-8 col-md-pull-4">
+                <div id="main">
+                    
+                    
+                    
+                    
+                    
+
+<div class="post">
+
+<p class="date"><span class="flask-moment" data-timestamp="2013-01-16T07:14:27Z" data-format="format('LL')" data-refresh="0">2013-01-16T07:14:27Z</span></p>
+<h1 class="post-title"><a href="building-an-arduino-robot-part-iii-assembling-the-robot.html">Building an Arduino Robot, Part III: Assembling the Robot</a></h1>
+<div class="posted">Posted by <span class="label label-danger"><a href="http://blog.miguelgrinberg.com/author/Miguel Grinberg">Miguel Grinberg</a></span> under <span class="label label-primary"><a href="../category/Arduino.html">Arduino</a></span>, <span class="label label-primary"><a href="../category/Robotics.html">Robotics</a></span>. </div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/building-an-arduino-robot-part-iii-assembling-the-robot" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/building-an-arduino-robot-part-iii-assembling-the-robot" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="building-an-arduino-robot-part-iii-assembling-the-robot.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/building-an-arduino-robot-part-iii-assembling-the-robot" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+<div class="post_body"><p><center><img alt="Arduino Robot" src="../static/images/arduino-robot-18.jpg" /></center></p>
+<p>Welcome to the third article in the tutorial series in which I'm building a remote controlled Arduino based vehicle robot.</p>
+<p>Here is the list of articles I have published:</p>
+<ul>
+<li><a href="building-an-arduino-robot-part-i-hardware-components.html">Part I: Hardware Components</a></li>
+<li><a href="building-an-arduino-robot-part-ii-programming-the-arduino.html">Part II: Programming the Arduino</a></li>
+<li><a href="building-an-arduino-robot-part-iii-assembling-the-robot.html">Part III: Assembling the Robot</a> (this article)</li>
+<li><a href="building-an-arduino-robot-part-iv-a-not-so-basic-robot-firmware.html">Part IV: A (Not So) Basic Robot Firmware</a></li>
+<li><a href="building-an-arduino-robot-part-v-avoiding-obstacles.html">Part V: Avoiding Obstacles</a></li>
+<li><a href="building-an-arduino-robot-part-vi-remote-control.html">Part VI: Remote Control</a></li>
+</ul>
+<p>In the previous article I introduced you to the programming side of my Arduino project, and I wrote a number of Arduino sketches that test the different hardware parts of my robot.</p>
+<p>Today I'm taking a break from programming and instead, I will show you how I built and tested my robot hardware.</p>
+<p>If you read my <a href="(/post/building-an-arduino-robot-part-i-hardware-components).html">first article</a> you know that I'm using the <a href="http://www.amazon.com/gp/product/B007R9U5CU?tag=thirdwish-20">Magician Chassis</a> two wheel vehicle kit. The kit includes the plastic chassis, wheels, motors, battery box and screws. I'm not going to show you the step-by-step assembly of the kit, as the instructions that come with it are easy to follow. What I will tell you though, is one thing I did differently.</p>
+<p>The manufacturer suggests attaching the battery box to the lower platform, but that would require unscrewing the top platform to change the batteries. To avoid that hassle, I have attached the box to the top platform.</p>
+<p>Here is the vehicle kit, fully assembled:</p>
+<p><center><img alt="Arduino Robot" src="../static/images/arduino-robot-19.jpg" /></center></p>
+<p>The top platform of the vehicle comes with a lot of slots where things can be attached. To mount the Arduino board there I attached three standoffs with screws from underneath. I kept them a bit loose until I found the right positions that matched the mounting holes in the board. Unfortunately I could not find a combination of slots that allowed me to match all four mounting holes, so three had to do:</p>
+<p><center><img alt="Arduino Robot" src="../static/images/arduino-robot-20.jpg" /></center></p>
+<p>The board ended up a tiny bit crooked with respect to the platform, but other than that it was pretty solid:</p>
+<p><center><img alt="Arduino Robot" src="../static/images/arduino-robot-21.jpg" /></center></p>
+<p>I then needed to mount the breadboard in the front of the vehicle. The bottom of the breadboard has adhesive, but since I wasn't sure everything would work fine with this configuration I decided to simply attach it with a rubberband and keep the option to undo the whole thing without complications:</p>
+<p><center><img alt="Arduino Robot" src="../static/images/arduino-robot-22.jpg" /></center></p>
+<p>The next step was pretty tricky. I now needed to mount the motor shield on top of the Arduino board, but once I mount it I lose access to the pins that I need to connect the distance sensor and the bluetooth slave.</p>
+<p>As I mentioned in a previous article, the prebuilt Adafruit motor driver that I ordered is pretty good, but unfortunately it plugs into every available pin in the Arduino board and does not provide pass-thru headers.</p>
+<p>So how can I connect my devices and the motor shield at the same time?</p>
+<p>There are actually a few possible solutions:</p>
+<ul>
+<li>While there are no pass-thru headers, the board does have contacts that expose some of the pins, like the six analog pins and the always needed <code>5V</code> and <code>GND</code>. So if I wanted to solder my way out of the problem I could.</li>
+<li>The <a href="http://www.amazon.com/DFRobot-DFR0060-Screw-Shield-Arduino/dp/B009OZATLW">Screw Shield</a> solves my problem nicely. This is a shield that plugs in between the Arduino board and the motor shield and provides access to the pins from the side.</li>
+<li>Buy another motor shield that has pass-thru headers.</li>
+<li>Buy a motor shield kit and solder the components it myself, adding pass-thru headers.</li>
+</ul>
+<p>Buying the screw shield or another motor shield are the cleanest two solutions to the problem, but unfortunately I did not have either at hand when I was building the robot, and didn't want to postpone the building for a few days until I can get them in the mail.</p>
+<p>So what did I do? I cut a few short pieces of cable and inserted their stripped ends in the pins that I needed before I crunched them in place with the motor shield.</p>
+<p>The pins that I needed to use were six:</p>
+<ul>
+<li><code>A0</code> and <code>A1</code> (pins 14 and 15) for the <code>Trig</code> and <code>Echo</code> pins of the distance sensor.</li>
+<li><code>RX</code> and <code>TX</code> (pins 0 and 1) for the bluetooth slave.</li>
+<li><code>5V</code> and <code>GND</code> to send power to the breadboard.</li>
+</ul>
+<p>Here is the Arduino board with the cables in place, before I inserted the motor shield:</p>
+<p><center><img alt="Arduino Robot" src="../static/images/arduino-robot-23.jpg" /></center></p>
+<p>And here it is with the motor shield in place:</p>
+<p><center><img alt="Arduino Robot" src="../static/images/arduino-robot-24.jpg" /></center></p>
+<p>Once the motor shield went in the cables could not be removed, so this solution will likely hold until I can get a better alternative. Unfortunately I only had white cable, as I would have preferred to use colored cables to make it more clear what each cable was and, why not say it, to make the robot a bit more colorful. Oh, well...</p>
+<p>The last step in building the robot was to make all the connections, so I started by inserting the distance sensor and the bluetooth slave in the breadboard.</p>
+<p>The white cables from the <code>5V</code> and <code>GND</code> pins went into red and blue pins in the breadboard. Then using red and blue jumper cables I extended the power to the proper pins in the distance sensor and bluetooth slave.</p>
+<p>The white cables coming out of analog pins 0 and 1 went to pins <code>Trig</code> and <code>Echo</code> in the distance sensor, and the ones from digital pins 0 and 1 went to the bluetooth slave. </p>
+<p>Finally, I attached the red and black cables from the two motors that came with the vehicle kit to motor inputs M1 and M3 in the motor shield.</p>
+<p>If you don't understand these connections check out the <a href="building-an-arduino-robot-part-ii-programming-the-arduino.html">previous article</a>, where I included connection diagrams and explained in detail how these hardware components work.</p>
+<h2>Testing</h2>
+<p>Right after I completed the assembly of the robot I wanted to make sure the connections were working.</p>
+<p>So what I did is simple. I uploaded the three sketches from the <a href="building-an-arduino-robot-part-ii-programming-the-arduino.html">previous article</a> that control the distance sensor, the motors and the bluetooth slave one by one to test each component individually.</p>
+<p>As I mentioned in the previous article, when the bluetooth slave is connected to the serial pins in the Arduino board the serial communication with the computer to upload sketches does not work very well, so each time I needed to upload a new sketch I unplugged the red power cable that goes to the bluetooth device to make sure there was no interference.</p>
+<p>In the end I verified that all the components worked fine, so I called the hardware assembly phase complete!</p>
+<h2>Introducing... the Michelino!</h2>
+<p>Without further ado, let me introduce you to my completed robot, which I have named <em>Michelino</em> (pronounced mi-keh-lee-no):</p>
+<p><center><img alt="Arduino Robot" src="../static/images/arduino-robot-25.jpg" /></center></p>
+<p><center><img alt="Arduino Robot" src="../static/images/arduino-robot-26.jpg" /></center></p>
+<h2>Final words</h2>
+<p>My robot hardware is complete, now I need to give it its brains.</p>
+<p>In the next few articles I will write the robot software in C++. This is no small task, as I will be writing the software from scratch. As a side note, I plan to release the code as open source for others to learn from, enjoy or improve.</p>
+<p>Stay tuned, as this is bound to get interesting pretty soon!</p>
+<p>Miguel</p></div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/building-an-arduino-robot-part-iii-assembling-the-robot" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/building-an-arduino-robot-part-iii-assembling-the-robot" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="building-an-arduino-robot-part-iii-assembling-the-robot.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/building-an-arduino-robot-part-iii-assembling-the-robot" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+
+
+<h4 style="text-align: right"><a name="comments"></a>29 comments</h4>
+
+
+<div class="comment">
+    <ul>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/289815c144ff6a081740dba1e5af835ace2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#1</span> <span class="label label-primary">Dimitri</span> said
+                    <span class="flask-moment" data-timestamp="2013-01-23T14:17:59Z" data-format="fromNow(0)" data-refresh="0">2013-01-23T14:17:59Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Very informative and interesting read. I&#39;ve ordered all the parts and can&#39;t wait for the programming part. 
+
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/608b3a58b647320ca14211845cc63263ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#2</span> <span class="label label-primary">denbo</span> said
+                    <span class="flask-moment" data-timestamp="2013-02-01T17:21:46Z" data-format="fromNow(0)" data-refresh="0">2013-02-01T17:21:46Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I was confused by your statement about the Adafruit motor shields.  I&#39;ve built many of them and I always added pass thru headers.
+
+Then I looked at your link to Amazon and noticed it&#39;s a pre-built Adafruit &#39;clone&#39; from SainSmart.   Since it is pre-built they already soldered up the headers.
+
+You can buy the motor shield direct from Adafruit and purchase the pass thru headers.  Of course, that means you need to completely assemble the motor shield.  If soldering is not your bag then your choice to go with the Arduino motor shield makes sense.
+
+Also note that most of the common Arduino motor shields (Arduino, Sparfun, etc...) do not need a library like the Adafruit does.  You just set the two PWM signal pins for speed (with analogWrite()) and direction pins to either HIGH or LOW.  Not much work.
+
+One other comment to make... it is often times a good idea to have two power supplies: one for the motors and another for the Arduino.   Noise from the motor can affect how well your Arduino runs, especially if you have a lot of analog sensors.  
+
+The adafruit motor shield has a jumper on the board that dictates whether to power the Arduino through the VIN pin (from the same batteries as the motor) or from separate power supply.  A 9v battery with a 2.1mm power plug works well.
+
+Good luck.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#3</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-02-02T03:43:55Z" data-format="fromNow(0)" data-refresh="0">2013-02-02T03:43:55Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@denbo: thank you for your comment, you are giving me pretty useful information. I have clarified a little bit better that I&#39;m using a pre-built Adafruit motor shield. I&#39;ve said in a past article that for this project I decided I was not going to solder, I wanted to keep it simple. Regarding the &#34;other motor shields do not need a library&#34; comment, that is really subjective. If you think about it a library is just C++ code moved to another file, so in reality any component can be controlled without a library even the Adafruit motor shield just by putting the code that controls it in your sketch. The decision to use a library is more a design choice, not a necessity. I, for example, would write my own library for any of those other motor shields for which the manufacturer does not give you one. I&#39;m trying to make the point that to have a well structured application you have to modularize, so libraries are your friend :). Regarding the dual power supply yes, I can see that my robot would benefit for 9V on the motors so I will explore that option at some point. Thanks again!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/608b3a58b647320ca14211845cc63263ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#4</span> <span class="label label-primary">denbo</span> said
+                    <span class="flask-moment" data-timestamp="2013-02-02T04:30:47Z" data-format="fromNow(0)" data-refresh="0">2013-02-02T04:30:47Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Miguel, please let me clarify something if I may.  When I said you &#39;need&#39; a library for the Adafruit I mean you really NEED Adafruit&#39;s library.  This is because in order to talk to the 2 L293D chips it goes through a 74HC595N shift register latch.  The communication is a bit complicated.   
+
+Whereas most other motor shields do not have a corresponding library like the Adafruit does.  They just tell you what the direction pins are and which PWM pins control speed.  I was not suggesting you should not write your own library, I simply meant that most motor shields do not come with one.
+
+As for the 9v battery that should hook up to the Arduino not to the motors.  A single 9v battery can&#39;t run the motors.  I generally use 8 AA batteries to power the motors and a 9v to power the arduino.  A good reference is on Adafruit&#39;s website (see second paragraph)  http://www.ladyada.net/make/mshield/use.html</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/e0bc425b4f7deec8ce8fe6272b1e3556ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#5</span> <span class="label label-primary">Gabriel</span> said
+                    <span class="flask-moment" data-timestamp="2013-08-16T10:51:40Z" data-format="fromNow(0)" data-refresh="0">2013-08-16T10:51:40Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">something&#39;s wrong with the sketch: 
+michelino:141: error: &#39;rightMotor&#39; was not declared in this scope
+michelino:140: error: &#39;leftMotor&#39; was not declared in this scope</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#6</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-08-19T22:53:31Z" data-format="fromNow(0)" data-refresh="0">2013-08-19T22:53:31Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Gabriel: Are there any errors or warnings before these? You are probably missing some of the files, or maybe the Arduino libraries for the  motors.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/80bc7775f295e3134f863e6bf04eb3f9ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#7</span> <span class="label label-primary">Mike Smith</span> said
+                    <span class="flask-moment" data-timestamp="2013-11-12T14:51:18Z" data-format="fromNow(0)" data-refresh="0">2013-11-12T14:51:18Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Thank you for a great tutorial, very easy to understand and very informative. well done</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/2b0ef6164d8df46bdcf63e70dff9ab3ace2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#8</span> <span class="label label-primary">Aniket reddy shamirpeta</span> said
+                    <span class="flask-moment" data-timestamp="2014-01-24T02:48:57Z" data-format="fromNow(0)" data-refresh="0">2014-01-24T02:48:57Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hai SIR
+
+My project is robotic arm will pick a pencil from a cup and move its arm towards the shaperner place in it.the sharpernwr should sense that pencil is place and it should rotate for some time for which pencil is sharped.later robotic arm again pick it from it and place back into cup.
+
+I want the coding for the opening and closing for robotic arm could any one help.I am using mechanical robotic arm and servo to control it.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/cd942b41a566263b7da736435a039cdcce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#9</span> <span class="label label-primary">shishir </span> said
+                    <span class="flask-moment" data-timestamp="2014-01-25T20:20:41Z" data-format="fromNow(0)" data-refresh="0">2014-01-25T20:20:41Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">hey dude u r awesome man ur articles are helping a lot thnx buddy. I jst wanted to tell u that i am soon ordering the entire kit so if in the course of essembling the parts(connecting all the wires and all) if i have any problem so at that case could u plz tell me the wiring part in skype or any other video chatting app or site. Thnx!!!!!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/2911c6ad709ff05272e49a21df247da2ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#10</span> <span class="label label-primary"><a href="http://heinitz-it.de/">Valentin</a></span> said
+                    <span class="flask-moment" data-timestamp="2014-01-30T08:49:04Z" data-format="fromNow(0)" data-refresh="0">2014-01-30T08:49:04Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I&#39;ve started reading your Flask tutorial and was very impressed by it.
+Now I&#39;ve found this tutorial and was so amused. I&#39;ve ordered exactly the same set of hardware and mechanical parts a year ago but still waiting for the opportunity to start tinkering. With your tutorial I will begin right the next week end!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/6e9d8f4aa90633b59a115def0c43b0fbce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#11</span> <span class="label label-primary">aurdinonewbie</span> said
+                    <span class="flask-moment" data-timestamp="2014-02-22T04:21:13Z" data-format="fromNow(0)" data-refresh="0">2014-02-22T04:21:13Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Your tutorial is so easy to understand but also explains not just the electronics but object oriented programming really well. I really hope you are teaching somewhere, otherwise many students are missing out.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/71beceb7f4a8d527878471f616f4dd42ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#12</span> <span class="label label-primary">Nvedia</span> said
+                    <span class="flask-moment" data-timestamp="2014-04-28T03:50:35Z" data-format="fromNow(0)" data-refresh="0">2014-04-28T03:50:35Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Please let me know if this chassis would work fine in place of Magician Chassis cause I really want to use 4 wheels
+
+http://cgi.ebay.com/ws/eBayISAPI.dll?ViewItem&amp;item=191112883493
+Are the specifications ok?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#13</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-04-29T15:50:17Z" data-format="fromNow(0)" data-refresh="0">2014-04-29T15:50:17Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Nvedia: Sure, you can use a four wheel model just fine.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/761fc08edc59e24599a3356d6561a510ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#14</span> <span class="label label-primary"><a href="http://blog.miguelgrinberg.com/index">Kevin</a></span> said
+                    <span class="flask-moment" data-timestamp="2014-05-28T06:34:29Z" data-format="fromNow(0)" data-refresh="0">2014-05-28T06:34:29Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I am definitely ordering the parts next week this looks great and descriptive also hard which is what I need to learn </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/dfa070a91c2e7e7812a35c3af4ab01ebce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#15</span> <span class="label label-primary">Kevin</span> said
+                    <span class="flask-moment" data-timestamp="2014-05-28T06:39:58Z" data-format="fromNow(0)" data-refresh="0">2014-05-28T06:39:58Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Does it move</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#16</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-05-28T15:57:20Z" data-format="fromNow(0)" data-refresh="0">2014-05-28T15:57:20Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Kevin: the robot does not move at this phase of the tutorial. The remaining articles explain how to write the software to make it move.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/dfcc2febcee9ceb55c32e8c20d6feff4ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#17</span> <span class="label label-primary">Kapil Surve</span> said
+                    <span class="flask-moment" data-timestamp="2014-06-16T12:26:33Z" data-format="fromNow(0)" data-refresh="0">2014-06-16T12:26:33Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi, Miguel, I cant afford to buy the magician chassis.. Can you suggest some parts which I can use to make the body of vehicle?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#18</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-06-16T15:42:23Z" data-format="fromNow(0)" data-refresh="0">2014-06-16T15:42:23Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Kapil: look for robot vehicle chassis on ebay.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/b6a5c395ef91e60f4e9befe222ba73bace2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#19</span> <span class="label label-primary">jay</span> said
+                    <span class="flask-moment" data-timestamp="2015-01-30T01:04:13Z" data-format="fromNow(0)" data-refresh="0">2015-01-30T01:04:13Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hey Miguel,
+
+Great tutorial. Thanks for taking the time to write it up so thoroughly.
+
+I just purchased the Adafruit motor shield v2.3.
+
+Do you know if I can stack this with my arduino uno without Soldering, a skill I currently am virtually clueless about. I checked the manual and it seems it&#39;s a requirement, but just didn&#39;t know if you knew anything more that I couldn&#39;t find.
+
+Or do you think I should just bite the bullet and finally learn solder? I&#39;m not a huge fan of permanently combining the two boards.
+
+Thanks!
+Jay</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#20</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2015-02-01T03:18:55Z" data-format="fromNow(0)" data-refresh="0">2015-02-01T03:18:55Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@jay: I believe Adafruit sells the motor driver as a kit, so you will have to put it together by soldering. But you can find clones that come assembled on amazon or ebay.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/dcd9f00a9a207a229308677cc2076e63ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#21</span> <span class="label label-primary">hello123</span> said
+                    <span class="flask-moment" data-timestamp="2015-02-23T09:16:36Z" data-format="fromNow(0)" data-refresh="0">2015-02-23T09:16:36Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hey buddy how did you connect the motors with the board, since i have a chassis should i cut the wires and than connect them to  the b oard</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#22</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2015-02-25T06:37:59Z" data-format="fromNow(0)" data-refresh="0">2015-02-25T06:37:59Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@hello123: the wires from the motors connect to the motor driver, so it depends on what connector you have there.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/177e6927c6270048bf54a9d0cf89c8f7ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#23</span> <span class="label label-primary">Ricky</span> said
+                    <span class="flask-moment" data-timestamp="2015-03-17T00:35:02Z" data-format="fromNow(0)" data-refresh="0">2015-03-17T00:35:02Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Great guide, but I&#39;m a little confused. Where do I attach the battery pack? Do i connect it directly to the arduino board or do I connect it to the motor shield?
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#24</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2015-03-17T03:40:48Z" data-format="fromNow(0)" data-refresh="0">2015-03-17T03:40:48Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Ricky: the simplest way is to power the Arduino with the batteries, then have the motors draw power from the Arduino. Depending on the hardware this may not give the motors enough power, so in those cases you can connect a separate power source directly into the motor shield.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/19146d11f6b5a57a2b7adb244f01f628ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#25</span> <span class="label label-primary">aahd</span> said
+                    <span class="flask-moment" data-timestamp="2015-03-29T20:10:40Z" data-format="fromNow(0)" data-refresh="0">2015-03-29T20:10:40Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi,
+
+I&#39;m getting some trouble with the Bluetooth module. At first it was working but when I reached this article where it had asked to combine both components onto the circuit things started acting up. The distance sensor works fine on its own but when I try to get the Bluetooth module to work on its own it doesn&#39;t do what it&#39;s supposed to do. Instead of printing &#34;Receive: &#39; onto the serial monitor and on my phone it keeps displaying &#39;Distance: 0cm&#39; when the distance sensor sketch and component isn&#39;t even connected to the circuit. What could be the problem? It&#39;s a weird one. </p>
+                </div>
+            </div>
+        </li>
+        
+    </ul>
+</div>
+
+<div class="page">
+<ul class="pager">
+  <li class="previous disabled">
+    <a href="#">&laquo;&laquo;</a>
+  </li>
+  <li class="previous disabled">
+    <a href="#">&laquo;</a>
+  </li>
+  <li class="next">
+    <a href="building-an-arduino-robot-part-iii-assembling-the-robot/page/0.html#comments">&raquo;&raquo;</a>
+  </li>
+  <li class="next">
+    <a href="building-an-arduino-robot-part-iii-assembling-the-robot/page/2.html#comments">&raquo;</a>
+  </li>
+</ul>
+</div>
+
+<h3><a name="commentform"></a>Leave a Comment</h3>
+
+<form action="#commentform" method="post"
+  class="form" role="form">
+  <div style="display:none;"><input id="csrf_token" name="csrf_token" type="hidden" value="1439536718.87##6a153bc157b75e7a6ff112ad312472eabc3d502d"></div>
+  
+    
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="name">Name</label>
+        <input class="form-control" id="name" name="name" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="url">URL</label>
+        <input class="form-control" id="url" name="url" type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="email">Email</label>
+        <input class="form-control" id="email" name="email" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="comment">Comment</label>
+        <textarea class="form-control" id="comment" name="comment" required></textarea>
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="captcha">Captcha</label>
+        
+<script type="text/javascript">var RecaptchaOptions = {"custom_translations": {"audio_challenge": "Get an audio challenge", "cant_hear_this": "Download sound as MP3", "help_btn": "Help", "image_alt_text": "reCAPTCHA challenge image", "incorrect_try_again": "Incorrect. Try again.", "instructions_audio": "Type what you hear", "instructions_visual": "Type the text", "play_again": "Play sound again", "privacy_and_terms": "Privacy & Terms", "refresh_btn": "Get a new challenge", "visual_challenge": "Get a visual challenge"}, "theme": "white"};</script>
+<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S"></script>
+<noscript>
+  <iframe src="http://www.google.com/recaptcha/api/noscript?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S" height="300" width="500" frameborder="0"></iframe><br>
+  <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+  <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
+</noscript>
+
+  </div>
+
+
+    
+
+
+
+
+
+  
+
+
+    <input class="btn btn-default" id="submit" name="submit" type="submit" value="Submit">
+  
+
+
+
+
+
+</form>
+
+
+</div>
+
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <p class="elapsed">This page was generated in None seconds.</p>
+            <p>&copy; 2014 by Miguel Grinberg. All rights reserved. <a href="mailto:webmaster _at_ miguelgrinberg _dot_ com">Questions?</a></p>
+        </div>
+    </div>
+
+
+    
+    
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.33/jquery.colorbox-min.js"></script>
+    <script type="text/javascript" src="../static/prettify.js"></script>
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment-with-langs.min.js"></script>
+<script>
+function flask_moment_render(elem) {
+    $(elem).text(eval('moment("' + $(elem).data('timestamp') + '").' + $(elem).data('format') + ';'));
+    $(elem).removeClass('flask-moment');
+}
+function flask_moment_render_all() {
+    $('.flask-moment').each(function() {
+        flask_moment_render(this);
+        if ($(this).data('refresh')) {
+            (function(elem, interval) { setInterval(function() { flask_moment_render(elem) }, interval); })(this, $(this).data('refresh'));
+        }
+    })
+}
+$(document).ready(function() {
+    flask_moment_render_all();
+});
+</script>
+    
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4777284-15']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".gallery").colorbox({rel:".gallery",maxWidth:"95%",maxHeight:"95%",scalePhotos:true});
+            // add prettyprint class to all <pre><code></code></pre> blocks
+            var prettify = false;
+            $("pre code").parent().each(function() {
+                $(this).addClass('prettyprint');
+                prettify = true;
+            });
+            prettyPrint();
+        });
+    </script>
+
+
+  </body>
+
+<!-- Mirrored from blog.miguelgrinberg.com/post/building-an-arduino-robot-part-iii-assembling-the-robot by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:41:17 GMT -->
+</html>

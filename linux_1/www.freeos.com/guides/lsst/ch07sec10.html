@@ -1,0 +1,26 @@
+<html>
+<!-- Mirrored from www.freeos.com/guides/lsst/ch07sec10.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 05 Jun 2015 06:05:25 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head> <!-- Last Updates : Thu., April- 11, 2002 06:18:30 PM (IST) --><title>LSST v1.05 &gt; Chapter 7 &gt; awk miscellaneous</title>
+
+<!--Google Top Ad BEGIN-->
+<script type="text/javascript"><!--
+google_ad_client = "pub-9961351994700795";
+google_ad_width = 728;
+google_ad_height = 90;
+google_ad_format = "728x90_as";
+google_color_border = "A8DDA0";
+google_color_bg = "EBFFED";
+google_color_link = "0000CC";
+google_color_url = "008000.html";
+google_color_text = "6F6F6F";
+//--></script>
+<script type="text/javascript"
+  src="../../../pagead2.googlesyndication.com/pagead/f.txt">
+</script>
+
+<!--Google Top Ad END-->
+
+ <table width=99% border=0 cellspacing=0 cellpadding=0 align=center><tr><td colspan=3> <div align=center><b>Linux Shell Scripting Tutorial (LSST) v1.05r3</b></div></td></tr><tr><td width=8% height=3> <div align=left><a href=ch07sec09.html>Prev</a></div></td><td width=86% height=3> <div align=center> Chapter 7: awk Revisited</div></td><td width=6% height=3> <div align=right><a href=ch07sec11.html>Next</a></div></td></tr><tr><td colspan=3> <hr align=center></td></tr></table><h1>awk miscellaneous</h1><p>You can even take input from keyboard while running awk script, try the following awk script:<br></p> <table width=100% border=0 cellspacing=1 cellpadding=1 bgcolor=#CCCCCC><tr><td height=16><p><code>$ cat &gt; <b><a href=datafiles/testusrip>testusrip</a></b><br> BEGIN {<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf &quot;Your name please:&quot;<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;getline na &lt; &quot;-&quot;<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf &quot;%s your age please:&quot;,na<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;getline age &lt; &quot;-&quot;<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print &quot;Hello &quot; na, &quot;, next year you will be &quot; age + 1<br> }</code></p></td></tr> </table><p>Save it and run as<br> <b>$ awk -f testusrip</b><br> <i>Your name please: </i><b>Vivek</b><br> <i>Vivek your age please:</i> <b>26</b><br> <i>Hello Vivek, next year you will be 27</i></p><p>Here getline function is used to read input from keyboard and then assign the data (inputted from keyboard) to variable.<br> <i>Syntax:</i><br> getline variable-name &lt; &quot;-&quot;<br> | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br> 1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3</p><p>1 --&gt; getline is function name<br> 2 --&gt; variable-name is used to assign the value read from input<br> 3 --&gt; Means read from stdin (keyboard)</p><p>To reading Input from file use following<br> <i>Syntax:</i><br> getline &lt; &quot;file-name&quot;</p><p><i>Example:</i><br> getline &lt; &quot;friends.db&quot;</p><p>To reading Input from pipe use following<br> <i>Syntax:</i><br> &quot;command&quot; | getline</p><p>Example:<br></p> <table width=100% border=0 cellspacing=1 cellpadding=1 bgcolor=#CCCCCC><tr><td><p><code>$ cat &gt; <a href=datafiles/awkread_file>awkread_file</a><br> BEGIN {<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;date&quot; | getline<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print $0</code><br> }</p><p></p></td></tr> </table><p><br> Run it as<br> <b>$ awk -f awkread_file<br> </b><i>Fri Apr 12 00:05:45 IST 2002</i><b> </b></p><p>Command date is executed and its piped to getline which assign the date command output to variable $0. If you want your own variable then replace the above program as follows</p> <table width=100% border=0 cellspacing=1 cellpadding=1 bgcolor=#CCCCCC><tr><td><p><code>$ cat &gt; <b><a href=datafiles/awkread_file1>awkread_file1</a></b><br> BEGIN {<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;date&quot; | getline today<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print today</code><br> }</p><p></p></td></tr> </table><p>Run it as follows:<br> <b> $ awk -f awkread_file1</b></p><p>Try to understand the following awk script and note down its output.<br> <a href=scripts/temp2final1.awk><b>temp2final1.awk </b></a></p> <table width=99% border=0 cellspacing=0 cellpadding=0 align=center><tr><td height=20 colspan=3><hr></td></tr><tr><td width=42%> <div align=left><a href=ch07sec09.html>Prev</a></div></td><td width=17%><div align=center><a href=index-2.html>Home</a></div></td><td width=41%> <div align=right><a href=ch07sec11.html>Next</a></div></td></tr><tr><td width=42%>Real life examples in awk</td><td width=17%> <div align=center><a href=ch07.html>Up</a></div></td><td width=41%> <div align=right>sed - Quick Introduction</div></td></tr></table></body>
+<!-- Mirrored from www.freeos.com/guides/lsst/ch07sec10.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 05 Jun 2015 06:05:33 GMT -->
+</html>

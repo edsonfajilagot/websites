@@ -1,0 +1,2145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from zetcode.com/wxpython/gdi/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Aug 2015 19:22:01 GMT -->
+<head>
+<title>The Graphics Device Interface in wxPython</title>
+<link rel="stylesheet" href="../../cfg/format2.css" type="text/css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="wxPython, Graphics Device Interface, GDI, Device Context, Pen, 
+Brush, 2D Vector Graphics, Drawing, wx.PaintDC, wx.ClientDC, working with graphics, drawing, painting">
+<meta name="description" content="This part of the wxPython tutorial covers the Graphics Device Interface
+in wxPython.">
+<meta name="author" content="Jan Bodnar">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div id="wide_ad" class="ltow">
+<script async src="../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- 160x600, August 2011 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:600px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="2484182563"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<div class="content">
+
+<header>
+
+<nav>
+<a href="http://zetcode.com/" title="Home">Home</a>&#160;
+<a href="../index.html">Contents</a>
+</nav>
+
+</header>
+
+
+<h1>The GDI</h1>
+
+
+<p>
+The <em>GDI</em> (<em>Graphics Device Interface</em>) is an interface for 
+working with graphics. It is used to interact with graphic devices such 
+as monitor, printer or a file. The GDI allows programmers to display data 
+on a screen or printer without having to be concerned about the details 
+of a particular device. The GDI insulates the programmer from the hardware. 
+</p>
+
+<div class="med_rec">
+<script async src="../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- NewSquare -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:250px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="0364418177"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div> 
+
+
+<p>
+From the programmer's point of view, the GDI is a group of classes and 
+methods for working with graphics. The GDI consists of 
+2D Vector Graphics, Fonts and Images. 
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/gdi2.png" alt="The GDI">
+<figcaption>Figure: The GDI structure</figcaption>
+</figure>
+
+<p>
+To begin drawing graphics, we must create a <em>device context</em> (<em>DC</em>) object. 
+In wxPython the device context is called <code>wx.DC</code>. The documentation defines 
+<code>wx.DC</code> as a device context onto which which graphics and text can be drawn. 
+It represents number of devices in a generic way. Same piece of code can write 
+to different kinds of devices. Be it a screen or a printer. The <code>wx.DC</code> is not 
+intended to be used directly. Instead a programmer should choose one of the derived 
+classes. Each derived class is intended to be used 
+under specific conditions. 
+</p>
+
+<h2>Derived wx.DC classes</h2>
+
+<ul>
+<li>wxBufferedDC</li>
+<li>wxBufferedPaintDC</li>
+<li>wxPostScriptDC</li>
+<li>wxMemoryDC</li>
+<li>wxPrinterDC</li>
+<li>wxScreenDC</li>
+<li>wxClientDC</li>
+<li>wxPaintDC</li>
+<li>wxWindowDC</li>
+</ul>
+
+<p>
+The <code>wx.ScreenDC</code> is used to draw anywhere on the screen. The 
+<code>wx.WindowDC</code> is used if we want to paint on the whole window 
+(Windows only). This includes window decorations. The <code>wx.ClientDC</code> 
+is used to draw on the client area of a window. The client area is the 
+area of a window without its decorations (title and border).
+The <code>wx.PaintDC</code> is used to draw on the client area as well. 
+But there is one difference between the <code>wx.PaintDC</code> and the <code>wx.ClientDC</code>. 
+The <code>wx.PaintDC</code> should be used only from a <code>wx.PaintEvent</code>. 
+The <code>wx.ClientDC</code> should not be used from a <code>wx.PaintEvent</code>.
+The <code>wx.MemoryDC</code> is used to draw graphics on the bitmap.
+The <code>wx.PostScriptDC</code> is used to write to PostScript files on any platform. 
+The <code>wx.PrinterDC</code> is used to access a printer (Windows only).
+</p>
+
+
+<h2>Drawing a simple line</h2>
+
+<p>
+Our first example will draw a simple line onto the client area of a window. 
+</p>
+
+<pre>
+DrawLine(int x1, int y1, int x2, int y2)
+</pre>
+
+<p>
+This method draws a line from the first point to the second. Excluding the second point. 
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+"""
+ZetCode wxPython tutorial 
+
+This program draws a line on the
+frame window after a while
+
+author: Jan Bodnar
+website: zetcode.com 
+last edited: November 2010
+"""
+
+import wx
+
+class Example(wx.Frame):
+    def __init__(self, parent, title):
+        super(Example, self).__init__(parent, title=title, 
+            size=(250, 150))
+
+        wx.FutureCall(2000, self.DrawLine)
+
+        self.Centre()
+        self.Show()
+
+    def DrawLine(self):
+        dc = wx.ClientDC(self)
+        dc.DrawLine(50, 60, 190, 60)
+
+if __name__ == '__main__':
+    app = wx.App()
+    Example(None, 'Line')
+    app.MainLoop()
+</pre>
+
+<p>
+We draw a line on the frame window after two seconds have elapsed.
+</p>
+
+<pre class="explanation">
+wx.FutureCall(2000, self.DrawLine)
+</pre>
+
+<p>
+We call the <code>DrawLine()</code> method after the window has been created. 
+We do it because, when the window is created, it is drawn. All our drawings 
+would be therefore lost. We can start drawing after the window has been 
+created. This is the reason, why we call the <code>wx.FutureCall()</code> method. 
+</p>
+
+<pre class="explanation">
+def DrawLine(self):
+    dc = wx.ClientDC(self)
+    dc.DrawLine(50, 60, 190, 60)
+</pre>
+
+<p>
+We create a <code>wx.ClientDC</code> device context. The only parameter is the 
+window on which we want to draw. In our case it is <code>self</code>, which is a 
+reference to our <code>wx.Frame</code> widget. We call the <code>DrawLine()</code> 
+method of the device context. This call actually draws a line on our window. 
+</p>
+
+<p>
+It is very important to understand the following behaviour. If we resize 
+the window, the line will disappear. 
+Why is this happening? Every window is redrawn if it is resized. It is 
+also redrawn if it is maximised. The window is also redrawn if we cover 
+it by another window and uncover afterwards. The window is drawn to its 
+default state and our line is lost. We have to draw the line each time the 
+window is resized. The solution is the <code>wx.PaintEvent</code>. 
+This event is triggered every time, the window is redrawn. We will draw 
+our line inside a method that will be hooked to the paint event. 
+</p>
+
+<p>
+The following example shows how it is done. 
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+"""
+ZetCode wxPython tutorial 
+
+This program draws a line in 
+a paint event
+
+author: Jan Bodnar
+website: zetcode.com 
+last edited: November 2010
+"""
+
+import wx
+
+class Example(wx.Frame):
+    def __init__(self, parent, title):
+        super(Example, self).__init__(parent, title=title, 
+            size=(250, 150))
+
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
+
+        self.Centre()
+        self.Show()
+
+    def OnPaint(self, e):
+        dc = wx.PaintDC(self)
+        dc.DrawLine(50, 60, 190, 60)
+
+if __name__ == '__main__':
+    app = wx.App()
+    Example(None, 'Line')
+    app.MainLoop()
+</pre>
+
+<p>
+We draw the same line. This time in reaction to a paint event. 
+</p>
+
+<pre class="explanation">
+self.Bind(wx.EVT_PAINT, self.OnPaint)
+</pre>
+
+<p>
+Here we bind the <code>OnPaint</code> method to the <code>wx.PaintEvent</code> event. 
+It means that each time our window is repainted, we call the <code>OnPaint</code> 
+method. Now the line will not disappear if we resize our window (cover it, maximise it).
+</p>
+
+<pre class="explanation">
+dc = wx.PaintDC(self)
+</pre>
+
+<p>
+Notice that this time we have used the <code>wx.PaintDC</code> device context.
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/aline.png" alt="Drawing a line">
+<figcaption>Figure: drawing a line</figcaption>
+</figure>
+
+
+
+<h2>Computer graphics</h2>
+
+There are two different computer graphics. <em>Vector</em> and 
+<em>raster</em> graphics. Raster graphics represents images as 
+a collection of pixels. Vector graphics is the use of geometrical
+ primitives such as points, lines, curves or polygons to 
+represent images. These primitives are created using 
+mathematical equations. 
+
+<p>
+Both types of computer graphics have advantages and disadvantages. 
+The advantages of vector graphics over raster are:
+</p>
+
+<ul>
+<li>smaller size</li>
+<li>ability to zoom indefinitely</li>
+<li>moving, scaling, filling or rotating does not degrade the quality of an image </li>
+</ul>
+
+
+<p><strong>Types of primitives</strong></p>
+<ul>
+<li>points</li>
+<li>lines</li>
+<li>polylines</li>
+<li>polygons</li>
+<li>circles</li>
+<li>ellipses</li>
+<li>Splines</li>
+</ul>
+
+<h3>Device context attributes</h3>
+
+<table>
+<tr>
+<th>Attribute</th>
+<th>Object</th>
+<th>Default value</th>
+<th>Get Method</th>
+<th>Set Method</th>
+</tr>
+<tr>
+<td>Brush</td><td>wx.Brush</td><td>wx.WHITE_BRUSH</td>
+<td>wx.Brush GetBrush()</td><td>SetBrush(wx.Brush brush)</td>
+</tr>
+<tr>
+<td class="gray">Pen</td><td class="gray">wx.Pen</td><td class="gray">wx.BLACK_PEN</td>
+<td class="gray">wx.Pen GetPen()</td><td class="gray">SetPen(wx.Pen pen)</td>
+</tr>
+<tr>
+<td>Mapping Mode</td><td>-</td><td>wx.MM_TEXT</td>
+<td>int GetMapMode()</td><td>SetMapMode(int mode)</td>
+</tr>
+<tr>
+<td class="gray">BackgroundMode</td><td class="gray">-</td><td class="gray">wx.TRANSPARENT</td>
+<td class="gray">int GetBackgroundMode()</td><td class="gray">SetBackgroundMode(int mode)</td>
+</tr>
+<tr>
+<td>Text background colour</td><td>wx.Colour</td><td>wx.WHITE</td>
+<td>wx.Colour GetTextBackground()</td><td>SetTextBackground(wx.Colour colour)</td>
+</tr>
+<tr>
+<td class="gray">Text foreground colour</td><td class="gray">wx.Colour</td><td class="gray">wx.BLACK</td>
+<td class="gray">wx.Colour GetTextForeground()</td><td class="gray">SetTextForeground(wx.Colour colour)</td>
+</tr>
+</table>
+
+
+<h2>Basic elements</h2>
+
+
+<p>
+In the following lines we will introduce several elementary 
+objects. Colours, Brushes, Pens, Joins, Caps, Gradients.
+</p>
+
+<h4>Colours</h4>
+
+<p>
+A colour is an object representing a combination of Red, Green, 
+and Blue (RGB) intensity values. Valid RGB values are in the range 0 to 255.
+There are three ways for setting colours. We can create a wx.Colour 
+object, use a predefined colour name or use hex value string. 
+<code>wx.Colour(0,0,255)</code>, <code>'BLUE'</code>, <code>'#0000FF'</code>. 
+These three notations produce the same colour.
+</p>
+
+<p>
+A perfect tool for working with colours 
+can be found on the <a href="http://www.colorjack.com/">colorjack.com</a>
+ website. Or we can use such a tool as Gimp. 
+</p>
+
+<p>
+We have also a list of predefined colour names that we can use in our programs.
+</p>
+
+
+<table>
+<caption><b>Standard colour database</b></caption>
+<tr><td>AQUAMARINE</td><td>BLACK</td><td>BLUE</td><td>BLUE VIOLET</td><td>BROWN</td></tr>
+<tr><td>CADET BLUE</td><td>CORAL</td><td>CORNFLOWER BLUE</td><td>CYAN</td><td>DARK GREY</td></tr>
+<tr><td>DARK GREEN</td><td>DARK OLIVE GREEN</td><td>DARK ORCHID</td><td>DARK SLATE BLUE</td><td>DARK SLATE GREY</td></tr>
+<tr><td>DARK TURQUOISE</td><td>DIM GREY</td><td>FIREBRICK</td><td>FOREST GREEN</td><td>GOLD</td></tr>
+<tr><td>GOLDENROD</td><td>GREY</td><td>GREEN</td><td>GREEN YELLOW</td><td>INDIAN RED</td></tr>
+<tr><td>KHAKI</td><td>LIGHT BLUE</td><td>LIGHT GREY</td><td>LIGHT STEEL BLUE</td><td>LIME GREEN</td></tr>
+<tr><td>MAGENTA</td><td>MAROON</td><td>MEDIUM AQUAMARINE</td><td>MEDIUM BLUE</td><td>MEDIUM FOREST GREEN</td></tr>
+<tr><td>MEDIUM GOLDENROD</td><td>MEDIUM ORCHID</td><td>MEDIUM SEA GREEN</td><td>MEDIUM SLATE BLUE</td><td>MEDIUM SPRING GREEN</td></tr>
+<tr><td>MEDIUM TURQUOISE</td><td>MEDIUM VIOLET RED</td><td>MIDNIGHT BLUE</td><td>NAVY</td><td>ORANGE</td></tr>
+<tr><td>ORANGE RED</td><td>ORCHID</td><td>PALE GREEN</td><td>PINK</td><td>PLUM</td></tr>
+<tr><td>PURPLE</td><td>RED</td><td>SALMON</td><td>SEA GREEN</td><td>SIENNA</td></tr>
+<tr><td>SKY BLUE</td><td>SLATE BLUE</td><td>SPRING GREEN</td><td>STEEL BLUE</td><td>TAN</td></tr>
+<tr><td>THISTLE	</td><td>TURQUOISE</td><td>VIOLET</td><td>VIOLET RED</td><td>WHEAT</td></tr>
+<tr><td>WHITE</td><td>YELLOW</td><td>YELLOW GREEN</td><td></td><td></td></tr>
+</table>
+
+<p>
+The following example uses a few colour values.
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+"""
+ZetCode wxPython tutorial 
+
+This program draws nine colours
+on the window
+
+author: Jan Bodnar
+website: zetcode.com 
+last edited: November 2010
+"""
+
+import wx
+
+class Example(wx.Frame):
+    def __init__(self, parent, title):
+        super(Example, self).__init__(parent, title=title, 
+            size=(350, 280))
+
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
+
+        self.Centre()
+        self.Show()
+        
+
+    def OnPaint(self, e):
+        dc = wx.PaintDC(self)
+        dc.SetPen(wx.Pen('#d4d4d4'))
+
+        dc.SetBrush(wx.Brush('#c56c00'))
+        dc.DrawRectangle(10, 15, 90, 60)
+
+        dc.SetBrush(wx.Brush('#1ac500'))
+        dc.DrawRectangle(130, 15, 90, 60)
+
+        dc.SetBrush(wx.Brush('#539e47'))
+        dc.DrawRectangle(250, 15, 90, 60)
+
+        dc.SetBrush(wx.Brush('#004fc5'))
+        dc.DrawRectangle(10, 105, 90, 60)
+
+        dc.SetBrush(wx.Brush('#c50024'))
+        dc.DrawRectangle(130, 105, 90, 60)
+
+        dc.SetBrush(wx.Brush('#9e4757'))
+        dc.DrawRectangle(250, 105, 90, 60)
+
+        dc.SetBrush(wx.Brush('#5f3b00'))
+        dc.DrawRectangle(10, 195, 90, 60)
+
+        dc.SetBrush(wx.Brush('#4c4c4c'))
+        dc.DrawRectangle(130, 195, 90, 60)
+
+        dc.SetBrush(wx.Brush('#785f36'))
+        dc.DrawRectangle(250, 195, 90, 60)
+        
+
+if __name__ == '__main__':
+    app = wx.App()
+    Example(None, 'Colours')
+    app.MainLoop()
+    
+</pre>
+
+<p>
+We draw nine rectangles and fill them with different colours.
+</p>
+
+<pre class="explanation">
+dc.SetBrush(wx.Brush('#c56c00'))
+dc.DrawRectangle(10, 15, 90, 60)
+</pre>
+
+<p>
+We specify the colour of the brush in hexadecimal notation. The
+brush is the background fill of the shape. Then
+we draw the rectangle.
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/colors.png" alt="Colours">
+<figcaption>Figure: Colours</figcaption>
+</figure>
+
+
+<h4>wx.Pen</h4>
+
+<p>
+Pen is an elementary graphics object. It is used to draw lines, curves and
+outlines of rectangles, ellipses, polygons or other shapes. 
+</p>
+
+<pre>
+wx.Pen(wx.Colour colour, width=1, style=wx.SOLID)
+</pre>
+
+<p>
+The <code>wx.Pen</code> constructor has three parameters. Colour, width and 
+style. Follows a list of possible pen styles.
+</p>
+
+<h3>Pen styles</h3>
+
+<ul>
+  <li>wx.SOLID</li>
+  <li>wx.DOT</li>
+  <li>wx.LONG_DASH</li>
+  <li>wx.SHORT_DASH</li>
+  <li>wx.DOT_DASH</li>
+  <li>wx.TRANSPARENT</li>
+</ul>
+
+<pre class="code">
+#!/usr/bin/python
+
+# pens.py
+
+import wx
+
+class Pens(wx.Frame):
+    def __init__(self, parent, id, title):
+        wx.Frame.__init__(self, parent, id, title, size=(350, 190))
+
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
+
+        self.Centre()
+        self.Show(True)
+
+    def OnPaint(self, event):
+        dc = wx.PaintDC(self)
+
+        dc.SetPen(wx.Pen('#4c4c4c', 1, wx.SOLID))
+        dc.DrawRectangle(10, 15, 90, 60)
+
+        dc.SetPen(wx.Pen('#4c4c4c', 1, wx.DOT))
+        dc.DrawRectangle(130, 15, 90, 60)
+
+        dc.SetPen(wx.Pen('#4c4c4c', 1, wx.LONG_DASH))
+        dc.DrawRectangle(250, 15, 90, 60)
+
+        dc.SetPen(wx.Pen('#4c4c4c', 1, wx.SHORT_DASH))
+        dc.DrawRectangle(10, 105, 90, 60)
+
+        dc.SetPen(wx.Pen('#4c4c4c', 1, wx.DOT_DASH))
+        dc.DrawRectangle(130, 105, 90, 60)
+
+        dc.SetPen(wx.Pen('#4c4c4c', 1, wx.TRANSPARENT))
+        dc.DrawRectangle(250, 105, 90, 60)
+
+app = wx.App()
+Pens(None, -1, 'Pens')
+app.MainLoop()
+</pre>
+
+<p>
+If we don't specify a custom brush, a default one is used. The default 
+brush is <code>wx.WHITE_BRUSH</code>. The perimeter of the rectangles is drawn 
+by the pen. The last one has no border. It is transparent, e.g. not visible.  
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/pens.png" alt="Pens">
+<figcaption>Figure: Pens</figcaption>
+</figure>
+
+
+<h3>Joins and Caps</h3>
+
+<p>
+A pen object has additional two parameters. The <code>Join</code> and the <code>Cap</code>. 
+The <code>Join</code> defines how joins between lines will be drawn. 
+The <code>Join</code> style has the following options:
+</p>
+
+<ul>
+<li>wx.JOIN_MITER</li>
+<li>wx.JOIN_BEVEL</li>
+<li>wx.JOIN_ROUND</li>
+</ul>
+
+<p>
+When using <code>wx.JOIN_MITER</code> the outer edges of the lines are 
+extended. They meet at an angle, and this area is filled.
+In <code>wx.JOIN_BEVEL</code> the triangular notch between two lines is 
+filled. In <code>wx.JOIN_ROUND</code> the circular arc between the two 
+lines is filled. The default value is <code>wx.JOIN_ROUND</code>.
+</p>
+
+<p>
+The <code>Cap</code> defines how the line ends will be drawn by the 
+pen. The options are:
+</p>
+
+<ul>
+  <li>wx.CAP_ROUND</li>
+  <li>wx.CAP_PROJECTING</li>
+  <li>wx.CAP_BUTT</li>
+</ul>
+
+<p>
+The <code>wx.CAP_ROUND</code> will draw rounded ends. 
+The <code>wx.CAP_PROJECTING</code> and the <code>wx.CAP_BUTT</code> will both draw 
+square ends. The difference between them is that the 
+<code>wx.CAP_PROJECTING</code> will extend beyond the end point by the half 
+of the line size. The <code>wx.CAP_ROUND</code> will extend beyond the end point as well. 
+</p>
+
+
+<pre class="code">
+#!/usr/bin/python
+
+# joinscaps.py
+
+import wx
+
+class JoinsCaps(wx.Frame):
+    def __init__(self, parent, id, title):
+        wx.Frame.__init__(self, parent, id, title, size=(330, 300))
+
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
+
+        self.Centre()
+        self.Show(True)
+
+    def OnPaint(self, event):
+        dc = wx.PaintDC(self)
+
+        pen = wx.Pen('#4c4c4c', 10, wx.SOLID)
+
+        pen.SetJoin(wx.JOIN_MITER)
+        dc.SetPen(pen)
+        dc.DrawRectangle(15, 15, 80, 50)
+
+        pen.SetJoin(wx.JOIN_BEVEL)
+        dc.SetPen(pen)
+        dc.DrawRectangle(125, 15, 80, 50)
+
+        pen.SetJoin(wx.JOIN_ROUND)
+        dc.SetPen(pen)
+        dc.DrawRectangle(235, 15, 80, 50)
+
+        pen.SetCap(wx.CAP_BUTT)
+        dc.SetPen(pen)
+        dc.DrawLine(30, 150,  150, 150)
+
+        pen.SetCap(wx.CAP_PROJECTING)
+        dc.SetPen(pen)
+        dc.DrawLine(30, 190,  150, 190)
+
+        pen.SetCap(wx.CAP_ROUND)
+        dc.SetPen(pen)
+        dc.DrawLine(30, 230,  150, 230)
+
+        pen2 = wx.Pen('#4c4c4c', 1, wx.SOLID)
+        dc.SetPen(pen2)
+        dc.DrawLine(30, 130, 30, 250)
+        dc.DrawLine(150, 130, 150, 250)
+        dc.DrawLine(155, 130, 155, 250)
+
+app = wx.App()
+JoinsCaps(None, -1, 'Joins and Caps')
+app.MainLoop()
+</pre>
+
+<pre class="explanation">
+pen = wx.Pen('#4c4c4c', 10, wx.SOLID)
+</pre>
+
+<p>
+In order to see the various <code>Join</code> and <code>Cap</code> styles, 
+we need to set the pen width to be greater than 1. 
+</p>
+
+<pre class="explanation">
+dc.DrawLine(150, 130, 150, 250)
+dc.DrawLine(155, 130, 155, 250)
+</pre>
+
+<p>
+Notice the two enclosing vertical lines. The distance between 
+them is 5px. It is exactly the half of the current pen width.
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/joinscaps.png" alt="Joins and Caps">
+<figcaption>Figure: Joins and Caps</figcaption>
+</figure>
+
+<h3>Gradients</h3>
+
+<p>
+In computer graphics, gradient is a smooth blending of shades from 
+light to dark or from one colour to another. In 2D drawing programs 
+and paint programs, gradients are used to create colorful backgrounds 
+and special effects as well as to simulate lights and shadows. (answers.com)
+</p>
+
+<pre>
+GradientFillLinear(wx.Rect rect, wx.Colour initialColour, wx.Colour destColour, int nDirection=wx.EAST)
+</pre>
+
+<p>
+This method fills the area specified by a <code>rect</code> with a linear 
+gradient, starting from <code>initialColour</code> and eventually fading 
+to <code>destColour</code>. The <code>nDirection</code> parameter specifies the
+direction of the colour change, the default value is <code>wx.EAST</code>.
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+
+# gradients.py
+
+import wx
+
+class Gradients(wx.Frame):
+    def __init__(self, parent, id, title):
+        wx.Frame.__init__(self, parent, id, title, size=(220, 260))
+
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
+
+        self.Centre()
+        self.Show(True)
+
+    def OnPaint(self, event):
+        dc = wx.PaintDC(self)
+
+        dc.GradientFillLinear((20, 20, 180, 40), '#ffec00', '#000000', wx.NORTH)
+        dc.GradientFillLinear((20, 80, 180, 40), '#ffec00', '#000000', wx.SOUTH)
+        dc.GradientFillLinear((20, 140, 180, 40), '#ffec00', '#000000', wx.EAST)
+        dc.GradientFillLinear((20, 200, 180, 40), '#ffec00', '#000000', wx.WEST)
+
+
+app = wx.App()
+Gradients(None, -1, 'Gradients')
+app.MainLoop()
+</pre>
+
+<p>
+In the example, four rectangles are filled with gradients.
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/gradients.png" alt="Gradients">
+<figcaption>Figure: Gradients</figcaption>
+</figure>
+
+
+<h4>wx.Brush</h4>
+
+
+<p>
+Brush is an elementary graphics object. It is used to paint the 
+background of graphics shapes, such as rectangles, ellipses or polygons. 
+</p>
+
+<pre>
+wx.Brush(wx.Colour colour, style=wx.SOLID)
+</pre>
+
+<p>
+The constructor of the <code>wx.Brush</code> accepts two parameters. 
+Colour name and style. The following is a list of possible 
+brush styles.
+</p>
+
+<h3>Brush styles</h3>
+
+<p>
+wxPython has the following built-in brush types:
+</p>
+
+<ul>
+  <li>wx.SOLID</li>
+  <li>wx.STIPPLE</li>
+  <li>wx.BDIAGONAL_HATCH</li>
+  <li>wx.CROSSDIAG_HATCH</li>
+  <li>wx.FDIAGONAL_HATCH</li>
+  <li>wx.CROSS_HATCH</li>
+  <li>wx.HORIZONTAL_HATCH</li>
+  <li>wx.VERTICAL_HATCH</li>
+  <li>wx.TRANSPARENT</li>
+</ul>
+
+
+<pre class="code">
+#!/usr/bin/python
+
+# brushes.py
+
+import wx
+
+class Brush(wx.Frame):
+    def __init__(self, parent, id, title):
+        wx.Frame.__init__(self, parent, id, title, size=(350, 280))
+
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
+
+        self.Centre()
+        self.Show(True)
+
+    def OnPaint(self, event):
+        dc = wx.PaintDC(self)
+
+        dc.SetBrush(wx.Brush('#4c4c4c', wx.CROSS_HATCH))
+        dc.DrawRectangle(10, 15, 90, 60)
+
+        dc.SetBrush(wx.Brush('#4c4c4c', wx.SOLID))
+        dc.DrawRectangle(130, 15, 90, 60)
+
+        dc.SetBrush(wx.Brush('#4c4c4c', wx.BDIAGONAL_HATCH))
+        dc.DrawRectangle(250, 15, 90, 60)
+
+        dc.SetBrush(wx.Brush('#4c4c4c', wx.CROSSDIAG_HATCH))
+        dc.DrawRectangle(10, 105, 90, 60)
+
+        dc.SetBrush(wx.Brush('#4c4c4c', wx.FDIAGONAL_HATCH))
+        dc.DrawRectangle(130, 105, 90, 60)
+
+        dc.SetBrush(wx.Brush('#4c4c4c', wx.HORIZONTAL_HATCH))
+        dc.DrawRectangle(250, 105, 90, 60)
+
+        dc.SetBrush(wx.Brush('#4c4c4c', wx.VERTICAL_HATCH))
+        dc.DrawRectangle(10, 195, 90, 60)
+
+        dc.SetBrush(wx.Brush('#4c4c4c', wx.TRANSPARENT))
+        dc.DrawRectangle(130, 195, 90, 60)
+
+
+app = wx.App()
+Brush(None, -1, 'Brushes')
+app.MainLoop()
+</pre>
+
+<p>
+Eight different built-in brush types were used in the example.
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/brushes.png" alt="Brushes">
+<figcaption>Figure: Brushes</figcaption>
+</figure>
+
+
+
+<h3>Custom Patterns</h3>
+
+<p>
+We are not restricted to use predefined patterns. We can easily
+create our own custom patterns. 
+</p>
+
+<pre>
+wx.Brush BrushFromBitmap(wx.Bitmap stippleBitmap)
+</pre>
+
+<p>
+This method creates a custom brush from the bitmap. 
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+
+# custompatterns.py
+
+import wx
+
+class CustomPatterns(wx.Frame):
+    def __init__(self, parent, id, title):
+        wx.Frame.__init__(self, parent, id, title, size=(350, 280))
+
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
+
+        self.Centre()
+        self.Show(True)
+
+    def OnPaint(self, event):
+        dc = wx.PaintDC(self)
+
+        dc.SetPen(wx.Pen('#C7C3C3'))
+
+        brush1 = wx.BrushFromBitmap(wx.Bitmap('pattern1.png'))
+        dc.SetBrush(brush1)
+        dc.DrawRectangle(10, 15, 90, 60)
+
+        brush2 = wx.BrushFromBitmap(wx.Bitmap('pattern2.png'))
+        dc.SetBrush(brush2)
+        dc.DrawRectangle(130, 15, 90, 60)
+
+        brush3 = wx.BrushFromBitmap(wx.Bitmap('pattern3.png'))
+        dc.SetBrush(brush3)
+        dc.DrawRectangle(250, 15, 90, 60)
+
+        brush4 = wx.BrushFromBitmap(wx.Bitmap('pattern4.png'))
+        dc.SetBrush(brush4)
+        dc.DrawRectangle(10, 105, 90, 60)
+
+        brush5 = wx.BrushFromBitmap(wx.Bitmap('pattern5.png'))
+        dc.SetBrush(brush5)
+        dc.DrawRectangle(130, 105, 90, 60)
+
+        brush6 = wx.BrushFromBitmap(wx.Bitmap('pattern6.png'))
+        dc.SetBrush(brush6)
+        dc.DrawRectangle(250, 105, 90, 60)
+
+        brush7 = wx.BrushFromBitmap(wx.Bitmap('pattern7.png'))
+        dc.SetBrush(brush7)
+        dc.DrawRectangle(10, 195, 90, 60)
+
+        brush8 = wx.BrushFromBitmap(wx.Bitmap('pattern8.png'))
+        dc.SetBrush(brush8)
+        dc.DrawRectangle(130, 195, 90, 60)
+
+        brushr9 = wx.BrushFromBitmap(wx.Bitmap('pattern9.png'))
+        dc.SetBrush(brushr9)
+        dc.DrawRectangle(250, 195, 90, 60)
+
+
+app = wx.App()
+CustomPatterns(None, -1, 'Custom Patterns')
+app.MainLoop()
+</pre>
+
+<p>
+We have created some small bitmaps. The bitmaps were created in Gimp.
+These bitmaps are rectangles, usually from 40 to 150px. 
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/custompatterns.jpg" alt="Custom Patterns">
+<figcaption>Figure: Custom Patterns</figcaption>
+</figure>
+
+
+<h3>Basic primitives</h3>
+
+
+<h4>Point</h4>
+
+<p>
+The simplest geometrical object is a point. It is a plain dot on the window.  
+</p>
+
+<pre>
+DrawPoint(int x, int y)
+</pre>
+
+<p>
+This method draws a point at x, y coordinates.
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+
+# points.py
+
+import wx
+import random
+
+class Points(wx.Frame):
+    def __init__(self, parent, id, title):
+        wx.Frame.__init__(self, parent, id, title, size=(250, 150))
+
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
+
+        self.Centre()
+        self.Show(True)
+
+    def OnPaint(self, event):
+        dc = wx.PaintDC(self)
+
+        dc.SetPen(wx.Pen('RED'))
+
+        for i in range(1000):
+            w, h = self.GetSize()
+            x = random.randint(1, w-1)
+            y = random.randint(1, h-1)
+            dc.DrawPoint(x, y)
+
+
+app = wx.App()
+Points(None, -1, 'Points')
+app.MainLoop()
+</pre>
+
+<p>
+ A single point might be difficult to see. So we create 1000 points. 
+</p>
+
+<pre class="explanation">
+dc.SetPen(wx.Pen('RED'))
+</pre>
+
+<p>
+Here we set the colour of the pen to red. 
+</p>
+
+<pre class="explanation">
+w, h = self.GetSize()
+x = random.randint(1, w-1)
+</pre>
+
+<p>
+The points are distributed randomly around the client area of the window. 
+They are also distributed dynamically. If we resize the window, the points 
+will be drawn randomly over a new client size. The <code>randint(a, b)</code> 
+method returns a random integer in range [a, b], e.g. including both points.
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/points.png" alt="Points">
+<figcaption>Figure: drawing points</figcaption>
+</figure>
+
+
+<h2>Shapes</h2>
+
+<p>
+Shapes are more sophisticated geometrical objects.
+We will draw various geometrical shapes in the following example.
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+
+# shapes.py
+
+import wx
+
+class Shapes(wx.Frame):
+    def __init__(self, parent, id, title):
+        wx.Frame.__init__(self, parent, id, title, size=(350, 300))
+
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
+
+        self.Centre()
+        self.Show(True)
+
+    def OnPaint(self, event):
+        dc = wx.PaintDC(self)
+
+        dc.DrawEllipse(20, 20, 90, 60)
+        dc.DrawRoundedRectangle(130, 20, 90, 60, 10)
+        dc.DrawArc(240, 40, 340, 40, 290, 20)
+
+        dc.DrawPolygon(((130, 140), (180, 170), (180, 140), (220, 110), (140, 100)))
+        dc.DrawRectangle(20, 120, 80, 50)
+        dc.DrawSpline(((240, 170), (280, 170), (285, 110), (325, 110)))
+
+        dc.DrawLines(((20, 260), (100, 260), (20, 210), (100, 210)))
+        dc.DrawCircle(170, 230, 35)
+        dc.DrawRectangle(250, 200, 60, 60)
+
+app = wx.App()
+Shapes(None, -1, 'Shapes')
+app.MainLoop()
+</pre>
+
+<p>
+In our example we have drawn an ellipse, a rounded rectangle, an arc, a 
+rectangle ,a polygon, splines, lines, a circle and a square 
+(from right to left, from top to bottom). A  circle is a 
+special kind of ellipse and a square is a special kind of rectangle. 
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/shapes.png" alt="Shapes">
+<figcaption>Figure: Shapes</figcaption>
+</figure>
+
+
+<h2>Regions</h2>
+
+
+<p>
+The device context can be divided into several parts called <em>Regions</em>.
+A region can be of any shape. 
+A region can be a simple rectangle or circle. With <code>Union</code>, 
+<code>Intersect</code>, <code>Substract</code> and <code>Xor</code> operations 
+we can create complex regions from simple ones. Regions are used 
+for outlining, filling or clipping.
+</p>
+
+
+<p>
+We can create regions in three ways. The easiest way is to create a 
+rectangular region. More complex regions can be created from a list 
+of points of from a bitmap.
+</p>
+
+<pre>
+wx.Region(int x=0, int y=0, int width=0, int height=0)
+</pre>
+
+<p>
+This constructor creates a rectangular region.
+</p>
+
+
+<pre>
+wx.RegionFromPoints(list points, int fillStyle=wx.WINDING_RULE)
+</pre>
+
+<p>
+This constructor creates a polygonal region. The <code>fillStyle</code> 
+parameter can be wx.WINDING_RULE or wx.ODDEVEN_RULE.
+</p>
+
+<pre>
+wx.RegionFromBitmap(wx.Bitmap bmp)
+</pre>
+
+<p>
+The most complex regions can be created with the previous method.
+</p>
+
+<p>
+Before we go to the regions, we will create a small example first. 
+We divide the topic into several parts so that it is easier to understand. 
+You may find it a good idea to revise your school math. 
+<a href="http://en.wikipedia.org/wiki/Circle">Here</a> we can 
+find a good article.
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+import wx
+from math import hypot, sin, cos, pi
+
+class Example(wx.Frame):
+  
+    def __init__(self, *args, **kw):
+        super(Example, self).__init__(*args, **kw) 
+
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
+
+        self.SetSize((350, 250))
+        self.SetTitle('Lines')
+        self.Centre()
+        self.Show(True)
+
+    def OnPaint(self, event):
+      
+        dc = wx.PaintDC(self)
+        size_x, size_y = self.GetClientSizeTuple()
+        dc.SetDeviceOrigin(size_x/2, size_y/2)
+
+        radius = hypot(size_x/2, size_y/2)
+        angle = 0
+
+        while (angle &lt; 2*pi):
+            x = radius*cos(angle)
+            y = radius*sin(angle)
+            dc.DrawLinePoint((0, 0), (x, y))
+            angle = angle + 2*pi/360
+
+def main():
+    
+    ex = wx.App()
+    Example(None)
+    ex.MainLoop()    
+
+if __name__ == '__main__':
+    main()   
+</pre>
+
+<p>
+In this example we draw 260 lines from the middle of the client area. 
+The distance between two lines is 1 degree. We create an interesting figure.
+</p>
+
+<pre class="explanation">
+import wx
+from math import hypot, sin, cos, pi
+</pre>
+
+<p>
+We need three mathematical functions and one constant from the math module.
+</p>
+
+<pre class="explanation">
+dc.SetDeviceOrigin(size_x/2, size_y/2)
+</pre>
+
+<p>
+The method <code>SetDeviceOrigin()</code> creates a new beginning of the 
+coordinate system. We place it into the middle of the 
+client area. By repositioning the coordinate system, we make our 
+drawing less complicated.
+</p>
+
+<pre class="explanation">
+radius = hypot(size_x/2, size_y/2)
+</pre>
+
+<p>
+Here we get the Hypotenuse. It is the longest line, we can draw from
+the middle of the client area. It is the length of the line that should 
+be drawn from the beginning into the corner of the window. This way most 
+of the lines are not drawn fully. The overlapping parts are not visible. 
+see <a href="http://en.wikipedia.org/wiki/Hypotenuse">Hypotenuse</a>.
+</p>
+
+<pre class="explanation">
+x = radius*cos(angle)
+y = radius*sin(angle)
+</pre>
+
+<p>
+These are parametric functions. They are used to find [x, y] points on 
+the curve. All 360 lines are drawn from the beginning of the coordinate 
+system up to the points on the circle. 
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/lines.png" alt="Lines">
+<figcaption>Figure: Lines</figcaption>
+</figure>
+
+
+<h4>Clipping</h4>
+
+<p>
+<code>Clipping</code> is restricting drawing to a certain area. Clipping is 
+used in two cases. To create effects and to improve
+performance of the application.
+We restrict drawing to a certain region with the 
+<code>SetClippingRegionAsRegion()</code> method.
+</p>
+
+<p>
+In the following example we will modify and enhance our previous script.
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+
+# star.py
+
+import wx
+from math import hypot, sin, cos, pi
+
+class Star(wx.Frame):
+    def __init__(self, parent, id, title):
+        wx.Frame.__init__(self, parent, id, title, size=(350, 300))
+
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
+
+        self.Centre()
+        self.Show(True)
+
+    def OnPaint(self, event):
+        dc = wx.PaintDC(self)
+
+        dc.SetPen(wx.Pen('#424242'))
+        size_x, size_y = self.GetClientSizeTuple()
+        dc.SetDeviceOrigin(size_x/2, size_y/2)
+
+        points = (((0, 85), (75, 75), (100, 10), (125, 75), (200, 85),
+            (150, 125), (160, 190), (100, 150), (40, 190), (50, 125)))
+
+        region = wx.RegionFromPoints(points)
+        dc.SetClippingRegionAsRegion(region)
+
+        radius = hypot(size_x/2, size_y/2)
+        angle = 0
+
+        while (angle &lt; 2*pi):
+            x = radius*cos(angle)
+            y = radius*sin(angle)
+            dc.DrawLinePoint((0, 0), (x, y))
+            angle = angle + 2*pi/360
+
+        dc.DestroyClippingRegion()
+
+
+app = wx.App()
+Star(None, -1, 'Star')
+app.MainLoop()
+</pre>
+
+<p>
+We draw again all the 360 lines. But this time, only a portion of the 
+client aren is drawn. The region that we restrict our drawing to is a 
+star object.
+</p>
+
+<pre class="explanation">
+region = wx.RegionFromPoints(points)
+dc.SetClippingRegionAsRegion(region)
+</pre>
+
+<p>
+We create a region from the list of points with the <code>wx.RegionFromPoins()</code> 
+method. The <code>SetClippingRegionAsRegion()</code>
+method restricts the drawing to the specified region. In our case it 
+is a star object.
+</p>
+
+<pre class="explanation">
+dc.DestroyClippingRegion()
+</pre>
+
+<p>
+We must destroy the clipping region.
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/star.png" alt="Star">
+<figcaption>Figure: Star</figcaption>
+</figure>
+
+
+<h4>Operations over Regions</h4>
+
+<p>
+Regions can be combined to create more complex shapes. We can use four set 
+operations. <code>Union</code>, <code>Intersect</code>, <code>Substract</code> and <code>Xor</code>. 
+</p>
+
+<p>
+The following example shows all four operations in action.
+</p>
+
+
+<pre class="code">
+#!/usr/bin/python
+
+# operations.py
+
+import wx
+
+class Operations(wx.Frame):
+     def __init__(self, parent, id, title):
+         wx.Frame.__init__(self, parent, id, title, size=(270, 220))
+
+         self.Bind(wx.EVT_PAINT, self.OnPaint)
+
+         self.Centre()
+         self.Show(True)
+
+     def OnPaint(self, event):
+         dc = wx.PaintDC(self)
+         dc.SetPen(wx.Pen('#d4d4d4'))
+
+         dc.DrawRectangle(20, 20, 50, 50)
+         dc.DrawRectangle(30, 40, 50, 50)
+
+         dc.SetBrush(wx.Brush('#ffffff'))
+         dc.DrawRectangle(100, 20, 50, 50)
+         dc.DrawRectangle(110, 40, 50, 50) 
+         region1 = wx.Region(100, 20, 50, 50)
+         region2 = wx.Region(110, 40, 50, 50)
+         region1.IntersectRegion(region2)
+         rect = region1.GetBox()
+         dc.SetClippingRegionAsRegion(region1)
+         dc.SetBrush(wx.Brush('#ff0000'))
+         dc.DrawRectangleRect(rect)
+         dc.DestroyClippingRegion()
+
+         dc.SetBrush(wx.Brush('#ffffff'))
+         dc.DrawRectangle(180, 20, 50, 50)
+         dc.DrawRectangle(190, 40, 50, 50)
+         region1 = wx.Region(180, 20, 50, 50)
+         region2 = wx.Region(190, 40, 50, 50)
+         region1.UnionRegion(region2)
+         dc.SetClippingRegionAsRegion(region1)
+         rect = region1.GetBox()
+         dc.SetBrush(wx.Brush('#fa8e00'))
+         dc.DrawRectangleRect(rect)
+         dc.DestroyClippingRegion()
+
+         dc.SetBrush(wx.Brush('#ffffff'))
+         dc.DrawRectangle(20, 120, 50, 50)
+         dc.DrawRectangle(30, 140, 50, 50)
+         region1 = wx.Region(20, 120, 50, 50)
+         region2 = wx.Region(30, 140, 50, 50)
+         region1.XorRegion(region2)
+         rect = region1.GetBox()
+         dc.SetClippingRegionAsRegion(region1)
+         dc.SetBrush(wx.Brush('#619e1b'))
+         dc.DrawRectangleRect(rect)
+         dc.DestroyClippingRegion()
+
+         dc.SetBrush(wx.Brush('#ffffff'))
+         dc.DrawRectangle(100, 120, 50, 50)
+         dc.DrawRectangle(110, 140, 50, 50)
+         region1 = wx.Region(100, 120, 50, 50)
+         region2 = wx.Region(110, 140, 50, 50)
+         region1.SubtractRegion(region2)
+         rect = region1.GetBox()
+         dc.SetClippingRegionAsRegion(region1)
+         dc.SetBrush(wx.Brush('#715b33'))
+         dc.DrawRectangleRect(rect)
+         dc.DestroyClippingRegion()
+
+         dc.SetBrush(wx.Brush('#ffffff'))
+         dc.DrawRectangle(180, 120, 50, 50)
+         dc.DrawRectangle(190, 140, 50, 50)
+         region1 = wx.Region(180, 120, 50, 50)
+         region2 = wx.Region(190, 140, 50, 50)
+         region2.SubtractRegion(region1)
+         rect = region2.GetBox()
+         dc.SetClippingRegionAsRegion(region2)
+         dc.SetBrush(wx.Brush('#0d0060'))
+         dc.DrawRectangleRect(rect)
+         dc.DestroyClippingRegion()
+
+app = wx.App()
+Operations(None, -1, 'Operations')
+app.MainLoop()
+</pre>
+
+<figure>
+<img src="../../img/gui/wxpython/operations.png" alt="Set operations on Regions">
+<figcaption>Figure: Set operations on Regions</figcaption>
+</figure>
+
+<!--<h4 id="">A wx.ListBox widget</h4>-->
+
+
+<h2>Mapping modes</h2>
+
+
+<h2>Speak in English, measure in Metric</h2>
+
+<p>
+The English language became the global language for communication. 
+So did the metric system become the global system in measuremet. 
+According to this wikipedia <a href="http://en.wikipedia.org/wiki/Metric_system">article</a>, 
+there are only three exceptions. The USA, Liberia and Myanmar. 
+For example, Americans use Fahrenheits to measure temperature, 
+gallons to tank their cars or pounds to weigh loads. 
+</p>
+
+<p>
+Even though we in Europe use the metric system, there are still exceptions. 
+The USA is dominating the IT and we are importing their standards.
+So we also say that we have a 17 Inch monitor. Graphics can be put into a 
+file, displayed on the screen of a monitor or other device (cameras, videocameras, mobile phones) 
+or printed with a printer. Paper size can be set in millimeters, points or inches, 
+the resolution of a screen is in pixels, the quality of a text is determined by the 
+number of dots per inch. We have also dots, bits or samples. This is one of the 
+reasons we have <em>logical</em> and <em>device</em> units. 
+</p>
+
+
+<h2>Logical and device units</h2>
+
+<p>
+If we draw text or geometrical primitives on the client area, we position them using logical units. 
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/drawtextstring.jpg" alt="Drawing text">
+<figcaption>Figure: Drawing text</figcaption>
+</figure>
+
+<p>
+If we want to draw some text, we provide the text parameter and the x, y 
+positions. x, y are in logical units. 
+The device then draws the text in device units. Logical and device units 
+may be the same, or they may differ. 
+Logical units are used by people (millimeters), device units are are 
+native to a <code>particular</code> device. For example a native device unit 
+for a screen is pixel. The native device unit for the 
+<code>HEWLETT PACKARD LaserJet 1022</code> is 1200 dpi. (dots per inch). 
+</p>
+
+<p>
+So far we have talked about various measurement units. The <em>mapping mode</em> 
+of the device is a way how  to convert logical units to device units.  wxPython
+ has the following mapping modes:
+</p>
+
+<table>
+<tr>
+<th>Mapping Mode</th>
+<th>Logical Unit</th>
+</tr>
+
+<tr>
+<td>wx.MM_TEXT </td><td>1 pixel</td>
+</tr>
+<tr>
+<td class="gray">wx.MM_METRIC</td><td class="gray">1 millimeter</td>
+</tr>
+<tr>
+<td>wx.MM_LOMETRIC </td><td>1/10 of a millimeter</td>
+</tr>
+<tr>
+<td class="gray">wx.MM_POINTS</td><td class="gray">1 point, 1/72 of an inch</td>
+</tr>
+<tr>
+<td>wx.MM_TWIPS</td><td>1/20 of a point or 1/1440 of an inch</td>
+</tr>
+</table>
+
+
+<p>
+The default mapping mode is wx.MM_TEXT. In this mode, the logical unit is 
+the same as the device unit. When people position object on a screen or 
+design a web page, they think usually in pixels. Web designers create 
+three column pages and these columns are set in pixels. The lowest common 
+denominator for a page is often 800 px etc. This thinking is natural as 
+we know our monitors have e.g. 1024x768 pxs. We are not going to do 
+convertions, rather we are accustomed to think in pixels. 
+ If we want to draw a structure in millimeters, we can use the two metric 
+mapping modes. Drawing directly in millimeters is too thick for a screen, 
+that's why we have the wx.MM_LOMETRIC mapping mode. 
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/setmapmode.jpg" alt="Map mode">
+<figcaption>Figure: Map mode</figcaption>
+</figure>
+
+<p>
+To set a different mapping mode, we use the <code>SetMapMode()</code> method. 
+</p>
+
+
+<h2>Ruler example</h2>
+
+<p>
+The ruler measures screen objects in pixels.
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+
+# ruler1.py
+
+import wx
+
+
+RW = 701 # ruler widht
+RM = 10  # ruler margin
+RH = 60  # ruler height
+
+
+class Ruler1(wx.Frame):
+    def __init__(self, parent, id, title):
+        wx.Frame.__init__(self, parent, id, title, size=(RW + 2*RM, 60),
+            style=wx.FRAME_NO_TASKBAR | wx.NO_BORDER | wx.STAY_ON_TOP)
+        self.font = wx.Font(7, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL,
+            wx.FONTWEIGHT_BOLD, False, 'Courier 10 Pitch')
+
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
+        self.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
+        self.Bind(wx.EVT_RIGHT_DOWN, self.OnRightDown)
+        self.Bind(wx.EVT_MOTION, self.OnMouseMove)
+
+        self.Centre()
+        self.Show(True)
+
+    def OnPaint(self, event):
+        dc = wx.PaintDC(self)
+
+        brush = wx.BrushFromBitmap(wx.Bitmap('granite.png'))
+        dc.SetBrush(brush)
+        dc.DrawRectangle(0, 0, RW+2*RM, RH)
+        dc.SetFont(self.font)
+
+
+        dc.SetPen(wx.Pen('#F8FF25'))
+        dc.SetTextForeground('#F8FF25')
+
+
+        for i in range(RW):
+            if not (i % 100):
+                dc.DrawLine(i+RM, 0, i+RM, 10)
+                w, h = dc.GetTextExtent(str(i))
+                dc.DrawText(str(i), i+RM-w/2, 11)
+            elif not (i % 20):
+                dc.DrawLine(i+RM, 0, i+RM, 8)
+            elif not (i % 2): dc.DrawLine(i+RM, 0, i+RM, 4)
+
+    def OnLeftDown(self, event):
+        pos = event.GetPosition()
+        x, y = self.ClientToScreen(event.GetPosition())
+        ox, oy = self.GetPosition()
+        dx = x - ox
+        dy = y - oy
+        self.delta = ((dx, dy))
+
+    def OnMouseMove(self, event):
+        if event.Dragging() and event.LeftIsDown():
+            x, y = self.ClientToScreen(event.GetPosition())
+            fp = (x - self.delta[0], y - self.delta[1])
+            self.Move(fp)
+
+    def OnRightDown(self, event):
+        self.Close()
+
+app = wx.App()
+Ruler1(None, -1, '')
+app.MainLoop()
+</pre>
+
+<p>
+In this example we create a ruler. This ruler measures screen 
+objects in pixels. We left the default mapping mode, which 
+is <code>wx.MM_TEXT</code>. As we have already mentioned, this mode has 
+the same logical and device units. In our case, these are pixels.
+</p>
+
+<pre class="explanation">
+wx.Frame.__init__(self, parent, id, title, size=(RW + 2*RM, 60), style=wx.FRAME_NO_TASKBAR | 
+    wx.NO_BORDER | wx.STAY_ON_TOP)
+</pre>
+
+<p>
+We have created a borderless window. The ruler is 721 px wide. 
+The ruler is RW + 2*RM = 701 + 20 = 721. The ruler shows 700 numbers. 
+0 ... 700  is 701 pixels. A ruler has a margin on both sides, 2*10 is 20 pixels. 
+Together it makes 721 pixels.
+</p>
+
+<pre class="explanation">
+brush = wx.BrushFromBitmap(wx.Bitmap('granite.png'))
+dc.SetBrush(brush)
+dc.DrawRectangle(0, 0, RW+2*RM, RH)
+</pre>
+
+<p>
+ Here we draw a custom pattern onto the window. I have used 
+a predefined pattern available in the Gimp. It is called granite. 
+</p>
+
+<pre class="explanation">
+w, h = dc.GetTextExtent(str(i))
+dc.DrawText(str(i), i+RM-w/2, 11)
+</pre>
+
+<p>
+These lines ensure that we align the text correctly. 
+The <code>GetTextExtent()</code> method returns the width and the height of the text. 
+</p>
+
+<p>
+We do not have a border around our window. So we must handle 
+moving manually by additional code. 
+The <code>OnLeftDown()</code> and the <code>OnMouseMove()</code> methods 
+enable us to move the ruler. (TODO:link to dragging.)
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/ruler.jpg" alt="Ruler example">
+<figcaption>Figure: Ruler example</figcaption>
+</figure>
+
+
+<h2>Practical examples</h2>
+
+<p>
+You might ask yourself, why do we need all those lines, pens, 
+gradients? What is it good for?
+The following scripts will bring some practical examples. We 
+will utilize, what we have learnt in practice. 
+</p>
+
+
+<h2>Charts</h2>
+
+<p>
+Creating charts is an excelent example of utilizing gdi drawing functions. 
+Charts are not GUI widgets. No gui toolkit provides charts as part of the 
+library. One exception is wxWidgets toolkit (and so the wxPython). But 
+these charts are very simple and cannot be used in real applications. A 
+developer has usually two options. To create his own charting library or 
+use a third-party library.
+</p>
+
+<p>
+In the following example we create a simple line chart. We do not dwell into 
+all details. I kept the example intentionally simple. A lot of things still 
+remain undone. But you can grasp the idea and follow it. 
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+
+# linechart.py
+
+import wx
+
+data = ((10, 9), (20, 22), (30, 21), (40, 30), (50, 41),
+(60, 53), (70, 45), (80, 20), (90, 19), (100, 22),
+(110, 42), (120, 62), (130, 43), (140, 71), (150, 89),
+(160, 65), (170, 126), (180, 187), (190, 128), (200, 125),
+(210, 150), (220, 129), (230, 133), (240, 134), (250, 165),
+(260, 132), (270, 130), (280, 159), (290, 163), (300, 94))
+
+years = ('2003', '2004', '2005')
+
+
+class LineChart(wx.Panel): 
+    def __init__(self, parent):
+        wx.Panel.__init__(self, parent)
+        self.SetBackgroundColour('WHITE')
+
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
+
+    def OnPaint(self, event):
+        dc = wx.PaintDC(self)
+        dc.SetDeviceOrigin(40, 240)
+        dc.SetAxisOrientation(True, True)
+        dc.SetPen(wx.Pen('WHITE'))
+        dc.DrawRectangle(1, 1, 300, 200)
+        self.DrawAxis(dc)
+        self.DrawGrid(dc)
+        self.DrawTitle(dc)
+        self.DrawData(dc)
+
+    def DrawAxis(self, dc):
+        dc.SetPen(wx.Pen('#0AB1FF'))
+        font =  dc.GetFont()
+        font.SetPointSize(8)
+        dc.SetFont(font)
+        dc.DrawLine(1, 1, 300, 1)
+        dc.DrawLine(1, 1, 1, 201)
+
+        for i in range(20, 220, 20):
+            dc.DrawText(str(i), -30, i+5)
+            dc.DrawLine(2, i, -5, i)
+
+        for i in range(100, 300, 100):
+            dc.DrawLine(i, 2, i, -5)
+
+        for i in range(3):
+            dc.DrawText(years[i], i*100-13, -10)
+
+
+
+    def DrawGrid(self, dc):
+        dc.SetPen(wx.Pen('#d5d5d5'))
+
+        for i in range(20, 220, 20):
+            dc.DrawLine(2, i, 300, i)
+
+        for i in range(100, 300, 100):
+            dc.DrawLine(i, 2, i, 200)
+
+    def DrawTitle(self, dc):
+        font =  dc.GetFont()
+        font.SetWeight(wx.FONTWEIGHT_BOLD)
+        dc.SetFont(font)
+        dc.DrawText('Historical Prices', 90, 235)
+
+
+    def DrawData(self, dc):
+        dc.SetPen(wx.Pen('#0ab1ff'))
+        for i in range(10, 310, 10):
+            dc.DrawSpline(data)
+
+
+class LineChartExample(wx.Frame):
+    def __init__(self, parent, id, title):
+        wx.Frame.__init__(self, parent, id, title, size=(390, 300))
+
+        panel = wx.Panel(self, -1)
+        panel.SetBackgroundColour('WHITE')
+
+        hbox = wx.BoxSizer(wx.HORIZONTAL)
+        linechart = LineChart(panel)
+        hbox.Add(linechart, 1, wx.EXPAND | wx.ALL, 15)
+        panel.SetSizer(hbox)
+
+        self.Centre()
+        self.Show(True)
+
+
+app = wx.App()
+LineChartExample(None, -1, 'A line chart')
+app.MainLoop()
+</pre>
+
+<pre class="explanation">
+dc.SetDeviceOrigin(40, 240)
+dc.SetAxisOrientation(True, True)
+</pre>
+
+<p>
+By default the coordinate system in wxPython begins at point [0, 0]. The 
+beginning point is located at the upper left corner of the clinet area.
+The orientation of x values is from left to right and the orientation of 
+y values is from top to bottom.
+The values can be only positive. This system is used in all 
+GUI toolkits. (All I am aware of.)
+</p>
+
+<p>
+For charting we use cartesian coordinate system. In cartesian system, 
+we can have both positive and negative values. The orientation of the 
+x values is from left to right and the orientation of y values is from 
+bottom to top. The origin is usually in the middle. But it is not compulsory. 
+</p>
+
+<pre class="explanation">
+dc.SetDeviceOrigin(40, 240)
+dc.SetAxisOrientation(True, True)
+</pre>
+
+<p>
+The <code>SetDeviceOrigin()</code> method moves the origin to a new point on 
+the client area. This is called <em>linear translation</em>. Then we change 
+the axis orientation with the <code>SetAxisOrientation()</code> method.
+</p>
+
+<pre>
+SetAxisOrientation(bool xLeftRight, bool yBottomUp)
+</pre>
+
+<p>
+The method signature is self-explanatory. We can put true or false 
+values to these two parameters.
+</p>
+
+<pre class="explanation">
+self.DrawAxis(dc)
+self.DrawGrid(dc)
+self.DrawTitle(dc)
+self.DrawData(dc)
+</pre>
+
+<p>
+We separate the construction of the chart into four methods. The first 
+will draw axis, the second will draw the grid, the third the title and 
+the last one will draw the data. 
+</p>
+
+<pre class="explanation">
+for i in range(3):
+    dc.DrawText(years[i], i*100-13, -10)
+</pre>
+
+<p>
+Because of the simplicity of the script, there are some magic numbers. 
+In reality, we would have to calculate them. 
+In the previous code example, we draw the years alongside the x axis. 
+We subtract 13 px from the x value. This is done to center the years 
+over the vertical lines. It works on my linux box. I might not work 
+correctly on other platforms. It might not work even on linux boxes 
+with different themes. You just play a bit with this example. 
+Adjusting it to fit under the different circumstances is no rocket science. 
+Normally, we need to calculate the width of the chart, the width of the 
+text and  center the text manually.
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/linechart.png" alt="A line chart">
+<figcaption>Figure: A line chart</figcaption>
+</figure>
+
+
+<h3>Note</h3> 
+
+<p>
+Note is a small script that shows several interesting features of 
+the GDI. We will see, how we can create a 
+custom shaped window. There are small applications that are used 
+to take visible notes. They work as reminders for people that
+work with computers a lot. 
+<p>
+
+<pre class="code">
+#!/usr/bin/python
+
+# note.py
+
+import wx
+
+class Note(wx.Frame):
+    def __init__(self, parent, id, title):
+        wx.Frame.__init__(self, parent, id, title,
+                        style=wx.FRAME_SHAPED |
+                        wx.SIMPLE_BORDER |
+                        wx.FRAME_NO_TASKBAR)
+
+        self.font = wx.Font(11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, 
+		wx.FONTWEIGHT_BOLD, False, 'Comic Sans MS')
+        self.bitmap = wx.Bitmap('note.png', wx.BITMAP_TYPE_PNG)
+        self.cross = wx.Bitmap('cross.png', wx.BITMAP_TYPE_PNG)
+
+        w = self.bitmap.GetWidth()
+        h = self.bitmap.GetHeight()
+        self.SetClientSize((w, h))
+
+        if wx.Platform == '__WXGTK__':
+            self.Bind(wx.EVT_WINDOW_CREATE, self.SetNoteShape)
+        else: self.SetNoteShape()
+
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
+        self.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
+        self.Bind(wx.EVT_MOTION, self.OnMouseMove)
+
+        self.bitmapRegion = wx.RegionFromBitmap(self.bitmap)
+        self.crossRegion = wx.RegionFromBitmap(self.cross)
+
+        self.bitmapRegion.IntersectRegion(self.crossRegion)
+        self.bitmapRegion.Offset(170, 10)
+
+        dc = wx.ClientDC(self)
+        dc.DrawBitmap(self.bitmap, 0, 0, True)
+        self.PositionTopRight()
+        self.Show(True)
+
+    def PositionTopRight(self):
+        disx, disy = wx.GetDisplaySize()
+        x, y = self.GetSize()
+        self.Move((disx-x, 0))
+
+    def SetNoteShape(self, *event):
+        region = wx.RegionFromBitmap(self.bitmap)
+        self.SetShape(region)
+
+    def OnLeftDown(self, event):
+        pos = event.GetPosition()
+        if self.bitmapRegion.ContainsPoint(pos):
+            self.Close()
+        x, y = self.ClientToScreen(event.GetPosition())
+        ox, oy = self.GetPosition()
+        dx = x - ox
+        dy = y - oy
+        self.delta = ((dx, dy))
+
+
+    def OnMouseMove(self, event):
+        if event.Dragging() and event.LeftIsDown():
+            x, y = self.ClientToScreen(event.GetPosition())
+            fp = (x - self.delta[0], y - self.delta[1])
+            self.Move(fp)
+
+    def OnPaint(self, event):
+        dc = wx.PaintDC(self)
+        dc.SetFont(self.font)
+        dc.SetTextForeground('WHITE')
+
+        dc.DrawBitmap(self.bitmap, 0, 0, True)
+        dc.DrawBitmap(self.cross, 170, 10, True)
+        dc.DrawText('- Go shopping', 20, 20)
+        dc.DrawText('- Make a phone call', 20, 50)
+        dc.DrawText('- Write an email', 20, 80)
+
+
+app = wx.App()
+Note(None, -1, '')
+app.MainLoop()
+</pre>
+
+<p>
+The idea behind creating a shaped window is simple. Most applications 
+are rectangular. They share lots of similarities. They have menus, 
+toolbars, titles etc. This might be boring. Some developers create 
+more fancy applications. We can make our applications more attractive 
+by using images. The idea is as follows. We create a frame without a 
+border. We can draw a custom image on the frame during the paint event. 
+</p>
+
+<pre class="explanation">
+wx.Frame.__init__(self, parent, id, title,
+                style=wx.FRAME_SHAPED |
+                wx.SIMPLE_BORDER |
+                wx.FRAME_NO_TASKBAR)
+</pre>
+
+<p>
+In order to create a custom shaped application, we must set necessary 
+style options. The <code>wx.FRAME_SHAPED</code> enables to create a shaped 
+window. The <code>wx.SIMPLE_BORDER</code> removes the thick border. 
+The <code>wx.FRAME_NO_TASKBAR</code> prevents the application from appearing 
+on the taskbar. 
+</p>
+
+<pre class="explanation">
+self.font = wx.Font(11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, 
+            wx.FONTWEIGHT_BOLD, False, 'Comic Sans MS')
+</pre>
+
+<p>
+We use Comic Sans MS font for the note example. This is a proprietary 
+font. Linux users must install the <code>msttcorefonts</code> package. 
+If we do not have a font installed, another one is chosen. 
+</p>
+
+
+<pre class="explanation">
+self.bitmap = wx.Bitmap('note.png', wx.BITMAP_TYPE_PNG)
+self.cross = wx.Bitmap('cross.png', wx.BITMAP_TYPE_PNG)
+</pre>
+
+<p>
+We have created two bitmaps. The first is a rounded rectangle. With a
+kind of an orange fill. The <em>Inkscape</em> vector illustrator was
+used to to create it the first image. The second one is a small cross. 
+It is used to close the application. For this we used the 
+<em>Gimp</em> image editor.
+</p>
+
+<pre class="explanation">
+w = self.bitmap.GetWidth()
+h = self.bitmap.GetHeight()
+self.SetClientSize((w, h))
+</pre>
+
+<p>
+We are going to draw a bitmap on the frame. I order to cover the 
+whole frame, we figure out the bitmap size. Then we set
+the site of the frame to the size of the bitmap.
+</p>
+
+
+<pre class="explanation">
+if wx.Platform == '__WXGTK__':
+    self.Bind(wx.EVT_WINDOW_CREATE, self.SetNoteShape)
+else: self.SetNoteShape()
+</pre>
+
+<p>
+This is some platform dependent code. Linux developers should call 
+the <code>SetNoteShape()</code> method immediately after the 
+<code>wx.WindowCreateEvent</code> event.
+</p>
+
+<pre class="explanation">
+dc = wx.ClientDC(self)
+dc.DrawBitmap(self.bitmap, 0, 0, True)
+</pre>
+
+<p>
+These lines are not necessary because a paint event is generated 
+during the creation of the application.
+But we believe that it makes the example smoother. 
+</p>
+
+<pre class="explanation">
+def SetNoteShape(self, *event):
+    region = wx.RegionFromBitmap(self.bitmap)
+    self.SetShape(region)
+</pre>
+
+<p>
+Here we set the shape of the frame to that of the bitmap. The pixels 
+outside the image become transparent.
+</p>
+
+<p>
+If we remove a border from the frame, we cannot move the window. 
+The <code>OnLeftDown()</code> and the <code>OnMouseMove()</code> methods enable 
+the user to move the window by clicking on the client area of the 
+frame and dragging it.
+</p>
+
+<pre class="explanation">
+dc.DrawBitmap(self.bitmap, 0, 0, True)
+dc.DrawBitmap(self.cross, 170, 10, True)
+dc.DrawText('- Go shopping', 20, 20)
+dc.DrawText('- Make a phone call', 20, 50)
+dc.DrawText('- Write an email', 20, 80)
+</pre>
+
+<p>
+Within the <code>OnPaint()</code> method we draw two bitmaps and three texts. 
+</p>
+
+<p>
+Finally we will talk about how we close the note script.
+</p>
+
+<pre class="explanation">
+self.bitmapRegion = wx.RegionFromBitmap(self.bitmap)
+self.crossRegion = wx.RegionFromBitmap(self.cross)
+
+self.bitmapRegion.IntersectRegion(self.crossRegion)
+self.bitmapRegion.Offset(170, 10)
+...
+pos = event.GetPosition()
+if self.bitmapRegion.ContainsPoint(pos):
+    self.Close()
+</pre>
+
+<p>
+We create two regions from two bitmaps. We intersect these two regions. 
+This way we get all pixels that share both bitmaps. 
+Finally we move the region to the point, where we draw the cross bitmap. 
+We use the <code>Offset()</code> method. By default the region starts at [0, 0] point. 
+</p>
+
+<p>
+Inside the <code>OnLeftDown()</code> method we check if we clicked inside 
+the region. If true, we close the script. 
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/note.jpg" alt="Note example">
+<figcaption>Figure: Note</figcaption>
+</figure>
+
+<p>
+In this chapter we have worked with the GDI.
+</p>
+
+<div class="hor">
+<script async src="../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- horizontal -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:468px;height:60px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="1734478269"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div> 
+
+
+<footer>
+
+<nav class="center">
+<span class="botNavItem"><a href="http://zetcode.com/">Home</a></span> ‡ <span class="botNavItem"><a href="../index.html">Contents</a></span> ‡ 
+<span class="botNavItem"><a href="#Top">Top of Page</a></span>
+</nav>
+
+<div class="signature">
+<a href="http://zetcode.com/">ZetCode</a> last modified June 3, 2007  <span class="copyright">&copy; 2007 - 2015 Jan Bodnar</span>
+</div>
+
+</footer>
+
+</div> <!-- content -->
+
+</div> <!-- container -->
+
+</body>
+
+<!-- Mirrored from zetcode.com/wxpython/gdi/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Aug 2015 19:22:12 GMT -->
+</html>

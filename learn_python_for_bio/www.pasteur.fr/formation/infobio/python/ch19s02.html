@@ -1,0 +1,245 @@
+<html>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch19s02.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:40 GMT -->
+<head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>19.2. Components</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><meta name="keywords" content="python, biology, bioinformatics, programming, computational biology"><link rel="home" href="index-2.html" title="Introduction to Programming using Python"><link rel="up" href="ch19.html" title="Chapter 19. Object-oriented design"><link rel="previous" href="ch19.html" title="Chapter 19. Object-oriented design"><link rel="next" href="ch19s03.html" title="19.3. Abstract Data Types"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">19.2. Components</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch19.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><th width="60%" align="center">Chapter 19. Object-oriented design</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch19s03.html"><img src="images/next.png" alt="Next"></a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="sect_components"></a>19.2. Components</h2></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="d0e8726"></a>19.2.1. Software quality factors</h3></div></div><p>
+	The topics introduced in this section address some of the issues of
+	software quality, and how Python can help on this matter. 
+      </p><p>
+      Before
+	entering into details, let us just summarize some important
+	concepts (you can find a good and more exhaustive description in
+	[Meyer97]). 
+ 	There is no absolute quality in software: depending on the
+	context, scale, scope and goals of the program being developped,
+    you might very well either write on-the-fly short pieces of code
+    to solve a temporary problem, or spend a significant effort to have
+    your application follow an industrial design process.
+    So, rather than only a global so-called standard that should be applied
+    for each program you write, there are a few <span class="emphasis"><em>quality
+    factors</em></span> to be evaluated according to the actual needs
+    of the project. Among
+    these factors, one usually distinguish between internal and external
+    factors. <span class="emphasis"><em>External</em></span> quality factors are the
+    ones that corresponds to visible requirements, directly important
+    for the user of the software, such as <span class="bold"><b>validity</b></span>, <span class="bold"><b>robustness</b></span> or <span class="bold"><b>efficiency</b></span>. <span class="emphasis"><em>Internal</em></span>
+    quality factors are properties of the code itself, such as
+    legibility or modularity. In fact, internal factors often
+    indirectly help to get external quality. Some factors, such as
+    <span class="bold"><b>reusability</b></span>, <span class="bold"><b>extensibility</b></span> and <span class="bold"><b>compatibility</b></span>, 
+    that we will study more thoroughly here, belong to external quality
+    factors in the sense that they can be required by the users of a
+    software library or the programmers of a shared source code; they
+    are also important internal quality factors in the sense that they
+    make the internal quality of the source code better.
+    The aim of this chapter is mainly to describe these factors, as
+    well as internal quality factors.
+      </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="d0e8763"></a>19.2.2. Large scale programming</h3></div></div><p>
+	Theoretically, in order to get a program that performs a given
+    task and solves the problem you have specified, a basic set of
+    instructions such as: branching, repetitions, expressions and data
+    structures can be sufficient. Now, the programs that you produce
+    can become a problem by themselves, for several reasons:
+
+	</p><div class="itemizedlist"><ul type="disc"><li>They can become very large, resulting in
+	    thousand lines of code where it is becoming difficult to
+	    make even a slight change
+	    (<span class="emphasis"><em>extensibility</em></span> problem). 
+	  </li><li>When an application is developped within a team, it
+	    is important for different people to be able to share the
+	    code and combine parts developped by different people
+	    (<span class="emphasis"><em>compatibility</em></span>) ; having big and
+	    complex source files can become a problem.
+	  </li><li>During your programmer's life, or within a team,
+	    you will very often have
+	    to re-use the same kind of instructions set: searching for
+	    an item in a collection, organizing a hierarchical
+	    data structure, converting data formats, ...; moreover,
+	    such typical blocks of code have certainly already been
+	    done elsewhere
+	    (<span class="emphasis"><em>reusability</em></span>). Generally, source code
+	    not well designed for re-use can thus be a problem.
+	  </li></ul></div><p>
+
+	  So, depending on the context of the project, there are some
+	  issues which are just related to the <span class="emphasis"><em>management of
+	  source code</em></span> by humans, as opposed to the
+	  specification of the task to perform. And if you think about
+	  it, you probably tend to use variable names that are
+	  relevant to your data and problem, aren't you? So, why? This is
+	  probably not for the computer, but, of course, rather for
+	  the human reader.  
+
+	  So, in  order to handle source structure and management issues,
+	  several conceptual and technical solutions have been
+	  designed in modern programming languages. This is the topic
+	  of this chapter.
+
+      </p><p>
+    Let us say that we have to develop source code for a big
+    application and that we want this source code to be spread and
+    shared among several team members, to be easy to maintain and evolve
+    (extensible), and to be useful outside of the project for other
+    people (reusable). What are the properties a source code should 
+    have for these purpose? 
+	</p><div class="itemizedlist"><ul type="disc"><li>it should be divided in small manageable chunks</li><li>these chunks should be logically divided</li><li>they should be easy to understand and use</li><li>they should be as independant as possible: you should
+	    not have to use chunk A each time you need to use chunk B</li><li>they should have a clear <span class="emphasis"><em>interface</em></span>
+	    defining what they can do</li></ul></div><p>
+
+    The most important concept to obtain these properties is called
+    <span class="emphasis"><em>modularity</em></span>, or how to build modular software
+    <span class="emphasis"><em>components</em></span>. The general idea related to
+    software components is that an application program can be built by
+    combining small logical building blocks.  In this approach, as
+    shown in figure <a href="ch19s02.html#fig_comp_lang" title="Figure 19.1. Components as a language">Figure 19.1</a>, building blocks form a kind of high-level
+    language.
+	
+	</p><div class="figure"><a name="fig_comp_lang"></a><p class="title"><b>Figure 19.1. Components as a language</b></p><div class="mediaobject"><img src="images/comp_lang.png"></div></div><p>
+	
+      </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="d0e8822"></a>19.2.3. Modularity</h3></div></div><p>
+	  The simplest form of modularity is actually something that
+	you already know: writing a function to encapsulate a block of
+	statements within a logical unit, with some form of
+	generalization, or abstraction, through the definition of some
+	parameters. But there are more general and elaborated forms of
+	components, namely: modules and packages.
+      </p><p>
+	  So, what is modularity? As developped in
+	[Meyer97], modularity is 
+	again not a general single property, but is rather
+	described by a few principles:
+	</p><div class="itemizedlist"><ul type="disc"><li><span class="bold"><b>A few interfaces</b></span>: a
+	      component must communicate with as 
+	      few other components as possible. The graph of
+	      dependencies between components should be rather loosely
+	      coupled. 
+	  </li><li><span class="bold"><b>Small interfaces</b></span>:
+	      whenever two components communicate, there should
+	      be as few communication as possible between them.
+	  </li><li><span class="bold"><b>Explicit interfaces</b></span>:
+	      interfaces should be explicit. Indirect
+	      coupling, in particular through shared variables, should
+	      be made explicitly public.
+	  </li><li><span class="bold"><b>Information hiding</b></span>:
+	      information in a component should 
+	      generally remain private, except for elements explicitly
+	      belonging to the interface. This means that it should not
+	      be necessary to use non public attributes elements of a
+	      component in order to use it. In languages such as
+	      Python, as we will see later, it is technically
+	      difficult to hide a component's attributes. So, some care
+	      must be taken in order to <span class="emphasis"><em>document</em></span>
+	      public and private attributes. 
+	  </li><li><span class="bold"><b>Syntactic units</b></span>:
+	      Components must correspond to syntactic units of the 
+	      language. In Python, this means that components should
+	      correspond to known elements such as modules, packages,
+	      classes, or functions that you use in Python statements:
+	    <pre class="programlisting">
+import dna
+from Bio.Seq import Seq
+	    </pre><tt>dna</tt>, <tt>Bio</tt>,
+	      <tt>Bio.Seq</tt> and
+	      <tt>Seq</tt> are syntactic units, not only
+	      files, directories or block of statements. In fact,
+	      Python really helps in defining components: almost
+	      everything that you define in a module is a syntactic unit.
+      </li></ul></div><p>
+
+	  You can view this approach as though not only the user of the
+	  application would be taken into account, but also the
+	  programmer, as the user of an intermediate level
+	  product. This is why there is a need for
+	  <span class="emphasis"><em>interfaces design</em></span> 
+	  also at the component level.
+
+      </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="d0e8874"></a>19.2.4. Methodology</h3></div></div><p>
+	These properties may be easier to obtain by choosing an
+	appropriate design methodogy. A	design methodoly should indeed: 
+	</p><div class="itemizedlist"><ul type="disc"><li>
+	      help in defining components by successive
+	      <span class="emphasis"><em>decomposition</em></span>; 
+	  </li><li>
+	      help in defining components that are easy to
+	      <span class="emphasis"><em>combine</em></span>; 
+	  </li><li>
+	      help in designing
+	      <span class="emphasis"><em>self-understandable</em></span> components: a
+	      programmer should be able to understand how to use a
+	      component by looking only at this component;
+	  </li><li>
+	      help in defining <span class="emphasis"><em>extensible</em></span> components;
+	      the more independant components are, the more they are
+	      easy to evolve; for instance, components sharing an
+	      internal data structure representation are difficult to
+	      change, because you have to modify all of them whenever
+	      you change the data structure.
+	  </li></ul></div><p>
+      </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="sect_comp_reuse"></a>19.2.5. Reusability</h3></div></div><p>
+	  Programming is by definition a very repetitive task, and
+	programmers have dreamed a lot of being able to pick
+	off-the-shelves general purpose 
+	components, relieving them from this burden of programming the
+	same code again and again. 
+
+	  However, this objective has, by far, not really been reached
+	so far. There
+	are several both non technical and technical reasons for
+	this. Non-technical reasons encompass organisational and
+	psychological obstacles: although this has probably been
+	reduced	by the wide access to the Web, being aware of existing
+	software, taking the time to learn it, and accepting to use
+	something you don't have built yourself are common
+	difficulties in reusing components. 
+
+	  On the technical side, there are some conditions for modules
+	  to be reusable.
+
+	</p><div class="orderedlist"><ol type="1"><li><span class="emphasis"><em>Flexibility</em></span>:
+	      One of the main difficulty for making
+	reusable components lies in the fact that, while having the
+	impression that you are again programming the same stereotyped
+	code, one does not really repeat exactly the same code.
+	 There are indeed slight variations that
+	typically concern to following aspects (for instance, in a
+	standard table lookup):
+	  
+	    <div class="itemizedlist"><ul type="disc"><li>
+	      types: the exact data type being used may vary: the
+	      table might contain integers, strings, ...
+	      </li><li>
+	      data structures and algorithms may vary: the table might
+	      be implemented with an array, a dictionary, a binary
+	      search tree, ... ; the comparison function in the sort
+	      procedure may also vary according to the type of the
+	      items. 
+	      </li></ul></div>
+
+	So, as you can understand from these remarks, the more
+	<span class="emphasis"><em>flexible</em></span> the component is, the more
+	  reusable it is. Flexibility can be partly obtained by
+	  modularity, as long as modules are well designed.
+	  However, in order to get real flexibility, other techniques
+	  are required, such as genericity, polymorphism, or
+	  inheritance, that are described in <a href="ch19s05.html" title="19.5. Flexibility">Section 19.5</a>.  
+
+      </li><li><span class="emphasis"><em>Independancy towards the internal
+	    representation</em></span>: by providing a interface that
+	    does not imply any specific internal data structure, the
+	    module can be used more safely. The client program will be
+	    able to use the same interface, even if the internal
+	    representation is modified.
+	  </li><li><span class="emphasis"><em>Group of related objects</em></span>: it is
+	  easier to use components when all objects that should be
+	  used together (the data structures, data and algorithms) are
+	  actually grouped in the same component. 
+	  </li><li><span class="emphasis"><em>Common features</em></span>: common
+	  features or similar templates among different modules should
+	  be made shareable, thus making the whole set of modules more
+	  consistent. 
+
+	</li></ol></div><p>
+
+      </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch19.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch19.html"><img src="images/up.png" alt="Up"></a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch19s03.html"><img src="images/next.png" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 19. Object-oriented design&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index-2.html"><img src="images/home.png" alt="Home"></a></td><td width="40%" align="right" valign="top">&nbsp;19.3. Abstract Data Types</td></tr></table></div></body>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch19s02.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:40 GMT -->
+</html>

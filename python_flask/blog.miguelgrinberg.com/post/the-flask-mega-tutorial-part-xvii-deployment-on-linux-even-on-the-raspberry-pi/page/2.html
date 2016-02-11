@@ -1,0 +1,1380 @@
+﻿<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xvii-deployment-on-linux-even-on-the-raspberry-pi/page/2 by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 05:49:06 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    
+    <title>
+    
+        The Flask Mega-Tutorial, Part XVII: Deployment on Linux (even on the Raspberry Pi!) - miguelgrinberg.com
+    
+</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="description" content="miguelgrinberg.com">
+	<meta name="copyright" content="Copyright (c) 2012-2015 Miguel Grinberg">
+	<meta name="author" content="Miguel Grinberg">
+    
+    <meta name="keywords" content="python, programming, flask, web, tutorial, deployment, hosting, vps, server">
+    
+
+    
+    <!-- Bootstrap -->
+    <link href="../../../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../../../static/prettify.css" type="text/css" rel="stylesheet" />
+    <link href="../../../static/colorbox/colorbox.css" rel="stylesheet" type="text/css" />
+    <link href="../../../static/style.css" rel="stylesheet" type="text/css" />
+
+    <link rel="shortcut icon" href="../../../static/favicon.ico">
+	<link rel="alternate" type="application/rss+xml" href="../../../feed" title="miguelgrinberg.com RSS feed">
+
+  </head>
+  <body>
+    
+    <!-- facebook sdk -->
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "../../../../connect.facebook.net/en_US/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    <!-- google plus sdk -->
+    <script type="text/javascript" src="../../../../apis.google.com/js/plusone.js"></script>
+    <!-- twitter sdk -->
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="../../../../platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <!-- linkedin sdk -->
+    <script src="../../../../platform.linkedin.com/in.js" type="text/javascript"></script>
+
+    
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://blog.miguelgrinberg.com/index">miguelgrinberg.com</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="http://blog.miguelgrinberg.com/index">Home</a></li>
+                        <li><a href="../../about-me.html">About Me</a></li>
+                        <li><a href="../../about-this-blog.html">About This Blog</a></li>
+                        
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <p class="navbar-text" style="margin-top: 10px; margin-bottom: 0px;">
+                                <a type="application/rss+xml" href="../../../feed"><img src="../../../static/rss.png" alt="RSS Feed" title="RSS Feed" /></a>
+                                <a href="https://www.facebook.com/miguelgrinbergblog"><img src="../../../static/facebook.png" alt="Facebook" title="Facebook" /></a>
+                                <a href="https://plus.google.com/u/0/117786742456929977820"><img src="../../../static/googleplus.png" alt="Google+" title="Google+" /></a>
+                                <a href="http://www.linkedin.com/in/miguelgrinberg"><img src="../../../static/linkedin.png" alt="LinkedIn" title="LinkedIn" /></a>
+                                <a href="http://github.com/miguelgrinberg"><img src="../../../static/github.png" alt="GitHub" title="GitHub" /></a>
+                                <a href="https://twitter.com/#!/miguelgrinberg"><img src="../../../static/twitter.png" alt="Twitter" title="Twitter" /></a>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </nav>
+
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-push-9 sidebar-bg">
+                <div id="sidebar">
+                    
+
+                    
+                    <h1>Flask Web Development</h1>
+                    <p>If you want to learn modern web development techniques with Python and Flask, you may find my O'Reilly book useful:</p>
+                    <p><center><a href="http://bit.ly/flaskbook"><img style="border: 1px solid black;" src="../../../static/flask-book-cover-tiny.png"></a></center></p>
+                    <p>Visit <a href="http://flaskbook.com/">http://flaskbook.com</a> for information about this and other Flask training products I have created!</p>
+                    
+
+                    <h1>About Miguel</h1>
+                    <img style="float: right; margin: 0px 8px 8px 0px; padding: 4px; border: 1px solid #ccc;" src="../../../static/miguel.jpg" />
+                    <p>Welcome to my blog!</p>
+                    <p>I'm a software engineer, photographer and filmmaker in Portland, Oregon, USA.</p>
+                    <p>You can also find me on <a href="https://www.facebook.com/miguelgrinbergblog">Facebook</a>, <a href="https://plus.google.com/u/0/117786742456929977820">Google+</a>, <a href="http://www.linkedin.com/in/miguelgrinberg">LinkedIn</a>, <a href="https://github.com/miguelgrinberg">Github</a> and <a href="https://twitter.com/#!/miguelgrinberg">Twitter</a>.</p>
+                    <p>Thank you for visiting!</p>
+
+                    
+
+                    
+                    <h1>Categories</h1>
+<ul>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Arduino/feed">
+			<img src="../../../static/rss-small.png" title="Arduino RSS Feed" label="Arduino RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Arduino">Arduino</a></span> (7)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Authentication/feed">
+			<img src="../../../static/rss-small.png" title="Authentication RSS Feed" label="Authentication RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Authentication">Authentication</a></span> (4)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Blog/feed">
+			<img src="../../../static/rss-small.png" title="Blog RSS Feed" label="Blog RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Blog">Blog</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/C++/feed">
+			<img src="../../../static/rss-small.png" title="C++ RSS Feed" label="C++ RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/C++">C++</a></span> (5)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Cloud/feed">
+			<img src="../../../static/rss-small.png" title="Cloud RSS Feed" label="Cloud RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Cloud">Cloud</a></span> (2)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Filmmaking/feed">
+			<img src="../../../static/rss-small.png" title="Filmmaking RSS Feed" label="Filmmaking RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Filmmaking">Filmmaking</a></span> (6)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Flask/feed">
+			<img src="../../../static/rss-small.png" title="Flask RSS Feed" label="Flask RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Flask">Flask</a></span> (39)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Games/feed">
+			<img src="../../../static/rss-small.png" title="Games RSS Feed" label="Games RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Games">Games</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Gear/feed">
+			<img src="../../../static/rss-small.png" title="Gear RSS Feed" label="Gear RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Gear">Gear</a></span> (6)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/HTML5/feed">
+			<img src="../../../static/rss-small.png" title="HTML5 RSS Feed" label="HTML5 RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/HTML5">HTML5</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Heroku/feed">
+			<img src="../../../static/rss-small.png" title="Heroku RSS Feed" label="Heroku RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Heroku">Heroku</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Javascript/feed">
+			<img src="../../../static/rss-small.png" title="Javascript RSS Feed" label="Javascript RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Javascript">Javascript</a></span> (3)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Movie Reviews/feed">
+			<img src="../../../static/rss-small.png" title="Movie Reviews RSS Feed" label="Movie Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Movie Reviews">Movie Reviews</a></span> (5)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Netflix/feed">
+			<img src="../../../static/rss-small.png" title="Netflix RSS Feed" label="Netflix RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Netflix">Netflix</a></span> (5)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Node.js/feed">
+			<img src="../../../static/rss-small.png" title="Node.js RSS Feed" label="Node.js RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Node.html">Node.js</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/OpenStack/feed">
+			<img src="../../../static/rss-small.png" title="OpenStack RSS Feed" label="OpenStack RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/OpenStack">OpenStack</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Personal/feed">
+			<img src="../../../static/rss-small.png" title="Personal RSS Feed" label="Personal RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Personal">Personal</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Photography/feed">
+			<img src="../../../static/rss-small.png" title="Photography RSS Feed" label="Photography RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Photography">Photography</a></span> (6)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Product Reviews/feed">
+			<img src="../../../static/rss-small.png" title="Product Reviews RSS Feed" label="Product Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Product Reviews">Product Reviews</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Programming/feed">
+			<img src="../../../static/rss-small.png" title="Programming RSS Feed" label="Programming RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Programming">Programming</a></span> (47)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Project Management/feed">
+			<img src="../../../static/rss-small.png" title="Project Management RSS Feed" label="Project Management RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Project Management">Project Management</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Python/feed">
+			<img src="../../../static/rss-small.png" title="Python RSS Feed" label="Python RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Python">Python</a></span> (43)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/REST/feed">
+			<img src="../../../static/rss-small.png" title="REST RSS Feed" label="REST RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/REST">REST</a></span> (5)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Rackspace/feed">
+			<img src="../../../static/rss-small.png" title="Rackspace RSS Feed" label="Rackspace RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Rackspace">Rackspace</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Raspberry Pi/feed">
+			<img src="../../../static/rss-small.png" title="Raspberry Pi RSS Feed" label="Raspberry Pi RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Raspberry Pi">Raspberry Pi</a></span> (6)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/RhinoSteady/feed">
+			<img src="../../../static/rss-small.png" title="RhinoSteady RSS Feed" label="RhinoSteady RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/RhinoSteady">RhinoSteady</a></span> (6)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Robotics/feed">
+			<img src="../../../static/rss-small.png" title="Robotics RSS Feed" label="Robotics RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Robotics">Robotics</a></span> (6)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Video/feed">
+			<img src="../../../static/rss-small.png" title="Video RSS Feed" label="Video RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Video">Video</a></span> (4)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Windows/feed">
+			<img src="../../../static/rss-small.png" title="Windows RSS Feed" label="Windows RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Windows">Windows</a></span> (1)
+	</li>
+
+</ul>
+                    
+                </div>
+            </div>
+            <div class="col-md-8 col-md-pull-4">
+                <div id="main">
+                    
+                    
+                    
+                    
+                    
+
+<div class="post">
+
+<p class="date"><span class="flask-moment" data-timestamp="2013-04-15T06:14:46Z" data-format="format('LL')" data-refresh="0">2013-04-15T06:14:46Z</span></p>
+<h1 class="post-title"><a href="../../the-flask-mega-tutorial-part-xvii-deployment-on-linux-even-on-the-raspberry-pi.html">The Flask Mega-Tutorial, Part XVII: Deployment on Linux (even on the Raspberry Pi!)</a></h1>
+<div class="posted">Posted by <span class="label label-danger"><a href="http://blog.miguelgrinberg.com/author/Miguel Grinberg">Miguel Grinberg</a></span> under <span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Programming">Programming</a></span>, <span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Python">Python</a></span>, <span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Raspberry Pi">Raspberry Pi</a></span>, <span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Flask">Flask</a></span>. </div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xvii-deployment-on-linux-even-on-the-raspberry-pi" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xvii-deployment-on-linux-even-on-the-raspberry-pi" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="../../the-flask-mega-tutorial-part-xvii-deployment-on-linux-even-on-the-raspberry-pi.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xvii-deployment-on-linux-even-on-the-raspberry-pi" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+<div class="post_body"><p>This is the seventeenth article in the series in which I document my experience writing web applications in <a href="http://python.org/">Python</a> using the <a href="http://flask.pocoo.org/">Flask</a> microframework.</p>
+<p>The goal of the tutorial series is to develop a decently featured microblogging application that demonstrating total lack of originality I have decided to call <code>microblog</code>.</p>
+<p><strong>NOTE</strong>: This article was revised in September 2014 to be in sync with current versions of Python and Flask.</p>
+<p>Here is an index of all the articles in the series that have been published to date:</p>
+<ul>
+<li><a href="../../the-flask-mega-tutorial-part-i-hello-world.html">Part I: Hello, World!</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-ii-templates.html">Part II: Templates</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-iii-web-forms.html">Part III: Web Forms</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-iv-database.html">Part IV: Database</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-v-user-logins.html">Part V: User Logins</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-vi-profile-page-and-avatars.html">Part VI: Profile Page And Avatars</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-vii-unit-testing.html">Part VII: Unit Testing</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-viii-followers-contacts-and-friends.html">Part VIII: Followers, Contacts And Friends</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-ix-pagination.html">Part IX: Pagination</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-x-full-text-search.html">Part X: Full Text Search</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xi-email-support.html">Part XI: Email Support</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xii-facelift.html">Part XII: Facelift</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xiii-dates-and-times.html">Part XIII: Dates and Times</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xiv-i18n-and-l10n.html">Part XIV: I18n, L10n</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xv-ajax.html">Part XV: Ajax</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xvi-debugging-testing-and-profiling.html">Part XVI: Debugging, Testing and Profiling</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xvii-deployment-on-linux-even-on-the-raspberry-pi.html">Part XVII: Deployment on Linux (even on the Raspberry Pi!)</a> (this article)</li>
+<li><a href="../../the-flask-mega-tutorial-part-xviii-deployment-on-the-heroku-cloud.html">Part XVIII: Deployment on the Heroku Cloud</a></li>
+</ul>
+<p>Today we are reaching a huge milestone in the life of our <code>microblog</code> application. We are going public with it, as we will be looking at different ways in which we can deploy it and make it accessible to our users.</p>
+<p>In this article I will explore the traditional hosting options, and will be looking at hands-on deployment on a Linux box and on the widely popular Raspberry Pi minicomputer. In the next article we will be looking at deployment on cloud services.</p>
+<p>To begin we will be looking at the more traditional of all deployment options. We will install the application behind a web server on a dedicated host that we will manage.</p>
+<p>But where can we find a host? These days there are many cheap server offers out there. The cheapest options are for a VPS (virtual private server), which is virtual machine that looks like a standalone and dedicated server to you, but is really sharing the physical hardware with a few others like it. You can check on <a href="http://www.lowendbox.com/">lowendbox.com</a> for deals if you want to get one to experiment with (note that I'm not affiliated with them, I do not endorse them or make money if you click the link above).</p>
+<p>Another easy way to obtain a host is to install a virtual machine on your regular PC. If you are a Windows or Mac user and would like to experience deploying the application to a Linux server without spending a dime, then this is the way to go. You can install <a href="https://www.virtualbox.org/">VirtualBox</a> on your system, download an ISO image for the Linux distribution of your choice and then create a VM on which you install this ISO image.</p>
+<p>Let's talk a bit about operating system choices. I think there are four decent choices for hosting a web server:</p>
+<ul>
+<li>Linux</li>
+<li>BSD</li>
+<li>OS X</li>
+<li>Windows</li>
+</ul>
+<p>From a technical point of view you could setup a Python based web server on any of the above, so how do we choose?</p>
+<p>In my opinion the choice isn't too hard to make. For me it is important that we are on a platform that is open source, because the community at large does a much better job at keeping a platform safe and secure than what a single company can do on a closed source product. We also want to be on a platform that has a large server installation base, because that gives us more chances of finding solutions to our problems. Based on the above criteria, I consider Windows and OS X inferior to Linux and BSD as servers.</p>
+<p>So now we are down to two options. The choice of Linux vs. BSD is an easy one for me: It does not matter. Both are excellent options for hosting a web server. Depending on the hosting provider you may have Linux or BSD options to choose from, so I just simply use what's available.</p>
+<p>There are many Linux and BSD distributions out there, so how to pick one? This is largely a matter of preference, but if we are going to try to use what the majority use we can look at the distributions according to some of their major characteristics, and then pick a popular distribution in the group of choice:</p>
+<ul>
+<li>RPM based (RedHat, CentOS, Fedora)</li>
+<li>Debian based (Debian, Ubuntu, Mint)</li>
+<li>BSD based (FreeBSD, NetBSD, OpenBSD)</li>
+<li>others</li>
+</ul>
+<p>I'm sure my simplistic grouping of distros will offend some. I'm also sure many will have the need to mention that Mac OS X is BSD based and as such should be in my list. Keep in mind that this classification is just my own, I don't expect everyone will agree with me.</p>
+<p>As an exercise in preparing this article I tested a few Linux distros (I'm using a VPS that does not offer BSD choices). I tried Fedora, Ubuntu, Debian and CentOS. None of them was straightforward, unfortunately, but out of all of these, the CentOS install was the one with less complications, so that's the one I'm going to describe here.</p>
+<p>If you have never done this you may find the setup task to be extremely laborious, and you would be correct if you think that. The thing is, once the server is setup it takes very little effort to keep it running.</p>
+<p>Ready? Here we go!</p>
+<h2>Hosting on CentOS 6</h2>
+<p>I'm going to assume that we have a clean install of CentOS 6 on a dedicated server or VPS. A VM in your PC also works, but go ahead and do a standard install before starting.</p>
+<h3>Client side setup</h3>
+<p>We will be managing this server remotely from our own PC, so we need a tool that we can use to login into this system and run commands. If your PC runs Linux or OS X then you already have <a href="http://www.openssh.org/">OpenSSH</a> installed. If you are on Windows then there are two very decent ways to get SSH functionality:</p>
+<ul>
+<li><a href="http://www.cygwin.com/">Cygwin</a> (select the OpenSSH package in the installer)</li>
+<li><a href="http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html">Putty</a></li>
+</ul>
+<p>Cygwin is much more than SSH, it provides a Linux like environment inside your Windows box. Putty, on the other side, is just an SSH tool. Since I want to cover the most ground, the instructions below will be for Linux, OS X and Cygwin users. If you use Putty on Windows, then there is a little bit of translation required.</p>
+<p>Let's begin by logging in to our shiny new CentOS 6 box. Open a command line prompt on your PC (a Cygwin prompt if you are on Windows) and run the following:</p>
+<pre><code>$ ssh root@&lt;your-server&gt;
+</code></pre>
+<p>This is saying that you want to login to the system as user <code>root</code>, the admin of the system. You should replace <code>&lt;your-server&gt;</code> with the IP address or hostname of your server. Note the <code>$</code> is the command line prompt, you do not type that.</p>
+<p>You will be asked to provide the password for user <code>root</code>. If this is a dedicated server or VPS that you purchased, you must have been asked about this password during the setup process. If this is your own VM then you chose a root password during installation.</p>
+<h3>Installing software packages</h3>
+<p>Now that we are logged in, we need to install all the software that we will be using to deploy our server, which obviously include Python and a web server. We will also switch from sqlite to a more robust MySQL database.</p>
+<p>The command to install software on CentOS is called <code>yum</code>. We can install all the packages we need using a single command:</p>
+<pre><code>$ yum install python python-devel python-virtualenv httpd httpd-devel mysql-server mysql-devel git gcc sudo
+</code></pre>
+<p>Some of these could be already installed, but it doesn't hurt to be safe and request all the packages we need, <code>yum</code> will only install what's missing.</p>
+<p>The packages we just installed are:</p>
+<ul>
+<li><code>python</code> and <code>python-devel</code>: the Python interpreter and its  development package</li>
+<li><code>virtualenv</code>: the Python script that creates virtual environments</li>
+<li><code>httpd</code> and <code>httpd-devel</code>: The Apache web server and its development package</li>
+<li><code>mysql-server</code> and <code>mysql-devel</code>: The MySQL database server and its development package</li>
+<li><code>git</code>: source code version control system (we will use it to download and update the application)</li>
+<li><code>gcc</code>: the C/C++ compiler (needed to compile Python extensions)</li>
+<li><code>sudo</code>: a tool that helps users run commands as other users.</li>
+</ul>
+<h3>Creating a user account to host the application</h3>
+<p>We will now setup a user account on which we will host our application. In case the reasons aren't clear, the <code>root</code> account has the maximum privileges, so we could easily delete or destroy important parts of the system by mistake. If we work inside a restricted account then all the important parts of the system will be out of reach so we are protected against mistakes. A second, maybe more important reason to not use the root account is that if a hacker gets hold of this account he will own our server. We want to hide the root account as much as possible, I like to disable root account logins completely on production servers.</p>
+<p>We will call this new account <code>apps</code>, assuming we could host several applications inside it. Since the applications will be run by the web server account, we will make the group of our <code>apps</code> account the group of the web server account (which was created for us when Apache was installed), so that the web server has permission to read and write on these files. If you are not familiar with Unix user permissions, then an introduction is available over at <a href="http://en.wikipedia.org/wiki/Filesystem_permissions#Traditional_Unix_permissions">this Wikipedia page</a>.</p>
+<p>The command to create the <code>apps</code> account on CentOS is:</p>
+<pre><code>$ adduser -g apache apps
+</code></pre>
+<p>The <code>-g</code> option makes the primary group of this account the <code>apache</code> group, which on CentOS is the group of the <code>apache</code> user account. As part of the account setup you will have to enter a password for this account.</p>
+<p>The <code>adduser</code> command will create a home directory for the new account, at <code>/home/apps</code>. Unfortunately, when we go check the permissions of this directory we find it to only be accessible to the owner:</p>
+<pre><code>$ ls /home -l
+total 7
+drwx------ 2 apps  apache 4096 Apr  7 11:46 apps
+</code></pre>
+<p>We decided we want the <code>apache</code> group users to be able to freely work on the files on this account, so we have to give the group enough permissions:</p>
+<pre><code>$ chmod 775 /home/apps
+</code></pre>
+<p>Consult the documentation for the <code>chmod</code> tool for detailed information. The <code>775</code> permisions will allow the owner and the group full access, and will also give others permission to read and execute, but not write to this directory.</p>
+<h3>Password-less logins</h3>
+<p>The next step is to be able to login to this account from our PC without using a password. The SSH tool supports another type of authentication, called <a href="http://en.wikipedia.org/wiki/Public-key_cryptography">public key</a>. If you are on a non-Windows OS it is very likely that you already have keys installed on your system. </p>
+<p>Now open a terminal window on your own PC (Cygwin's bash shell for Windows users). To check if you have keys installed run the following command:</p>
+<pre><code>$ ls ~/.ssh
+id_rsa  id_rsa.pub
+</code></pre>
+<p>If the directory listing shows files named <code>id_rsa</code> and <code>id_rsa.pub</code> like above then you are good to go. If you don't have these files then you have to run the following command:</p>
+<pre><code>$ keygen -t rsa
+</code></pre>
+<p>This application will prompt you to enter a few things, for which I recommend you accept the defaults by pressing Enter on all the prompts. If you know what you are doing and want to do otherwise, you are certainly welcome to.</p>
+<p>After this command runs you should have the two files listed above. The file <code>id_rsa.pub</code> is your public key, the data in this file can be shared with others without creating a security risk. The <code>id_rsa</code> file is your private key, so you should never share the contents of this file with anyone.</p>
+<p>We will now add our public key to our server, so that it knows who we are. Still on our local PC we start by printing the public key file:</p>
+<pre><code>$ cat ~/.ssh/id_rsa.pub
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCjwaK4JVuY6PZAr8HocCIOszrLIzzCjO0Xlt9zkFNKvVpP1B92u3JvwwiagqR+k0kHih2SmYnycmXjAcE60tvu+sIDA/7tEJZh4kO4nUYM5PJ17E+qTqUleBXQM74eITydq/USkOqc5p++qUUgA60gUUuNum3igbZiNi71zK4m8g/IDywWYk+5vzNt2i7Sm8NEuauy/xWgnWhCBXZ/tXfkgWgC/4HzpmsfO+nniNh8VgTZp8Q+y+4psSE+p14qUg7KdDbf0Wo/D35wDkMvto96bIT8RF0np9dTkFj8TgNW8inP+6MC+4vCd8F/NpESCVt8hRlBVERMF8Xv4f/0+7WT miguel@miguelspc
+</code></pre>
+<p>Now we need to copy this data to the clipboard and then switch to the CentOS system, where we will issue these commands:</p>
+<pre><code>$ mkdir /home/apps/.ssh
+$ echo &lt;paste-your-key-here&gt; &gt; /home/apps/.ssh/authorized_keys
+</code></pre>
+<p>For my server and public key the following commands are necessary:</p>
+<pre><code>$ mkdir /home/apps/.ssh
+$ echo ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCjwaK4JVuY6PZAr8HocCIOszrLIzzCjO0Xlt9zkFNKvVpP1B92u3JvwwiagqR+k0kHih2SmYnycmXjAcE60tvu+sIDA/7tEJZh4kO4nUYM5PJ17E+qTqUleBXQM74eITydq/USkOqc5p++qUUgA60gUUuNum3igbZiNi71zK4m8g/IDywWYk+5vzNt2i7Sm8NEuauy/xWgnWhCBXZ/tXfkgWgC/4HzpmsfO+nniNh8VgTZp8Q+y+4psSE+p14qUg7KdDbf0Wo/D35wDkMvto96bIT8RF0np9dTkFj8TgNW8inP+6MC+4vCd8F/NpESCVt8hRlBVERMF8Xv4f/0+7WT miguel@miguelspc &gt; /home/apps/.ssh/authorized_keys
+</code></pre>
+<p>These commands write your public key to the file <code>authorized_keys</code> in the server. This makes your public key known to OpenSSH on the server. The remaining task is to secure the <code>.ssh</code> directory and the <code>authorized_keys</code> file inside it:</p>
+<pre><code>$ chown -R apps:apache /home/apps/.ssh
+$ chmod 700 /home/apps/.ssh
+$ chmod 600 /home/apps/.ssh/authorized_keys
+</code></pre>
+<p>These commands change the ownership of these files to the <code>apps</code> account and then make the directory and file only accessible by the new owner.</p>
+<p>The password-less login should now be working. We will now logout of the <code>root</code> account of our server and then login again, but this time we will login as the <code>apps</code> user:</p>
+<pre><code>$ ssh apps@&lt;your-server&gt;
+</code></pre>
+<p>If everything goes well you should not need to enter a password to obtain access.</p>
+<h3>Installing the application</h3>
+<p>We will now use <code>git</code> to download and install <code>microblog</code> into the server. If you are not familiar with <code>git</code> I recommend that you read <a href="http://ryanflorence.com/git-for-beginners/">git for beginners</a>.</p>
+<p>The application must be available in a git server that can be reached from our web server. I will be using my own github hosted application. You are welcome to use it as well, or if you prefer you can also clone it and make one that is yours.</p>
+<p>To install <code>microblog</code> in our server we just issue a <code>git clone</code> command:</p>
+<pre><code>$ git clone https://github.com/miguelgrinberg/microblog.git
+$ cd microblog
+</code></pre>
+<p>The latest version of the application has a few changes from how we left it in the previous article.</p>
+<p>First, there are a few new files at the top level, <code>runp-sqlite.fcgi</code>, <code>runp-mysql.fcgi</code>, <code>killpython</code> and <code>requirements.txt</code>. The <code>*.fcgi</code> scripts are starter scripts that are invoked by servers that use the <a href="http://www.fastcgi.com/drupal/">FastCGI</a> protocol. The <code>killpython</code> script will help us restart the application after we upgrade it. The <code>requirements.txt</code> file lists all the dependencies that we need to install to run our application. We will look at all these later.</p>
+<p>Another interesting change is in our <code>config.py</code> file. Up to now we initialized our database as follows:</p>
+<pre><code>SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'app.db')
+</code></pre>
+<p>Now we have this instead:</p>
+<pre><code>if os.environ.get('DATABASE_URL') is None:
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'app.db')
+else:
+    SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
+</code></pre>
+<p>This is a simple change that enables us to override the database the application will use by setting an environment variable. You will see how we take advantage of this change in the next section.</p>
+<h3>Setting up MySQL</h3>
+<p>The sqlite database that we've been using all this time is great for simple applications, but when we get into a full blown web server that can serve multiple requests at a time it is a better idea to use a more robust database. So we will setup a MySQL database for <code>microblog</code>.</p>
+<p>We have installed MySQL already, so all that is left is to create a database and a user that has permissions on it. To manage our database server we use the <code>mysql</code> tool:</p>
+<pre><code>$ mysql -u root -p
+Enter password: (enter the mysql root password, or empty if one is not defined)
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 11
+Server version: 5.1.67 Source distribution
+
+Copyright (c) 2000, 2012, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql&gt;
+</code></pre>
+<p>And now that we are in the mysql prompt we can go ahead and create a database and a user, both named <code>apps</code>:</p>
+<pre><code>mysql&gt; create database apps character set utf8 collate utf8_bin;
+mysql&gt; create user 'apps'@'localhost' identified by 'apps';
+mysql&gt; grant all privileges on apps.* to 'apps'@'localhost';
+mysql&gt; flush privileges;
+mysql&gt; quit;
+</code></pre>
+<p>Note that you will need to pick a password for the <code>apps</code> MySQL user in the <code>identified by</code> section. For simplicity I have picked <code>apps</code> as password, but on a real installation a hard to guess password should be used. Do not confuse the database <code>apps</code> user with the system's <code>apps</code> user.</p>
+<h3>Initializing the application</h3>
+<p>Now that we have a database ready we can initialize <code>microblog</code>.</p>
+<p>We start by creating and populating the Python virtualenv:</p>
+<pre><code>$ virtualenv flask
+$ flask/bin/pip install -r requirements.txt
+$ flask/bin/pip install mysql-python
+</code></pre>
+<p>Note that in addition to installing all the dependencies listed in the <code>requirements.txt</code> file we add the MySQL support, which is required by SQLAlchemy when connecting to that database server.</p>
+<p>Then we create the database:</p>
+<pre><code>$ DATABASE_URL=mysql://apps:apps@localhost/apps ./db_create.py
+</code></pre>
+<p>Note how we set an environment variable to point to our new MySQL database instead of the sqlite default.</p>
+<p>Next we compile all the messages in our translation database:</p>
+<pre><code>$ ./tr_compile.py
+</code></pre>
+<p>And to finalize, we enable group write access to the two folders that need to be written to by the web server:</p>
+<pre><code>$ chmod -R g+w search.db tmp
+</code></pre>
+<p>The <code>search.db</code> folder is used by our Whoosh full text search database. The <code>tmp</code> directory should be left open so that new files can be created there when needed.</p>
+<h3>Setting up Apache</h3>
+<p>The last thing to do is to configure our Apache web server.</p>
+<p>We wil be using the <code>mod_fcigd</code> module to handle the FastCGI communication with our application. Many Linux distributions offer a package for <code>mod_fcgid</code>, but unfortunately CentOS is not one of them, so we will build this module from its source code.</p>
+<p>Here is the list of commands that build and install the current release of <code>mod_fcgid</code>:</p>
+<pre><code>$ wget http://mirror.metrocast.net/apache/httpd/mod_fcgid/mod_fcgid-2.3.9.tar.gz
+$ tar xvzf mod_fcgid-2.3.9.tar.gz
+$ cd mod_fcgid-2.3.9
+$ APXS=/usr/sbin/apxs ./configure.apxs
+$ su
+(enter root password)
+$ make install
+</code></pre>
+<p>You can consult the <code>mod_fcgid</code> documentation if you want details on the above commands.</p>
+<p>With this module installed we can now configure our server. For this we need to edit the Apache configuration file. Linux distributions do not agree on a standard location and name for this file, so you will need to figure out where this file is. On CentOS, the config file is located at <code>/etc/httpd/conf/httpd.conf</code>.</p>
+<p>The changes that we need to make are simply to define our server. At the bottom of the configuration file we add the following (from the root account, since this file is not writable to regular users):</p>
+<pre><code>FcgidIPCDir /tmp
+AddHandler fcgid-script .fcgi
+&lt;VirtualHost *:80&gt;
+    DocumentRoot /home/apps/microblog/app/static
+    Alias /static /home/apps/microblog/app/static
+    ScriptAlias / /home/apps/microblog/runp-mysql.fcgi/
+&lt;/VirtualHost&gt;
+</code></pre>
+<p>The <code>FcgidIPCDir</code> sets the directory where the file sockets will be created. I've found that on CentOS this was going by default to a directory where the <code>apache</code> user did not have write permissions, so I'm putting all these files on <code>/tmp</code> instead.</p>
+<p>Next we use <code>AddHandler</code> to tell apache that any files that have a <code>.fcgi</code> extension should be treated as FastCGI files and routed through the <code>mod_fcgid</code> module that we just installed. Remember the new <code>runp-mysql.fcgi</code> file that we have in our root folder? This file uses the <code>flipflop</code> Python module as an adapter so that our application can speak the FastCGI protocol. Let's have a quick look at this file:</p>
+<pre><code>#!flask/bin/python
+import os
+os.environ['DATABASE_URL'] = 'mysql://apps:apps@localhost/apps'
+
+from flipflop import WSGIServer
+from app import app
+
+if __name__ == '__main__':
+    WSGIServer(app).run()
+</code></pre>
+<p>Apache will execute this script to start our application. Note how we insert the MySQL database name in the environment, so that Apache can see it.</p>
+<p>The <code>&lt;VirtualHost&gt;</code> section defines the host that will run our web server. The <code>*:80</code> denomination indicates that any requests that arrive at the server for any hostnames on port 80 will be handled by this virtual server. The configuration can have multiple <code>&lt;VirtualHost&gt;</code> sections, each defining a different server. To differentiate the servers you can use different IP addresses, domain or sub-domain names or ports.</p>
+<p>The definition of our virtual host is pretty simple. The <code>DocumentRoot</code> statement tells Apache where to look for static files. Any requests for files will be served our of this folder, so for example, when browsers ask for a <code>/favicon.ico</code> file to show the little icon next to the URL Apache will try to find it here. Unfortunately all the static files that we use in our application have a <code>/static</code> prefix, so to prevent Apache from looking for another <code>static</code> folder we use the <code>Alias</code> statement, which just says that anything that starts with <code>/static</code> should go directly to our folder. Finally, the <code>ScriptAlias</code> statement tells Apache that when a request that starts with <code>/</code> arrives  (basically all requests that are not for static files) then use the script indicated as second argument to handle it, and that is our <code>.fcgi</code> script.</p>
+<p>The Apache config file supports many more options that I will not mention here. I recommend that you review the Apache documentation to decide what options make sense for your server.</p>
+<p>To activate the changes we made we need to restart the apache server, again from the root account:</p>
+<pre><code>$ service httpd restart
+</code></pre>
+<p>And now from the browser on your PC you should be able to access microblog at the address <code>http://&lt;your-server&gt;</code>.</p>
+<h3>Installing application updates</h3>
+<p>The last remaining thing we are going to look at for this server is how to roll out an update of the application.</p>
+<p>Let's assume we have deployed the application and it has been running happily for a while on our server. Now it's time to push an update, which could fix some bugs we found, or just add features.</p>
+<p>We will use <code>git</code> and our own tools for this. If we login to the web server using the <code>apps</code> account we can upgrade to the latest release from the git repository by running:</p>
+<pre><code>$ cd microblog
+$ git pull
+$ DATABASE_URL=mysql://apps:apps@localhost/apps ./db_upgrade.py
+$ ./tr_compile.py
+</code></pre>
+<p>The <code>git pull</code> operation downloads any new or updated files from our git server. We then upgrade our database and recompile our translation files, in case any of those need updating. That's it!</p>
+<p>Once we have the updates in place we need to tell apache to restart the FastCGI processes, and this gets a bit tricky, because we are logged in as user <code>apps</code>, an unprivileged account, while the FastCGI processes are owned by the <code>apache</code> user.</p>
+<p>For this we are going to use <code>sudo</code>. The <code>sudo</code> tool allows users to selectively run applications as other users. We don't really want to give our <code>apps</code> account a lot of power, we will limit it to just be able to send kill signals to the FastCGI processes started by the apache user.</p>
+<p>The <code>killpython</code> script that we have in the <code>microblog</code> directory does this work:</p>
+<pre><code>killall /home/apps/microblog/flask/bin/python
+</code></pre>
+<p>The problem is, if we run this under the <code>apps</code> account we won't have permission to kill the processes owned by the <code>apache</code> user. To enable <code>apps</code> to kill these processes we have to make a small change in file <code>/etc/sudoers</code>:</p>
+<pre><code>apps    ALL=(apache) NOPASSWD:/home/apps/microblog/killpython
+Defaults: apps    !requiretty
+</code></pre>
+<p>Note you will need to make this change as user <code>root</code>, since <code>/etc/sudoers</code> is a system file.</p>
+<p>The first cryptic command gives the <code>apps</code> user permission to run the <code>killpython</code> command as user <code>apache</code> without having to provide a password. The second line allows <code>sudo</code> commands for user <code>apps</code> to be issued from a script in addition to doing it from an interactive console. You can read the man page for <code>sudoers</code> for detailed information on the syntax of <code>sudo</code> configuration file.</p>
+<p>Now when logged in as <code>apps</code> we can kill the python jobs as follows:</p>
+<pre><code>$ sudo -u apache ./killpython
+</code></pre>
+<p>If the FastCGI processes are killed Apache will restart them the next time a request comes for <code>microblog</code>.</p>
+<p>To make upgrading our server a bit more simple we can write a client side script that upgrades and restarts all together. The script would run the following:</p>
+<pre><code>ssh apps@&lt;your-server&gt; "cd microblog;git pull;sudo -u apache ./killpython;DATABASE_URL=mysql://apps:apps@localhost/apps ./db_upgrade.py;./tr_compile.py"
+</code></pre>
+<p>If you store the above line in a script then you can roll out an application upgrade with a single command!</p>
+<h3>What's left to do</h3>
+<p>I will not discuss a few more mundane operations that are recommended to make a server that is open to the hostile Internet world more secure. Things such as:</p>
+<ul>
+<li>Not allowing <code>root</code> remote logins</li>
+<li>Disabling any services that are not used, like FTP, CIFS, etc.</li>
+<li>Setting up a firewall</li>
+<li>Keep the server up to date on security fixes.</li>
+<li>Etc.</li>
+</ul>
+<p>I will leave these as an exercise to the interested reader, since they are largely unrelated to this tutorial.</p>
+<h2>Hosting on the Raspberry Pi</h2>
+<p>The <a href="http://www.raspberrypi.org/">Raspberry Pi</a> is a revolutionary little Linux computer that costs $35. It has very low power consumption so it is the perfect device to host a home based web application that can be online 24/7 without tying up a full blown computer.</p>
+<p>There are several Linux distributions that run on the Raspberry Pi. We'll set up our application on <a href="http://www.raspbian.org/">Raspbian</a>, the official distribution.</p>
+<p>As a side benefit, note that Raspbian is a derivative of Debian, so the instructions below will apply with little or no modification for Debian/Ubuntu based servers.</p>
+<p>We will now follow the same steps we followed for CentOS to get the RPi server setup.</p>
+<h3>Client side setup</h3>
+<p>A Raspberry Pi is a pretty decent computer to work in. You can connect an HDMI monitor, keyboard and mouse and work directly on it to configure our web server. Also like we did for CentOS or actually any other Linux distribution you can have the Raspberry Pi just connected to the network and then access it remotely from a PC over <code>ssh</code>. See the client side setup section above for CentOS for instructions on how to setup a client PC with <code>ssh</code>.</p>
+<p>Note that I will not cover how to install and setup the Raspberry Pi here, there are plenty of articles elsewhere for that. I will assume the Raspberry Pi is already running and connected to the network.</p>
+<h3>Installing software packages</h3>
+<p>Since the Pi is a limited power machine we will not do a full blown Apache/MySQL installation like we did for CentOS. Instead, we will take a lightweight approach. For web server we will use <a href="http://www.lighttpd.net/">Lighttpd</a> (pronounced "Lighty"), a small web server with a very good and efficient FastCGI implementation. For our database we will stay with sqlite.</p>
+<p>With CentOS we used <code>yum</code> to install packages. In Debian derivatives the package manager is called <code>apt-get</code>:</p>
+<pre><code>$ sudo apt-get update
+$ sudo apt-get upgrade
+$ sudo apt-get install python python-dev python-virtualenv lighttpd git
+</code></pre>
+<p>The <code>update</code> line downloads an updated package list to your Pi. The <code>upgrade</code> line upgrades all installed packages to their latest versions.  It is recommended that you issue these two commands regularly, to keep your Raspberry Pi's software up to date. Finally the <code>install</code> statement installs the packages that we need for our task.</p>
+<h3>Creating a user account to host the application</h3>
+<p>We said that we will assume our Raspberry Pi server will be in a trusted network. Since security is not a major concern we will not bother creating a dedicated account and instead will install the app directly on the default <code>pi</code> account.</p>
+<p>If your Raspberry Pi will be connected to the internet then you should follow the approach we used for CentOS and make a different account that has no privileges, as this ensure that if an intruder manages to access the account the damage that he or she can cause will be limited.</p>
+<h3>Password-less logins</h3>
+<p>Having a public key authentication procedure is also less important if we assume the application will run on a small intranet, but should you need such functionality the procedure is identical to what we did for the CentOS system.</p>
+<h3>Installing the application</h3>
+<p>The application installs very easily, again using <code>git</code>:</p>
+<pre><code>$ git clone git://github.com/miguelgrinberg/microblog.git
+$ cd microblog
+</code></pre>
+<h3>Initializing the application</h3>
+<p>Since we will be using a sqlite database in this host we can go ahead and initialize <code>microblog</code> as we have done in past articles for our development server:</p>
+<pre><code>$ virtualenv flask
+$ flask/bin/pip install -r requirements.txt
+% flask/bin/pip install mysql-python
+$ ./db_create.py
+$ ./tr_compile.py
+</code></pre>
+<p>Note that the <code>setup.py</code> script will try to install the MySQL support and that will fail, but this is all right since we will not use it.</p>
+<p>The files were all checked out under the <code>pi</code> user ownership. But as we have seen for CentOS, the web server on the Pi will run under a different account. Since security isn't a concern for this server, we will take a much simpler approach:</p>
+<pre><code>$ chmod -R 777 *
+</code></pre>
+<p>The above <code>chmod</code> statement makes all the files writable by all users. Again, this would be a really bad thing to do on an open server, but for a server where you have full control it saves you from the trouble of dealing with user permissions.</p>
+<p>I want to make it clear that the Raspberry Pi is perfectly capable of supporting a configuration based on user groups and user permissions similar to what we created above for the CentOS box. We are choosing this simplified setup because we will be using this server in a controlled environment.</p>
+<h3>Setting up Lighttpd</h3>
+<p>Lighttpd comes with native support for FastCGI, so we do not need to worry about installing a separate module for it.</p>
+<p>All we need to do is append the definition of our website to the configuration file, which is located at <code>/etc/lighttpd/lighttpd.conf</code>:</p>
+<pre><code>fastcgi.server = ("/microblog" =&gt;
+    ((
+        "socket" =&gt; "/tmp/microblog-fcgi.sock",
+        "bin-path" =&gt; "/home/pi/microblog/runp-sqlite.fcgi",
+        "check-local" =&gt; "disable",
+        "max-procs" =&gt; 1
+    ))
+)
+
+alias.url = (
+    "/microblog/static/" =&gt; "/home/pi/microblog/app/static/",
+)
+</code></pre>
+<p>And with this our application should be online at <code>http://aaa.bbb.ccc.ddd/microblog</code>, with <code>aaa.bbb.ccc.ddd</code> being the IP address of your Raspberry Pi.</p>
+<p>But there are a few things to note in the above configuration, and also a couple of things that didn't initially work and required some changes in the application side.</p>
+<p>The <code>fastcgi.server</code> statement is the one that defines the behavior of our FastCGI server, which we are exposing under the <code>/microblog</code> URL. The reason we are not exposing the application at the root URL is simple, we may want to host more than one application, so putting all the URLs under a <code>/microblog</code> root effectively works as a namespace.</p>
+<p>Inside the FastCGI definition we provide a socket name in the <code>/tmp</code> directory and the path to our <code>runp-sqlite.fcgi</code> file, which Lighttpd will execute to start up FastCGI processes. The <code>check-local</code> option tells Lighttpd to send requests to the FastCGI server even if the request path matches a file on disk. The <code>max-procs</code> limits the number of FastCGI processes to 1, which for a small server is enough and avoids potential problems with multiple concurrent writers to the sqlite database.</p>
+<p>The <code>alias.url</code> section provides the mapping that enables Lighttpd to server our static files. The alias maps any requests for <code>/microblog/static/...</code> to the correct location on disk where we store our static files.</p>
+<p>The <code>runp-sqlite.fcgi</code> script is pretty much the same as the one we used for CentOS, but without overriding the database setting:</p>
+<pre><code>from flipflop import WSGIServer
+from app import app
+
+if __name__ == '__main__':
+    WSGIServer(app).run()
+</code></pre>
+<h3>Some necessary fixes</h3>
+<p>Testing this setup reveals a couple of bugs in our application.</p>
+<p>First, our javascript and css static files are not being served. The problem becomes evident after inspecting the HTML source of the login page. The <code>base.html</code> template references these files via hardcoded paths that begin with <code>/static</code>, but we said are putting this application inside a <code>/microblog</code> prefix. For example, see how we had the link to the CSS file:</p>
+<pre><code>&lt;link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen"&gt;
+</code></pre>
+<p>Here we really want <code>/microblog/static/bootstrap.min.css</code>, but of course we can't add <code>/microblog</code> to the <code>base.html</code> file because that will break the development server that runs on our PC. The solution is to let Flask generate these URLs using our old friend <code>url_for</code>:</p>
+<pre><code>&lt;link href="{{ url_for('.static', filename='css/bootstrap.min.css') }}" rel="stylesheet" media="screen"&gt;
+</code></pre>
+<p>After updating all the js and css files as above the site serves the login page with all the auxiliary static files.</p>
+<p>But trying to login reveals another problem, Right after logging in we get a 500 error code. Luckily  for us we have logging, so a quick look at <code>/home/pi/microblog/tmp/microblog.log</code> shows the following error:</p>
+<pre><code>ProgrammingError: (ProgrammingError) SQLite objects created in a thread can only be used in that same thread.The object was created in thread id -1260325776 and this is thread id -1243548560
+</code></pre>
+<p>What is this? We are not running multiple threads ourselves but obviously there are multiple threads in our application. The only difference between our development server and this one is that we are now using <code>flipflop</code> for the FastCGI server. Looking at the code in this module we can easily find that by default <code>flipflop</code> runs a multithreaded web server.</p>
+<p>A possible solution would be to use the single-threaded FastCGI server from <code>flipflop</code> but that could affect the performance if the server will have multiple concurrent users. Another, more interesting way to handle this problem is to enable threading in <code>sqlite</code> (which appears to be <a href="http://www.sqlite.org/threadsafe.html">fully supported</a>). Multithreading can be enabled in SQLAlchemy by setting the <code>check_same_thread</code> option to <code>False</code> in our <code>config.py</code> configuration file:</p>
+<pre><code>SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'app.db') + '?check_same_thread=False'
+</code></pre>
+<p>With this change we are allowing multiple threads to make changes to the database, the sqlite library takes care of synchronizing multiple accesses.</p>
+<p>And with these small changes we have a fully enabled web application running on our Raspberry Pi!</p>
+<h3>Installing application updates</h3>
+<p>To deploy application updates we can just login to the Raspberry Pi and issue the commands that update the source files, database and translation files:</p>
+<pre><code>$ cd microblog
+$ git pull
+$ ./db_upgrade.py
+$ ./tr_compile.py
+</code></pre>
+<p>If you setup password-less login to your Pi then of course you can write a script wrapper that does all this in a single command.</p>
+<h2>Final words</h2>
+<p>The updated application is available, as always, on my <a href="https://github.com/miguelgrinberg/microblog/tree/version-0.17">github page</a>. Alternatively you can download it as a zip file below:</p>
+<p>Download <a href="https://codeload.github.com/miguelgrinberg/microblog/zip/version-0.17">microblog 0.17</a>.</p>
+<p>In the next article we will be looking at deployment on cloud services as an alternative to the traditional options we explored today.</p>
+<p>I will see you then. Thank you!</p>
+<p>Miguel</p></div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xvii-deployment-on-linux-even-on-the-raspberry-pi" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xvii-deployment-on-linux-even-on-the-raspberry-pi" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="../../the-flask-mega-tutorial-part-xvii-deployment-on-linux-even-on-the-raspberry-pi.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xvii-deployment-on-linux-even-on-the-raspberry-pi" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+
+
+<h4 style="text-align: right"><a name="comments"></a>78 comments</h4>
+
+
+<div class="comment">
+    <ul>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/b9a05452c8b4c7fd4482dd79d54e407ace2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#26</span> <span class="label label-primary">Julio Guzman</span> said
+                    <span class="flask-moment" data-timestamp="2014-03-01T14:36:14Z" data-format="fromNow(0)" data-refresh="0">2014-03-01T14:36:14Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel,
+
+Many thanks for this chapter of the article. I found it really interesting.
+
+At this point, I need a recommendation from you. Looking for a VPS host, I found attractive options offering different alternatives. For tutorial compatibility purposes, which one would you recommend?
+
+ CentOS 6.4 32 bit minimal, CentOS 64 bit minimal https://www.lunanode.com/cart.php?a=confproduct&amp;i=1
+
+or, CentOS-6-x86_64 https://manage.host1plus.com/cart.php?a=confproduct&amp;i=0
+
+and, CentOS 6 https://ssdvps.com/portal/cart.php?a=confproduct&amp;i=0</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#27</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-03-01T17:58:14Z" data-format="fromNow(0)" data-refresh="0">2014-03-01T17:58:14Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Julio: Between a 32-bit or 64-bit VM I would go with 64-bit. Besides that I don&#39;t think you&#39;ll find any significant differences, so go with the most recent CentOS version they offer.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/8b9901e7cc01a01fdc77013c891e557cce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#28</span> <span class="label label-primary">Ryan Baer</span> said
+                    <span class="flask-moment" data-timestamp="2014-03-04T16:02:03Z" data-format="fromNow(0)" data-refresh="0">2014-03-04T16:02:03Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel,
+This is an incredible tutorial and it&#39;s awesome that you&#39;re so vigilant about replying to everyone&#39;s comments.
+
+Just wanted to point out two small typos for this page since no one else has:
+
+&#34;The last thing to do is to configure our Apache web server.
+
+We ----&gt; wil &lt;---- be using the ----&gt; mod_fcigd  &lt;---- module to handle the FastCGI communication with our application. Many Linux distributions offer a package for mod_fcgid,&#34;
+
+Thanks again!
+Ryan</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/da7af8e53be0df2fcb20fae81293b9e9ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#29</span> <span class="label label-primary">Blake</span> said
+                    <span class="flask-moment" data-timestamp="2014-03-07T17:03:29Z" data-format="fromNow(0)" data-refresh="0">2014-03-07T17:03:29Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I&#39;m getting an error when migrating after transitioning to MySQL. 
+
+$ ./db_migrate.py 
+Traceback (most recent call last):
+  File &#34;./db_migrate.py&#34;, line 10, in &lt;module&gt;
+    exec old_model in tmp_module.__dict__
+  File &#34;&lt;string&gt;&#34;, line 9, in &lt;module&gt;
+TypeError: object() takes no parameters
+
+Any thoughts on what might be wrong and how to migrate properly with MySQL?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/da7af8e53be0df2fcb20fae81293b9e9ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#30</span> <span class="label label-primary">Blake</span> said
+                    <span class="flask-moment" data-timestamp="2014-03-07T17:33:09Z" data-format="fromNow(0)" data-refresh="0">2014-03-07T17:33:09Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">About the earlier migration problem. I switched over to Alembic, since it seems the creator of SQL migrate is no longer keeping up with the project. Alembic worked great. </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/f6c3c1ded16637322a084833904d766fce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#31</span> <span class="label label-primary">victor</span> said
+                    <span class="flask-moment" data-timestamp="2014-03-10T08:24:13Z" data-format="fromNow(0)" data-refresh="0">2014-03-10T08:24:13Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel, I learned a lot from your blog series ! Thanks for the hardwork! My question, since flask is single process and single thread, could you also write about how we can scale up this app to thousands of simultaneous access? probably with nginx (just guessing)? thanks!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#32</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-03-10T17:01:48Z" data-format="fromNow(0)" data-refresh="0">2014-03-10T17:01:48Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Victor: Flask is typically used as a single-process/single-thread during development, but not in production. When you use a production web server such a gunicorn or nginx you can create multiple threads or processes (or both).</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/be4b0dccbdc2b8e7d4efcb064cb3e924ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#33</span> <span class="label label-primary">Stephen Swensen</span> said
+                    <span class="flask-moment" data-timestamp="2014-05-19T02:58:02Z" data-format="fromNow(0)" data-refresh="0">2014-05-19T02:58:02Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Can you explain the reasoning behind &#34;We decided we want the apache group users to be able to freely work on the files on this account, so we have to give the group enough permissions:&#34;?
+
+I ask because this interferes with ssh key-based authentication (an out-of-the-box CentOS install does not allow ssh key-based authentication for a user who&#39;s home dir gives write permissions to a group, such as apache here).
+
+Thank you.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#34</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-05-19T14:48:13Z" data-format="fromNow(0)" data-refresh="0">2014-05-19T14:48:13Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Stephen: the problem that you mention did not appear to me back when I tested this more than a year ago. Instead you could just chmod the files inside the directory, leaving the directory itself alone.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/47d545529e036682e7075910a2489214ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#35</span> <span class="label label-primary">Ondoheer</span> said
+                    <span class="flask-moment" data-timestamp="2014-06-23T15:52:01Z" data-format="fromNow(0)" data-refresh="0">2014-06-23T15:52:01Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hello Miguel,
+Firsto of all thanks for this amazing mega guide. I&#39;ve been following it avidly and I love how despise it have been 2 years since you wrote it it is still uptodate. 
+I have a problem, I have deployed on a Linode CentOS server and I get a 500 error. When I check the error log for Apache I see that 
+&#34;Premature end of script headers: runp-mysql.fcgi&#34;
+As far as my little knowledge goes this happens because the script did not send the right headers? text/html? Any hints would be greatly appreciated!
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#36</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-06-25T02:39:53Z" data-format="fromNow(0)" data-refresh="0">2014-06-25T02:39:53Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Ondoheer: run the app in debug mode, so that you get a stack trace for the error.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/51b6679e7b2720fb7daf8259c1ca3beace2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#37</span> <span class="label label-primary"><a href="bloominglabs.html">Steve C</a></span> said
+                    <span class="flask-moment" data-timestamp="2014-08-02T00:00:59Z" data-format="fromNow(0)" data-refresh="0">2014-08-02T00:00:59Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I&#39;m seeing the 404 on the Raspberry Pi to...but lighttpd serves up static stuff fine. Hmmmm...</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/51b6679e7b2720fb7daf8259c1ca3beace2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#38</span> <span class="label label-primary"><a href="bloominglabs.html">SDC</a></span> said
+                    <span class="flask-moment" data-timestamp="2014-08-02T01:49:38Z" data-format="fromNow(0)" data-refresh="0">2014-08-02T01:49:38Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Eww boy. I tried to deploy this to my Raspberry Pi. I get cryptic error messages (btw, how does one set up the nice full debug pages? fastcgi.debug got me nothing). Poking around, it looks like the sqlite database we generate is not working. I try to open it and:
+
+(flask)pi@raspberrypi ~/microblog $ sqlite app.db 
+Unable to open database &#34;app.db&#34;: file is encrypted or is not a database
+
+Please help...</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#39</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-08-02T04:48:45Z" data-format="fromNow(0)" data-refresh="0">2014-08-02T04:48:45Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">SDC: make sure you use sqlite3 to open the database.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/51b6679e7b2720fb7daf8259c1ca3beace2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#40</span> <span class="label label-primary"><a href="bloominglabs.html">SDC</a></span> said
+                    <span class="flask-moment" data-timestamp="2014-08-02T20:01:19Z" data-format="fromNow(0)" data-refresh="0">2014-08-02T20:01:19Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Thanks Miguel...did that, made some progress, got debugging to work...then got an error about something not being serializable.
+
+Then I changed from the code in git to the code I ended up with following through the tutorial (I went a somewhat divergent path). Had some probs but hit it with the chmod 777 sledgehammer (it&#39;s not accessible from outside my home network) yet I still get:
+
+&lt;class &#39;sqlalchemy.exc.OperationalError&#39;&gt;: (OperationalError) unable to open database file u&#39;UPDATE user SET last_seen=? WHERE user.id = ?&#39; (&#39;2014-08-02 19:54:21.601275&#39;, 2) 
+      args = (&#39;(OperationalError) unable to open database file&#39;,) 
+      connection_invalidated = False 
+      instance = &lt;bound method type.instance of &lt;class &#39;sqlalchemy.exc.OperationalError&#39;&gt;&gt; 
+      message = &#39;(OperationalError) unable to open database file&#39; 
+      orig = OperationalError(&#39;unable to open database file&#39;,) 
+      params = (&#39;2014-08-02 19:54:21.601275&#39;, 2) 
+      statement = u&#39;UPDATE user SET last_seen=? WHERE user.id = ?&#39;
+
+Perhaps this is the &#39;I can&#39;t have multiple people accessing the sqlite database file&#39; dealy? I did do this:
+
+SQLALCHEMY_DATABASE_URI = &#39;sqlite:///&#39; + os.path.join(basedir, &#39;app.db&#39;) + &#39;?check_same_thread=False&#39;
+
+Well I will keep forging ahead, only way to learn, right? Thanks again for the great tutorial and general helpfulness. I&#39;m going to buy your book and that will help me in my travels I am sure.
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/80a8efb8799f01b035c9d1f7319cfe22ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#41</span> <span class="label label-primary">Sven Hergenhahn</span> said
+                    <span class="flask-moment" data-timestamp="2014-09-12T09:26:32Z" data-format="fromNow(0)" data-refresh="0">2014-09-12T09:26:32Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Miguel - thanks a lot for this vast tutorial.
+
+It covers so much more than just flask and even in the article about deployment, a sysadmin like myself was able to learn a bit oer two.
+
+It is very well written and with good examples and explanations for all aspects of the project.
+
+I&#39;ll certainly come back for parts of this at some point in time.
+
+If you have (or start) a flattr account, please let me know.
+
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/4889729f32f6d6c8b9cd443c16322624ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#42</span> <span class="label label-primary"><a href="ggupta.html">Gaurav</a></span> said
+                    <span class="flask-moment" data-timestamp="2014-11-20T15:46:22Z" data-format="fromNow(0)" data-refresh="0">2014-11-20T15:46:22Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I am trying to run my blog on amazon ec2, When configured I am getting below error in apache error logs 
+
+[Thu Nov 20 15:31:46 2014] [warn] [client 122.167.10.10] (104)Connection reset by peer: mod_fcgid: error reading data from FastCGI server
+[Thu Nov 20 15:31:46 2014] [error] [client 122.167.10.10] Premature end of script headers: runp-mysql.fcgi
+
+my apache configuration looks like this
+
+&lt;VirtualHost *:80&gt;
+    DocumentRoot /home/gupta/ggupta/app/static
+    Alias /static /home/gupta/ggupta/app/static
+    ScriptAlias / /home/gupta/ggupta/runp-mysql.fcgi
+    &lt;Directory /&gt;
+     	Order allow,deny
+        Allow from all
+    &lt;/Directory&gt;
+
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#43</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-11-21T06:33:48Z" data-format="fromNow(0)" data-refresh="0">2014-11-21T06:33:48Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Gaurav: check file permissions on runp-mysql.fcgi, make sure the www-data user is allowed to run it.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/4889729f32f6d6c8b9cd443c16322624ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#44</span> <span class="label label-primary"><a href="ggupta.html">Gaurav Gupta</a></span> said
+                    <span class="flask-moment" data-timestamp="2014-11-21T14:35:17Z" data-format="fromNow(0)" data-refresh="0">2014-11-21T14:35:17Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel, 
+
+I have changed permission for runp-mysql.fcgi, now its 775 and group is apache.
+
+Now I am getting below timeout error for mod_fcgid
+
+[Fri Nov 21 14:29:45 2014] [warn] [client 122.172.41.10] mod_fcgid: read data timeout in 40 seconds
+[Fri Nov 21 14:29:45 2014] [error] [client 122.172.41.10] Premature end of script headers: runp-mysql.fcgi
+
+Do i have to change group  permission of complete user folder to apache so that it can access it ? right now only user gupta under whom application is running is having group set as apache and has primary group also as apache.  
+
+I have tried increasing timeout also for mod_fcgid in httpd.conf setting but that&#39;s also not helping. any thoughts ?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#45</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-11-23T00:23:42Z" data-format="fromNow(0)" data-refresh="0">2014-11-23T00:23:42Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Gaurav: can you run runp-mysql.fcgi from the console? There must still be some issue that prevents the apache user to run this script.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/4889729f32f6d6c8b9cd443c16322624ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#46</span> <span class="label label-primary"><a href="ggupta.html">Gaurav</a></span> said
+                    <span class="flask-moment" data-timestamp="2014-11-23T02:47:47Z" data-format="fromNow(0)" data-refresh="0">2014-11-23T02:47:47Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I am getting below error while running directly from console 
+
+[root@ggupta.in]# ./runp-mysql.fcgi 
+Traceback (most recent call last):
+  File &#34;./runp-mysql.fcgi&#34;, line 12, in &lt;module&gt;
+    WSGIServer(app).run()
+  File &#34;/home/gupta/gupta.in/flask/lib/python2.7/site-packages/flipflop.py&#34;, line 938, in run
+    sock.getpeername()
+socket.error: [Errno 88] Socket operation on non-socket
+[root@ggupta.in]#</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#47</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-11-23T08:19:00Z" data-format="fromNow(0)" data-refresh="0">2014-11-23T08:19:00Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Gaurav: the output is the expected, but you are running the script under your user, not apache&#39;s. For Ubuntu you may want to try &#34;sudo -u www-data ./runp-mysql.fcgi&#34; as root, but note that the username of the apache user may be different in your system.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/e60847296d76508577d371c043a9bd14ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#48</span> <span class="label label-primary">Alex</span> said
+                    <span class="flask-moment" data-timestamp="2014-12-09T06:57:28Z" data-format="fromNow(0)" data-refresh="0">2014-12-09T06:57:28Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel,
+
+Thank you for this amazing guide, it really has blown me away.
+
+I&#39;m getting so close to the end and have come across my first real roadblock. While setting up the requirements.txt I&#39;ve given the following error: http://pastebin.com/pQZmxm6N
+
+Do you have any idea what I&#39;ve done wrong here? Regards</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#49</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-12-10T15:26:31Z" data-format="fromNow(0)" data-refresh="0">2014-12-10T15:26:31Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Alex: you need to install Postgres in your machine before you attempt to install the Postgres support for Python.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/e60847296d76508577d371c043a9bd14ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#50</span> <span class="label label-primary">Alex</span> said
+                    <span class="flask-moment" data-timestamp="2014-12-15T12:51:40Z" data-format="fromNow(0)" data-refresh="0">2014-12-15T12:51:40Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel,
+
+Thanks very much for getting back to me, that was exactly the problem, I really appreciate it.
+
+I am now stuck with another error while trying to get it to run, I get a 500 apache internal server error. I&#39;m running it on CentOS 6.6 and haven&#39;t switched over to the mysql database yet, so I&#39;m running runp-sqlite.fcgi. I&#39;ve got selinux disabled at the moment as that was causing a different problem I haven&#39;t got to yet.
+
+If I run it from the console I get the following error:
+	[root@**** portal]# sudo -u apache ./runp-sqlite.fcgi
+	Traceback (most recent call last):
+		File &#34;./runp-sqlite.fcgi&#34;, line 6, in &lt;module&gt;
+			WSGIServer(app).run()
+		File &#34;/home/apps/portal/flask/lib/python2.6/site-packages/flipflop.py&#34;, line 938, in run
+			sock.getpeername()
+	socket.error: [Errno 88] Socket operation on non-socket
+
+I saw your comment about the same error above, I&#39;ve run it as &#34;sudo -u apache ./runp-sqlite.fcgi&#34; and still get the above error. I&#39;ve ensured the environment is chown&#39;d to app:apache, and made sure the user apache is part of the apache group.
+
+In my error logs I get the following error when trying to access the page:
+	[Mon Dec 15 22:21:44 2014] [warn] [client *.*.*.*] mod_fcgid: read data timeout in 40 seconds
+	[Mon Dec 15 22:21:44 2014] [error] [client *.*.*.*] Premature end of script headers: runp-sqlite.fcgi
+
+I&#39;m probably doing something stupid again, could I have the permissions setup wrong? If you could point me in the right direction I&#39;d really appreciate it, I&#39;ve googled through so many pages and just can&#39;t see what I&#39;m missing.
+
+
+Kind Regards,
+Alex</p>
+                </div>
+            </div>
+        </li>
+        
+    </ul>
+</div>
+
+<div class="page">
+<ul class="pager">
+  <li class="previous">
+    <a href="1.html#comments">&laquo;&laquo;</a>
+  </li>
+  <li class="previous">
+    <a href="1.html#comments">&laquo;</a>
+  </li>
+  <li class="next">
+    <a href="0.html#comments">&raquo;&raquo;</a>
+  </li>
+  <li class="next">
+    <a href="3.html#comments">&raquo;</a>
+  </li>
+</ul>
+</div>
+
+<h3><a name="commentform"></a>Leave a Comment</h3>
+
+<form action="#commentform" method="post"
+  class="form" role="form">
+  <div style="display:none;"><input id="csrf_token" name="csrf_token" type="hidden" value="1439534736.16##06bad96b96a475052830ed61970f735760eedc92"></div>
+  
+    
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="name">Name</label>
+        <input class="form-control" id="name" name="name" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="url">URL</label>
+        <input class="form-control" id="url" name="url" type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="email">Email</label>
+        <input class="form-control" id="email" name="email" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="comment">Comment</label>
+        <textarea class="form-control" id="comment" name="comment" required></textarea>
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="captcha">Captcha</label>
+        
+<script type="text/javascript">var RecaptchaOptions = {"custom_translations": {"audio_challenge": "Get an audio challenge", "cant_hear_this": "Download sound as MP3", "help_btn": "Help", "image_alt_text": "reCAPTCHA challenge image", "incorrect_try_again": "Incorrect. Try again.", "instructions_audio": "Type what you hear", "instructions_visual": "Type the text", "play_again": "Play sound again", "privacy_and_terms": "Privacy & Terms", "refresh_btn": "Get a new challenge", "visual_challenge": "Get a visual challenge"}, "theme": "white"};</script>
+<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S"></script>
+<noscript>
+  <iframe src="http://www.google.com/recaptcha/api/noscript?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S" height="300" width="500" frameborder="0"></iframe><br>
+  <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+  <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
+</noscript>
+
+  </div>
+
+
+    
+
+
+
+
+
+  
+
+
+    <input class="btn btn-default" id="submit" name="submit" type="submit" value="Submit">
+  
+
+
+
+
+
+</form>
+
+
+</div>
+
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <p class="elapsed">This page was generated in None seconds.</p>
+            <p>&copy; 2014 by Miguel Grinberg. All rights reserved. <a href="mailto:webmaster _at_ miguelgrinberg _dot_ com">Questions?</a></p>
+        </div>
+    </div>
+
+
+    
+    
+    <script src="../../../../cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="../../../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../../../cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.33/jquery.colorbox-min.js"></script>
+    <script type="text/javascript" src="../../../static/prettify.js"></script>
+    <script src="../../../../cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment-with-langs.min.js"></script>
+<script>
+function flask_moment_render(elem) {
+    $(elem).text(eval('moment("' + $(elem).data('timestamp') + '").' + $(elem).data('format') + ';'));
+    $(elem).removeClass('flask-moment');
+}
+function flask_moment_render_all() {
+    $('.flask-moment').each(function() {
+        flask_moment_render(this);
+        if ($(this).data('refresh')) {
+            (function(elem, interval) { setInterval(function() { flask_moment_render(elem) }, interval); })(this, $(this).data('refresh'));
+        }
+    })
+}
+$(document).ready(function() {
+    flask_moment_render_all();
+});
+</script>
+    
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4777284-15']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".gallery").colorbox({rel:".gallery",maxWidth:"95%",maxHeight:"95%",scalePhotos:true});
+            // add prettyprint class to all <pre><code></code></pre> blocks
+            var prettify = false;
+            $("pre code").parent().each(function() {
+                $(this).addClass('prettyprint');
+                prettify = true;
+            });
+            prettyPrint();
+        });
+    </script>
+
+
+  </body>
+
+<!-- Mirrored from blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xvii-deployment-on-linux-even-on-the-raspberry-pi/page/2 by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 05:49:15 GMT -->
+</html>

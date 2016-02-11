@@ -1,0 +1,720 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+<!-- Mirrored from www.tangowithdjango.com/book17/chapters/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 10 Jan 2016 04:09:45 GMT -->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>9. User Authentication &mdash; How to Tango with Django 1.7</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/twd.ico"/>
+    <link rel="top" title="How to Tango with Django 1.7" href="../index-2.html" />
+    <link rel="next" title="10. Working with Templates" href="templates.html" />
+    <link rel="prev" title="8. Fun with Forms" href="forms.html" />
+ <style type="text/css">
+	img{
+	    width: 85%; /* you can use % */
+	    height: auto;
+	}
+	
+	table {
+		margin: auto;
+	}
+	
+	p.caption {
+		font-size: 10pt;
+		font-style: italic;
+	}
+ </style>
+ <script type="text/javascript">
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','../../../www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-44397330-1', 'tangowithdjango.com');
+  ga('send', 'pageview');
+     
+
+  </script>      
+
+  </head>
+  <body role="document">
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        
+        <li class="right" >
+          <a href="templates.html" title="10. Working with Templates"
+             accesskey="N">next</a>
+          </li>
+		
+        <li class="right" >
+          <a href="forms.html" title="8. Fun with Forms"
+             accesskey="P">previous</a>
+          </li>
+		
+        <li><a href="../index-2.html">How to Tango with Django 1.7</a> &raquo;</li> 
+
+      </ul>
+
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index-2.html">
+              <img class="logo" src="../_static/twd200x200.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index-2.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">9. User Authentication</a><ul>
+<li><a class="reference internal" href="#setting-up-authentication">9.1. Setting up Authentication</a></li>
+<li><a class="reference internal" href="#the-user-model">9.2. The <code class="docutils literal"><span class="pre">User</span></code> Model</a></li>
+<li><a class="reference internal" href="#additional-user-attributes">9.3. Additional User Attributes</a></li>
+<li><a class="reference internal" href="#creating-a-user-registration-view-and-template">9.4. Creating a <em>User Registration</em> View and Template</a><ul>
+<li><a class="reference internal" href="#creating-the-userform-and-userprofileform">9.4.1. Creating the <code class="docutils literal"><span class="pre">UserForm</span></code> and <code class="docutils literal"><span class="pre">UserProfileForm</span></code></a></li>
+<li><a class="reference internal" href="#creating-the-register-view">9.4.2. Creating the <code class="docutils literal"><span class="pre">register()</span></code> View</a></li>
+<li><a class="reference internal" href="#creating-the-registration-template">9.4.3. Creating the <em>Registration</em> Template</a></li>
+<li><a class="reference internal" href="#the-register-view-url-mapping">9.4.4. The <code class="docutils literal"><span class="pre">register()</span></code> View URL Mapping</a></li>
+<li><a class="reference internal" href="#linking-together">9.4.5. Linking Together</a></li>
+<li><a class="reference internal" href="#demo">9.4.6. Demo</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#adding-login-functionality">9.5. Adding Login Functionality</a><ul>
+<li><a class="reference internal" href="#creating-the-login-view">9.5.1. Creating the <code class="docutils literal"><span class="pre">login()</span></code> View</a></li>
+<li><a class="reference internal" href="#creating-a-login-template">9.5.2. Creating a <em>Login</em> Template</a></li>
+<li><a class="reference internal" href="#mapping-the-login-view-to-a-url">9.5.3. Mapping the Login View to a URL</a></li>
+<li><a class="reference internal" href="#id1">9.5.4. Linking Together</a></li>
+<li><a class="reference internal" href="#id2">9.5.5. Demo</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#restricting-access">9.6. Restricting Access</a><ul>
+<li><a class="reference internal" href="#restricting-access-with-a-decorator">9.6.1. Restricting Access with a Decorator</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#logging-out">9.7. Logging Out</a></li>
+<li><a class="reference internal" href="#exercises">9.8. Exercises</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="forms.html"
+                        title="previous chapter">8. Fun with Forms</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="templates.html"
+                        title="next chapter">10. Working with Templates</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/chapters/login.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="http://www.tangowithdjango.com/book17/search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="user-authentication">
+<span id="login-label"></span><h1>9. User Authentication<a class="headerlink" href="#user-authentication" title="Permalink to this headline">¶</a></h1>
+<p>The aim of this next part of the tutorial is to get you familiar with the user authentication mechanisms provided by Django. We&#8217;ll be using the <code class="docutils literal"><span class="pre">auth</span></code> application provided as part of a standard Django installation in package <code class="docutils literal"><span class="pre">django.contrib.auth</span></code>. According to <a class="reference external" href="https://docs.djangoproject.com/en/1.7/topics/auth/">Django&#8217;s official documentation on Authentication</a>, the application consists of the following aspects.</p>
+<ul class="simple">
+<li><em>Users.</em></li>
+<li><em>Permissions:</em> a series of binary flags (e.g. yes/no) determining what a user may or may not do.</li>
+<li><em>Groups:</em> a method of applying permissions to more than one user.</li>
+<li>A configurable <em>password hashing system:</em> a must for ensuring data security.</li>
+<li><em>Forms and view tools for logging in users,</em> or restricting content.</li>
+</ul>
+<p>There&#8217;s lots that Django can do for you in the area of user authentication. We&#8217;ll be covering the basics to get you started. This will help you build your confidence with the available tools and their underlying concepts.</p>
+<div class="section" id="setting-up-authentication">
+<h2>9.1. Setting up Authentication<a class="headerlink" href="#setting-up-authentication" title="Permalink to this headline">¶</a></h2>
+<p>Before you can begin to play around with Django&#8217;s authentication offering, you&#8217;ll need to make sure that the relevant settings are present in your Rango project&#8217;s <code class="docutils literal"><span class="pre">settings.py</span></code> file.</p>
+<p>Within the <code class="docutils literal"><span class="pre">settings.py</span></code> file find the <code class="docutils literal"><span class="pre">INSTALLED_APPS</span></code> tuple and check that <code class="docutils literal"><span class="pre">django.contrib.auth</span></code> and <code class="docutils literal"><span class="pre">django.contrib.contenttypes</span></code> are listed, so that it looks like the code below:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s">&#39;django.contrib.admin&#39;</span><span class="p">,</span>
+    <span class="s">&#39;django.contrib.auth&#39;</span><span class="p">,</span>
+    <span class="s">&#39;django.contrib.contenttypes&#39;</span><span class="p">,</span>
+    <span class="s">&#39;django.contrib.sessions&#39;</span><span class="p">,</span>
+    <span class="s">&#39;django.contrib.messages&#39;</span><span class="p">,</span>
+    <span class="s">&#39;django.contrib.staticfiles&#39;</span><span class="p">,</span>
+    <span class="s">&#39;rango&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>While <code class="docutils literal"><span class="pre">django.contrib.auth</span></code> provides Django with access to the authentication system, <code class="docutils literal"><span class="pre">django.contrib.contenttypes</span></code> is used by the authentication application to track models installed in your database.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Remember, if you had to add the <code class="docutils literal"><span class="pre">auth</span></code> applications to your <code class="docutils literal"><span class="pre">INSTALLED_APPS</span></code> tuple, you will need to update your database with the <code class="docutils literal"><span class="pre">$</span> <span class="pre">python</span> <span class="pre">manage.py</span> <span class="pre">migrate</span></code> command.</p>
+</div>
+<p>Passwords are stored by default in Django using the <a class="reference external" href="http://en.wikipedia.org/wiki/PBKDF2">PBKDF2 algorithm</a>, providing a good level of security for your user&#8217;s data. You can read more about this as part of the <a class="reference external" href="https://docs.djangoproject.com/en/1.7/topics/auth/passwords/#how-django-stores-passwords">official Django documentation on how django stores passwords</a>. The documentation also provides an explanation of how to use different password hashers if you require a greater level of security.</p>
+<p>If you want more control over how the passwords are hashed, then in the <code class="docutils literal"><span class="pre">settings.py</span></code> add in tuple to specify the <code class="docutils literal"><span class="pre">PASSWORD_HASHERS</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">PASSWORD_HASHERS</span> <span class="o">=</span> <span class="p">(</span>
+<span class="s">&#39;django.contrib.auth.hashers.PBKDF2PasswordHasher&#39;</span><span class="p">,</span>
+<span class="s">&#39;django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Django will use the first hasher in <code class="docutils literal"><span class="pre">PASSWORD_HASHERS</span></code> i.e. settings.PASSWORD_HASHERS[0]. If you wanted to use a more secure hasher, you can install Bcrypt (see <a class="reference external" href="https://pypi.python.org/pypi/bcrypt/">https://pypi.python.org/pypi/bcrypt/</a> ) using <code class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">bcrypt</span></code>, and then set the <code class="docutils literal"><span class="pre">PASSWORD_HASHERS</span></code> to be:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">PASSWORD_HASHERS</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s">&#39;django.contrib.auth.hashers.BCryptSHA256PasswordHasher&#39;</span><span class="p">,</span>
+<span class="s">&#39;django.contrib.auth.hashers.BCryptPasswordHasher&#39;</span><span class="p">,</span>
+<span class="s">&#39;django.contrib.auth.hashers.PBKDF2PasswordHasher&#39;</span><span class="p">,</span>
+<span class="s">&#39;django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>However, to get up and running you don&#8217;t need to explicitly specify the <code class="docutils literal"><span class="pre">PASSWORD_HASHERS</span></code>, in which case Django defaults to, <code class="docutils literal"><span class="pre">django.contrib.auth.hashers.PBKDF2PasswordHasher</span></code>.</p>
+</div>
+<div class="section" id="the-user-model">
+<h2>9.2. The <code class="docutils literal"><span class="pre">User</span></code> Model<a class="headerlink" href="#the-user-model" title="Permalink to this headline">¶</a></h2>
+<p>The core of Django&#8217;s authentication system is the <code class="docutils literal"><span class="pre">User</span></code> object, located at <code class="docutils literal"><span class="pre">django.contrib.auth.models.User</span></code>. A <code class="docutils literal"><span class="pre">User</span></code> object represents each of the people interacting with a Django application. The <a class="reference external" href="https://docs.djangoproject.com/en/1.7/topics/auth/default/#user-objects">Django documentation on User objects</a> states that they are used to allow aspects of the authentication system like access restriction, registration of new user profiles and the association of creators with site content.</p>
+<p>The <code class="docutils literal"><span class="pre">User</span></code> model comes complete with five primary attributes. They are:</p>
+<ul class="simple">
+<li>the username for the user account;</li>
+<li>the account&#8217;s password;</li>
+<li>the user&#8217;s email address;</li>
+<li>the user&#8217;s first name; and</li>
+<li>the user&#8217;s surname.</li>
+</ul>
+<p>The model also comes with other attributes such as <code class="docutils literal"><span class="pre">is_active</span></code> (which determines whether a particular account is active or not). Check the <a class="reference external" href="https://docs.djangoproject.com/en/1.7/ref/contrib/auth/#django.contrib.auth.models.User">official Django documentation on the user model</a> for a full list of attributes provided by the base <code class="docutils literal"><span class="pre">User</span></code> model.</p>
+</div>
+<div class="section" id="additional-user-attributes">
+<h2>9.3. Additional User Attributes<a class="headerlink" href="#additional-user-attributes" title="Permalink to this headline">¶</a></h2>
+<p>If you would like to include other attributes than what is provided by the <code class="docutils literal"><span class="pre">User</span></code> model, then you have two options: (1) extend the <code class="docutils literal"><span class="pre">User</span></code> model by creating a new user model from <code class="docutils literal"><span class="pre">AbstractUser</span></code> (see the <cite>official Django Document on extending Django&#8217;s default user`_&lt;https://docs.djangoproject.com/en/1.7/topics/auth/customizing/#extending-django-s-default-user&gt; or (2) create a model with a one-to-one association with the the ``User`</cite> model. In this tutorial, we will create an associated model. For our Rango application, we want to include two more additional attributes for each user account. Specifically, we wish to include:</p>
+<ul class="simple">
+<li>a <code class="docutils literal"><span class="pre">URLField</span></code>, allowing a user of Rango to specify their own website; and</li>
+<li>a <code class="docutils literal"><span class="pre">ImageField</span></code>, which allows users to specify a picture for their user profile.</li>
+</ul>
+<p>This can be achieved by creating an additional model in Rango&#8217;s <code class="docutils literal"><span class="pre">models.py</span></code> file. Let&#8217;s add a new model called <code class="docutils literal"><span class="pre">UserProfile</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">UserProfile</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="c"># This line is required. Links UserProfile to a User model instance.</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">OneToOneField</span><span class="p">(</span><span class="n">User</span><span class="p">)</span>
+
+    <span class="c"># The additional attributes we wish to include.</span>
+    <span class="n">website</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">URLField</span><span class="p">(</span><span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">picture</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ImageField</span><span class="p">(</span><span class="n">upload_to</span><span class="o">=</span><span class="s">&#39;profile_images&#39;</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="c"># Override the __unicode__() method to return out something meaningful!</span>
+    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">username</span>
+</pre></div>
+</div>
+<p>Note that we reference the <code class="docutils literal"><span class="pre">User</span></code> model using a One to One relationship. Since we reference the default <code class="docutils literal"><span class="pre">User</span></code> model, we need to import it within the <code class="docutils literal"><span class="pre">models.py</span></code> file:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+</pre></div>
+</div>
+<p>It may have been tempting to add these additional fields by inheriting from the <code class="docutils literal"><span class="pre">User</span></code> model directly. However, because other applications may also want access to the <code class="docutils literal"><span class="pre">User</span></code> model, then it not recommended to use inheritance, but instead use the one-to-one relationship.</p>
+<p>For Rango, we&#8217;ve added two fields to complete our user profile, and provided a <code class="docutils literal"><span class="pre">__unicode__()</span></code> method to return a meaningful value when a unicode representation of a <code class="docutils literal"><span class="pre">UserProfile</span></code> model instance is requested.</p>
+<p>For the two fields <code class="docutils literal"><span class="pre">website</span></code> and <code class="docutils literal"><span class="pre">picture</span></code>, we have set <code class="docutils literal"><span class="pre">blank=True</span></code> for both. This allows each of the fields to be blank if necessary, meaning that users do not have to supply values for the attributes if they do not wish to.</p>
+<p>Note that the <code class="docutils literal"><span class="pre">ImageField</span></code> field has an <code class="docutils literal"><span class="pre">upload_to</span></code> attribute. The value of this attribute is conjoined with the project&#8217;s <code class="docutils literal"><span class="pre">MEDIA_ROOT</span></code> setting to provide a path with which uploaded profile images will be stored. For example, a <code class="docutils literal"><span class="pre">MEDIA_ROOT</span></code> of <code class="docutils literal"><span class="pre">&lt;workspace&gt;/tango_with_django_project/media/</span></code> and <code class="docutils literal"><span class="pre">upload_to</span></code> attribute of <code class="docutils literal"><span class="pre">profile_images</span></code> will result in all profile images being stored in the directory <code class="docutils literal"><span class="pre">&lt;workspace&gt;/tango_with_django_project/media/profile_images/</span></code>.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The Django <code class="docutils literal"><span class="pre">ImageField</span></code> field makes use of the <em>Python Imaging Library (PIL).</em> Back in Chapter <a class="reference internal" href="requirements.html#requirements-label">3</a>, we discussed installing PIL along with Django to your setup. If you haven&#8217;t got PIL installed, you&#8217;ll need to install it now. If you don&#8217;t, you&#8217;ll be greeted with exceptions stating that the module <code class="docutils literal"><span class="pre">pil</span></code> cannot be found!</p>
+</div>
+<p>With our <code class="docutils literal"><span class="pre">UserProfile</span></code> model defined, we now edit Rango&#8217;s <code class="docutils literal"><span class="pre">admin.py</span></code> file to include the new <code class="docutils literal"><span class="pre">UserProfile</span></code> model in the Django administration web interface. In the <code class="docutils literal"><span class="pre">admin.py</span></code> file, add the following line.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">rango.models</span> <span class="kn">import</span> <span class="n">UserProfile</span>
+
+<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">UserProfile</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Remember that your database must be updated with the creation of a new model. Run <code class="docutils literal"><span class="pre">$</span> <span class="pre">python</span> <span class="pre">manage.py</span> <span class="pre">makemigrations</span> <span class="pre">rango</span></code> from your terminal to create the migration scripts for the new <code class="docutils literal"><span class="pre">UserProfile</span></code> model. Then run <code class="docutils literal"><span class="pre">$</span> <span class="pre">python</span> <span class="pre">manage.py</span> <span class="pre">migrate</span></code></p>
+</div>
+</div>
+<div class="section" id="creating-a-user-registration-view-and-template">
+<h2>9.4. Creating a <em>User Registration</em> View and Template<a class="headerlink" href="#creating-a-user-registration-view-and-template" title="Permalink to this headline">¶</a></h2>
+<p>With our authentication infrastructure laid out, we can now begin to build onto it by providing users of our application with the opportunity to create new user accounts. We will achieve this via the creation of a new view and template combination.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It is important to note that there are several off-the-shelf user registration packages available which reduce a lot of the hassle of building your own registration and log in forms. However, it is good to get a feeling for the underlying mechanics, because using such applications. It will also re-enforce your understanding of working with forms, how to extend upon the user model, and how to upload media.</p>
+</div>
+<p>To provide the user registration functionality we will go through the following steps:</p>
+<ol class="arabic simple">
+<li>Create a <code class="docutils literal"><span class="pre">UserForm</span></code> and <code class="docutils literal"><span class="pre">UserProfileForm</span></code>.</li>
+<li>Add a view to handle the creation of a new user.</li>
+<li>Create a  template that displays the <code class="docutils literal"><span class="pre">UserForm</span></code> and <code class="docutils literal"><span class="pre">UserProfileForm</span></code>.</li>
+<li>Map a URL to the view created.</li>
+<li>Link the index page to the register page</li>
+</ol>
+<div class="section" id="creating-the-userform-and-userprofileform">
+<span id="login-formclasses-label"></span><h3>9.4.1. Creating the <code class="docutils literal"><span class="pre">UserForm</span></code> and <code class="docutils literal"><span class="pre">UserProfileForm</span></code><a class="headerlink" href="#creating-the-userform-and-userprofileform" title="Permalink to this headline">¶</a></h3>
+<p>In <code class="docutils literal"><span class="pre">rango/forms.py</span></code>, we now need to create two classes inheriting from <code class="docutils literal"><span class="pre">forms.ModelForm</span></code>. We&#8217;ll be creating one for the base <code class="docutils literal"><span class="pre">User</span></code> class, as well as one for the new <code class="docutils literal"><span class="pre">UserProfile</span></code> model that we just created. The two <code class="docutils literal"><span class="pre">ModelForm</span></code> inheriting classes allow us to display a HTML form displaying the necessary form fields for a particular model, taking away a significant amount of work for us. Neat!</p>
+<p>In <code class="docutils literal"><span class="pre">rango/forms.py</span></code>, let&#8217;s create our two classes which inherit from <code class="docutils literal"><span class="pre">forms.ModelForm</span></code>. Add the following code to the module.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">UserForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">ModelForm</span><span class="p">):</span>
+    <span class="n">password</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">PasswordInput</span><span class="p">())</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">User</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;username&#39;</span><span class="p">,</span> <span class="s">&#39;email&#39;</span><span class="p">,</span> <span class="s">&#39;password&#39;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">UserProfileForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">ModelForm</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">UserProfile</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;website&#39;</span><span class="p">,</span> <span class="s">&#39;picture&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You&#8217;ll notice that within both classes, we added a <a class="reference external" href="http://www.brpreiss.com/books/opus7/html/page598.html">nested</a> <code class="docutils literal"><span class="pre">Meta</span></code> class. As <a class="reference external" href="http://www.webopedia.com/TERM/M/meta.html">the name of the nested class suggests</a>, anything within a nested <code class="docutils literal"><span class="pre">Meta</span></code> class describes additional properties about the particular <code class="docutils literal"><span class="pre">ModelForm</span></code> class it belongs to. Each <code class="docutils literal"><span class="pre">Meta</span></code> class must at a bare minimum supply a <code class="docutils literal"><span class="pre">model</span></code> field, which references back to the model the <code class="docutils literal"><span class="pre">ModelForm</span></code> inheriting class should relate to. Our <code class="docutils literal"><span class="pre">UserForm</span></code> class is therefore associated with the <code class="docutils literal"><span class="pre">User</span></code> model, for example. As of Django 1.7, you also need to specify, <code class="docutils literal"><span class="pre">fields</span></code> or <code class="docutils literal"><span class="pre">exclude</span></code> to indicate which fields associated with the model should be present on the form.</p>
+<p>Here we only want to show the fields, <code class="docutils literal"><span class="pre">username</span></code>, <code class="docutils literal"><span class="pre">email</span></code> and <code class="docutils literal"><span class="pre">password</span></code>, associated with the <code class="docutils literal"><span class="pre">User</span></code> model, and the <code class="docutils literal"><span class="pre">website</span></code> and <code class="docutils literal"><span class="pre">picture</span></code> associated with the <code class="docutils literal"><span class="pre">UserProfile</span></code> model. For the <code class="docutils literal"><span class="pre">user</span></code> field within <code class="docutils literal"><span class="pre">UserProfile</span></code> we will need to make this association when we register the user.</p>
+<p>You&#8217;ll also notice that <code class="docutils literal"><span class="pre">UserForm</span></code> includes a definition of the <code class="docutils literal"><span class="pre">password</span></code> attribute. While a <code class="docutils literal"><span class="pre">User</span></code> model instance contains a <code class="docutils literal"><span class="pre">password</span></code> attribute by default, the rendered HTML form element will not hide the password. If a user types a password, the password will be visible. By updating the <code class="docutils literal"><span class="pre">password</span></code> attribute, we can then specify that the <code class="docutils literal"><span class="pre">CharField</span></code> instance should hide a user&#8217;s input from prying eyes through use of the <code class="docutils literal"><span class="pre">PasswordInput()</span></code> widget.</p>
+<p>Finally, remember to include the required classes at the top of the <code class="docutils literal"><span class="pre">forms.py</span></code> module!</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">forms</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+<span class="kn">from</span> <span class="nn">rango.models</span> <span class="kn">import</span> <span class="n">Category</span><span class="p">,</span> <span class="n">Page</span><span class="p">,</span> <span class="n">UserProfile</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="creating-the-register-view">
+<h3>9.4.2. Creating the <code class="docutils literal"><span class="pre">register()</span></code> View<a class="headerlink" href="#creating-the-register-view" title="Permalink to this headline">¶</a></h3>
+<p>Next we need to handle both the rendering of the form, and the processing of form input data. Within Rango&#8217;s <code class="docutils literal"><span class="pre">views.py</span></code> file, add the following view function:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">rango.forms</span> <span class="kn">import</span> <span class="n">UserForm</span><span class="p">,</span> <span class="n">UserProfileForm</span>
+
+<span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+
+    <span class="c"># A boolean value for telling the template whether the registration was successful.</span>
+    <span class="c"># Set to False initially. Code changes value to True when registration succeeds.</span>
+    <span class="n">registered</span> <span class="o">=</span> <span class="bp">False</span>
+
+    <span class="c"># If it&#39;s a HTTP POST, we&#39;re interested in processing form data.</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;POST&#39;</span><span class="p">:</span>
+        <span class="c"># Attempt to grab information from the raw form information.</span>
+        <span class="c"># Note that we make use of both UserForm and UserProfileForm.</span>
+        <span class="n">user_form</span> <span class="o">=</span> <span class="n">UserForm</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
+        <span class="n">profile_form</span> <span class="o">=</span> <span class="n">UserProfileForm</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
+
+        <span class="c"># If the two forms are valid...</span>
+        <span class="k">if</span> <span class="n">user_form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">()</span> <span class="ow">and</span> <span class="n">profile_form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="c"># Save the user&#39;s form data to the database.</span>
+            <span class="n">user</span> <span class="o">=</span> <span class="n">user_form</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+            <span class="c"># Now we hash the password with the set_password method.</span>
+            <span class="c"># Once hashed, we can update the user object.</span>
+            <span class="n">user</span><span class="o">.</span><span class="n">set_password</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">password</span><span class="p">)</span>
+            <span class="n">user</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+            <span class="c"># Now sort out the UserProfile instance.</span>
+            <span class="c"># Since we need to set the user attribute ourselves, we set commit=False.</span>
+            <span class="c"># This delays saving the model until we&#39;re ready to avoid integrity problems.</span>
+            <span class="n">profile</span> <span class="o">=</span> <span class="n">profile_form</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">commit</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+            <span class="n">profile</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">user</span>
+
+            <span class="c"># Did the user provide a profile picture?</span>
+            <span class="c"># If so, we need to get it from the input form and put it in the UserProfile model.</span>
+            <span class="k">if</span> <span class="s">&#39;picture&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">FILES</span><span class="p">:</span>
+                <span class="n">profile</span><span class="o">.</span><span class="n">picture</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">FILES</span><span class="p">[</span><span class="s">&#39;picture&#39;</span><span class="p">]</span>
+
+            <span class="c"># Now we save the UserProfile model instance.</span>
+            <span class="n">profile</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+            <span class="c"># Update our variable to tell the template registration was successful.</span>
+            <span class="n">registered</span> <span class="o">=</span> <span class="bp">True</span>
+
+        <span class="c"># Invalid form or forms - mistakes or something else?</span>
+        <span class="c"># Print problems to the terminal.</span>
+        <span class="c"># They&#39;ll also be shown to the user.</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span> <span class="n">user_form</span><span class="o">.</span><span class="n">errors</span><span class="p">,</span> <span class="n">profile_form</span><span class="o">.</span><span class="n">errors</span>
+
+    <span class="c"># Not a HTTP POST, so we render our form using two ModelForm instances.</span>
+    <span class="c"># These forms will be blank, ready for user input.</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">user_form</span> <span class="o">=</span> <span class="n">UserForm</span><span class="p">()</span>
+        <span class="n">profile_form</span> <span class="o">=</span> <span class="n">UserProfileForm</span><span class="p">()</span>
+
+    <span class="c"># Render the template depending on the context.</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span>
+            <span class="s">&#39;rango/register.html&#39;</span><span class="p">,</span>
+            <span class="p">{</span><span class="s">&#39;user_form&#39;</span><span class="p">:</span> <span class="n">user_form</span><span class="p">,</span> <span class="s">&#39;profile_form&#39;</span><span class="p">:</span> <span class="n">profile_form</span><span class="p">,</span> <span class="s">&#39;registered&#39;</span><span class="p">:</span> <span class="n">registered</span><span class="p">}</span> <span class="p">)</span>
+</pre></div>
+</div>
+<p>Is the view a lot more complex? It might look so at first, but it isn&#8217;t really. The only added complexity from our previous <code class="docutils literal"><span class="pre">add_category()</span></code> view is the need to handle two distinct <code class="docutils literal"><span class="pre">ModelForm</span></code> instances - one for the <code class="docutils literal"><span class="pre">User</span></code> model, and one for the <code class="docutils literal"><span class="pre">UserProfile</span></code> model. We also need to handle a user&#8217;s profile image, if he or she chooses to upload one.</p>
+<p>We also establish a link between the two model instances that we create. After creating a new <code class="docutils literal"><span class="pre">User</span></code> model instance, we reference it in the <code class="docutils literal"><span class="pre">UserProfile</span></code> instance with the line <code class="docutils literal"><span class="pre">profile.user</span> <span class="pre">=</span> <span class="pre">user</span></code>. This is where we populate the <code class="docutils literal"><span class="pre">user</span></code> attribute of the <code class="docutils literal"><span class="pre">UserProfileForm</span></code> form, which we hid from users in Section <a class="reference internal" href="#login-formclasses-label">9.4.1</a>.</p>
+</div>
+<div class="section" id="creating-the-registration-template">
+<h3>9.4.3. Creating the <em>Registration</em> Template<a class="headerlink" href="#creating-the-registration-template" title="Permalink to this headline">¶</a></h3>
+<p>Now create a new template file, <code class="docutils literal"><span class="pre">rango/register.html</span></code> and add the following code:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+    <span class="nt">&lt;head&gt;</span>
+        <span class="nt">&lt;title&gt;</span>Rango<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;/head&gt;</span>
+
+    <span class="nt">&lt;body&gt;</span>
+        <span class="nt">&lt;h1&gt;</span>Register with Rango<span class="nt">&lt;/h1&gt;</span>
+
+        {% if registered %}
+        Rango says: <span class="nt">&lt;strong&gt;</span>thank you for registering!<span class="nt">&lt;/strong&gt;</span>
+        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/rango/&quot;</span><span class="nt">&gt;</span>Return to the homepage.<span class="nt">&lt;/a&gt;&lt;br</span> <span class="nt">/&gt;</span>
+        {% else %}
+        Rango says: <span class="nt">&lt;strong&gt;</span>register here!<span class="nt">&lt;/strong&gt;&lt;br</span> <span class="nt">/&gt;</span>
+
+        <span class="nt">&lt;form</span> <span class="na">id=</span><span class="s">&quot;user_form&quot;</span> <span class="na">method=</span><span class="s">&quot;post&quot;</span> <span class="na">action=</span><span class="s">&quot;/rango/register/&quot;</span>
+                <span class="na">enctype=</span><span class="s">&quot;multipart/form-data&quot;</span><span class="nt">&gt;</span>
+
+            {% csrf_token %}
+
+            <span class="c">&lt;!-- Display each form. The as_p method wraps each element in a paragraph</span>
+<span class="c">                 (&lt;p&gt;) element. This ensures each element appears on a new line,</span>
+<span class="c">                 making everything look neater. --&gt;</span>
+            {{ user_form.as_p }}
+            {{ profile_form.as_p }}
+
+            <span class="c">&lt;!-- Provide a button to click to submit the form. --&gt;</span>
+            <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span> <span class="na">name=</span><span class="s">&quot;submit&quot;</span> <span class="na">value=</span><span class="s">&quot;Register&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;/form&gt;</span>
+        {% endif %}
+    <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
+</div>
+<p>This HTML template makes use of the <code class="docutils literal"><span class="pre">registered</span></code> variable we used in our view indicating whether registration was successful or not. Note that <code class="docutils literal"><span class="pre">registered</span></code> must be <code class="docutils literal"><span class="pre">False</span></code> in order for the template to display the registration form - otherwise, apart from the title, only a success message is displayed.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">You should be aware of the <code class="docutils literal"><span class="pre">enctype</span></code> attribute for the <code class="docutils literal"><span class="pre">&lt;form&gt;</span></code> element. When you want users to upload files from a form, it&#8217;s an absolute <em>must</em> to set <code class="docutils literal"><span class="pre">enctype</span></code> to <code class="docutils literal"><span class="pre">multipart/form-data</span></code>. This attribute and value combination instructs your browser to send form data in a special way back to the server. Essentially, the data representing your file is split into a series of chunks and sent. For more information, check out <a class="reference external" href="http://stackoverflow.com/a/4526286">this great Stack Overflow answer</a>. You should also should remember to include the CSRF token, too. Ensure that you include <code class="docutils literal"><span class="pre">{%</span> <span class="pre">csrf_token</span> <span class="pre">%}</span></code> within your <code class="docutils literal"><span class="pre">&lt;form&gt;</span></code> element.</p>
+</div>
+</div>
+<div class="section" id="the-register-view-url-mapping">
+<h3>9.4.4. The <code class="docutils literal"><span class="pre">register()</span></code> View URL Mapping<a class="headerlink" href="#the-register-view-url-mapping" title="Permalink to this headline">¶</a></h3>
+<p>Now we can add a URL mapping to our new view. In <code class="docutils literal"><span class="pre">rango/urls.py</span></code> modify the <code class="docutils literal"><span class="pre">urlpatterns</span></code> tuple as shown below:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">urlpatterns</span> <span class="o">=</span> <span class="n">patterns</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;index&#39;</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^about/$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">about</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;about&#39;</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^category/(?P&lt;category_name_slug&gt;\w+)$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">category</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;category&#39;</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^add_category/$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">add_category</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;add_category&#39;</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^category/(?P&lt;category_name_slug&gt;\w+)/add_page/$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">add_page</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;add_page&#39;</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^register/$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">register</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;register&#39;</span><span class="p">),</span> <span class="c"># ADD NEW PATTERN!</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<p>The newly added pattern points the URL <code class="docutils literal"><span class="pre">/rango/register/</span></code> to the <code class="docutils literal"><span class="pre">register()</span></code> view.</p>
+</div>
+<div class="section" id="linking-together">
+<h3>9.4.5. Linking Together<a class="headerlink" href="#linking-together" title="Permalink to this headline">¶</a></h3>
+<p>Finally, we can add a link pointing to that URL in our homepage <code class="docutils literal"><span class="pre">index.html</span></code> template. Underneath the link to the category addition page, add the following hyperlink.</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/rango/register/&quot;</span><span class="nt">&gt;</span>Register Here<span class="nt">&lt;/a&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="demo">
+<h3>9.4.6. Demo<a class="headerlink" href="#demo" title="Permalink to this headline">¶</a></h3>
+<p>Easy! Now you&#8217;ll have a new hyperlink with the text <code class="docutils literal"><span class="pre">Register</span> <span class="pre">Here</span></code> that&#8217;ll take you to the registration page. Try it out now! Start your Django development server and try to register a new user account. Upload a profile image if you wish. Your registration form should look like the one illustrated in Figure <a class="pageref" href="#fig-rango-register-form">1</a>.</p>
+<div class="align-center figure" id="id4">
+<span id="fig-rango-register-form"></span><img alt="../_images/rango-register-form.png" src="../_images/rango-register-form.png" />
+<p class="caption"><span class="caption-text">Figure 1: A screenshot illustrating the basic registration form you create as part of this tutorial.</span></p>
+</div>
+<p>Upon seeing the message indicating your details were successfully registered, the database should have two new entries in its tables corresponding to the <code class="docutils literal"><span class="pre">User</span></code> and <code class="docutils literal"><span class="pre">UserProfile</span></code> models.</p>
+</div>
+</div>
+<div class="section" id="adding-login-functionality">
+<h2>9.5. Adding Login Functionality<a class="headerlink" href="#adding-login-functionality" title="Permalink to this headline">¶</a></h2>
+<p>With the ability to register accounts completed, we now need to add login in functionality. To achieve this we will need to undertake the workflow below:</p>
+<ul class="simple">
+<li>Create a login in view to handle user credentials</li>
+<li>Create a login template to display the login form</li>
+<li>Map the login view to a url</li>
+<li>Provide a link to login from the index page</li>
+</ul>
+<div class="section" id="creating-the-login-view">
+<h3>9.5.1. Creating the <code class="docutils literal"><span class="pre">login()</span></code> View<a class="headerlink" href="#creating-the-login-view" title="Permalink to this headline">¶</a></h3>
+<p>In <code class="docutils literal"><span class="pre">rango/views.py</span></code> create a new function called <code class="docutils literal"><span class="pre">user_login()</span></code> and add the following code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">user_login</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+
+    <span class="c"># If the request is a HTTP POST, try to pull out the relevant information.</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;POST&#39;</span><span class="p">:</span>
+        <span class="c"># Gather the username and password provided by the user.</span>
+        <span class="c"># This information is obtained from the login form.</span>
+                <span class="c"># We use request.POST.get(&#39;&lt;variable&gt;&#39;) as opposed to request.POST[&#39;&lt;variable&gt;&#39;],</span>
+                <span class="c"># because the request.POST.get(&#39;&lt;variable&gt;&#39;) returns None, if the value does not exist,</span>
+                <span class="c"># while the request.POST[&#39;&lt;variable&gt;&#39;] will raise key error exception</span>
+        <span class="n">username</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;username&#39;</span><span class="p">)</span>
+        <span class="n">password</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;password&#39;</span><span class="p">)</span>
+
+        <span class="c"># Use Django&#39;s machinery to attempt to see if the username/password</span>
+        <span class="c"># combination is valid - a User object is returned if it is.</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">authenticate</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">)</span>
+
+        <span class="c"># If we have a User object, the details are correct.</span>
+        <span class="c"># If None (Python&#39;s way of representing the absence of a value), no user</span>
+        <span class="c"># with matching credentials was found.</span>
+        <span class="k">if</span> <span class="n">user</span><span class="p">:</span>
+            <span class="c"># Is the account active? It could have been disabled.</span>
+            <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">is_active</span><span class="p">:</span>
+                <span class="c"># If the account is valid and active, we can log the user in.</span>
+                <span class="c"># We&#39;ll send the user back to the homepage.</span>
+                <span class="n">login</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="s">&#39;/rango/&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c"># An inactive account was used - no logging in!</span>
+                <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s">&quot;Your Rango account is disabled.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c"># Bad login details were provided. So we can&#39;t log the user in.</span>
+            <span class="k">print</span> <span class="s">&quot;Invalid login details: {0}, {1}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s">&quot;Invalid login details supplied.&quot;</span><span class="p">)</span>
+
+    <span class="c"># The request is not a HTTP POST, so display the login form.</span>
+    <span class="c"># This scenario would most likely be a HTTP GET.</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c"># No context variables to pass to the template system, hence the</span>
+        <span class="c"># blank dictionary object...</span>
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&#39;rango/login.html&#39;</span><span class="p">,</span> <span class="p">{})</span>
+</pre></div>
+</div>
+<p>This view may seem rather complicated as it has to handle a variety of situations. Like in previous examples, the <code class="docutils literal"><span class="pre">user_login()</span></code> view handles form rendering and processing.</p>
+<p>First, if the view is accessed via the HTTP GET method, then the login form is displayed. However, if the form has been posted via the HTTP POST method, then we can handle processing the form.</p>
+<p>If a valid form is sent, the username and password are extracted from the form. These details are then used to attempt to authenticate the user (with Django&#8217;s <code class="docutils literal"><span class="pre">authenticate()</span></code> function). <code class="docutils literal"><span class="pre">authenticate()</span></code> then returns a <code class="docutils literal"><span class="pre">User</span></code> object if the username/password combination exists within the database - or <code class="docutils literal"><span class="pre">None</span></code> if no match was found.</p>
+<p>If we retrieve a <code class="docutils literal"><span class="pre">User</span></code> object, we can then check if the account is active or inactive - and return the appropriate response to the client&#8217;s browser.</p>
+<p>However, if an invalid form is sent, because the user did not add both a username and password the login form is presented back to the user with form error messages (i.e. username/password is missing).</p>
+<p>Of particular interest in the code sample above is the use of the built-in Django machinery to help with the authentication process. Note the use of the <code class="docutils literal"><span class="pre">authenticate()</span></code> function to check whether the username and password provided match to a valid user account, and the <code class="docutils literal"><span class="pre">login()</span></code> function to signify to Django that the user is to be logged in.</p>
+<p>You&#8217;ll also notice that we make use of a new class, <code class="docutils literal"><span class="pre">HttpResponseRedirect</span></code>. As the name may suggest to you, the response generated by an instance of the <code class="docutils literal"><span class="pre">HttpResponseRedirect</span></code> class tells the client&#8217;s browser to redirect to the URL you provide as the argument. Note that this will return a HTTP status code of 302, which denotes a redirect, as opposed to an status code of 200 i.e. OK. See the <a class="reference external" href="https://docs.djangoproject.com/en/1.7/ref/request-response/#django.http.HttpResponseRedirect">official Django documentation  on Redirection</a>, to learn more.</p>
+<p>All of these functions and classes are provided by Django, and as such you&#8217;ll need to import them, so add the following imports to <code class="docutils literal"><span class="pre">rango/views.py</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.contrib.auth</span> <span class="kn">import</span> <span class="n">authenticate</span><span class="p">,</span> <span class="n">login</span>
+<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponseRedirect</span><span class="p">,</span> <span class="n">HttpResponse</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="creating-a-login-template">
+<h3>9.5.2. Creating a <em>Login</em> Template<a class="headerlink" href="#creating-a-login-template" title="Permalink to this headline">¶</a></h3>
+<p>With our new view created, we&#8217;ll need to create a new template allowing users to login. While we know that the template will live in the <code class="docutils literal"><span class="pre">templates/rango/</span></code> directory, we&#8217;ll leave you to figure out the name of the file. Look at the code example above to work out the name. In your new template file, add the following code:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+    <span class="nt">&lt;head&gt;</span>
+        <span class="c">&lt;!-- Is anyone getting tired of repeatedly entering the header over and over?? --&gt;</span>
+        <span class="nt">&lt;title&gt;</span>Rango<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;/head&gt;</span>
+
+    <span class="nt">&lt;body&gt;</span>
+        <span class="nt">&lt;h1&gt;</span>Login to Rango<span class="nt">&lt;/h1&gt;</span>
+
+        <span class="nt">&lt;form</span> <span class="na">id=</span><span class="s">&quot;login_form&quot;</span> <span class="na">method=</span><span class="s">&quot;post&quot;</span> <span class="na">action=</span><span class="s">&quot;/rango/login/&quot;</span><span class="nt">&gt;</span>
+            {% csrf_token %}
+            Username: <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">name=</span><span class="s">&quot;username&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span> <span class="na">size=</span><span class="s">&quot;50&quot;</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;br</span> <span class="nt">/&gt;</span>
+            Password: <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;password&quot;</span> <span class="na">name=</span><span class="s">&quot;password&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span> <span class="na">size=</span><span class="s">&quot;50&quot;</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;br</span> <span class="nt">/&gt;</span>
+
+            <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span> <span class="na">value=</span><span class="s">&quot;submit&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;/form&gt;</span>
+
+    <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
+</div>
+<p>Ensure that you match up the input <code class="docutils literal"><span class="pre">name</span></code> attributes to those that you specified in the <code class="docutils literal"><span class="pre">user_login()</span></code> view - i.e. <code class="docutils literal"><span class="pre">username</span></code> for the username, and <code class="docutils literal"><span class="pre">password</span></code> for password. Don&#8217;t forget the <code class="docutils literal"><span class="pre">{%</span> <span class="pre">csrf_token</span> <span class="pre">%}</span></code>, either!</p>
+</div>
+<div class="section" id="mapping-the-login-view-to-a-url">
+<h3>9.5.3. Mapping the Login View to a URL<a class="headerlink" href="#mapping-the-login-view-to-a-url" title="Permalink to this headline">¶</a></h3>
+<p>With your login template created, we can now match up the <code class="docutils literal"><span class="pre">user_login()</span></code> view to a URL. Modify Rango&#8217;s <code class="docutils literal"><span class="pre">urls.py</span></code> file so that its <code class="docutils literal"><span class="pre">urlpatterns</span></code> tuple now looks like the code below:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">urlpatterns</span> <span class="o">=</span> <span class="n">patterns</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;index&#39;</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^about/$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">about</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;about&#39;</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^category/(?P&lt;category_name_slug&gt;\w+)$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">category</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;category&#39;</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^add_category/$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">add_category</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;add_category&#39;</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^category/(?P&lt;category_name_slug&gt;\w+)/add_page/$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">add_page</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;add_page&#39;</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^register/$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">register</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;register&#39;</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^login/$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">user_login</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;login&#39;</span><span class="p">),</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id1">
+<h3>9.5.4. Linking Together<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>Our final step is to provide users of Rango with a handy link to access the login page. To do this, we&#8217;ll edit the <code class="docutils literal"><span class="pre">index.html</span></code> template inside of the <code class="docutils literal"><span class="pre">templates/rango/</span></code> directory. Find the previously created category addition and registration links, and add the following hyperlink underneath. You may wish to include a line break (<code class="docutils literal"><span class="pre">&lt;br</span> <span class="pre">/&gt;</span></code>) before the link.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;/rango/login/&quot;</span><span class="o">&gt;</span><span class="n">Login</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>If you like, you can also modify the header of the index page to provide a personalised message if a user is logged in, and a more generic message if the user isn&#8217;t. Within the <code class="docutils literal"><span class="pre">index.html</span></code> template, find the header, as shown in the code snippet below.</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;h1&gt;Rango says..hello world!&lt;/h1&gt;
+</pre></div>
+</div>
+<p>Replace this header with the following markup and Django template code. Note that we make use of the <code class="docutils literal"><span class="pre">user</span></code> object, which is available to Django&#8217;s template system via the context. We can tell from this object if the user is logged in (authenticated). If he or she is logged in, we can also obtain details about him or her.</p>
+<div class="highlight-python"><div class="highlight"><pre>{% if user.is_authenticated %}
+&lt;h1&gt;Rango says... hello {{ user.username }}!&lt;/h1&gt;
+{% else %}
+&lt;h1&gt;Rango says... hello world!&lt;/h1&gt;
+{% endif %}
+</pre></div>
+</div>
+<p>As you can see we have used  Django&#8217;s Template Language to check if the user is authenticated with <code class="docutils literal"><span class="pre">{%</span> <span class="pre">if</span> <span class="pre">user.is_authenticated</span> <span class="pre">%}</span></code>. The context variable which we pass through to the template will include a user variable if the user is logged in - so we can check whether they are authenticated or not. If so they will receive a personalised greeting in the header, i.e. <code class="docutils literal"><span class="pre">Rango</span> <span class="pre">says...</span> <span class="pre">hello</span> <span class="pre">leifos!</span></code>. Otherwise, the generic <code class="docutils literal"><span class="pre">Rango</span> <span class="pre">says...</span> <span class="pre">hello</span> <span class="pre">world!</span></code> header is displayed.</p>
+</div>
+<div class="section" id="id2">
+<h3>9.5.5. Demo<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>Check out Figure <a class="pageref" href="#fig-rango-login-message">2</a> for screenshots of what everything should look like.</p>
+<div class="align-center figure" id="id5">
+<span id="fig-rango-login-message"></span><img alt="../_images/rango-login-message.png" src="../_images/rango-login-message.png" />
+<p class="caption"><span class="caption-text">Figure 2: Screenshots illustrating the header users receive when not logged in, and logged in with username <code class="docutils literal"><span class="pre">somebody</span></code>.</span></p>
+</div>
+<p>With this completed, user logins should now be completed! To test everything out, try starting Django&#8217;s development server and attempt to register a new account. After successful registration, you should then be able to login with the details you just provided.</p>
+</div>
+</div>
+<div class="section" id="restricting-access">
+<h2>9.6. Restricting Access<a class="headerlink" href="#restricting-access" title="Permalink to this headline">¶</a></h2>
+<p>Now that users can login to Rango, we can now go about restricting access to particular parts of the application as per the specification, i.e. that only registered users can add categories and pages. With Django, there are two ways in which we can achieve this goal:</p>
+<ul class="simple">
+<li>directly, by examining the <code class="docutils literal"><span class="pre">request</span></code> object and check if the user is authenticated, or,</li>
+<li>using a convenience <em>decorator</em> function that check if the user is authenticated.</li>
+</ul>
+<p>The direct approach checks to see whether a user is logged in, via the <code class="docutils literal"><span class="pre">user.is_authenticated()</span></code> method. The <code class="docutils literal"><span class="pre">user</span></code> object is available via the <code class="docutils literal"><span class="pre">request</span></code> object passed into a view. The following example demonstrates this approach.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">some_view</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s">&quot;You are logged in.&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s">&quot;You are not logged in.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The second approach uses <a class="reference external" href="http://wiki.python.org/moin/PythonDecorators">Python decorators</a>. Decorators are named after a <a class="reference external" href="http://en.wikipedia.org/wiki/Decorator_pattern">software design pattern by the same name</a>. They can dynamically alter the functionality of a function, method or class without having to directly edit the source code of the given function, method or class.</p>
+<p>Django provides a decorator called <code class="docutils literal"><span class="pre">login_required()</span></code>, which we can attach to any view where we require the user to be logged in. If a user is not logged in and they try to access a page which calls that view, then the user is redirected to another page which you can set, typically the login page.</p>
+<div class="section" id="restricting-access-with-a-decorator">
+<h3>9.6.1. Restricting Access with a Decorator<a class="headerlink" href="#restricting-access-with-a-decorator" title="Permalink to this headline">¶</a></h3>
+<p>To try this out,  create a view in Rango&#8217;s <code class="docutils literal"><span class="pre">views.py</span></code> file, called <code class="docutils literal"><span class="pre">restricted()</span></code> and add the following code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">restricted</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s">&quot;Since you&#39;re logged in, you can see this text!&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that to use a decorator, you place it <em>directly above</em> the function signature, and put a <code class="docutils literal"><span class="pre">&#64;</span></code> before naming the decorator. Python will execute the decorator before executing the code of your function/method. To use the decorator you will have to import it, so also add the following import:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.contrib.auth.decorators</span> <span class="kn">import</span> <span class="n">login_required</span>
+</pre></div>
+</div>
+<p>We&#8217;ll also add in another pattern to Rango&#8217;s <code class="docutils literal"><span class="pre">urlpatterns</span></code> tuple in the <code class="docutils literal"><span class="pre">urls.py</span></code> file. Our tuple should then look something like the following example. Note the inclusion of mapping of the <code class="docutils literal"><span class="pre">views.restricted</span></code> view - this is the mapping you need to add.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">urlpatterns</span> <span class="o">=</span> <span class="n">patterns</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;index&#39;</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^add_category/$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">add_category</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;add_category&#39;</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^register/$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">register</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;register&#39;</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^login/$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">user_login</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;login&#39;</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^(?P&lt;category_name_slug&gt;\w+)&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">category</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;category&#39;</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^restricted/&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">restricted</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;restricted&#39;</span><span class="p">),</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<p>We&#8217;ll also need to handle the scenario where a user attempts to access the <code class="docutils literal"><span class="pre">restricted()</span></code> view, but is not logged in. What do we do with the user? The simplest approach is to redirect his or her browser. Django allows us to specify this in our project&#8217;s <code class="docutils literal"><span class="pre">settings.py</span></code> file, located in the project configuration directory. In <code class="docutils literal"><span class="pre">settings.py</span></code>, define the variable <code class="docutils literal"><span class="pre">LOGIN_URL</span></code> with the URL you&#8217;d like to redirect users to that aren&#8217;t logged in, i.e. the login page located at <code class="docutils literal"><span class="pre">/rango/login/</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">LOGIN_URL</span> <span class="o">=</span> <span class="s">&#39;/rango/login/&#39;</span>
+</pre></div>
+</div>
+<p>This ensures that the <code class="docutils literal"><span class="pre">login_required()</span></code> decorator will redirect any user not logged in to the URL <code class="docutils literal"><span class="pre">/rango/login/</span></code>.</p>
+</div>
+</div>
+<div class="section" id="logging-out">
+<h2>9.7. Logging Out<a class="headerlink" href="#logging-out" title="Permalink to this headline">¶</a></h2>
+<p>To enable users to log out gracefully it would be nice to provide a logout option to users. Django comes with a handy <code class="docutils literal"><span class="pre">logout()</span></code> function that takes care of ensuring that the user is logged out, that their session is ended, and that if they subsequently try to access a view, it will deny them access.</p>
+<p>To provide log out functionality in <code class="docutils literal"><span class="pre">rango/views.py</span></code> add the a view called <code class="docutils literal"><span class="pre">user_logout()</span></code> with the following code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.contrib.auth</span> <span class="kn">import</span> <span class="n">logout</span>
+
+<span class="c"># Use the login_required() decorator to ensure only those logged in can access the view.</span>
+<span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">user_logout</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="c"># Since we know the user is logged in, we can now just log them out.</span>
+    <span class="n">logout</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+
+    <span class="c"># Take the user back to the homepage.</span>
+    <span class="k">return</span> <span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="s">&#39;/rango/&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>With the view created, map the URL <code class="docutils literal"><span class="pre">/rango/logout/</span></code> to the <code class="docutils literal"><span class="pre">user_logout()</span></code> view by modifying the <code class="docutils literal"><span class="pre">urlpatterns</span></code> tuple in Rango&#8217;s <code class="docutils literal"><span class="pre">urls.py</span></code> module:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">urlpatterns</span> <span class="o">=</span> <span class="n">patterns</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;index&#39;</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^about/$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">about</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;about&#39;</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^category/(?P&lt;category_name_slug&gt;\w+)$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">category</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;category&#39;</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^add_category/$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">add_category</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;add_category&#39;</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^category/(?P&lt;category_name_slug&gt;\w+)/add_page/$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">add_page</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;add_page&#39;</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^register/$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">register</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;register&#39;</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^login/$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">user_login</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;login&#39;</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^restricted/$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">restricted</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;restricted&#39;</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^logout/$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">user_logout</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;logout&#39;</span><span class="p">),</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<p>Now that all the machinery for logging a user out has been completed, it&#8217;d be handy to provide a link from the homepage to allow users to simply click a link to logout. However, let&#8217;s be smart about this: is there any point providing the logout link to a user who isn&#8217;t logged in? Perhaps not - it may be more beneficial for a user who isn&#8217;t logged in to be given the chance to register, for example.</p>
+<p>Like in the previous section, we&#8217;ll be modifying Rango&#8217;s <code class="docutils literal"><span class="pre">index.html</span></code> template, and making use of the <code class="docutils literal"><span class="pre">user</span></code> object in the template&#8217;s context to determine what links we want to show. Find your growing list of links at the bottom of the page and replace it with the following HTML markup and Django template code. Note we also add a link to our restricted page at <code class="docutils literal"><span class="pre">/rango/restricted/</span></code>.</p>
+<div class="highlight-html"><div class="highlight"><pre>{% if user.is_authenticated %}
+<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/rango/restricted/&quot;</span><span class="nt">&gt;</span>Restricted Page<span class="nt">&lt;/a&gt;&lt;br</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/rango/logout/&quot;</span><span class="nt">&gt;</span>Logout<span class="nt">&lt;/a&gt;&lt;br</span> <span class="nt">/&gt;</span>
+{% else %}
+<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/rango/register/&quot;</span><span class="nt">&gt;</span>Register Here<span class="nt">&lt;/a&gt;&lt;br</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/rango/login/&quot;</span><span class="nt">&gt;</span>Login<span class="nt">&lt;/a&gt;&lt;br</span> <span class="nt">/&gt;</span>
+{% endif %}
+
+<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/rango/about/&quot;</span><span class="nt">&gt;</span>About<span class="nt">&lt;/a&gt;&lt;br/&gt;</span>
+<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/rango/add_category/&quot;</span><span class="nt">&gt;</span>Add a New Category<span class="nt">&lt;/a&gt;&lt;br</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<p>Simple - when a user is authenticated and logged in, he or she can see the <code class="docutils literal"><span class="pre">Restricted</span> <span class="pre">Page</span></code> and <code class="docutils literal"><span class="pre">Logout</span></code> links. If he or she isn&#8217;t logged in, <code class="docutils literal"><span class="pre">Register</span> <span class="pre">Here</span></code> and <code class="docutils literal"><span class="pre">Login</span></code> are presented. As <code class="docutils literal"><span class="pre">About</span></code> and <code class="docutils literal"><span class="pre">Add</span> <span class="pre">a</span> <span class="pre">New</span> <span class="pre">Category</span></code> are not within the template conditional blocks, these links are available to both anonymous and logged in users.</p>
+</div>
+<div class="section" id="exercises">
+<h2>9.8. Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline">¶</a></h2>
+<p>This chapter has covered several important aspects of managing user authentication within Django. We&#8217;ve covered the basics of installing Django&#8217;s <code class="docutils literal"><span class="pre">django.contrib.auth</span></code> application into our project. Additionally, we have also shown how to implement a user profile model that can provide additional fields to the base <code class="docutils literal"><span class="pre">django.contrib.auth.models.User</span></code> model. We have also detailed how to setup the functionality to allow user registrations, login, logout, and to control access. For more information about user authentication and registration consult  <a class="reference external" href="https://docs.djangoproject.com/en/1.7/topics/auth/">Django&#8217;s official documentation on Authentication</a>.</p>
+<ul class="simple">
+<li>Customise the application so that only registered users can add/edit, while non-registered can only view/use the categories/pages. You&#8217;ll also have ensure links to add/edit pages appear only if the user browsing the website is logged in.</li>
+<li>Provide informative error messages when users incorrectly enter their username or password.</li>
+</ul>
+<p>In most applications you are going to require different levels of security when registering and managing users - for example, making sure the user enters an email address that they have access to, or sending users passwords that they have forgotten. While we could extend the current approach and build all the necessary infrastructure to support such functionality a <code class="docutils literal"><span class="pre">django-registration-redux</span></code> application has been developed which greatly simplifies the process - visit <a class="reference external" href="https://django-registration-redux.readthedocs.org/">https://django-registration-redux.readthedocs.org</a> to find out more about using this package. Templates can be found at: <a class="reference external" href="https://github.com/macdhuibh/django-registration-templates">https://github.com/macdhuibh/django-registration-templates</a></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        
+        <li class="right" >
+          <a href="templates.html" title="10. Working with Templates"
+             >next</a>
+          </li>
+		
+        <li class="right" >
+          <a href="forms.html" title="8. Fun with Forms"
+             >previous</a>
+          </li>
+		
+        <li><a href="../index-2.html">How to Tango with Django 1.7</a> &raquo;</li> 
+
+      </ul>
+
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2013, Leif Azzopardi and David Maxwell.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+
+<!-- Mirrored from www.tangowithdjango.com/book17/chapters/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 10 Jan 2016 04:10:00 GMT -->
+</html>

@@ -1,0 +1,1162 @@
+﻿<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from blog.miguelgrinberg.com/post/building-an-arduino-robot-part-ii-programming-the-arduino by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:41:17 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    
+    <title>
+    
+        Building an Arduino Robot, Part II: Programming the Arduino - miguelgrinberg.com
+    
+</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="description" content="miguelgrinberg.com">
+	<meta name="copyright" content="Copyright (c) 2012-2015 Miguel Grinberg">
+	<meta name="author" content="Miguel Grinberg">
+    
+    <meta name="keywords" content="robotics, arduino, robot, hardware, android, bluetooth, hc-sr04, ultrasonic sensor, dc motor, motor">
+    
+
+    
+    <!-- Bootstrap -->
+    <link href="../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../static/prettify.css" type="text/css" rel="stylesheet" />
+    <link href="../static/colorbox/colorbox.css" rel="stylesheet" type="text/css" />
+    <link href="../static/style.css" rel="stylesheet" type="text/css" />
+
+    <link rel="shortcut icon" href="../static/favicon.ico">
+	<link rel="alternate" type="application/rss+xml" href="../feed" title="miguelgrinberg.com RSS feed">
+
+  </head>
+  <body>
+    
+    <!-- facebook sdk -->
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "../../connect.facebook.net/en_US/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    <!-- google plus sdk -->
+    <script type="text/javascript" src="../../apis.google.com/js/plusone.js"></script>
+    <!-- twitter sdk -->
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="../../platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <!-- linkedin sdk -->
+    <script src="../../platform.linkedin.com/in.js" type="text/javascript"></script>
+
+    
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://blog.miguelgrinberg.com/index">miguelgrinberg.com</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="http://blog.miguelgrinberg.com/index">Home</a></li>
+                        <li><a href="about-me.html">About Me</a></li>
+                        <li><a href="about-this-blog.html">About This Blog</a></li>
+                        
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <p class="navbar-text" style="margin-top: 10px; margin-bottom: 0px;">
+                                <a type="application/rss+xml" href="../feed"><img src="../static/rss.png" alt="RSS Feed" title="RSS Feed" /></a>
+                                <a href="https://www.facebook.com/miguelgrinbergblog"><img src="../static/facebook.png" alt="Facebook" title="Facebook" /></a>
+                                <a href="https://plus.google.com/u/0/117786742456929977820"><img src="../static/googleplus.png" alt="Google+" title="Google+" /></a>
+                                <a href="http://www.linkedin.com/in/miguelgrinberg"><img src="../static/linkedin.png" alt="LinkedIn" title="LinkedIn" /></a>
+                                <a href="http://github.com/miguelgrinberg"><img src="../static/github.png" alt="GitHub" title="GitHub" /></a>
+                                <a href="https://twitter.com/#!/miguelgrinberg"><img src="../static/twitter.png" alt="Twitter" title="Twitter" /></a>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </nav>
+
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-push-9 sidebar-bg">
+                <div id="sidebar">
+                    
+
+                    
+                    <h1>An Introduction to Flask</h1>
+                    <p>If you are a beginner giving your first steps in web development, my Flask introductory video is for you:</p>
+                    <p><center><a href="http://bit.ly/flaskintro"><img style="border: 1px solid black;" src="../static/flask-intro-cover-tiny.png"></a></center></p>
+                    <p>Visit <a href="http://flaskbook.com/">http://flaskbook.com</a> for information about this and other Flask training products I have created!</p>
+                    
+
+                    <h1>About Miguel</h1>
+                    <img style="float: right; margin: 0px 8px 8px 0px; padding: 4px; border: 1px solid #ccc;" src="../static/miguel.jpg" />
+                    <p>Welcome to my blog!</p>
+                    <p>I'm a software engineer, photographer and filmmaker in Portland, Oregon, USA.</p>
+                    <p>You can also find me on <a href="https://www.facebook.com/miguelgrinbergblog">Facebook</a>, <a href="https://plus.google.com/u/0/117786742456929977820">Google+</a>, <a href="http://www.linkedin.com/in/miguelgrinberg">LinkedIn</a>, <a href="https://github.com/miguelgrinberg">Github</a> and <a href="https://twitter.com/#!/miguelgrinberg">Twitter</a>.</p>
+                    <p>Thank you for visiting!</p>
+
+                    
+
+                    
+                    <h1>Categories</h1>
+<ul>
+
+	<li>
+		<a href="../category/Arduino/feed">
+			<img src="../static/rss-small.png" title="Arduino RSS Feed" label="Arduino RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Arduino.html">Arduino</a></span> (7)
+	</li>
+
+	<li>
+		<a href="../category/Authentication/feed">
+			<img src="../static/rss-small.png" title="Authentication RSS Feed" label="Authentication RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Authentication.html">Authentication</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../category/Blog/feed">
+			<img src="../static/rss-small.png" title="Blog RSS Feed" label="Blog RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Blog.html">Blog</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/C%2b%2b/feed">
+			<img src="../static/rss-small.png" title="C++ RSS Feed" label="C++ RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/C%2b%2b.html">C++</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Cloud/feed">
+			<img src="../static/rss-small.png" title="Cloud RSS Feed" label="Cloud RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Cloud.html">Cloud</a></span> (2)
+	</li>
+
+	<li>
+		<a href="../category/Filmmaking/feed">
+			<img src="../static/rss-small.png" title="Filmmaking RSS Feed" label="Filmmaking RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Filmmaking.html">Filmmaking</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Flask/feed">
+			<img src="../static/rss-small.png" title="Flask RSS Feed" label="Flask RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Flask.html">Flask</a></span> (39)
+	</li>
+
+	<li>
+		<a href="../category/Games/feed">
+			<img src="../static/rss-small.png" title="Games RSS Feed" label="Games RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Games.html">Games</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Gear/feed">
+			<img src="../static/rss-small.png" title="Gear RSS Feed" label="Gear RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Gear.html">Gear</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/HTML5/feed">
+			<img src="../static/rss-small.png" title="HTML5 RSS Feed" label="HTML5 RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/HTML5.html">HTML5</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Heroku/feed">
+			<img src="../static/rss-small.png" title="Heroku RSS Feed" label="Heroku RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Heroku.html">Heroku</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Javascript/feed">
+			<img src="../static/rss-small.png" title="Javascript RSS Feed" label="Javascript RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Javascript.html">Javascript</a></span> (3)
+	</li>
+
+	<li>
+		<a href="../category/Movie%20Reviews/feed">
+			<img src="../static/rss-small.png" title="Movie Reviews RSS Feed" label="Movie Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Movie%20Reviews.html">Movie Reviews</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Netflix/feed">
+			<img src="../static/rss-small.png" title="Netflix RSS Feed" label="Netflix RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Netflix.html">Netflix</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Node.js/feed">
+			<img src="../static/rss-small.png" title="Node.js RSS Feed" label="Node.js RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Node.html">Node.js</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/OpenStack/feed">
+			<img src="../static/rss-small.png" title="OpenStack RSS Feed" label="OpenStack RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/OpenStack.html">OpenStack</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Personal/feed">
+			<img src="../static/rss-small.png" title="Personal RSS Feed" label="Personal RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Personal.html">Personal</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Photography/feed">
+			<img src="../static/rss-small.png" title="Photography RSS Feed" label="Photography RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Photography.html">Photography</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Product%20Reviews/feed">
+			<img src="../static/rss-small.png" title="Product Reviews RSS Feed" label="Product Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Product%20Reviews.html">Product Reviews</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Programming/feed">
+			<img src="../static/rss-small.png" title="Programming RSS Feed" label="Programming RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Programming.html">Programming</a></span> (47)
+	</li>
+
+	<li>
+		<a href="../category/Project%20Management/feed">
+			<img src="../static/rss-small.png" title="Project Management RSS Feed" label="Project Management RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Project%20Management.html">Project Management</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Python/feed">
+			<img src="../static/rss-small.png" title="Python RSS Feed" label="Python RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Python.html">Python</a></span> (43)
+	</li>
+
+	<li>
+		<a href="../category/REST/feed">
+			<img src="../static/rss-small.png" title="REST RSS Feed" label="REST RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/REST.html">REST</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Rackspace/feed">
+			<img src="../static/rss-small.png" title="Rackspace RSS Feed" label="Rackspace RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Rackspace.html">Rackspace</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Raspberry%20Pi/feed">
+			<img src="../static/rss-small.png" title="Raspberry Pi RSS Feed" label="Raspberry Pi RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Raspberry%20Pi.html">Raspberry Pi</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/RhinoSteady/feed">
+			<img src="../static/rss-small.png" title="RhinoSteady RSS Feed" label="RhinoSteady RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/RhinoSteady.html">RhinoSteady</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Robotics/feed">
+			<img src="../static/rss-small.png" title="Robotics RSS Feed" label="Robotics RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Robotics.html">Robotics</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Video/feed">
+			<img src="../static/rss-small.png" title="Video RSS Feed" label="Video RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Video.html">Video</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../category/Windows/feed">
+			<img src="../static/rss-small.png" title="Windows RSS Feed" label="Windows RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Windows.html">Windows</a></span> (1)
+	</li>
+
+</ul>
+                    
+                </div>
+            </div>
+            <div class="col-md-8 col-md-pull-4">
+                <div id="main">
+                    
+                    
+                    
+                    
+                    
+
+<div class="post">
+
+<p class="date"><span class="flask-moment" data-timestamp="2013-01-03T08:55:23Z" data-format="format('LL')" data-refresh="0">2013-01-03T08:55:23Z</span></p>
+<h1 class="post-title"><a href="building-an-arduino-robot-part-ii-programming-the-arduino.html">Building an Arduino Robot, Part II: Programming the Arduino</a></h1>
+<div class="posted">Posted by <span class="label label-danger"><a href="http://blog.miguelgrinberg.com/author/Miguel Grinberg">Miguel Grinberg</a></span> under <span class="label label-primary"><a href="../category/Robotics.html">Robotics</a></span>, <span class="label label-primary"><a href="../category/Arduino.html">Arduino</a></span>, <span class="label label-primary"><a href="../category/C%2b%2b.html">C++</a></span>, <span class="label label-primary"><a href="../category/Programming.html">Programming</a></span>. </div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/building-an-arduino-robot-part-ii-programming-the-arduino" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/building-an-arduino-robot-part-ii-programming-the-arduino" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="building-an-arduino-robot-part-ii-programming-the-arduino.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/building-an-arduino-robot-part-ii-programming-the-arduino" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+<div class="post_body"><p><center><img alt="Arduino Robot" src="../static/images/arduino-robot-10.jpg" /></center></p>
+<p>Welcome to the second article in the tutorial series in which I'm building a remote controlled Arduino based vehicle robot.</p>
+<p>Here is the list of articles I have published:</p>
+<ul>
+<li><a href="building-an-arduino-robot-part-i-hardware-components.html">Part I: Hardware Components</a></li>
+<li><a href="building-an-arduino-robot-part-ii-programming-the-arduino.html">Part II: Programming the Arduino</a> (this article)</li>
+<li><a href="building-an-arduino-robot-part-iii-assembling-the-robot.html">Part III: Assembling the Robot</a></li>
+<li><a href="building-an-arduino-robot-part-iv-a-not-so-basic-robot-firmware.html">Part IV: A (Not So) Basic Robot Firmware</a></li>
+<li><a href="building-an-arduino-robot-part-v-avoiding-obstacles.html">Part V: Avoiding Obstacles</a></li>
+<li><a href="building-an-arduino-robot-part-vi-remote-control.html">Part VI: Remote Control</a></li>
+</ul>
+<p>In the previous article I introduced you to my project. I showed you the parts I bought and what features I wanted to implement in my little remote controlled robot vehicle. </p>
+<p>Today I will introduce you to the programming side of my project. This is a pretty long article that is heavy in information that can be applied to most Arduino projects. By the end of it you will know the basics of programming sensors, motors and other devices connected to the Arduino, and will also have an understanding of how a wireless remote controller can communicate with the Arduino board over Bluetooth. I encourage you to get the parts I listed in the previous article and try these tests along with me.</p>
+<h2>The Arduino Pins</h2>
+<p>The Arduino board communicates with connected devices via its input and output pins, so I'll quickly go over what these pins are.</p>
+<p>Here is a diagram of a typical Arduino board.</p>
+<p><center><img alt="Arduino Robot" src="../static/images/arduino-robot-11.png" /></center></p>
+<p>On the left side you have the USB port (grey box) and the power input jack (black box). During testing I will be powering my Arduino with a USB cable, but the final robot will receive power from a battery box connected to the power input jack.</p>
+<p>On the top, from right to left there are 14 pins labeled <code>0</code> to <code>13</code>. These are the <a href="http://arduino.cc/en/Tutorial/DigitalPins">digital  pins</a>. These pins can be individually configured as inputs or outputs, meaning that digital data can be read or written from connected devices on these pins. Since these pins are digital, they have only two possible states, <code>HIGH</code> and <code>LOW</code>.</p>
+<p>Some of the digital pins have preassigned functions. Pins 0 and 1 are also labeld <code>RX</code> and <code>TX</code> respectively. These are used by the serial communication hardware to send and receive data. Pin 13 has a <a href="http://en.wikipedia.org/wiki/Light-emitting_diode">LED</a> attached to it on most Arduino boards, so it is a convenient pin to send simple visual information out to the real world. The pin 13 LED is located below the pin 13 itself, labeled with the letter <code>L</code> in the diagram above. Pins 3, 5, 6, 9, 10 and 11 are marked with a <code>~</code> or a <code>PWM</code> label, short for <a href="http://www.arduino.cc/en/Tutorial/PWM">pulse width modulation</a>. These pins are capable of producing simulated analog output over a digital line. These can be used, for example, to light a LED at different levels of intensity.</p>
+<p>The next pin on the top from right to left is <code>GND</code>, short for ground. The ground is what closes a circuit and allows the electric current to flow uninterrupted. Connected devices can connect their own GND pin here.</p>
+<p>The next pin on the top left is labeled <code>AREF</code>, short for analog reference. This pin is rarely used, it tells the Arduino how to configure the voltage range of the analog pins.</p>
+<p>Some Arduino boards have more pins to the left of <code>AREF</code>. Since these are not in all boards I will not discuss them here.</p>
+<p>On the bottom right we have six pins labeled <code>0</code> to <code>5</code>. These are the <a href="http://arduino.cc/en/Tutorial/AnalogInputPins">analog input pins</a>. Unlike the digital pins which have only two possible states, an analog pin can have 1024 possible states, according to the voltage applied to it. Typically the voltage range goes up to 5V, but the range can be changed by applying the desired maximum voltage to the <code>AREF</code> pin. Also unlike the digital pins which can be configured as inputs or outputs, the analog pins can only be inputs.</p>
+<p>An interesting property of the analog pins is that they can be used as digital pins as well, with pin numbers 14 to 19. You will see later that an important part of any project is allocating pins to components. If you are running short of digital pins keep in mind that you have six more available to you.</p>
+<p>Continuing on the bottom from right to left we find a pin labeled <code>VIN</code>. This pin provides direct access to the voltage provided by the power supply. So for example, if you power your Arduino with a 9V power supply through the power jack, then this pin gives you 9V.</p>
+<p>The next two pins are labeled <code>GND</code> and are two more ground pins, exactly like the one in the top row. They are here just for convenience.</p>
+<p>The next two pins are labeled <code>5V</code> and <code>3.3V</code> and just return those voltages, regardless of what the voltage of the power supply is.</p>
+<p>Next we have the <code>RESET</code> pin. When this pin is connected to <code>GND</code> the board will reset. So this is a handy pin to build an external reset button.</p>
+<p>As with the top row of pins, some boards have a more pins on the bottom left that I will not cover here. If you are interested in finding out what extra pins in your board do you should consult the documentation for your board.</p>
+<h2>Programming the Arduino with Sketches</h2>
+<p>By now you are probably wondering how can you make the Arduino do things.</p>
+<p>The easiest way to program the board is with the <a href="http://arduino.cc/en/Main/Software">Arduino software</a>, which is free and open source, and available for Windows, Mac OS X and Linux users. </p>
+<p>Here is a screenshot of the Arduino software:</p>
+<p><center><img alt="Arduino Robot" src="../static/images/arduino-robot-12.png" /></center></p>
+<p>The white area is where the program is written. The programming language that the Arduino platform uses is called <a href="http://en.wikipedia.org/wiki/C++">C++</a> (pronounced <em>see plus plus</em>), a language that is regarded as very powerful but difficult to learn. I will try to explain the basics of C++ in this and the following articles, but I will not cover C++ programming in detail. If you have any specific C++ programming questions I'll be happy to address them in the comments at the bottom.</p>
+<p>C++ programs are written as regular text. Arduino calls these programs <em>Sketches</em>. Then a utility called <em>compiler</em> reads the sketch and converts it to machine instructions that the Arduino understands.</p>
+<p>The black area at the bottom of the Arduino software window is where status information appears. For example, if your C++ code has an error this is where you will see the details.</p>
+<p>The Arduino software also has a toolbar, with the following buttons (in order, from left to right):</p>
+<ul>
+<li><em>Verify</em>: Runs the C++ compiler on your program. If there are any errors you will see them in the black status area.</li>
+<li><em>Upload</em>: Compiles your C++ program like the Verify button does, and if compilation is successful it uploads the resulting program to the Arduino board, which must be connected to the computer through the USB port.</li>
+<li><em>New</em>: Clears the program currently loaded.</li>
+<li><em>Open</em>: Shows a dropdown with a long list of example programs to load or the option to load a sketch from disk.</li>
+<li><em>Save</em>: Saves the current program to a file on disk.</li>
+<li><em>Serial Monitor</em>: Opens the serial monitor console. This is used mostly for debugging, as I will show in a little bit.</li>
+</ul>
+<h2>"Hello, world!", Arduino style</h2>
+<p>To begin, let's write a very simple program that writes a message to the serial port. We will see this message in the Serial Monitor.</p>
+<p>I assume you will be doing this with me, so please follow along.</p>
+<p>First install the <a href="http://arduino.cc/en/Main/Software">Arduino software</a>. Installation instructions are very simple, you should not have any trouble with this step.</p>
+<p>Start the Arduino software making sure the Arduino board is not connected to your computer. Open the Tools menu, then the Port submenu. Take note of the options that appear here and then close the Arduino software.</p>
+<p>Next connect your Arduino board to your computer using the USB cable. If you are doing this on Windows, then see <a href="http://arduino.cc/en/Guide/windows">this page</a> for instructions on how to install the Arduino board drivers. If you are on Windows 8, also see <a href="http://www.windows7hacker.com/index.php/2012/08/how-to-install-an-un-signed-3rd-party-driver-in-windows-8">this page</a> for information on how to bypass the requirement for signed drivers. Mac and Linux users are lucky and do not need to install any drivers.</p>
+<p>With the Arduino board connected, launch the Arduino software again. In the Tools menu open the Board submenu and make sure the correct model of Arduino board is selected. Then in the Port submenu find the serial port entry that did not appear in the list when you had the Arduino board disconnected. That's the serial port that is assigned to the Arduino connection, so select that one.</p>
+<p>Then in the white area type (or copy/paste) the following C++ program:</p>
+<pre><code>void setup()
+{
+    Serial.begin(9600);
+}
+
+void loop()
+{
+    Serial.println("Hello, world!");
+    delay(1000);
+}
+</code></pre>
+<p>Press the <em>Upload</em> button to compile and upload the sketch to the board. If you made any mistakes they will be indicated in the black status area. At this point the errors will look very cryptic if you are not used to programming in C++, so the best you can do is compare what you typed against the above and fix any differences you find until the upload operation succeeds.</p>
+<p>If the Upload is successful the status area will show a message similar to the following:</p>
+<p><code>Binary sketch size: 1,978 bytes (of a 32,256 byte maximum)</code></p>
+<p>At this point the program is running inside the Arduino. You will notice that the LED labeled <code>TX</code> blinks every once in a while, indicating the Arduino board is transmitting data through the serial port.</p>
+<p>To see the data click on the <em>Serial Monitor</em> button in the toolbar. At the bottom right of the serial monitor window make sure the drop-down is set to <code>9600 baud</code>. You should now see the message <code>Hello, world!</code> printing in the window every second.</p>
+<p>Congratulations, you've completed your first Arduino sketch!</p>
+<p>I'm sure you want to understand a little bit how this sketch works, so let me give you some information.</p>
+<p>Arduino sketches have two main functions, called <code>setup</code> and <code>loop</code>. When the program starts it will execute the <code>setup</code> function. This function is supposed to initialize the hardware and get it ready for operation. Then the <code>loop</code> function will be called repeatedly until the Arduino is reset or powered off. If you look at the code above you will see these two functions, each starting with the word <code>void</code> followed by the function name, and ending with a closing curly bracket.</p>
+<p>What goes before the opening curly bracket is called the <em>declaration</em> of the function. What goes in between the opening and closing curly brackets is the actual <em>code</em> of the function, or in other words, the instructions that the Arduino executes when the function is <em>invoked</em>.</p>
+<p>In this small example the <code>setup</code> function initializes the serial interface by calling the <code>Serial.begin</code> function. What goes in between the parenthesis are called <em>arguments</em>, and each function defines what arguments it needs, if any. The <code>Serial.begin</code> function requires the speed of the serial communication to be given as an argument, in baud units. I selected 9600 bauds in this example. The statement ends with a semicolon, this acts as a statement separator.</p>
+<p>Now how do you know what functions you can use in your sketches?</p>
+<p>That's what the <a href="http://arduino.cc/en/Reference/HomePage">Arduino reference</a> is for. This page has a quick reference for C++ and the list of all the functions that are provided by the Arduino development environment.</p>
+<p>For example, let's say you want to know all the functions related to serial port communications. Then you can open the <a href="http://arduino.cc/en/Reference/serial">Serial</a> link under the Communications section. You will find the <code>begin</code> function I used above listed there. Note that outside of any context the function is called <code>Serial.begin</code>, but when the context is clearly in the <code>Serial</code> class, then it is enough to call the function <code>begin</code>. If you now wanted to see information about the arguments required by the <code>Serial.begin</code> function you just click on it to go to the <a href="http://arduino.cc/en/Serial/Begin">Serial.begin documentation</a>.</p>
+<p>The <a href="http://arduino.cc/en/Reference/HomePage">Arduino reference</a> documentation is very good so I recommend you keep it open in a browser window at all times when you are writing sketches.</p>
+<p>Let's go back to our example. The second function is the <code>loop</code> function. This function makes two <em>function calls</em>. First it calls <a href="http://arduino.cc/en/Serial/Println"><code>Serial.println</code></a>, passing the message <code>"Hello, World!"</code> as an argument. As you can guess, the <code>Serial.println</code> function prints a message to the serial port. The message is given as a <em>character string</em>, within double quotes. The function is called <code>println</code> and not <code>print</code> because in addition to printing our message it ends the line, meaning that the next print will start at the beginning of the next line. There is, in fact, a <code>print</code> function that prints the message and does not move to the next line.</p>
+<p>The second and last instruction in the <code>loop</code> function is a call to a function called <a href="http://arduino.cc/en/Reference/Delay"><code>delay</code></a>. This function pauses the program for the amount of time specified as an argument. The units of time are given as milliseconds, so I'm passing the value <code>1000</code> to pause the program for one second.</p>
+<p>Since the <code>loop</code> function is invoked repeatedly, the result of this program is that the text <code>Hello, world!</code> is printed to the Serial Monitor every second.</p>
+<h2>Working with LEDs</h2>
+<p>Let's look at an improved version of the previous sketch:</p>
+<pre><code>void setup() {
+    Serial.begin(9600);
+    pinMode(13, OUTPUT);
+}
+
+void loop() {
+    Serial.println("Hello, world!");
+    digitalWrite(13, HIGH);
+    delay(500);
+    digitalWrite(13, LOW);
+    delay(500);
+}
+</code></pre>
+<p>Enter the code above in the code window of the Arduino software replacing the old sketch and upload it to your board to test it.</p>
+<p>If you understood the first sketch then you can probably figure out what this version does easily.</p>
+<p>In the <code>setup</code> function in addition to initializing the serial port like before I'm also initializing pin 13 as an output pin. Recall that digital pins can be used as inputs or outputs, so whenever you need to use a pin you have to configure it for the intended use. In this case I'm making it an output pin, which means that I can write a value to this pin, and the value I write will affect the electrical current coming out it. See the <a href="http://arduino.cc/en/Reference/PinMode"><code>pinMode</code></a> documentation for details on this.</p>
+<p>The <code>loop</code> function prints the message to the serial port like before, but then sets pin 13 to a <code>HIGH</code> state with the <a href="http://arduino.cc/en/Reference/DigitalWrite"><code>digitalWrite</code></a> function. In most Arduino boards this lights the on-board LED. Then the program pauses for 500 milliseconds, or half a second. Then the state of pin 13 is changed to <code>LOW</code> to turn the LED off. Then the program sleeps for another half a second.</p>
+<p>The <code>loop</code> function is called over and over again, so what the above code does is make the LED blink! It blinks at a rate of one blink per second, staying on for the first half second, then off for the other half.</p>
+<h2>Programming the Distance Sensor</h2>
+<p>Now you know how to do the basic stuff that appears in every Arduino introductory tutorial. Are you ready to do something real with your Arduino? I hope you are!</p>
+<p>I'm going to show you how to program the HC-SR04 distance sensor. Recall that I will be using this sensor to help my robot "see" and avoid walls and obstacles.</p>
+<p>For most devices that connect to the Arduino board there are already appropriate <em>libraries</em> of functions incorporated into the Arduino software. You can see what libraries are included by going to the Sketch menu, "Import Library..." submenu. You will see libraries there for motors, LCDs and a variety of other devices.</p>
+<p>Unfortunately there is nothing for distance sensors. So how can one control such a device?</p>
+<p>In most cases manufacturers of Arduino compatible devices provide the required libraries to control their products. Other times developers write their own libraries and make them available as open source. The documentation of the device is the first place to go, but as always in cases like this, Google is your best friend.</p>
+<p>Searching around I've found not one but three open source Arduino libraries for my distance sensor, <a href="http://freecode.com/projects/hc-sr04-ultrasonic-arduino-library">here</a>, <a href="https://github.com/elrodri/Ultrasonic-HC-SR04/tree/master/Ultrasonic">here</a> and <a href="http://code.google.com/p/arduino-new-ping">here</a>. I quickly reviewed them and out of the three the <a href="http://code.google.com/p/arduino-new-ping">arduino-new-ping</a> library appeared to be the most complete, so I decided to give that one a try first. If that one does not work I can always go get one of the other two.</p>
+<p>The library comes in a zip file, available as a download link in the page linked above. To install it and make it available in the Arduino software you just need to unzip it and copy the top folder (called <code>NewPing</code>)  inside the <code>libraries</code> folder in your Arduino sketches folder. The Arduino sketches folder is in your home directory, see the <a href="http://arduino.cc/en/Guide/Libraries">documentation</a> for details.</p>
+<p>After you install the NewPing library close and reopen the Arduino software so that it can recognize it.</p>
+<p>Now start a new sketch, go to the Sketch menu and select "Import Library...". You should now see <code>NewPing</code> in the list. If you select this library the following line will be added to your sketch:</p>
+<pre><code>#include &lt;NewPing.h&gt;
+</code></pre>
+<p>This is telling the C++ compiler that you will be using the functions from the NewPing third party library. Note that you don't have to go through the menus to get this text written for you, if you prefer you can write it yourself.</p>
+<p>Before I show you the sketch that controls the distance sensor take a look at the following wiring diagram:</p>
+<p><center><img alt="Arduino Robot" src="../static/images/arduino-robot-13.png" /></center></p>
+<p>As you see in the diagram I'm using the breadboard and some jumper cables to make all the connections.</p>
+<p>First I connected the <code>5V</code> output from the Arduino to the "red" side of the top section of the breadboard, and the <code>GND</code> line to the "blue" side. The top and bottom sections of the breadboard have "red" and "blue" sides, and these are typically used to distribute power and ground lines to the whole breadboard. Plugging the <code>5V</code> output to one of the red pins makes the 5V available to all the red pins in that row, and likewise, connecting <code>GND</code> to a blue pin makes GND available in all the blue pins in the row.</p>
+<p>Next I transferred the <code>5V</code> and <code>GND</code> lines to the bottom part of the breadboard with two more jumper cables. This is always a good practice when prototyping, setting up the breadboard like this ensures that you can always grab your power and ground lines from the side that is most convenient.</p>
+<p>The distance sensor plugs nicely into four consecutive pins in the middle of the breadboard. The two middle sections of the breadboard connect groups of five vertically aligned pins together, so to make a connection to one of the sensor pins I just plug one end of the jumper cable into any of the remaining four pins in the same group. </p>
+<p>The leftmost pin is labeled <code>VCC</code>, this is the pin that should be connected to the <code>5V</code> line. So to do that I connect a jumper cable to this pin from the sensor to one of the red pins in the breadboard bottom. The next two pins are labeled <code>Trig</code> and <code>Echo</code>. These connect to any two available pins in the Arduino board. Since any pins will do, I will be using analog pins 0 and 1, which as I said before can double up as digital pins 14 and 15. The rightmost pin is labeled <code>GND</code>, so the connection can go to any of the blue pins at the top or bottom of the breadboard.</p>
+<p>Here is an actual picture of how this circuit looks in real life:</p>
+<p><center><img alt="Arduino Robot" src="../static/images/arduino-robot-14.jpg" /></center></p>
+<p>So far it's been pretty easy, right?</p>
+<p>Let's see what the sketch looks like:</p>
+<pre><code>#include &lt;NewPing.h&gt;
+
+#define TRIGGER_PIN  14
+#define ECHO_PIN     15
+#define MAX_DISTANCE 200
+
+NewPing DistanceSensor(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
+
+void setup()
+{
+    Serial.begin(9600);
+}
+
+void loop()
+{
+    unsigned int cm = DistanceSensor.ping_cm();
+    Serial.print("Distance: ");
+    Serial.print(cm);
+    Serial.println("cm");
+    delay(1000);
+}
+</code></pre>
+<p>There are a couple new things in this sketch that I haven't used in the previous ones, but overall things are largely similar.</p>
+<p>The <code>#include</code> statement at the top tells the C++ compiler that I will be using a third party library. The <code>NewPing.h</code> between the angle brackets refers to a <em>header</em> file that is inside this library. This file contains the definitions for all the functions provided by the library. If a library does not have documentation, chances are there is information at the top of this file.</p>
+<p>Next there are a few <code>#define</code> lines. If you recall the LED blinking sketch from above, I have written the pin number 13 in a couple of places there. Instead of using the number directly I could have <em>defined</em> a constant. That's what <code>#define</code> does. You use it to give a value a meaningful name, then in the rest of the sketch you can write the name instead of the value. This is useful to make the code more readable, but also makes it very easy to change the pin assignments, because then you just go to the top of the sketch and update the numbers in just one place.</p>
+<p>In this sketch we have three <code>#define</code> statements. The first two create constants for the <code>Trig</code> and <code>Echo</code> pins of the distance sensor which I connected to pins 14 and 15 respectively (analog pins 0 and 1). The third <code>#define</code> is to set a constant for the maximum distance that I want the sensor to recognize, which I set to 2 meters, using centimeter units.</p>
+<p>Next we have the following statement:</p>
+<pre><code>NewPing DistanceSensor(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
+</code></pre>
+<p>This statement creates an <em>object</em> that represents the distance sensor. The syntax for object creation requires the <em>class</em> of the object first (<code>NewPing</code> in this case), then the name I want to give the object (<code>DistanceSensor</code>) and then any arguments enclosed in parenthesis. The arguments that the NewPing object requires are the trigger pin, the echo pin and the maximum distance to consider, all in that order and separated with commas. These happen to be the three constants defined above, so I can write the names instead of the values.</p>
+<p>Note that the object is created outside of any functions. Objects can exist only at the level they are created, so creating the object inside the <code>loop</code> function would make it disappear when that function ends. The next time <code>loop</code> is called a new object would be created and initialized, which would be a waste of time and effort. Putting the object creation outside of any functions makes it a <em>global</em> object that persists across function calls.</p>
+<p>The <code>setup</code> function is exactly like the one I used before, it just sets up the serial communication so that we can see output from the Arduino board in the Serial Monitor.</p>
+<p>The <code>loop</code> function starts with a type of instruction that I haven't used before:</p>
+<pre><code>unsigned int cm = DistanceSensor.ping_cm();
+</code></pre>
+<p>Let's analyze this statement one piece at a time. To the right of the <code>=</code> sign I am invoking a function called <code>ping_cm</code> provided by the <code>DistanceSensor</code> object created above. This function is slightly different than functions I used before, because in addition to doing something it <em>returns</em> a result, which in this case is the distance to the closest object measured in centimeters.</p>
+<p>Since I intend to use this distance result later in the sketch I have to <em>store</em> it somewhere, so to the left of the <code>=</code> sign I have created a <em>variable</em>, which is basically a space in memory where a value can be stored. The C++ syntax for variable creation requires me to provide the type of values this variable will store first (<code>unsigned int</code> in this case, a positive integer) and then the variable name, which is any name of my choosing that I will use later to refer to the value stored in the variable.</p>
+<p>As a side note, the distance sensor library documentation indicates that there is also a <code>ping_in</code> function that is equivalent to <code>ping_cm</code> but returns the distance result in inches. Another option provided by the library is a function <code>ping</code>, which just returns the time it took the ultrasonic signal to make a round trip back to the sensor in microseconds. You can then divide this time by the time it takes sound to travel twice the distance units of your choice to get the distance in those units. For my purposes having the distance in centimeters is accurate enough.</p>
+<p>Next in the <code>loop</code> function I have three consecutive prints to the serial port. The first two prints use the <code>Serial.print</code> function and the last uses <code>Serial.println</code>. That means that the second and third prints will go to the same line as the first, and after the third message is printed the cursor will move to the next line.</p>
+<p>The first and last print statements print text messages like in the previous sketches. The middle print, however, prints the <code>cm</code> variable, in which I have the result of the distance sensor <code>ping_cm</code> function. </p>
+<p>The final line in the <code>loop</code> function does a <code>delay</code> of one second, exactly like before.</p>
+<p>When you run this sketch on your board and move your hand or some other object closer and farther away from the sensor you will see something like this in the serial monitor:</p>
+<pre><code>Distance: 28cm
+Distance: 28cm
+Distance: 21cm
+Distance: 18cm
+Distance: 15cm
+Distance: 15cm
+Distance: 12cm
+Distance: 12cm
+Distance: 24cm
+</code></pre>
+<h2>Fun with motors</h2>
+<p>Let's move on to something else. The vehicle kit that I'm using for my project comes with two wheels, each with an attached motor.</p>
+<p>The motor driver board that I have is the <a href="http://www.ladyada.net/make/mshield">Adafruit Motor Shield</a>, which comes with its own library, called <a href="https://github.com/adafruit/Adafruit-Motor-Shield-library">AF_Motor</a>. If you are using the same motor controller then go ahead and install this library in your Arduino environment. If you are using a different motor controller then you'll have to find the library that works for your hardware.</p>
+<p>Most motor controllers come as a <em>shield</em>, which means that the motor board plugs right on top of the Arduino board, connecting to both rows of pins, even though many of the pins are not used to control motors. The nicer motor shields provide pass-thru headers with access to all the Arduino pins. Unfortunately the Adafruit shield does not give access to the pins, so connecting additional components becomes difficult. This is a problem I'll have to work around.</p>
+<p>The Adafruit motor controller can drive up to four DC motors, labeled M1 through M4 in the board. I need just two, so for convenience I'm going to connect my two motors one on each side of the board, using the M1 and M3 connectors.</p>
+<p>To test the motors on the assembled kit I turned it upside down, so that I can see the wheels turn without the vehicle moving while the Arduino is connected to the USB power. The motor connections are extremely simple, each motor has just two connections:</p>
+<p><center><img alt="Arduino Robot" src="../static/images/arduino-robot-15.jpg" /></center></p>
+<p>The Arduino board is hidden underneath the motor shield in this picture.</p>
+<p>Here is the sketch that I used to test the motors:</p>
+<pre><code>#include &lt;AFMotor.h&gt;
+
+AF_DCMotor Motor1(1);
+AF_DCMotor Motor2(3);
+
+void setup()
+{
+}
+
+void loop()
+{
+    Motor1.setSpeed(255);
+    Motor2.setSpeed(255);
+    Motor1.run(FORWARD);
+    Motor2.run(FORWARD);
+    delay(1000);
+    Motor1.run(BACKWARD);
+    Motor2.run(BACKWARD);
+    delay(1000);
+    Motor1.run(FORWARD);
+    Motor2.run(BACKWARD);
+    delay(1000);
+    Motor1.run(BACKWARD);
+    Motor2.run(FORWARD);
+    delay(1000);
+    Motor1.setSpeed(0);
+    Motor2.setSpeed(0);
+    Motor1.run(BRAKE);
+    Motor2.run(BRAKE);
+    delay(1000);
+}
+</code></pre>
+<p>I don't think I need to explain every line in this sketch, since it does not have any new C++ constructs. Like the distance sensor, each motor requires an object to be created, this time one of class <code>AF_DCMotor</code>. The only argument is the motor number, from 1 to 4. I created two motors, numbers 1 and 3 to match the motors connected to ports M1 and M3 of the controller.</p>
+<p>The motors are controlled with two functions, <code>setSpeed</code> and <code>run</code>. The <code>setSpeed</code> function takes a numeric argument with range 0 to 255, indicating the speed the motor should turn. The <code>run</code> function configures the mode in which the motor runs, which can be <code>FORWARD</code>, <code>BACKWARD</code>, <code>BRAKE</code> or <code>RELEASE</code>.</p>
+<p>The sketch above makes the wheels do a few tricks: one second of both wheels going forward, then one second of both wheels going backwards, then one wheel forward and the other backwards, then each wheel reverses direction, then the wheels stop for a second. Then the cycle repeats with the next invocation of the <code>loop</code> function.</p>
+<h2>Remote Control over Bluetooth</h2>
+<p>The final piece of hardware that I intend to use in my Android robot vehicle is the Bluetooth slave, which connects to my smartphone to receive remote control commands.</p>
+<p>I expected bluetooth communication would be the most complex aspect of my project, but after reading the one page documentation that came with my device I was proved wrong. Turns out the bluetooth slave works over the standard serial communication protocols in the Arduino board, which means you use the functions in the <code>Serial</code> class like I used in all the previous sketches. When the Arduino board with Bluetooth is paired with a smartphone a <code>Serial.print</code> command will send the data not to the PC but to the phone! The <code>Serial</code> class also has functions to read data from the other end, so I will use these functions to receive commands from the smartphone.</p>
+<p>The wiring of the bluetooth slave is pretty simple:</p>
+<p><center><img alt="Arduino Robot" src="../static/images/arduino-robot-16.png" /></center></p>
+<p>Note how the <code>RX</code> and <code>TX</code> pins in the Bluetooth slave go to digital pins 0 and 1 respectively, the pins that are dedicated to serial communications.</p>
+<p>This is how my actual circuit looks like with everything connected, noting that in the picture below the Bluetooth dongle is facing the other side, so the connections appear reversed from the diagram above:</p>
+<p><center><img alt="Arduino Robot" src="../static/images/arduino-robot-17.jpg" /></center></p>
+<p>An example sketch that allows remote communication is below:</p>
+<pre><code>void setup()
+{
+    Serial.begin(9600);
+    pinMode(13, OUTPUT);
+}
+
+void loop()
+{
+    if (Serial.available() &gt; 0) {
+        char ch = Serial.read();
+        Serial.print("Received: ");
+        Serial.println(ch);
+        if (ch == 'a') {
+            digitalWrite(13, HIGH);
+        }
+        else {
+            digitalWrite(13, LOW);
+        }
+    }
+}
+</code></pre>
+<p>The <code>setup</code> function does not have anything I haven't done before. From reading it you can guess that I'm going to be playing with the pin 13 LED again.</p>
+<p>In the <code>loop</code> function I'm introducing a new type of C++ statement, the <em>if</em> statement, sometimes also called <em>conditional</em>. A conditional is useful when you want the program to do something only when a condition is <em>true</em>.</p>
+<p>What follows after the <code>if</code> keyword is the <em>condition</em>, enclosed in parenthesis. In my sketch the condition that I'm checking is <code>Serial.available() &gt; 0</code>. To know if this condition is true or not the Arduino will invoke the function <code>Serial.available</code>, which returns the number of data bytes that have been received in the serial port, and compare that number against 0. If the number of available bytes is greater than 0 then the condition is true, so the instructions that are between the opening and closing curly brackets will be executed. If the condition is not true, then the whole group of instructions inside the curly brackets will be skipped.</p>
+<p>Do you understand why a conditional makes sense in this case? The <code>Serial.available</code> function will return a positive number only when the master on the other end of the serial communication has sent data. Saying <code>if Serial.available() &gt; 0</code> in C++ is the same as saying "if there is data available" in English. If the condition is not true (which is the same as saying it is <em>false</em>), then it means that at that moment the remote controller has not sent any data, so in that case I have nothing to do and skip the whole thing.</p>
+<p>So what happens when the condition is true?</p>
+<p>The very first thing I do inside the <code>if</code> block is read a byte from the serial port, using the <code>Serial.read</code> function. Note that I use a variable to store the result, but this time I declared the variable with the type <code>char</code>, which in C++ is the type that represents one byte of data.</p>
+<p>Once I have my byte of data I print it, using our old friends the <code>print</code> and <code>println</code> functions.</p>
+<p>After I print the data received I have another conditional (note how I <em>indent</em> my sketch to make it very clear that I have one if statement inside another). This time my condition is <code>ch == 'a'</code>, which as I'm sure you guessed, will be true only when the lower case letter <em>a</em> is the data received. In that case I set pin 13 to HIGH, which turns the LED on.</p>
+<p>The <code>else</code> statement that follows is an extension to the <code>if</code>. I said before that when the <code>if</code> condition is false the instructions inside the curly brackets are skipped. When a conditional has both <code>if</code> and <code>else</code> blocks the condition determines which of the two blocks executes. If the condition is true the block that follows the <code>if</code> executes and the block that follows the <code>else</code> is skipped. If the condition is false the block that follows  the <code>if</code> is skipped and the block that follows the <code>else</code> executes.</p>
+<p>Do you see what this conditional does, then? When the Arduino receives an <code>a</code> it will turn on the pin 13 LED. Any other data received will turn it off. With this simple sketch I built a remote control for the LED in the Arduino board!</p>
+<p>When trying to upload this sketch to my Arduino I've found that often the upload failed. I believe this is a result of a collision between the serial communication established by the computer and the one from the Bluetooth slave. It appears that the Bluetooth slave wins and prevents the computer from talking to the Arduino. I have found that disconnecting the <code>RX</code> and <code>TX</code> pins from the Bluetooth slave when I need to upload a new sketch solves the issue.</p>
+<p>Are you ready to try this?</p>
+<p>Go ahead and install <a href="https://play.google.com/store/apps/details?id=es.pymasde.blueterm">BlueTerm</a> in your Android device. This app works exactly like the Serial Monitor from the Arduino software. I suppose there is an equivalent app for iOS, if you have found one that works please let me know in the comments below. </p>
+<p><em>Update: It appears that <a href="https://itunes.apple.com/app/id516628472?mt=8">nBlueTerm</a> is an equivalent application for iOS devices, though I haven't had a chance to test it yet.</em></p>
+<p>If you don't have a smartphone or the Bluetooth slave you can try this sketch using the serial communication to the computer and the Serial Monitor.</p>
+<p>Once you have the app in your Android device and the sketch uploaded to the Arduino you are ready to go. Start by powering up the Arduino (via USB cable or power supply). The red LED in the Bluetooth slave will blink rapidly, indicating it is ready to pair with another device. Start BlueTerm in your smartphone and select "Connect Device" from the menu. The Bluetooth pairing window should appear and should show a device with name <code>linvor</code>. Select this device to establish a connection. Use <code>1234</code> as pairing code.</p>
+<p>Once the connection is established the LED in the Bluetooth slave goes steady, and on the smartphone you have a <em>terminal</em> like the one in the Serial Monitor. Any letters that you type are sent over to the Arduino, and the Arduino responds back with a message that confirms that it has received the same letter. When you type the lower case letter <code>a</code> in addition to the above the LED in the Arduino board lights up. When you press any other key the LED goes off. Pretty cool, right?</p>
+<h2>Final words</h2>
+<p>I hope you found the information in this article useful. Please let me know if you have any questions below in the comments.</p>
+<p>In the next article I'll be discussing a much lighter topic. I will show you how I mounted and connected all the hardware into the vehicle kit platform. Then after that I 'll show you how I developed the firmware for my robot from scratch!</p>
+<p>As always, I thank you for being a loyal reader. I hope to see you next time!</p>
+<p>Miguel</p></div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/building-an-arduino-robot-part-ii-programming-the-arduino" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/building-an-arduino-robot-part-ii-programming-the-arduino" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="building-an-arduino-robot-part-ii-programming-the-arduino.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/building-an-arduino-robot-part-ii-programming-the-arduino" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+
+
+<h4 style="text-align: right"><a name="comments"></a>88 comments</h4>
+
+
+<div class="comment">
+    <ul>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/d0d24dcff67cea142ab1afaf20e9aecfce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#1</span> <span class="label label-primary">F.Javier Fernandez</span> said
+                    <span class="flask-moment" data-timestamp="2013-01-03T17:35:48Z" data-format="fromNow(0)" data-refresh="0">2013-01-03T17:35:48Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Very nice series of articles, clear explanation evev for beginners .
+
+Equivalent Bluetooth applivation for IOS is nBlueTerm, available free @ Appstore. </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#2</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-01-03T22:39:03Z" data-format="fromNow(0)" data-refresh="0">2013-01-03T22:39:03Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@F.Javier: thanks for the tip!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/033b351dff84b6eef9838a72a411cddfce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#3</span> <span class="label label-primary">Markus</span> said
+                    <span class="flask-moment" data-timestamp="2013-01-06T12:41:04Z" data-format="fromNow(0)" data-refresh="0">2013-01-06T12:41:04Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel
+
+Your guideline is verry helpful for me
+Im lookong forward for the next Part
+
+Regards
+Markus</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/289815c144ff6a081740dba1e5af835ace2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#4</span> <span class="label label-primary">Dimitri</span> said
+                    <span class="flask-moment" data-timestamp="2013-01-23T14:29:59Z" data-format="fromNow(0)" data-refresh="0">2013-01-23T14:29:59Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Such a detailed explanation! Thanks for spending your time on this project. </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/aefe59c58e9e9a60985eda02291ab70fce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#5</span> <span class="label label-primary">salem</span> said
+                    <span class="flask-moment" data-timestamp="2013-03-23T04:47:41Z" data-format="fromNow(0)" data-refresh="0">2013-03-23T04:47:41Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">i cant believe that they are guys like you , who want to share their projects for free , what can i say . thank you thank you </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/146a504a7d2745e003b1a5d4222bdd7fce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#6</span> <span class="label label-primary">Bas15</span> said
+                    <span class="flask-moment" data-timestamp="2013-05-05T11:23:33Z" data-format="fromNow(0)" data-refresh="0">2013-05-05T11:23:33Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Thanks a lot 
+It is wonderful,</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/7af34e61ae4be2b1154767d9fa4bc7a7ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#7</span> <span class="label label-primary">Chaminda Amarasinghe</span> said
+                    <span class="flask-moment" data-timestamp="2013-05-22T21:14:53Z" data-format="fromNow(0)" data-refresh="0">2013-05-22T21:14:53Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel, 
+
+Thanks. Very nice article </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/1f2983b82a7196b9ffaacb52ef8b86b0ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#8</span> <span class="label label-primary">Kevin</span> said
+                    <span class="flask-moment" data-timestamp="2013-06-19T20:50:23Z" data-format="fromNow(0)" data-refresh="0">2013-06-19T20:50:23Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi - You recommend the Arduino Motor Shield R3, though, you article uses the Adafruit.  I would like to use the Arduino MS R3 - can I use the AFMotor library?
+Thanks.  </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#9</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-06-20T04:28:50Z" data-format="fromNow(0)" data-refresh="0">2013-06-20T04:28:50Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Kevin: Unfortunately the Adafruit motor shield is different than the Arduino one. To use the Arduino R3 shield you will need to write different code to control the motors, and you will not use the AFMotor library. The changes should be pretty simple though.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/50590bb0a10d1d048e5af42b23a5d53dce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#10</span> <span class="label label-primary">sid</span> said
+                    <span class="flask-moment" data-timestamp="2013-07-07T18:30:56Z" data-format="fromNow(0)" data-refresh="0">2013-07-07T18:30:56Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I am using arduino motor shield r3 and have written a code for the same with bluetooth module but i want to use ping sensor code also with it.I am totally new to this.how can i power both ping sensor and bluetooth from motor shield and how to write another program along with my motor shield and bluetooth code.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#11</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-07-07T18:49:08Z" data-format="fromNow(0)" data-refresh="0">2013-07-07T18:49:08Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@sid: All the peripherals are powered from the Arduino. See the wiring diagrams above in this article. As for using all the components together, see the tutorials that follow this one for some ideas.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/d521aa3ac12d46090eaa90f07bcb6c64ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#12</span> <span class="label label-primary">Marcos Montelpare</span> said
+                    <span class="flask-moment" data-timestamp="2013-07-09T17:18:18Z" data-format="fromNow(0)" data-refresh="0">2013-07-09T17:18:18Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">he construido un robot como est siguiendo paso a paso el tutorial con un arduino Uno R2 + el escudo motor Adafuit + Bluetooth master/slave + pingHCSRO4. Luego de leer todos los tutoriales descargue el archivo Michelino y al copiarlo en el compilador el verificador detecta un error aquí 
+private:
+        Motor leftMotor;
+        Motor rightMotor;
+como estoy comenzando con esto no he podido corregirlo. agradecería su ayuda para poder probar todo el sistema</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/c79c789392edc6193aab74ad695fca0dce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#13</span> <span class="label label-primary">Nilesh</span> said
+                    <span class="flask-moment" data-timestamp="2013-07-28T08:45:05Z" data-format="fromNow(0)" data-refresh="0">2013-07-28T08:45:05Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel. Thank you for the prompt response. After a little bit of research I found this tutorial for programming Arduino Motor Shield http://www.instructables.com/id/Arduino-Motor-Shield-Tutorial/step5/Two-Motors/. 
+
+How would you suggest to use this? Shall I create a library file from this and include it in my sketch ?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#14</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-07-28T16:41:16Z" data-format="fromNow(0)" data-refresh="0">2013-07-28T16:41:16Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Nilesh: you can create a new driver that uses the same functions of mine. If you do it that way the rest of the program will not know the difference.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/e0bc425b4f7deec8ce8fe6272b1e3556ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#15</span> <span class="label label-primary">Gabriel</span> said
+                    <span class="flask-moment" data-timestamp="2013-08-16T01:10:28Z" data-format="fromNow(0)" data-refresh="0">2013-08-16T01:10:28Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">how can i control the robot from ios? if so, what app can i use
+
+-Gabriel</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#16</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-08-16T04:27:31Z" data-format="fromNow(0)" data-refresh="0">2013-08-16T04:27:31Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Gabriel: I don&#39;t use iOS myself, so I can&#39;t recommend anything. You should look for a bluetooth remote control app for robots.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/79c1d3784cd7953d3789f4ff9080df01ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#17</span> <span class="label label-primary">Mick</span> said
+                    <span class="flask-moment" data-timestamp="2013-08-24T16:59:11Z" data-format="fromNow(0)" data-refresh="0">2013-08-24T16:59:11Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Following your tuition I hit problems had to solder adafruit motor shield I managed to get two dc motors running using M2 and M3. Motor 2 has racing faster thank M3 set the speed lower in M2 to little effect so I stopped both motors speed set to zero , but power was still being delivered to both motors. Do you know of any way tho resove this problem ?
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#18</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-08-25T04:55:27Z" data-format="fromNow(0)" data-refresh="0">2013-08-25T04:55:27Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Mick: If the motors run at different speeds you may need to calibrate them. You can do this by trial and error. For example, you may find that you need to set the faster motor to 90% of the speed of the slower one and then they match.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/263fe13993318de3fd3119c0da2ed216ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#19</span> <span class="label label-primary">Chip</span> said
+                    <span class="flask-moment" data-timestamp="2013-08-26T18:46:44Z" data-format="fromNow(0)" data-refresh="0">2013-08-26T18:46:44Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">When I figured out you can use the other pins, I just removed the L293N chips from the Motor Shield and wired them up directly</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/3c4e149c89fdf1c3dfed6e672f1b7ba1ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#20</span> <span class="label label-primary">Marcel</span> said
+                    <span class="flask-moment" data-timestamp="2013-09-02T04:51:32Z" data-format="fromNow(0)" data-refresh="0">2013-09-02T04:51:32Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Thank you for a such great tutorial! I have a question related to this project: what pins are conected between motor shield and arduino? I had studied the code, but i can&#39;t see what pins from arduino are connected to the shield. I don&#39;t have a motor shield and i will try to use a diver circuit + a shift register from schematics of adafruit motor shield v 1.2, and this information is the missing piece to aquaire this. Thank you and keep working to new projects!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#21</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-09-02T05:30:43Z" data-format="fromNow(0)" data-refresh="0">2013-09-02T05:30:43Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Marcel: The FAQ page for the Adafruit motor shield describes the pins that are in use.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/3f20b563df9218a57cf45fb15c6ac9cace2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#22</span> <span class="label label-primary">Marcel</span> said
+                    <span class="flask-moment" data-timestamp="2013-09-02T20:23:07Z" data-format="fromNow(0)" data-refresh="0">2013-09-02T20:23:07Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Thank you very much!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/c79c789392edc6193aab74ad695fca0dce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#23</span> <span class="label label-primary">Nilesh</span> said
+                    <span class="flask-moment" data-timestamp="2013-09-20T16:08:39Z" data-format="fromNow(0)" data-refresh="0">2013-09-20T16:08:39Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I just found out that nBlueTerm app for iPhone does not work with BT2S bluetooth slave. I have tested it as well I have got the confirmation from Virtuabotix as well. The reason being iPhone does not allow serial connection easily (nearly impossible). Only option as of now is to either use and Android device or use the new BTLE shield specially made for bluetooth connection with iPhone.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/74fa17594def26b4050c339f3d706285ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#24</span> <span class="label label-primary">Subhash Jadhav`</span> said
+                    <span class="flask-moment" data-timestamp="2013-09-23T16:50:55Z" data-format="fromNow(0)" data-refresh="0">2013-09-23T16:50:55Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I use the Ultrasonic range finder sensor instead of distance sensor.. There are 3 pins in this sensor 1 of them Positive 2 of Negative &amp; 3 of Analog pin.. then how to make the code ? I build 4wd obstacle avoidance robot. I use Arduino uno r3 board,Adafruit motor shield,4 Bo gear motors,1 gm servo,&amp; the distance sensor. I don&#39;t understand how to make the code for this robot. pl help....</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#25</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-09-24T01:54:50Z" data-format="fromNow(0)" data-refresh="0">2013-09-24T01:54:50Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Subhash: The NewPing library probably supports your ultrasonic range finder. Did you try it?</p>
+                </div>
+            </div>
+        </li>
+        
+    </ul>
+</div>
+
+<div class="page">
+<ul class="pager">
+  <li class="previous disabled">
+    <a href="#">&laquo;&laquo;</a>
+  </li>
+  <li class="previous disabled">
+    <a href="#">&laquo;</a>
+  </li>
+  <li class="next">
+    <a href="building-an-arduino-robot-part-ii-programming-the-arduino/page/0.html#comments">&raquo;&raquo;</a>
+  </li>
+  <li class="next">
+    <a href="building-an-arduino-robot-part-ii-programming-the-arduino/page/2.html#comments">&raquo;</a>
+  </li>
+</ul>
+</div>
+
+<h3><a name="commentform"></a>Leave a Comment</h3>
+
+<form action="#commentform" method="post"
+  class="form" role="form">
+  <div style="display:none;"><input id="csrf_token" name="csrf_token" type="hidden" value="1439536721.99##469f5ae43e24fabe2def88f99c87c889290c4085"></div>
+  
+    
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="name">Name</label>
+        <input class="form-control" id="name" name="name" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="url">URL</label>
+        <input class="form-control" id="url" name="url" type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="email">Email</label>
+        <input class="form-control" id="email" name="email" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="comment">Comment</label>
+        <textarea class="form-control" id="comment" name="comment" required></textarea>
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="captcha">Captcha</label>
+        
+<script type="text/javascript">var RecaptchaOptions = {"custom_translations": {"audio_challenge": "Get an audio challenge", "cant_hear_this": "Download sound as MP3", "help_btn": "Help", "image_alt_text": "reCAPTCHA challenge image", "incorrect_try_again": "Incorrect. Try again.", "instructions_audio": "Type what you hear", "instructions_visual": "Type the text", "play_again": "Play sound again", "privacy_and_terms": "Privacy & Terms", "refresh_btn": "Get a new challenge", "visual_challenge": "Get a visual challenge"}, "theme": "white"};</script>
+<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S"></script>
+<noscript>
+  <iframe src="http://www.google.com/recaptcha/api/noscript?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S" height="300" width="500" frameborder="0"></iframe><br>
+  <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+  <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
+</noscript>
+
+  </div>
+
+
+    
+
+
+
+
+
+  
+
+
+    <input class="btn btn-default" id="submit" name="submit" type="submit" value="Submit">
+  
+
+
+
+
+
+</form>
+
+
+</div>
+
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <p class="elapsed">This page was generated in None seconds.</p>
+            <p>&copy; 2014 by Miguel Grinberg. All rights reserved. <a href="mailto:webmaster _at_ miguelgrinberg _dot_ com">Questions?</a></p>
+        </div>
+    </div>
+
+
+    
+    
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.33/jquery.colorbox-min.js"></script>
+    <script type="text/javascript" src="../static/prettify.js"></script>
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment-with-langs.min.js"></script>
+<script>
+function flask_moment_render(elem) {
+    $(elem).text(eval('moment("' + $(elem).data('timestamp') + '").' + $(elem).data('format') + ';'));
+    $(elem).removeClass('flask-moment');
+}
+function flask_moment_render_all() {
+    $('.flask-moment').each(function() {
+        flask_moment_render(this);
+        if ($(this).data('refresh')) {
+            (function(elem, interval) { setInterval(function() { flask_moment_render(elem) }, interval); })(this, $(this).data('refresh'));
+        }
+    })
+}
+$(document).ready(function() {
+    flask_moment_render_all();
+});
+</script>
+    
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4777284-15']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".gallery").colorbox({rel:".gallery",maxWidth:"95%",maxHeight:"95%",scalePhotos:true});
+            // add prettyprint class to all <pre><code></code></pre> blocks
+            var prettify = false;
+            $("pre code").parent().each(function() {
+                $(this).addClass('prettyprint');
+                prettify = true;
+            });
+            prettyPrint();
+        });
+    </script>
+
+
+  </body>
+
+<!-- Mirrored from blog.miguelgrinberg.com/post/building-an-arduino-robot-part-ii-programming-the-arduino by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:43:04 GMT -->
+</html>

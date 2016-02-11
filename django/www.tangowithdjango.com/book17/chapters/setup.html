@@ -1,0 +1,421 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+<!-- Mirrored from www.tangowithdjango.com/book17/chapters/setup.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 10 Jan 2016 04:08:42 GMT -->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>4. Django Basics &mdash; How to Tango with Django 1.7</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/twd.ico"/>
+    <link rel="top" title="How to Tango with Django 1.7" href="../index-2.html" />
+    <link rel="next" title="5. Templates and Static Media" href="templates_static.html" />
+    <link rel="prev" title="3. Getting Ready to Tango" href="requirements.html" />
+ <style type="text/css">
+	img{
+	    width: 85%; /* you can use % */
+	    height: auto;
+	}
+	
+	table {
+		margin: auto;
+	}
+	
+	p.caption {
+		font-size: 10pt;
+		font-style: italic;
+	}
+ </style>
+ <script type="text/javascript">
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','../../../www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-44397330-1', 'tangowithdjango.com');
+  ga('send', 'pageview');
+     
+
+  </script>      
+
+  </head>
+  <body role="document">
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        
+        <li class="right" >
+          <a href="templates_static.html" title="5. Templates and Static Media"
+             accesskey="N">next</a>
+          </li>
+		
+        <li class="right" >
+          <a href="requirements.html" title="3. Getting Ready to Tango"
+             accesskey="P">previous</a>
+          </li>
+		
+        <li><a href="../index-2.html">How to Tango with Django 1.7</a> &raquo;</li> 
+
+      </ul>
+
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index-2.html">
+              <img class="logo" src="../_static/twd200x200.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index-2.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">4. Django Basics</a><ul>
+<li><a class="reference internal" href="#testing-your-setup">4.1. Testing your Setup</a></li>
+<li><a class="reference internal" href="#creating-your-django-project">4.2. Creating your Django Project</a></li>
+<li><a class="reference internal" href="#creating-a-django-application">4.3. Creating a Django Application</a></li>
+<li><a class="reference internal" href="#creating-a-view">4.4. Creating a View</a></li>
+<li><a class="reference internal" href="#mapping-urls">4.5. Mapping URLs</a></li>
+<li><a class="reference internal" href="#basic-workflows">4.6. Basic Workflows</a><ul>
+<li><a class="reference internal" href="#creating-a-new-django-project">4.6.1. Creating a new Django Project</a></li>
+<li><a class="reference internal" href="#creating-a-new-django-application">4.6.2. Creating a new Django application</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exercises">4.7. Exercises</a><ul>
+<li><a class="reference internal" href="#hints">4.7.1. Hints</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="requirements.html"
+                        title="previous chapter">3. Getting Ready to Tango</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="templates_static.html"
+                        title="next chapter">5. Templates and Static Media</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/chapters/setup.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="http://www.tangowithdjango.com/book17/search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="django-basics">
+<span id="setup-label"></span><span id="id1"></span><h1>4. Django Basics<a class="headerlink" href="#django-basics" title="Permalink to this headline">¶</a></h1>
+<p>Let&#8217;s get started with Django! In this chapter, we&#8217;ll be giving you an overview of the how to get started with Django. You&#8217;ll be setting up a new project and a new web application. By the end of this chapter, you will have a simple Django-power webpage up and running!</p>
+<div class="section" id="testing-your-setup">
+<h2>4.1. Testing your Setup<a class="headerlink" href="#testing-your-setup" title="Permalink to this headline">¶</a></h2>
+<p>Let&#8217;s start by checking that your Python and Django installations are installed correctly, and are at the correct version for this tutorial. To do this, open a new terminal instance and issue the following command.</p>
+<div class="highlight-python"><div class="highlight"><pre>$ python --version
+2.7.5
+</pre></div>
+</div>
+<p>This print the Python version number and exit. If the version displayed is anything but <code class="docutils literal"><span class="pre">2.7.5</span></code>, you will need to go back to Section <a class="reference internal" href="requirements.html#installing-software">3.2</a> and verify you have completed all the relevant steps for your operating system.</p>
+<p>After verifying your Python installation, check your Django installation by issuing the following command.</p>
+<div class="highlight-python"><div class="highlight"><pre>$ python -c &quot;import django; print(django.get_version())&quot;
+1.7
+</pre></div>
+</div>
+<p>The command again executes the code within the string provided as part of the <code class="docutils literal"><span class="pre">-c</span></code> switch. After importing Django, you should see <code class="docutils literal"><span class="pre">1.7</span></code> printed underneath. If you see a different set of numbers or are greeted with a Python <code class="docutils literal"><span class="pre">ImportError</span></code>, go back to Section <a class="reference internal" href="requirements.html#installing-software">3.2</a> or consult the <a class="reference external" href="https://docs.djangoproject.com/en/1.7/topics/install/">Django Documentation on Installing Django</a> for more information. If you find that you have got a different version of Django, it is possible that you will come across problems at some point. It&#8217;s definitely worth making sure you have Django 1.7 installed.</p>
+</div>
+<div class="section" id="creating-your-django-project">
+<h2>4.2. Creating your Django Project<a class="headerlink" href="#creating-your-django-project" title="Permalink to this headline">¶</a></h2>
+<p>To create a new Django Project, go to your <code class="docutils literal"><span class="pre">code</span></code> directory (i.e. your <code class="docutils literal"><span class="pre">&lt;workspace&gt;</span></code> directory), and issue the following command:</p>
+<p><code class="docutils literal"><span class="pre">$</span> <span class="pre">django-admin.py</span> <span class="pre">startproject</span> <span class="pre">tango_with_django_project</span></code></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On Windows you may have to use the full path to the django-admin.py script. i.e. <code class="docutils literal"><span class="pre">python</span> <span class="pre">c:\python27\scripts\django-admin.py</span> <span class="pre">startproject</span> <span class="pre">tango_with_django_project</span></code> as suggested on <a class="reference external" href="http://stackoverflow.com/questions/8112630/cant-create-django-project-using-command-prompt">StackOverflow</a>.</p>
+</div>
+<p>This command will invoke the <code class="docutils literal"><span class="pre">django-admin.py</span></code> script, which will set up a new Django project called <code class="docutils literal"><span class="pre">tango_with_django_project</span></code> for you. Typically, we append <code class="docutils literal"><span class="pre">_project</span></code> to the end of our Django project directories so we know exactly what they contain - but the naming convention is entirely up to you.</p>
+<p>You&#8217;ll now notice within your workspace is a directory set to the name of your new project, <code class="docutils literal"><span class="pre">tango_with_django_project</span></code>. Within this newly created directory, you should see two items:</p>
+<ul class="simple">
+<li>another directory with the same name as your project, <code class="docutils literal"><span class="pre">tango_with_django_project</span></code>; and</li>
+<li>a Python script called <code class="docutils literal"><span class="pre">manage.py</span></code>.</li>
+</ul>
+<p>For the purposes of this tutorial, we call this nested directory the <em>project configuration directory</em>. Within this directory, you will find four Python scripts. We will discuss this scripts in detail later on, but for now you should see:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">__init__.py</span></code>, a blank Python script whose presence indicates to the Python interpreter that the directory is a Python package;</li>
+<li><code class="docutils literal"><span class="pre">settings.py</span></code>, the place to store all of your Django project&#8217;s settings;</li>
+<li><code class="docutils literal"><span class="pre">urls.py</span></code>, a Python script to store URL patterns for your project; and</li>
+<li><code class="docutils literal"><span class="pre">wsgi.py</span></code>, a Python script used to help run your development server and deploy your project to a production environment.</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The project configuration directory has been created with new Django projects since version 1.4. Having two directories with the same name may seem quite a bit odd, but the change was made to separate out project-related components from its individual applications.</p>
+</div>
+<p>In the project directory, you will see there is a file called <code class="docutils literal"><span class="pre">manage.py</span></code>. We will be calling this script time and time again as we develop our project, as it provides you with a series of commands you can run to maintain your Django project. For example, <code class="docutils literal"><span class="pre">manage.py</span></code> allows you to run the built-in Django development server to test your work and run database commands. You&#8217;ll be using this script a lot throughout the development cycle.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">See the Django documentation for more details about the <a class="reference external" href="https://docs.djangoproject.com/en/1.7/ref/django-admin/#django-admin-py-and-manage-py">Admin and Manage scripts</a>.</p>
+</div>
+<p>You can try using the <code class="docutils literal"><span class="pre">manage.py</span></code> script now, by issuing the following command.</p>
+<p><code class="docutils literal"><span class="pre">$</span> <span class="pre">python</span> <span class="pre">manage.py</span> <span class="pre">runserver</span></code></p>
+<p>Executing this command will instruct Django to initiate its lightweight development server. You should see the output in your terminal similar to the example shown below:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ python manage.py runserver
+
+System check identified no issues (0 silenced).
+
+You have unapplied migrations; your app may not work properly until they are applied.
+Run &#39;python manage.py migrate&#39; to apply them.
+
+October 01, 2014 - 19:49:05
+Django version 1.7c2, using settings &#39;tango_with_django_project.settings&#39;
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>$ python manage.py migrate
+
+Operations to perform:
+  Apply all migrations: admin, contenttypes, auth, sessions
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying auth.0001_initial... OK
+  Applying admin.0001_initial... OK
+  Applying sessions.0001_initial... OK
+</pre></div>
+</div>
+<p>#TODO(leifos): add description of migrate command: from django tutorial: The migrate command looks at the INSTALLED_APPS setting and creates any necessary database tables according to the database settings in your mysite/settings.py file and the database migrations shipped with the app (we’ll cover those later). You’ll see a message for each migration it applies. If you’re interested, run the command-line client for your database and type dt (PostgreSQL), SHOW TABLES; (MySQL), or .schema (SQLite) to display the tables Django created.</p>
+<p>Now open up your favourite web browser and enter the URL <a class="reference external" href="http://127.0.0.1:8000/">http://127.0.0.1:8000/</a> <a class="footnote-reference" href="#f1" id="id2"><sup>1</sup></a>. You should see a webpage similar to the one shown in Figure <a class="pageref" href="#fig-django-dev-server-firstrun">1</a>.</p>
+<div class="align-center figure" id="id4">
+<span id="fig-django-dev-server-firstrun"></span><img alt="../_images/django-dev-server-firstrun.png" src="../_images/django-dev-server-firstrun.png" />
+<p class="caption"><span class="caption-text">Figure 1: A screenshot of the initial Django page you will see when running the development server for the first time.</span></p>
+</div>
+<p>You can stop the development server at anytime by pushing <code class="docutils literal"><span class="pre">CTRL</span> <span class="pre">+</span> <span class="pre">C</span></code> in your terminal window. If you wish to run the development server on a different port, or allow users from other machines to access it, you can do so by supplying optional arguments. Consider the following command:</p>
+<p><code class="docutils literal"><span class="pre">$</span> <span class="pre">python</span> <span class="pre">manage.py</span> <span class="pre">runserver</span> <span class="pre">&lt;your_machines_ip_address&gt;:5555</span></code></p>
+<p>Executing this command will force the development server to respond to incoming requests on TCP port 5555. You will need to replace <code class="docutils literal"><span class="pre">&lt;your_machines_ip_address&gt;</span></code> with your computer&#8217;s IP address.</p>
+<p>When setting ports, it is unlikely that you will be able to use TCP port 80 as this is traditionally reserved for HTTP traffic. Also, any port below 1024 is considered to be <a class="reference external" href="http://www.w3.org/Daemon/User/Installation/PrivilegedPorts.html">privileged</a> by your operating system.</p>
+<p>While you won&#8217;t be using the lightweight development server to deploy your application, sometimes it is nice to be able to demo your application on a computer of a colleague. Running the server with your machine&#8217;s IP address will enable others to enter in <code class="docutils literal"><span class="pre">http://&lt;your_machines_ip_address&gt;:&lt;port&gt;/</span></code> and view your web application. Of course, this will depend on how your network is configured. There may be proxy servers or firewalls in the way which would need to be configured before this would work. Check with the administrator of the network you are using if you can&#8217;t view the development server remotely.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <code class="docutils literal"><span class="pre">django-admin.py</span></code> and <code class="docutils literal"><span class="pre">manage.py</span></code> scripts provides a lot of useful, time-saving functionality for you. <code class="docutils literal"><span class="pre">django-admin.py</span></code> allows you to start new projects and apps, along with other commands. Within your project directory, <code class="docutils literal"><span class="pre">manage.py</span></code> allows you to perform administrative tasks within the scope of your project only. Simply execute the relevant script name without any arguments to see what you can do with each. The <a class="reference external" href="https://docs.djangoproject.com/en/1.7/ref/django-admin/">official Django documentation provides a detailed list and explanation of each possible command</a> you can supply for both scripts.</p>
+</div>
+<p>If you are using version control, now may be a good time to commit the changes you have made to your workspace. Refer to the <a class="reference internal" href="git.html#git-crash-course"><span>crash course on GIT</span></a> if you can&#8217;t remember the commands and steps involved in doing this.</p>
+</div>
+<div class="section" id="creating-a-django-application">
+<h2>4.3. Creating a Django Application<a class="headerlink" href="#creating-a-django-application" title="Permalink to this headline">¶</a></h2>
+<p>A Django project is a collection of <em>configurations</em> and <em>applications</em> that together make up a given web application or website. One of the intended outcomes of using this approach is to promote good software engineering practices. By developing a small series of applications, the idea is that you can theoretically drop an existing application into a different Django project and have it working with minimal effort. Why reinvent the wheel if it&#8217;s already there? <a class="footnote-reference" href="#f2" id="id3"><sup>2</sup></a></p>
+<p>A Django application exists to perform a particular task. You need to create specific applications that are responsible for providing your site with particular kinds of functionality. For example, we could imagine that a project might consist of several applications including a polling app, a registration app, and a specific content related app. In another project, we may wish to re-use the polling and registration apps and use them with to dispatch different content. There are many Django applications you can <a class="reference external" href="https://code.djangoproject.com/wiki/DjangoResources#Djangoapplicationcomponents">download</a> and use in your projects. Since we are getting started, we&#8217;ll kick off by walking through how to create your own application.</p>
+<p>To start, create a new application called <em>Rango</em>. From within your Django project directory (e.g. <code class="docutils literal"><span class="pre">&lt;workspace&gt;/tango_with_django_project</span></code>), run the following command.</p>
+<div class="highlight-python"><div class="highlight"><pre>$ python manage.py startapp rango
+</pre></div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">startapp</span></code> command creates a new directory within your project&#8217;s root. Unsurprisingly, this directory is called <code class="docutils literal"><span class="pre">rango</span></code> - and contained within it are another five Python scripts:</p>
+<ul class="simple">
+<li>another <code class="docutils literal"><span class="pre">__init__.py</span></code>, serving the exact same purpose as discussed previously;</li>
+<li>models.py, a place to store your application&#8217;s data models - where you specify the entities and relationships between data;</li>
+<li>tests.py, where you can store a series of functions to test your application&#8217;s code; and</li>
+<li>views.py, where you can store a series of functions that take a clients&#8217;s requests and return responses.</li>
+<li>admin.py, where you can register your models so that you can benefit from some Django machinery which creates an admin interface for you (see #TODO(leifos):add link to admin chapter)</li>
+</ul>
+<p><code class="docutils literal"><span class="pre">views.py</span></code> and <code class="docutils literal"><span class="pre">models.py</span></code> are the two files you will use for any given application, and form part of the main architectural design pattern employed by Django, i.e. the <em>Model-View-Template</em> pattern. You can check out <a class="reference external" href="https://docs.djangoproject.com/en/1.7/intro/overview/">the official Django documentation</a> to see how models, views and templates relate to each other in more detail.</p>
+<p>Before you can get started with creating your own models and views, you must first tell your Django project about your new application&#8217;s existence. To do this, you need to modify the <code class="docutils literal"><span class="pre">settings.py</span></code> file, contained within your project&#8217;s configuration directory. Open the file and find the <code class="docutils literal"><span class="pre">INSTALLED_APPS</span></code> tuple. Add the <code class="docutils literal"><span class="pre">rango</span></code> application to the end of the tuple, which should then look like the following example.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s">&#39;django.contrib.admin&#39;</span><span class="p">,</span>
+    <span class="s">&#39;django.contrib.auth&#39;</span><span class="p">,</span>
+    <span class="s">&#39;django.contrib.contenttypes&#39;</span><span class="p">,</span>
+    <span class="s">&#39;django.contrib.sessions&#39;</span><span class="p">,</span>
+    <span class="s">&#39;django.contrib.messages&#39;</span><span class="p">,</span>
+    <span class="s">&#39;django.contrib.staticfiles&#39;</span><span class="p">,</span>
+    <span class="s">&#39;rango&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Verify that Django picked up your new application by running the development server again. If you can start the server without errors, your application was picked up and you will be ready to proceed to the next step.</p>
+</div>
+<div class="section" id="creating-a-view">
+<h2>4.4. Creating a View<a class="headerlink" href="#creating-a-view" title="Permalink to this headline">¶</a></h2>
+<p>With our Rango application created, let&#8217;s now create a simple view. For our first view, let&#8217;s just send some simple text back to the client - we won&#8217;t concern ourselves about using models or templates just yet.</p>
+<p>In your favourite IDE, open the file <code class="docutils literal"><span class="pre">views.py</span></code>, located within your newly created <code class="docutils literal"><span class="pre">rango</span></code> application directory. Remove the comment <code class="docutils literal"><span class="pre">#</span> <span class="pre">Create</span> <span class="pre">your</span> <span class="pre">views</span> <span class="pre">here.</span></code> so that you now have a blank file.</p>
+<p>You can now add in the following code.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
+
+<span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s">&quot;Rango says hey there world!&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Breaking down the three lines of code, we observe the following points about creating this simple view.</p>
+<ul class="simple">
+<li>We first import the <a class="reference external" href="https://docs.djangoproject.com/en/1.7/ref/request-response/#django.http.HttpResponse">HttpResponse</a> object from the <code class="docutils literal"><span class="pre">django.http</span></code> module.</li>
+<li>Each view exists within the <code class="docutils literal"><span class="pre">views.py</span></code> file as a series of individual functions. In this instance, we only created one view - called <code class="docutils literal"><span class="pre">index</span></code>.</li>
+<li>Each view takes in at least one argument - a <a class="reference external" href="https://docs.djangoproject.com/en/1.7/ref/request-response/#django.http.HttpRequest">HttpRequest</a> object, which also lives in the <code class="docutils literal"><span class="pre">django.http</span></code> module.  Convention dictates that this is named <code class="docutils literal"><span class="pre">request</span></code>, but you can rename this to whatever you want if you so desire.</li>
+<li>Each view must return a HttpResponse object. A simple HttpResponse object takes a string parameter representing the content of the page we wish to send to the client requesting the view.</li>
+</ul>
+<p>With the view created, you&#8217;re only part of the way to allowing a user to access it. For a user to see your view, you must map a <a class="reference external" href="http://en.wikipedia.org/wiki/Uniform_resource_locator">Uniform Resources Locator (URL)</a> to the view.</p>
+</div>
+<div class="section" id="mapping-urls">
+<h2>4.5. Mapping URLs<a class="headerlink" href="#mapping-urls" title="Permalink to this headline">¶</a></h2>
+<p>Within the <code class="docutils literal"><span class="pre">rango</span></code> application directory, we now need to create a new file called <code class="docutils literal"><span class="pre">urls.py</span></code>. The contents of the file will allow you to map URLs for your application (e.g. <code class="docutils literal"><span class="pre">http://www.tangowithdjango.com/rango/</span></code>) to specific views. Check out the simple <code class="docutils literal"><span class="pre">urls.py</span></code> file below.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">patterns</span><span class="p">,</span> <span class="n">url</span>
+<span class="kn">from</span> <span class="nn">rango</span> <span class="kn">import</span> <span class="n">views</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="n">patterns</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+        <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;index&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>This code imports the relevant Django machinery that we use to create URL mappings. Importing the <code class="docutils literal"><span class="pre">views</span></code> module from <code class="docutils literal"><span class="pre">rango</span></code> also provides us with access to our simple view implemented previously, allowing us to reference the view in the URL mapping we will create.</p>
+<p>To create our mappings, we use a <a class="reference external" href="http://en.wikipedia.org/wiki/Tuple">tuple</a>. For Django to pick your mappings up, this tuple <em>must</em> be called <code class="docutils literal"><span class="pre">urlpatterns</span></code>. The <code class="docutils literal"><span class="pre">urlpatterns</span></code> tuple contains a series of calls to the <code class="docutils literal"><span class="pre">django.conf.urls.url()</span></code> function, with each call handling a unique mapping. In the code example above, we only use <code class="docutils literal"><span class="pre">url()</span></code> once, so we have therefore defined only one URL mapping. The first parameter we provide to the <code class="docutils literal"><span class="pre">django.conf.urls.url()</span></code> function is the regular expression <code class="docutils literal"><span class="pre">^$</span></code>, which matches to an empty string. Any URL supplied by the user that matches this pattern means that the view <code class="docutils literal"><span class="pre">views.index()</span></code> would be invoked by Django. The view would be passed a <code class="docutils literal"><span class="pre">HttpRequest</span></code> object as a parameter, containing information about the user&#8217;s request to the server. We also make use of the optional parameter to the <code class="docutils literal"><span class="pre">url()</span></code> function, <code class="docutils literal"><span class="pre">name</span></code>, using the string <code class="docutils literal"><span class="pre">'index'</span></code> as the associated value.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You might be thinking that matching a blank URL is pretty pointless - what use would it serve? When the URL pattern matching takes place, only a portion of the original URL string is considered. This is because our Django project will first process the original URL string (i.e. <code class="docutils literal"><span class="pre">http://www.tangowithdjango.com/rango/</span></code>). Once this has been processed, it is removed, with the remained being passed for pattern matching. In this instance, there would be nothing left - so an empty string would match!</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <code class="docutils literal"><span class="pre">name</span></code> parameter is optional to the <code class="docutils literal"><span class="pre">django.conf.urls.url()</span></code> function. This is provided by Django to allow you to distinguish one mapping from another. It is entirely plausible that two separate URL mappings expressions could end calling the same view. <code class="docutils literal"><span class="pre">name</span></code> allows you to differentiate between them - something which is useful for <em>reverse URL matching.</em> Check out <a class="reference external" href="https://docs.djangoproject.com/en/1.7/topics/http/urls/#naming-url-patterns">the Official Django documentation on this topic</a> for more information.</p>
+</div>
+<p>You may have seen that within your project configuration directory a <code class="docutils literal"><span class="pre">urls.py</span></code> file already exists. Why make another? Technically, you can put <em>all</em> the URLs for your project&#8217;s applications within this file. However, this is considered bad practice as it increases coupling on your individual applications. A separate <code class="docutils literal"><span class="pre">urls.py</span></code> file for each application allows you to set URLs for individual applications. With minimal coupling, you can then join them up to your project&#8217;s master <code class="docutils literal"><span class="pre">urls.py</span></code> file later.</p>
+<p>This means we need to configure the <code class="docutils literal"><span class="pre">urls.py</span></code> of our project <code class="docutils literal"><span class="pre">tango_with_django_project</span></code> and connect up our main project with our Rango application.</p>
+<p>How do we do this? It&#8217;s quite simple. Open the project&#8217;s <code class="docutils literal"><span class="pre">urls.py</span></code> file which is located inside your project configuration directory. As a relative path from your workspace directory, this would be the file <code class="docutils literal"><span class="pre">&lt;workspace&gt;/tango_with_django_project/tango_with_django_project/urls.py</span></code>. Update the <code class="docutils literal"><span class="pre">urlpatterns</span></code> tuple as shown in the example below.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">urlpatterns</span> <span class="o">=</span> <span class="n">patterns</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+    <span class="c"># Examples:</span>
+    <span class="c"># url(r&#39;^$&#39;, &#39;tango_with_django_project_17.views.home&#39;, name=&#39;home&#39;),</span>
+    <span class="c"># url(r&#39;^blog/&#39;, include(&#39;blog.urls&#39;)),</span>
+
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^admin/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">)),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^rango/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;rango.urls&#39;</span><span class="p">)),</span> <span class="c"># ADD THIS NEW TUPLE!</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>The added mapping looks for url strings that match the patterns <code class="docutils literal"><span class="pre">^rango/</span></code>. When a match is made the remainder of the url string is then passed onto and handled by <code class="docutils literal"><span class="pre">rango.urls</span></code> (which we have already configured). This is done with the help of the <code class="docutils literal"><span class="pre">include()</span></code> function from within <code class="docutils literal"><span class="pre">django.conf.urls</span></code>. Think of this as a chain that processors the URL string - as illustrated in Figure <a class="pageref" href="#fig-url-chain">2</a>. In this chain, the domain is stripped out and the remainder of the url string (<code class="docutils literal"><span class="pre">rango/</span></code>) is passed on to tango_with_django project, where it finds a match and strips away <code class="docutils literal"><span class="pre">rango/</span></code> leaving and empty string to be passed on to the application rango. Rango now tries to match the empty string, which it does, and this then dispatches the <code class="docutils literal"><span class="pre">index()</span></code> view that we created.</p>
+<p>Restart the Django development server and visit <code class="docutils literal"><span class="pre">http://127.0.0.1:8000/rango</span></code>. If all went well, you should see the text <code class="docutils literal"><span class="pre">Rango</span> <span class="pre">says</span> <span class="pre">hello</span> <span class="pre">world!</span></code>. It should look just like the screenshot shown in Figure <a class="pageref" href="#fig-rango-hello-world">3</a>.</p>
+<div class="align-center figure" id="id5">
+<span id="fig-url-chain"></span><img src="../_images/url-chain.svg" /><p class="caption"><span class="caption-text">Figure 2: An illustration of a URL, showing how the different parts of the URL are the responsibility of different <code class="docutils literal"><span class="pre">url.py</span></code> files.</span></p>
+</div>
+<div class="align-center figure" id="id6">
+<span id="fig-rango-hello-world"></span><img alt="../_images/rango-hello-world.png" src="../_images/rango-hello-world.png" />
+<p class="caption"><span class="caption-text">Figure 3: A screenshot of Google Chrome displaying our first Django-powered webpage. Hello, Rango!</span></p>
+</div>
+<p>Within each application, you will create a number of URL to view mappings. This initial mapping is quite simple. As we progress, we will create more sophisticated mappings that using allow the URLs to be parameterised.</p>
+<p>It&#8217;s important to have a good understanding of how URLs are handled in Django. If you are still bit confused or would like to know more check out the <a class="reference external" href="https://docs.djangoproject.com/en/1.7/topics/http/urls/">official Django documentation on URLs</a> for further details and further examples.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The URL patterns use <a class="reference external" href="http://en.wikipedia.org/wiki/Regular_expression">regular expressions</a> to perform the matching. It is worthwhile familiarising yourself on how to use regular expressions in Python. The official Python documentation contains a <a class="reference external" href="http://docs.python.org/2/howto/regex.html">useful guide on regular expressions</a> , while regexcheatsheet.com provides a <a class="reference external" href="http://regexcheatsheet.com/">neat summary of regular expressions</a>.</p>
+</div>
+</div>
+<div class="section" id="basic-workflows">
+<h2>4.6. Basic Workflows<a class="headerlink" href="#basic-workflows" title="Permalink to this headline">¶</a></h2>
+<p>What you&#8217;ve just learnt in this chapter can be succinctly summarised into a list of actions. Here, we provide these lists for the two distinct tasks you have performed. You can use this section for a quick reference if you need to remind yourself about particular actions.</p>
+<div class="section" id="creating-a-new-django-project">
+<h3>4.6.1. Creating a new Django Project<a class="headerlink" href="#creating-a-new-django-project" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>To create the project run, <code class="docutils literal"><span class="pre">python</span> <span class="pre">django-admin.py</span> <span class="pre">startproject</span> <span class="pre">&lt;name&gt;</span></code>, where <code class="docutils literal"><span class="pre">&lt;name&gt;</span></code> is the name of the project you wish to create.</li>
+</ol>
+</div>
+<div class="section" id="creating-a-new-django-application">
+<h3>4.6.2. Creating a new Django application<a class="headerlink" href="#creating-a-new-django-application" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>To create a new application run, <code class="docutils literal"><span class="pre">$</span> <span class="pre">python</span> <span class="pre">manage.py</span> <span class="pre">startapp</span> <span class="pre">&lt;appname&gt;</span></code>, where <code class="docutils literal"><span class="pre">&lt;appname&gt;</span></code> is the name of the application you wish to create.</li>
+<li>Tell your Django project about the new application by adding it to the <code class="docutils literal"><span class="pre">INSTALLED_APPS</span></code> tuple in your project&#8217;s <code class="docutils literal"><span class="pre">settings.py</span></code> file.</li>
+<li>In your project <code class="docutils literal"><span class="pre">urls.py</span></code> file, add a mapping to the application.</li>
+<li>In your application&#8217;s directory, create a <code class="docutils literal"><span class="pre">urls.py</span></code> file to direct incoming URL strings to views.</li>
+<li>In your application&#8217;s <code class="docutils literal"><span class="pre">view.py</span></code>, create the required views ensuring that they return a <code class="docutils literal"><span class="pre">HttpResponse</span></code> object.</li>
+</ol>
+</div>
+</div>
+<div class="section" id="exercises">
+<h2>4.7. Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline">¶</a></h2>
+<p>Congratulations! You have got Rango up and running. This is a significant landmark in working with Django. Creating views and mapping URLs to views is the first step towards developing more complex and usable web applications. Now try the following exercises to reinforce what you&#8217;ve learnt.</p>
+<ul class="simple">
+<li>Revise the procedure and make sure you follow how the URLs are mapped to views.</li>
+<li>Now create a new view called <code class="docutils literal"><span class="pre">about</span></code> which returns the following: <code class="docutils literal"><span class="pre">Rango</span> <span class="pre">says</span> <span class="pre">here</span> <span class="pre">is</span> <span class="pre">the</span> <span class="pre">about</span> <span class="pre">page.</span></code></li>
+<li>Now map the this view to <code class="docutils literal"><span class="pre">/rango/about/</span></code>. For this step, you&#8217;ll only need to edit the <code class="docutils literal"><span class="pre">urls.py</span></code> of the rango application.</li>
+<li>Revise the <code class="docutils literal"><span class="pre">HttpResponse</span></code> in the <code class="docutils literal"><span class="pre">index</span></code> view to include a link to the about page.</li>
+<li>In the <code class="docutils literal"><span class="pre">HttpResponse</span></code> in the <code class="docutils literal"><span class="pre">about</span></code> view include a link back to the main page.</li>
+<li>If you haven&#8217;t done so already, it is a good point to go off an complete part one of the official <a class="reference external" href="https://docs.djangoproject.com/en/1.7/intro/tutorial01/">Django Tutorial</a>.</li>
+</ul>
+<div class="section" id="hints">
+<h3>4.7.1. Hints<a class="headerlink" href="#hints" title="Permalink to this headline">¶</a></h3>
+<p>If you&#8217;re struggling to get the exercises done, the following hints will hopefully provide you with some inspiration on how to progress.</p>
+<ul class="simple">
+<li>Your <code class="docutils literal"><span class="pre">index</span></code> view should be updated to include a link to the <code class="docutils literal"><span class="pre">about</span></code> view. Keep it simple for now - something like <code class="docutils literal"><span class="pre">Rango</span> <span class="pre">says:</span> <span class="pre">Hello</span> <span class="pre">world!</span> <span class="pre">&lt;br/&gt;</span> <span class="pre">&lt;a</span> <span class="pre">href='/rango/about'&gt;About&lt;/a&gt;</span></code> will suffice. We&#8217;ll be going back later to improve the presentation of these pages.</li>
+<li>The regular expression to match <code class="docutils literal"><span class="pre">about/</span></code> is <code class="docutils literal"><span class="pre">r'^about/'</span></code> - this will be handy when thinking about your URL pattern.</li>
+<li>The HTML to link back to the index page is <code class="docutils literal"><span class="pre">&lt;a</span> <span class="pre">href=&quot;/rango/&quot;&gt;Index&lt;/a&gt;</span></code>. The link uses the same structure as the link to the <code class="docutils literal"><span class="pre">about</span></code> page shown above.</li>
+</ul>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="f1" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[1]</a></td><td>This assumes that you are using the IP address 127.0.0.1 and port 8000 when running your Django development web server. If you do not explicitly provide a port to run the development server on, Django defaults to port 8000 for you.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="f2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[2]</a></td><td>There are many applications available out there that you can use in your project. Take a look at <a class="reference external" href="https://pypi.python.org/pypi?%3Aaction=search&amp;term=django&amp;submit=search">PyPI</a> and <a class="reference external" href="https://www.djangopackages.com/">Django Packages</a> to search for reusable apps which you can drop into your projects.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        
+        <li class="right" >
+          <a href="templates_static.html" title="5. Templates and Static Media"
+             >next</a>
+          </li>
+		
+        <li class="right" >
+          <a href="requirements.html" title="3. Getting Ready to Tango"
+             >previous</a>
+          </li>
+		
+        <li><a href="../index-2.html">How to Tango with Django 1.7</a> &raquo;</li> 
+
+      </ul>
+
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2013, Leif Azzopardi and David Maxwell.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+
+<!-- Mirrored from www.tangowithdjango.com/book17/chapters/setup.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 10 Jan 2016 04:08:53 GMT -->
+</html>

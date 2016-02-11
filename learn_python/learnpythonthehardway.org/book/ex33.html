@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+    
+<!-- Mirrored from learnpythonthehardway.org/book/ex33.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 03 Sep 2014 17:52:40 GMT -->
+<head>
+        <link href='stylesheets/fonts.css' rel='stylesheet' type='text/css'>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="twitter:creator" content="@lzsthw">
+        <title>Learn Python</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href='stylesheets/pure.css' rel='stylesheet'>
+        <link href='stylesheets/pygments.css' rel='stylesheet'>
+        <link href='stylesheets/main.css' rel='stylesheet'>
+        <link href='stylesheets/nav.css' rel='stylesheet'>
+        <style>
+        </style>
+ 
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.11: http://docutils.sourceforge.net/" />
+<title>Exercise 33: While Loops</title>
+    </head>
+    <body id='wrapper'>
+        <div class='master-logo-wrapper clearfix'>
+            <a href='index-2.html'>
+                <div class='python-logo-sprite'></div>
+            </a>
+                <span class='edition-3'><img src='images/3rd-edition-cloud.png' /></span>
+        </div><!-- /.master-logo-wrapper -->
+
+        <div style='clear: both;'>
+
+        <div id="main">
+            <div class='chapters-wrapper'>
+                  <nav id='chapters'>
+                      <div class='masthead-title'></div>
+                      <ul class='masthead'>
+                          <li>
+                              <a href='index.html'>
+                                  <div class='nav-tcontents'>
+                                      <img src='images/nav-contents.png' /></br>
+                                  main
+                                  </div>
+                              </a>
+                          </li>
+                          <li>
+                              <a href='#video'>
+                                  <div class='nav-play-video' id="#video_toggle_icon">
+                                      <img src='images/nav-play.png' /><br/>
+                                      play video
+                                      <div class='line-2'>(this chapter)</div>
+                                  </div>
+                              </a>
+                          </li>
+                          <li>
+                              <a href='#' id='prev_link'>
+                                  <div class='nav-previous'>
+                                      <img src='images/nav-previous.png' /></br>
+                                      previous
+                                  </div>
+                              </a>
+                          </li>
+                          <li>
+                              <a href='#' id='next_link'>
+                                  <div class='nav-next'>
+                                      <img src='images/nav-next.png' /></br>
+                                      next
+                                  </div>
+                              </a>
+                          </li>
+                          <li><!-- AMBULANCE ICON -->
+                              <a href='help.html' id=''>
+                                  <div class='ambulance'>
+                                      <img src='images/help-ambulance.png' /></br>
+                                      help
+                                  </div>
+                              </a>
+                          </li>
+                          <li id="follow">
+                                <a href="https://twitter.com/lzsthw" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false" data-dnt="true">Follow @lzsthw</a>
+                                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                           </li>
+
+                      </ul><!-- /.masthead -->
+                      <!--<img src='images/fa-bullhorn.png' />-->
+                  </nav><!-- /.chapters -->
+            </div><!-- /.chapters-wrapper -->
+
+        <!--- RST STARTS -->
+            <h1 class="title">Exercise 33: While Loops</h1>
+            <p>Now to totally blow your mind with a new loop, the <tt class="docutils literal"><span class="pre">while-loop</span></tt>.  A <tt class="docutils literal"><span class="pre">while-loop</span></tt> will keep executing the code block under it as long as a boolean expression is <tt class="docutils literal">True</tt>.</p>
+<p>Wait, you have been keeping up with the terminology, right?  That if we write a line and end it with a <tt class="docutils literal">:</tt> (colon) then that tells Python to start a new block of code?  Then we indent and that's the new code.  This is all about structuring your programs so that Python knows what you mean.  If you do not get that idea then go back and do some more work with <tt class="docutils literal"><span class="pre">if-statements</span></tt>, functions, and the <tt class="docutils literal"><span class="pre">for-loop</span></tt> until you get it.</p>
+<p>Later on we'll have some exercises that will train your brain to read these structures, similar to how we burned boolean expressions into your brain.</p>
+<p>Back to <tt class="docutils literal"><span class="pre">while-loops</span></tt>. What they do is simply do a test like an <tt class="docutils literal"><span class="pre">if-statement</span></tt>, but instead of running the code block <em>once</em>, they jump back to the &quot;top&quot; where the <tt class="docutils literal">while</tt> is, and repeat.  A <tt class="docutils literal"><span class="pre">while-loop</span></tt> runs until the expression is <tt class="docutils literal">False</tt>.</p>
+<p>Here's the problem with <tt class="docutils literal"><span class="pre">while-loops</span></tt>: Sometimes they do not stop. This is great if your intention is to just keep looping until the end of the universe.  Otherwise you almost always want your loops to end eventually.</p>
+<p>To avoid these problems, there are some rules to follow:</p>
+<ol class="arabic simple">
+<li>Make sure that you use <tt class="docutils literal"><span class="pre">while-loops</span></tt> sparingly.  Usually a <tt class="docutils literal"><span class="pre">for-loop</span></tt> is better.</li>
+<li>Review your while statements and make sure that the boolean test will become <tt class="docutils literal">False</tt> at some point.</li>
+<li>When in doubt, print out your test variable at the top and bottom of the <tt class="docutils literal"><span class="pre">while-loop</span></tt> to see what it's doing.</li>
+</ol>
+<p>In this exercise, you will learn the <tt class="docutils literal"><span class="pre">while-loop</span></tt> while doing these three checks:</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16</pre></div></td><td class="code"><div class="highlight"><pre><a name="python--ex33.py-idio.html-1"></a><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+<a name="python--ex33.py-idio.html-2"></a><span class="n">numbers</span> <span class="o">=</span> <span class="p">[]</span>
+<a name="python--ex33.py-idio.html-3"></a>
+<a name="python--ex33.py-idio.html-4"></a><span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">:</span>
+<a name="python--ex33.py-idio.html-5"></a>    <span class="k">print</span> <span class="s">&quot;At the top i is </span><span class="si">%d</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">i</span>
+<a name="python--ex33.py-idio.html-6"></a>    <span class="n">numbers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<a name="python--ex33.py-idio.html-7"></a>
+<a name="python--ex33.py-idio.html-8"></a>    <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+<a name="python--ex33.py-idio.html-9"></a>    <span class="k">print</span> <span class="s">&quot;Numbers now: &quot;</span><span class="p">,</span> <span class="n">numbers</span>
+<a name="python--ex33.py-idio.html-10"></a>    <span class="k">print</span> <span class="s">&quot;At the bottom i is </span><span class="si">%d</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">i</span>
+<a name="python--ex33.py-idio.html-11"></a>
+<a name="python--ex33.py-idio.html-12"></a>
+<a name="python--ex33.py-idio.html-13"></a><span class="k">print</span> <span class="s">&quot;The numbers: &quot;</span>
+<a name="python--ex33.py-idio.html-14"></a>
+<a name="python--ex33.py-idio.html-15"></a><span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">numbers</span><span class="p">:</span>
+<a name="python--ex33.py-idio.html-16"></a>    <span class="k">print</span> <span class="n">num</span>
+</pre></div>
+</td></tr></table><div class="section" id="what-you-should-see">
+<h1>What You Should See</h1>
+<div class="highlight"><pre><a name="python--ex33.sh-idio-shint-pyg.html-1"></a><span class="gp">$</span> python ex33.py
+<a name="python--ex33.sh-idio-shint-pyg.html-2"></a><span class="go">At the top i is 0</span>
+<a name="python--ex33.sh-idio-shint-pyg.html-3"></a><span class="go">Numbers now:  [0]</span>
+<a name="python--ex33.sh-idio-shint-pyg.html-4"></a><span class="go">At the bottom i is 1</span>
+<a name="python--ex33.sh-idio-shint-pyg.html-5"></a><span class="go">At the top i is 1</span>
+<a name="python--ex33.sh-idio-shint-pyg.html-6"></a><span class="go">Numbers now:  [0, 1]</span>
+<a name="python--ex33.sh-idio-shint-pyg.html-7"></a><span class="go">At the bottom i is 2</span>
+<a name="python--ex33.sh-idio-shint-pyg.html-8"></a><span class="go">At the top i is 2</span>
+<a name="python--ex33.sh-idio-shint-pyg.html-9"></a><span class="go">Numbers now:  [0, 1, 2]</span>
+<a name="python--ex33.sh-idio-shint-pyg.html-10"></a><span class="go">At the bottom i is 3</span>
+<a name="python--ex33.sh-idio-shint-pyg.html-11"></a><span class="go">At the top i is 3</span>
+<a name="python--ex33.sh-idio-shint-pyg.html-12"></a><span class="go">Numbers now:  [0, 1, 2, 3]</span>
+<a name="python--ex33.sh-idio-shint-pyg.html-13"></a><span class="go">At the bottom i is 4</span>
+<a name="python--ex33.sh-idio-shint-pyg.html-14"></a><span class="go">At the top i is 4</span>
+<a name="python--ex33.sh-idio-shint-pyg.html-15"></a><span class="go">Numbers now:  [0, 1, 2, 3, 4]</span>
+<a name="python--ex33.sh-idio-shint-pyg.html-16"></a><span class="go">At the bottom i is 5</span>
+<a name="python--ex33.sh-idio-shint-pyg.html-17"></a><span class="go">At the top i is 5</span>
+<a name="python--ex33.sh-idio-shint-pyg.html-18"></a><span class="go">Numbers now:  [0, 1, 2, 3, 4, 5]</span>
+<a name="python--ex33.sh-idio-shint-pyg.html-19"></a><span class="go">At the bottom i is 6</span>
+<a name="python--ex33.sh-idio-shint-pyg.html-20"></a><span class="go">The numbers:</span>
+<a name="python--ex33.sh-idio-shint-pyg.html-21"></a><span class="go">0</span>
+<a name="python--ex33.sh-idio-shint-pyg.html-22"></a><span class="go">1</span>
+<a name="python--ex33.sh-idio-shint-pyg.html-23"></a><span class="go">2</span>
+<a name="python--ex33.sh-idio-shint-pyg.html-24"></a><span class="go">3</span>
+<a name="python--ex33.sh-idio-shint-pyg.html-25"></a><span class="go">4</span>
+<a name="python--ex33.sh-idio-shint-pyg.html-26"></a><span class="go">5</span>
+</pre></div></div>
+<div class="section" id="study-drills">
+<h1>Study Drills</h1>
+<ol class="arabic simple">
+<li>Convert this <tt class="docutils literal"><span class="pre">while-loop</span></tt> to a function that you can call, and replace <tt class="docutils literal">6</tt> in the test (<tt class="docutils literal">i &lt; 6</tt>) with a variable.</li>
+<li>Use this function to rewrite the script to try different numbers.</li>
+<li>Add another variable to the function arguments that you can pass in that lets you change the <tt class="docutils literal">+ 1</tt> on line 8 so you can change how much it increments by.</li>
+<li>Rewrite the script again to use this function to see what effect that has.</li>
+<li>Write it to use <tt class="docutils literal"><span class="pre">for-loops</span></tt> and <tt class="docutils literal">range</tt>.  Do you need the incrementor in the middle anymore?  What happens if you do not get rid of it?</li>
+</ol>
+<p>If at any time that you are doing this it goes crazy (it probably will), just hold down CTRL and press <tt class="docutils literal">c</tt> (CTRL-<tt class="docutils literal">c</tt>) and the program will abort.</p>
+</div>
+<div class="section" id="common-student-questions">
+<h1>Common Student Questions</h1>
+<dl class="docutils">
+<dt>What's the difference between a <tt class="docutils literal"><span class="pre">for-loop</span></tt> and a <tt class="docutils literal"><span class="pre">while-loop</span></tt>?</dt>
+<dd>A <tt class="docutils literal"><span class="pre">for-loop</span></tt> can only iterate (loop) &quot;over&quot; collections of things.  A <tt class="docutils literal"><span class="pre">while-loop</span></tt> can do any kind of iteration (looping) you want.  However, <tt class="docutils literal"><span class="pre">while-loops</span></tt> are harder to get right and you normally can get many things done with <tt class="docutils literal"><span class="pre">for-loops</span></tt>.</dd>
+<dt>Loops are hard. How do I figure them out?</dt>
+<dd>The main reason people don't understand loops is because they can't follow the &quot;jumping&quot; that the code does.  When a loop runs, it goes through its block of code, and at the end it jumps back to the top.  To visualize this, put print statements all over the loop printing out where in the loop Python is running and what the variables are set to at those points.  Write <tt class="docutils literal">print</tt> lines before the loop, at the top of the loop, in the middle, and at the bottom.  Study the output and try to understand the jumping that's going on.</dd>
+</dl>
+</div>
+        <!-- RST ENDS -->
+
+            <!-- /.help-icon -->
+        <div id="video_holder">
+            <h1>Video</h1>
+            <div id="video" class="row inner">
+                <div class="small-12 small-centered columns">
+                    <div data-paydiv_product="2" id='paydiv'>
+                        &nbsp;
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        </div><!-- /#main -->
+
+        <div class='ad-deck gold' id="footer">
+            <ul class='retailers clearfix'>
+                <li>
+                    <a href='https://paydiv.io/access/buy/2/'>
+                        <div class='retailer-name'>Zed Shaw</div>
+                        <div class='book-type'>PDF + Videos + Updates</div>
+                        <div class='book-price'>$29.95</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.amazon.com/gp/product/0321884914/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0321884914&amp;linkCode=as2&amp;tag=lepythhawa-20'>
+                        <div class='retailer-name'>Amazon</div>
+                        <div class='book-type'>Paper + DVD</div>
+                        <div class='book-price'>$29.95</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.amazon.com/gp/product/B00FGUS948/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=B00FGUS948&amp;linkCode=as2&amp;tag=lepythhawa-20'>
+                        <div class='retailer-name'>Amazon</div>
+                        <div class='book-type'>Kindle (No Videos)</div>
+                        <div class='book-price'>$17.27</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.barnesandnoble.com/w/learn-python-the-hard-way-zed-shaw/1112055406?ean=9780321884916'>
+                        <div class='retailer-name'>B&amp;N</div>
+                        <div class='book-type'>Paper + DVD</div>
+                        <div class='book-price'>$17.27</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.barnesandnoble.com/w/learn-python-the-hard-way-zed-shaw/1112055406?ean=9780133124347&amp;itm=1&amp;usri=learn+python+the+hard+way'>
+                        <div class='retailer-name'>B&amp;N</div>
+                        <div class='book-type'>Nook (No Video)</div>
+                        <div class='book-price'>$17.27</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.informit.com/store/learn-python-the-hard-way-a-very-simple-introduction-9780321884916'>
+                        <div class='retailer-name'>InformIT</div>
+                        <div class='book-type'>eBook + Paper</div>
+                        <div class='book-price'>$43.19</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://ruby.learncodethehardway.org/book/'>
+                        <div class='retailer-name'>Interested In Ruby?</div>
+                        <div class='book-type'>Ruby is also a great language.</div>
+                        <div class='book-price'>Learn Ruby The Hard Way</div>
+                    </a>
+                </li>
+
+            </ul><!-- /.places -->
+        </div><!-- /#ad-deck -->
+
+        <script src="javascripts/jquery.js"></script>
+        <script src="index.js"></script>
+        <script src="../../paydiv.io/static/jzed.js"></script>
+        <script src="../../paydiv.io/static/js/videojs/video.js"></script>
+        <link rel="stylesheet" href="../../paydiv.io/static/js/videojs/video-js.css">
+        <script src="../../paydiv.io/static/api/v1/paydiv.js"></script>
+        <script src="javascripts/app.js"></script>
+        <script src="javascripts/littools.js"></script>
+        <script type="text/javascript">
+        
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-24168052-1']);
+        _gaq.push(['_trackPageview']);
+        
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+        
+        </script>
+
+
+        <script src="javascripts/littools.js"></script>
+
+        </body>
+
+<!-- Mirrored from learnpythonthehardway.org/book/ex33.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 03 Sep 2014 17:52:40 GMT -->
+</html>
+

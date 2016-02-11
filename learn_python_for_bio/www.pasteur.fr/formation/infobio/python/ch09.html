@@ -1,0 +1,144 @@
+<html>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch09.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:28 GMT -->
+<head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Chapter 9. Collections</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><meta name="keywords" content="python, biology, bioinformatics, programming, computational biology"><link rel="home" href="index-2.html" title="Introduction to Programming using Python"><link rel="up" href="index-2.html" title="Introduction to Programming using Python"><link rel="previous" href="ch08s04.html" title="8.4. Boolean functions"><link rel="next" href="ch09s02.html" title="9.2. Methods, Operators and Functions on Lists"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 9. Collections</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch08s04.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch09s02.html"><img src="images/next.png" alt="Next"></a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><h2 class="title"><a name="chap_coll"></a>Chapter 9. Collections</h2></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt>9.1. <a href="ch09.html#d0e3361">Datatypes for collections</a></dt><dt>9.2. <a href="ch09s02.html">Methods, Operators and Functions on Lists</a></dt><dt>9.3. <a href="ch09s03.html">Methods, Operators and Functions on Dictionaries</a></dt><dt>9.4. <a href="ch09s04.html">What data type for which collection</a></dt></dl></div><div class="section"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="d0e3361"></a>9.1. Datatypes for collections</h2></div></div><p>
+      In a previous chapter we have seen that
+      <span class="emphasis"><em>strings</em></span> can be interpreted as
+      <span class="emphasis"><em>collections of characters.</em></span> But they are a very
+      restricted sort of collection, you can only put characters in a
+      string and a string is always ordered. But we need often to handle
+      collections of all sorts of objects and
+      sometimes these collections are not even homogeneous, meaning
+      that they may contain objects of different types. Python provides
+      several predefined <span class="bold"><b>data types</b></span>
+      that can manage such collections. The two most used structures
+      are called <span class="bold"><b>Lists</b></span> and <span class="bold"><b>Dictionaries</b></span>. Both can handle collections
+      of different sorts of objects, but what are their differences?
+    </p><div class="definition"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/definition.png"></td><td><p class="title"><b>List</b></p></td></tr><tr><td colspan="2" align="left" valign="top">
+      
+      <p>
+	<span class="emphasis"><em>Lists</em></span> are
+	<span class="emphasis"><em>mutable ordered collections</em></span> of objects of 
+	different sorts. The objects are accessible using
+	their position in the <span class="emphasis"><em>ordered collection</em></span>.
+      </p>
+    </td></tr></table></div><div class="definition"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/definition.png"></td><td><p class="title"><b>Dictionary</b></p></td></tr><tr><td colspan="2" align="left" valign="top">
+      
+      <p>
+	<span class="emphasis"><em>Dictionaries</em></span> are
+	<span class="emphasis"><em>mutable unordered collections</em></span> which may
+	contain objects of different sorts.
+	The objects can be accessed using a <span class="emphasis"><em>key</em></span>. 
+      </p>
+    </td></tr></table></div><p>
+      Here are some examples comparing a list version of a collection
+      of enzyme's pattern and a dictionary version of the same collection.
+      Lists are created using a comma
+      separated list of all elements enclosed into brackets, whereas
+      dictionaries are enclosed into braces and contain a comma
+      separated list of key-value pairs, each separated by a colon.
+      
+      <pre class="programlisting">
+&gt;&gt;&gt; patternList = [ 'gaattc', 'ggatcc', 'aagctt' ]
+&gt;&gt;&gt; patternList
+['gaattc', 'ggatcc', 'aagctt']
+
+&gt;&gt;&gt; patternDict = { 'EcoRI' : 'gaattc', 'BamHI' : 'ggatcc', 'HindIII' : 'aagctt' }
+&gt;&gt;&gt; patternDict
+{ 'EcoRI' : 'gaattc', 'BamHI' : 'ggatcc', 'HindIII' : 'aagctt' }
+      </pre>
+
+      To access the elements we use the position in the list and the
+      key for the dictionary.
+    
+      </p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/important.png"></td><th align="left">Important</th></tr><tr><td colspan="2" align="left" valign="top"><p>List indices have the same properties as string
+	  indices, in particular they start with 0 (remember <a href="ch06.html#fig_string_index" title="Figure 6.1. String indices">Figure 6.1</a>).
+	</p></td></tr></table></div><p>
+
+    <pre class="programlisting">
+&gt;&gt;&gt; patternList[0]
+'gaattc'
+&gt;&gt;&gt; patternDict['EcoRI']
+'gaattc'
+    </pre>
+
+      As for strings you can get the number of elements in the
+      collection, as well as the smallest and the greatest element.
+
+      <pre class="programlisting">
+&gt;&gt;&gt; len(patternList)
+3
+&gt;&gt;&gt; len(patternDict)
+3
+      </pre>
+
+      Lists can be sliced but dictionaries cannot. Remember that
+      dictionaries are unordered collections, so getting a slice does
+      not make any sense.
+
+      <pre class="programlisting">
+&gt;&gt;&gt; digest = patternList[:1]
+&gt;&gt;&gt; digest
+['gaattc']
+      </pre>
+
+      You can ask whether an element is in the
+      collection. Dictionaries have two possibilities to perform this.
+
+      <pre class="programlisting">
+&gt;&gt;&gt; 'gaattc' in patternList
+1
+&gt;&gt;&gt; patternDict.has_key('HindIII')
+1
+&gt;&gt;&gt; 'HindIII' in patternDict
+1
+      </pre>
+
+      Unlike strings both collections are mutable. This
+      means that you
+      can remove, add or even change their elements.
+
+      <pre class="programlisting">
+&gt;&gt;&gt; del patternList[0]
+&gt;&gt;&gt; patternList
+['ggatcc', 'aagctt']
+&gt;&gt;&gt; patternList[0] = 'gaattc'
+&gt;&gt;&gt; patternList
+['gaattc', 'aagctt']
+&gt;&gt;&gt; patternList.append('ggattc')
+&gt;&gt;&gt; patternList
+['gaattc', 'aagctt', 'ggattc']
+&gt;&gt;&gt; del patternList[:2]
+&gt;&gt;&gt; patternList
+['ggattc']
+
+&gt;&gt;&gt; del patternDict['EcoRI']
+&gt;&gt;&gt; patternDict
+{'BamHI': 'ggatcc', 'HindIII': 'aagctt'}
+&gt;&gt;&gt; patternDict['EcoRI'] = 'gaattc'
+&gt;&gt;&gt; patternDict
+{'BamHI': 'ggatcc', 'EcoRI': 'gaattc', 'HindIII': 'aagctt'}
+&gt;&gt;&gt; patternDict['BamHI'] =''
+&gt;&gt;&gt; patternDict
+{'BamHI': '', 'EcoRI': 'gaattc', 'HindIII': 'aagctt'}
+      </pre>
+
+      As for strings you cannot access elements that do not exist.
+
+      <pre class="programlisting">
+&gt;&gt;&gt; patternList[10]
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in ?
+IndexError: list index out of range
+&gt;&gt;&gt; patternDict['ScaI']
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in ?
+KeyError: ScaI
+      </pre>
+    </p><p>
+      <a href="ch09.html#tab_comp_collections" title="Figure 9.1. Comparison some collection datatypes">Figure 9.1</a> compares different
+      actions on collections for strings, lists and dictionaries.
+    </p><div class="figure"><a name="tab_comp_collections"></a><p class="title"><b>Figure 9.1. Comparison some collection datatypes</b></p><div class="mediaobject"><img src="images/tab_collection.png" width="400"></div></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch08s04.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="index-2.html"><img src="images/up.png" alt="Up"></a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch09s02.html"><img src="images/next.png" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">8.4. Boolean functions&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index-2.html"><img src="images/home.png" alt="Home"></a></td><td width="40%" align="right" valign="top">&nbsp;9.2. Methods, Operators and Functions on Lists</td></tr></table></div></body>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch09.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:28 GMT -->
+</html>

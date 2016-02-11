@@ -1,0 +1,324 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from www.python-course.eu/python3_deep_copy.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:07:58 GMT -->
+<head>
+
+<!-- Dieses Tag in den Head-Bereich oder direkt vor dem schlieÃŸenden Body-Tag einfÃ¼gen -->
+<script type="text/javascript" src="../apis.google.com/js/plusone.js"></script>
+
+
+
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "../connect.facebook.net/en_GB/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script><title>Python3 Tutorial: Shallow and Deep Copy</title>
+<meta http-equiv="content-type" content="text/html; charset="ISO-8859-1">
+<meta name="Description" content="Copy object and lists in Python. We explain how to avoid the pitfalls by introducing  shallow and deep copy" />
+<meta name="Keywords" content="Python, Python 3, copy, shallow, deep, Problem, problems" />
+
+<link href="favicon.ico" rel="shortcut icon">
+
+<link href="moderna.css" rel="stylesheet" type="text/css" />
+<link href="moderna_print.css" media="print" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+<div id="container">
+
+<div id="banner">
+<!-- <a href="impressum.php">Impressum</a> | <a href="mailto:">contact</a> | --><h1>Python Course</h1>
+
+</div>
+
+	<!-- Begin Top Menu -->
+<ul id="navlist">
+<li><a href="index-2.html" >Home</a></li><li><a href="course.html" >Python 2 Tutorial</a></li><li class="active"><a id="current" href="python3_course.html" >Python 3 Tutorial</a></li><li><a href="advanced_topics.html" >Advanced Topics</a></li><li><a href="python_books.html" >Python Books</a></li><li><a href="python_tkinter.html" >Tkinter Tutorial</a></li><li><a href="contact.html" rel="nofollow">Contact</a></li>                          
+</ul>
+	<!-- End Top Menu -->
+<div id="sidebar-a">
+<img class="border" src="images/Deep_Sea_Squid_copy.jpg" alt="box" />    <h2>Python 3 Tutorial</h2>
+
+<div class="menu">
+
+<ul>
+<li><a href="python3_history_and_philosophy.html">The Origins of Python</a></li><li><a href="python3_interactive.html">Starting with Python: The Interactive Shell</a></li><li><a href="python3_execute_script.html">Executing a Script</a></li><li><a href="python3_blocks.html">Indentation</a></li><li><a href="python3_variables.html">Data Types and Variables</a></li><li><a href="python3_operators.html">Operators</a></li><li><a href="python3_sequential_data_types.html">Sequential Data Types: Lists and Strings</a></li><li><a href="python3_deep_copy.html">Shallow and Deep Copy</a></li><li><a href="python3_dictionaries.html">Dictionaries</a></li><li><a href="python3_sets_frozensets.html">Sets and Frozen Sets</a></li><li><a href="python3_input.html">input via the keyboard</a></li><li><a href="python3_conditional_statements.html">Conditional Statements</a></li><li><a href="python3_loops.html">Loops, while Loop</a></li><li><a href="python3_for_loop.html">For Loops</a></li><li><a href="python3_print.html">Output with Print</a></li><li><a href="python3_formatted_output.html">Formatted output with string modulo and the format method</a></li><li><a href="python3_functions.html">Functions</a></li><li><a href="python3_recursive_functions.html">Recursion and Recursive Functions</a></li><li><a href="python3_tests.html">Tests, DocTests, UnitTests</a></li><li><a href="python3_memoization.html">Memoization and Decorators</a></li><li><a href="python3_passing_arguments.html">Parameter Passing in Functions</a></li><li><a href="python3_namespaces.html">Namespaces</a></li><li><a href="python3_global_vs_local_variables.html">Global and Local Variables</a></li><li><a href="python3_file_management.html">Read and Write Files</a></li><li><a href="python3_modules_and_modular_programming.html">Modular Programming and Modules</a></li><li><a href="python3_re.html">Regular Expressions</a></li><li><a href="python3_re_advanced.html">Regular Expressions, Advanced</a></li><li><a href="python3_lambda.html">Lambda Operator, Filter, Reduce and Map</a></li><li><a href="python3_list_comprehension.html">List Comprehension</a></li><li><a href="python3_generators.html">Iterators and Generators</a></li><li><a href="python3_exception_handling.html">Exception Handling</a></li><li><a href="python3_object_oriented_programming.html">Object Oriented Programming</a></li><li><a href="python3_class_and_instance_attributes.html">Class and Instance Attributes</a></li><li><a href="python3_properties.html">Properties vs. getters and setters</a></li><li><a href="python3_inheritance.html">Inheritance</a></li><li><a href="python3_multiple_inheritance.html">Multiple Inheritance</a></li><li><a href="python3_magic_methods.html">Magic Methods and Operator Overloading</a></li><li><a href="python3_inheritance_example.html">OOP, Inheritance Example</a></li></ul>
+
+</div>
+
+<p>
+<hr>
+<h3>Deep and Shallow</h3>
+<i>"Under all speech that is good for anything there lies a silence that is better. Silence 
+is deep as Eternity; speech is shallow as Time."</i>
+<br>
+Thomas Carlyle, (1795 - 1881)
+<br>
+<i>"Only the shallow know themselves."</i>
+<br>Oscar Wilde, (1854 - 1900)
+<h3>Copy</h3>
+<i>"Copy from one, it's plagiarism; copy from two, it's research."</i>
+<br>
+Wilson Mizner, (1876 - 1933)
+
+<br><br>
+<hr>
+<br>
+This website is supported by:<br>
+<a href="http://www.bodenseo.com/courses.php"><img style="width: 150px;" alt="Bodenseo,
+Linux, courses and seminars"
+		     src="images/bodenseo_python_training.gif"><br>Linux and Python Training Courses and Seminars</a>
+<br>
+<hr>
+</div><div id="sidebar-b"><img style="width: 150px;" alt="Python-Logo"
+		     src="images/python-logo.png"><!-- Dieses Tag dort einfügen, wo die +1-Schaltfläche dargestellt werden soll -->
+<g:plusone></g:plusone>
+<br><br>
+
+<div class="fb-like" data-href="www.python-course.eu" data-send="false" data-layout="button_count" 
+data-width="130" data-show-faces="true" data-action="recommend"></div>
+
+<br><br>
+This topic in German / Deutsche Übersetzung:
+    <a href="http://www.python-kurs.eu/python3_deep_copy.php">Flaches und Tiefes Kopieren</a><h3>Python3</h3>This is a tutorial in Python3, but this chapter of our course is available in a version for Python 2.x as well: <a href="deep_copy.html">Shallow and Deep Copy in Python 2.x</a><p>
+<h3>Classroom Training Courses</h3>
+The goal of this website is to provide educational material, 
+allowing you to learn Python on your own.
+Nevertheless, it is faster and more efficient to attend a "real" 
+Python course in a classroom, with
+an experienced trainer. So why not attend one of the live 
+<a href="python_classes.html">Python courses</a> in Paris, London, Berlin, Munich
+or Lake Constance by Bernd Klein, the author of this tutorial?
+<br><br>
+You can also check the   
+<a href="http://www.bodenseo.com/courses.php?topic=Python">Python Training courses
+<img style="width: 150px;" alt="Bodenseo Kurse in Python"
+		     src="images/bodenseo_stairs_to_python.png"></a>
+		     delivered by Bodenseo and Bernd Klein.
+<br><br>
+You can book on-site classes at your company or organization, e.g. in England, Switzerland, Austria, Germany,
+France, Belgium, the Netherlands, Luxembourg, Poland, UK, Italy and other locations in Europe.
+<br><br>
+<h3>Python3</h3>This is a tutorial in Python3, but this chapter of our course is available in a version for Python 2.x as well: <a href="deep_copy.html">Shallow and Deep Copy in Python 2.x</a>
+ </p>
+
+
+
+
+    
+</p></div>
+<div id="content">
+
+<div id="contextlinks">Previous Chapter: <a href="python3_sequential_data_types.html">Sequential Data Types: Lists and Strings</a><br>
+<LINK rel="prev" href="python3_sequential_data_types.html">Next Chapter: <a href="python3_dictionaries.html">Dictionaries</a><br>
+<LINK rel="next" href="python3_dictionaries.html"></div>
+<h2>Shallow and Deep Copy</h2>
+<h3>Introduction</h3>
+
+<img class="imgright" src="images/Deep_Sea_Squid.jpg" alt="Deep Sea Squid" />
+<br>
+In this chapter, we will cover the question of how to copy lists and nested lists. Trying to copy lists
+can be a stumping experience for newbies. But before we to summarize some insights from the previous chapter
+ "Data Types and Variables".  Python even shows a strange behaviour for beginners of the language 
+- in copmparison with some other trditional programming languages - when assigning and copying simple 
+data types like intgers and strings. The difference between 
+shallow and deep copying is only relevant for compound objects, i.e. objects containing other 
+objects, like lists or class instances.
+<br>
+<br>In the follwing code snippet, y points to the same memory location than X. We can see this by 
+applying the id() function on x and y. But unlike "real" pointers like those in C and C++, things
+change, when we assign a new value to y. In this case y will receive a separate memory location, 
+as we have seen in the chapter "Data Types and Variables" and can see in the following example:
+<br>
+<pre>
+>>> x = 3
+>>> y = x
+>>> print(id(x), id(y))
+9251744 9251744
+>>> y = 4
+>>> print(id(x), id(y))
+9251744 9251776
+>>> print(x,y)
+3 4
+>>> 
+</pre>
+
+But even if this internal behaviour appears strange compared to programming languages like C, 
+C++ and Perl, yet the observable results of the assignments answer our expectations. 
+But it can be problematic, if we copy mutable objects like lists and dictionaries.
+<br><br>
+Python creates only real copies, if it has to, i.e. if the user, the programmer, explicitly 
+demands it.
+<br><br>
+We will introduce you the most crucial problems, which can occur when copying mutable objects, i.e.
+when copying lists and dictionaries.
+
+
+<h3>Copying a list</h3>
+<p>
+<pre>
+>>> colours1 = ["red", "green"]
+>>> colours2 = colours1
+>>> print(colours1)
+['red', 'green']
+>>> print(colours2)
+['red', 'green']
+>>> print(id(colours1),id(colours2))
+43444416 43444416
+>>> colours2 = ["rouge", "vert"]
+>>> print(colours1)
+['red', 'green']
+>>> print(colours2)
+['rouge', 'vert']
+>>> print(id(colours1),id(colours2))
+43444416 43444200
+>>> 
+</pre>
+<img class="imgleft" src="images/deep_copy_1.png" alt="Copying a simple list" />
+In the example above a simple list is assigned to colours1. This list is a so-called "shallow list", because
+it doesn't have a nested structure, i.e. no sublists are contained in the list. 
+In the next step we assign colour1 to colours2. 
+<br><br>
+The id() function shows us, that both variables point to the same list object, i.e. they share this object. 
+<br><br>
+Now we want to see, what happens, if we assign a new list object to colours2.
+<br><br>
+As we have expected, the values of colours1 remained unchanged. Like it was in our example
+in the chapter "Data types and variables" a new memory location had been allocated for colours2, 
+because we have assigned a complete new list, i.e. a new list object, to this variable. 
+<pre>
+>>> colours1 = ["red", "green"]
+>>> colours2 = colours1
+>>> print(id(colours1),id(colours2))
+14603760 14603760
+>>> colours2[1] = "blue"
+>>> print(id(colours1),id(colours2))
+14603760 14603760
+>>> print(colours1)
+['red', 'blue']
+>>> print(colours2)
+['red', 'blue']
+>>> 
+</pre>
+
+<img class="imgleft" src="images/deep_copy_2.png" alt="Copying a simple list" />
+Now we have to examine, what will happen, if we change just one element of the list of colours2 or colours1?
+<br><br>
+In the example above, we assign a new value to the second element of colours2, i.e. the element with the index 1. 
+Lots of beginners will be stunned, that the list of colours1 has been "automatically" changed as well. 
+<br><br>
+The explanation is, that there has been no new assignment to colours2, only to one of its elements. Both variables
+still point to the same list object.  
+</p>
+
+<h3>Copy with the Slice Operator</h3>
+<p>
+It's possible to completely copy shallow list structures with the slice operator without having any 
+of the side effects, which we have described above:
+<pre>
+>>> list1 = ['a','b','c','d']
+>>> list2 = list1[:]
+>>> list2[1] = 'x'
+>>> print(list2)
+['a', 'x', 'c', 'd']
+>>> print(list1)
+['a', 'b', 'c', 'd']
+>>> 
+</pre>
+But as soon as a list contains sublists, we have the same difficulty, i.e. just pointers to the
+sublists.
+
+<pre>
+>>> lst1 = ['a','b',['ab','ba']]
+>>> lst2 = lst1[:]
+</pre>
+<br>
+This behaviour is depicted in the following diagram:
+<br>
+<img class="imgleft" src="images/deep_copy_3.png" alt="Copying a list with sublists" />
+<br><br><br><br><br><br><br><br><br><br><br>
+If you assign a new value to the 0th Element of one of the two lists, there will 
+be no side effect. Problems arise, if you change one of the elements of the sublist.
+<pre>
+>>> lst1 = ['a','b',['ab','ba']]
+>>> lst2 = lst1[:]
+>>> lst2[0] = 'c'
+>>> lst2[2][1] = 'd'
+>>> print(lst1)
+['a', 'b', ['ab', 'd']]
+</pre>
+
+
+<br><br>The following diagram depicts what happens, if one of the elements of a sublist 
+will be changed: Both the content of lst1 and lst2 are changed. 
+<br>
+<br>
+<img class="imgleft" src="images/deep_copy_4.png" alt="Copying lists containing sublists" />
+<br><br><br><br><br><br><br><br><br>
+<br>
+<h3>Using the Method deepcopy from the Module copy</h3>
+A solution to the described problems provides the module "copy". 
+This module provides the method "copy", which allows a complet copy of
+a arbitrary list, i.e. shallow and other lists. <br><br> 
+The following script uses our example above and this method:
+<br>
+<pre>
+from copy import deepcopy
+
+lst1 = ['a','b',['ab','ba']]
+
+lst2 = deepcopy(lst1)
+
+lst2[2][1] = "d"
+lst2[0] = "c";
+
+print(lst2)
+print(lst1)
+</pre>
+If we save this script under the name of deep_copy.py ab and if we call ist with 
+"python deep_copy.py", we will receive the following output:
+<pre>
+$ python deep_copy.py 
+['c', 'b', ['ab', 'd']]
+['a', 'b', ['ab', 'ba']]
+</pre>
+
+<img class="imgleft" src="images/deep_copy_5.png" alt="Copy a list with Deep-Copy" />
+<br><br><br><br><br><br><br><br><br><br><br><br>
+
+<br>
+ </p>
+
+
+
+
+
+
+
+
+</tbody>
+</table>
+
+<br>
+<br>
+
+
+<div id="contextlinks">Previous Chapter: <a href="python3_sequential_data_types.html">Sequential Data Types: Lists and Strings</a><br>
+<LINK rel="prev" href="python3_sequential_data_types.html">Next Chapter: <a href="python3_dictionaries.html">Dictionaries</a><br>
+<LINK rel="next" href="python3_dictionaries.html"></div><br><br><br>
+
+</div>
+<div id="footer">  &copy; 2011 - 2014 <a href="http://www.bklein.de/">Bernd Klein</a>,
+Bodenseo; 
+Design by Denise Mitchinson adapted for python-course.eu by Bernd Klein</div>
+</div>
+</body>
+
+<!-- Mirrored from www.python-course.eu/python3_deep_copy.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:07:58 GMT -->
+</html>

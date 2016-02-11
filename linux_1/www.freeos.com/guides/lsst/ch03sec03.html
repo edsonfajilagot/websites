@@ -1,0 +1,52 @@
+<html>
+<!-- Mirrored from www.freeos.com/guides/lsst/ch03sec03.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 05 Jun 2015 06:04:09 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head><title>LSST v1.05r3 &gt; Chapter 3 &gt; if...else...fi</title>
+
+<!--Google Top Ad BEGIN-->
+<script type="text/javascript"><!--
+google_ad_client = "pub-9961351994700795";
+google_ad_width = 728;
+google_ad_height = 90;
+google_ad_format = "728x90_as";
+google_color_border = "A8DDA0";
+google_color_bg = "EBFFED";
+google_color_link = "0000CC";
+google_color_url = "008000.html";
+google_color_text = "6F6F6F";
+//--></script>
+<script type="text/javascript"
+  src="../../../pagead2.googlesyndication.com/pagead/f.txt">
+</script>
+
+<!--Google Top Ad END-->
+
+ <table width=99% border=0 cellspacing=0 cellpadding=0 align=center><tr><td colspan=3> <div align=center><b>Linux Shell Scripting Tutorial (LSST) v1.05r3</b></div></td></tr><tr><td width=8%> <div align=left><a href=ch03sec02.html>Prev</a></div></td><td width=86%> <div align=center>Chapter 3: Shells (bash) structured Language Constructs</div></td><td width=6%> <div align=right><a href=ch03sec04.html>Next</a></div></td></tr><tr><td colspan=3> <hr align=center></td></tr> </table><h1>if...else...fi</h1><p>If given condition is true then command1 is executed otherwise command2 is executed.<br> <i>Syntax:</i><br><pre>           if condition
+           then
+                       condition is zero (true - 0)
+                       execute all commands up to else statement
+
+           else
+                       if condition is not true then
+                       execute all commands up to fi
+           fi</pre><p>For e.g. Write Script as follows:</p> <table width=100% border=0 cellspacing=1 cellpadding=1 bgcolor=#CCCCCC><tr><td height=265><code>$ vi isnump_n<br> #!/bin/sh<br> #<br> # Script to see whether argument is positive or negative<br> #<br> if [ $# -eq 0 ]<br> then<br> echo &quot;$0 : You must give/supply one integers&quot;<br> exit 1<br> fi</code><p><br><code> if test $1 -gt 0<br> then<br> echo &quot;$1 number is positive&quot;<br> else<br> echo &quot;$1 number is negative&quot;<br> fi</code></p></td></tr> </table><p>Try it as follows:<br> <b>$ chmod 755 isnump_n<br><br> $ isnump_n 5</b><br> <i>5 number is positive</i><br> <b><br> $ isnump_n -45 </b><br> <i>-45 number is negative</i><br> <b><br> $ isnump_n</b><br> <i>./ispos_n : You must give/supply one integers</i><br> <b><br> $ isnump_n 0</b><br> <i>0 number is negative</i></p><p></p><p><i><b>Detailed explanation</b></i><br> First script checks whether command line argument is given or not, if not given then it print error message as &quot;<i>./ispos_n : You must give/supply one integers</i>&quot;. if statement checks whether number of argument ($#) passed to script is not equal (-eq) to 0, if we passed any argument to script then this if statement is false and if no command line argument is given then this if statement is true. The echo command i.e.<br> echo "$0 : You must give/supply one integers"<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2<br> 1 will print Name of script<br> 2 will print this error message<br> And finally statement exit 1 causes normal program termination with exit status 1 (nonzero means script is not successfully run).</p><p>The last sample run<b> $ isnump_n 0</b> , gives output as &quot;<i>0 number is negative</i>&quot;, because given argument is not &gt; 0, hence condition is false and it's taken as negative number. To avoid this replace second if statement with <b>if test $1 -ge 0</b>.</p><h1><a name=nestedifelseif></a><img src=images/bulb.gif width=9 height=13>Nested if-else-fi</h1><p>You can write the entire if-else construct within either the body of the if statement of the body of an else statement. This is called the nesting of ifs.</p> <table width=100% border=0 cellspacing=1 cellpadding=1 bgcolor=#CCCCCC><tr><td><p><code>$ vi nestedif.sh<br> osch=0<br><br> echo &quot;1. Unix (Sun Os)&quot;<br> echo &quot;2. Linux (Red Hat)&quot;<br> echo -n &quot;Select your os choice [1 or 2]? &quot;<br> read osch<br><br> if [ $osch -eq 1 ] ; then<br><br> &nbsp;&nbsp;&nbsp; &nbsp;echo &quot;You Pick up Unix (Sun Os)&quot;<br><br> else #### nested if i.e. if within if ######<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if [ $osch -eq 2 ] ; then<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;You Pick up Linux (Red Hat)&quot;<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;What you don't like Unix/Linux OS.&quot;<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fi<br> fi</code></p></td></tr> </table><p>Run the above shell script as follows:<br> <b>$ chmod +x nestedif.sh<br> $ ./nestedif.sh</b><br> <i>1. Unix (Sun Os)<br> 2. Linux (Red Hat)<br> Select you os choice [1 or 2]? <b>1</b><br> You Pick up Unix (Sun Os)</i></p><p><b>$ ./nestedif.sh</b><br> <i>1. Unix (Sun Os)<br> 2. Linux (Red Hat)<br> Select you os choice [1 or 2]? <b>2</b><br> You Pick up Linux (Red Hat)</i></p><p><b>$ ./nestedif.sh</b><br> <i>1. Unix (Sun Os)<br> 2. Linux (Red Hat)<br> Select you os choice [1 or 2]? <b>3</b><br> What you don't like Unix/Linux OS.<br> </i></p><p>Note that Second <i>if-else</i> constuct is nested in the first <i>else</i> statement. If the condition in the first <i>if</i> statement is false the the condition in the second <i>if</i> statement is checked. If it is false as well the final <i>else</i> statement is executed.</p><p>You can use the nested <i>if</i>s as follows also:<br> <i>Syntax:</i><br><pre>
+	if condition
+	then
+		if condition
+		then
+			.....
+			..
+			do this
+		else
+			....
+			..
+			do this
+		fi
+	else
+		...
+		.....
+		do this
+	fi
+</pre><BR> <table width=99% border=0 cellspacing=0 cellpadding=0 align=center><tr><td height=20 colspan=3> <hr></td></tr><tr><td width=42%> <div align=left><a href=ch03sec02.html>Prev</a></div></td><td width=17%> <div align=center><a href=index-2.html>Home</a></div></td><td width=41%> <div align=right><a href=ch03sec04.html>Next</a></div></td></tr><tr><td width=42%>test command or [ expr ]</td><td width=17%> <div align=center><a href=ch03.html>Up</a></div></td><td width=41%> <div align=right>Multilevel if-then-else</div></td></tr> </table></body>
+<!-- Mirrored from www.freeos.com/guides/lsst/ch03sec03.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 05 Jun 2015 06:04:09 GMT -->
+</html>

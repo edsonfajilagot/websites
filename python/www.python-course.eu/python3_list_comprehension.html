@@ -1,0 +1,331 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from www.python-course.eu/python3_list_comprehension.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:09:19 GMT -->
+<head>
+
+<!-- Dieses Tag in den Head-Bereich oder direkt vor dem schlieÃŸenden Body-Tag einfÃ¼gen -->
+<script type="text/javascript" src="../apis.google.com/js/plusone.js"></script>
+
+
+
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "../connect.facebook.net/en_GB/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script><title>Python3 Tutorial: List Comprehension</title>
+<meta http-equiv="content-type" content="text/html; charset="ISO-8859-1">
+<meta name="Description" content="Tutorial on List Comprehension in Python. Guido van Rossum's alternative to lambda, filter, map and reduce." />
+<meta name="Keywords" content="Python, tutorial, lambda, list comprehension" />
+
+<link href="favicon.ico" rel="shortcut icon">
+
+<link href="moderna.css" rel="stylesheet" type="text/css" />
+<link href="moderna_print.css" media="print" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+<div id="container">
+
+<div id="banner">
+<!-- <a href="impressum.php">Impressum</a> | <a href="mailto:">contact</a> | --><h1>Python Course</h1>
+
+</div>
+
+	<!-- Begin Top Menu -->
+<ul id="navlist">
+<li><a href="index-2.html" >Home</a></li><li><a href="course.html" >Python 2 Tutorial</a></li><li class="active"><a id="current" href="python3_course.html" >Python 3 Tutorial</a></li><li><a href="advanced_topics.html" >Advanced Topics</a></li><li><a href="python_books.html" >Python Books</a></li><li><a href="python_tkinter.html" >Tkinter Tutorial</a></li><li><a href="contact.html" rel="nofollow">Contact</a></li>                          
+</ul>
+	<!-- End Top Menu -->
+<div id="sidebar-a">
+<img class="border" src="images/no_lambda_small.png" alt="box" />    <h2>Python 3 Tutorial</h2>
+
+<div class="menu">
+
+<ul>
+<li><a href="python3_history_and_philosophy.html">The Origins of Python</a></li><li><a href="python3_interactive.html">Starting with Python: The Interactive Shell</a></li><li><a href="python3_execute_script.html">Executing a Script</a></li><li><a href="python3_blocks.html">Indentation</a></li><li><a href="python3_variables.html">Data Types and Variables</a></li><li><a href="python3_operators.html">Operators</a></li><li><a href="python3_sequential_data_types.html">Sequential Data Types: Lists and Strings</a></li><li><a href="python3_deep_copy.html">Shallow and Deep Copy</a></li><li><a href="python3_dictionaries.html">Dictionaries</a></li><li><a href="python3_sets_frozensets.html">Sets and Frozen Sets</a></li><li><a href="python3_input.html">input via the keyboard</a></li><li><a href="python3_conditional_statements.html">Conditional Statements</a></li><li><a href="python3_loops.html">Loops, while Loop</a></li><li><a href="python3_for_loop.html">For Loops</a></li><li><a href="python3_print.html">Output with Print</a></li><li><a href="python3_formatted_output.html">Formatted output with string modulo and the format method</a></li><li><a href="python3_functions.html">Functions</a></li><li><a href="python3_recursive_functions.html">Recursion and Recursive Functions</a></li><li><a href="python3_tests.html">Tests, DocTests, UnitTests</a></li><li><a href="python3_memoization.html">Memoization and Decorators</a></li><li><a href="python3_passing_arguments.html">Parameter Passing in Functions</a></li><li><a href="python3_namespaces.html">Namespaces</a></li><li><a href="python3_global_vs_local_variables.html">Global and Local Variables</a></li><li><a href="python3_file_management.html">Read and Write Files</a></li><li><a href="python3_modules_and_modular_programming.html">Modular Programming and Modules</a></li><li><a href="python3_re.html">Regular Expressions</a></li><li><a href="python3_re_advanced.html">Regular Expressions, Advanced</a></li><li><a href="python3_lambda.html">Lambda Operator, Filter, Reduce and Map</a></li><li><a href="python3_list_comprehension.html">List Comprehension</a></li><li><a href="python3_generators.html">Iterators and Generators</a></li><li><a href="python3_exception_handling.html">Exception Handling</a></li><li><a href="python3_object_oriented_programming.html">Object Oriented Programming</a></li><li><a href="python3_class_and_instance_attributes.html">Class and Instance Attributes</a></li><li><a href="python3_properties.html">Properties vs. getters and setters</a></li><li><a href="python3_inheritance.html">Inheritance</a></li><li><a href="python3_multiple_inheritance.html">Multiple Inheritance</a></li><li><a href="python3_magic_methods.html">Magic Methods and Operator Overloading</a></li><li><a href="python3_inheritance_example.html">OOP, Inheritance Example</a></li></ul>
+
+</div>
+
+<p>
+<br>
+<hr>
+<br>
+<h3>Comprehension without Lists</h3>
+<i>"Man is not born to solve the problem of the universe, but to find out what he
+has to do; and to restrain himself within the limits of his comprehension."</i>
+<br>
+(Johann Wolfgang von Goethe (1749 - 1832)
+<br>
+<hr>
+Supported by:<br>
+<a href="http://www.bodenseo.com/"><img style="width: 150px;" alt="Bodenseo, Training courses
+in Linux and Python"
+		     src="images/bodenseo_python_training.gif"><br>Training Courses in Python</a>
+		     <br><br>		     
+
+</div><div id="sidebar-b"><img style="width: 150px;" alt="Python-Logo"
+		     src="images/python-logo.png"><!-- Dieses Tag dort einfügen, wo die +1-Schaltfläche dargestellt werden soll -->
+<g:plusone></g:plusone>
+<br><br>
+
+<div class="fb-like" data-href="www.python-course.eu" data-send="false" data-layout="button_count" 
+data-width="130" data-show-faces="true" data-action="recommend"></div>
+
+<br><br>
+This topic in German / Deutsche Übersetzung:
+    <a href="http://www.python-kurs.eu/python3_list_comprehension.php">Listen-Abstraktion (List Comprehension)</a><h3>Python3</h3>This is a tutorial in Python3, but this chapter of our course is available in a version for Python 2.x as well: <a href="list_comprehension.html">List Comprehension in Python 2.x</a><p>
+<h3>Classroom Training Courses</h3>
+The goal of this website is to provide educational material, 
+allowing you to learn Python on your own.
+Nevertheless, it is faster and more efficient to attend a "real" 
+Python course in a classroom, with
+an experienced trainer. So why not attend one of the live 
+<a href="python_classes.html">Python courses</a> in Paris, London, Berlin, Munich
+or Lake Constance by Bernd Klein, the author of this tutorial?
+<br><br>
+You can also check the   
+<a href="http://www.bodenseo.com/courses.php?topic=Python">Python Training courses
+<img style="width: 150px;" alt="Bodenseo Kurse in Python"
+		     src="images/bodenseo_stairs_to_python.png"></a>
+		     delivered by Bodenseo and Bernd Klein.
+<br><br>
+You can book on-site classes at your company or organization, e.g. in England, Switzerland, Austria, Germany,
+France, Belgium, the Netherlands, Luxembourg, Poland, UK, Italy and other locations in Europe.
+<br><br>
+<h3>Python3</h3>This is a tutorial in Python3, but this chapter of our course is available in a version for Python 2.x as well: <a href="list_comprehension.html">List Comprehension in Python 2.x</a>
+ </p>
+
+
+
+
+    
+</p></div>
+<div id="content">
+
+<div id="contextlinks">Previous Chapter: <a href="python3_lambda.html">Lambda Operator, Filter, Reduce and Map</a><br>
+<LINK rel="prev" href="python3_lambda.html">Next Chapter: <a href="python3_generators.html">Iterators and Generators</a><br>
+<LINK rel="next" href="python3_generators.html"></div>
+<h2>List Comprehension</h2>
+<h3>Introduction</h3>
+<p>
+<img class="imgright" src="images/alternative_lambda_map.png" alt="alternative to map, filter, reduce and lambda" />
+We learned in the previous chapter <a href="python3_lambda.html">"Lambda Operator, Filter, Reduce and Map"</a> that 
+Guido van Rossum perfers list comprehensions to constructs using map, filter, reduce and lambda. In this chapter 
+we will cover the essentials about list comprehensions.
+<br><br> 
+List comprehensions were added with Python 2.0. 
+Essentially, it is Python's way of implementing a well-known notation for sets 
+as used by mathematicians. 
+<br>
+In mathematics the square numbers of the natural numbers are for example created 
+by { x<sup>2</sup> | x &isin;  &#x2115 } or the set of complex integers { (x,y) | x &isin;  &#x2124 &and; y &isin;  &#x2124 }.
+<br><br>
+ List comprehension is an elegant way to define and create
+list in Python. These lists have often the qualities of sets, but are not in all cases
+sets. 
+<br><br> 
+List comprehension is a complete substitute for the lambda function as well as the functions
+map(), filter() and reduce(). For most people the syntax of list comprehension is easier 
+to be grasped.
+<br><br>
+<h3>Examples</h3>
+In the chapter on lambda and map() we had designed a map() function to convert Celsius values
+into Fahrenheit and vice versa. It looks like this with list comprehension:
+<pre>
+>>> Celsius = [39.2, 36.5, 37.3, 37.8]
+>>> Fahrenheit = [ ((float(9)/5)*x + 32) for x in Celsius ]
+>>> print(Fahrenheit)
+[102.56, 97.700000000000003, 99.140000000000001, 100.03999999999999]
+>>> 
+</pre>
+<br>
+A Pythagorean triple consists of three positive integers a, b, and c, such that
+<br>
+a<sup>2</sup> + b<sup>2</sup> = c<sup>2</sup>.
+<br>
+Such a triple is commonly written (a, b, c), and the best known example is (3, 4, 5). 
+<br>
+The following list comprehension creates the Pythagorean triples:
+<pre>
+>>> [(x,y,z) for x in range(1,30) for y in range(x,30) for z in range(y,30) if x**2 + y**2 == z**2]
+[(3, 4, 5), (5, 12, 13), (6, 8, 10), (7, 24, 25), (8, 15, 17), (9, 12, 15), (10, 24, 26), (12, 16, 20), (15, 20, 25), (20, 21, 29)]
+>>> 
+</pre>
+<br><br>
+Another example: Let A and B be two sets, the cross product (or Cartesian product) of A and B, written A×B, 
+is the set of all pairs wherein the first element is a member of the set 
+A and the second element is a member of the set B. 
+<br><br>
+Mathematical definition:
+<br>
+A×B = {(a, b) : a belongs to A, b belongs to B}.
+<br>
+It's easy to be accomplished in Python:
+<pre>
+>>> colours = [ "red", "green", "yellow", "blue" ]
+>>> things = [ "house", "car", "tree" ]
+>>> coloured_things = [ (x,y) for x in colours for y in things ]
+>>> print(coloured_things)
+[('red', 'house'), ('red', 'car'), ('red', 'tree'), ('green', 'house'), ('green', 'car'), ('green', 'tree'), ('yellow', 'house'), ('yellow', 'car'), ('yellow', 'tree'), ('blue', 'house'), ('blue', 'car'), ('blue', 'tree')]
+>>> 
+</pre>
+
+<br><br>
+
+<h3>Generator Comprehension</h3>
+Generator comprehensions were introduced with Python 2.6. 
+They are simply like a list comprehension but with parentheses - round brackets - instead of (square) brackets
+around it.
+Otherwise, the syntax and the way of working is like list comprehension, but a generator comprehension
+returns a generator instead of a list. 
+
+<pre>
+>>> x = (x **2 for x in range(20))
+>>> print(x)
+<generator object <genexpr> at 0xb7307aa4>
+>>> x = list(x)
+>>> print(x)
+[0, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144, 169, 196, 225, 256, 289, 324, 361]
+</pre>
+
+
+<br><br>
+<h3>A more Demanding Example</h3>
+Calculation of the prime numbers between 1 and 100 using the sieve of Eratosthenes:
+<pre>
+>>> noprimes = [j for i in range(2, 8) for j in range(i*2, 100, i)]
+>>> primes = [x for x in range(2, 100) if x not in noprimes]
+>>> print(primes)
+[2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
+>>> 
+</pre>
+
+We want to bring the previous example into more general form, so that we can calculate the list of prime
+numbers up to an arbitrary number n:
+
+<pre>
+>>> from math import sqrt
+>>> n = 100
+>>> sqrt_n = int(sqrt(n))
+>>> no_primes = [j for i in range(2,sqrt_n) for j in range(i*2, n, i)]
+</pre>
+If we have a look at the content of no_primes, we can see, that we have a problem. 
+There are lots of double entries contained in this list:
+<pre>
+>>> no_primes
+[4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68, 70, 72, 74, 76, 78, 80, 82, 84, 86, 88, 90, 92, 94, 96, 98, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51, 54, 57, 60, 63, 66, 69, 72, 75, 78, 81, 84, 87, 90, 93, 96, 99, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, 68, 72, 76, 80, 84, 88, 92, 96, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 12, 18, 24, 30, 36, 42, 48, 54, 60, 66, 72, 78, 84, 90, 96, 14, 21, 28, 35, 42, 49, 56, 63, 70, 77, 84, 91, 98, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 18, 27, 36, 45, 54, 63, 72, 81, 90, 99]
+>>>
+</pre>
+<br>
+
+The solution to this unbearable problem is easier than you may think. It's just a matter of changing square brackets into braces,
+or in other words: We will use set comprehension. 
+
+
+<h3>Set Comprehension</h3>
+A set comprehension is similiar to a list comprehension, but returns a set and not a list.
+Syntactically, we use curly brackets instead of square brackets to create a set.
+Set comprehension is the right functionality to solve our problem from the previous subsection. 
+We are able to create the set of non primes without doublets:
+
+<pre>
+>>> from math import sqrt
+>>> n = 100
+>>> sqrt_n = int(sqrt(n))
+>>> no_primes = {j for i in range(2,sqrt_n) for j in range(i*2, n, i)}
+>>> no_primes
+{4, 6, 8, 9, 10, 12, 14, 15, 16, 18, 20, 21, 22, 24, 25, 26, 27, 28, 30, 32, 33, 34, 35, 36, 38, 39, 40, 42, 44, 45, 46, 48, 49, 50, 51, 52, 54, 55, 56, 57, 58, 60, 62, 63, 64, 65, 66, 68, 69, 70, 72, 74, 75, 76, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 96, 98, 99}
+>>> primes = {i for i in range(n) if i not in no_primes}
+>>> print(primes)
+{0, 1, 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97}
+>>> 
+</pre>
+
+
+<h3>Recursive Function to Calculate the Primes</h3>
+The following Python script uses a recursive function to calculate the prime numbers. It incorporates the
+fact, that it is enough to examine the multiples of the prime numbers up to the square root of n:
+<pre>
+from math import sqrt
+def primes(n):
+    if n == 0:
+        return []
+    elif n == 1:
+        return [1]
+    else:
+        p = primes(int(sqrt(n)))
+        no_p = {j for i in p for j in range(i*2, n, i)}
+        p = {x for x in range(2, n) if x not in no_p}
+    return p
+
+print(primes(40))
+</pre>
+
+
+<h3>Differences between version 2.x and 3.x</h3>
+In Python 2, the loop control variable is not local, i.e. it can change another variable of that name outside of
+the list comprehension, as we can see in the following example:
+<pre>
+>>> x = "This value will be changed in the list comprehension"
+>>> res = [x for x in range(3)]
+>>> res
+[0, 1, 2]
+>>> x
+2
+>>> res = [i for i in range(5)]
+>>> i
+4
+>>> 
+</pre>
+
+Guido van Rossum referred to this effect as "one of Python's 'dirty little secrets' for years".<sup>1</sup> 
+The reason for doing this was efficiency. "It started out as an intentional compromise to make list 
+comprehensions blindingly fast, and while it was not a common pitfall for beginners, it definitely stung 
+people occasionally."<sup>2</sup>
+<br><br>
+This "dirty little secret" is fixed in Python3, as you can see in the following code:
+<br>
+<pre>
+$ python3
+Python 3.2 (r32:88445, Mar 25 2011, 19:28:28) 
+[GCC 4.5.2] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+>>> x = "Python 3 fixed the dirty little secret"
+>>> res = [x for x in range(3)]
+>>> print(res)
+[0, 1, 2]
+>>> x
+'Python 3 fixed the dirty little secret'
+>>> 
+</pre>
+
+
+<br><br>
+
+<h3>Footnotes:</h3>
+<sup>1</sup> Guido van Rossum: 
+<a href="http://python-history.blogspot.com/2010/06/from-list-comprehensions-to-generator.html">From List Comprehensions to Generator Expressions</a>
+<br><br>
+<sup>2</sup> dto.
+<br><br>
+</p>
+
+<div id="contextlinks">Previous Chapter: <a href="python3_lambda.html">Lambda Operator, Filter, Reduce and Map</a><br>
+<LINK rel="prev" href="python3_lambda.html">Next Chapter: <a href="python3_generators.html">Iterators and Generators</a><br>
+<LINK rel="next" href="python3_generators.html"></div><br><br><br>
+
+</div>
+<div id="footer">  &copy; 2011 - 2014 <a href="http://www.bklein.de/">Bernd Klein</a>,
+Bodenseo; 
+Design by Denise Mitchinson adapted for python-course.eu by Bernd Klein</div>
+</div>
+</body>
+
+<!-- Mirrored from www.python-course.eu/python3_list_comprehension.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:09:19 GMT -->
+</html>

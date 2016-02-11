@@ -1,0 +1,171 @@
+<html>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch15s03.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:33 GMT -->
+<head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>15.3. Recursive data structures</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><meta name="keywords" content="python, biology, bioinformatics, programming, computational biology"><link rel="home" href="index-2.html" title="Introduction to Programming using Python"><link rel="up" href="ch15.html" title="Chapter 15. Recursive functions"><link rel="previous" href="ch15s02.html" title="15.2. Flow of execution of recursive functions"><link rel="next" href="ch15s04.html" title="15.4. Solutions"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">15.3. Recursive data structures</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch15s02.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><th width="60%" align="center">Chapter 15. Recursive functions</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch15s04.html"><img src="images/next.png" alt="Next"></a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="sect_more_recursion"></a>15.3. Recursive data structures</h2></div></div><p>
+    In the <a href="ch10.html" title="Chapter 10. Nested data structures">Chapter 10</a>, we have worked
+    with examples using nested list. If we examine them a little bit
+    more, we will see that a nested list can be defined recursively.
+  </p><div class="definition"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/definition.png"></td><td><p class="title"><b>Nested list</b></p></td></tr><tr><td colspan="2" align="left" valign="top">
+    
+    <p>
+      A nested list is an ordered collection of elements that are:
+      </p><div class="itemizedlist"><ul type="bullet" compact><li style="list-style-type: disc"><p>either items</p></li><li style="list-style-type: disc"><p>or nested lists</p></li></ul></div><p>
+      
+      The items define the content, whereas the lists define the
+      structure of the collection.
+    </p>
+  </td></tr></table></div><p><b>How can we use this?&nbsp;</b>
+      Let's use phylogenetic trees as examples for such a recursive
+      list structure. <a href="ch15s03.html#fig_tree" title="Figure 15.3. A phylogenetic tree topology">Figure 15.3</a> shows an example of a
+      phylogenetic tree topology that can be implemented in Python as
+      follows:
+      <pre class="programlisting">
+&gt;&gt;&gt; tree = [[[['human', 'chimpanzee'], 'gorilla'], 'orang-utan'], 'gibbon']
+      </pre>
+      <a href="ch15s03.html#fig_tree" title="Figure 15.3. A phylogenetic tree topology">Figure 15.3</a> shows the representation of
+      <tt>tree</tt>.
+    </p><div class="figure"><a name="fig_tree"></a><p class="title"><b>Figure 15.3. A phylogenetic tree topology</b></p><div class="mediaobject"><img src="images/tree.png"></div></div><div class="figure"><p class="title"><b>Figure 15.4. Tree representation using a recursive list structure</b></p><div class="mediaobject"><img src="images/tree_rep.png"></div></div><p><b>Working with recursive structures.&nbsp;</b>
+      Assume that we would do something for each branching point in
+      the above tree. A simple traversal using
+      <tt>for</tt> or <tt>while</tt> is no
+      more possible, because both loop structures handle only one
+      level of the list. But with recursive functions we can do such
+      things with the following strategy:
+    </p><div class="procedure"><p class="title"><b>Procedure 15.4. tree_traversal(tree)</b></p><p>INPUT: a tree <span class="emphasis"><em>tree</em></span></p><ol type="1"><li>do what you have to do when you enter the branching point</li><li><span class="bold"><b>if </b></span><span class="emphasis"><em>tree</em></span> is a list:
+      <ol type="a"><li>*** recursion step ***</li><li><span class="bold"><b>for each </b></span><span class="emphasis"><em>element</em></span> of <span class="emphasis"><em>tree</em></span>: 
+	  <ol type="i"><li><span class="bold"><b>tree_traversal</b></span>(<span class="emphasis"><em>element</em></span>)
+	    </li></ol></li></ol></li><li><span class="bold"><b>otherwise</b></span>:
+      <ol type="a"><li>*** end condition of the recursion, here the leaves of
+	the tree ***</li></ol></li><li>do what you have to do when you leave the branching
+      point 
+    </li></ol></div><p>
+    Doing something when you enter the branching point, is also known
+    as <span class="emphasis"><em>preorder traversal</em></span> of a tree, whereas
+    doing something when leaving a branching point is also called
+    <span class="emphasis"><em>postorder traversal</em></span> of a tree. 
+  </p><p>
+    We will give two example applications of this strategy for our
+    tree. The first one prints all species of the trees:
+  </p><pre class="programlisting">
+    tree = [[[['human', 'chimpanzee'], 'gorilla'], 'orang-utan'], 'gibbon']
+
+import types
+
+def print_species(tree):
+    if type(tree) is types.ListType:
+        for child in tree:
+            print_species(child)
+    else:
+        print tree
+
+
+
+&gt;&gt;&gt; print_species(tree)
+human
+chimpanzee
+gorilla
+orang-utan
+gibbon
+  </pre><p>and the second one that prints for a tree or a  binary tree
+    <sup>[<a name="d0e6132" href="#ftn.d0e6132">2</a>]</sup> the two populations that are split at this point.
+  </p><pre class="programlisting">
+    tree = [[[['human', 'chimpanzee'], 'gorilla'], 'orang-utan'], 'gibbon']
+
+import types
+
+def splits(tree):
+    if type(tree) is types.ListType:
+        all_leaves = []
+        for child in tree:
+            child_leaves = splits(child)
+            print child_leaves,
+            all_leaves += child_leaves
+        print
+        return all_leaves
+    else:
+        return [ tree ]
+    
+
+def binary_splits(tree):
+    if type(tree) is types.ListType:
+        left = binary_splits(tree[0])
+        right = binary_splits(tree[1])
+        print left, right
+        return left + right
+    else:
+        return [ tree ]
+    
+
+
+
+&gt;&gt;&gt; splits(tree)
+['human'] ['chimpanzee']
+['human', 'chimpanzee'] ['gorilla']
+['human', 'chimpanzee', 'gorilla'] ['orang-utan']
+['human', 'chimpanzee', 'gorilla', 'orang-utan'] ['gibbon']
+['human', 'chimpanzee', 'gorilla', 'orang-utan', 'gibbon']
+  </pre><p>
+    Finally, we will show the code that separates the work to do from
+    the tree traversal itself by functions. The traversal function
+    <tt>tree_traversal</tt> does not change for the
+    task. The user has only to redefine the functions
+    <tt>do_prework</tt>, <tt>do_postwork</tt>
+    and <tt>do_leafwork</tt>.
+  </p><pre class="programlisting">
+    import types
+
+def do_prework(node):
+    print "prework:", node
+
+def do_postwork(node):
+    print "postwork:", node
+
+def is_leaf(node):
+    return type(node) is not types.ListType
+        
+def do_leafwork(leaf):
+    print "that is a leaf:", leaf
+    
+def tree_traversal (node):
+    do_prework(node)
+    
+    if not is_leaf(node):
+        for child in node:
+            tree_traversal(child)
+    else:
+        do_leafwork(node)
+
+    do_postwork(node)
+
+
+
+
+&gt;&gt;&gt; tree=[[[['human', 'chimpanzee'], 'gorilla'], 'orang-utan'], 'gibbon']
+&gt;&gt;&gt; tree_traversal(tree)
+prework: [[[['human', 'chimpanzee'], 'gorilla'], 'orang-utan'], 'gibbon']
+prework: [[['human', 'chimpanzee'], 'gorilla'], 'orang-utan']
+prework: [['human', 'chimpanzee'], 'gorilla']
+prework: ['human', 'chimpanzee']
+prework: human
+that is a leaf: human
+postwork: human
+prework: chimpanzee
+that is a leaf: chimpanzee
+postwork: chimpanzee
+postwork: ['human', 'chimpanzee']
+prework: gorilla
+that is a leaf: gorilla
+postwork: gorilla
+postwork: [['human', 'chimpanzee'], 'gorilla']
+prework: orang-utan
+that is a leaf: orang-utan
+postwork: orang-utan
+postwork: [[['human', 'chimpanzee'], 'gorilla'], 'orang-utan']
+prework: gibbon
+that is a leaf: gibbon
+postwork: gibbon
+postwork: [[[['human', 'chimpanzee'], 'gorilla'], 'orang-utan'], 'gibbon']
+  </pre><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch15s02.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch15.html"><img src="images/up.png" alt="Up"></a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch15s04.html"><img src="images/next.png" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">15.2. Flow of execution of recursive functions&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index-2.html"><img src="images/home.png" alt="Home"></a></td><td width="40%" align="right" valign="top">&nbsp;15.4. Solutions</td></tr></table></div></body>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch15s03.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:34 GMT -->
+</html>

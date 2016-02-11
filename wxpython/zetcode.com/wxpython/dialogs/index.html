@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from zetcode.com/wxpython/dialogs/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Aug 2015 19:21:40 GMT -->
+<head>
+<title>wxPython dialogs</title>
+<link rel="stylesheet" href="../../cfg/format2.css" type="text/css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="wxPython, dialogs, custom dialog, about dialog box">
+<meta name="description" content="In this part of the wxPython tutorial we cover dialogs.">
+<meta name="author" content="Jan Bodnar">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div id="wide_ad" class="ltow">
+<script async src="../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- 160x600, August 2011 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:600px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="2484182563"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<div class="content">
+
+
+<header>
+
+<nav>
+<a href="http://zetcode.com/" title="Home">Home</a>&#160;
+<a href="../index.html">Contents</a>
+</nav>
+
+</header>
+
+
+<h1>wxPython dialogs</h1>
+
+
+<p>
+Dialog windows or dialogs are an indispensable part of most modern 
+GUI applications. A dialog is defined as a conversation between two 
+or more persons. In a computer application a dialog is a window which 
+is used to "talk" to the application. A dialog is used to input data, 
+modify data, change the application settings etc. Dialogs are important
+means of communication between a user and a computer program. 
+</p>
+
+<div class="med_rec">
+<script async src="../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- NewSquare -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:250px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="0364418177"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div> 
+
+
+<h2>A Simple message box</h2>
+
+<p>
+A message box provides short information to the user. A good 
+example is a CD burning application. When a CD is finished burning,
+a message box pops up.
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+'''
+ZetCode wxPython tutorial
+
+This example shows a simple 
+message box.
+
+author: Jan Bodnar
+website: www.zetcode.com
+last modified: October 2011
+'''
+
+import wx
+
+class Example(wx.Frame):
+    
+    def __init__(self, *args, **kwargs):
+        super(Example, self).__init__(*args, **kwargs) 
+            
+        self.InitUI()
+        
+    def InitUI(self):    
+
+        wx.FutureCall(5000, self.ShowMessage)
+
+        self.SetSize((300, 200))
+        self.SetTitle('Message box')
+        self.Centre()
+        self.Show(True)
+
+    def ShowMessage(self):
+        wx.MessageBox('Download completed', 'Info', 
+            wx.OK | wx.ICON_INFORMATION)
+
+
+def main():
+    
+    ex = wx.App()
+    Example(None)
+    ex.MainLoop()    
+
+
+if __name__ == '__main__':
+    main()    
+</pre>
+
+<p>
+This example shows a message box after 5 seconds.
+</p>
+
+<pre class="explanation">
+wx.FutureCall(5000, self.ShowMessage)
+</pre>
+
+<p>
+<code>wx.FutureCall</code> calls a method after 5 seconds. The first 
+parameter is a time value, after which a given method is called. 
+The parameter is in milliseconds. The second parameter is a 
+method to be called.
+</p>
+
+<pre class="explanation">
+def ShowMessage(self):
+    wx.MessageBox('Download completed', 'Info', 
+        wx.OK | wx.ICON_INFORMATION)
+</pre>
+
+<p>
+<code>wx.MessageBox</code> shows a small dialog window. We provide three parameters. 
+The text message, the title message and flags. The flags are used to 
+show different buttons and icons. In our case we show an OK button and Information
+icon.
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/messagebox.png" alt="Message box">
+<figcaption>Figure: A Message box</figcaption>
+</figure>
+
+
+<h2>Predefined dialogs</h2>
+
+<p>
+wxPython has several predefined dialogs. These are dialogs for common 
+programming tasks like showing text, receiving input, 
+loading and saving files etc. 
+</p>
+
+
+<h2>Message dialogs</h2>
+
+<p>
+Message dialogs are used to show messages to the user. They are more flexible 
+than simple message boxes that we saw in the previous example. They are 
+customisable. We can change icons and buttons that will be shown in a dialog.
+</p>
+
+<table>
+<tr>
+<th>flag</th>
+<th>meaning</th>
+</tr>
+<tr>
+<td>wx.OK</td><td>show OK button</td>
+</tr>
+<tr class="gray">
+<td>wx.CANCEL</td><td>show Cancel button</td>
+</tr>
+<tr>
+<td>wx.YES_NO</td><td>show Yes, No buttons</td>
+</tr>
+<tr class="gray">
+<td>wx.YES_DEFAULT</td><td>make Yes button the default</td>
+</tr>
+<tr>
+<td>wx.NO_DEFAULT</td><td>make No button the default</td>
+</tr>
+<tr class="gray">
+<td>wx.ICON_EXCLAMATION</td><td>show an alert icon</td>
+</tr>
+<tr>
+<td>wx.ICON_ERROR</td><td>show an error icon</td>
+</tr>
+<tr class="gray">
+<td>wx.ICON_HAND</td><td>same as wx.ICON_ERROR</td>
+</tr>
+<tr>
+<td>wx.ICON_INFORMATION</td><td>show an info icon</td>
+</tr>
+<tr class="gray">
+<td>wx.ICON_QUESTION</td><td>show a question icon</td>
+</tr>
+</table>
+
+<p>
+These are flags that can be used with <code>wx.MessageDialog</code> class.
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+'''
+ZetCode wxPython tutorial
+
+This example shows four types of
+message dialogs.
+
+author: Jan Bodnar
+website: www.zetcode.com
+last modified: October 2011
+'''
+
+import wx
+
+class Example(wx.Frame):
+    
+    def __init__(self, *args, **kwargs):
+        super(Example, self).__init__(*args, **kwargs) 
+            
+        self.InitUI()
+        
+    def InitUI(self):    
+
+        panel = wx.Panel(self)
+
+        hbox = wx.BoxSizer()
+        sizer = wx.GridSizer(2, 2, 2, 2)
+
+        btn1 = wx.Button(panel, label='Info')
+        btn2 = wx.Button(panel, label='Error')
+        btn3 = wx.Button(panel, label='Question')
+        btn4 = wx.Button(panel, label='Alert')
+
+        sizer.AddMany([btn1, btn2, btn3, btn4])
+
+        hbox.Add(sizer, 0, wx.ALL, 15)
+        panel.SetSizer(hbox)
+
+        btn1.Bind(wx.EVT_BUTTON, self.ShowMessage1)
+        btn2.Bind(wx.EVT_BUTTON, self.ShowMessage2)
+        btn3.Bind(wx.EVT_BUTTON, self.ShowMessage3)
+        btn4.Bind(wx.EVT_BUTTON, self.ShowMessage4)
+
+        self.SetSize((300, 200))
+        self.SetTitle('Messages')
+        self.Centre()
+        self.Show(True)
+
+    def ShowMessage1(self, event):
+        dial = wx.MessageDialog(None, 'Download completed', 'Info', wx.OK)
+        dial.ShowModal()
+
+    def ShowMessage2(self, event):
+        dial = wx.MessageDialog(None, 'Error loading file', 'Error', 
+            wx.OK | wx.ICON_ERROR)
+        dial.ShowModal()
+
+    def ShowMessage3(self, event):
+        dial = wx.MessageDialog(None, 'Are you sure to quit?', 'Question', 
+            wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION)
+        dial.ShowModal()
+
+    def ShowMessage4(self, event):
+        dial = wx.MessageDialog(None, 'Unallowed operation', 'Exclamation', 
+            wx.OK | wx.ICON_EXCLAMATION)
+        dial.ShowModal()
+
+def main():
+    
+    ex = wx.App()
+    Example(None)
+    ex.MainLoop()    
+
+
+if __name__ == '__main__':
+    main()
+</pre>
+
+<p>
+In our example, we have created four buttons and put them in a grid sizer. 
+These buttons will show four different dialog windows. We create them by 
+specifying different style flags.
+</p>
+
+<pre class="explanation">
+def ShowMessage2(self, event):
+    dial = wx.MessageDialog(None, 'Error loading file', 'Error', 
+        wx.OK | wx.ICON_ERROR)
+    dial.ShowModal()
+</pre>
+
+<p>
+The creation of the message dialog is simple. We set the dialog to 
+be a toplevel window by providing None as a parent. 
+The two strings provide the message text and the dialog title. We 
+show an OK button and an error icon by specifying the <code>wx.OK</code> and 
+<code>wx.ICON_ERROR</code> flags. To show the dialog on screen, we 
+call the <code>ShowModal()</code> method.
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/idialog.png" alt="Information dialog">
+<figcaption>Figure: Information dialog</figcaption>
+</figure>
+
+
+<h2>About dialog box</h2>
+
+<p>
+Almost every application has a typical about dialog box. It is usually 
+placed in the Help menu. The purpose of this dialog is to give the 
+user the basic information about the name and the version of the 
+application. In the past, these dialogs used to be quite brief. These 
+days most of these boxes provide additional information about the authors. 
+They give credits to additional programmers or documentation writers. They 
+also provide information about the application license. These boxes can 
+show the logo of the company or the application logo. Some of the more 
+capable about boxes show animation. 
+wxPython has a special about dialog box starting from 2.8.x series.
+</p>
+
+<p>
+In order to create an about dialog box we must create two objects. 
+A <code>wx.AboutDialogInfo</code> and a <code>wx.AboutBox</code>. 
+</p>
+
+<p>
+wxPython can display two kinds of About boxes. It depends on which platform 
+we use and which methods we call. It can be a native dialog or a wxPython generic dialog. 
+Windows native about dialog box cannot display custom icons, license text nor 
+the URL's. If we omit these three fields, wxPython will show a native dialog. 
+Otherwise it will resort to a generic one. It is advised to provide license information 
+in a separate menu item if we want to stay as native as possible. 
+GTK+ can show all these fields.  
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+'''
+ZetCode wxPython tutorial
+
+In this example, we create an
+about dialog box. 
+
+author: Jan Bodnar
+website: www.zetcode.com
+last modified: October 2011
+'''
+
+import wx
+
+
+class Example(wx.Frame):
+    
+    def __init__(self, *args, **kwargs):
+        super(Example, self).__init__(*args, **kwargs) 
+            
+        self.InitUI()
+        
+    def InitUI(self):    
+
+        menubar = wx.MenuBar()
+        help = wx.Menu()
+        help.Append(100, '&amp;About')
+        self.Bind(wx.EVT_MENU, self.OnAboutBox, id=100)
+        menubar.Append(help, '&amp;Help')
+        self.SetMenuBar(menubar)
+
+        self.SetSize((300, 200))
+        self.SetTitle('About dialog box')
+        self.Centre()
+        self.Show(True)
+
+    def OnAboutBox(self, e):
+        
+        description = """File Hunter is an advanced file manager for 
+the Unix operating system. Features include powerful built-in editor, 
+advanced search capabilities, powerful batch renaming, file comparison, 
+extensive archive handling and more.
+"""
+
+        licence = """File Hunter is free software; you can redistribute 
+it and/or modify it under the terms of the GNU General Public License as 
+published by the Free Software Foundation; either version 2 of the License, 
+or (at your option) any later version.
+
+File Hunter is distributed in the hope that it will be useful, 
+but WITHOUT ANY WARRANTY; without even the implied warranty of 
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+See the GNU General Public License for more details. You should have 
+received a copy of the GNU General Public License along with File Hunter; 
+if not, write to the Free Software Foundation, Inc., 59 Temple Place, 
+Suite 330, Boston, MA  02111-1307  USA"""
+
+
+        info = wx.AboutDialogInfo()
+
+        info.SetIcon(wx.Icon('hunter.png', wx.BITMAP_TYPE_PNG))
+        info.SetName('File Hunter')
+        info.SetVersion('1.0')
+        info.SetDescription(description)
+        info.SetCopyright('(C) 2007 - 2014 Jan Bodnar')
+        info.SetWebSite('http://www.zetcode.com')
+        info.SetLicence(licence)
+        info.AddDeveloper('Jan Bodnar')
+        info.AddDocWriter('Jan Bodnar')
+        info.AddArtist('The Tango crew')
+        info.AddTranslator('Jan Bodnar')
+
+        wx.AboutBox(info)
+
+
+def main():
+    
+    ex = wx.App()
+    Example(None)
+    ex.MainLoop()    
+
+
+if __name__ == '__main__':
+    main()
+</pre>
+
+<p>
+The example has an about menu item. After selecting the
+item, the about box is displayed. 
+</p>
+
+<pre class="explanation">
+        description = """File Hunter is an advanced file manager for 
+the Unix operating system. Features include powerful built-in editor, 
+advanced search capabilities, powerful batch renaming, file comparison, 
+extensive archive handling and more.
+"""
+</pre>
+
+<p>
+It is not the best idea to put too much text into the code of the application. 
+We did not want to make the example too complex, so we put all the text 
+into the code. But in real world programs, the text should be placed 
+separately inside a file. It helps us with the maintenace of our application.
+For example, if we want to translate our application to other languages. 
+</p>
+
+<pre class="explanation">
+info = wx.AboutDialogInfo()
+</pre>
+
+<p>
+The first thing to do is to create a <code>wx.AboutDialogInfo</code> object. 
+The constructor is empty. It does not taky 
+any parameters. 
+</p>
+
+<pre class="explanation">
+info.SetIcon(wx.Icon('hunter.png', wx.BITMAP_TYPE_PNG))
+info.SetName('File Hunter')
+info.SetVersion('1.0')
+info.SetDescription(description)
+info.SetCopyright('(C) 2007 - 2014 Jan Bodnar')
+info.SetWebSite('http://www.zetcode.com')
+info.SetLicence(licence)
+info.AddDeveloper('Jan Bodnar')
+info.AddDocWriter('Jan Bodnar')
+info.AddArtist('The Tango crew')
+info.AddTranslator('Jan Bodnar')
+</pre>
+
+<p>
+The next thing to do is to call all necessary methods upon 
+the created <code>wx.AboutDialogInfo</code> object. 
+</p>
+
+<pre class="explanation">
+wx.AboutBox(info)
+</pre>
+
+<p>
+In the end we create a <code>wx.AboutBox</code> widget. The only 
+parameter it takes is the <code>wx.AboutDialogInfo</code> object. 
+</p>
+
+<p>
+And of course, if we want to have an animation or some other 
+eye candy, we must implement our about dialog manually.
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/hunter.png" alt="About dialog box">
+<figcaption>Figure: About dialog box</figcaption>
+</figure>
+
+
+<h2>A custom dialog</h2>
+
+<p>
+In the next example we create a custom dialog. An image editing application 
+can change a colour depth of a picture. 
+To provide this funcionality, we could create a suitable dialog. 
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+'''
+ZetCode wxPython tutorial
+
+In this code example, we create a
+custom dialog.
+
+author: Jan Bodnar
+website: www.zetcode.com
+last modified: July 2012
+'''
+
+import wx
+
+class ChangeDepthDialog(wx.Dialog):
+    
+    def __init__(self, *args, **kw):
+        super(ChangeDepthDialog, self).__init__(*args, **kw) 
+            
+        self.InitUI()
+        self.SetSize((250, 200))
+        self.SetTitle("Change Color Depth")
+        
+        
+    def InitUI(self):
+
+        pnl = wx.Panel(self)
+        vbox = wx.BoxSizer(wx.VERTICAL)
+
+        sb = wx.StaticBox(pnl, label='Colors')
+        sbs = wx.StaticBoxSizer(sb, orient=wx.VERTICAL)        
+        sbs.Add(wx.RadioButton(pnl, label='256 Colors', 
+            style=wx.RB_GROUP))
+        sbs.Add(wx.RadioButton(pnl, label='16 Colors'))
+        sbs.Add(wx.RadioButton(pnl, label='2 Colors'))
+        
+        hbox1 = wx.BoxSizer(wx.HORIZONTAL)        
+        hbox1.Add(wx.RadioButton(pnl, label='Custom'))
+        hbox1.Add(wx.TextCtrl(pnl), flag=wx.LEFT, border=5)
+        sbs.Add(hbox1)
+        
+        pnl.SetSizer(sbs)
+       
+        hbox2 = wx.BoxSizer(wx.HORIZONTAL)
+        okButton = wx.Button(self, label='Ok')
+        closeButton = wx.Button(self, label='Close')
+        hbox2.Add(okButton)
+        hbox2.Add(closeButton, flag=wx.LEFT, border=5)
+
+        vbox.Add(pnl, proportion=1, 
+            flag=wx.ALL|wx.EXPAND, border=5)
+        vbox.Add(hbox2, 
+            flag=wx.ALIGN_CENTER|wx.TOP|wx.BOTTOM, border=10)
+
+        self.SetSizer(vbox)
+        
+        okButton.Bind(wx.EVT_BUTTON, self.OnClose)
+        closeButton.Bind(wx.EVT_BUTTON, self.OnClose)
+        
+        
+    def OnClose(self, e):
+        
+        self.Destroy()
+        
+        
+class Example(wx.Frame):
+    
+    def __init__(self, *args, **kw):
+        super(Example, self).__init__(*args, **kw) 
+            
+        self.InitUI()
+        
+        
+    def InitUI(self):    
+    
+        ID_DEPTH = wx.NewId()
+
+        tb = self.CreateToolBar()
+        tb.AddLabelTool(id=ID_DEPTH, label='', 
+            bitmap=wx.Bitmap('color.png'))
+        
+        tb.Realize()
+
+        self.Bind(wx.EVT_TOOL, self.OnChangeDepth, 
+            id=ID_DEPTH)
+
+        self.SetSize((300, 200))
+        self.SetTitle('Custom dialog')
+        self.Centre()
+        self.Show(True)
+        
+        
+    def OnChangeDepth(self, e):
+        
+        chgdep = ChangeDepthDialog(None, 
+            title='Change Color Depth')
+        chgdep.ShowModal()
+        chgdep.Destroy()        
+
+
+def main():
+    
+    ex = wx.App()
+    Example(None)
+    ex.MainLoop()    
+
+
+if __name__ == '__main__':
+    main()
+</pre>
+
+<p>
+In the above example, we have created a custom dialog.
+</p>
+
+<pre class="explanation">
+class ChangeDepthDialog(wx.Dialog):
+    
+    def __init__(self, *args, **kw):
+        super(ChangeDepthDialog, self).__init__(*args, **kw) 
+</pre>
+
+<p>
+In our code example we create a custom ChangeDepthDialog dialog. 
+We inherit from a <code>wx.Dialog</code> widget.
+</p>
+
+<pre class="explanation">
+chgdep = ChangeDepthDialog(None, 
+    title='Change Color Depth')
+chgdep.ShowModal()
+chgdep.Destroy()  
+</pre>
+
+<p>
+We instantiate a <code>ChangeDepthDialog class</code>. Then we call the 
+<code>ShowModal()</code> dialog. We must not forget to destroy 
+our dialog. Notice the visual difference between the dialog and 
+the top level window. The dialog in the following figure 
+has been activated. We cannot work with the toplevel window until 
+the dialog is destroyed. There is a clear difference in the titlebar 
+of the windows.
+</p>
+
+
+<figure>
+<img src="../../img/gui/wxpython/customdialog.png" alt="Custom dialog"> 
+<figcaption>Figure: A custom dialog</figcaption>
+</figure>
+
+
+<p>
+In this chapter, we have covered dialogs. 
+</p>
+
+<div class="hor">
+<script async src="../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- horizontal -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:468px;height:60px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="1734478269"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<footer>
+
+<nav class="center">
+<span class="botNavItem"><a href="http://zetcode.com/">Home</a></span> ‡ <span class="botNavItem"><a href="../index.html">Contents</a></span> ‡ 
+<span class="botNavItem"><a href="#">Top of Page</a></span>
+</nav>
+
+<div class="signature">
+<a href="http://zetcode.com/">ZetCode</a> last modified July 28, 2012  <span class="copyright">&copy; 2007 - 2015 Jan Bodnar</span>
+</div>
+
+</footer>
+
+</div> <!-- content -->
+
+</div> <!-- container -->
+
+</body>
+
+<!-- Mirrored from zetcode.com/wxpython/dialogs/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Aug 2015 19:21:42 GMT -->
+</html>
+

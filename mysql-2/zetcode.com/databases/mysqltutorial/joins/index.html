@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from zetcode.com/databases/mysqltutorial/joins/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Jul 2015 02:47:03 GMT -->
+<head>
+<title>Joining tables in MySQL</title>
+<link rel="stylesheet" href="../../../cfg/format2.css" type="text/css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="MySQL, SQL, Joins, OUTER, INNER, JOIN, LEFT, CROSS, NATURAL">
+<meta name="description" content="In this part of the MySQL tutorial we will
+be joining database tables.">
+<meta name="author" content="Jan Bodnar">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div id="wide_ad" class="ltow">
+<script async src="../../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- 160x600, August 2011 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:600px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="2484182563"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<div class="content">
+
+
+<header>
+
+<nav>
+<a href="http://zetcode.com/" title="Home">Home</a>&#160;
+<a href="../index.html">Contents</a>
+</nav>
+
+</header>
+
+
+<h1>Joining tables in MySQL</h1>
+
+
+<p>
+In this part of the MySQL tutorial, we will join tables in MySQL.
+</p>
+
+<div class="med_rec">
+<script async src="../../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- NewSquare -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:250px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="0364418177"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<p>
+The real power and benefits from relational databases come from joining tables.
+The SQL <code>JOIN</code> clause combines records from two or more tables in a 
+database. There are basically two types of joins: <code>INNER</code> and <code>OUTER</code>.
+</p>
+
+<p>
+In this part of the tutorial, we will work with <code>Customers</code> 
+and <code>Reservations</code> tables. 
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM Customers;
++------------+-------------+
+| CustomerId | Name        |
++------------+-------------+
+|          1 | Paul Novak  |
+|          2 | Terry Neils |
+|          3 | Jack Fonda  |
+|          4 | Tom Willis  |
++------------+-------------+
+</pre>
+
+<p>
+These are values from the <code>Customers</code> table.
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM Reservations;
++----+------------+------------+
+| Id | CustomerId | Day        |
++----+------------+------------+
+|  1 |          1 | 2009-11-22 |
+|  2 |          2 | 2009-11-28 |
+|  3 |          2 | 2009-11-29 |
+|  4 |          1 | 2009-11-29 |
+|  5 |          3 | 2009-12-02 |
++----+------------+------------+
+
+</pre>
+
+<p>
+These are values from the <code>Reservations</code> tables.
+</p>
+
+<p>
+The <code>Customers</code> and <code>Reservations</code> have both a 
+<code>CustomerId</code> column. It is the relationship column. If it has the 
+same name in both tables, we can use <code>USING (CustomerId) syntax</code>. 
+If the name differs, say we had <code>CustomerId</code> and <code>CId</code>, 
+we would use the <code>ON Customers.CustomerId = Reservations.CId</code> syntax.
+</p>
+
+
+<h2 id="inner">Inner joins</h2>
+
+<p>
+The inner join is the most common type of joins. It is the default 
+join also. The inner join selects only those records from database tables 
+that have matching values. We have three types of <em>INNER JOINS</em>:
+<code>INNER JOIN</code>, <code>NATURAL INNER JOIN</code>, and 
+<code>CROSS INNER JOIN</code>. The <code>INNER</code> keyword can be omitted.
+</p>
+
+
+<h3>INNER JOIN</h3>
+
+<pre class="code">
+mysql> SELECT Name, Day FROM Customers AS C JOIN Reservations 
+    -> AS R ON C.CustomerId=R.CustomerId;
++-------------+------------+
+| Name        | Day        |
++-------------+------------+
+| Paul Novak  | 2009-11-22 |
+| Terry Neils | 2009-11-28 |
+| Terry Neils | 2009-11-29 |
+| Paul Novak  | 2009-11-29 |
+| Jack Fonda  | 2009-12-02 |
++-------------+------------+
+5 rows in set (0.00 sec)
+</pre>
+
+<p>
+In this <code>SELECT</code> statement, we have selected all customers 
+that have made some reservations. Paul Novak and Terry Neils made two 
+reservations. Jack Fonda has made one. Tom Willis is missing, he has 
+not yet made any reservations. Note that we have omitted the 
+<code>INNER</code> keyword.
+</p>
+
+<p>
+The statement is equivalent to the following one:
+</p>
+
+<pre class="code">
+mysql> SELECT Name, Day FROM Customers, Reservations
+    -> WHERE Customers.CustomerId=Reservations.CustomerId;
++-------------+------------+
+| Name        | Day        |
++-------------+------------+
+| Paul Novak  | 2009-11-22 |
+| Terry Neils | 2009-11-28 |
+| Terry Neils | 2009-11-29 |
+| Paul Novak  | 2009-11-29 |
+| Jack Fonda  | 2009-12-02 |
++-------------+------------+
+</pre>
+
+<p>
+We get the same data.
+</p>
+
+
+<h3>CROSS INNER JOIN</h3>
+
+<p>
+The <code>CROSS INNER JOIN</code> combines all records
+from one table with all records from another table. This type of join
+has little practical value. It is also called a Cartesian product of records.
+</p>
+
+<pre class="code">
+mysql> SELECT Name, Day FROM Customers CROSS JOIN Reservations;
++-------------+------------+
+| Name        | Day        |
++-------------+------------+
+| Paul Novak  | 2009-11-22 |
+| Paul Novak  | 2009-11-28 |
+| Paul Novak  | 2009-11-29 |
+| Paul Novak  | 2009-11-29 |
+| Paul Novak  | 2009-12-02 |
+| Terry Neils | 2009-11-22 |
+| Terry Neils | 2009-11-28 |
+| Terry Neils | 2009-11-29 |
+| Terry Neils | 2009-11-29 |
+| Terry Neils | 2009-12-02 |
+| Jack Fonda  | 2009-11-22 |
+...
+</pre>
+
+<p>
+The same result can be achieved with the following SQL statement:
+</p>
+
+<pre>
+SELECT Name, Day FROM Customers, Reservations;
+</pre>
+
+
+<h2 id="outer">Outer joins</h2>
+
+
+<p>
+An <em>outer join</em> does not require each record in the two joined 
+tables to have a matching record. There are three types of outer joins.
+Left outer joins, right outer joins, and full outer joins.
+MySQL does not support full outer joins at the time of the tutorial
+creation.
+</p>
+
+<p>
+As we have already stated above, the inner joins are the most common ones.
+Outer joins may be useful to find out orphaned records. Is a person a 
+customer if he has not made any reservations? Is a reservation valid
+if we cannot match it with a customer?
+</p>
+
+
+<h3>LEFT OUTER JOIN</h3>
+
+<p>
+The <code>LEFT OUTER JOIN</code> returns all values from the left table, even
+if there is no match with the right table. In such rows, there will be 
+<code>NULL</code> values. In other words, left outer join returns all the values 
+from the left table, plus matched values from the right table. Note that the 
+<code>OUTER</code> keyword can be omitted. 
+</p>
+
+<pre class="code">
+mysql> SELECT Name, Day FROM Customers LEFT JOIN Reservations
+    -> ON Customers.CustomerId=Reservations.CustomerId;
++-------------+------------+
+| Name        | Day        |
++-------------+------------+
+| Paul Novak  | 2009-11-22 |
+| Paul Novak  | 2009-11-29 |
+| Terry Neils | 2009-11-28 |
+| Terry Neils | 2009-11-29 |
+| Jack Fonda  | 2009-12-02 |
+| Tom Willis  | NULL       |
++-------------+------------+
+</pre>
+
+<p>
+Here we have all customers with their reservations, plus a customer, 
+who has no reservation. There is <code>NULL</code> value in his row. 
+</p>
+
+<p>
+We can use the <code>USING</code> keyword to achieve the same result.
+This is because the relationship column has the same name in both tables.
+The SQL statement will be less verbose.
+</p>
+
+<pre class="code">
+mysql> SELECT Name, Day FROM Customers LEFT JOIN Reservations
+    -> USING (CustomerId);
++-------------+------------+
+| Name        | Day        |
++-------------+------------+
+| Paul Novak  | 2009-11-22 |
+| Paul Novak  | 2009-11-29 |
+| Terry Neils | 2009-11-28 |
+| Terry Neils | 2009-11-29 |
+| Jack Fonda  | 2009-12-02 |
+| Tom Willis  | NULL       |
++-------------+------------+
+</pre>
+
+<p>
+Same result, with shorter SQL statement.
+</p>
+
+
+<h3>RIGHT OUTER JOIN</h3>
+
+<p>
+<code>RIGHT OUTER JOIN</code> and <code>RIGHT JOIN</code> are the same.
+It gives all the records match in both tables and all possibilities 
+of the right table. Orphaned right records show <code>NULL</code> on the left.
+</p>
+
+<pre class="code">
+mysql> SELECT Name, Day FROM Customers RIGHT JOIN
+    -> Reservations USING (CustomerId);
++-------------+------------+
+| Name        | Day        |
++-------------+------------+
+| Paul Novak  | 2009-11-22 |
+| Terry Neils | 2009-11-28 |
+| Terry Neils | 2009-11-29 |
+| Paul Novak  | 2009-11-29 |
+| Jack Fonda  | 2009-12-02 |
++-------------+------------+
+</pre>
+
+<p>
+This is an output for the right join of two tables. All the
+records of the table on the right side (Reservations) have a
+matching record on the left side (Customers). 
+</p>
+
+
+<h2 id="natural">Natural Joins</h2>
+
+<p>
+A natural join links all columns in two tables with the same name.
+In our <code>ustomers</code> and <code>Reservations</code> tables, 
+we have a column named <code>CustomerId</code>.
+</p>
+
+<h3>NATURAL INNER JOIN</h3>
+
+<p>
+The <code>NATURAL INNER JOIN</code> automatically uses all the matching 
+column names for the join. In our tables, we have a column named 
+<code>CustomerId</code> in both tables.
+</p>
+
+<pre class="code">
+mysql> SELECT Name, Day FROM Customers NATURAL JOIN Reservations;
++-------------+------------+
+| Name        | Day        |
++-------------+------------+
+| Paul Novak  | 2009-11-22 |
+| Terry Neils | 2009-11-28 |
+| Terry Neils | 2009-11-29 |
+| Paul Novak  | 2009-11-29 |
+| Jack Fonda  | 2009-12-02 |
++-------------+------------+
+</pre>
+
+<p>
+We get the same data. The SQL statement is less verbose. 
+</p>
+
+<h3>NATURAL LEFT OUTER JOIN</h3>
+
+<p>
+The <code>NATURAL LEFT OUTER JOIN</code> gives all the matching records
+from the tables and all other records on the left table. It automatically 
+uses all the matching column names for the join.
+</p>
+
+<pre class="code">
+mysql> SELECT Name, Day FROM Customers 
+    -> NATURAL LEFT JOIN Reservations;
++-------------+------------+
+| Name        | Day        |
++-------------+------------+
+| Paul Novak  | 2009-11-22 |
+| Paul Novak  | 2009-11-29 |
+| Terry Neils | 2009-11-28 |
+| Terry Neils | 2009-11-29 |
+| Jack Fonda  | 2009-12-02 |
+| Tom Willis  | NULL       |
++-------------+------------+
+</pre>
+
+<p>
+Same result, but with fewer key strokes.
+</p>
+
+<h3>NATURAL RIGHT OUTER JOIN</h3>
+
+<p>
+The <code>NATURAL RIGHT OUTER JOIN</code> gives all the matching records
+from the tables and all other records on the right table. It automatically uses 
+matching column names for the join.
+</p>
+
+<pre class="code">
+mysql> SELECT Name, Day FROM Customers
+    -> NATURAL RIGHT JOIN Reservations;
++-------------+------------+
+| Name        | Day        |
++-------------+------------+
+| Paul Novak  | 2009-11-22 |
+| Terry Neils | 2009-11-28 |
+| Terry Neils | 2009-11-29 |
+| Paul Novak  | 2009-11-29 |
+| Jack Fonda  | 2009-12-02 |
++-------------+------------+
+</pre>
+
+
+
+<h2 id="recap">Quick recap</h2>
+
+<p>
+Next we will create two small tables to recap what we have learned here.
+</p>
+
+<pre class="code">
+mysql> CREATE TABLE AA(A INTEGER);
+mysql> CREATE TABLE BB(B INTEGER);
+mysql> INSERT INTO AA VALUES(1);
+mysql> INSERT INTO AA VALUES(2);
+mysql> INSERT INTO AA VALUES(3);
+mysql> INSERT INTO AA VALUES(4);
+mysql> INSERT INTO BB VALUES(3);
+mysql> INSERT INTO BB VALUES(4);
+mysql> INSERT INTO BB VALUES(5);
+mysql> INSERT INTO BB VALUES(6);
+
+mysql> SELECT * FROM AA;
++------+
+| A    |
++------+
+|    1 |
+|    2 |
+|    3 |
+|    4 |
++------+
+
+mysql> SELECT * FROM BB;
++------+
+| B    |
++------+
+|    3 |
+|    4 |
+|    5 |
+|    6 |
++------+
+</pre>
+
+<p>
+We have created and populated two tables with numerical data. 
+Table <code>AA</code> has two unique numbers (1, 2), table <code>BB</code> 
+has also two unique numbers (5, 6). They share two numbers (3, 4).
+</p>
+
+<h3>INNER JOIN</h3>
+
+<pre class="code">
+mysql> SELECT * FROM AA JOIN BB ON A = B;
++------+------+
+| A    | B    |
++------+------+
+|    3 |    3 |
+|    4 |    4 |
++------+------+
+</pre>
+
+<p>
+This is a <code>INNER JOIN</code> on both tables. We 
+get only the matching values from both tables.
+</p>
+
+
+<h3>LEFT OUTER JOIN</h3>
+
+<pre class="code">
+mysql> SELECT * FROM AA LEFT JOIN BB ON A = B;
++------+------+
+| A    | B    |
++------+------+
+|    1 | NULL |
+|    2 | NULL |
+|    3 |    3 |
+|    4 |    4 |
++------+------+
+</pre>
+
+<p>
+This is a <code>LEFT OUTER JOIN</code> on both tables. We 
+get the matching values plus the values from the left table 
+that do not have a mathing record.
+</p>
+
+
+<h3>RIGHT OUTER JOIN</h3>
+
+<pre class="code">
+mysql> SELECT * FROM AA RIGHT JOIN BB ON A = B;
++------+------+
+| A    | B    |
++------+------+
+|    3 |    3 |
+|    4 |    4 |
+| NULL |    5 |
+| NULL |    6 |
++------+------+
+</pre>
+
+<p>
+This is a <code>RIGHT OUTER JOIN</code> on both tables. We 
+get the matching values plus the values from the right table 
+that do not have a matching record.
+</p>
+
+<p>
+In this part of the MySQL tutorial, we were joining tables.
+</p>
+
+
+<footer>
+
+<nav class="center">
+<span class="botNavItem"><a href="http://zetcode.com/">Home</a></span> ‡ <span class="botNavItem"><a href="../index.html">Contents</a></span> ‡ 
+<span class="botNavItem"><a href="#">Top of Page</a></span>
+</nav>
+
+<div class="signature">
+<a href="http://zetcode.com/">ZetCode</a> last modified January 18, 2011  <span class="copyright">&copy; 2007 - 2015 Jan Bodnar</span>
+</div>
+
+</footer>
+
+</div> <!-- content -->
+
+</div> <!-- container -->
+
+</body>
+
+<!-- Mirrored from zetcode.com/databases/mysqltutorial/joins/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Jul 2015 02:47:03 GMT -->
+</html>
+

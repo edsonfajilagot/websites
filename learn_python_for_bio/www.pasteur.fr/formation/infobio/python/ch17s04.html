@@ -1,0 +1,83 @@
+<html>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch17s04.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:35 GMT -->
+<head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>17.4. Parsing</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><meta name="keywords" content="python, biology, bioinformatics, programming, computational biology"><link rel="home" href="index-2.html" title="Introduction to Programming using Python"><link rel="up" href="ch17.html" title="Chapter 17. Scripting"><link rel="previous" href="ch17s03.html" title="17.3. Parsing command line options with&#xA;      getopt"><link rel="next" href="ch17s05.html" title="17.5. Searching for patterns."></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">17.4. Parsing</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch17s03.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><th width="60%" align="center">Chapter 17. Scripting</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch17s05.html"><img src="images/next.png" alt="Next"></a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="sect_scripting_parsing"></a>17.4. Parsing</h2></div></div><p>
+	  In Bioinformatics, parsing is very important, since it enables to
+    extract informations from data files or to extract results
+    produced by various analysis programs, and to make 
+    them available in your programs. For instance, a Blast parser will
+    transform a text output into a list of hits and their alignment,
+    that can be made available as a data structure, such as, for example,
+    Biopython <tt>Bio.Blast.Record</tt> objects, that you
+    can use in a Python program.
+    </p><p>
+    The purpose of this section is not to present everything about
+    parsing, but just to introduce some basic notions.
+    </p><p>
+      Parsing means analyzing a text and producing structured data in
+      a form that is useful for programs. It can be a list of
+      strings, a set of classes instances, or just a boolean result:
+      this depends on the needs and the parsing system you are using.
+      An important aspect of parsing is the architecture that is used
+      to process the text that you want to analyze. 
+
+      </p><div class="itemizedlist"><ul type="disc"><li><p>
+      Parsing can be done by just reading a file or a stream line by
+      line, and by looking for the occurrence(s) of a word, or a
+      pattern. In <a href="ch17s04.html#fig_parsing_manual" title="Figure 17.1. Manual parsing">Figure 17.1</a>, lines are
+      searched for a header pattern, or a hit pattern, and processed
+      accordingly. 
+
+	  </p><div class="figure"><a name="fig_parsing_manual"></a><p class="title"><b>Figure 17.1. Manual parsing</b></p><div class="mediaobject"><img src="images/parsing_manual.png"></div></div><p>
+
+      </p></li><li><p>
+
+      You can tell an external component which set of words you are
+      interested in, by providing a description of set of words to be
+      found. You then feed this component a document to parse, and
+      wait him to tell you when these words are found as well as
+      sending you the occurrences. This      kind of system 
+      is said to be <span class="emphasis"><em>event-driven</em></span>, and XML
+      provides tools for such type of parsing.
+
+	  </p><div class="figure"><a name="fig_parsing_event"></a><p class="title"><b>Figure 17.2. Event-based parsing</b></p><div class="mediaobject"><img src="images/parsing_event.png"></div></div><p>
+      </p></li><li><p>
+      You can describe the whole document by set of hierarchical
+      subparts, and associate to each sub-part actions to be
+      automatically executed by a parsing engine. <a href="ch17s04.html#fig_parsing_deco_grammar" title="Figure 17.3. Parsing: decorated grammar">Figure 17.3</a>
+      shows such a system to parse a Blast report. A Blast report is
+      described as a header followed by a list of hits. A hit is
+      described as a score and a list of HSP, and a HSP is described as a
+      score and a list of alignments.  You define
+      these subparts by a set of 
+      <span class="emphasis"><em>rules</em></span>, sometimes using patterns, in what is
+      usually called a <span class="emphasis"><em>grammar</em></span>, or even a
+      <span class="emphasis"><em>decorated</em></span> grammar, since you decorate each
+      sub-part with an associated action. The
+      <tt>lex</tt> and <tt>yacc</tt> system is
+      such a parsing engine.
+
+	  </p><div class="figure"><a name="fig_parsing_deco_grammar"></a><p class="title"><b>Figure 17.3. Parsing: decorated grammar</b></p><div class="mediaobject"><img src="images/parsing_deco_grammar.png"></div></div><p>
+      </p></li><li><p>
+      You can have a parsing engine process your data according to a
+      grammar, and returns a hierarchical data structure in a form
+      that your program can understand (for instance, in Python, as a
+      set of objects). The XML/DOM engine behaves like this.
+
+	  </p><div class="figure"><a name="fig_parsing_doc"></a><p class="title"><b>Figure 17.4. Parsing result as a hierarchical document</b></p><div class="mediaobject"><img src="images/parsing_doc.png"></div></div><p>
+
+      </p></li></ul></div><p>
+
+      So, in all the cases, there is an engine driving the whole
+      process, be it a simple loop or a specialized component.
+
+      In this chapter, we will just do some "manual" parsing with
+      patterns that are introduced in <a href="ch17s05.html" title="17.5. Searching for patterns.">Section 17.5</a>, as well as  some
+      event-driven parsing will be done as a 
+      practical work on abstract frameworks (see <a href="ch19s04.html#exo_abstract_fmk_enz" title="Exercise 19.4. Example of an abstract framework:&#xA;			Enzyme parser">Exercise 19.4</a>), and during the Web/XML
+      course. 
+      </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch17s03.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch17.html"><img src="images/up.png" alt="Up"></a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch17s05.html"><img src="images/next.png" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">17.3. Parsing command line options with
+      getopt&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index-2.html"><img src="images/home.png" alt="Home"></a></td><td width="40%" align="right" valign="top">&nbsp;17.5. Searching for patterns.</td></tr></table></div></body>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch17s04.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:36 GMT -->
+</html>

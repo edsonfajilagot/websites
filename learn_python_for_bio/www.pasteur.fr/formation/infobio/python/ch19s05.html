@@ -1,0 +1,145 @@
+<html>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch19s05.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:41 GMT -->
+<head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>19.5. Flexibility</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><meta name="keywords" content="python, biology, bioinformatics, programming, computational biology"><link rel="home" href="index-2.html" title="Introduction to Programming using Python"><link rel="up" href="ch19.html" title="Chapter 19. Object-oriented design"><link rel="previous" href="ch19s04.html" title="19.4. Inheritance: sharing code among classes"><link rel="next" href="ch19s06.html" title="19.6. Object-oriented design patterns"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">19.5. Flexibility</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch19s04.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><th width="60%" align="center">Chapter 19. Object-oriented design</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch19s06.html"><img src="images/next.png" alt="Next"></a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="sect_class_flex"></a>19.5. Flexibility</h2></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="d0e9961"></a>19.5.1. Summary of mechanisms for flexibility in Python</h3></div></div><p>
+      Earlier, in <a href="ch19s02.html#sect_comp_reuse" title="19.2.5. Reusability">Section 19.2.5</a>, we have seen that one of the
+	powerful properties a software piece can have is to be
+	reusable. We also concluded that the more flexible it is, the
+	more general and thus reusable it will be.
+	Let us now summarize some mechanisms in object-oriented
+	programming that help in achieving more flexibility.
+	
+	</p><div class="itemizedlist"><ul type="disc"><li><span class="emphasis"><em>Genericity</em></span>: genericity (as available
+	      in the ADA programming language), is a technique to
+	      define parameters for a 
+	      module, exactly as you define parameters for a function,
+	      thus making the module more general.  For instance, you
+	      can define the type of an element of a Table module,
+	      or the function to move to the next item, as being
+	      generic. There is no specific syntax in Python to
+	      define generic components, but in a way, it is not
+	      really necessary because Python is dynamically typed,
+	      and can handle functions as parameters for other
+	      functions. 
+
+	  </li><li><span class="emphasis"><em>Inheritance</em></span>: as we have just seen
+	in <a href="ch19s04.html" title="19.4. Inheritance: sharing code among classes">Section 19.4</a> this describes the
+	      ability, in object-oriented programming, to derive a
+	      class from another, either to extend it or to specialize
+	      it. 
+
+	  </li><li><span class="emphasis"><em>Overloading</em></span>, which refers to the
+	      possibility for an operator or a method to behave
+	      differently according to the actual data types of their
+	      operands or arguments. This feature does not directly
+	      address the problem of flexibility: it is rather an
+	      elegant syntactic mean not to have different operators
+	      or names to perform similar tasks on different objects
+	      or sets of objects. In this sense, it is actually a form
+	      of polymorphism. In object-oriented programming,
+	      overloading moreover exactly means being able to
+	      redefine a method in a derived class, thus enabling
+	      polymorphism of instances: given an instance, it is
+	      possible that you do not know exactly to which class in
+	      a hierarchy it belongs (e.g
+	      <tt>DNA</tt> or
+	      <tt>Protein</tt>). In other
+	      programming languages, such as Java, there is 
+	  another kind of overloading: it is possible,
+	  <span class="emphasis"><em>within the same class</em></span>, to have several
+	  definitions of the same method, but with different
+	  <span class="emphasis"><em>signatures</em></span>, i.e a different set of
+	  parameters. This does not exist in Python, and as described
+	      below (see <a href="ch19s05.html#sect_manual_over" title="19.5.2. Manual overloading">Section 19.5.2</a>), you have to handle it manually.
+	      
+	      
+	  </li><li><span class="emphasis"><em>Polymorphism</em></span>: refers to the
+	      possibility for something to be of several forms, e.g,
+	      for an object to be of any type. In Python, for
+	      instance, lists are polymorphic, since you can put items
+	      of any type in a list. Overloading is one aspect of
+	      polymorphism, polymorphism of methods. Polymorphism
+	      brings a lot of flexibility, just only because you do
+	      not have to define as many classes as potential data
+	      type for it, as you would have to do in statically typed
+	      languages. In this sense, Python helps in designing more
+	      simple classes frameworks.
+	      
+	  </li></ul></div><p>
+
+	  Some of these techniques, mainly inheritance, are available
+	in Python, other, such as genericity and overloading, are not,
+	or in a restricted way.
+
+      </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="sect_manual_over"></a>19.5.2. Manual overloading</h3></div></div><p>
+      
+	  If you want a
+	  method to behave differently according to the parameters,
+	  you must either create subclasses or write the code to
+	  analyze the parameters yourself. 
+	  In <a href="ch19s05.html#exa_class_curve_over" title="Example 19.5. Curve class: manual overloading">Example 19.5</a>, there is an example a
+	  method dealing with different types of parameters, that are
+	  manually handled.
+
+	</p><div class="example"><a name="exa_class_curve_over"></a><p class="title"><b>Example 19.5. <tt>Curve</tt> class: manual overloading</b></p><p>
+	    </p><div class="programlistingco"><pre class="programlisting">
+    def __getitem__(self, key):
+        """
+        Extended access to the curve.
+        c[3]
+        c['toto']
+        c['x&lt;100']
+        c['x==y']
+        """
+        _x = []
+        _y = []
+        _result = None
+        if type(key) is ListType:                                         <span class="co"><img src="images/callouts/1.png" alt="(1)"></span>
+            _x = key
+            _x.sort()
+            _y = self.y(_x)
+            _result = Curve(zip(_x, _y))
+        elif type(key) is SliceType:                                      <span class="co"><img src="images/callouts/2.png" alt="(2)"></span>
+            _x = self._range_x(key.start, key.stop)
+            _y = apply(self.y, _x)
+            if _x and _y:
+                _result = Curve(zip(_x, _y))
+        elif self._curve.has_key(key):                                    <span class="co"><img src="images/callouts/3.png" alt="(3)"></span>
+            _result = self._curve[key]
+        elif type(key) is StringType:                                     <span class="co"><img src="images/callouts/4.png" alt="(4)"></span>
+            _x = self._tag_x(key)
+            if len(_x) &gt; 0:                                               <span class="co"><img src="images/callouts/5.png" alt="(5)"></span>
+                _x.sort()
+                _y = self.y(_x)
+                _result = Curve(zip(_x, _y))
+            else:                                                         <span class="co"><img src="images/callouts/6.png" alt="(6)"></span>
+                _result = self._getexpr(key)
+        if _result is not None:
+            return _result
+        
+	    </pre><div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><img src="images/callouts/1.png" alt="1" border="0"></td><td valign="top" align="left"><p>Recognizes the argument as a list.</p></td></tr><tr><td width="5%" valign="top" align="left"><img src="images/callouts/2.png" alt="2" border="0"></td><td valign="top" align="left"><p>Recognizes the argument as a slice.</p></td></tr><tr><td width="5%" valign="top" align="left"><img src="images/callouts/3.png" alt="3" border="0"></td><td valign="top" align="left"><p>Recognizes the argument as an index.</p></td></tr><tr><td width="5%" valign="top" align="left"><img src="images/callouts/4.png" alt="4" border="0"></td><td valign="top" align="left"><p>Recognizes the argument as a string, that is going to be further analyzed as a tag name or an expression.</p></td></tr><tr><td width="5%" valign="top" align="left"><img src="images/callouts/5.png" alt="5" border="0"></td><td valign="top" align="left"><p>Recognizes the argument as a tag name.</p></td></tr><tr><td width="5%" valign="top" align="left"><img src="images/callouts/6.png" alt="6" border="0"></td><td valign="top" align="left"><p>Recognizes the argument as an expression, such as 'x&lt; y' or 'y&gt;10'.</p></td></tr></table></div></div><p>
+	    Python is not able to do this analysis automatically,
+	    because it is dynamically typed. You do not have any mean
+	    to specify the <span class="emphasis"><em>type</em></span> of the parameter.
+	    In a language providing static typing and full method
+	    overloading, i.e also within the same class, you could have several
+	    <tt>__getitem__</tt> definitions that would
+	    look like:
+
+	    <pre class="programlisting">
+    def __getitem__(self, key: List):
+         ...
+    def __getitem__(self, key: Slice):
+         ...
+    def __getitem__(self, key: String):
+         ...
+	    </pre>
+	    As you can notice, this is of course not valid Python
+	    code, since there is no possibility to define the type of
+	    a parameter in Python.
+       </p></div><p>
+
+       </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch19s04.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch19.html"><img src="images/up.png" alt="Up"></a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch19s06.html"><img src="images/next.png" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">19.4. Inheritance: sharing code among classes&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index-2.html"><img src="images/home.png" alt="Home"></a></td><td width="40%" align="right" valign="top">&nbsp;19.6. Object-oriented design patterns</td></tr></table></div></body>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch19s05.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:42 GMT -->
+</html>

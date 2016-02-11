@@ -1,0 +1,366 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+<!-- Mirrored from www.tangowithdjango.com/book17/chapters/login_redux.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 10 Jan 2016 04:10:21 GMT -->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>12. User Authentication with Django-Registration-Redux &mdash; How to Tango with Django 1.7</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/twd.ico"/>
+    <link rel="top" title="How to Tango with Django 1.7" href="../index-2.html" />
+    <link rel="next" title="13. Bootstrapping Rango" href="bootstrap.html" />
+    <link rel="prev" title="11. Cookies and Sessions" href="cookie.html" />
+ <style type="text/css">
+	img{
+	    width: 85%; /* you can use % */
+	    height: auto;
+	}
+	
+	table {
+		margin: auto;
+	}
+	
+	p.caption {
+		font-size: 10pt;
+		font-style: italic;
+	}
+ </style>
+ <script type="text/javascript">
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','../../../www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-44397330-1', 'tangowithdjango.com');
+  ga('send', 'pageview');
+     
+
+  </script>      
+
+  </head>
+  <body role="document">
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        
+        <li class="right" >
+          <a href="bootstrap.html" title="13. Bootstrapping Rango"
+             accesskey="N">next</a>
+          </li>
+		
+        <li class="right" >
+          <a href="cookie.html" title="11. Cookies and Sessions"
+             accesskey="P">previous</a>
+          </li>
+		
+        <li><a href="../index-2.html">How to Tango with Django 1.7</a> &raquo;</li> 
+
+      </ul>
+
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index-2.html">
+              <img class="logo" src="../_static/twd200x200.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index-2.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">12. User Authentication with Django-Registration-Redux</a><ul>
+<li><a class="reference internal" href="#setting-up-django-registration-redux">12.1. Setting up Django Registration Redux</a></li>
+<li><a class="reference internal" href="#functionality-and-url-mapping">12.2. Functionality and URL mapping</a></li>
+<li><a class="reference internal" href="#setting-up-the-templates">12.3. Setting up the Templates</a><ul>
+<li><a class="reference internal" href="#login-template">12.3.1. Login Template</a></li>
+<li><a class="reference internal" href="#registration-template">12.3.2. Registration Template</a></li>
+<li><a class="reference internal" href="#registration-complete-template">12.3.3. Registration Complete Template</a></li>
+<li><a class="reference internal" href="#logout-template">12.3.4. Logout Template</a></li>
+<li><a class="reference internal" href="#try-out-the-registration-process">12.3.5. Try out the Registration Process</a></li>
+<li><a class="reference internal" href="#refactoring-your-project">12.3.6. Refactoring your project</a></li>
+<li><a class="reference internal" href="#modifying-the-registration-flow">12.3.7. Modifying the Registration Flow</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exercises">12.4. Exercises</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="cookie.html"
+                        title="previous chapter">11. Cookies and Sessions</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="bootstrap.html"
+                        title="next chapter">13. Bootstrapping Rango</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/chapters/login_redux.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="http://www.tangowithdjango.com/book17/search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="user-authentication-with-django-registration-redux">
+<span id="login-redux-label"></span><h1>12. User Authentication with Django-Registration-Redux<a class="headerlink" href="#user-authentication-with-django-registration-redux" title="Permalink to this headline">¶</a></h1>
+<p>There are numerous add-on applications that have been developed that provide login, registration and authentication mechanisms. Since most applications will provide such facilitaties there is little point re-writing / re-inventing the urls, views, and templates. In this chapter, we are going to use the package <code class="docutils literal"><span class="pre">django-registration-redux</span></code> to provide these facilities. This will mean we will need re-factor our code - however, it will provide with some experience of using external applications, how easily they can be plugged into your Django project, along with login facilities with all the bells and whistles. It will also make our application much cleaner.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This chapter is not neccessary. You can skip it, but we will be assuming that you have upgraded the authentication mechanisms, in subsequent chapters.</p>
+</div>
+<div class="section" id="setting-up-django-registration-redux">
+<h2>12.1. Setting up Django Registration Redux<a class="headerlink" href="#setting-up-django-registration-redux" title="Permalink to this headline">¶</a></h2>
+<p>To start we need to first install <code class="docutils literal"><span class="pre">django-registration-redux</span></code>:</p>
+<blockquote>
+<div>$ pip install django-registration-redux</div></blockquote>
+<p>Now that it is installed, we need to tell Django that we will be using this application. Open up the <code class="docutils literal"><span class="pre">settings.py</span></code> file, and update the <code class="docutils literal"><span class="pre">INSTALLED_APPS</span></code> tuple:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">(</span>
+<span class="s">&#39;django.contrib.admin&#39;</span><span class="p">,</span>
+<span class="s">&#39;django.contrib.auth&#39;</span><span class="p">,</span>
+<span class="s">&#39;django.contrib.contenttypes&#39;</span><span class="p">,</span>
+<span class="s">&#39;django.contrib.sessions&#39;</span><span class="p">,</span>
+<span class="s">&#39;django.contrib.messages&#39;</span><span class="p">,</span>
+<span class="s">&#39;django.contrib.staticfiles&#39;</span><span class="p">,</span>
+<span class="s">&#39;rango&#39;</span><span class="p">,</span>
+<span class="s">&#39;registration&#39;</span><span class="p">,</span> <span class="c"># add in the registration package</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>While you are in the <code class="docutils literal"><span class="pre">settings.py</span></code> file you can also add:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">REGISTRATION_OPEN</span> <span class="o">=</span> <span class="bp">True</span>                <span class="c"># If True, users can register</span>
+<span class="n">ACCOUNT_ACTIVATION_DAYS</span> <span class="o">=</span> <span class="mi">7</span>     <span class="c"># One-week activation window; you may, of course, use a different value.</span>
+<span class="n">REGISTRATION_AUTO_LOGIN</span> <span class="o">=</span> <span class="bp">True</span>  <span class="c"># If True, the user will be automatically logged in.</span>
+<span class="n">LOGIN_REDIRECT_URL</span> <span class="o">=</span> <span class="s">&#39;/rango/&#39;</span>  <span class="c"># The page you want users to arrive at after they successful log in</span>
+<span class="n">LOGIN_URL</span> <span class="o">=</span> <span class="s">&#39;/accounts/login/&#39;</span>  <span class="c"># The page users are directed to if they are not logged in,</span>
+                                                                <span class="c"># and are trying to access pages requiring authentication</span>
+</pre></div>
+</div>
+<p>These settings should be self explanatory. Now, in <code class="docutils literal"><span class="pre">tango_with_django_project/urls.py</span></code> you can update the <code class="docutils literal"><span class="pre">urlpatterns</span></code> so it includes a reference to the registration package:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">urlpatterns</span> <span class="o">=</span> <span class="n">patterns</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+
+<span class="n">url</span><span class="p">(</span><span class="s">r&#39;^admin/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">)),</span>
+<span class="n">url</span><span class="p">(</span><span class="s">r&#39;^rango/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;rango.urls&#39;</span><span class="p">)),</span>
+<span class="n">url</span><span class="p">(</span><span class="s">r&#39;^accounts/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;registration.backends.simple.urls&#39;</span><span class="p">)),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">django-registration-redux</span></code> package provides a number of different registration backends, depending on your needs. For example you may want a two-step process, where user are sent a confirmation email, and a verification link. Here we will be using the simple one-step registration process, where a user sets up their account by entering in a username, email, and password, and is automatically logged in.</p>
+</div>
+<div class="section" id="functionality-and-url-mapping">
+<h2>12.2. Functionality and URL mapping<a class="headerlink" href="#functionality-and-url-mapping" title="Permalink to this headline">¶</a></h2>
+<p>The Django Registration Redux package provides the machinery for numerous functions. In the <code class="docutils literal"><span class="pre">registration.backend.simple.urls</span></code>, it provides:</p>
+<ul class="simple">
+<li>registration  -&gt; <code class="docutils literal"><span class="pre">/accounts/register/</span></code></li>
+<li>registration complete -&gt; <code class="docutils literal"><span class="pre">/accounts/register/complete</span></code></li>
+<li>login  -&gt; <code class="docutils literal"><span class="pre">/accounts/login/</span></code></li>
+<li>logout  -&gt; <code class="docutils literal"><span class="pre">/accounts/logout/</span></code></li>
+<li>password change -&gt; <code class="docutils literal"><span class="pre">/password/change/</span></code></li>
+<li>password reset -&gt; <code class="docutils literal"><span class="pre">/password/reset/</span></code></li>
+</ul>
+<p>While in the <code class="docutils literal"><span class="pre">registration.backends.default.urls</span></code> it also provides the functions for activating the account in a two stage process:</p>
+<ul>
+<li><p class="first">activation complete (used in the two-step registration) -&gt; <code class="docutils literal"><span class="pre">activate/complete/</span></code></p>
+</li>
+<li><p class="first">activate (used if the account actiona fails) -&gt; <code class="docutils literal"><span class="pre">activate/&lt;activation_key&gt;/</span></code></p>
+</li>
+<li><p class="first">activation email (notifies the user an activation email has been sent out)</p>
+<blockquote>
+<div><ul class="simple">
+<li>activation email body (a text file, that contains the activation email text)</li>
+<li>activation email subject (a text file, that contains the subject line of the activation email)</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<p>Now the catch. While Django Registration Redux provides all this functionality, it does not provide the templates. So we need to provide the templates associated with each view.</p>
+</div>
+<div class="section" id="setting-up-the-templates">
+<h2>12.3. Setting up the Templates<a class="headerlink" href="#setting-up-the-templates" title="Permalink to this headline">¶</a></h2>
+<p>In the quickstart guide, see <a class="reference external" href="https://django-registration-redux.readthedocs.org/en/latest/quickstart.html">https://django-registration-redux.readthedocs.org/en/latest/quickstart.html</a>, it provides an overveiw of what templates are required, but it is not immediately clear what goes within each template.</p>
+<p>However, it is possible to download a set of tempaltes from Anders Hofstee&#8217;s GitHub account, see
+<a class="reference external" href="https://github.com/macdhuibh/django-registration-templates">https://github.com/macdhuibh/django-registration-templates</a>, and from here you can see what goes into the templates. We will use these templates as our guide here.</p>
+<p>First, create a new directory in the <code class="docutils literal"><span class="pre">templates</span></code> directory, called <code class="docutils literal"><span class="pre">registration</span></code>. This is where we will house all the pages associated with the Django Registration Redux application, as it will look in this directory for the templates it requires.</p>
+<div class="section" id="login-template">
+<h3>12.3.1. Login Template<a class="headerlink" href="#login-template" title="Permalink to this headline">¶</a></h3>
+<p>In <code class="docutils literal"><span class="pre">templates/registration</span></code> create the file, <code class="docutils literal"><span class="pre">login.html</span></code> with the following code:</p>
+<div class="highlight-html"><div class="highlight"><pre>{% extends &quot;rango/base.html&quot; %}
+
+{% block body_block %}
+<span class="nt">&lt;h1&gt;</span>Login<span class="nt">&lt;/h1&gt;</span>
+        <span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">&quot;post&quot;</span> <span class="na">action=</span><span class="s">&quot;.&quot;</span><span class="nt">&gt;</span>
+                {% csrf_token %}
+                {{ form.as_p }}
+
+                <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span> <span class="na">value=</span><span class="s">&quot;Log in&quot;</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name=</span><span class="s">&quot;next&quot;</span> <span class="na">value=</span><span class="s">&quot;{{ next }}&quot;</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;/form&gt;</span>
+
+        <span class="nt">&lt;p&gt;</span>Not  a member? <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;{% url &#39;registration_register&#39; %}&quot;</span><span class="nt">&gt;</span>Register<span class="nt">&lt;/a&gt;</span>!<span class="nt">&lt;/p&gt;</span>
+{% endblock %}
+</pre></div>
+</div>
+<p>Notice that whenever a url is referenced, the <code class="docutils literal"><span class="pre">url</span></code> template tag is used to reference it. If you visit, <a class="reference external" href="http://127.0.0.1:8000/accounts/">http://127.0.0.1:8000/accounts/</a> then you will see the list of url mappings, and the names assocaited with each url.</p>
+</div>
+<div class="section" id="registration-template">
+<h3>12.3.2. Registration Template<a class="headerlink" href="#registration-template" title="Permalink to this headline">¶</a></h3>
+<p>In <code class="docutils literal"><span class="pre">templates/registration</span></code> create the file, <code class="docutils literal"><span class="pre">registration_form.html</span></code> with the following code:</p>
+<div class="highlight-html"><div class="highlight"><pre>{% extends &quot;rango/base.html&quot; %}
+
+
+{% block body_block %}
+<span class="nt">&lt;h1&gt;</span>Register Here<span class="nt">&lt;/h1&gt;</span>
+        <span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">&quot;post&quot;</span> <span class="na">action=</span><span class="s">&quot;.&quot;</span><span class="nt">&gt;</span>
+                {% csrf_token %}
+                {{ form.as_p }}
+
+                <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span> <span class="na">value=</span><span class="s">&quot;Submit&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;/form&gt;</span>
+{% endblock %}
+</pre></div>
+</div>
+</div>
+<div class="section" id="registration-complete-template">
+<h3>12.3.3. Registration Complete Template<a class="headerlink" href="#registration-complete-template" title="Permalink to this headline">¶</a></h3>
+<p>In <code class="docutils literal"><span class="pre">templates/registration</span></code> create the file, <code class="docutils literal"><span class="pre">registration_complete.html</span></code> with the following code:</p>
+<div class="highlight-html"><div class="highlight"><pre>{% extends &quot;rango/base.html&quot; %}
+
+
+{% block body_block %}
+<span class="nt">&lt;h1&gt;</span>Registration Complete<span class="nt">&lt;/h1&gt;</span>
+        <span class="nt">&lt;p&gt;</span>You are now registered<span class="nt">&lt;/p&gt;</span>
+{% endblock %}
+</pre></div>
+</div>
+</div>
+<div class="section" id="logout-template">
+<h3>12.3.4. Logout Template<a class="headerlink" href="#logout-template" title="Permalink to this headline">¶</a></h3>
+<p>In <code class="docutils literal"><span class="pre">templates/registration</span></code> create the file, <code class="docutils literal"><span class="pre">logout.html</span></code> with the following code:</p>
+<div class="highlight-html"><div class="highlight"><pre>{% extends &quot;rango/base.html&quot; %}
+
+
+{% block body_block %}
+<span class="nt">&lt;h1&gt;</span>Logged Out<span class="nt">&lt;/h1&gt;</span>
+        <span class="nt">&lt;p&gt;</span>You are now logged out.<span class="nt">&lt;/p&gt;</span>
+{% endblock %}
+</pre></div>
+</div>
+</div>
+<div class="section" id="try-out-the-registration-process">
+<h3>12.3.5. Try out the Registration Process<a class="headerlink" href="#try-out-the-registration-process" title="Permalink to this headline">¶</a></h3>
+<p>Run the runserver and visit: <a class="reference external" href="http://127.0.0.1:8000/accounts/register/">http://127.0.0.1:8000/accounts/register/</a></p>
+<p>Note how the registration form contains two fields for password - so that it can be checked. Try registering, but enter different passwords.</p>
+<p>While this works, not everything is hooked up, and we still have some legacy code.</p>
+</div>
+<div class="section" id="refactoring-your-project">
+<h3>12.3.6. Refactoring your project<a class="headerlink" href="#refactoring-your-project" title="Permalink to this headline">¶</a></h3>
+<p>Now you will need to update the <code class="docutils literal"><span class="pre">base.html</span></code> so that the new registration url/views are used:</p>
+<ul class="simple">
+<li>Update register to point to <code class="docutils literal"><span class="pre">&lt;a</span> <span class="pre">href=&quot;{%</span> <span class="pre">url</span> <span class="pre">'registration_register'</span> <span class="pre">%}&quot;&gt;</span></code></li>
+<li>login to point to <code class="docutils literal"><span class="pre">&lt;a</span> <span class="pre">href=&quot;{%</span> <span class="pre">url</span> <span class="pre">'auth_login'</span> <span class="pre">%}&quot;&gt;</span></code>, and</li>
+<li>logout to point to <code class="docutils literal"><span class="pre">&lt;a</span> <span class="pre">href=&quot;{%</span> <span class="pre">url</span> <span class="pre">'auth_logout'</span> <span class="pre">%}?next=/rango/&quot;&gt;</span></code></li>
+<li>In <code class="docutils literal"><span class="pre">settings.py</span></code>, update <code class="docutils literal"><span class="pre">LOGIN_URL</span></code> to be <code class="docutils literal"><span class="pre">'/accounts/login/'</span></code>.</li>
+</ul>
+<p>Notice that for the logout, we have included a <code class="docutils literal"><span class="pre">?next=/rango/</span></code>. This is so when the user logs out, it will redirect them to the index page of rango. If we exclude it, then they will be directed to the log out page (but that would not be very nice).</p>
+<p>Next de-commission the <code class="docutils literal"><span class="pre">register</span></code>,  <code class="docutils literal"><span class="pre">login</span></code>, <code class="docutils literal"><span class="pre">logout</span></code> functionality from the
+<code class="docutils literal"><span class="pre">rango</span></code> application, i.e. remove the urls, views, and templates (or comment them out).</p>
+</div>
+<div class="section" id="modifying-the-registration-flow">
+<h3>12.3.7. Modifying the Registration Flow<a class="headerlink" href="#modifying-the-registration-flow" title="Permalink to this headline">¶</a></h3>
+<p>At the moment, when users register, it takes them to the registration complete page. This feels a bit clunky, so instead, we can take them to the main index page. This can be done by overriding the <code class="docutils literal"><span class="pre">RegistrationView</span></code> provided by <code class="docutils literal"><span class="pre">registration.backends.simple.views</span></code>. To do this, the <code class="docutils literal"><span class="pre">tango_with_django_project/urls.py</span></code>, import  <code class="docutils literal"><span class="pre">RegistrationView</span></code>, add in a new registration class and then update the urlpatterns as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">registration.backends.simple.views</span> <span class="kn">import</span> <span class="n">RegistrationView</span>
+
+<span class="c"># Create a new class that redirects the user to the index page, if successful at logging</span>
+<span class="k">class</span> <span class="nc">MyRegistrationView</span><span class="p">(</span><span class="n">RegistrationView</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_success_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">request</span><span class="p">,</span> <span class="n">user</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&#39;/rango/&#39;</span>
+
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="n">patterns</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^admin/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">)),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^rango/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;rango.urls&#39;</span><span class="p">)),</span>
+        <span class="c">#Add in this url pattern to override the default pattern in accounts.</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^accounts/register/$&#39;</span><span class="p">,</span> <span class="n">MyRegistrationView</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;registration_register&#39;</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^accounts/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;registration.backends.simple.urls&#39;</span><span class="p">)),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>#TODO(leifos): Add in a customized registration form..</p>
+</div>
+</div>
+<div class="section" id="exercises">
+<h2>12.4. Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Provide users with password change functionality</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        
+        <li class="right" >
+          <a href="bootstrap.html" title="13. Bootstrapping Rango"
+             >next</a>
+          </li>
+		
+        <li class="right" >
+          <a href="cookie.html" title="11. Cookies and Sessions"
+             >previous</a>
+          </li>
+		
+        <li><a href="../index-2.html">How to Tango with Django 1.7</a> &raquo;</li> 
+
+      </ul>
+
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2013, Leif Azzopardi and David Maxwell.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+
+<!-- Mirrored from www.tangowithdjango.com/book17/chapters/login_redux.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 10 Jan 2016 04:10:22 GMT -->
+</html>

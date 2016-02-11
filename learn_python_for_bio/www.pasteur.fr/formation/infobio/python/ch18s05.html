@@ -1,0 +1,324 @@
+<html>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch18s05.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:38 GMT -->
+<head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>18.5. Classes and objects in Python: technical aspects</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><meta name="keywords" content="python, biology, bioinformatics, programming, computational biology"><link rel="home" href="index-2.html" title="Introduction to Programming using Python"><link rel="up" href="ch18.html" title="Chapter 18. Object-oriented programming"><link rel="previous" href="ch18s04.html" title="18.4. Combining objects"><link rel="next" href="ch18s06.html" title="18.6. Solutions"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">18.5. Classes and objects in Python: technical aspects</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch18s04.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><th width="60%" align="center">Chapter 18. Object-oriented programming</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch18s06.html"><img src="images/next.png" alt="Next"></a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="sect_class_obj_python"></a>18.5. Classes and objects in Python: technical aspects</h2></div></div><p>
+      The aim of this section is to clarify technical aspects of
+      classes and objects in Python.
+      </p><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="sect_class_ns"></a>18.5.1. Namespaces</h3></div></div><p>
+	Classes and instances have their own namespaces, that is
+	accessible with the dot ('.') operator. As illustrated by <a href="ch18s05.html#fig_class_inst_ns" title="Figure 18.5. Classes and instances namespaces.">Figure 18.5</a>, these namespaces are
+	implemented by dictionaries, one for each instance, and one
+	for the class (see also [Martelli2002]).
+
+	  </p><div class="figure"><a name="fig_class_inst_ns"></a><p class="title"><b>Figure 18.5. Classes and instances namespaces.</b></p><div class="mediaobject"><img src="images/class_inst_ns_dna.png"></div></div><p>
+
+	</p><p><b>Instances attributes.&nbsp;</b>
+
+	As we have learnt, a class may define attributes for its instances.
+	For example, attributes of <tt>s1</tt>, such as the
+	<tt>name</tt>, are directly available
+	through the dot operator:
+	<pre class="programlisting">
+&gt;&gt;&gt; s1.name
+'seq1'
+ 	</pre>
+
+	The dictionary for the instance attributes is also accessible
+	by its <tt>__dict__</tt> variable, or the
+	<tt>vars()</tt> function: 
+	<pre class="programlisting">
+&gt;&gt;&gt; s1.__dict__
+{'seq: 'aaacaacttcgtaagtata', 'name': 'seq1'}
+&gt;&gt;&gt; vars(s1)
+{'seq': 'aaacaacttcgtaagtata', 'name': 'seq1'}
+ 	</pre>
+
+	 The <tt>dir()</tt> command lists more attributes:
+	<pre class="programlisting">
+&gt;&gt;&gt; dir(s1)
+['__doc__', '__init__', '__module__', 'gc', 'translate', 'name', 'seq']
+ 	</pre>
+	    because it is not limited to the dictionary of the
+	    instance. It actually also displays its class
+	    attributes, and recursively the attributes of its class
+	    base classes (see <a href="ch19s04.html" title="19.4. Inheritance: sharing code among classes">Section 19.4</a>).
+        
+	You can add attributes to an instance that were not defined by
+	the class, such as the <tt>annotation</tt> in the
+	following: 
+	<pre class="programlisting">
+&gt;&gt;&gt; s1.annotation = 'an annotation'
+&gt;&gt;&gt; s1.__dict__
+{'seq: 'aaacaacttcgtaagtata', 'name': 'seq1', annotation: 'an annotation'}
+ 	</pre>
+	Adding attributes on-the-fly is not something that is
+	available in many object-oriented programming languages!
+	  Be aware that this type of programming should be used
+	carefully, since by doing this, you start to have instances
+	that have different behaviour, at least if you consider that
+	the list of attributes defines a behaviour. This is not the
+	same as having a different <span class="emphasis"><em>state</em></span> by
+	having different values for the same attribute. But this
+	matter is probably a topic of discussion.
+	</p><p><b>Class attributes.&nbsp;</b>
+	It is also possible to define attributes <span class="emphasis"><em>at the
+	class level</em></span>. These attributes will be shared by
+	all the instances (<a href="ch18s05.html#fig_class_inst_ns2" title="Figure 18.6. Class attributes in class dictionary">Figure 18.6</a>). You define such attributes
+	in the class body part, usually at the top, for legibility:
+	    <pre class="programlisting">
+               class Protein:
+                 ...
+                 weight = {"A":71.08,"C":103.14 ,"D":115.09 ,"E":129.12 ,"F":147.18 ,"G":57.06 ,"H":137.15 ,"I":113.17 ,"K":128.18 ,"L":113.17 ,"M":131.21 ,"N":114.11 ,"P":97.12 ,"Q":128.41 ,"R":156.20 ,"S":87.08 ,"T":101.11,"V":99.14 ,"W":186.21 ,"Y":163.18 ,"X": 110}
+                 default_prosite_file = 'prosite.dat'
+                 ...
+	    </pre>
+	To access this attribute, you use the dot notation:
+   <pre class="programlisting">
+&gt;&gt;&gt; Protein.default_prosite_file
+'prosite.dat'
+&gt;&gt;&gt; Protein.weight
+{"A":71.08,"C":103.14 ,"D":115.09 ,"E":129.12 ,"F":147.18 ,"G":57.06 ,"H":137.15 ,"I":113.17 ,"K":128.18 ,"L":113.17 ,"M":131.21 ,"N":114.11 ,"P":97.12 ,"Q":128.41 ,"R":156.20 ,"S":87.08 ,"T":101.11,"V":99.14 ,"W":186.21 ,"Y":163.18 ,"X": 110}
+   </pre>
+
+	  <div class="figure"><a name="fig_class_inst_ns2"></a><p class="title"><b>Figure 18.6. Class attributes in class dictionary</b></p><div class="mediaobject"><img src="images/class_inst_ns_prot.png"></div></div>
+
+	You can also access to this attribute through an instance:
+	    <pre class="programlisting">
+&gt;&gt;&gt; p1.default_prosite_file
+'prosite.dat'
+	    </pre>
+	You <span class="emphasis"><em>cannot</em></span> change the attribute through
+	the instance, though: 
+	    <div class="programlistingco"><pre class="programlisting">
+&gt;&gt;&gt; p1.default_prosite_file = 'myfile.dat'                                <span class="co"><img src="images/callouts/1.png" alt="(1)"></span>
+&gt;&gt;&gt; Protein.default_prosite_file
+'prosite.dat'
+	      </pre><div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><img src="images/callouts/1.png" alt="1" border="0"></td><td valign="top" align="left"><p>This just creates a new
+	  <tt>default_prosite_file</tt> attribute for the
+	  <tt>p1</tt> instance, which masks the class
+	  attribute, by the way. 
+		</p></td></tr></table></div></div>
+	  
+	<p>
+	  The class attributes are displayed by the
+	  <tt>pydoc</tt> command, as opposed to the
+	  instance attributes (see <a href="ch18s05.html#sect_use_class_doc" title="18.5.5. Getting information on classes and instances">Section 18.5.5</a>).
+	</p>
+
+	<p>
+	Class methods are referenced in the class dictionary: but
+	what is their <span class="emphasis"><em>value</em></span> actually? As shown in
+	<a href="ch18s05.html#fig_class_inst_ns2" title="Figure 18.6. Class attributes in class dictionary">Figure 18.6</a>, the class dictionary
+	entries for methods are pointing to standard Python
+	functions. When accessing to a method through an instance
+	name, such as in <tt>p1.mw</tt>, there is an
+	intermediate data structure, that itself points to the class
+	and the instance. Objects in this data structure are called
+	<span class="emphasis"><em>bound methods</em></span>:
+	</p>
+
+        <pre class="programlisting">
+&gt;&gt;&gt; s1.gc
+&lt;bound method DNA.gc&gt; of &lt;__main__.DNA instance at 0x4016a56c&gt;
+        </pre>
+	They are said to be bound, because they are bound to
+	a particular instance, and know about it. This is really
+	important, for it is the only way to know what to do, and on
+	which object to operate.
+
+
+	  <div class="figure"><a name="fig_class_inst_ns2"></a><p class="title"><b>Figure 18.7. Classes methods and bound methods</b></p><div class="mediaobject"><img src="images/bound_method_dna.png"></div></div>
+
+
+      </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="d0e8469"></a>18.5.2. Objects lifespan</h3></div></div><p>
+
+	Once it is created, an object's lifespan depends on the
+	fact that there are references on it. Namely, as opposed to
+	variables present within functions, an object can still exist 
+        after exiting the function or
+	method where it has been created, as long as there is a valid
+	reference to it, as shown in the following example:
+
+	    </p><div class="programlistingco"><pre class="programlisting">
+class C1: pass
+
+class C2:
+    def show(self):
+        print "I am an instance of class ", self.__class__
+        
+def create_C2_ref_in(p):
+    p.c2 = C2()                                                           <span class="co"><img src="images/callouts/1.png" alt="(1)"></span>
+
+c1 = C1()
+create_C2_ref_in(c1)                                                      <span class="co"><img src="images/callouts/2.png" alt="(2)"></span>
+c1.c2.show()                                                              <span class="co"><img src="images/callouts/3.png" alt="(3)"></span>
+	</pre><div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><img src="images/callouts/1.png" alt="1" border="0"></td><td valign="top" align="left"><p>This function creates an instance of class
+		  <tt>C2</tt> and stores its reference
+		  in an attribute of <tt>p</tt>, an instance
+		  of class <tt>C1</tt>.
+		  </p></td></tr><tr><td width="5%" valign="top" align="left"><img src="images/callouts/2.png" alt="2" border="0"></td><td valign="top" align="left"><p>Creation of the <tt>C2</tt>
+		  instance by calling
+		  <tt>create_C2_ref_in</tt>
+		  </p></td></tr><tr><td width="5%" valign="top" align="left"><img src="images/callouts/3.png" alt="3" border="0"></td><td valign="top" align="left"><p>This statement displays:
+		  "I am an instance of class  __main__.C2"
+		  </p></td></tr></table></div></div><p>
+
+	  As you can observe, the <tt>C2</tt> instance
+	  exists after exiting the
+	  <tt>create_C2_ref_in</tt> function. It will
+	  exist as long as its reference remains in the
+	  <tt>c1.c2</tt> attribute. If you issue:
+	<pre class="programlisting">
+c1.c2 = None
+	</pre>
+	  There will be no reference left to our
+	  <tt>C2</tt> instance, and it will be
+	  automatically deleted. The same would happen if you would
+	  issue an additional call to the
+	  <tt>create_C2_ref_in</tt> function: 
+	<pre class="programlisting">
+create_C2_ref_in(c1)
+	</pre>
+	  it would overwrite the preceeding reference to the former
+	  <tt>C2</tt> instance, and delete it. You can check 
+	  this by asking the <tt>c1.c2</tt> reference for
+	  its identity:
+	<pre class="programlisting">
+id(c1.c2)
+	</pre>
+	  Of course, another way to delete an object is to use the
+	  <tt>del</tt> function:
+	<pre class="programlisting">
+del c1.c2
+	</pre>
+	</p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="sect_object_eq"></a>18.5.3. Objects equality</h3></div></div><p>
+
+	Instances equality cannot be tested by the
+	<tt>==</tt> operator.If we come back to our DNA class:
+	<pre class="programlisting">
+&gt;&gt;&gt; a = DNA('seq1', 'acaagatgccattgtc')
+&gt;&gt;&gt; b = DNA('seq1', 'acaagatgccattgtc')
+&gt;&gt;&gt; a.__dict__
+{'name': 'seq1', 'seq': 'acaagatgccattgtc'}
+&gt;&gt;&gt; b.__dict__
+{'name': 'seq1', 'seq': 'acaagatgccattgtc'}
+&gt;&gt;&gt; a == b
+False
+&gt;&gt;&gt; a.__dict__ == b.__dict__
+True
+ 	</pre>
+	This means that the equality operator must be defined by the
+	programmer. We will see the <tt>__eq__</tt> special method
+	later in <a href="ch19s03.html#sect_class_op" title="19.3.3. Using special methods within classes">Section 19.3.3</a>.
+	</p><p>
+	Instances identity means that two objects are in fact <span class="emphasis"><em>the
+	same</em></span> object, or more exactly, that two variables
+	refer to the same object.
+ 	<pre class="programlisting">
+&gt;&gt;&gt; a = DNA('seq1', 'acaagatgccattgtc')
+&gt;&gt;&gt; b = a
+&gt;&gt;&gt; b == a
+True
+&gt;&gt;&gt; b is a
+True
+ 	</pre>
+	As for all Python objects, identity implies equality.
+	</p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="d0e8567"></a>18.5.4. Classes and types</h3></div></div><p>
+	Types in Python include integer,floating-point numbers, strings, lists,dictionaries, etc...
+        Basically, 
+        types and classes are very similar. There is a general difference between them, 
+        however, lying in the fact that there are literals for built-in types, such as: 
+		<pre class="programlisting">
+34
+'a nice string'
+0.006
+[7, 'a', 45]
+	</pre>
+
+        whereas there is no literal for a class. 
+
+        The reason for this difference between types and classes is that
+	you can define a predicate for recognizing expressions of a
+	type [Wegner89], while, with class, you cannot, you can only define
+	collections of objects after a template. 
+
+	</p><p>
+	  As shown in <a href="ch18s05.html#fig_types_class_obj" title="Figure 18.8. Types of classes and objects.">Figure 18.8</a>, the Python 
+          <tt>type()</tt> can be used to know whether a
+          variable is a class or an instance. It will very basically answer
+          <tt>ClassType</tt> or
+	  <tt>InstanceType</tt>, as defined in module
+	  <tt>types</tt>, but it will not tell you 
+          which class an instance belongs to.
+
+	  </p><div class="figure"><a name="fig_types_class_obj"></a><p class="title"><b>Figure 18.8. Types of classes and objects.</b></p><div class="mediaobject"><img src="images/types_class_obj_dna.png"></div></div><p>
+       </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="sect_use_class_doc"></a>18.5.5. Getting information on classes and instances</h3></div></div><p>
+	It is important to know what classes are available, what
+	methods are defined for a class, and what arguments can be
+	passed to them. First, classes are generally defined 
+	in modules, and the modules you want to use should have some
+	documentation to explain how to use them. Then, you have the
+	<b>pydoc</b> command that lists the methods of the
+	class, and describes their parameters. The following command
+	displays information on the <tt>DNA</tt>
+	class, provided it is in the <tt>sequence.py</tt> file:
+	<pre class="programlisting">
+	  pydoc sequence.DNA
+        </pre>
+	See also the embedding module, which might bring additional
+	documentation about related components. This may be important
+	when several classes work together, as is described in
+	<a href="ch18s04.html" title="18.4. Combining objects">Section 18.4</a>.
+
+	</p><p>
+	When you consult the documentation of a class with
+	the <b>pydoc</b> command, you get most of the time
+	a strange list of method names, such as
+	<tt>__str__</tt> or
+	<tt>__getitem__</tt>. These methods are special
+	methods to redefine operators, and will be explained in the
+	next chapter on object-oriented design (<a href="ch19s03.html#sect_class_op" title="19.3.3. Using special methods within classes">Section 19.3.3</a>).
+	</p><p>
+	Caution: the defined instances attributes  will not be listed
+	by pydoc, since they belong to 
+	the instances rather than to the class. That is why they should be
+	described in the documentation string of the class. If they
+	are not, which sometimes happens..., run the Python interpretor
+	and create an instance, then ask for its dictionary or use the
+	<b>dir()</b> command:
+	<pre class="programlisting">
+&gt;&gt;&gt; s1 = DNA()
+&gt;&gt;&gt; dir(s1)
+['__doc__', '__init__', '__module__', 'gc', 'revcompl', 'translate', 'name', 'seq']
+	</pre>
+	</p><p><b>Information on instances.&nbsp;</b>
+	  There are some mechanisms to know about the class of a given
+	  instance. You can use the special attribute
+	  <tt>__class__</tt>:
+	<pre class="programlisting">
+&gt;&gt;&gt; s1 = DNA()
+&gt;&gt;&gt; s1.__class__
+class __main__.DNA at 0x81d1d64&gt;
+	</pre>
+	You can even use this information to create other instances:
+	<pre class="programlisting">
+&gt;&gt;&gt; s2=s1.__class__()
+&gt;&gt;&gt; s2              
+__main__.DNA instance at 0x8194ca4&gt;
+	</pre>
+	This can be useful if you need to create an object of the same
+	class of another source object, without knowing the class of the
+	source object.
+	You can also ask whether an object belongs to a given class:
+	<pre class="programlisting">
+&gt;&gt;&gt; isinstance(s1,DNA)
+True
+	</pre>
+	  As mentionned above, the Python <tt>type()</tt> 
+          will not provide
+	  the class of an instance, but just:
+	  <tt>InstanceType</tt> (see <a href="ch18s05.html#fig_types_class_obj" title="Figure 18.8. Types of classes and objects.">Figure 18.8</a>). 
+	  </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch18s04.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch18.html"><img src="images/up.png" alt="Up"></a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch18s06.html"><img src="images/next.png" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">18.4. Combining objects&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index-2.html"><img src="images/home.png" alt="Home"></a></td><td width="40%" align="right" valign="top">&nbsp;18.6. Solutions</td></tr></table></div></body>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch18s05.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:39 GMT -->
+</html>

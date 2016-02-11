@@ -1,0 +1,908 @@
+﻿<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from blog.miguelgrinberg.com/post/watch-live-video-of-earth-on-your-raspberry-pi by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:51:37 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    
+    <title>
+    
+        Watch Live Video of Earth on your Raspberry Pi - miguelgrinberg.com
+    
+</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="description" content="miguelgrinberg.com">
+	<meta name="copyright" content="Copyright (c) 2012-2015 Miguel Grinberg">
+	<meta name="author" content="Miguel Grinberg">
+    
+    <meta name="keywords" content="ISS, video, streaming, raspberry pi, earth, astronomy, hls. h.264">
+    
+
+    
+    <!-- Bootstrap -->
+    <link href="../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../static/prettify.css" type="text/css" rel="stylesheet" />
+    <link href="../static/colorbox/colorbox.css" rel="stylesheet" type="text/css" />
+    <link href="../static/style.css" rel="stylesheet" type="text/css" />
+
+    <link rel="shortcut icon" href="../static/favicon.ico">
+	<link rel="alternate" type="application/rss+xml" href="../feed" title="miguelgrinberg.com RSS feed">
+
+  </head>
+  <body>
+    
+    <!-- facebook sdk -->
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "../../connect.facebook.net/en_US/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    <!-- google plus sdk -->
+    <script type="text/javascript" src="../../apis.google.com/js/plusone.js"></script>
+    <!-- twitter sdk -->
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="../../platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <!-- linkedin sdk -->
+    <script src="../../platform.linkedin.com/in.js" type="text/javascript"></script>
+
+    
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://blog.miguelgrinberg.com/index">miguelgrinberg.com</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="http://blog.miguelgrinberg.com/index">Home</a></li>
+                        <li><a href="about-me.html">About Me</a></li>
+                        <li><a href="about-this-blog.html">About This Blog</a></li>
+                        
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <p class="navbar-text" style="margin-top: 10px; margin-bottom: 0px;">
+                                <a type="application/rss+xml" href="../feed"><img src="../static/rss.png" alt="RSS Feed" title="RSS Feed" /></a>
+                                <a href="https://www.facebook.com/miguelgrinbergblog"><img src="../static/facebook.png" alt="Facebook" title="Facebook" /></a>
+                                <a href="https://plus.google.com/u/0/117786742456929977820"><img src="../static/googleplus.png" alt="Google+" title="Google+" /></a>
+                                <a href="http://www.linkedin.com/in/miguelgrinberg"><img src="../static/linkedin.png" alt="LinkedIn" title="LinkedIn" /></a>
+                                <a href="http://github.com/miguelgrinberg"><img src="../static/github.png" alt="GitHub" title="GitHub" /></a>
+                                <a href="https://twitter.com/#!/miguelgrinberg"><img src="../static/twitter.png" alt="Twitter" title="Twitter" /></a>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </nav>
+
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-push-9 sidebar-bg">
+                <div id="sidebar">
+                    
+
+                    
+                    <h1>Flask Web Development</h1>
+                    <p>If you want to learn modern web development techniques with Python and Flask, you may find my O'Reilly book useful:</p>
+                    <p><center><a href="http://bit.ly/flaskbook"><img style="border: 1px solid black;" src="../static/flask-book-cover-tiny.png"></a></center></p>
+                    <p>Visit <a href="http://flaskbook.com/">http://flaskbook.com</a> for information about this and other Flask training products I have created!</p>
+                    
+
+                    <h1>About Miguel</h1>
+                    <img style="float: right; margin: 0px 8px 8px 0px; padding: 4px; border: 1px solid #ccc;" src="../static/miguel.jpg" />
+                    <p>Welcome to my blog!</p>
+                    <p>I'm a software engineer, photographer and filmmaker in Portland, Oregon, USA.</p>
+                    <p>You can also find me on <a href="https://www.facebook.com/miguelgrinbergblog">Facebook</a>, <a href="https://plus.google.com/u/0/117786742456929977820">Google+</a>, <a href="http://www.linkedin.com/in/miguelgrinberg">LinkedIn</a>, <a href="https://github.com/miguelgrinberg">Github</a> and <a href="https://twitter.com/#!/miguelgrinberg">Twitter</a>.</p>
+                    <p>Thank you for visiting!</p>
+
+                    
+
+                    
+                    <h1>Categories</h1>
+<ul>
+
+	<li>
+		<a href="../category/Arduino/feed">
+			<img src="../static/rss-small.png" title="Arduino RSS Feed" label="Arduino RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Arduino.html">Arduino</a></span> (7)
+	</li>
+
+	<li>
+		<a href="../category/Authentication/feed">
+			<img src="../static/rss-small.png" title="Authentication RSS Feed" label="Authentication RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Authentication.html">Authentication</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../category/Blog/feed">
+			<img src="../static/rss-small.png" title="Blog RSS Feed" label="Blog RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Blog.html">Blog</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/C%2b%2b/feed">
+			<img src="../static/rss-small.png" title="C++ RSS Feed" label="C++ RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/C%2b%2b.html">C++</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Cloud/feed">
+			<img src="../static/rss-small.png" title="Cloud RSS Feed" label="Cloud RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Cloud.html">Cloud</a></span> (2)
+	</li>
+
+	<li>
+		<a href="../category/Filmmaking/feed">
+			<img src="../static/rss-small.png" title="Filmmaking RSS Feed" label="Filmmaking RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Filmmaking.html">Filmmaking</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Flask/feed">
+			<img src="../static/rss-small.png" title="Flask RSS Feed" label="Flask RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Flask.html">Flask</a></span> (39)
+	</li>
+
+	<li>
+		<a href="../category/Games/feed">
+			<img src="../static/rss-small.png" title="Games RSS Feed" label="Games RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Games.html">Games</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Gear/feed">
+			<img src="../static/rss-small.png" title="Gear RSS Feed" label="Gear RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Gear.html">Gear</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/HTML5/feed">
+			<img src="../static/rss-small.png" title="HTML5 RSS Feed" label="HTML5 RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/HTML5.html">HTML5</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Heroku/feed">
+			<img src="../static/rss-small.png" title="Heroku RSS Feed" label="Heroku RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Heroku.html">Heroku</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Javascript/feed">
+			<img src="../static/rss-small.png" title="Javascript RSS Feed" label="Javascript RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Javascript.html">Javascript</a></span> (3)
+	</li>
+
+	<li>
+		<a href="../category/Movie%20Reviews/feed">
+			<img src="../static/rss-small.png" title="Movie Reviews RSS Feed" label="Movie Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Movie%20Reviews.html">Movie Reviews</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Netflix/feed">
+			<img src="../static/rss-small.png" title="Netflix RSS Feed" label="Netflix RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Netflix.html">Netflix</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Node.js/feed">
+			<img src="../static/rss-small.png" title="Node.js RSS Feed" label="Node.js RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Node.html">Node.js</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/OpenStack/feed">
+			<img src="../static/rss-small.png" title="OpenStack RSS Feed" label="OpenStack RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/OpenStack.html">OpenStack</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Personal/feed">
+			<img src="../static/rss-small.png" title="Personal RSS Feed" label="Personal RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Personal.html">Personal</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Photography/feed">
+			<img src="../static/rss-small.png" title="Photography RSS Feed" label="Photography RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Photography.html">Photography</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Product%20Reviews/feed">
+			<img src="../static/rss-small.png" title="Product Reviews RSS Feed" label="Product Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Product%20Reviews.html">Product Reviews</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Programming/feed">
+			<img src="../static/rss-small.png" title="Programming RSS Feed" label="Programming RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Programming.html">Programming</a></span> (47)
+	</li>
+
+	<li>
+		<a href="../category/Project%20Management/feed">
+			<img src="../static/rss-small.png" title="Project Management RSS Feed" label="Project Management RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Project%20Management.html">Project Management</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Python/feed">
+			<img src="../static/rss-small.png" title="Python RSS Feed" label="Python RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Python.html">Python</a></span> (43)
+	</li>
+
+	<li>
+		<a href="../category/REST/feed">
+			<img src="../static/rss-small.png" title="REST RSS Feed" label="REST RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/REST.html">REST</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Rackspace/feed">
+			<img src="../static/rss-small.png" title="Rackspace RSS Feed" label="Rackspace RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Rackspace.html">Rackspace</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Raspberry%20Pi/feed">
+			<img src="../static/rss-small.png" title="Raspberry Pi RSS Feed" label="Raspberry Pi RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Raspberry%20Pi.html">Raspberry Pi</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/RhinoSteady/feed">
+			<img src="../static/rss-small.png" title="RhinoSteady RSS Feed" label="RhinoSteady RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/RhinoSteady.html">RhinoSteady</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Robotics/feed">
+			<img src="../static/rss-small.png" title="Robotics RSS Feed" label="Robotics RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Robotics.html">Robotics</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Video/feed">
+			<img src="../static/rss-small.png" title="Video RSS Feed" label="Video RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Video.html">Video</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../category/Windows/feed">
+			<img src="../static/rss-small.png" title="Windows RSS Feed" label="Windows RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Windows.html">Windows</a></span> (1)
+	</li>
+
+</ul>
+                    
+                </div>
+            </div>
+            <div class="col-md-8 col-md-pull-4">
+                <div id="main">
+                    
+                    
+                    
+                    
+                    
+
+<div class="post">
+
+<p class="date"><span class="flask-moment" data-timestamp="2014-05-15T17:21:05Z" data-format="format('LL')" data-refresh="0">2014-05-15T17:21:05Z</span></p>
+<h1 class="post-title"><a href="watch-live-video-of-earth-on-your-raspberry-pi.html">Watch Live Video of Earth on your Raspberry Pi</a></h1>
+<div class="posted">Posted by <span class="label label-danger"><a href="http://blog.miguelgrinberg.com/author/Miguel Grinberg">Miguel Grinberg</a></span> under <span class="label label-primary"><a href="../category/Video.html">Video</a></span>, <span class="label label-primary"><a href="../category/Raspberry%20Pi.html">Raspberry Pi</a></span>. </div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/watch-live-video-of-earth-on-your-raspberry-pi" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/watch-live-video-of-earth-on-your-raspberry-pi" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="watch-live-video-of-earth-on-your-raspberry-pi.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/watch-live-video-of-earth-on-your-raspberry-pi" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+<div class="post_body"><p><center><img src="../static/images/iss-stream-01.jpg"></center></p>
+<p>A few weeks ago NASA started streaming live video of Earth from cameras installed aboard the International Space Station (ISS), and some of the views are nothing short of breathtaking. If you haven't seen this stream yet, then stop reading and <a href="http://www.nasa.gov/mission_pages/station/research/experiments/917.html">go watch it now</a>. Keep in mind that you have a 50% chance of catching the dark part of the planet, so if all you find is an all black image then try again a little later. You can always check <a href="http://www.isstracker.com/">isstracker.com</a> to find out over which region the ISS is over and if it is day or night there.</p>
+<p>I thought it would be a cool idea to have this stream running constantly on a screen by my desk. Something I can keep an eye on while I work, so that I can catch the most interesting views without having to have it constantly taking space on my main computer's screens.</p>
+<p>In this short article I'm going to show you how to play the ISS live stream on your Raspberry Pi.</p>
+<h2>Playing Video Streams on the Raspberry Pi</h2>
+<p>The Raspberry Pi is well equipped for the task of playing video streams because it can decode the video in the GPU, so the amount of work done in the CPU is minimal. The Pi's GPU comes with a H.264 video decoder from the factory. This is the format most web based video streams use, including the ISS stream. As a side note, an MPEG-2 decoder is also available, but a license needs to be purchased from the Raspberry Pi Foundation to use it.</p>
+<p>The ISS live stream is provided by <a href="http://www.ustream.tv/channel/iss-hdev-payload">UStream</a>. The stream is delivered in short segments, presented to the player in a constantly changing playlist, using a format called <a href="http://en.wikipedia.org/wiki/HTTP_Live_Streaming">HLS</a>. But UStream does not openly advertise how to access these playlists, instead they expect clients to embed a UStream web based video player applet based on Flash or HTML5, where all the HLS processing is done.</p>
+<p>Unfortunately playing this type of stream in a browser on the Raspberry Pi is kind of complicated, as you need a modern browser that can run their Flash/HTML5 video player, and on top of that you need the player to be specifically designed to use the hardware accelerated decoder in the Pi. So in my view, using a web browser for this project is not an option.</p>
+<p>I have found that <a href="https://github.com/popcornmix/omxplayer">omxplayer</a> is a pretty good command line player, specifically created for the Pi and with support for hardware decoding. To use omxplayer you do not even need to be running the graphical environment, the video plays as an overlay, even on top of the console. Recent releases of Raspbian include omxplayer, so chances are you already have it installed. If not, you can always install it:</p>
+<pre><code>$ sudo apt-get install omxplayer
+</code></pre>
+<p>But how do we connect the HLS stream from UStream to omxplayer?</p>
+<p>The <a href="http://livestreamer.readthedocs.org/en/latest/">livestreamer</a> utility helps simplify the process of downloading video from UStream and other video stream providers. This tool does all the processing and converts the stream to a standard video file that can be sent to a player like omxplayer. To install livestreamer you have to run the following commands:</p>
+<pre><code>$ sudo apt-get install python-pip
+$ sudo pip install livestreamer
+</code></pre>
+<p>For those of you that know their way around Python, you should know that livestreamer is written in that language, and that it can be installed in a virtual environment if you prefer to keep it separate from your system Python interpreter.</p>
+<p>The command that combines livestream and omxplayer and starts the ISS stream in full screen mode is as follows:</p>
+<pre><code>$ livestreamer http://ustream.tv/channel/iss-hdev-payload mobile_480p --player omxplayer --fifo
+</code></pre>
+<p>The first argument is the URL for the streaming channel. This is followed by "mobile_480p" which tells livestreamer to select one of the available resolutions for the given channel (the list of choices are printed to the console). Livestreamer by default will try to launch the stream on VLC, so we use --player to tell it to use omxplayer instead. Finally, the --fifo argument selects the use of a named pipe as a mechanism for livestreamer to communicate with omxplayer.</p>
+<p>If you try the above command you may find that everything works great, so you are good to go. In my case, however, I've found that the playback window did not cover the entire screen. The reason is that omxplayer by default plays at 1920x1080, but I have my console running at 1600x1200. This is easy to fix using the --win argument:</p>
+<pre><code>$ livestreamer http://ustream.tv/channel/iss-hdev-payload mobile_480p --player omxplayer --fifo \
+&gt; --player-args "--win \"0 0 1600 1200\" {filename}"
+</code></pre>
+<p>If you are running under a different resolution you may need to play with the numbers given to --win to make the video fill your screen.</p>
+<h2>Final Touches</h2>
+<p>If you try this you will find that from time to time the stream halts and you are sent back to the command line. This is probably some sort of interruption to the stream that causes omxplayer to error. But whatever causes this resolves pretty fast, because the video is back up a couple of seconds later after restarting the process.</p>
+<p>To avoid having to manually restart the process each time it stops, a wrapper bash script can be created to do this for us:</p>
+<pre><code>#!/bin/bash
+while true
+do
+    livestreamer http://ustream.tv/channel/iss-hdev-payload mobile_480p --player omxplayer --fifo --player-args "--win \"0 0 1600 1200\" {filename}"
+done
+</code></pre>
+<p>If you put the above in a file named <code>iss-streamer</code> you can make it executable and run it as a command:</p>
+<pre><code>$ chmod +x iss-streamer
+$ ./iss-streamer
+</code></pre>
+<p>And now the stream will restart itself whenever there is an interruption. Note that when you do want to stop the stream, you will have to hold the Ctrl+C for a couple of seconds to also break out of the while loop in the bash script.</p>
+<p>I thought it would also be useful to have the stream autostart when the Pi is plugged in, so that it can run completely unattended. This is achieved by adding the command to the <code>/etc/rc.local</code> file, right before the <code>exit 0</code> line:</p>
+<pre><code># start the ISS video stream
+sudo -u pi /home/pi/iss/iss-streamer &gt;/dev/null 2&gt;&amp;1 &amp;
+</code></pre>
+<p>There are a few details that were required to make the stream work. First of all, the <code>/etc/rc.local</code> script runs as the root user, so I use <code>sudo</code> to downgrade the user to the regular "pi" user as a safety measure. The command needs to run in the background, so I added <code>&amp;</code> at the end. And because it runs in the background, I also suppressed all the output from stdout and stderr. Finally, since the PATH environment variable is not set when the command runs, I specified the full path to the <code>iss-streamer</code> script.</p>
+<h2>The End</h2>
+<p><center><img src="../static/images/iss-stream-02.jpg"></center></p>
+<p>I hope you find this entertaining, fascinating and mind blowing as I do.  Obviously this technique can be used with many other internet streams, so feel free to experiment!</p>
+<p>If you have any tips to improve this idea be sure to let me know in the comments below!</p></div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/watch-live-video-of-earth-on-your-raspberry-pi" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/watch-live-video-of-earth-on-your-raspberry-pi" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="watch-live-video-of-earth-on-your-raspberry-pi.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/watch-live-video-of-earth-on-your-raspberry-pi" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+
+
+<h4 style="text-align: right"><a name="comments"></a>23 comments</h4>
+
+
+<div class="comment">
+    <ul>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/8311e9be5f3395e24981a8e69e8c3bfece2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#1</span> <span class="label label-primary">Aba Even</span> said
+                    <span class="flask-moment" data-timestamp="2014-05-17T11:03:35Z" data-format="fromNow(0)" data-refresh="0">2014-05-17T11:03:35Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Works great. Awesome!
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/6ecca1436fcb1dfcb045f9bd5f670904ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#2</span> <span class="label label-primary">Miguel Maldonado</span> said
+                    <span class="flask-moment" data-timestamp="2014-05-24T21:52:43Z" data-format="fromNow(0)" data-refresh="0">2014-05-24T21:52:43Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Thanks, this is working great...transferred streaming video to large screen. My daughter loves it..!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/eacbfff438cf01d61beceb3efcf53fa5ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#3</span> <span class="label label-primary"><a href="http://issabove.com/">Liam Kennedy</a></span> said
+                    <span class="flask-moment" data-timestamp="2014-06-13T03:46:55Z" data-format="fromNow(0)" data-refresh="0">2014-06-13T03:46:55Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Great post.  Thanks for sharing.    I could never get the mobile_480p stream to come up.    I installed a couple of additional libraries (libffi-dev and python-librtmp I think) and then I managed to get the 720p+ and 480p_alt_akamai stream to work just perfectly.     </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/8b5f28fb7c0f91931a60cd01ca26ba1bce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#4</span> <span class="label label-primary">Chinna</span> said
+                    <span class="flask-moment" data-timestamp="2014-11-17T18:19:44Z" data-format="fromNow(0)" data-refresh="0">2014-11-17T18:19:44Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi, very nice project! How can I make the video to be played only when somebody is near to the display. I know, I should use a PIR detector, but I don&#39;t know the code. Could you please point me in the right direction.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/d5739d8aed132ba55aebcf917f5ada5ece2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#5</span> <span class="label label-primary">Stuart</span> said
+                    <span class="flask-moment" data-timestamp="2014-11-21T23:27:18Z" data-format="fromNow(0)" data-refresh="0">2014-11-21T23:27:18Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I get python-librtmp is not installed and no streams found on this URL
+
+Any ideas please?? Thanks.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#6</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-11-23T01:29:58Z" data-format="fromNow(0)" data-refresh="0">2014-11-23T01:29:58Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Stuart: I just tested this, and only the HD resolutions need librtmp, there are mobile resolutions up to 480p that play fine without that. But in any case, you can run &#34;sudo apt-get install librtmp-dev&#34;, &#34;pip install cffi&#34; and finally &#34;pip install python-librtmp&#34;. Then the HD streams should be accessible as well.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/82e3ca75795cc606cf7c96cfbc97f4e9ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#7</span> <span class="label label-primary">David</span> said
+                    <span class="flask-moment" data-timestamp="2014-12-16T17:03:35Z" data-format="fromNow(0)" data-refresh="0">2014-12-16T17:03:35Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Great tutorial! I&#39;m going to add this to my laundry list of &#34;Raspberry Pi Projects&#34;. I just thought of a cool enhancement to this. I think it&#39;d be great if you could snap an HD screenshot of the feed if you happen to see something particularly beautiful and want to capture it.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/f0970168c1dac9a43eea646e11fd9e07ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#8</span> <span class="label label-primary">Jeremie</span> said
+                    <span class="flask-moment" data-timestamp="2015-01-07T14:35:48Z" data-format="fromNow(0)" data-refresh="0">2015-01-07T14:35:48Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Sounds great I&#39;ll give it a go!!
+
+Would it be possible to have this live street as a background on your desktop rather than on a seperate screen?
+
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#9</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2015-01-07T19:29:46Z" data-format="fromNow(0)" data-refresh="0">2015-01-07T19:29:46Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Jeremie: I&#39;m not sure, I haven&#39;t really tried to do it as a live wallpaper. This StackOverflow question may give you some ideas: http://superuser.com/questions/750949/how-can-i-set-the-live-video-feed-from-the-iss-as-my-desktop-background</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/5f66147369cb50502b172515f84ca651ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#10</span> <span class="label label-primary">Raj</span> said
+                    <span class="flask-moment" data-timestamp="2015-02-04T04:25:03Z" data-format="fromNow(0)" data-refresh="0">2015-02-04T04:25:03Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hey Miguel, great tutorial. Thanks. I&#39;ve followed it and got the stream running on my new Pi. My problem is that once I get to the &#39;Final touches&#39; section of your guide I&#39;m lost. You say &#39;a wrapper bash script can be created&#39; and show us she script itself but I don&#39;t actually know how to go about creating it! it was so step by step before. I&#39;m sure its super simple for someone with experience in linux but for those of us new to linux and the pi, its a missing step. Little help for a noob please?
+
+I&#39;d love to follow your guide through to the end so i can have the stream auto start with my pi so it can run unattended.
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#11</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2015-02-04T07:29:31Z" data-format="fromNow(0)" data-refresh="0">2015-02-04T07:29:31Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Raj: you need to use your favorite text editor to create the script. You will also need a text editor for the next step, when you need to edit the /etc/rc.local file. An easy to use text editor is &#34;nano&#34;, which should be already installed in your Pi.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/ab900bc0c5c0c01b6de7aeb00626a97ece2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#12</span> <span class="label label-primary">Kalpesh</span> said
+                    <span class="flask-moment" data-timestamp="2015-02-08T11:04:48Z" data-format="fromNow(0)" data-refresh="0">2015-02-08T11:04:48Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hey Miguel, Great mind blowing tutorial. after reading this i bought new raspberry pi 2 yesterday to test this. im a totally new to all this. will do first time. basically i want to play Adaptive HLS stream with .m3u8 extension from Akamai. can you please help and give more detail tutorial for new learner like do i need to use micro sd card in new pi 2 model? if yes then which os i need to install on that and what extension do i have to give to bash file after editing in text editor. sorry for asking dummy question and will be thank full to you for the help.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#13</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2015-02-08T18:25:40Z" data-format="fromNow(0)" data-refresh="0">2015-02-08T18:25:40Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Kalpesh: Try the latest release of Raspbian, that is the most user-friendly OS for the Pi, in my opinion.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/ff1f3c0b997466d232593af24ccdebb7ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#14</span> <span class="label label-primary">jef</span> said
+                    <span class="flask-moment" data-timestamp="2015-02-12T00:36:05Z" data-format="fromNow(0)" data-refresh="0">2015-02-12T00:36:05Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Great information, works very well, thanks  :)</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/ab900bc0c5c0c01b6de7aeb00626a97ece2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#15</span> <span class="label label-primary">kalpesh</span> said
+                    <span class="flask-moment" data-timestamp="2015-02-13T17:32:33Z" data-format="fromNow(0)" data-refresh="0">2015-02-13T17:32:33Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">hi miguel: finally i started playing stream with adding hlsvariant://  after livestreamer and before my .m3u8 link. the omxplayer plays it successfully for 30 seconds only then it exits but same with mplayer plays fine in small screen please help me playing in omxplayer more then 30 second...</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/0896e3a8a9375fa5397d885cb1757be1ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#16</span> <span class="label label-primary">Momanon</span> said
+                    <span class="flask-moment" data-timestamp="2015-02-27T22:22:41Z" data-format="fromNow(0)" data-refresh="0">2015-02-27T22:22:41Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Thanks for this info!  I was able to get this running on my Raspberry Pi 2 using NOOBS.  I&#39;ve just been leaving it up all the time.  This &#34;payload&#34; link seems to have better views than their main ustream channel.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/2c4995d5a213edb37bf227aaf54d14a2ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#17</span> <span class="label label-primary">Nick</span> said
+                    <span class="flask-moment" data-timestamp="2015-03-19T21:41:54Z" data-format="fromNow(0)" data-refresh="0">2015-03-19T21:41:54Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi.  Thanks for all this work.
+
+I keep getting the error...
+
+error: No streams found on this URL: http://www.ustream.tv/channel/iss-hdev-payload
+
+Any ideas?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#18</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2015-03-21T22:03:37Z" data-format="fromNow(0)" data-refresh="0">2015-03-21T22:03:37Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Nick: looks like the video streaming is going to be offline between March 20 and 23. Try again in a couple of days.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/3ac044d3ace58ca4227af4e3f583b4f2ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#19</span> <span class="label label-primary">waymon</span> said
+                    <span class="flask-moment" data-timestamp="2015-04-15T23:19:35Z" data-format="fromNow(0)" data-refresh="0">2015-04-15T23:19:35Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@miguel What would be the URL to the HD streams? I installed both librtmp-dev and python-librtmp but do not know the URL to the HD stream.  Any advice?
+
+Thanks for the great write up!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#20</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2015-04-16T04:46:47Z" data-format="fromNow(0)" data-refresh="0">2015-04-16T04:46:47Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@waymon: It&#39;s the same URL. You have to use &#34;720p+&#34; instead of &#34;mobile_480p&#34;.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/eacbfff438cf01d61beceb3efcf53fa5ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#21</span> <span class="label label-primary"><a href="http://issabove.com/">Liam Kennedy</a></span> said
+                    <span class="flask-moment" data-timestamp="2015-04-17T17:27:28Z" data-format="fromNow(0)" data-refresh="0">2015-04-17T17:27:28Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Or just use &#34;best&#34; and you will get the current best stream available (which would usually be 720p+).   I have found sometimes not all stream quality types are available - so using &#34;best&#34; seems to be more reliable.   </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/6dac7d5815adafce24c8ec8d913bf5a0ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#22</span> <span class="label label-primary">Marc</span> said
+                    <span class="flask-moment" data-timestamp="2015-06-05T02:36:58Z" data-format="fromNow(0)" data-refresh="0">2015-06-05T02:36:58Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Miguel,  Thank you for the whole write up and programming lines to get a full screen video stream.  I&#39;m currently running Ubuntu (on a PC) and I would like to setup up a &#39;system&#39; where I click on a button and it not only goes to a specific site with a live stream, but also automatically makes the stream full screen.  You can imagine, this would be so cool to be able to simply double click on an icon and have the &#39;TV Channel&#39; full screen.  If I can get this right I would then like to transfer the code to a Raspberry Pi project that has a small monitor with the ability to select TV Channels.
+Your help would be greatly appreciated.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#23</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2015-06-06T05:19:01Z" data-format="fromNow(0)" data-refresh="0">2015-06-06T05:19:01Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Marc: your problem is unrelated to the video streaming, you just need to figure out how to start an application full screen in the window manager that you are using, or what command options to include in the start up command for the video player to make it go full screen.</p>
+                </div>
+            </div>
+        </li>
+        
+    </ul>
+</div>
+
+<div class="page">
+<ul class="pager">
+  <li class="previous disabled">
+    <a href="#">&laquo;&laquo;</a>
+  </li>
+  <li class="previous disabled">
+    <a href="#">&laquo;</a>
+  </li>
+  <li class="next disabled">
+    <a href="#">&raquo;&raquo;</a>
+  </li>
+  <li class="next disabled">
+    <a href="#">&raquo;</a>
+  </li>
+</ul>
+</div>
+
+<h3><a name="commentform"></a>Leave a Comment</h3>
+
+<form action="#commentform" method="post"
+  class="form" role="form">
+  <div style="display:none;"><input id="csrf_token" name="csrf_token" type="hidden" value="1439536828.17##19b27dc7dc3c925ec5328690fd697921b43aa365"></div>
+  
+    
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="name">Name</label>
+        <input class="form-control" id="name" name="name" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="url">URL</label>
+        <input class="form-control" id="url" name="url" type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="email">Email</label>
+        <input class="form-control" id="email" name="email" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="comment">Comment</label>
+        <textarea class="form-control" id="comment" name="comment" required></textarea>
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="captcha">Captcha</label>
+        
+<script type="text/javascript">var RecaptchaOptions = {"custom_translations": {"audio_challenge": "Get an audio challenge", "cant_hear_this": "Download sound as MP3", "help_btn": "Help", "image_alt_text": "reCAPTCHA challenge image", "incorrect_try_again": "Incorrect. Try again.", "instructions_audio": "Type what you hear", "instructions_visual": "Type the text", "play_again": "Play sound again", "privacy_and_terms": "Privacy & Terms", "refresh_btn": "Get a new challenge", "visual_challenge": "Get a visual challenge"}, "theme": "white"};</script>
+<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S"></script>
+<noscript>
+  <iframe src="http://www.google.com/recaptcha/api/noscript?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S" height="300" width="500" frameborder="0"></iframe><br>
+  <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+  <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
+</noscript>
+
+  </div>
+
+
+    
+
+
+
+
+
+  
+
+
+    <input class="btn btn-default" id="submit" name="submit" type="submit" value="Submit">
+  
+
+
+
+
+
+</form>
+
+
+</div>
+
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <p class="elapsed">This page was generated in None seconds.</p>
+            <p>&copy; 2014 by Miguel Grinberg. All rights reserved. <a href="mailto:webmaster _at_ miguelgrinberg _dot_ com">Questions?</a></p>
+        </div>
+    </div>
+
+
+    
+    
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.33/jquery.colorbox-min.js"></script>
+    <script type="text/javascript" src="../static/prettify.js"></script>
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment-with-langs.min.js"></script>
+<script>
+function flask_moment_render(elem) {
+    $(elem).text(eval('moment("' + $(elem).data('timestamp') + '").' + $(elem).data('format') + ';'));
+    $(elem).removeClass('flask-moment');
+}
+function flask_moment_render_all() {
+    $('.flask-moment').each(function() {
+        flask_moment_render(this);
+        if ($(this).data('refresh')) {
+            (function(elem, interval) { setInterval(function() { flask_moment_render(elem) }, interval); })(this, $(this).data('refresh'));
+        }
+    })
+}
+$(document).ready(function() {
+    flask_moment_render_all();
+});
+</script>
+    
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4777284-15']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".gallery").colorbox({rel:".gallery",maxWidth:"95%",maxHeight:"95%",scalePhotos:true});
+            // add prettyprint class to all <pre><code></code></pre> blocks
+            var prettify = false;
+            $("pre code").parent().each(function() {
+                $(this).addClass('prettyprint');
+                prettify = true;
+            });
+            prettyPrint();
+        });
+    </script>
+
+
+  </body>
+
+<!-- Mirrored from blog.miguelgrinberg.com/post/watch-live-video-of-earth-on-your-raspberry-pi by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:51:49 GMT -->
+</html>

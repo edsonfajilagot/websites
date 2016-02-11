@@ -1,0 +1,95 @@
+<html>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch16.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:34 GMT -->
+<head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Chapter 16. Files</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><meta name="keywords" content="python, biology, bioinformatics, programming, computational biology"><link rel="home" href="index-2.html" title="Introduction to Programming using Python"><link rel="up" href="index-2.html" title="Introduction to Programming using Python"><link rel="previous" href="ch15s04.html" title="15.4. Solutions"><link rel="next" href="ch16s02.html" title="16.2. Reading data from files"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 16. Files</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch15s04.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch16s02.html"><img src="images/next.png" alt="Next"></a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><h2 class="title"><a name="chap_files"></a>Chapter 16. Files</h2></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt>16.1. <a href="ch16.html#d0e6182">Handle files in programs</a></dt><dt>16.2. <a href="ch16s02.html">Reading data from files</a></dt><dt>16.3. <a href="ch16s03.html">Writing in files</a></dt><dt>16.4. <a href="ch16s04.html">Design problems</a></dt><dt>16.5. <a href="ch16s05.html">Documentation strings</a></dt></dl></div><div class="section"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="d0e6182"></a>16.1. Handle files in programs</h2></div></div><p>
+      In <a href="ch04s04.html" title="4.4. Files">Section 4.4</a>, we have introduced simple reading and writing file operations. This section provides a more advanced view of the whole set of file operations and attributes.
+
+    </p><p>
+      File data are ordered collections, such as lists. But you have to
+      traverse all elements to get to a position, whereas lists can
+      by accessed directly using an index. 
+    </p><p><b>Opening.&nbsp;</b>
+      When you open a file in Python using the built-in function
+      <tt>open</tt>, you have to indicate, in addition to
+      its name, whether you want to read from it or write in
+      it. The default is reading.
+      </p><p><b>Working.&nbsp;</b>
+	The <span class="emphasis"><em>file object</em></span> created by the open
+	function has methods to read from the file, to write in it and
+	to move the <span class="emphasis"><em>file pointer</em></span> to another
+	position. 
+      </p><p>
+	Although Python can handle files containing binary
+	data as well as text data, <span class="emphasis"><em>file objects</em></span>
+	have special functions to work with text files, such as reading
+	line per line.
+    </p><p>
+      At this point we like to show two possibilities
+	to handle text file data line per line. The first one uses the
+      loop <tt>while</tt>:
+   
+
+ 
+      <pre class="programlisting">infile="&lt;some-file-name"&gt;
+infh=open(infile)
+
+line=infh.readline()
+while line:
+    #do something with the line
+    line=infh.readline()
+
+infh.close()
+</pre>
+    
+      And the second one the loop <tt>for</tt>. 
+
+      </p><div class="example"><a name="exa_read_general_for"></a><p class="title"><b>Example 16.1. Reading from files</b></p><pre class="programlisting">infile="&lt;some-file-name&gt;"
+infh=open(infile)
+
+for line in infh.xreadlines()
+    #do something with the line
+
+infh.close()
+</pre></div><p>
+
+      There exists two file methods,
+      <tt>readlines</tt> and
+      <tt>xreadlines</tt>, with the same properties as 
+      <tt>range</tt> and <tt>xrange</tt>. The
+      first one reads all the lines of a file and puts them in a list,
+      whereas the second one allows to iterate over all lines without
+      creating the list. The first one is appropriated for small
+      files, but if you are not sure about the number of lines in your
+      file, the second one prevents to overload the memory.
+    </p><p>
+      <a href="ch16.html#tab_filemethods" title="Table 16.1. File methods">Table 16.1</a> gives a list of all common
+      used file methods and <a href="ch16.html#tab_filemodes" title="Table 16.2. File modes">Table 16.2</a> explains
+      all possible <span class="emphasis"><em>modes</em></span> to work with files.
+    </p><div class="table"><a name="tab_filemethods"></a><p class="title"><b>Table 16.1. File methods</b></p><table summary="File methods" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th align="left">Method</th><th align="left">Action</th></tr></thead><tbody><tr><td align="left"><tt>read([n])</tt></td><td align="left">reads at most <tt>n</tt>
+		bytes; if no <tt>n</tt>
+		is specified, reads the entire file</td></tr><tr><td align="left"><tt>readline([n])</tt></td><td align="left">reads a line of input, if <tt>n</tt> is specified reads at most
+	      <tt>n</tt> bytes</td></tr><tr><td align="left"><tt>readlines()</tt></td><td align="left">reads all lines and returns them in a list</td></tr><tr><td align="left"><tt>xreadlines()</tt></td><td align="left">reads all lines but handles them as a <tt>XRangeType</tt><sup>[<a name="d0e6304" href="#ftn.d0e6304">a</a>]</sup></td></tr><tr><td align="left"><tt>write(s)</tt></td><td align="left">writes strings <tt>s</tt></td></tr><tr><td align="left"><tt>writelines(l)</tt></td><td align="left">writes all strings in list 
+		<tt>l</tt> as lines</td></tr><tr><td align="left"><tt>close()</tt></td><td align="left">closes the file</td></tr><tr><td align="left"><tt>seek(offset [, mode])</tt></td><td align="left"><p>changes to a new file <tt>position=start +
+		  offset</tt>. <tt>start</tt> is specified by the mode
+		  argument:
+		  <tt>mode=0</tt>
+		  (default), 
+		<tt>start</tt> = start of the file,
+		  <tt>mode=1</tt>, 
+		<tt>start</tt> = current file position and 
+		  <tt>mode=2</tt>, 
+		<tt>start</tt> = end of the file</p></td></tr></tbody><tbody class="footnotes"><tr><td colspan="2"><div class="footnote"><p><sup>[<a name="ftn.d0e6304" href="#d0e6304">a</a>] </sup>See <a href="ch11s05.html" title="11.5. Range and Xrange objects">Section 11.5</a> for more informations</p></div></td></tr></tbody></table></div><div class="table"><a name="tab_filemodes"></a><p class="title"><b>Table 16.2. File modes</b></p><table summary="File modes" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Mode</th><th>Description</th></tr></thead><tbody><tr><td>r</td><td>read</td></tr><tr><td>w</td><td>write</td></tr><tr><td>a</td><td>append</td></tr><tr><td>[rwa]b</td><td>[reading,writing,append] as binary data (required
+	      on Windows)</td></tr><tr><td>r+</td><td>update+reading (output operations must flush
+	      their data before subsequent input operations)
+	      </td></tr><tr><td>w+</td><td>truncate to size zero followed by writing</td></tr><tr></tr></tbody></table></div><p><b>Closing.&nbsp;</b>
+      Although Python closes all opened files when the interpreter exits,
+      it is a good idea to close them explicitly. Why ??? 
+      </p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/important.png"></td><th align="left">Important</th></tr><tr><td colspan="2" align="left" valign="top"><p>
+	Pay attention, while <tt>open</tt> is a built in
+	<span class="emphasis"><em>function</em></span> creating a file object,
+	<tt>close</tt> is a <span class="emphasis"><em>method</em></span> of
+	the created file object. 
+      </p></td></tr></table></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch15s04.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="index-2.html"><img src="images/up.png" alt="Up"></a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch16s02.html"><img src="images/next.png" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">15.4. Solutions&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index-2.html"><img src="images/home.png" alt="Home"></a></td><td width="40%" align="right" valign="top">&nbsp;16.2. Reading data from files</td></tr></table></div></body>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch16.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:34 GMT -->
+</html>

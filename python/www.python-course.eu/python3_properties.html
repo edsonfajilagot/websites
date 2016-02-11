@@ -1,0 +1,544 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from www.python-course.eu/python3_properties.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:09:45 GMT -->
+<head>
+
+<!-- Dieses Tag in den Head-Bereich oder direkt vor dem schlieÃŸenden Body-Tag einfÃ¼gen -->
+<script type="text/javascript" src="../apis.google.com/js/plusone.js"></script>
+
+
+
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "../connect.facebook.net/en_GB/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script><title>Python3 Tutorial: Properties vs. getters and setters</title>
+<meta http-equiv="content-type" content="text/html; charset="ISO-8859-1">
+<meta name="Description" content="Object oriented programming in Python: instance attributes vs. class attributes
+and their proper usage." />
+<meta name="Keywords" content="Python, Python3, OOP, tutorial, course, getters, setters, private attributes, 
+public attributes, property, properties" />
+
+<link href="favicon.ico" rel="shortcut icon">
+
+<link href="moderna.css" rel="stylesheet" type="text/css" />
+<link href="moderna_print.css" media="print" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+<div id="container">
+
+<div id="banner">
+<!-- <a href="impressum.php">Impressum</a> | <a href="mailto:">contact</a> | --><h1>Python Course</h1>
+
+</div>
+
+	<!-- Begin Top Menu -->
+<ul id="navlist">
+<li><a href="index-2.html" >Home</a></li><li><a href="course.html" >Python 2 Tutorial</a></li><li class="active"><a id="current" href="python3_course.html" >Python 3 Tutorial</a></li><li><a href="advanced_topics.html" >Advanced Topics</a></li><li><a href="python_books.html" >Python Books</a></li><li><a href="python_tkinter.html" >Tkinter Tutorial</a></li><li><a href="contact.html" rel="nofollow">Contact</a></li>                          
+</ul>
+	<!-- End Top Menu -->
+<div id="sidebar-a">
+<img class="border" src="images/logo100.png" alt="box" />    <h2>Python 3 Tutorial</h2>
+
+<div class="menu">
+
+<ul>
+<li><a href="python3_history_and_philosophy.html">The Origins of Python</a></li><li><a href="python3_interactive.html">Starting with Python: The Interactive Shell</a></li><li><a href="python3_execute_script.html">Executing a Script</a></li><li><a href="python3_blocks.html">Indentation</a></li><li><a href="python3_variables.html">Data Types and Variables</a></li><li><a href="python3_operators.html">Operators</a></li><li><a href="python3_sequential_data_types.html">Sequential Data Types: Lists and Strings</a></li><li><a href="python3_deep_copy.html">Shallow and Deep Copy</a></li><li><a href="python3_dictionaries.html">Dictionaries</a></li><li><a href="python3_sets_frozensets.html">Sets and Frozen Sets</a></li><li><a href="python3_input.html">input via the keyboard</a></li><li><a href="python3_conditional_statements.html">Conditional Statements</a></li><li><a href="python3_loops.html">Loops, while Loop</a></li><li><a href="python3_for_loop.html">For Loops</a></li><li><a href="python3_print.html">Output with Print</a></li><li><a href="python3_formatted_output.html">Formatted output with string modulo and the format method</a></li><li><a href="python3_functions.html">Functions</a></li><li><a href="python3_recursive_functions.html">Recursion and Recursive Functions</a></li><li><a href="python3_tests.html">Tests, DocTests, UnitTests</a></li><li><a href="python3_memoization.html">Memoization and Decorators</a></li><li><a href="python3_passing_arguments.html">Parameter Passing in Functions</a></li><li><a href="python3_namespaces.html">Namespaces</a></li><li><a href="python3_global_vs_local_variables.html">Global and Local Variables</a></li><li><a href="python3_file_management.html">Read and Write Files</a></li><li><a href="python3_modules_and_modular_programming.html">Modular Programming and Modules</a></li><li><a href="python3_re.html">Regular Expressions</a></li><li><a href="python3_re_advanced.html">Regular Expressions, Advanced</a></li><li><a href="python3_lambda.html">Lambda Operator, Filter, Reduce and Map</a></li><li><a href="python3_list_comprehension.html">List Comprehension</a></li><li><a href="python3_generators.html">Iterators and Generators</a></li><li><a href="python3_exception_handling.html">Exception Handling</a></li><li><a href="python3_object_oriented_programming.html">Object Oriented Programming</a></li><li><a href="python3_class_and_instance_attributes.html">Class and Instance Attributes</a></li><li><a href="python3_properties.html">Properties vs. getters and setters</a></li><li><a href="python3_inheritance.html">Inheritance</a></li><li><a href="python3_multiple_inheritance.html">Multiple Inheritance</a></li><li><a href="python3_magic_methods.html">Magic Methods and Operator Overloading</a></li><li><a href="python3_inheritance_example.html">OOP, Inheritance Example</a></li></ul>
+
+</div>
+
+<p>
+<hr>
+<h3>Organized Robbery</h3>
+George Bernard Shaw once said "Property is organized robbery."
+This is true in a very positive sense in Python as well:
+A property in Python "robs" the necessity to need getters and setters
+for attributes and to make it possible to start with public attributes
+instead of having everything private!
+
+<br><br>
+<h3>Sayings about Property</h3>
+This is not Python related:
+<i>
+Thieves respect property. 
+They merely wish the property to become their property 
+that they may more perfectly respect it.
+</i>
+
+<i>
+"Property has its duties as well as its rights.", Thomas Drummond (1797-1840)
+</i>
+<hr>
+
+<h3>Cute Wabbit</h3>
+
+A little girl goes into a pet show and asks for a wabbit. The shop keeper looks 
+down at her, smiles and says:
+<br>
+"Would you like a lovely fluffy little white rabbit, or a cutesy wootesly 
+little brown rabbit?"
+<br>
+"Actually", says the little girl, "I don't think my python would notice."
+<br>
+(Nick Leaton, Wed, 04 Dec 1996)
+
+<br>
+
+<br<
+<hr>
+<br>
+This website is supported by:<br>
+<a href="http://www.bodenseo.com/courses.php"><img style="width: 150px;" alt="Bodenseo,
+Linux, courses and seminars"
+		     src="images/bodenseo_python_training.gif"><br>Linux and Python Courses and Seminars</a>
+<br>
+<hr>
+</div><div id="sidebar-b"><img style="width: 150px;" alt="Python-Logo"
+		     src="images/python-logo.png"><!-- Dieses Tag dort einfügen, wo die +1-Schaltfläche dargestellt werden soll -->
+<g:plusone></g:plusone>
+<br><br>
+
+<div class="fb-like" data-href="www.python-course.eu" data-send="false" data-layout="button_count" 
+data-width="130" data-show-faces="true" data-action="recommend"></div>
+
+<br><br>
+This topic in German / Deutsche Übersetzung:
+    <a href="http://www.python-kurs.eu/python3_properties.php">Properties</a><p>
+<h3>Classroom Training Courses</h3>
+The goal of this website is to provide educational material, 
+allowing you to learn Python on your own.
+Nevertheless, it is faster and more efficient to attend a "real" 
+Python course in a classroom, with
+an experienced trainer. So why not attend one of the live 
+<a href="python_classes.html">Python courses</a> in Paris, London, Berlin, Munich
+or Lake Constance by Bernd Klein, the author of this tutorial?
+<br><br>
+You can also check the   
+<a href="http://www.bodenseo.com/courses.php?topic=Python">Python Training courses
+<img style="width: 150px;" alt="Bodenseo Kurse in Python"
+		     src="images/bodenseo_stairs_to_python.png"></a>
+		     delivered by Bodenseo and Bernd Klein.
+<br><br>
+You can book on-site classes at your company or organization, e.g. in England, Switzerland, Austria, Germany,
+France, Belgium, the Netherlands, Luxembourg, Poland, UK, Italy and other locations in Europe.
+<br><br>
+
+ </p>
+
+
+
+
+    
+</p></div>
+<div id="content">
+
+<div id="contextlinks">Previous Chapter: <a href="python3_class_and_instance_attributes.html">Class and Instance Attributes</a><br>
+<LINK rel="prev" href="python3_class_and_instance_attributes.html">Next Chapter: <a href="python3_inheritance.html">Inheritance</a><br>
+<LINK rel="next" href="python3_inheritance.html"></div><br>
+<h2>Properties vs. Getters and Setters</h2>
+<br>
+<h3>Properties</h3>
+<br><br>
+
+<img class="imgright" width=300 src="images/venitian_masks.png" alt="Venitian Masks: Properties are like Masks" />
+
+Getters and setters are used in many object oriented programming languages to ensure the 
+principle of data encapsulation. They are known as mutator methods as well. Data encapsulation 
+- as we have learnt in our 
+<a href="python3_object_oriented_programming.html" name="Object Oriented Programming">introduction 
+on Object Oriented Programming</a> of our tutorial -  is seen as the bundling of data with
+the methods that operate on these data. These methods are of course the getter for retrieving the
+data and the setter for changing the data. According to this principle, the attributes of a 
+class are made private to hide and protect them from other code.  
+<br><br>
+Unfortunately, it is widespread belief, that a proper Python class should encapsulate private 
+attributes by using getters and setters. As soon as one of these programmers introduces a new 
+attribute, he or she will make it a private variable and creates "automatically" a getter and a 
+setter for this attributes. Such programmers may even use an editor or an IDE, which automatically
+create getters and setters for all private attributes. These tools even warn the programmer if she 
+or he uses a public attribute!
+Java programmers will wrinkle their brows, screw up their noses, or even scream with horror when 
+they read the following: The Pythonic way to introduce attributes is to make them public. 
+<br><br>
+We will explain this later. First, we demonstrate in the following example, how we can design a 
+class in a Javaesque way with getters and setters to encapsulate the private attribute "self.__x":
+<br><br>
+
+<pre>
+class P:
+
+    def __init__(self,x):
+        self.__x = x
+
+    def getX(self):
+        return self.__x
+
+    def setX(self, x):
+        self.__x = x
+</pre>
+<br>
+We can see in the following demo session how to work with this class and the methods:
+<br><br>
+
+<pre>
+>>> from mutators import P
+>>> p1 = P(42)
+>>> p2 = P(4711)
+>>> p1.getX()
+42
+>>> p1.setX(47)
+>>> p1.setX(p1.getX()+p2.getX())
+>>> p1.getX()
+4758
+>>> 
+</pre>
+<br>
+What do you thing about the expression "p1.setX(p1.getX()+p2.getX())"? It's ugly, isn't it? 
+It's a lot easier to write an expression like the following, if we had a public attribute x:
+<br>
+<pre>
+p1.x = p1.x + p2.y 
+</pre>
+<br>
+Such an assignment is easier to write and above all easier to read than the Javaesque expression.
+<br><br>
+Let's rewrite the class P in a Pythonic way. No getter, no setter and instead of the private 
+attribute "self.__x" we use a public one:
+
+
+<pre>
+class P:
+
+    def __init__(self,x):
+        self.x = x
+</pre>
+
+<br>
+Beautiful, isn't it? Just three lines of code, if we don't count the blank line!
+
+<pre>
+>>> from p import P
+>>> p1 = P(42)
+>>> p2 = P(4711)
+>>> p1.x
+42
+>>> p1.x = 47
+>>> p1.x = p1.x + p2.x
+>>> p1.x
+4758
+>>> 
+</pre>
+
+"<span style="font-size: smaller;"><span style="font-size: smaller;">But</span></span>, 
+<span style="font-size: smaller;">but</span>, but, 
+<span style="font-size: larger;">but</span>, 
+<span style="font-size: larger;"><span style="font-size: larger;">but</span></span> ... ", 
+we can here them howling and screaming, 
+<span style="font-size: larger;"><span style="font-size: larger;">
+<span style="font-size: larger;">"But there is NO data ENCAPSULATION!"</span></span></span> 
+<br>
+Yes, in this case there is no data encapsulation. We don't need it in this case. The only thing
+getX and setX in our starting example did was "getting the data through" without doing anything,
+no checks nothing.
+<br><br>But what happens, if we want to change the implementation in the future. This is a serious 
+argument. Let's assume, we want to change the implementation like this: The attribute x can have 
+values between 0 and 1000. If a value larger than 1000 is assigned, x should be set to 1000.
+Correspondingly, x should be set to 0, if the value is less than 0.
+<br><br>
+It is easy to change our first P class to cover this problem. We change the setX method accordingly:
+
+<pre>
+class P:
+
+    def __init__(self,x):
+        self.setX(x)
+
+    def getX(self):
+        return self.__x
+
+    def setX(self, x):
+        if x < 0:
+            self.__x = 0
+        elif x > 1000:
+            self.__x = 1000
+        else:
+            self.__x = x
+</pre>
+
+The following Python session shows, that it works the way we want it to work:
+
+<pre>
+>>> from mutators import P
+>>> p1 = P(1001)
+>>> p1.getX()
+1000
+>>> p2 = P(15)
+>>> p2.getX()
+15
+>>> p3 = P(-1)
+>>> p3.getX()
+0
+</pre>
+
+But there is a catch: Let's assume we have designed our class with the public attribute
+and no methods. People have already used it a lot and they have written code like this:
+
+<pre>
+from p import P
+p1 = P(42)
+p1.x = 1001
+</pre>
+
+Our new class means breaking the interface. The attribute x is not available anymore. 
+That's why in Java e.g. people are recommended to use only private attributes with 
+getters and setters, so that they can change the implementation without having to
+change the interface.
+<br><br>
+But Python offers a solution to this problem. The solution is called properties!
+<br><br>
+
+The class with a property looks like this:
+
+<pre>
+class P:
+
+    def __init__(self,x):
+        self.x = x
+
+    @property
+    def x(self):
+        return self.__x
+
+    @x.setter
+    def x(self, x):
+        if x < 0:
+            self.__x = 0
+        elif x > 1000:
+            self.__x = 1000
+        else:
+            self.__x = x
+</pre>
+
+A method which is used for setting a value is decorated with "@property", i.e. we put this 
+line directly in front of the header. The method which has to function as the setter is decorated
+with "@x.setter". If the function had been called "f", we would have had to decorate it with "@f.setter".
+<br>
+Two things are noteworthy: We just put the code line "self.x = x" in the __init__ method and 
+the property method x is used to check the limits of the values. The second interesting thing is, that we 
+wrote "two" methods with the same name and a different number of parameters "def x(self)" and 
+"def x(self,x)". We have learned in a previous chapter of our course, that this is not possible.
+It works here due to the decorating:
+
+<pre>
+>>> from p import P
+>>> p1 = P(1001)
+>>> p1.x
+1000
+>>> p1.x = -12
+>>> p1.x
+0
+>>> 
+</pre>
+
+Alternatively, we could have used a different syntax without decorators to define the 
+property. As you can see, the code is definitely less elegant and we have to make sure, 
+that we use the getter function in the __init__ method again:
+ 
+<br><br>
+
+<pre>
+class P:
+
+    def __init__(self,x):
+        self.setX(x)
+
+    def getX(self):
+        return self.__x
+
+    def setX(self, x):
+        if x < 0:
+            self.__x = 0
+        elif x > 1000:
+            self.__x = 1000
+        else:
+            self.__x = x
+
+    x = property(getX, setX)
+</pre>
+<br>
+<img class="imgright" width=250 src="images/marvin2.png" 
+alt="Robot with heart and feelings" />
+<br>
+There is still another problem in the most recent version. We have now two ways to access
+or change the value of x: Either by using "p1.x = 42" or by "p1.setX(42)". This way we are
+violating one of the fundamentals of Python: "There should be one-- and preferably only 
+one --obvious way to do it." (see <a href="python3_history_and_philosophy.html">Zen of 
+Python</a>) So our decorator version is the best solution!
+
+
+
+<br><br>
+
+From what we have written so far, and what can be seen in other books and tutorials as well,
+we could easily get the impression, that there is a one-to-one connection between properties
+(or mutator methods) and the attributes, i.e. that each attribute has or should have its own 
+property (or getter-setter-pair) and the other way around. Even in other object oriented languages 
+than Python, it's usually not a god idea to implement a class like that. The main reason is, that
+many attributes are only internally needed and creating interfaces for the user of the class
+increases unnecessarily the usability of the class. The possible user of a class shouldn't be "drowned"
+with umpteen - of mainly unnecessary - methods or properties!
+<br><br>
+The following example shows a class, which has internal attributes, which can't be accessed 
+from outside. These are the private attributes self.__potential_physical and 
+self.__potential_psychic. Furthermore we show, that a property can be deduced from
+the values of more than one attribute.  The property "condition" of our example returns
+the condition of the robot in a descriptive string. The condition depends on the sum of the values 
+of the psychic and the physical conditions of the robot. 
+<br><br>
+
+<pre>
+class Robot:
+
+    def __init__(self, name, build_year, lk = 0.5, lp = 0.5 ):
+        self.name = name
+        self.build_year = build_year
+        self.__potential_physical = lk
+        self.__potential_psychic = lp
+
+    @property
+    def condition(self):
+        s = self.__potential_physical + self.__potential_psychic
+        if s <= -1:
+           return "I feel miserable!"
+        elif s <= 0:
+           return "I feel bad!"
+        elif s <= 0.5:
+           return "Could be worse!"
+        elif s <= 1:
+           return "Seems to be okay!"
+        else:
+           return "Great!" 
+  
+if __name__ == "__main__":
+    x = Robot("Marvin", 1979, 0.2, 0.4 )
+    y = Robot("Caliban", 1993, -0.4, 0.3)
+    print(x.condition)
+    print(y.condition)
+</pre>
+
+
+<br><br>
+
+
+
+<h3>Public instead of Private Attributes</h3>
+
+Let's summarize the usage of private and public attributes, getters and setters and 
+properties: 
+
+Let's assume, that we are designing a new class and we pondering about an instance or class
+attribute "OurAtt", which we need for the design of our class. We have to observe the
+following  issues: 
+
+<ul>
+<li>Will the  value of "OurAtt" be needed by the possible users of our class?</li>
+<li>If not, we can or should make it a private attribute.</li>
+<li>If it has to be accessed, we make it accessible as a public attribute</li>
+<li>We will define it as a private attribute with the corresponding property, if and only if 
+we have to do some checks or transformation of the data. (As an example, you can
+have a look again at our class P, where the attribute has to be in the interval 
+between 0 and 1000, which is ensured by the property "x") </li>
+<li>Alternatively, you could use a getter and a setter, but using 
+a property is the Pythonic way to deal with it!</li>
+</ul>
+
+Let's assume, we have defined "OurAtt" as a public attribute. Our class has been successfully 
+used by other users for quite a while.  Now comes the point, which frightens some traditional
+OOPistas out of the wits: Imagine "OurAtt" has been used a an integer. Now, our class has to ensure
+that "OurAtt" has to be a value between 0 and 1000? Without property, this is really a horrible
+scenario! Due to properties it's easy: We create a property version of "OurAtt".  
+it.
+
+<table>
+<tr>
+<td>
+<pre>
+class OurClass:
+
+    def __init__(self, a):
+        self.OurAtt = a
+
+
+x = OurClass(10)
+print(x.OurAtt)
+</pre>
+
+</td>
+<td>
+<img width=30 src="images/green_arrow.png" alt="'green arrow' meaning 'is turned into'" />
+</td>
+<td>
+<pre>
+class OurClass:
+
+    def __init__(self, a):
+        self.OurAtt = a
+
+    @property
+    def OurAtt(self):
+        return self.__OurAtt
+
+    @OurAtt.setter
+    def OurAtt(self, val):
+        if val < 0:
+            self.__OurAtt = 0
+        elif val > 1000:
+            self.__OurAtt = 1000
+        else:
+            self.__OurAtt = val
+
+
+x = OurClass(10)
+print(x.OurAtt)
+</pre>
+
+</td>
+</tr>
+</table>
+
+This is great, isn't it: You can start with the simplest implementation imaginable, and 
+you are free to later migrate to a property version without having to change the interface!
+So properties are not just a replacement for getters and setter!
+<br><br>
+Something else, you might have already noticed: For the users of a class, properties are
+syntactically identical to ordinary attributes.
+
+
+<br><br><br>
+
+
+
+<br>
+<div id="contextlinks">Previous Chapter: <a href="python3_class_and_instance_attributes.html">Class and Instance Attributes</a><br>
+<LINK rel="prev" href="python3_class_and_instance_attributes.html">Next Chapter: <a href="python3_inheritance.html">Inheritance</a><br>
+<LINK rel="next" href="python3_inheritance.html"></div><br><br><br>
+
+</div>
+<div id="footer">  &copy; 2011 - 2014 <a href="http://www.bklein.de/">Bernd Klein</a>,
+Bodenseo; 
+Design by Denise Mitchinson adapted for python-course.eu by Bernd Klein</div>
+</div>
+</body>
+
+<!-- Mirrored from www.python-course.eu/python3_properties.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:09:50 GMT -->
+</html>
+
+
+

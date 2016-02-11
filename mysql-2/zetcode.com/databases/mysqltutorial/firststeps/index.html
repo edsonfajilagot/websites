@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from zetcode.com/databases/mysqltutorial/firststeps/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Jul 2015 02:47:03 GMT -->
+<head>
+<title>First steps in MySQL</title>
+<link rel="stylesheet" href="../../../cfg/format2.css" type="text/css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="First steps, MySQL, databases, SQL">
+<meta name="description" content="In this part of the MySQL tutorial, we
+do first steps in MySQL.">
+<meta name="author" content="Jan Bodnar">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div id="wide_ad" class="ltow">
+<script async src="../../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- 160x600, August 2011 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:600px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="2484182563"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<div class="content">
+
+
+<header>
+
+<nav>
+<a href="http://zetcode.com/" title="Home">Home</a>&#160;
+<a href="../index.html">Contents</a>
+</nav>
+
+</header>
+
+
+<h1>First steps in MySQL</h1>
+
+
+<p>
+In this chapter, we are going to make our first steps with MySQL. We will
+start the server, connect to the server with a client tool, create a new
+user and issue our first SQL statements. 
+</p>
+
+<div class="med_rec">
+<script async src="../../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- NewSquare -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:250px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="0364418177"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+
+<h2 id="startstop">Starting/stopping the MySQL server</h2>
+
+<p>
+MySQL server is a daemon which runs in the background. The way you start 
+MySQL depends on your system and the installation type that you have done. 
+</p>
+
+<pre class="code">
+$ sudo /etc/init.d/mysqld start
+$ sudo /etc/init.d/mysqld stop
+</pre>
+
+<p>
+On traditional init based systems, we would use the above commands to start 
+and stop the MySQL server.
+</p>
+
+<pre class="code">
+$ sudo service mysql start
+$ sudo service mysql stop
+</pre>
+
+<p>
+Ubuntu Linux has migrated to Upstart, which is an event based daemon used for starting
+tasks and services and supervising them. On systems that use Upstart, we would start
+and stop MySQL server using the above commands. 
+</p>
+
+<pre class="code">
+$ su
+Password: 
+# /usr/local/mysql/bin/mysqld_safe &amp;
+# exit
+exit
+$ 
+</pre>
+
+<p>
+The final option is to start and stop MySQL server manually. If you have followed this
+tutorial from the beginning and have installed the MySQL from sources, this is the
+way to go. The mysqld_safe script starts the MySQL server. <!--Note the full path. Despite
+the fact that the directory containing mysqld_safe script is inside the PATH variable, 
+we need to specify the full path. On some systems we might not need to specify the full
+path. It depends on the way sudo command was built. On Ubuntu, the sudo command shortens
+the PATH and takes only a limited group of directories into account. -->
+First we change to the root account and then we start the script. 
+</p>
+
+<pre class="code">
+$ sudo passwd root
+Enter new UNIX password: 
+Retype new UNIX password: 
+passwd: password updated successfully
+$ su root
+Password: 
+root@spartan:/usr/local/mysql# 
+</pre>
+
+<p>
+On Ubuntu, the root account is not enabled by default. Here we show, how to enable it.
+Then we can use the <code>su</code> (switch user) command to switch to root to start 
+the MySQL daemon. 
+</p>
+
+<p>
+After we have started the server, we can check if it is alive.
+</p>
+
+<pre class="code">
+$ mysqladmin -uroot -p ping
+Enter password: 
+mysqld is alive
+</pre>
+
+<p>
+We use the <code>mysqladmin</code> tool to check if MySQL server 
+is running. The <code>-u</code> option specifies the user which 
+pings the server. The <code>-p</code> option is a password for the 
+user. If the password is omitted, the <code>mysqladmin</code> prompts 
+for one. The characters that you type after the prompt are not visible. 
+This is a more secure solution for working with <code>mysqladmin</code>. 
+This way no one behind your back can see the password you have typed 
+and it is not stored in the history of the shell. 
+</p>
+
+<pre class="code">
+$ mysqladmin -uroot -p shutdown
+</pre>
+
+<p>
+We use the <code>mysqladmin</code> tool to shut down the MySQL server. 
+</p>
+
+
+<h2 id="connect">Connecting to the MySQL server</h2>
+
+<p>
+The <code>mysql</code> is a MySQL command line tool. It is a simple shell. 
+It supports interactive and non-interactive use. It is located in the 
+<code>/usr/local/mysql/bin</code> directory. (On our installation.)
+</p>
+
+<pre class="code">
+$ mysql -uroot -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 1
+Server version: 5.5.9 Source distribution
+
+Copyright (c) 2000, 2010, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> 
+</pre>
+
+<p>
+We connect to the server with the <code>mysql</code> tool. Note that we have 
+omitted the password after the <code>-p</code> option. We type the password 
+after the <samp>'Enter password'</samp> prompt.
+</p>
+
+<p>
+The <code>mysql</code> command line tool has mysql> as prompt. At this prompt 
+we can issue both <code>mysql</code> built-in commands and SQL statements. 
+We need to familiarise ourselves with the <code>mysql</code> tool. 
+The <kbd>Ctrl</kbd>+<kbd>L</kbd> clears the screen, the <kbd>Ctrl</kbd>+<kbd>D</kbd> 
+or the <code>quit</code> command quit 
+the <code>mysql</code>. We need to distinguish between <code>mysql</code> 
+commands and SQL statements. SQL statements are terminated with a semicolon.
+</p>
+
+<pre class="code">
+mysql> help
+
+For information about MySQL products and services, visit:
+   http://www.mysql.com/
+For developer information, including the MySQL Reference Manual, visit:
+   http://dev.mysql.com/
+To buy MySQL Enterprise support, training, or other products, visit:
+   https://shop.mysql.com/
+
+List of all MySQL commands:
+Note that all text commands must be first on line and end with ';'
+?         (\?) Synonym for `help'.
+clear     (\c) Clear the current input statement.
+connect   (\r) Reconnect to the server. Optional arguments are db and host.
+delimiter (\d) Set statement delimiter.
+edit      (\e) Edit command with $EDITOR.
+ego       (\G) Send command to mysql server, display result vertically.
+exit      (\q) Exit mysql. Same as quit.
+go        (\g) Send command to mysql server.
+help      (\h) Display this help.
+nopager   (\n) Disable pager, print to stdout.
+notee     (\t) Don't write into outfile.
+pager     (\P) Set PAGER [to_pager]. Print the query results via PAGER.
+print     (\p) Print current command.
+prompt    (\R) Change your mysql prompt.
+quit      (\q) Quit mysql.
+...
+</pre>
+
+<p>
+Type help to get a full list of <code>mysql</code> commands. 
+</p>
+
+<pre class="code">
+mysql> system pwd
+/home/vronskij/programming/mysql
+</pre>
+
+<p>
+The <code>system</code> command can execute a shell command. We have launched 
+the <code>pwd</code> command to find out our current working directory. 
+</p>
+
+<pre class="code">
+mysql> quit
+Bye
+</pre>
+
+<p>
+The <code>quit</code> command terminates the <code>mysql</code> shell. 
+</p>
+
+
+<h2 id="database">Creating a database</h2>
+
+<p>
+Now we are going to create our database. 
+</p>
+
+<pre class="code">
+mysql> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| test               |
++--------------------+
+</pre>
+
+<p>
+The <code>SHOW DATABASES</code> statement shows all available databases on our
+system. Note that SQL statements are terminated with a semicolon. There are four
+databases present. The <code>information_schema</code>, <code>mysql</code>, 
+and <code>performance_schema</code> are MySQL system databases. The <code>test</code> 
+database is available as a workspace for users to try things out. It is empty; 
+there are no tables. 
+</p>
+
+<pre class="code">
+mysql> CREATE DATABASE mydb;
+</pre>
+
+<p>
+This statement creates a new database. Throughout this tutorial, we will use the 
+<code>mydb</code> database. To create a new database, we need to have certain 
+privileges. Remember that we have connected to the server with the root user, which 
+is a superuser and has all privileges.
+</p>
+
+<pre class="code">
+mysql> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mydb               |
+| mysql              |
+| performance_schema |
+| test               |
++--------------------+
+</pre>
+
+<p>
+Showing all databases, the <code>mydb</code> database is among them. 
+</p>
+
+<pre class="code">
+mysql> use mydb;
+Database changed
+</pre>
+
+<p>
+In order to work with a database, we must first select it. 
+We select a specific database with a use command. 
+</p>
+
+<pre class="code">
+mysql> SHOW TABLES;
+Empty set (0.00 sec)
+</pre>
+
+<p>
+The <code>SHOW TABLES</code> statement shows all available tables in 
+a database. Since it is a newly created database, no tables are found. 
+</p>
+
+<pre class="code">
+mysql> source cars.sql
+Database changed
+Query OK, 0 rows affected (0.20 sec)
+
+Query OK, 1 row affected (0.08 sec)
+
+...
+</pre>
+
+<p>
+In the first chapter, we have provided some SQL scripts to create
+some tables. We use the source command to execute the <code>cars.sql</code> 
+script, which creates a <code>Cars</code> table for us.
+</p>
+
+<pre class="code">
+mysql> SHOW TABLES;
++----------------+
+| Tables_in_mydb |
++----------------+
+| Cars           |
++----------------+
+</pre>
+
+<p>
+Now the <code>SHOW TABLES</code> statement displays one table available. 
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM Cars;
++----+------------+--------+
+| Id | Name       | Cost   |
++----+------------+--------+
+|  1 | Audi       |  52642 |
+|  2 | Mercedes   |  57127 |
+|  3 | Skoda      |   9000 |
+|  4 | Volvo      |  29000 |
+|  5 | Bentley    | 350000 |
+|  6 | Citroen    |  21000 |
+|  7 | Hummer     |  41400 |
+|  8 | Volkswagen |  21600 |
++----+------------+--------+
+</pre>
+
+<p>
+And this is the data in the table. 
+</p>
+
+
+<h2 id="user">Creating a new user</h2>
+
+<p>
+Similarly to Unix root account, it is advised not to use the MySQL
+superuser root account for our tasks. We should use the root
+account only when it is necessary. We rather create a new account
+that we will use for our tasks. This user will have limited privileges. 
+When using the root user we could accidentally do a lot of harm to
+our data. 
+</p>
+
+<pre class="code">
+mysql> CREATE USER user12@localhost IDENTIFIED BY '34klq*';
+</pre>
+
+<p>
+The above statement created a new user called <code>user12</code>. 
+The accout has password <code>34klq*</code>. The user is created, 
+but he has no privileges. 
+</p>
+
+<pre class="code">
+mysql> GRANT ALL ON mydb.* to user12@localhost;
+</pre>
+
+<p>
+This statement grants all privileges to <code>user12</code> for all database 
+objects on the <code>mydb</code> database. These privileges will be sufficient 
+for the examples in this tutorial.
+</p>
+
+<p>
+In this chapter, we did our first steps with MySQL database system. 
+</p>
+
+
+<footer>
+
+<nav class="center">
+<span class="botNavItem"><a href="http://zetcode.com/">Home</a></span> ‡ <span class="botNavItem"><a href="../index.html">Contents</a></span> ‡ 
+<span class="botNavItem"><a href="#">Top of Page</a></span>
+</nav>
+
+<div class="signature">
+<a href="http://zetcode.com/">ZetCode</a> last modified February 11, 2011  <span class="copyright">&copy; 2007 - 2015 Jan Bodnar</span>
+</div>
+
+</footer>
+
+</div> <!-- content -->
+
+</div> <!-- container -->
+
+</body>
+
+<!-- Mirrored from zetcode.com/databases/mysqltutorial/firststeps/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Jul 2015 02:47:03 GMT -->
+</html>
+

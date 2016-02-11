@@ -1,0 +1,322 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from www.python-course.eu/towers_of_hanoi.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:07:10 GMT -->
+<head>
+
+<!-- Dieses Tag in den Head-Bereich oder direkt vor dem schlieÃŸenden Body-Tag einfÃ¼gen -->
+<script type="text/javascript" src="../apis.google.com/js/plusone.js"></script>
+
+
+
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "../connect.facebook.net/en_GB/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script><title>Python Tutorial: Towers of Hanoi</title>
+<meta http-equiv="content-type" content="text/html; charset="ISO-8859-1">
+<meta name="Description" content="Python Program with a recursive function solving the towers of Hanoi game" />
+<meta name="Keywords" content="Python, recursive, recursion, game, towers, towers of Hanoi, solution, exercise, problem" />
+
+<link href="favicon.ico" rel="shortcut icon">
+
+<link href="moderna.css" rel="stylesheet" type="text/css" />
+<link href="moderna_print.css" media="print" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+<div id="container">
+
+<div id="banner">
+<!-- <a href="impressum.php">Impressum</a> | <a href="mailto:">contact</a> | --><h1>Python Course</h1>
+
+</div>
+
+	<!-- Begin Top Menu -->
+<ul id="navlist">
+<li><a href="index-2.html" >Home</a></li><li><a href="course.html" >Python 2 Tutorial</a></li><li><a href="python3_course.html" >Python 3 Tutorial</a></li><li class="active"><a id="current" href="advanced_topics.html" >Advanced Topics</a></li><li><a href="python_books.html" >Python Books</a></li><li><a href="python_tkinter.html" >Tkinter Tutorial</a></li><li><a href="contact.html" rel="nofollow">Contact</a></li>                          
+</ul>
+	<!-- End Top Menu -->
+<div id="sidebar-a">
+<img class="border" src="images/towers_of_hanoi_part.jpg" alt="box" />    <h2>Advanced Topics</h2>
+
+<div class="menu">
+
+<ul>
+<li><a href="sys_module.html">Introduction into the sys module</a></li><li><a href="os_module_shell.html">Python and the Shell</a></li><li><a href="forking.html">Forks and Forking in Python</a></li><li><a href="threads.html">Introduction into Threads</a></li><li><a href="pipes.html">Pipe, Pipes and "99 Bottles of Beer"</a></li><li><a href="graphs_python.html">Graph Theory and Graphs in Python"</a></li><li><a href="pygraph.html">Graphs: PyGraph"</a></li><li><a href="networkx.html">Graphs: NetworkX"</a></li><li><a href="finite_state_machine.html">Finite State Machine in Python</a></li><li><a href="turing_machine.html">Turing Machine in Python</a></li><li><a href="numpy.html">NumPy Module</a></li><li><a href="matrix_arithmetic.html">Matrix Arithmetic</a></li><li><a href="linear_combinations.html">Linear Combinations</a></li><li><a href="text_classification_introduction.html">Introduction into Text Classification using Naive Bayes</a></li><li><a href="text_classification_python.html">Python Implementation of Text Classification</a></li><li><a href="towers_of_hanoi.html">Example for recursive Programming: Towers of Hanoi</a></li><li><a href="mastermind.html">Mastermind / Bulls and Cows</a></li><li><a href="dynamic_websites_wsgi.html">Creating dynamic websites with WSGI</a></li><li><a href="dynamic_websites.html">Dynamic websites with mod_python</a></li><li><a href="pylons.html">Dynamic websites with Pylons</a></li><li><a href="sql_python.html">Python, SQL, MySQL and SQLite</a></li><li><a href="python_scores.html">Python Scores</a></li></ul>
+
+</div>
+
+<p>
+<hr>
+<h3>Recursion</h3>
+<i>"The power of recursion evidently lies in the possibility of defining an infinite 
+set of objects by a finite statement. In the same manner, an infinite number of 
+computations can be described by a finite recursive program, even if this program 
+contains no explicit repetitions."</i>
+<br>
+Niklaus Wirth in "Algorithms + Data Structures", 1976
+<br>
+<hr>
+<i>
+"Beware of bugs in the above code; I have only proved it correct, not tried it. "
+<br>
+Donald Knuth in a memo subtitled "An instructive use of recursion"
+</i>
+<hr>
+<br>
+This website is created by:<br><br>
+<a href="http://www.python-training-courses.com/"><img style="width: 150px;" alt="Python Training Courses"
+		     src="images/toronto_building.jpg"><br><br>Python Training Courses in Toronto, Canada</a>
+<br>
+On site trainings in Europe, Canada and the US.
+<br>
+<hr>
+</div><div id="sidebar-b"><img style="width: 150px;" alt="Python-Logo"
+		     src="images/python-logo.png"><!-- Dieses Tag dort einfügen, wo die +1-Schaltfläche dargestellt werden soll -->
+<g:plusone></g:plusone>
+<br><br>
+
+<div class="fb-like" data-href="www.python-course.eu" data-send="false" data-layout="button_count" 
+data-width="130" data-show-faces="true" data-action="recommend"></div>
+
+<br><br>
+<h3>Python Training Courses</h3>
+<p>
+
+<p>If you  want to learn Python fast and efficiently, you should consider a 
+<a href="http://www.bodenseo.com/courses.php?topic=Python">
+<img class="imgright" src="images/radolfzell_segel_bodenseo_logo.jpg" alt="Bodenseo logo" />
+<br>Python Training course</a> at Bodenseo. There are also
+ special seminars for advanced students like the 
+ <a href="http://w ww.bodenseo.com/course/python_xml_training_course.html">Python & XML Training Course</a>.
+ If you want to acquire special knowledge in Text Processing and Text Classification, then  
+<a href="http://www.bodenseo.com/course/python_text_processing_course.html">"Python Text Processing 
+Course"</a> will be the right one for you.
+<br>
+All the Python seminars are available in German as well: 
+<a href="http://www.bodenseo.de/kurse.php?topic=Python">Python-Kurse</a>"
+<br><br>
+You can also book Bernd Klein for <a href="python_classes.html">onsite training courses</a>
+
+
+
+<br><br>
+<h3>Python and Recursion</h3>
+In programming languages like Lisp or Prolog, recursion is essential. It is hardly possible to write
+a program without using recursion. Python fully supports the implementation of recursive functions, but
+on the other hand, there are powerful and easy to be used loops, which is one of the reasons, why recursions
+are not as often used in Python as they are in Lisp or Prolog.
+ <br><br>
+
+
+
+
+</p></div>
+<div id="content">
+
+<div id="contextlinks">Previous Chapter: <a href="text_classification_python.html">Python Implementation of Text Classification</a><br>
+<LINK rel="prev" href="text_classification_python.html">Next Chapter: <a href="mastermind.html">Mastermind / Bulls and Cows</a><br>
+<LINK rel="next" href="mastermind.html"></div>
+<h2>Towers of Hanoi</h2>
+<br>
+<h3>Introduction</h3>
+Why do we present a Python implementation of the "Towers of Hanoi"? 
+The hello-world of recursion is the Factorial. This means, you will hardly find any book or tutorial about 
+programming languages which doesn't deal with the first and introductory example about recursive functions.
+Another one is the calculation of the n-th Fibonacci number. Both are well suited for a tutorial
+ because of their simplicity but they can be easily written in an iterative way as well. 
+<br><br>If you have problems in understanding recursion, we recommend, that you go through the chapter 
+ "<a href="python3_recursive_functions.html">Recursive Functions</a>" of our tutorial.
+<br><br>
+That's different with the "Towers of Hanoi". A recursive solution almost forces itself on the programmer,
+while the iterative solution of the game is hard to find and to grasp. So, with the Towers of Hanoi we present
+a recursive Python program, which is hard to program in an iterative way.
+<br><br>
+<h3>Origin</h3>
+<p>
+<img class="imgright" src="images/towers_of_hanoi.jpg" alt="Towers of Hanoi" />
+<br>
+There is an old legend about a temple or monastery, which contains three poles. One of them filled with
+64 gold disks. The disks are of different sizes, and they are put on top of each other, according to
+their size, i.e. each disk on the pole a little smaller than the one beneath it. The priests, if the legend is
+about a temple, or the monks, if it is about a monastery, have to 
+move this stack from one of the three poles to another one. But one rule has to be applied:  a large 
+disk can never be placed on top of a smaller one. When they would have finished their work, 
+the legend tells, the temple would crumble into dust, and the world would end.
+<br><br>
+But don't be afraid, it's not very likely, that they will finish their work soon, because 
+2<sup>64</sup> - 1 moves are necessary, i.e. 18,446,744,073,709,551,615 to move the tower according 
+to the rules.
+<br><br>
+But there is - most probably - no ancient legend. The legend and the game "towers of Hanoi" had been
+conceived by the  French mathematician Edouard Lucas in 1883.
+<br>
+<h3>Rules of the Game</h3>
+The rules of the game are very simple, but the solution is not so obvious. The game "Towers of Hanoi" 
+uses three rods. 
+A number of disks is stacked in decreasing order from the bottom to the top of one rod, i.e. the largest 
+disk at the bottom and the smallest one on top. The disks build a conical tower.  
+<br><br>
+The aim of the game is to move the tower of disks from one rod to another rod.
+<br><br>
+The following rules have to be obeyed:
+<ul>
+<li>Only one disk may be moved at a time.</li>
+<li>Only the most upper disk from one of the rods can be moved in a move</li>
+<li>It can be put on another rod, if this rod is empty or if the most upper disk of this rod is
+larger than the one which is moved.</li>
+</ul>
+
+<br>
+<h3>Number of Moves</h3>
+The number of moves necessary to move a tower with n disks can be calculated as:
+2<sup>n</sup> - 1
+<br>
+<h3>Playing around to Find a Solution</h3>
+<br>
+From the formula above, we know, that we need 7 moves to move a tower of size 3 from the most left rod (let's
+call it SOURCE to the most right tower (TARGET).
+<br><br>
+The pole in the middle (we will call it AUX) is needed as an auxiliary stack to deposit disks temporarily. 
+<br><br>
+<img class="imgright" src="images/towers_of_hanoi_3_disks.jpg" alt="Towers of Hanoi" />
+Before we examine the case with 3 disks, as it is depicted in the image on the right side, we will have 
+a look at towers of size 1 (i.e. just one disk) and size 2. The solution for a tower with just one disk
+is straightforward: We will the one disk on the SOURCE tower to the TARGET tower and we are finished.
+<br><br>
+Let's look now at a tower with size 2, i.e. two disks. There are two possibilities to move the first disk,
+the disk on top of the stack of SOURCE: We can move this disk either to TARGET or to AUX.
+<ul>
+<li>So let's start by moving the smallest disk from SOURCE to TARGET. Now there are two choices: We can 
+move this disk again, either back to the SOURCE peg, which obviously doesn't make sense, or we could move
+it to AUX, which doesn't make sense either, because we could have moved there as our first step. So the
+only move which makes sense is moving the other disk, i.e. the largest disk, to peg AUX. Now, we have to
+move the smallest disk again, because we don't want to move the largest disk back to SOURCE again. We can 
+move the smallest disk to AUX. Now we can see, that we have moved the tower of size 2 to the peg AUX, but
+the target had been peg TARGET. We have already used the maximal number of moves, i.e. 2<sup>2</sup> - 1 = 3
+<li>Moving the smallest disk from peg SOURCE to TARGET as our first step has not shown to be successful.
+So, we will move this disk to peg AUX in our first step. After this we move the second disk to TARGET. 
+After this we move the smallest disk from AUX to TARGET and we have finished our task!</li>
+</li>
+</ul>
+We have seen in the cases n=1 and n=2 that it depends on the first move, if we will be able to successfully 
+and with the minimal number of moves solve the riddle. We know from our formula, that the minimal number 
+of moves nessary to move a tower of size 3 from the SOURCE peg to the target peg is 7 (2<sup>3</sup> - 1)
+<br>
+You can see in the solution, which we present in our image, that the first disk has to be moved from the
+peg SOURCE to the peg TARGET. If your first step consists of moving the smallest disk to AUX, you will not
+be capable of finishing the task with less than 9 moves.
+<img class="imgright" src="images/towers_of_hanoi_n_disks.jpg" alt="Towers of Hanoi, n disks" />
+<br><br>
+Let's number the disks as D<sub>1</sub> (smallest), D<sub>2</sub> and D<sub>3</sub> (largest) and name 
+the pegs as S (SOURCE peg), A (AUX), T (TARGET). We can see, that we move in three moves the tower of 
+size 2 (the disks D<sub>1</sub> and D<sub>2</sub>) to A. Now 
+we can move D<sub>3</sub> to T, where it is finally positioned. The last three moves move the tower 
+consisting of D<sub>2</sub>D<sub>1</sub> from peg A to T to place them on top of D<sub>3</sub>.
+<br><br>
+There is a general rule for moving a tower of size n (n &gt; 1) from the peg S to the peg T:
+<ul>
+<li>move a tower of n - 1 discs D<sub>n-1</sub> ... D<sub>1</sub> from S to A. Disk D<sub>n</sub> is 
+left alone on peg S</li>
+<li>Move disk D<sub>n</sub> to T</li>
+<li>move the tower of n - 1 discs D<sub>n-1</sub> ... D<sub>1</sub> on A to T, i.e. this tower
+will be put on top of Disk D<sub>n</sub></li>
+</ul>
+The algorithm, which we have just defined, is a recursive algorithm to move a tower of size n.
+It actually is the one, which we will use in our Python implementation to solve the Towers of Hanoi.
+Step 2 is a simple move of a disk. But to accomplish the steps 1 and 3, we apply the same algorithm 
+again on a tower of n-1. The calculation will finish with a finite number of steps, because very time
+the recursion will be started with a tower which is 1 smaller than the one in the calling function.
+So finally we will end up with a tower of size n = 1, i.e. a simple move.
+<br>
+<h3>Recursive Python Program</h3>
+The following Python script contains a recursive function "hanoi", which implements a recursive solution for
+Towers of Hanoi:
+<pre>
+def hanoi(n, source, helper, target):
+    if n > 0:
+        # move tower of size n - 1 to helper:
+        hanoi(n - 1, source, target, helper)
+        # move disk from source peg to target peg
+        if source:
+            target.append(source.pop())
+        # move tower of size n-1 from helper to target
+        hanoi(n - 1, helper, source, target)
+        
+source = [4,3,2,1]
+target = []
+helper = []
+hanoi(len(source),source,helper,target)
+
+print source, helper, target
+</pre>
+
+This function is implementing, what we have explained in the previous subchapter. First we move a tower of
+size n-1 from the peg source to the helper peg. We do this by calling 
+<pre>hanoi(n - 1, source, target, helper)</pre>
+After this, there will be the largest disk left on the peg source. We move it to the empty peg target by the
+statement 
+<pre>
+        if source:
+            target.append(source.pop())
+</pre>
+After this, we have to move the tower from "helper" to "target", i.e. on top of the largest disk:
+
+<pre>
+        hanoi(n - 1, helper, source, target)
+</pre>
+
+If you want to check, what's going on, while the recursion is running, we suggest the following Python
+programm. We have slightly changed the data structure. Instead of passing just the stacks of disks to
+the function, we pass tuples to the function. Each tuple consists of the stack and the function of the 
+stack:
+
+<pre>
+def hanoi(n, source, helper, target):
+    print "hanoi( ", n, source, helper, target, " called"
+    if n > 0:
+        # move tower of size n - 1 to helper:
+        hanoi(n - 1, source, target, helper)
+        # move disk from source peg to target peg
+        if source[0]:
+            disk = source[0].pop()
+            print "moving " + str(disk) + " from " + source[1] + " to " + target[1]
+            target[0].append(disk)
+        # move tower of size n-1 from helper to target
+        hanoi(n - 1, helper, source, target)
+        
+source = ([4,3,2,1], "source")
+target = ([], "target")
+helper = ([], "helper")
+hanoi(len(source[0]),source,helper,target)
+
+print source, helper, target
+</pre>
+ 
+
+<br><br>
+
+  
+
+
+</p>
+
+<div id="contextlinks">Previous Chapter: <a href="text_classification_python.html">Python Implementation of Text Classification</a><br>
+<LINK rel="prev" href="text_classification_python.html">Next Chapter: <a href="mastermind.html">Mastermind / Bulls and Cows</a><br>
+<LINK rel="next" href="mastermind.html"></div><br><br><br>
+
+</div>
+<div id="footer">  &copy; 2011 - 2014 <a href="http://www.bklein.de/">Bernd Klein</a>,
+Bodenseo; 
+Design by Denise Mitchinson adapted for python-course.eu by Bernd Klein</div>
+</div>
+</body>
+
+<!-- Mirrored from www.python-course.eu/towers_of_hanoi.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:07:15 GMT -->
+</html>

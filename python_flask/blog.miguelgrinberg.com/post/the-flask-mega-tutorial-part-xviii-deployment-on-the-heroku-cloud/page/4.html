@@ -1,0 +1,868 @@
+﻿<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xviii-deployment-on-the-heroku-cloud/page/4 by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:14:37 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    
+    <title>
+    
+        The Flask Mega-Tutorial, Part XVIII: Deployment on the Heroku Cloud - miguelgrinberg.com
+    
+</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="description" content="miguelgrinberg.com">
+	<meta name="copyright" content="Copyright (c) 2012-2015 Miguel Grinberg">
+	<meta name="author" content="Miguel Grinberg">
+    
+    <meta name="keywords" content="python, programming, flask, web, tutorial, deployment, hosting, cloud, heroku">
+    
+
+    
+    <!-- Bootstrap -->
+    <link href="../../../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../../../static/prettify.css" type="text/css" rel="stylesheet" />
+    <link href="../../../static/colorbox/colorbox.css" rel="stylesheet" type="text/css" />
+    <link href="../../../static/style.css" rel="stylesheet" type="text/css" />
+
+    <link rel="shortcut icon" href="../../../static/favicon.ico">
+	<link rel="alternate" type="application/rss+xml" href="../../../feed" title="miguelgrinberg.com RSS feed">
+
+  </head>
+  <body>
+    
+    <!-- facebook sdk -->
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "../../../../connect.facebook.net/en_US/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    <!-- google plus sdk -->
+    <script type="text/javascript" src="../../../../apis.google.com/js/plusone.js"></script>
+    <!-- twitter sdk -->
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="../../../../platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <!-- linkedin sdk -->
+    <script src="../../../../platform.linkedin.com/in.js" type="text/javascript"></script>
+
+    
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://blog.miguelgrinberg.com/index">miguelgrinberg.com</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="http://blog.miguelgrinberg.com/index">Home</a></li>
+                        <li><a href="../../about-me.html">About Me</a></li>
+                        <li><a href="../../about-this-blog.html">About This Blog</a></li>
+                        
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <p class="navbar-text" style="margin-top: 10px; margin-bottom: 0px;">
+                                <a type="application/rss+xml" href="../../../feed"><img src="../../../static/rss.png" alt="RSS Feed" title="RSS Feed" /></a>
+                                <a href="https://www.facebook.com/miguelgrinbergblog"><img src="../../../static/facebook.png" alt="Facebook" title="Facebook" /></a>
+                                <a href="https://plus.google.com/u/0/117786742456929977820"><img src="../../../static/googleplus.png" alt="Google+" title="Google+" /></a>
+                                <a href="http://www.linkedin.com/in/miguelgrinberg"><img src="../../../static/linkedin.png" alt="LinkedIn" title="LinkedIn" /></a>
+                                <a href="http://github.com/miguelgrinberg"><img src="../../../static/github.png" alt="GitHub" title="GitHub" /></a>
+                                <a href="https://twitter.com/#!/miguelgrinberg"><img src="../../../static/twitter.png" alt="Twitter" title="Twitter" /></a>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </nav>
+
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-push-9 sidebar-bg">
+                <div id="sidebar">
+                    
+
+                    
+                    <h1>Building Web APIs with Flask</h1>
+                    <p>Flask is the ideal Python framework for building REST APIs that are flexible, easy to maintain and efficient. I have created a training video with O'Reilly in which I show all my techniques:</p>
+                    <p><center><a href="http://bit.ly/flaskapi"><img style="border: 1px solid black;" src="../../../static/flask-api-cover-tiny.png"></a></center></p>
+                    <p>Visit <a href="http://flaskbook.com/">http://flaskbook.com</a> for information about this and other Flask training products I have created!</p>
+                    
+
+                    <h1>About Miguel</h1>
+                    <img style="float: right; margin: 0px 8px 8px 0px; padding: 4px; border: 1px solid #ccc;" src="../../../static/miguel.jpg" />
+                    <p>Welcome to my blog!</p>
+                    <p>I'm a software engineer, photographer and filmmaker in Portland, Oregon, USA.</p>
+                    <p>You can also find me on <a href="https://www.facebook.com/miguelgrinbergblog">Facebook</a>, <a href="https://plus.google.com/u/0/117786742456929977820">Google+</a>, <a href="http://www.linkedin.com/in/miguelgrinberg">LinkedIn</a>, <a href="https://github.com/miguelgrinberg">Github</a> and <a href="https://twitter.com/#!/miguelgrinberg">Twitter</a>.</p>
+                    <p>Thank you for visiting!</p>
+
+                    
+
+                    
+                    <h1>Categories</h1>
+<ul>
+
+	<li>
+		<a href="../../../category/Arduino/feed">
+			<img src="../../../static/rss-small.png" title="Arduino RSS Feed" label="Arduino RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Arduino.html">Arduino</a></span> (7)
+	</li>
+
+	<li>
+		<a href="../../../category/Authentication/feed">
+			<img src="../../../static/rss-small.png" title="Authentication RSS Feed" label="Authentication RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Authentication.html">Authentication</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../../../category/Blog/feed">
+			<img src="../../../static/rss-small.png" title="Blog RSS Feed" label="Blog RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Blog.html">Blog</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/C%2b%2b/feed">
+			<img src="../../../static/rss-small.png" title="C++ RSS Feed" label="C++ RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/C%2b%2b.html">C++</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../../../category/Cloud/feed">
+			<img src="../../../static/rss-small.png" title="Cloud RSS Feed" label="Cloud RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Cloud.html">Cloud</a></span> (2)
+	</li>
+
+	<li>
+		<a href="../../../category/Filmmaking/feed">
+			<img src="../../../static/rss-small.png" title="Filmmaking RSS Feed" label="Filmmaking RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Filmmaking.html">Filmmaking</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/Flask/feed">
+			<img src="../../../static/rss-small.png" title="Flask RSS Feed" label="Flask RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Flask.html">Flask</a></span> (39)
+	</li>
+
+	<li>
+		<a href="../../../category/Games/feed">
+			<img src="../../../static/rss-small.png" title="Games RSS Feed" label="Games RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Games.html">Games</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Gear/feed">
+			<img src="../../../static/rss-small.png" title="Gear RSS Feed" label="Gear RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Gear.html">Gear</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/HTML5/feed">
+			<img src="../../../static/rss-small.png" title="HTML5 RSS Feed" label="HTML5 RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/HTML5.html">HTML5</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Heroku/feed">
+			<img src="../../../static/rss-small.png" title="Heroku RSS Feed" label="Heroku RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Heroku.html">Heroku</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Javascript/feed">
+			<img src="../../../static/rss-small.png" title="Javascript RSS Feed" label="Javascript RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Javascript.html">Javascript</a></span> (3)
+	</li>
+
+	<li>
+		<a href="../../../category/Movie%20Reviews/feed">
+			<img src="../../../static/rss-small.png" title="Movie Reviews RSS Feed" label="Movie Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Movie%20Reviews.html">Movie Reviews</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../../../category/Netflix/feed">
+			<img src="../../../static/rss-small.png" title="Netflix RSS Feed" label="Netflix RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Netflix.html">Netflix</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../../../category/Node.js/feed">
+			<img src="../../../static/rss-small.png" title="Node.js RSS Feed" label="Node.js RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Node.html">Node.js</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/OpenStack/feed">
+			<img src="../../../static/rss-small.png" title="OpenStack RSS Feed" label="OpenStack RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/OpenStack.html">OpenStack</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Personal/feed">
+			<img src="../../../static/rss-small.png" title="Personal RSS Feed" label="Personal RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Personal.html">Personal</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Photography/feed">
+			<img src="../../../static/rss-small.png" title="Photography RSS Feed" label="Photography RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Photography.html">Photography</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/Product%20Reviews/feed">
+			<img src="../../../static/rss-small.png" title="Product Reviews RSS Feed" label="Product Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Product%20Reviews.html">Product Reviews</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Programming/feed">
+			<img src="../../../static/rss-small.png" title="Programming RSS Feed" label="Programming RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Programming.html">Programming</a></span> (47)
+	</li>
+
+	<li>
+		<a href="../../../category/Project%20Management/feed">
+			<img src="../../../static/rss-small.png" title="Project Management RSS Feed" label="Project Management RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Project%20Management.html">Project Management</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Python/feed">
+			<img src="../../../static/rss-small.png" title="Python RSS Feed" label="Python RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Python.html">Python</a></span> (43)
+	</li>
+
+	<li>
+		<a href="../../../category/REST/feed">
+			<img src="../../../static/rss-small.png" title="REST RSS Feed" label="REST RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/REST.html">REST</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../../../category/Rackspace/feed">
+			<img src="../../../static/rss-small.png" title="Rackspace RSS Feed" label="Rackspace RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Rackspace.html">Rackspace</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Raspberry%20Pi/feed">
+			<img src="../../../static/rss-small.png" title="Raspberry Pi RSS Feed" label="Raspberry Pi RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Raspberry%20Pi.html">Raspberry Pi</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/RhinoSteady/feed">
+			<img src="../../../static/rss-small.png" title="RhinoSteady RSS Feed" label="RhinoSteady RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/RhinoSteady.html">RhinoSteady</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/Robotics/feed">
+			<img src="../../../static/rss-small.png" title="Robotics RSS Feed" label="Robotics RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Robotics.html">Robotics</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/Video/feed">
+			<img src="../../../static/rss-small.png" title="Video RSS Feed" label="Video RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Video.html">Video</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../../../category/Windows/feed">
+			<img src="../../../static/rss-small.png" title="Windows RSS Feed" label="Windows RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Windows.html">Windows</a></span> (1)
+	</li>
+
+</ul>
+                    
+                </div>
+            </div>
+            <div class="col-md-8 col-md-pull-4">
+                <div id="main">
+                    
+                    
+                    
+                    
+                    
+
+<div class="post">
+
+<p class="date"><span class="flask-moment" data-timestamp="2013-04-24T06:24:58Z" data-format="format('LL')" data-refresh="0">2013-04-24T06:24:58Z</span></p>
+<h1 class="post-title"><a href="../../the-flask-mega-tutorial-part-xviii-deployment-on-the-heroku-cloud.html">The Flask Mega-Tutorial, Part XVIII: Deployment on the Heroku Cloud</a></h1>
+<div class="posted">Posted by <span class="label label-danger"><a href="http://blog.miguelgrinberg.com/author/Miguel Grinberg">Miguel Grinberg</a></span> under <span class="label label-primary"><a href="../../../category/Programming.html">Programming</a></span>, <span class="label label-primary"><a href="../../../category/Python.html">Python</a></span>, <span class="label label-primary"><a href="../../../category/Heroku.html">Heroku</a></span>, <span class="label label-primary"><a href="../../../category/Flask.html">Flask</a></span>, <span class="label label-primary"><a href="../../../category/Cloud.html">Cloud</a></span>. </div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xviii-deployment-on-the-heroku-cloud" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xviii-deployment-on-the-heroku-cloud" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="../../the-flask-mega-tutorial-part-xviii-deployment-on-the-heroku-cloud.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xviii-deployment-on-the-heroku-cloud" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+<div class="post_body"><p>This is the eighteenth article in the series in which I document my experience writing web applications in <a href="http://python.org/">Python</a> using the <a href="http://flask.pocoo.org/">Flask</a> microframework.</p>
+<p>The goal of the tutorial series is to develop a decently featured microblogging application that demonstrating total lack of originality I have decided to call <code>microblog</code>.</p>
+<p><strong>NOTE</strong>: This article was revised in September 2014 to be in sync with current versions of Python and Flask.</p>
+<p>Here is an index of all the articles in the series that have been published to date:</p>
+<ul>
+<li><a href="../../the-flask-mega-tutorial-part-i-hello-world.html">Part I: Hello, World!</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-ii-templates.html">Part II: Templates</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-iii-web-forms.html">Part III: Web Forms</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-iv-database.html">Part IV: Database</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-v-user-logins.html">Part V: User Logins</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-vi-profile-page-and-avatars.html">Part VI: Profile Page And Avatars</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-vii-unit-testing.html">Part VII: Unit Testing</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-viii-followers-contacts-and-friends.html">Part VIII: Followers, Contacts And Friends</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-ix-pagination.html">Part IX: Pagination</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-x-full-text-search.html">Part X: Full Text Search</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xi-email-support.html">Part XI: Email Support</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xii-facelift.html">Part XII: Facelift</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xiii-dates-and-times.html">Part XIII: Dates and Times</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xiv-i18n-and-l10n.html">Part XIV: I18n, L10n</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xv-ajax.html">Part XV: Ajax</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xvi-debugging-testing-and-profiling.html">Part XVI: Debugging, Testing and Profiling</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xvii-deployment-on-linux-even-on-the-raspberry-pi.html">Part XVII: Deployment on Linux (even on the Raspberry Pi!)</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xviii-deployment-on-the-heroku-cloud.html">Part XVIII: Deployment on the Heroku Cloud</a> (this article)</li>
+</ul>
+<p>In the previous article we explored traditional hosting options. We've looked at two actual examples of deployment to Linux servers, first to a CentOS system and later to the Raspberry Pi credit card sized computer. Those that are not used to administer a Linux system probably thought the amount of effort we had to put into the task was huge, and that surely there must be an easier way.</p>
+<p>Today we will try to see if deploying to the <em>cloud</em> is the answer to the complexity problem.</p>
+<p>But what does it mean to "deploy to the cloud"?</p>
+<p>A cloud hosting provider offers a platform on which an application can run. All the developer needs to provide is the application, because the rest, which includes the hardware, operating system, scripting language interpreters and database, is managed by the service.</p>
+<p>Sounds too good to be true, right?</p>
+<p>We'll look at deploying to <a href="http://heroku.com/">Heroku</a>, one of the most popular cloud hosting services. I picked Heroku not only because it is popular, but also because it has a free service level, so we get to host our application without having to spend any money. If you want to find information about this type of services and what other providers are out there you can consult the Wikipedia page on <a href="http://en.wikipedia.org/wiki/Platform_as_a_service">platform as a service</a>.</p>
+<h2>Hosting on Heroku</h2>
+<p>Heroku was one of the first platform as a service providers. It started as a hosting option for Ruby based applications, but then grew to support many other languages like Java, Node.js and our favorite, Python.</p>
+<p>In essence, deploying a web application to Heroku requires just uploading the application using <code>git</code> (you'll see how that works in a moment). Heroku looks for a file called <code>Procfile</code> in the application's root directory for instructions on how to execute the application. For Python projects Heroku also expects a <code>requirements.txt</code> file that lists all the module dependencies that need to be installed.</p>
+<p>After the application is uploaded you are essentially done. Heroku will do its magic and the application will be online within seconds. The amount of money you pay directly determines how much computing power you get for your application, so as your application gets more users you will need to buy more units of computing, which Heroku calls "dynos", and that is how you keep up with the load.</p>
+<p>Ready to try Heroku? Let's get started!</p>
+<h3>Creating Heroku account</h3>
+<p>Before we can deploy to Heroku we need to have an account with them. So head over to <a href="https://id.heroku.com/signup">heroku.com</a> and create an account.</p>
+<p>Once you are logged in you have access to a dashboard, where all your apps can be managed. We will not be using the dashboard much though, but it provides a nice view of your account.</p>
+<h3>Installing the Heroku client</h3>
+<p>Even though it is possible to manage applications from the Heroku web site to some extent, there are some things that can only be done from the command line, so we'll just do everything there.</p>
+<p>Heroku offers a tool called the "Heroku client" that we'll use to create and manage our application. This tool is available for Windows, Mac OS X and Linux. If there is a <a href="https://toolbelt.heroku.com/">Heroku toolbelt</a> download for your platform then that's the easiest way to get the Heroku client tool installed.</p>
+<p>The first thing we should do with the client tool is to login to our account:</p>
+<pre><code>$ heroku login
+</code></pre>
+<p>Heroku will prompt for your email address and your account password. The first time you login it will send your public SSH key to the Heroku servers.</p>
+<p>Your authenticated status will be remembered in subsequent commands.</p>
+<h3>Git setup</h3>
+<p>The <code>git</code> tool is core to the deployment of apps to Heroku, so it must also be available. If you installed the Heroku toolbelt then you already have it as part of that installation.</p>
+<p>To deploy to Heroku the application must be in a local <code>git</code> repository, first so let's get one set up:</p>
+<pre><code>$ git clone -b version-0.18 git://github.com/miguelgrinberg/microblog.git
+$ cd microblog
+</code></pre>
+<p>Note that we are choosing a specific branch to be checked out, this is the branch that has the Heroku integration.</p>
+<h3>Creating a Heroku app</h3>
+<p>To create a new Heroku app you just use the <code>create</code> command from the root directory of the application:</p>
+<pre><code>$ heroku apps:create flask-microblog
+Creating flask-microblog... done, stack is cedar
+http://flask-microblog.herokuapp.com/ | git@heroku.com:flask-microblog.git
+</code></pre>
+<p>In addition to setting up a URL this command adds a <a href="http://gitref.org/remotes/">git remote</a> to our <code>git</code> repository that we will soon use to upload the application.</p>
+<p>Of course the name <code>flask-microblog</code> is now taken by me, so make sure you use a different app name if you are doing this along.</p>
+<h3>Eliminating local file storage</h3>
+<p>Several of the functions of our application rely on writing data to disk files.</p>
+<p>Unfortunately we have a tricky problem with this. Applications that run on Heroku are not supposed to write permanent files to disk, because Heroku uses a virtualized platform that does not remember data files, the file system is reset to a clean state that just contains the application script files each time a virtual worker is started. Essentially this means that the application can write temporary files to disk, but should be able to regenerate those files should they disappear. Also when two or more workers (dynos) are in use each gets its own virtual file system, so it is not possible to share files among them.</p>
+<p>This is really bad news for us. For starters, it means we cannot use sqlite as a database, and our Whoosh full text search database will also fail to work, since it writes all its data to files. We also have the compiled translation files for Flask-Babel, which are generated when running the <code>tr_compile.py</code> script. And yet another area where there is problem is logging, we used to write our logfile.to the <code>tmp</code> folder and that is also not going to work when running on Heroku.</p>
+<p>We have identified four major problems for which we need to try to find solutions.</p>
+<p>For our first problem, the database, we'll migrate to Heroku's own database offering, which is based on <a href="http://www.postgresql.org/">PostgreSQL</a>.</p>
+<p>For the full text search functionality we don't have a readily available alternative. We could re-implement full text searches using PostgreSQL functionality, but that would require several changes to our application. It is a pity, but solving this problem now would be a huge distraction, so for now we'll disable full text searches when running under Heroku. </p>
+<p>To support translations we are going to include the compiled translation files in the git repository, that way these files will be persistant in the file system.</p>
+<p>Finally, since we can't write our own log file, we'll add our logs to the logger that Heroku uses, which is actually simple, since Heroku will add to its log anything that goes to <code>stdout</code>.</p>
+<h3>Creating a Heroku database</h3>
+<p>To create a database we use the Heroku client:</p>
+<pre><code>$ heroku addons:add heroku-postgresql:dev
+Adding heroku-postgresql:dev on flask-microblog... done, v3 (free)
+Attached as HEROKU_POSTGRESQL_ORANGE_URL
+Database has been created and is available
+ ! This database is empty. If upgrading, you can transfer
+ ! data from another database with pgbackups:restore.
+Use `heroku addons:docs heroku-postgresql:dev` to view documentation.
+$ heroku pg:promote HEROKU_POSTGRESQL_ORANGE_URL
+Promoting HEROKU_POSTGRESQL_ORANGE_URL to DATABASE_URL... done
+</code></pre>
+<p>Note that we are adding a development database, because that is the only database offering that is free. A production web server would need one of the production database options.</p>
+<p>And how does our application know the details to connect to this database? Heroku publishes the URI to the database in the <code>$DATABASE_URL</code> environment variable. If you recall, we have modified our configuration to look for this variable in the previous hosting article, so the changes are already in place to connect with this database.</p>
+<h3>Disabling full text searches</h3>
+<p>To disable full text searches we need our application to be able to know if it is running under Heroku or not. For this we will add a custom environment variable, again using the Heroku client tool:</p>
+<pre><code>heroku config:set HEROKU=1
+</code></pre>
+<p>The <code>HEROKU</code> environment variable will now be set to <code>1</code> when our application runs inside the Heroku virtual platform.</p>
+<p>Now it is easy to disable the full text search index. First we add a configuration variable (file <code>config.py</code>):</p>
+<pre><code># Whoosh does not work on Heroku
+WHOOSH_ENABLED = os.environ.get('HEROKU') is None
+</code></pre>
+<p>Then we suppress the creation of the full text database instance (file <code>app/models.py</code>):</p>
+<pre><code>from config import WHOOSH_ENABLED
+
+enable_search = WHOOSH_ENABLED
+if enable_search:
+    import flask.ext.whooshalchemy as whooshalchemy
+
+# ...
+if enable_search:
+    whooshalchemy.whoosh_index(app, Post)
+</code></pre>
+<h3>Precompiled Tranlations</h3>
+<p>This one is pretty easy. After running <code>tr_compile.py</code> we end up with a <code>&lt;language&gt;.mo</code> file for each <code>&lt;language&gt;.po</code> source file. All we need to do is add the <code>mo</code> files to the git repository, and then in the future we'll have to remember to update them. The <code>mo</code> file for Spanish is included in the branch of the git repository dedicated to this article.</p>
+<h3>Fixing the logging</h3>
+<p>Under Heroku, anything that is written to <code>stdout</code> is added to the Heroku application log. But logs written to a disk file will not be accessible. So on this platform we will suppress the file log and instead use a log that writes to <code>stdout</code> (file <code>app/__init__.py</code>):</p>
+<pre><code>if not app.debug and os.environ.get('HEROKU') is None:
+    import logging
+    from logging.handlers import RotatingFileHandler
+    file_handler = RotatingFileHandler('tmp/microblog.log', 'a', 1 * 1024 * 1024, 10)
+    file_handler.setLevel(logging.INFO)
+    file_handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
+    app.logger.addHandler(file_handler)
+    app.logger.setLevel(logging.INFO)
+    app.logger.info('microblog startup')
+
+if os.environ.get('HEROKU') is not None:
+    import logging
+    stream_handler = logging.StreamHandler()
+    app.logger.addHandler(stream_handler)
+    app.logger.setLevel(logging.INFO)
+    app.logger.info('microblog startup')
+</code></pre>
+<h3>The web server</h3>
+<p>Heroku does not provide a web server. Instead, it expects the application to start its own server on the port number given in environment variable <code>$PORT</code>.</p>
+<p>We know the Flask web server is not good for production use because it is single process and single threaded, so we need a better server. The Heroku tutorial for Python suggests <a href="http://gunicorn.org/">gunicorn</a>, a pre-fork style web server written in Python, so that's the one we'll use.</p>
+<p>For our local environment <code>gunicorn</code> installs as a regular python module into our virtual environment:</p>
+<pre><code>$ flask/bin/pip install gunicorn
+</code></pre>
+<p>To start this browser we need to provide a single argument that names the Python module that defines the application and the application object, both separated by a colon. Now for example, if we wanted to start a local <code>gunicorn</code> server with this module we would issue the following command:</p>
+<pre><code>$ flask/bin/gunicorn --log-file - app:app
+2013-04-24 08:42:34 [31296] [INFO] Starting gunicorn 19.1.1
+2013-04-24 08:42:34 [31296] [INFO] Listening at: http://127.0.0.1:8000 (31296)
+2013-04-24 08:42:34 [31296] [INFO] Using worker: sync
+2013-04-24 08:42:34 [31301] [INFO] Booting worker with pid: 31301
+</code></pre>
+<h3>The requirements file</h3>
+<p>Soon we will be uploading our application to Heroku, but before we can do that we have to inform the server what dependencies the application needs to run. We created a <code>requirements.txt</code> file in the previous chapter, to simplify the installation of dependencies in a dedicated server, and the good news is that Heroku also imports dependencies from a requirements file.</p>
+<p>The <code>gunicorn</code> web server needs to be added to the list, and so is the <code>psycopg2</code> driver, which is required by SQLAlchemy to connect to PostgreSQL databases. The final <code>requirements.txt</code> file looks like this:</p>
+<pre><code>Babel==1.3
+Flask==0.10.1
+Flask-Babel==0.9
+Flask-Login==0.2.11
+Flask-Mail==0.9.0
+Flask-OpenID==1.2.1
+Flask-SQLAlchemy==2.0
+Flask-WTF==0.10.2
+Flask-WhooshAlchemy==0.56
+Jinja2==2.7.3
+MarkupSafe==0.23
+SQLAlchemy==0.9.7
+Tempita==0.5.2
+WTForms==2.0.1
+Werkzeug==0.9.6
+Whoosh==2.6.0
+blinker==1.3
+coverage==3.7.1
+decorator==3.4.0
+flipflop==1.0
+guess-language==0.2
+gunicorn==19.1.1
+itsdangerous==0.24
+pbr==0.10.0
+psycopg2==2.5.4
+python-openid==2.2.5
+pytz==2014.7
+six==1.8.0
+speaklater==1.3
+sqlalchemy-migrate==0.9.2
+sqlparse==0.1.11
+</code></pre>
+<p>Some of these modules will not be needed in the Heroku version of our application, but it really doesn't hurt to have extra stuff, to me it seems better to have a complete requirements list.</p>
+<h3>The Procfile</h3>
+<p>The last requirement is to tell Heroku how to run the application. For this Heroku requires a file called <code>Procfile</code> in the root folder of the application.</p>
+<p>This file is extremely simple, it just defines process names and the commands associated with them (file <code>Procfile</code>):</p>
+<pre><code>web: gunicorn app:app
+init: python db_create.py
+upgrade: python db_upgrade.py
+</code></pre>
+<p>The <code>web</code> label is associated with the web server. Heroku expects this task and will use it to start our application.</p>
+<p>The other two tasks, named <code>init</code> and <code>upgrade</code> are custom tasks that we will use to work with our application. The init task initializes our application by creating the database. The upgrade task is similar, but instead of creating the database from scratch it upgrades it to the latest migration.</p>
+<h3>Deploying the application</h3>
+<p>And now we have reached the most interesting part, where we push the application to our Heroku hosting account. This is actually pretty simple, we just use <code>git</code> to push the application:</p>
+<pre><code>$ git push heroku master
+Counting objects: 307, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (168/168), done.
+Writing objects: 100% (307/307), 165.57 KiB, done.
+Total 307 (delta 142), reused 272 (delta 122)
+
+-----&gt; Python app detected
+-----&gt; No runtime.txt provided; assuming python-2.7.4.
+-----&gt; Preparing Python runtime (python-2.7.4)
+-----&gt; Installing Distribute (0.6.36)
+-----&gt; Installing Pip (1.3.1)
+-----&gt; Installing dependencies using Pip (1.3.1)
+...
+-----&gt; Discovering process types
+       Procfile declares types -&gt; init, upgrade, web
+
+-----&gt; Compiled slug size: 29.6MB
+-----&gt; Launching... done, v6
+       http://flask-microblog.herokuapp.com deployed to Heroku
+
+To git@heroku.com:flask-microblog.git
+ * [new branch]      master -&gt; master
+</code></pre>
+<p>The label <code>heroku</code> that we used in the <code>git push</code> command was automatically registered with our <code>git</code> repository when we created our application with <code>heroku create</code>. To see how this remote repository is configured you can run <code>git remote -v</code> in the application folder.</p>
+<p>The first time we push the application to Heroku we need to initialize the database and the translation files, and for that we can execute the <code>init</code> task that we included in our <code>Procfile</code>:</p>
+<pre><code>$ heroku run init
+Running `init` attached to terminal... up, run.7671
+/app/.heroku/python/lib/python2.7/site-packages/sqlalchemy/engine/url.py:105: SADeprecationWarning: The SQLAlchemy PostgreSQL dialect has been renamed from 'postgres' to 'postgresql'. The new URL format is postgresql[+driver]://&lt;user&gt;:&lt;pass&gt;@&lt;host&gt;/&lt;dbname&gt;
+  module = __import__('sqlalchemy.dialects.%s' % (dialect, )).dialects
+</code></pre>
+<p>The deprecation warning comes from SQLAlchemy, because it does not like that the URI starts with <code>postgres://</code> instead of <code>postgresql://</code>. This URI comes from Heroku via the <code>$DATABASE_URL</code> environment variable, so we really don't have any control over this. Let's hope this continues to work for a long time.</p>
+<p>Believe it or not, now the application is online. In my case, the application can be accessed at <a href="http://flask-microblog.herokuapp.com/">http://flask-microblog.herokuapp.com</a>. For example, you can become my follower from my <a href="http://flask-microblog.herokuapp.com/user/miguel.grinberg">profile page</a>. I'm not sure how long I'll leave it there, but feel free to give it a try if you can connect to it!</p>
+<h3>Updating the application</h3>
+<p>The time will come when an update needs to be deployed. This works in a similar way to the initial deployment. First the application is pushed from <code>git</code>:</p>
+<pre><code>$ git push heroku master
+</code></pre>
+<p>Then the upgrade script is executed:</p>
+<pre><code>$ heroku run upgrade
+</code></pre>
+<h3>Logging</h3>
+<p>If a problem occurs then it may be useful to see the logs. Recall that for the Heroku hosted version we are writing our logs to <code>stdout</code> which Heroku collects into its own logs.</p>
+<p>To see the logs we use the Heroku client:</p>
+<pre><code>$ heroku logs
+</code></pre>
+<p>The above command will show all the logs, including Heroku ones. To only see application logs we can use this command:</p>
+<pre><code>$ heroku logs --source app
+</code></pre>
+<p>Things like stack traces and other application errors will appear in these app logs.</p>
+<h2>Is it worth it?</h2>
+<p>We've now seen what it takes to deploy to a cloud hosting service so we can now compare against the traditional hosting.</p>
+<p>The simplicity aspect is easily won by cloud. At least for Heroku the deployment process was extremely simple. When deploying to a dedicated server or VPS there are a lot of administrative tasks that need to be done to prepare the system. Heroku takes care of all that and allows us to concentrate on our application.</p>
+<p>The price is where it is harder to come to a conclusion. Cloud offerings are more expensive than dedicated servers, since you are not only paying for the server but also for the admin work. A pretty basic production service with Heroku that includes two dynos and the least expensive production database costs $85 per month at the time I'm writing this. On the other side, if you look hard you can find well provisioned VPS servers for abour $40 per year.</p>
+<p>In the end, I think it all comes down to what is most important to you, time or money.</p>
+<h2>The End?</h2>
+<p>The updated application is available, as always, on my <a href="https://github.com/miguelgrinberg/microblog/tree/version-0.18">github page</a>. Alternatively you can download it as a zip file below:</p>
+<p>Download <a href="https://codeload.github.com/miguelgrinberg/microblog/zip/version-0.18">microblog 0.18</a>.</p>
+<p>With our application deployed in every possible way it feels like we are reaching the end of this journey.</p>
+<p>I hope these articles were a useful introduction to the development of a real world web application project, and that the knowledge dump I've made over these eighteen articles motivates you to start your own project.</p>
+<p>I'm not closing the door to more <code>microblog</code> articles. If and when an interesting topic comes to mind I will write more, but I expect the rate of updates from now on will slow down a bit. From time to time I may make small updates to the application that don't deserve a blog post, so you may want to <a href="https://github.com/miguelgrinberg/microblog">watch the project on github</a> to catch these.</p>
+<p>I will continue blogging about topics related to web development and software in general, so I invite you to connect via <a href="https://twitter.com/#!/miguelgrinberg">Twitter</a> or <a href="https://www.facebook.com/miguelgrinbergblog">Facebook</a> if you haven't done it yet, so that you find my future articles.</p>
+<p>Thank you, again, for being a loyal reader.</p>
+<p>Miguel</p></div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xviii-deployment-on-the-heroku-cloud" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xviii-deployment-on-the-heroku-cloud" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="../../the-flask-mega-tutorial-part-xviii-deployment-on-the-heroku-cloud.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xviii-deployment-on-the-heroku-cloud" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+
+
+<h4 style="text-align: right"><a name="comments"></a>80 comments</h4>
+
+
+<div class="comment">
+    <ul>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/fc626026e5b10f0a22032155480e4698ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#76</span> <span class="label label-primary">Andy</span> said
+                    <span class="flask-moment" data-timestamp="2015-04-27T10:14:02Z" data-format="fromNow(0)" data-refresh="0">2015-04-27T10:14:02Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel,
+
+Thanks for your help.
+
+For the second part , the push with heroku , I&#39;ve found out the solution-&gt;
+
+You can create another branch
+
+git checkout -b master
+
+Once done, things are pushing fine :)
+
+Many thanks again for the tutorial and for the help.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/fe2df96ed3c685a0966485abc0ec18a8ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#77</span> <span class="label label-primary">Huw</span> said
+                    <span class="flask-moment" data-timestamp="2015-06-09T16:27:50Z" data-format="fromNow(0)" data-refresh="0">2015-06-09T16:27:50Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">What about the openid temp files. Openid seems to work just fine even without access to a temp folder on Heroku.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#78</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2015-06-09T18:04:06Z" data-format="fromNow(0)" data-refresh="0">2015-06-09T18:04:06Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Huw: Don&#39;t know. Maybe the OpenID extension regenerates these files with every log in attempt? It&#39;s more efficient to give it a temp folder and let it write what it wants to write.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/4fbe1be64d508e90b2639b4168141f82ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#79</span> <span class="label label-primary">Ankit Kumar</span> said
+                    <span class="flask-moment" data-timestamp="2015-07-01T19:46:04Z" data-format="fromNow(0)" data-refresh="0">2015-07-01T19:46:04Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Can you please update this section of the blog? I am having trouble deploying to the heroku platform.
+
+Thanks a ton for the awesome flask tutorial..</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#80</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2015-07-03T16:25:11Z" data-format="fromNow(0)" data-refresh="0">2015-07-03T16:25:11Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Ankit: what&#39;s the problem you are having?</p>
+                </div>
+            </div>
+        </li>
+        
+    </ul>
+</div>
+
+<div class="page">
+<ul class="pager">
+  <li class="previous">
+    <a href="1.html#comments">&laquo;&laquo;</a>
+  </li>
+  <li class="previous">
+    <a href="3.html#comments">&laquo;</a>
+  </li>
+  <li class="next disabled">
+    <a href="#">&raquo;&raquo;</a>
+  </li>
+  <li class="next disabled">
+    <a href="#">&raquo;</a>
+  </li>
+</ul>
+</div>
+
+<h3><a name="commentform"></a>Leave a Comment</h3>
+
+<form action="#commentform" method="post"
+  class="form" role="form">
+  <div style="display:none;"><input id="csrf_token" name="csrf_token" type="hidden" value="1439536610.38##fc6068e2d5b725de19c98c1f9b7c5529aa9234f1"></div>
+  
+    
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="name">Name</label>
+        <input class="form-control" id="name" name="name" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="url">URL</label>
+        <input class="form-control" id="url" name="url" type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="email">Email</label>
+        <input class="form-control" id="email" name="email" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="comment">Comment</label>
+        <textarea class="form-control" id="comment" name="comment" required></textarea>
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="captcha">Captcha</label>
+        
+<script type="text/javascript">var RecaptchaOptions = {"custom_translations": {"audio_challenge": "Get an audio challenge", "cant_hear_this": "Download sound as MP3", "help_btn": "Help", "image_alt_text": "reCAPTCHA challenge image", "incorrect_try_again": "Incorrect. Try again.", "instructions_audio": "Type what you hear", "instructions_visual": "Type the text", "play_again": "Play sound again", "privacy_and_terms": "Privacy & Terms", "refresh_btn": "Get a new challenge", "visual_challenge": "Get a visual challenge"}, "theme": "white"};</script>
+<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S"></script>
+<noscript>
+  <iframe src="http://www.google.com/recaptcha/api/noscript?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S" height="300" width="500" frameborder="0"></iframe><br>
+  <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+  <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
+</noscript>
+
+  </div>
+
+
+    
+
+
+
+
+
+  
+
+
+    <input class="btn btn-default" id="submit" name="submit" type="submit" value="Submit">
+  
+
+
+
+
+
+</form>
+
+
+</div>
+
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <p class="elapsed">This page was generated in None seconds.</p>
+            <p>&copy; 2014 by Miguel Grinberg. All rights reserved. <a href="mailto:webmaster _at_ miguelgrinberg _dot_ com">Questions?</a></p>
+        </div>
+    </div>
+
+
+    
+    
+    <script src="../../../../cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="../../../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../../../cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.33/jquery.colorbox-min.js"></script>
+    <script type="text/javascript" src="../../../static/prettify.js"></script>
+    <script src="../../../../cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment-with-langs.min.js"></script>
+<script>
+function flask_moment_render(elem) {
+    $(elem).text(eval('moment("' + $(elem).data('timestamp') + '").' + $(elem).data('format') + ';'));
+    $(elem).removeClass('flask-moment');
+}
+function flask_moment_render_all() {
+    $('.flask-moment').each(function() {
+        flask_moment_render(this);
+        if ($(this).data('refresh')) {
+            (function(elem, interval) { setInterval(function() { flask_moment_render(elem) }, interval); })(this, $(this).data('refresh'));
+        }
+    })
+}
+$(document).ready(function() {
+    flask_moment_render_all();
+});
+</script>
+    
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4777284-15']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".gallery").colorbox({rel:".gallery",maxWidth:"95%",maxHeight:"95%",scalePhotos:true});
+            // add prettyprint class to all <pre><code></code></pre> blocks
+            var prettify = false;
+            $("pre code").parent().each(function() {
+                $(this).addClass('prettyprint');
+                prettify = true;
+            });
+            prettyPrint();
+        });
+    </script>
+
+
+  </body>
+
+<!-- Mirrored from blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xviii-deployment-on-the-heroku-cloud/page/4 by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:14:37 GMT -->
+</html>

@@ -1,0 +1,74 @@
+<html>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch16s02.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:34 GMT -->
+<head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>16.2. Reading data from files</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><meta name="keywords" content="python, biology, bioinformatics, programming, computational biology"><link rel="home" href="index-2.html" title="Introduction to Programming using Python"><link rel="up" href="ch16.html" title="Chapter 16. Files"><link rel="previous" href="ch16.html" title="Chapter 16. Files"><link rel="next" href="ch16s03.html" title="16.3. Writing in files"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">16.2. Reading data from files</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch16.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><th width="60%" align="center">Chapter 16. Files</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch16s03.html"><img src="images/next.png" alt="Next"></a></td></tr></table><hr></div><div class="section"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="sect_read_files"></a>16.2. Reading data from files</h2></div></div><p>
+      Let us work on a concrete example. In <a href="ch11s03.html" title="11.3. The while loop">Section 11.3</a>,
+      we have written the <tt>findpos</tt> function that
+      finds all occurrences of a pattern in a
+      sequence. In the following example, we will show how we can read
+      restriction site patterns of enzymes described in  the
+      <a href="http://www.rebase.org/" target="_top">ReBase</a> database.   
+    </p><p><b>ReBase database format.&nbsp;</b>
+	In our example we will use an excerpt of the
+	<tt>gcgenz.dat</tt> file of the restriction
+	enzyme ReBase database. The
+	information for each restriction enzyme is stored in one line
+	of this file. The information
+	about isoschizomers and the header of the file containing
+	explanations have been omitted in the excerpt that we will
+	use. 
+	<a href="ch16s02.html#fig_rebase" title="Figure 16.1. ReBase file format">Figure 16.1</a> shows a part of this file. Each line
+	starts with the enzyme name, followed by the number of 
+	bases after which it cuts the restriction site pattern, the
+	sequence of the restriction site, the length of the overhang
+	and some comments about the isoschizomeres and the availability
+	of the enzyme.
+      </p><div class="figure"><a name="fig_rebase"></a><p class="title"><b>Figure 16.1. ReBase&#8482; file format</b></p><pre class="programlisting">AarI      11 CACCTGCnnnn'nnnn_   4 !                                    &gt;F	201,386
+AatII      5 G_ACGT'C      -4 !  ZraI                              &gt;AEFGIKMNOR	624
+AccI       2 GT'mk_AC       2 !  FblI,XmiI                         &gt;ABEGJKMNORSU	288,374,751
+Acc65I     1 G'GTAC_C       4 !  KpnI,Asp718I                      &gt;FGINR	505
+AciI       1 C'CG_C         2 !                                    &gt;N	497
+AclI       2 AA'CG_TT       2 !  Psp1406I                          &gt;IN	140
+AfeI       3 AGC'GCT        0 !  Eco47III,Aor51HI,FunI             &gt;IN	15
+AflII      1 C'TTAA_G       4 !  BfrI,BspTI,Bst98I,MspCI,Vha464I   &gt;ABJKNO	722
+AflIII     1 A'CryG_T       4 !                                    &gt;BGMNS	722
+AgeI       1 A'CCGG_T       4 !  AsiAI,BshTI,CspAI,PinAI           &gt;GJNR	739
+</pre></div><p>
+      Using the general scheme of reading lines from files shown above
+      (<a href="ch16.html#exa_read_general_for" title="Example 16.1. Reading from files">Example 16.1</a>), the following shows one
+      possibility for extracting the restriction site pattern from the
+      line. 
+    </p><div class="procedure"><p class="title"><b>Procedure 16.1. <tt>read_rebase</tt></b></p><p>INPUT: a <span class="emphasis"><em>file</em></span> in rebase
+      format</p><p>OUTPUT: a dictionary <span class="emphasis"><em>enz_dict</em></span>
+      containing all restriction patterns indexed by their name</p><ol type="1"><li><span class="emphasis"><em>enz_dict</em></span> &lt;- empty dictionary
+	
+      </li><li><span class="emphasis"><em>infh</em></span> &lt;- <span class="bold"><b>open</b></span><span class="emphasis"><em> file</em></span> for reading
+      </li><li><span class="bold"><b>for each </b></span><span class="emphasis"><em>line</em></span> read from <span class="emphasis"><em>infh</em></span>:
+	<ol type="a"><li>split <span class="emphasis"><em>line</em></span> in its fields</li><li><span class="emphasis"><em>name</em></span> &lt;- first field</li><li><span class="emphasis"><em>pat</em></span> &lt;- third field</li><li><span class="emphasis"><em>clean pat</em></span> to get a string
+	  containing only the sequence recognized by the restriction enzyme</li><li>add the cleaned <span class="emphasis"><em>pat</em></span> to
+	  <span class="emphasis"><em>enz_dict</em></span> with <span class="emphasis"><em>name</em></span>
+	  as key</li></ol></li><li><span class="bold"><b>close </b></span><span class="emphasis"><em>infh</em></span></li><li><span class="emphasis"><em>return  </em></span><span class="emphasis"><em>enz_dict</em></span></li></ol></div><p>here is one possibility how to translate this procedure
+    into Python:</p><pre class="programlisting">def get_site_only(pat):
+    newpat = ""
+    for c in pat:
+        if c.isalpha():
+            newpat +=c
+    return newpat
+
+def read_rebase(filename):
+    enz_dict={}
+    infh= open(filename)
+    for line in infh.xreadlines():
+        fields = line.split()
+        name = fields[0]
+        pat = fields[2]
+        enz_dict[name] = get_site_only(pat)
+
+    infh.close()
+    return enz_dict
+
+print read_rebase("../data/rebase.dat")
+</pre></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch16.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch16.html"><img src="images/up.png" alt="Up"></a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch16s03.html"><img src="images/next.png" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 16. Files&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index-2.html"><img src="images/home.png" alt="Home"></a></td><td width="40%" align="right" valign="top">&nbsp;16.3. Writing in files</td></tr></table></div></body>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch16s02.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:34 GMT -->
+</html>

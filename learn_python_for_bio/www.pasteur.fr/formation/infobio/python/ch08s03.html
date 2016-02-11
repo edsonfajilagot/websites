@@ -1,0 +1,122 @@
+<html>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch08s03.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:28 GMT -->
+<head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>8.3. Functions and namespaces</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><meta name="keywords" content="python, biology, bioinformatics, programming, computational biology"><link rel="home" href="index-2.html" title="Introduction to Programming using Python"><link rel="up" href="ch08.html" title="Chapter 8. Defining Functions"><link rel="previous" href="ch08s02.html" title="8.2. Parameters and Arguments or the difference between a function&#xA;      definition and a function call"><link rel="next" href="ch08s04.html" title="8.4. Boolean functions"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">8.3. Functions and namespaces</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch08s02.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><th width="60%" align="center">Chapter 8. Defining Functions</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch08s04.html"><img src="images/next.png" alt="Next"></a></td></tr></table><hr></div><div class="section"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="d0e3222"></a>8.3. Functions and namespaces</h2></div></div><p>
+	In the following piece of code, and even if it is confusing at the beginning, the
+	<tt>seq</tt> variable in the function call is not
+	the same as the <tt>seq</tt> parameter of the
+	<tt>gc</tt> function. During the function call the
+	global variable is evaluated and its value <tt>'ATGACT'</tt>
+	is assigned to the parameter <tt>seq</tt> of the
+	<tt>gc</tt> function.
+	
+	<pre class="programlisting">
+&gt;&gt;&gt; seq = 'ATGACT'
+&gt;&gt;&gt; def gc(seq):
+      ....
+&gt;&gt;&gt; gc(seq)
+	</pre> 
+      </p><p>
+	How does Python distinguish the two variables? It can do so,
+	because they are not in the same namespace. All functions have
+	two associated namespaces, a <span class="emphasis"><em>local</em></span> and a
+	<span class="emphasis"><em>global</em></span> namespace. The
+	<span class="emphasis"><em>global</em></span> namespace is the namespace where
+	the function is defined and the <span class="emphasis"><em>local</em></span>
+	namespace is a namespace created at the function definition
+	where parameters are defined. The local namespace contains
+	also all <span class="emphasis"><em>local variables</em></span>. <span class="emphasis"><em>Local
+	variables</em></span> are variables that are bound to value in
+	the function body.
+        When a function is defined, its source code is analyzed and all
+	used names are sorted in the two namespaces.
+    </p><p>
+	If a variable name is searched during a function execution,
+	Python looks in the local namespace for local variables and in
+	the global namespace for global variables.  If a global
+	variable is not found there, the builtin namespace is
+	searched. If it is not found there, an error is produced. 
+    </p><div class="definition"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/definition.png"></td><td><p class="title"><b>builtin namespace</b></p></td></tr><tr><td colspan="2" align="left" valign="top">
+      
+      <p>
+	The
+	<span class="emphasis"><em>builtin namespace</em></span> is a
+	<span class="emphasis"><em>namespace</em></span> that contains all
+	predefined function of Python. 
+      </p>
+    </td></tr></table></div><p>
+      You can ask Python which names are defined in the
+	global and the local namespace using the functions
+	<tt>globals()</tt> and
+	<tt>locals()</tt>.
+
+	<pre class="programlisting">
+	&gt;&gt;&gt; from string import *
+&gt;&gt;&gt; def gc(seq):
+...    nbases = count(seq, 'N')
+...    gcpercent = float(count(seq, 'G') + count(seq, 'C')) / (len(seq) - nbases)
+...    print "local namespace:", locals()
+...    print "global namespace:", globals()
+...    print "names in the current namespace:", dir()
+...    return gcpercent
+...
+&gt;&gt;&gt; seq = 'ATGACGATAGGAGANNTATAGAN'
+
+&gt;&gt;&gt; gc(seq)
+local namespace: {'gcpercent': 0.34999999999999998, 'nbases': 3, 
+'seq': 'ATGACGATAGGAGANNTATAGAN'}
+global namespace: {'ascii_lowercase': 'abcdefghijklmnopqrstuvwxyz', 
+	'upper': &lt;function upper at 0x1623f0&gt;, 'punctuation': '"!#$%&amp;\'()*+,-./:;&lt;=&gt;?@[\\]^_`{|}~', 
+'letters': 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', 
+'seq': 'ATGACGATAGGAGANNTATAGAN', 'lstrip': &lt;function lstrip at 0x160cf0&gt;, 
+'uppercase': 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 
+'ascii_letters': 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', 
+'replace': &lt;function replace at 0x160b90&gt;, 'capwords': &lt;function capwords at 0x160b10&gt;, 
+'index_error': &lt;class exceptions.ValueError at 0x119700&gt;, 
+'expandtabs': &lt;function expandtabs at 0x160a50&gt;, 'strip': &lt;function strip at 0x160cb0&gt;, 
+'ascii_uppercase': 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'find': &lt;function find at 0x160810&gt;, 
+'gc': &lt;function gc at 0x160b50&gt;, 'rjust': &lt;function rjust at  0x160990&gt;, 
+'ljust': &lt;function ljust at 0x160950&gt;, 'whitespace': '\t\n\x0b\x0c\r ', 
+'rindex': &lt;function rindex at 0x1625a0&gt;, 'capitalize': &lt;function capitalize at 0x160ad0&gt;, 
+'atol_error': &lt;class exceptions.ValueError at 0x119700&gt;, 'octdigits': '01234567', 
+'lower': &lt;function lower at 0x1623b0&gt;, 'splitfields': &lt;function split at 0x160d70&gt;, 
+'split': &lt;function split at 0x160d70&gt;, 'rstrip': &lt;function rstrip at 0x160d30&gt;, 
+'translate': &lt;function translate at 0x160a90&gt;, 
+'__doc__': None, 
+'printable': '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!"#$%&amp;\'()*+,-./:;&lt;=&gt;?@[\\]^_`{|}~ \t\n\r\x0b\x0c', 
+'digits': '0123456789', 'joinfields': &lt;function join at 0x162520&gt;, 
+'index': &lt;function index at 0x162560&gt;, 
+'__builtins__': &lt;module '__builtin__' (built-in)&gt;, 
+'swapcase': &lt;function swapcase at 0x162430&gt;, 
+'atof_error': &lt;class exceptions.ValueError at 0x119700&gt;, 
+'atoi': &lt;function atoi at 0x1608d0&gt;, 'hexdigits': '0123456789abcdefABCDEF', 
+'atol': &lt;function atol at 0x160910&gt;, '__name__': '__main__', 
+'atof': &lt;function atof at 0x160890&gt;, 'count': &lt;function count at 0x1625e0&gt;, 
+'lowercase': 'abcdefghijklmnopqrstuvwxyz', 'join': &lt;function join at 0x162520&gt;, 
+'center': &lt;function center at 0x1609d0&gt;, 'rfind': &lt;function rfind at 0x160850&gt;, 
+'atoi_error': &lt;class exceptions.ValueError at 0x119700&gt;, 
+'maketrans': &lt;built-in function maketrans&gt;, 'zfill': &lt;function zfill at 0x160a10&gt;}
+names in the current namespace: ['gcpercent', 'nbases', 'seq']
+0.34999999999999998
+
+      </pre>
+    </p><p>
+      The <tt>dir</tt> function shows all the names defined in the
+      current namespace.
+    </p><pre class="programlisting">
+&gt;&gt;&gt; from string import *
+
+&gt;&gt;&gt; dir()
+['__builtins__', '__doc__', '__name__', 'ascii_letters', 'ascii_lowercase', 
+'ascii_uppercase', 'atof', 'atof_error', 'atoi', 'atoi_error', 'atol', 
+'atol_error', 'capitalize', 'capwords', 'center', 'count', 'digits', 
+'expandtabs', 'find', 'gc', 'hexdigits', 'index', 'index_error', 'join', 
+'joinfields', 'letters', 'ljust', 'lower', 'lowercase', 'lstrip', 'maketrans', 
+'octdigits', 'printable', 'punctuation', 'replace', 'rfind', 'rindex', 'rjust', 
+'rstrip', 'seq', 'split', 'splitfields', 'strip', 'swapcase', 'translate', 
+'upper', 'uppercase', 'whitespace', 'zfill']
+    </pre></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch08s02.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch08.html"><img src="images/up.png" alt="Up"></a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch08s04.html"><img src="images/next.png" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">8.2. Parameters and Arguments or the difference between a function
+      definition and a function call&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index-2.html"><img src="images/home.png" alt="Home"></a></td><td width="40%" align="right" valign="top">&nbsp;8.4. Boolean functions</td></tr></table></div></body>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch08s03.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:28 GMT -->
+</html>

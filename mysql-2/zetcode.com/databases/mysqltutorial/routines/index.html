@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from zetcode.com/databases/mysqltutorial/routines/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Jul 2015 02:47:03 GMT -->
+<head>
+<title>MySQL stored routines</title>
+<link rel="stylesheet" href="../../../cfg/format2.css" type="text/css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="Stored routines, procedures, functions, MySQL, databases, SQL">
+<meta name="description" content="In this part of the MySQL tutorial, we
+cover stored routines.">
+<meta name="author" content="Jan Bodnar">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div id="wide_ad" class="ltow">
+<script async src="../../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- 160x600, August 2011 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:600px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="2484182563"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<div class="content">
+
+
+<header>
+
+<nav>
+<a href="http://zetcode.com/" title="Home">Home</a>&#160;
+<a href="../index.html">Contents</a>
+</nav>
+
+</header>
+
+
+<h1>MySQL stored routines</h1>
+
+
+<p>
+This chapter introduces stored routines in MySQL. In MySQL there are two kinds 
+of stored routines: stored procedures and stored functions. 
+</p>
+
+<div class="med_rec">
+<script async src="../../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- NewSquare -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:250px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="0364418177"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+
+<p>
+Stored procedures are called with the <code>CALL</code> statement. They do not return
+values. Stored functions return values. And are used with the <code>SELECT</code> 
+statement.
+</p>
+
+<p>
+A stored routine is a set of SQL statements that can be stored in the server. 
+Stored routines are not generally accepted. They have some advantages but also
+several disadvantages. Stored routines are typically used in data validation or
+access control. 
+</p>
+
+<p>
+Stored procedures may be useful in situations, where there are many
+client applications written in different languages or work on different platforms, 
+but need to perform the same database operations. They can lead to some performance
+gains. Stored routines are stored in the server and so the network load decreases. 
+In some database systems the stored routines can be precompiled, which increases
+the performance. If you change some logic on the database, it is automatically ready
+for all possible clients. When we change some logic on the client side, this must
+be done in all possible clients. 
+</p>
+
+<p>
+On the other hand, stored routines have some drawbacks. Stored routines violate the
+principal design pattern, where business logic, data and presentation are separated
+in specific tiers. Stored routines mangle business logic with data. Stored routines
+are more difficult to debug and test. The application that has a lot of business logic
+in stored routines is less scalable. Moreover, there is no version control system for
+stored routines. Finally, stored routines are implemented differently in various
+database systems. This makes potential migration between database systems more 
+difficult.
+</p>
+
+
+<h2 id="simproc">A simple procedure</h2>
+
+<p>
+The procedure is created with a <code>CREATE PROCEDURE</code> statement. 
+</p>
+
+<pre class="code">
+mysql> CREATE PROCEDURE AllCars() SELECT * FROM Cars;
+</pre>
+
+<p>
+In this statement, we have created a new simple procedure called 
+<code>AllCars()</code>. The select statement following the name of the 
+procedure is the body of the procedure, which is executed when we call 
+the procedure. The procedure selects all data from the <code>Cars</code> table.
+</p>
+
+<pre class="code">
+mysql> CALL AllCars();
++----+------------+--------+
+| Id | Name       | Cost   |
++----+------------+--------+
+|  1 | Audi       |  52642 |
+|  2 | Mercedes   |  57127 |
+|  3 | Skoda      |   9000 |
+|  4 | Volvo      |  29000 |
+|  5 | Bentley    | 350000 |
+|  6 | Citroen    |  21000 |
+|  7 | Hummer     |  41400 |
+|  8 | Volkswagen |  21600 |
++----+------------+--------+
+</pre>
+
+<p>
+We call the <code>AllCars()</code> procedure and its body is executed. 
+</p>
+
+
+<h2 id="simfunc">A simple function</h2>
+
+<p>
+A function is created with a <code>CREATE FUNCTION</code> statement. A function returns
+a value. It is called with a <code>SELECT</code> statement. 
+</p>
+
+<pre class="code">
+-- this function computes the area
+-- of a circle; it takes a radius as
+-- a parameter
+
+DELIMITER $$
+
+DROP FUNCTION IF EXISTS CircleArea;
+
+CREATE FUNCTION CircleArea(r DOUBLE) RETURNS DOUBLE
+BEGIN
+    DECLARE area DOUBLE;
+
+    SET area = r * r * pi();
+    RETURN area;
+END 
+
+$$
+
+DELIMITER ;
+</pre>
+
+<p>
+In this code, we create a <code>CircleArea()</code> function which computes the
+area of a circle. It takes a radius as a parameter. The best way
+to create a procedure or a function that has more than one line is to
+create an SQL file and read the file with the source command.
+</p>
+
+
+<pre class="explanation">
+-- this function computes the area
+-- of a circle; it takes a radius as
+-- a parameter
+</pre>
+
+<p>
+Comments begin with double dashes.
+</p>
+
+<pre class="explanation">
+DELIMITER $$
+</pre>
+
+<p>
+SQL statements are finished with a semicolon. To create a procedure or a function
+we need multiple statements. Because of this, we need to temporarily use a different
+delimiter. Here we have used <code>$$</code> as a delimiter. We could use different 
+characters. At the end of the function definition, we use this delimiter.
+</p>
+
+<pre class="explanation">
+DROP FUNCTION IF EXISTS CircleArea;
+</pre>
+
+<p>
+When developing our stored routines, we will run into various syntax or other errors.
+The function may be already partially created. Therefore we use the above
+statement to erase any of our flawed attempts and create a function from the beginning.
+</p>
+
+<pre class="explanation">
+CREATE FUNCTION CircleArea(r DOUBLE) RETURNS DOUBLE
+</pre>
+
+<p>
+We create a function called <code>CircleArea</code>. It takes a parameter 
+<code>r</code> of type <code>DOUBLE</code>. The function returns a value of 
+type <code>DOUBLE</code>. 
+</p>
+
+<pre class="explanation">
+BEGIN
+   ...
+END 
+</pre>
+
+<p>
+The function body is placed between the <code>BEGIN</code> and 
+<code>END</code> keywords. 
+</p>
+
+<pre class="explanation">
+DECLARE area DOUBLE;
+</pre>
+
+<p>
+We declare a new variable in the routine. Its name is area and
+data type is <code>DOUBLE</code>. 
+</p>
+
+<pre class="explanation">
+SET area = r * r * pi();
+</pre>
+
+<p>
+We compute the area of the circle with the given radius.
+</p>
+
+<pre class="explanation">
+RETURN area;
+</pre>
+
+<p>
+We return the variable. 
+</p>
+
+<pre class="explanation">
+$$
+</pre>
+
+<p>
+Here is the end of the routine. 
+</p>
+
+<pre class="explanation">
+DELIMITER ;
+</pre>
+
+<p>
+We use again the default delimiter. 
+</p>
+
+<pre class="code">
+mysql> source circlearea.sql
+
+mysql> SELECT CircleArea(5.5);
++-------------------+
+| CircleArea(5.5)   |
++-------------------+
+| 95.03317777109125 |
++-------------------+
+</pre>
+
+<p>
+We create the <code>CircleArea()</code> function and call it with the 
+<code>SELECT</code> statement. 
+</p>
+
+
+<h2 id="procpar">Procedure parameters</h2>
+
+<p>
+A procedure cannot return a value. However, it can work with three types 
+of variables:
+</p>
+
+<ul>
+  <li>IN</li>
+  <li>OUT</li>
+  <li>INOUT</li>
+</ul>
+
+<p>
+The <code>IN</code> is the default type of parameter. It is used when no type 
+is specified explicitly. The <code>IN</code> parameter is passed to the procedure. 
+It can be modified inside the procedure, but it remains unchanged outside. In the 
+case of the <code>OUT</code> parameter no value is passed to the procedure. It 
+can be modified inside the procedure. And the variable is available outside the 
+procedure. The <code>INOUT</code> variable is the blending of the both <code>IN</code> 
+and <code>OUT</code> parameters. It can be passed to the procedure,
+changed there and can be retrieved outside the procedure. 
+</p>
+
+<pre class="code">
+-- this procedure computes the power 
+-- of a given value
+
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS Pow;
+
+CREATE PROCEDURE Pow(IN val DOUBLE, OUT p DOUBLE) 
+BEGIN
+    SET p = val * val;
+END 
+
+$$
+
+DELIMITER ;
+</pre>
+
+<p>
+In this procedure, we compute the power of a given value. 
+</p>
+
+<pre class="explanation">
+CREATE PROCEDURE Pow(IN val DOUBLE, OUT p DOUBLE) 
+</pre>
+
+<p>
+The procedure takes two parameters. The first is the value to
+compute the power. It is declared to be <code>IN</code>. It is passed 
+to the routine and used there. The second variable is an <code>OUT</code> 
+variable. It is the parameter where we store the result of this procedure.
+It can be used after the routine has finished.
+</p>
+
+<pre class="code">
+mysql> source power.sql
+
+mysql> CALL Pow(3, @p);
+
+mysql> SELECT @p;
++------+
+| @p   |
++------+
+|    9 |
++------+
+</pre>
+
+<p>
+We create the procedure <code>Pow()</code>. We call it using the 
+<code>CALL</code> statement. The result is stored in the <code>@p</code> 
+variable. Finally, we select the <code>@p</code> variable to see its content. 
+</p>
+
+
+<h2 id="rand">Random numbers</h2>
+
+<p>
+In the following example, we will create a procedure which produces
+five random numbers. From 0 to 9.
+</p>
+
+<pre class="code">
+-- this procedure generates
+-- five random numbers from 0 to 9
+
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS FiveRandomNumbers;
+
+CREATE PROCEDURE FiveRandomNumbers()
+BEGIN
+    SET @i = 0;
+    REPEAT 
+        SELECT FLOOR(RAND() * 10) AS 'Random Number'; 
+        SET @i = @i + 1; 
+    UNTIL @i >=5 END REPEAT;
+END 
+
+$$
+
+DELIMITER ;
+</pre>
+
+<p>
+In this procedure, we will use <code>RAND()</code> and <code>FLOOR()</code> 
+built-in functions.
+</p>
+
+<pre class="explanation">
+SET @i = 0;
+</pre>
+
+<p>
+This variable is a counter. 
+</p>
+
+<pre class="explanation">
+REPEAT 
+    SELECT FLOOR(RAND() * 10) AS 'Random Number'; 
+    SET @i = @i + 1; 
+UNTIL @i >=5 END REPEAT;
+</pre>
+
+<p>
+The <code>REPEAT</code>, <code>UNTIL</code> keywords create a loop. The 
+counter is used to control the number of iterations. In our case, we have five. 
+The <code>RAND()</code> function returns a decimal number and the 
+<code>FLOOR()</code> function is used to round it. 
+</p>
+
+<pre class="code">
+mysql> source fiverandomnumbers.sql;
+
+mysql> CALL FiveRandomNumbers;
++---------------+
+| Random Number |
++---------------+
+|             9 |
++---------------+
+1 row in set (0.00 sec)
+
++---------------+
+| Random Number |
++---------------+
+|             1 |
++---------------+
+...
+</pre>
+
+<p>
+We create the procedure using the source command. And then call it. 
+</p>
+
+
+<h2 id="find">Finding routines</h2>
+
+<p>
+In MySQL, we can use <code>SHOW PROCEDURE STATUS</code> and 
+<code>SHOW FUNCTION STATUS</code> to see routines and their characteristics
+in our database. 
+</p>
+
+<p>
+There is also a <code>ROUTINES</code> table in the <code>information_schema</code> 
+database. We can query the table for information about stored routines. 
+</p>
+
+<pre class="code">
+mysql> SELECT SPECIFIC_NAME from information_schema.ROUTINES  
+    -> WHERE ROUTINE_TYPE='PROCEDURE';
++-------------------+
+| SPECIFIC_NAME     |
++-------------------+
+| AllCars           |
+| FiveRandomNumbers |
+| Pow               |
++-------------------+
+</pre>
+
+<p>
+This statement shows all procedures in the database. 
+</p>
+
+<pre class="code">
+mysql> SELECT SPECIFIC_NAME from information_schema.ROUTINES 
+    -> WHERE ROUTINE_TYPE='FUNCTION';
++---------------+
+| SPECIFIC_NAME |
++---------------+
+| CircleArea    |
++---------------+
+</pre>
+
+<p>
+This statement shows all functions in the database.
+</p>
+
+<p>
+In this chapter, we covered MySQL routines.
+</p>
+
+
+<footer>
+
+<nav class="center">
+<span class="botNavItem"><a href="http://zetcode.com/">Home</a></span> ‡ <span class="botNavItem"><a href="../index.html">Contents</a></span> ‡ 
+<span class="botNavItem"><a href="#">Top of Page</a></span>
+</nav>
+
+<div class="signature">
+<a href="http://zetcode.com/">ZetCode</a> last modified February 18, 2011  <span class="copyright">&copy; 2007 - 2015 Jan Bodnar</span>
+</div>
+
+</footer>
+
+</div> <!-- content -->
+
+</div> <!-- container --> 
+
+</body>
+
+<!-- Mirrored from zetcode.com/databases/mysqltutorial/routines/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Jul 2015 02:47:03 GMT -->
+</html>
+
+

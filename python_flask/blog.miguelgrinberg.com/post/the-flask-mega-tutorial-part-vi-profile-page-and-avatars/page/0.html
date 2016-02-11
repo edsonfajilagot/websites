@@ -1,0 +1,1103 @@
+﻿<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-vi-profile-page-and-avatars/page/0 by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:00:46 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    
+    <title>
+    
+        The Flask Mega-Tutorial, Part VI: Profile Page And Avatars - miguelgrinberg.com
+    
+</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="description" content="miguelgrinberg.com">
+	<meta name="copyright" content="Copyright (c) 2012-2015 Miguel Grinberg">
+	<meta name="author" content="Miguel Grinberg">
+    
+    <meta name="keywords" content="python, programming, flask, web, tutorial, avatar, gravatar, forms">
+    
+
+    
+    <!-- Bootstrap -->
+    <link href="../../../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../../../static/prettify.css" type="text/css" rel="stylesheet" />
+    <link href="../../../static/colorbox/colorbox.css" rel="stylesheet" type="text/css" />
+    <link href="../../../static/style.css" rel="stylesheet" type="text/css" />
+
+    <link rel="shortcut icon" href="../../../static/favicon.ico">
+	<link rel="alternate" type="application/rss+xml" href="../../../feed" title="miguelgrinberg.com RSS feed">
+
+  </head>
+  <body>
+    
+    <!-- facebook sdk -->
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "../../../../connect.facebook.net/en_US/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    <!-- google plus sdk -->
+    <script type="text/javascript" src="../../../../apis.google.com/js/plusone.js"></script>
+    <!-- twitter sdk -->
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="../../../../platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <!-- linkedin sdk -->
+    <script src="../../../../platform.linkedin.com/in.js" type="text/javascript"></script>
+
+    
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://blog.miguelgrinberg.com/index">miguelgrinberg.com</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="http://blog.miguelgrinberg.com/index">Home</a></li>
+                        <li><a href="../../about-me.html">About Me</a></li>
+                        <li><a href="../../about-this-blog.html">About This Blog</a></li>
+                        
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <p class="navbar-text" style="margin-top: 10px; margin-bottom: 0px;">
+                                <a type="application/rss+xml" href="../../../feed"><img src="../../../static/rss.png" alt="RSS Feed" title="RSS Feed" /></a>
+                                <a href="https://www.facebook.com/miguelgrinbergblog"><img src="../../../static/facebook.png" alt="Facebook" title="Facebook" /></a>
+                                <a href="https://plus.google.com/u/0/117786742456929977820"><img src="../../../static/googleplus.png" alt="Google+" title="Google+" /></a>
+                                <a href="http://www.linkedin.com/in/miguelgrinberg"><img src="../../../static/linkedin.png" alt="LinkedIn" title="LinkedIn" /></a>
+                                <a href="http://github.com/miguelgrinberg"><img src="../../../static/github.png" alt="GitHub" title="GitHub" /></a>
+                                <a href="https://twitter.com/#!/miguelgrinberg"><img src="../../../static/twitter.png" alt="Twitter" title="Twitter" /></a>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </nav>
+
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-push-9 sidebar-bg">
+                <div id="sidebar">
+                    
+
+                    
+                    <h1>Building Web APIs with Flask</h1>
+                    <p>Flask is the ideal Python framework for building REST APIs that are flexible, easy to maintain and efficient. I have created a training video with O'Reilly in which I show all my techniques:</p>
+                    <p><center><a href="http://bit.ly/flaskapi"><img style="border: 1px solid black;" src="../../../static/flask-api-cover-tiny.png"></a></center></p>
+                    <p>Visit <a href="http://flaskbook.com/">http://flaskbook.com</a> for information about this and other Flask training products I have created!</p>
+                    
+
+                    <h1>About Miguel</h1>
+                    <img style="float: right; margin: 0px 8px 8px 0px; padding: 4px; border: 1px solid #ccc;" src="../../../static/miguel.jpg" />
+                    <p>Welcome to my blog!</p>
+                    <p>I'm a software engineer, photographer and filmmaker in Portland, Oregon, USA.</p>
+                    <p>You can also find me on <a href="https://www.facebook.com/miguelgrinbergblog">Facebook</a>, <a href="https://plus.google.com/u/0/117786742456929977820">Google+</a>, <a href="http://www.linkedin.com/in/miguelgrinberg">LinkedIn</a>, <a href="https://github.com/miguelgrinberg">Github</a> and <a href="https://twitter.com/#!/miguelgrinberg">Twitter</a>.</p>
+                    <p>Thank you for visiting!</p>
+
+                    
+
+                    
+                    <h1>Categories</h1>
+<ul>
+
+	<li>
+		<a href="../../../category/Arduino/feed">
+			<img src="../../../static/rss-small.png" title="Arduino RSS Feed" label="Arduino RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Arduino.html">Arduino</a></span> (7)
+	</li>
+
+	<li>
+		<a href="../../../category/Authentication/feed">
+			<img src="../../../static/rss-small.png" title="Authentication RSS Feed" label="Authentication RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Authentication.html">Authentication</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../../../category/Blog/feed">
+			<img src="../../../static/rss-small.png" title="Blog RSS Feed" label="Blog RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Blog.html">Blog</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/C%2b%2b/feed">
+			<img src="../../../static/rss-small.png" title="C++ RSS Feed" label="C++ RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/C%2b%2b.html">C++</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../../../category/Cloud/feed">
+			<img src="../../../static/rss-small.png" title="Cloud RSS Feed" label="Cloud RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Cloud.html">Cloud</a></span> (2)
+	</li>
+
+	<li>
+		<a href="../../../category/Filmmaking/feed">
+			<img src="../../../static/rss-small.png" title="Filmmaking RSS Feed" label="Filmmaking RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Filmmaking.html">Filmmaking</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/Flask/feed">
+			<img src="../../../static/rss-small.png" title="Flask RSS Feed" label="Flask RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Flask.html">Flask</a></span> (39)
+	</li>
+
+	<li>
+		<a href="../../../category/Games/feed">
+			<img src="../../../static/rss-small.png" title="Games RSS Feed" label="Games RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Games.html">Games</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Gear/feed">
+			<img src="../../../static/rss-small.png" title="Gear RSS Feed" label="Gear RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Gear.html">Gear</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/HTML5/feed">
+			<img src="../../../static/rss-small.png" title="HTML5 RSS Feed" label="HTML5 RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/HTML5.html">HTML5</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Heroku/feed">
+			<img src="../../../static/rss-small.png" title="Heroku RSS Feed" label="Heroku RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Heroku.html">Heroku</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Javascript/feed">
+			<img src="../../../static/rss-small.png" title="Javascript RSS Feed" label="Javascript RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Javascript.html">Javascript</a></span> (3)
+	</li>
+
+	<li>
+		<a href="../../../category/Movie%20Reviews/feed">
+			<img src="../../../static/rss-small.png" title="Movie Reviews RSS Feed" label="Movie Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Movie%20Reviews.html">Movie Reviews</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../../../category/Netflix/feed">
+			<img src="../../../static/rss-small.png" title="Netflix RSS Feed" label="Netflix RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Netflix.html">Netflix</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../../../category/Node.js/feed">
+			<img src="../../../static/rss-small.png" title="Node.js RSS Feed" label="Node.js RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Node.html">Node.js</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/OpenStack/feed">
+			<img src="../../../static/rss-small.png" title="OpenStack RSS Feed" label="OpenStack RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/OpenStack.html">OpenStack</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Personal/feed">
+			<img src="../../../static/rss-small.png" title="Personal RSS Feed" label="Personal RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Personal.html">Personal</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Photography/feed">
+			<img src="../../../static/rss-small.png" title="Photography RSS Feed" label="Photography RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Photography.html">Photography</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/Product%20Reviews/feed">
+			<img src="../../../static/rss-small.png" title="Product Reviews RSS Feed" label="Product Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Product%20Reviews.html">Product Reviews</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Programming/feed">
+			<img src="../../../static/rss-small.png" title="Programming RSS Feed" label="Programming RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Programming.html">Programming</a></span> (47)
+	</li>
+
+	<li>
+		<a href="../../../category/Project%20Management/feed">
+			<img src="../../../static/rss-small.png" title="Project Management RSS Feed" label="Project Management RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Project%20Management.html">Project Management</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Python/feed">
+			<img src="../../../static/rss-small.png" title="Python RSS Feed" label="Python RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Python.html">Python</a></span> (43)
+	</li>
+
+	<li>
+		<a href="../../../category/REST/feed">
+			<img src="../../../static/rss-small.png" title="REST RSS Feed" label="REST RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/REST.html">REST</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../../../category/Rackspace/feed">
+			<img src="../../../static/rss-small.png" title="Rackspace RSS Feed" label="Rackspace RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Rackspace.html">Rackspace</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Raspberry%20Pi/feed">
+			<img src="../../../static/rss-small.png" title="Raspberry Pi RSS Feed" label="Raspberry Pi RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Raspberry%20Pi.html">Raspberry Pi</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/RhinoSteady/feed">
+			<img src="../../../static/rss-small.png" title="RhinoSteady RSS Feed" label="RhinoSteady RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/RhinoSteady.html">RhinoSteady</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/Robotics/feed">
+			<img src="../../../static/rss-small.png" title="Robotics RSS Feed" label="Robotics RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Robotics.html">Robotics</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/Video/feed">
+			<img src="../../../static/rss-small.png" title="Video RSS Feed" label="Video RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Video.html">Video</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../../../category/Windows/feed">
+			<img src="../../../static/rss-small.png" title="Windows RSS Feed" label="Windows RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Windows.html">Windows</a></span> (1)
+	</li>
+
+</ul>
+                    
+                </div>
+            </div>
+            <div class="col-md-8 col-md-pull-4">
+                <div id="main">
+                    
+                    
+                    
+                    
+                    
+
+<div class="post">
+
+<p class="date"><span class="flask-moment" data-timestamp="2012-07-16T03:44:16Z" data-format="format('LL')" data-refresh="0">2012-07-16T03:44:16Z</span></p>
+<h1 class="post-title"><a href="../../the-flask-mega-tutorial-part-vi-profile-page-and-avatars.html">The Flask Mega-Tutorial, Part VI: Profile Page And Avatars</a></h1>
+<div class="posted">Posted by <span class="label label-danger"><a href="http://blog.miguelgrinberg.com/author/Miguel Grinberg">Miguel Grinberg</a></span> under <span class="label label-primary"><a href="../../../category/Python.html">Python</a></span>, <span class="label label-primary"><a href="../../../category/Programming.html">Programming</a></span>, <span class="label label-primary"><a href="../../../category/Flask.html">Flask</a></span>. </div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-vi-profile-page-and-avatars" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-vi-profile-page-and-avatars" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="../../the-flask-mega-tutorial-part-vi-profile-page-and-avatars.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-vi-profile-page-and-avatars" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+<div class="post_body"><p>This is the sixth article in the series in which I document my experience writing web applications in <a href="http://python.org/">Python</a> using the <a href="http://flask.pocoo.org/">Flask</a> microframework.</p>
+<p>The goal of the tutorial series is to develop a decently featured microblogging application that demonstrating total lack of originality I have decided to call <code>microblog</code>.</p>
+<p><strong>NOTE</strong>: This article was revised in September 2014 to be in sync with current versions of Python and Flask.</p>
+<p>Here is an index of all the articles in the series that have been published to date:</p>
+<ul>
+<li><a href="../../the-flask-mega-tutorial-part-i-hello-world.html">Part I: Hello, World!</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-ii-templates.html">Part II: Templates</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-iii-web-forms.html">Part III: Web Forms</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-iv-database.html">Part IV: Database</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-v-user-logins.html">Part V: User Logins</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-vi-profile-page-and-avatars.html">Part VI: Profile Page And Avatars</a> (this article)</li>
+<li><a href="../../the-flask-mega-tutorial-part-vii-unit-testing.html">Part VII: Unit Testing</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-viii-followers-contacts-and-friends.html">Part VIII: Followers, Contacts And Friends</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-ix-pagination.html">Part IX: Pagination</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-x-full-text-search.html">Part X: Full Text Search</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xi-email-support.html">Part XI: Email Support</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xii-facelift.html">Part XII: Facelift</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xiii-dates-and-times.html">Part XIII: Dates and Times</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xiv-i18n-and-l10n.html">Part XIV: I18n and L10n</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xv-ajax.html">Part XV: Ajax</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xvi-debugging-testing-and-profiling.html">Part XVI: Debugging, Testing and Profiling</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xvii-deployment-on-linux-even-on-the-raspberry-pi.html">Part XVII: Deployment on Linux (even on the Raspberry Pi!)</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xviii-deployment-on-the-heroku-cloud.html">Part XVIII: Deployment on the Heroku Cloud</a></li>
+</ul>
+<h2>Recap</h2>
+<p>In the previous chapter of this tutorial we created our user login system, so we can now have users log in and out of the website using their OpenIDs.</p>
+<p>Today, we are going to work on the user profiles. First, we'll create the user profile page, which shows the user's information and more recent blog posts, and as part of that we will learn how to show user avatars. Then we are going to create a web form for users to edit their profiles.</p>
+<h2>User Profile Page</h2>
+<p>Creating a user profile page does not really require any new major concepts to be introduced. We just need to create a new view function and its accompanying HTML template.</p>
+<p>Here is the view function (file <code>app/views.py</code>):</p>
+<pre><code>@app.route('/user/&lt;nickname&gt;')
+@login_required
+def user(nickname):
+    user = User.query.filter_by(nickname=nickname).first()
+    if user == None:
+        flash('User %s not found.' % nickname)
+        return redirect(url_for('index'))
+    posts = [
+        {'author': user, 'body': 'Test post #1'},
+        {'author': user, 'body': 'Test post #2'}
+    ]
+    return render_template('user.html',
+                           user=user,
+                           posts=posts)
+</code></pre>
+<p>The <code>@app.route</code> decorator that we used to declare this view function looks a little bit different than the previous ones. In this case we have an <em>argument</em> in it, which is indicated as <code>&lt;nickname&gt;</code>. This translates into an argument of the same name added to the view function. When the client requests, say, URL <code>/user/miguel</code> the view function will be invoked with <code>nickname</code> set to <code>'miguel'</code>.</p>
+<p>The implementation of the view function should have no surprises. First we try to load the user from the database, using the nickname that we received as argument. If that doesn't work then we just redirect to the main page with an error message, as we have seen in the previous chapter.</p>
+<p>Once we have our user, we just send it in the <code>render_template</code> call, along with some fake posts. Note that in the user profile page we will be displaying only posts by this user, so our fake posts have the <code>author</code> field correctly set.</p>
+<p>Our initial view template will be extremely simple (file <code>app/templates/user.html</code>):</p>
+<pre><code>&lt;!-- extend base layout --&gt;
+{% extends "base.html" %}
+
+{% block content %}
+  &lt;h1&gt;User: {{ user.nickname }}!&lt;/h1&gt;
+  &lt;hr&gt;
+  {% for post in posts %}
+  &lt;p&gt;
+    {{ post.author.nickname }} says: &lt;b&gt;{{ post.body }}&lt;/b&gt;
+  &lt;/p&gt;
+  {% endfor %}
+{% endblock %}
+</code></pre>
+<p>The profile page is now complete, but a link to it does not exist anywhere in the web site. To make it a bit more easy for a user to check his or her own profile, we are going to add a link to it in the navigation bar at the top (file `app/templates/base.html'):</p>
+<pre><code>    &lt;div&gt;Microblog:
+        &lt;a href="{{ url_for('index') }}"&gt;Home&lt;/a&gt;
+        {% if g.user.is_authenticated() %}
+        | &lt;a href="{{ url_for('user', nickname=g.user.nickname) }}"&gt;Your Profile&lt;/a&gt;
+        | &lt;a href="{{ url_for('logout') }}"&gt;Logout&lt;/a&gt;
+        {% endif %}
+    &lt;/div&gt;
+</code></pre>
+<p>Note how in the <code>url_for</code> function we have added the required <code>nickname</code> argument.</p>
+<p>Give the application a try now. Clicking on the <code>Your Profile</code> link at the top should take you to your user page. Since we don't have any links that will direct you to an arbitrary user profile page you will need to type the URL by hand if you want to see someone else. For example, you would type <code>http://localhost:5000/user/miguel</code> to see the profile of user <code>miguel</code>.</p>
+<h2>Avatars</h2>
+<p>I'm sure you agree that our profile pages are pretty boring. To make them a bit more interesting, let's add user avatars.</p>
+<p>Instead of having to deal with a possibly large collection of uploaded images in our server, we will rely on the <a href="http://gravatar.com/">Gravatar</a> service to provide our user avatars.</p>
+<p>Since returning an avatar is a user related task, we will be putting it in the <code>User</code> class (file <code>app/models.py</code>):</p>
+<pre><code>from hashlib import md5
+# ...
+class User(db.Model):
+    # ...
+    def avatar(self, size):
+        return 'http://www.gravatar.com/avatar/%s?d=mm&amp;s=%d' % (md5(self.email.encode('utf-8')).hexdigest(), size)
+</code></pre>
+<p>The <code>avatar</code> method of <code>User</code> returns the URL of the user's avatar image, scaled to the requested size in pixels.</p>
+<p>Turns out with the Gravatar service this is really easy to do. You just need to create an md5 hash of the user email and then incorporate it into the specially crafted URL that you see above. After the md5 of the email you can provide a number of options to customize the avatar. The <code>d=mm</code> determines what placeholder image is returned when a user does not have an Gravatar account. The <code>mm</code> option returns the "mystery man" image, a gray silhouette of a person. The <code>s=N</code> option requests the avatar scaled to the given size in pixels.</p>
+<p>The Gravatar's website has <a href="https://gravatar.com/site/implement/images">documentation</a> for the avatar URL.</p>
+<p>Now that our <code>User</code> class knows how to return avatar images, we can incorporate them into our profile page layout (file <code>app/templates/user.html</code>):</p>
+<pre><code>&lt;!-- extend base layout --&gt;
+{% extends "base.html" %}
+
+{% block content %}
+  &lt;table&gt;
+      &lt;tr valign="top"&gt;
+          &lt;td&gt;&lt;img src="{{ user.avatar(128) }}"&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;h1&gt;User: {{ user.nickname }}&lt;/h1&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/table&gt;
+  &lt;hr&gt;
+  {% for post in posts %}
+  &lt;p&gt;
+    {{ post.author.nickname }} says: &lt;b&gt;{{ post.body }}&lt;/b&gt;
+  &lt;/p&gt;
+  {% endfor %}
+{% endblock %}
+</code></pre>
+<p>The nice thing about making the <code>User</code> class responsible for returning avatars is that if some day we decide Gravatar avatars are not what we want, we just rewrite the <code>avatar</code> method to return different URLs (even ones that points to our own web server, if we decide we want to host our own avatars), and all our templates will start showing the new avatars automatically.</p>
+<p>We have added the user avatar to the top of the profile page, but at the bottom of the page we have posts, and those could have a little avatar as well. For the user profile page we will of course be showing the same avatar for all the posts, but then when we move this functionality to the main page we will have each post decorated with the author's avatar, and that will look really nice.</p>
+<p>To show avatars for the posts we just need to make a small change in our template (file `app/templates/user.html'):</p>
+<pre><code>&lt;!-- extend base layout --&gt;
+{% extends "base.html" %}
+
+{% block content %}
+  &lt;table&gt;
+      &lt;tr valign="top"&gt;
+          &lt;td&gt;&lt;img src="{{ user.avatar(128) }}"&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;h1&gt;User: {{ user.nickname }}&lt;/h1&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/table&gt;
+  &lt;hr&gt;
+  {% for post in posts %}
+  &lt;table&gt;
+      &lt;tr valign="top"&gt;
+          &lt;td&gt;&lt;img src="{{ post.author.avatar(50) }}"&gt;&lt;/td&gt;&lt;td&gt;&lt;i&gt;{{ post.author.nickname }} says:&lt;/i&gt;&lt;br&gt;{{ post.body }}&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/table&gt;
+  {% endfor %}
+{% endblock %}
+</code></pre>
+<p>Here is how our profile page looks at this point:</p>
+<p><center><img alt="microblog profile page" src="../../../static/images/flask-mega-tutorial-part-vi-1.png" /></center></p>
+<h2>Reusing at the sub-template level</h2>
+<p>We designed the user profile page so that it displays the posts written by the user. Our index page also displays posts, this time of any user. So now we have two templates that will need to display posts made by users. We could just copy/paste the portion of the template that deals with the rendering of a post, but that is really not ideal, because when we decide to change the layout of a post we'll have to remember to go update all the templates that have posts in them.</p>
+<p>Instead, we are going to make a sub-template that just renders a post, then we'll include it in all the templates that need it.</p>
+<p>To start, we create a post sub-template, which is really nothing more than a regular template. We do so by simply extracting the HTML for a post from our user template (file <code>/app/templates/post.html</code>):</p>
+<pre><code>&lt;table&gt;
+    &lt;tr valign="top"&gt;
+        &lt;td&gt;&lt;img src="{{ post.author.avatar(50) }}"&gt;&lt;/td&gt;&lt;td&gt;&lt;i&gt;{{ post.author.nickname }} says:&lt;/i&gt;&lt;br&gt;{{ post.body }}&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;
+</code></pre>
+<p>And then we invoke this sub-template from our user template using Jinja2's <code>include</code> command (file <code>app/templates/user.html</code>):</p>
+<pre><code>&lt;!-- extend base layout --&gt;
+{% extends "base.html" %}
+
+{% block content %}
+  &lt;table&gt;
+      &lt;tr valign="top"&gt;
+          &lt;td&gt;&lt;img src="{{ user.avatar(128) }}"&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;h1&gt;User: {{ user.nickname }}&lt;/h1&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/table&gt;
+  &lt;hr&gt;
+  {% for post in posts %}
+      {% include 'post.html' %}
+  {% endfor %}
+{% endblock %}
+</code></pre>
+<p>Once we have a fully functioning index page we will invoke this same sub-template from over there, but we aren't quite ready to do that, we'll leave that for a future chapter of this tutorial.</p>
+<h2>More interesting profiles</h2>
+<p>While we now have a nice profile page, we don't really have much information to show on it. Users like to tell a bit about them on these pages, so we'll let them write something about themselves that we can show here. We will also keep track of what was the last time each user accessed the site, so that we can also show that on their profile page.</p>
+<p>To add these things we have to start by modifying our database. More specifically, we need to add two new fields to our <code>User</code> class (file <code>app/models.py</code>):</p>
+<pre><code>class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nickname = db.Column(db.String(64), index=True, unique=True)
+    email = db.Column(db.String(120), index=True, unique=True)
+    posts = db.relationship('Post', backref='author', lazy='dynamic')
+    about_me = db.Column(db.String(140))
+    last_seen = db.Column(db.DateTime)
+</code></pre>
+<p>Every time we modify the database we have to generate a new migration. Remember that in the database chapter we went through the pain of setting up a database migration system. We can see the fruits of that effort now. To add these two new fields to our database we just do this:</p>
+<pre><code>$ ./db_migrate.py
+</code></pre>
+<p>To which our script will respond:</p>
+<pre><code>New migration saved as db_repository/versions/003_migration.py
+Current database version: 3
+</code></pre>
+<p>And our two new fields are now in our database. Remember that if you are on Windows the way to invoke this script is different.</p>
+<p>If we did not have migration support you would have needed to edit your database manually, or worse, delete it and recreate it from scratch.</p>
+<p>Next, let's modify our profile page template to show these fields (file <code>app/templates/user.html</code>):</p>
+<pre><code>&lt;!-- extend base layout --&gt;
+{% extends "base.html" %}
+
+{% block content %}
+  &lt;table&gt;
+    &lt;tr valign="top"&gt;
+      &lt;td&gt;&lt;img src="{{user.avatar(128)}}"&gt;&lt;/td&gt;
+      &lt;td&gt;
+        &lt;h1&gt;User: {{user.nickname}}&lt;/h1&gt;
+          {% if user.about_me %}&lt;p&gt;{{ user.about_me }}&lt;/p&gt;{% endif %}
+          {% if user.last_seen %}&lt;p&gt;&lt;i&gt;Last seen on: {{ user.last_seen }}&lt;/i&gt;&lt;/p&gt;{% endif %}
+      &lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/table&gt;
+  &lt;hr&gt;
+  {% for post in posts %}
+    {% include 'post.html' %}
+  {% endfor %}
+{% endblock %}
+</code></pre>
+<p>Note we make use of Jinja2's conditionals to show these fields, because we only want to show them if they are set (at this point these two new fields are empty for all users, so nothing will show).</p>
+<p>The <code>last_seen</code> field is pretty easy to support. Remember that in a previous chapter we created a <code>before_request</code> handler, to register the logged in user with the <code>flask.g</code> global, as <code>g.user</code>. That is the perfect time to update our database with the last access time for a user (file <code>app/views.py</code>):</p>
+<pre><code>from datetime import datetime
+# ...
+@app.before_request
+def before_request():
+    g.user = current_user
+    if g.user.is_authenticated():
+        g.user.last_seen = datetime.utcnow()
+        db.session.add(g.user)
+        db.session.commit()
+</code></pre>
+<p>If you log in to your profile page again the last seen time will now display, and each time you refresh the page the time will update as well, because each time the browser makes a request the <code>before_request</code> handler will update the time in the database.</p>
+<p>Note that we are writing the time in the standard UTC timezone. We discussed this in a previous chapter, we will write all timestamps in UTC so that they are consistent. That has the undesired side effect that the time displayed in the user profile page is also in UTC. We will fix this in a future chapter that will be dedicated to date and time handling.</p>
+<p>To display the user's about me information we have to give them a place to enter it, and the proper place for this is in the edit profile page.</p>
+<h2>Editing the profile information</h2>
+<p>Adding a profile form is surprisingly easy. We start by creating the web form (file <code>app/forms.py</code>):</p>
+<pre><code>from flask.ext.wtf import Form
+from wtforms import StringField, BooleanField, TextAreaField
+from wtforms.validators import DataRequired, Length
+
+class EditForm(Form):
+    nickname = StringField('nickname', validators=[DataRequired()])
+    about_me = TextAreaField('about_me', validators=[Length(min=0, max=140)])
+</code></pre>
+<p>Then the view template (file <code>app/templates/edit.html</code>):</p>
+<pre><code>&lt;!-- extend base layout --&gt;
+{% extends "base.html" %}
+
+{% block content %}
+  &lt;h1&gt;Edit Your Profile&lt;/h1&gt;
+  &lt;form action="" method="post" name="edit"&gt;
+      {{form.hidden_tag()}}
+      &lt;table&gt;
+          &lt;tr&gt;
+              &lt;td&gt;Your nickname:&lt;/td&gt;
+              &lt;td&gt;{{ form.nickname(size=24) }}&lt;/td&gt;
+          &lt;/tr&gt;
+          &lt;tr&gt;
+              &lt;td&gt;About yourself:&lt;/td&gt;
+              &lt;td&gt;{{ form.about_me(cols=32, rows=4) }}&lt;/td&gt;
+          &lt;/tr&gt;
+          &lt;tr&gt;
+              &lt;td&gt;&lt;/td&gt;
+              &lt;td&gt;&lt;input type="submit" value="Save Changes"&gt;&lt;/td&gt;
+          &lt;/tr&gt;
+      &lt;/table&gt;
+  &lt;/form&gt;
+{% endblock %}
+</code></pre>
+<p>And finally we write the view function (file <code>app/views.py</code>):</p>
+<pre><code>from forms import LoginForm, EditForm
+
+@app.route('/edit', methods=['GET', 'POST'])
+@login_required
+def edit():
+    form = EditForm()
+    if form.validate_on_submit():
+        g.user.nickname = form.nickname.data
+        g.user.about_me = form.about_me.data
+        db.session.add(g.user)
+        db.session.commit()
+        flash('Your changes have been saved.')
+        return redirect(url_for('edit'))
+    else:
+        form.nickname.data = g.user.nickname
+        form.about_me.data = g.user.about_me
+    return render_template('edit.html', form=form)
+</code></pre>
+<p>To make this page easy to reach, we also add a link to it from the user profile page (file <code>app/templates/user.html</code>):</p>
+<pre><code>&lt;!-- extend base layout --&gt;
+{% extends "base.html" %}
+
+{% block content %}
+  &lt;table&gt;
+      &lt;tr valign="top"&gt;
+          &lt;td&gt;&lt;img src="{{ user.avatar(128) }}"&gt;&lt;/td&gt;
+          &lt;td&gt;
+              &lt;h1&gt;User: {{user.nickname}}&lt;/h1&gt;
+              {% if user.about_me %}&lt;p&gt;{{ user.about_me }}&lt;/p&gt;{% endif %}
+              {% if user.last_seen %}&lt;p&gt;&lt;i&gt;Last seen on: {{ user.last_seen }}&lt;/i&gt;&lt;/p&gt;{% endif %}
+              {% if user.id == g.user.id %}&lt;p&gt;&lt;a href="{{ url_for('edit') }}"&gt;Edit&lt;/a&gt;&lt;/p&gt;{% endif %}
+          &lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/table&gt;
+  &lt;hr&gt;
+  {% for post in posts %}
+      {% include 'post.html' %}
+  {% endfor %}
+{% endblock %}
+</code></pre>
+<p>Pay attention to the clever conditional we are using to make sure that the Edit link appears when you are viewing your own profile, but not when you are viewing someone else's.</p>
+<p>Below is a new screenshot of the user profile page, with all the additions, and with some "about me" words written:</p>
+<p><center><img alt="microblog profile page" src="../../../static/images/flask-mega-tutorial-part-vi-2.png" /></center></p>
+<h2>Final words... and your homework!</h2>
+<p>So it seems we are pretty much done with user profiles, right? We sort of are, but we have a nasty bug that we need to fix. </p>
+<p>Can you find it?</p>
+<p>Here is a clue. We have introduced this bug in the previous chapter of the tutorial, when we were looking at the login system. And today we have written a new piece of code that has the same bug.</p>
+<p>Think about it, and if you know what the problem is feel free to show off in the comments below. I will explain the bug, and how to fix it properly in the next chapter.</p>
+<p>As always, here is the download link for the complete application with today's additions:</p>
+<p>Download <a href="https://codeload.github.com/miguelgrinberg/microblog/zip/version-0.6">microblog-0.6.zip</a>.</p>
+<p>Remember that I'm not including a database in the archive. If you have a database from the previous chapter, just put it in the correct location and then run <code>db_upgrade.py</code> to upgrade it. If you don't have a previous database then call <code>db_create.py</code> to make a brand new one.</p>
+<p>Thank you for following my tutorial. I hope to see you again in the next installment.</p>
+<p>Miguel</p></div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-vi-profile-page-and-avatars" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-vi-profile-page-and-avatars" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="../../the-flask-mega-tutorial-part-vi-profile-page-and-avatars.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-vi-profile-page-and-avatars" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+
+
+<h4 style="text-align: right"><a name="comments"></a>66 comments</h4>
+
+
+<div class="comment">
+    <ul>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/9d1487f63298e91e0958e99711bdde77ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#51</span> <span class="label label-primary">Yecid</span> said
+                    <span class="flask-moment" data-timestamp="2014-10-21T15:21:15Z" data-format="fromNow(0)" data-refresh="0">2014-10-21T15:21:15Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Miguel I don&#39;t have any error in code, just HTTP error 302, Maybe I have an issue to star the database or something. Thanks.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#52</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-10-21T17:26:18Z" data-format="fromNow(0)" data-refresh="0">2014-10-21T17:26:18Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Yecid: 302 is not an error, it is used for redirects. Your browser you interpret that and then go get a new page, isn&#39;t that happening?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/9d1487f63298e91e0958e99711bdde77ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#53</span> <span class="label label-primary">Yecid</span> said
+                    <span class="flask-moment" data-timestamp="2014-10-21T21:36:48Z" data-format="fromNow(0)" data-refresh="0">2014-10-21T21:36:48Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">No, it goes to /login page again. I tried with 5 users and none of them login. But when I go to &#34;localhots:5000/user/Miguel&#34; deleting the @login_required at views.py it displays user information normally. As I wrote before I used your code on microblog-0.6.zip with db_migrate.py and add users. Thanks for helping me</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#54</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-10-22T06:22:36Z" data-format="fromNow(0)" data-refresh="0">2014-10-22T06:22:36Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Yecid: if it goes back to /login then it thinks authentication failed. I wonder something in your network prevents the OpenID exchange from happening. Are you behind a strict firewall?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/50809eaba0b44b122c44366c90151d30ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#55</span> <span class="label label-primary">Yecid</span> said
+                    <span class="flask-moment" data-timestamp="2014-10-23T02:50:13Z" data-format="fromNow(0)" data-refresh="0">2014-10-23T02:50:13Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I desactivated my firewall, but still not displaying user info. Think the problem is OpenID exchange I&#39;m using python 3.4 and OpenID 1.2.2 . Thanks for taking your time.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#56</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-10-25T17:39:57Z" data-format="fromNow(0)" data-refresh="0">2014-10-25T17:39:57Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Yecid: did you try more than one OpenID provider? I usually test with Google or Yahoo.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/9d1487f63298e91e0958e99711bdde77ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#57</span> <span class="label label-primary">Yecid</span> said
+                    <span class="flask-moment" data-timestamp="2014-11-04T03:57:23Z" data-format="fromNow(0)" data-refresh="0">2014-11-04T03:57:23Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">yes, with Google it works, with yahoo exceed some limit but with my database doesn´t work.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/2154722b354040cf47f959506f8fc32dce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#58</span> <span class="label label-primary">Vince Fulco</span> said
+                    <span class="flask-moment" data-timestamp="2014-11-04T19:08:43Z" data-format="fromNow(0)" data-refresh="0">2014-11-04T19:08:43Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hey all-- Getting an error after installing the profile pages using Flask-WTF==0.10.2 and WTForms 2.0.1 along the lines of from wtforms.fields.core import * ValueError: bad marshal data (digit out of range in long).  Any assistance would be appreciated.  Stack trace below.  Best.
+
+/home/microblog# python run.py
+Traceback (most recent call last):
+  File &#34;run.py&#34;, line 3, in &lt;module&gt;
+    from app import app
+  File &#34;/home/microblog/app/__init__.py&#34;, line 20, in &lt;module&gt;
+    from app import views, models
+  File &#34;/home/microblog/app/views.py&#34;, line 6, in &lt;module&gt;
+    from forms import LoginForm
+  File &#34;/home/microblog/app/forms.py&#34;, line 1, in &lt;module&gt;
+    from flask.ext.wtf import Form
+  File &#34;/usr/local/lib/python2.7/dist-packages/flask/exthook.py&#34;, line 62, in load_module
+    __import__(realname)
+  File &#34;/usr/local/lib/python2.7/dist-packages/flask_wtf/__init__.py&#34;, line 15, in &lt;module&gt;
+    from .form import Form
+  File &#34;/usr/local/lib/python2.7/dist-packages/flask_wtf/form.py&#34;, line 7, in &lt;module&gt;
+    from wtforms.fields import HiddenField
+  File &#34;/usr/local/lib/python2.7/dist-packages/wtforms/__init__.py&#34;, line 12, in &lt;module&gt;
+    from wtforms.fields import *
+  File &#34;/usr/local/lib/python2.7/dist-packages/wtforms/fields/__init__.py&#34;, line 1, in &lt;module&gt;
+    from wtforms.fields.core import *
+ValueError: bad marshal data (digit out of range in long)
+
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#59</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-11-05T02:24:04Z" data-format="fromNow(0)" data-refresh="0">2014-11-05T02:24:04Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Yecid: unfortunately OpenID is sort of dying a slow death. My recommendation is that for your own applications you look into a more well supported mechanism. My newer examples (like the applications featured in my book and PyCon talks) use password authentication. I also plan to publish an article on OAuth soon.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#60</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-11-05T02:34:16Z" data-format="fromNow(0)" data-refresh="0">2014-11-05T02:34:16Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Vince: what exact version of Python 2.7 are you using?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/d0c5154030742807d5e1105ddded9612ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#61</span> <span class="label label-primary">George Vas</span> said
+                    <span class="flask-moment" data-timestamp="2015-02-19T15:09:48Z" data-format="fromNow(0)" data-refresh="0">2015-02-19T15:09:48Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hello Minguel! Again excellent work! So excellent that you should place a donate button just for this tutorial. It &#39;s amazing. Anyway, my problem is that while in models.py my User.avatar link is just like yours, when I visit the site the end of the avatar link is like &#39;?d=mm&amp;amp;s=50&#39;. This &#39;&amp;amp&#39; prevents the profile avatar from being displayed. Probably due to utf-8 coding. Any ideas anyone?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#62</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2015-02-20T06:36:20Z" data-format="fromNow(0)" data-refresh="0">2015-02-20T06:36:20Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@George: that is odd, maybe you have a different version of Jinja2 that urlencodes the image path? Try using {{ user.avatar(128) | safe }} to see if that makes it work. The &#34;safe&#34; filter will prevent escaping to be done on the avatar path.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/9ee14f55e56fe7aa8cb326444f822c85ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#63</span> <span class="label label-primary">depeche</span> said
+                    <span class="flask-moment" data-timestamp="2015-06-28T16:44:15Z" data-format="fromNow(0)" data-refresh="0">2015-06-28T16:44:15Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hello, Miguel
+
+Thank you for these lessons. I am very appreciate them.
+
+This is not very clear for me:
+
+def before_request():
+    g.user = current_user
+    if g.user.is_authenticated():
+        g.user.last_seen = datetime.utcnow()
+        db.session.add(g.user)
+        db.session.commit()
+
+Why we saving last access time in g.user.last_seen but added in db all object g.user via db.session.add(g.user)?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#64</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2015-07-01T19:15:12Z" data-format="fromNow(0)" data-refresh="0">2015-07-01T19:15:12Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@depeche: the idea is to update the last time the user was seen. This needs to be written to the user model, and to the database.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/20738905c180d08cf9705a75b1dd76d8ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#65</span> <span class="label label-primary">Joshua</span> said
+                    <span class="flask-moment" data-timestamp="2015-07-30T01:30:03Z" data-format="fromNow(0)" data-refresh="0">2015-07-30T01:30:03Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Good blog so far.  Only on article 3, comments disabled so had to leave comment here.
+
+I&#39;m on article 3 and when I download the .zip and run it (after installing flask) it gives me an error.  A bunch of lines but last couple lines are:
+File &#34;C:\Users\josh\Desktop\microblog\flask\lib\site-packages\babel\core.py&#34;
+line 58, in get_global
+  _global data = pickle.load&lt;fileobj&gt;
+TypeError: an integer is requred (got type str)
+
+I&#39;ve installed virtualenv in the flask directory in the microblog folder, installed all the packages, and did the whole process again on a VM.  Same error, both with my script that I&#39;ve been following along in your article and with your .zip file.
+
+Any ideas?
+Many thanks.
+
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/89fbe3bf3a71de6c32c34adb65059e5ece2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#66</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2015-08-02T05:37:26Z" data-format="fromNow(0)" data-refresh="0">2015-08-02T05:37:26Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Joshua: those lines you omitted might have some clue about your error.</p>
+                </div>
+            </div>
+        </li>
+        
+    </ul>
+</div>
+
+<div class="page">
+<ul class="pager">
+  <li class="previous">
+    <a href="1.html#comments">&laquo;&laquo;</a>
+  </li>
+  <li class="previous">
+    <a href="2.html#comments">&laquo;</a>
+  </li>
+  <li class="next disabled">
+    <a href="#">&raquo;&raquo;</a>
+  </li>
+  <li class="next disabled">
+    <a href="#">&raquo;</a>
+  </li>
+</ul>
+</div>
+
+<h3><a name="commentform"></a>Leave a Comment</h3>
+
+<form action="#commentform" method="post"
+  class="form" role="form">
+  <div style="display:none;"><input id="csrf_token" name="csrf_token" type="hidden" value="1439535777.94##9c022114af351b0c180d78fe09514594218de362"></div>
+  
+    
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="name">Name</label>
+        <input class="form-control" id="name" name="name" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="url">URL</label>
+        <input class="form-control" id="url" name="url" type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="email">Email</label>
+        <input class="form-control" id="email" name="email" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="comment">Comment</label>
+        <textarea class="form-control" id="comment" name="comment" required></textarea>
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="captcha">Captcha</label>
+        
+<script type="text/javascript">var RecaptchaOptions = {"custom_translations": {"audio_challenge": "Get an audio challenge", "cant_hear_this": "Download sound as MP3", "help_btn": "Help", "image_alt_text": "reCAPTCHA challenge image", "incorrect_try_again": "Incorrect. Try again.", "instructions_audio": "Type what you hear", "instructions_visual": "Type the text", "play_again": "Play sound again", "privacy_and_terms": "Privacy & Terms", "refresh_btn": "Get a new challenge", "visual_challenge": "Get a visual challenge"}, "theme": "white"};</script>
+<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S"></script>
+<noscript>
+  <iframe src="http://www.google.com/recaptcha/api/noscript?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S" height="300" width="500" frameborder="0"></iframe><br>
+  <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+  <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
+</noscript>
+
+  </div>
+
+
+    
+
+
+
+
+
+  
+
+
+    <input class="btn btn-default" id="submit" name="submit" type="submit" value="Submit">
+  
+
+
+
+
+
+</form>
+
+
+</div>
+
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <p class="elapsed">This page was generated in None seconds.</p>
+            <p>&copy; 2014 by Miguel Grinberg. All rights reserved. <a href="mailto:webmaster _at_ miguelgrinberg _dot_ com">Questions?</a></p>
+        </div>
+    </div>
+
+
+    
+    
+    <script src="../../../../cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="../../../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../../../cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.33/jquery.colorbox-min.js"></script>
+    <script type="text/javascript" src="../../../static/prettify.js"></script>
+    <script src="../../../../cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment-with-langs.min.js"></script>
+<script>
+function flask_moment_render(elem) {
+    $(elem).text(eval('moment("' + $(elem).data('timestamp') + '").' + $(elem).data('format') + ';'));
+    $(elem).removeClass('flask-moment');
+}
+function flask_moment_render_all() {
+    $('.flask-moment').each(function() {
+        flask_moment_render(this);
+        if ($(this).data('refresh')) {
+            (function(elem, interval) { setInterval(function() { flask_moment_render(elem) }, interval); })(this, $(this).data('refresh'));
+        }
+    })
+}
+$(document).ready(function() {
+    flask_moment_render_all();
+});
+</script>
+    
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4777284-15']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".gallery").colorbox({rel:".gallery",maxWidth:"95%",maxHeight:"95%",scalePhotos:true});
+            // add prettyprint class to all <pre><code></code></pre> blocks
+            var prettify = false;
+            $("pre code").parent().each(function() {
+                $(this).addClass('prettyprint');
+                prettify = true;
+            });
+            prettyPrint();
+        });
+    </script>
+
+
+  </body>
+
+<!-- Mirrored from blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-vi-profile-page-and-avatars/page/0 by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:00:47 GMT -->
+</html>

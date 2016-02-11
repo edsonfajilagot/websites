@@ -1,0 +1,363 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from www.python-course.eu/generators.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:09:21 GMT -->
+<head>
+
+<!-- Dieses Tag in den Head-Bereich oder direkt vor dem schlieÃŸenden Body-Tag einfÃ¼gen -->
+<script type="text/javascript" src="../apis.google.com/js/plusone.js"></script>
+
+
+
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "../connect.facebook.net/en_GB/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script><title>Python Tutorial: Generators</title>
+<meta http-equiv="content-type" content="text/html; charset="ISO-8859-1">
+<meta name="Description" content="Introduction into Generators and their usage in Python" />
+<meta name="Keywords" content="Python, Generators, Generator, example, examples, introduction, usage, 
+permutations, Fibonacci numbers, Fibonacci sequence, iterator, iterators" />
+
+<link href="favicon.ico" rel="shortcut icon">
+
+<link href="moderna.css" rel="stylesheet" type="text/css" />
+<link href="moderna_print.css" media="print" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+<div id="container">
+
+<div id="banner">
+<!-- <a href="impressum.php">Impressum</a> | <a href="mailto:">contact</a> | --><h1>Python Course</h1>
+
+</div>
+
+	<!-- Begin Top Menu -->
+<ul id="navlist">
+<li><a href="index-2.html" >Home</a></li><li class="active"><a id="current" href="course.html" >Python 2 Tutorial</a></li><li><a href="python3_course.html" >Python 3 Tutorial</a></li><li><a href="advanced_topics.html" >Advanced Topics</a></li><li><a href="python_books.html" >Python Books</a></li><li><a href="python_tkinter.html" >Tkinter Tutorial</a></li><li><a href="contact.html" rel="nofollow">Contact</a></li>                          
+</ul>
+	<!-- End Top Menu -->
+<div id="sidebar-a">
+<img class="border" src="images/wind_generators_small.png" alt="box" />    <h2>Python 2 Tutorial</h2>
+
+<div class="menu">
+
+<ul>
+<li><a href="history_and_philosophy.html">History and Philosophy of Python</a></li><li><a href="why_python.html">Why Python</a></li><li><a href="interactive.html">Interactive Mode</a></li><li><a href="execute_script.html">Execute a Script</a></li><li><a href="blocks.html">Structuring with Indentation</a></li><li><a href="variables.html">Data Types and Variables</a></li><li><a href="operators.html">Operators</a></li><li><a href="input.html">input and raw_input via the keyboard</a></li><li><a href="conditional_statements.html">Conditional Statements</a></li><li><a href="loops.html">While Loops</a></li><li><a href="for_loop.html">For Loops</a></li><li><a href="formatted_output.html">Formatted output</a></li><li><a href="print.html">Output with Print</a></li><li><a href="sequential_data_types.html">Sequential Data Types</a></li><li><a href="dictionaries.html">Dictionaries</a></li><li><a href="sets_frozensets.html">Sets and Frozen Sets</a></li><li><a href="deep_copy.html">Shallow and Deep Copy</a></li><li><a href="functions.html">Functions</a></li><li><a href="recursive_functions.html">Recursion and Recursive Functions</a></li><li><a href="tests.html">Tests, DocTests, UnitTests</a></li><li><a href="memoization.html">Memoization and Decorators</a></li><li><a href="passing_arguments.html">Passing Arguments</a></li><li><a href="namespaces.html">Namespaces</a></li><li><a href="global_vs_local_variables.html">Global vs. Local Variables</a></li><li><a href="file_management.html">File Management</a></li><li><a href="modules_and_modular_programming.html">Modular Programming and Modules</a></li><li><a href="re.html">Introduction in Regular Expressions</a></li><li><a href="re_advanced.html">Regular Expressions, Advanced</a></li><li><a href="lambda.html">Lambda Operator, Filter, Reduce and Map</a></li><li><a href="list_comprehension.html">List Comprehension</a></li><li><a href="generators.html">Generators</a></li><li><a href="exception_handling.html">Exception Handling</a></li><li><a href="object_oriented_programming.html">Object Oriented Programming</a></li><li><a href="inheritance_example.html">Inheritance Example</a></li></ul>
+
+</div>
+
+<p>
+<h3>Mythology</h3>
+The first great achievement of Apollo was to slay the huge serpent Python. In some texts 
+Python is an enormous dragon and not a serpent. 
+<br>  
+But who was this mythical creature? Python was created out of the slime and mud left after 
+the great flood. She was  appointed by Gaia (Mother Earth) to guard the oracle of Delphi, 
+known as Pytho. After having defeated Python Apollo remade
+her former home and the oracle as his own.
+<br>
+
+</div><div id="sidebar-b"><img style="width: 150px;" alt="Python-Logo"
+		     src="images/python-logo.png"><!-- Dieses Tag dort einfügen, wo die +1-Schaltfläche dargestellt werden soll -->
+<g:plusone></g:plusone>
+<br><br>
+
+<div class="fb-like" data-href="www.python-course.eu" data-send="false" data-layout="button_count" 
+data-width="130" data-show-faces="true" data-action="recommend"></div>
+
+<br><br>
+This topic in German / Deutsche Übersetzung:
+    <a href="http://www.python-kurs.eu/generatoren.php">Generatoren</a><h3>Python 2.7</h3>This tutorial deals with Python Version 2.7<br>This chapter from our course is available in a version for Python3: <a href="python3_generators.html">Generators</a><h3>Classroom Training Courses</h3>
+<p>
+This website contains a free and extensive online tutorial by Bernd Klein, using
+material from his classroom <a href="python_classes.html">Python courses</a>.
+<br><br>
+If you are interested in an instructor-led classroom training, you may have a look at the 
+<a href="http://www.bodenseo.com/courses.php?topic=Python">Python courses
+<br><img style="width: 150px;" 
+alt="Bodenseo, Python and other courses and seminars"
+		     src="images/classroom_training_courses.jpg">
+</a>
+by Bernd Klein at Bodenseo.
+<font size="1">© kabliczech - Fotolia.com</font>
+ </p>
+
+
+
+<h3>Quote of the Day:</h3>
+<p>
+
+<i>"Don't have good ideas if you aren't willing to be responsible for them. "</i> (Alan Perlis)
+<br><hr>
+
+<h3>Advantages of Python</h3>
+<p>
+<ul>
+<li>Easy and fast to learn</li>
+<li>Simple to get support</li>
+<li>Python's syntax is clear and readable</li>
+<li>Fast to Code, i.e. it is easier and faster to code a problem in Python than in 
+C, C++ or Java, just to mention a few other languages</li>
+<li>Python is portable, i.e. it runs on multiple platforms and systems, like e.g. Linux 
+and Microsoft Windows</li>
+<li>Object oriented</li>
+<li>It's trendy, i.e more and more successful companies switch to Python, like Google did a long
+time ago.</li>
+</ul>
+</p>
+
+
+</p></div>
+<div id="content">
+
+<div id="contextlinks">Previous Chapter: <a href="list_comprehension.html">List Comprehension</a><br>
+<LINK rel="prev" href="list_comprehension.html">Next Chapter: <a href="exception_handling.html">Exception Handling</a><br>
+<LINK rel="next" href="exception_handling.html"></div>
+<h2>Generators</h2> 
+<h3>Introduction</h3>
+<p>
+<img class="imgright" src="images/wind_generators_posterize.png" alt="Generators" />
+Generators are a simple and powerful possibility to create or to generate iterators. On the surface
+they look like functions, but there is both a syntactical and a semantical difference.
+Instead of return statements you will find inside of the body of a generator only yield statements,
+i.e. one or more yield statements.
+<br><br>
+Another important feature of generators is that the local variables and the execution start is 
+automatically saved between calls. This is necessary, because unlike an ordinary function 
+successive calls to a generator function don't start execution at the beginning of the function. 
+Instead, the new call to a generator function will resume execution right
+after the yield statement in the code, where the last call exited. In other words: When the Python
+interpreter finds a yield statement inside of an iterator generated by a generator, it records 
+the position of this statement and the local variables, and returns from the iterator. The next time 
+this iterator is called, it will resume execution at the line following the previous yield statement. 
+There may be more than one yield statement in the code of a generator or the yield statement might be 
+inside the body of a loop. If there is a return statement in the code of a generator, the execution 
+will stop with a StopIteration exception error if this code is executed by the Python interpreter. 
+<br>
+<br>
+Everything what can be done with a generator can be implemented with a class based iterator as well.
+But the crucial advantage of generators consists in automatically creating the methods 
+__iter__() and next().
+<br>
+Generators provide a very neat way of producing data which is huge or infinite.
+<br>
+<br>The following is a simple example of a generator, which is capable of producing four city names:
+<pre>
+def city_generator():
+    yield("Konstanz")
+    yield("Zurich")
+    yield("Schaffhausen")
+    yield("Stuttgart")
+</pre>
+It's possible to create an iterator with this generator, which generates one after the other 
+the four cities Konstanz, Zurich, Schaffhausen and Stuttgart.
+<br>
+<pre>
+>>> from city_generator import city_generator
+>>> x = city_generator()
+>>> print x.next()
+Konstanz
+>>> print x.next()
+Zurich
+>>> print x.next()
+Schaffhausen
+>>> print x.next()
+Stuttgart
+>>> print x.next()
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+StopIteration
+>>> 
+</pre>
+As we can see, we have generated an iterator x in the interactive shell. Every call of the method 
+next() returns another city. After the last city, i.e. Stuttgart, has been created, another call of
+x.next() raises an error, saying that the iteration has stopped, i.e. "StopIteration".
+<br>Can we send a reset to an iterator is a frequently asked question, so that it can start the iteration
+all over again. There is no reset, but it's possible to create another generator. This can be done e.g. by
+ having the statement "x = city_generator()" again.
+<br>Thought at first sight the yield statement looks like the return statement of a function, we can see
+in this example, that there is a big difference. If we had a return statement instead of a yield in the
+previous example, it would be a function. But this function would always return "Konstanz" and never any 
+of the other cities, i.e. Zurich, Schaffhausen or Stuttgart.
+
+</p>
+<h3>Method of Operation</h3>
+<p>
+As we have elaborated in the introduction of this chapter, the generators offer a comfortable
+method to generate iterators, and that's why they are called generators.
+<br>
+<br>Method of working:
+<ul>
+  <li>A generator is called like a function. It's return value is an iterator object. The code
+  of the generator will not be executed in this stage.
+  <li>The iterator can be used by calling the next method. The first time the execution 
+  starts like a function, i.e. the first line of code within the body of the iterator.
+  The code is executed until a yield statement is reached.
+  <li>yield returns the value of the expression, which is following the keyword yield. 
+  This is like a function, but Python keeps track of the position of this yield and the
+  state of the local variables is stored for the next call. At the next call, the execution
+  continues with the statement following the yield statement and the variables have the same
+  values as they had in the previous call.
+  <li>The iterator is finished, if the generator body is completely worked through or
+  if the program flow encounters a return statement without a value. 
+</ul>
+We will illustrate this behaviour in the following example of a generator which generates
+the Fibonacci numbers. 
+<br>
+The Fibonacci sequence is named after Leonardo of Pisa, who was known as Fibonacci 
+(a contraction of filius Bonacci, "son of Bonaccio"). 
+In his textbook Liber Abaci, which appeared in the year 1202) he had an exercise about 
+the rabbits and their breeding: It starts with a newly-born pair of rabbits, i.e. a male
+and a female animal. It takes one month until they can mate. At the end of the second month
+the female gives birth to a new pair of rabbits. Now let's suppose that every female rabbit
+will bring forth another pair of rabbits every month after the end of the first month.
+We have to mention, that Fibonacci's rabbits never die. They question is how large the
+population will be after a certain period of time.
+<br><br>
+This produces a sequence of numbers:  0,1,1,2,3,5,8,13 
+<br><br>
+This sequence can be defined in mathematical terms like this:
+<br><br>
+F<sub>n</sub> = F<sub>n - 1</sub> + F<sub>n - 2</sub>
+<br>with the seed values:<br>
+F<sub>0</sub> = 0 and F<sub>1</sub> = 1
+<pre>
+def fibonacci(n):
+    """Fibonacci numbers generator, first n"""
+    a, b, counter = 0, 1, 0
+    while True:
+        if (counter > n): return
+        yield a
+        a, b = b, a + b
+        counter += 1
+f = fibonacci(5)
+for x in f:
+    print x,
+print
+</pre>
+The generator above can be used to create the first n Fibonacci numbers, or better
+(n+1) numbers because the 0th number is also included. 
+<br>In the next example we show you a version which is capable of returing an endless
+iterator. We have to take care when we use this iterator, that a termination criterium
+is used:
+
+<pre>
+def fibonacci():
+    """Fibonacci numbers generator"""
+    a, b = 0, 1
+    while True:
+        yield a
+        a, b = b, a + b
+
+f = fibonacci()
+
+counter = 0
+for x in f:
+    print x,
+    counter += 1
+    if (counter > 10): break 
+print
+</pre>
+</p>
+<br>
+<h3>Recursive Generators</h3>
+<p>
+<img class="imgright" src="images/permutationen.png" alt="Permutations" />
+Like functions generators can be recursively programmed.  
+The following example is a generator to create all the permutations of a given list 
+of items.
+<br><br>
+For those who don't know what permutations are, we have a short introduction:<br><br>
+Formal Definition:<br>
+A permutation is a rearrangement of the elements of an ordered list. In other words: Every 
+arrangement of n elements is called a permutation.
+<br>
+<br>
+In the following lines we show you all the permutations of the letter a, b and c:
+<br><br>
+a b c<br>
+a c b<br>
+b a c<br>
+b c a<br>
+c a b<br>
+c b a<br>
+<br>
+The number of permutations on a set of n elements is given by n!
+<br
+<pre>
+n! = n*(n-1)*(n-2) ... 2 * 1
+</pre>
+The permutation generator can be called with an arbitrary list of objects. 
+The iterator returned by this generator generates all the possible permutations:
+<pre>
+def permutations(items):
+    n = len(items)
+    if n==0: yield []
+    else:
+        for i in range(len(items)):
+            for cc in permutations(items[:i]+items[i+1:]):
+                yield [items[i]]+cc
+
+for p in permutations(['r','e','d']): print ''.join(p)
+for p in permutations(list("game")): print ''.join(p)
+</pre>
+</p>
+
+<h3>A Generator of Generators</h3>
+<p>
+The second generator of our Fibonacci sequence example generates an iterator, which
+can theoretically produce all the Fibonacci numbers, i.e. an infinite number.
+But you shouldn't try to produce all these numbers, as we would do in the following
+example: 
+<pre>
+list(fibonacci())
+</pre>
+This will show you very fast the limits of your computer.
+<br>
+In most practical applications, we only need the first n elements of an "endless" iterator.
+We can use another generator, in our example firstn, to create the first n elements of
+a generator g: 
+<pre>
+def firstn(g, n):
+	for i in range(n):
+		yield g.next()
+</pre>
+The following script returns the first 10 elements of the Fibonacci sequence:
+<pre>
+#!/usr/bin/env python
+def fibonacci():
+    """Ein Fibonacci-Zahlen-Generator"""
+    a, b = 0, 1
+    while True:
+        yield a
+        a, b = b, a + b
+
+def firstn(g, n):
+	for i in range(n):
+		yield g.next()
+
+print list(firstn(fibonacci(), 10))
+
+</pre>
+</p>
+
+<div id="contextlinks">Previous Chapter: <a href="list_comprehension.html">List Comprehension</a><br>
+<LINK rel="prev" href="list_comprehension.html">Next Chapter: <a href="exception_handling.html">Exception Handling</a><br>
+<LINK rel="next" href="exception_handling.html"></div><br><br><br>
+
+</div>
+<div id="footer">  &copy; 2011 - 2014 <a href="http://www.bklein.de/">Bernd Klein</a>,
+Bodenseo; 
+Design by Denise Mitchinson adapted for python-course.eu by Bernd Klein</div>
+</div>
+</body>
+
+<!-- Mirrored from www.python-course.eu/generators.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:09:26 GMT -->
+</html>

@@ -1,0 +1,1037 @@
+﻿<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from blog.miguelgrinberg.com/post/a-cheap-bluetooth-serial-port-for-your-raspberry-pi by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:52:15 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    
+    <title>
+    
+        A cheap Bluetooth serial port for your Raspberry Pi - miguelgrinberg.com
+    
+</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="description" content="miguelgrinberg.com">
+	<meta name="copyright" content="Copyright (c) 2012-2015 Miguel Grinberg">
+	<meta name="author" content="Miguel Grinberg">
+    
+    <meta name="keywords" content="raspberry pi, bluetooth, hardware">
+    
+
+    
+    <!-- Bootstrap -->
+    <link href="../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../static/prettify.css" type="text/css" rel="stylesheet" />
+    <link href="../static/colorbox/colorbox.css" rel="stylesheet" type="text/css" />
+    <link href="../static/style.css" rel="stylesheet" type="text/css" />
+
+    <link rel="shortcut icon" href="../static/favicon.ico">
+	<link rel="alternate" type="application/rss+xml" href="../feed" title="miguelgrinberg.com RSS feed">
+
+  </head>
+  <body>
+    
+    <!-- facebook sdk -->
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "../../connect.facebook.net/en_US/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    <!-- google plus sdk -->
+    <script type="text/javascript" src="../../apis.google.com/js/plusone.js"></script>
+    <!-- twitter sdk -->
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="../../platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <!-- linkedin sdk -->
+    <script src="../../platform.linkedin.com/in.js" type="text/javascript"></script>
+
+    
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://blog.miguelgrinberg.com/index">miguelgrinberg.com</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="http://blog.miguelgrinberg.com/index">Home</a></li>
+                        <li><a href="about-me.html">About Me</a></li>
+                        <li><a href="about-this-blog.html">About This Blog</a></li>
+                        
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <p class="navbar-text" style="margin-top: 10px; margin-bottom: 0px;">
+                                <a type="application/rss+xml" href="../feed"><img src="../static/rss.png" alt="RSS Feed" title="RSS Feed" /></a>
+                                <a href="https://www.facebook.com/miguelgrinbergblog"><img src="../static/facebook.png" alt="Facebook" title="Facebook" /></a>
+                                <a href="https://plus.google.com/u/0/117786742456929977820"><img src="../static/googleplus.png" alt="Google+" title="Google+" /></a>
+                                <a href="http://www.linkedin.com/in/miguelgrinberg"><img src="../static/linkedin.png" alt="LinkedIn" title="LinkedIn" /></a>
+                                <a href="http://github.com/miguelgrinberg"><img src="../static/github.png" alt="GitHub" title="GitHub" /></a>
+                                <a href="https://twitter.com/#!/miguelgrinberg"><img src="../static/twitter.png" alt="Twitter" title="Twitter" /></a>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </nav>
+
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-push-9 sidebar-bg">
+                <div id="sidebar">
+                    
+
+                    
+                    <h1>Building Web APIs with Flask</h1>
+                    <p>Flask is the ideal Python framework for building REST APIs that are flexible, easy to maintain and efficient. I have created a training video with O'Reilly in which I show all my techniques:</p>
+                    <p><center><a href="http://bit.ly/flaskapi"><img style="border: 1px solid black;" src="../static/flask-api-cover-tiny.png"></a></center></p>
+                    <p>Visit <a href="http://flaskbook.com/">http://flaskbook.com</a> for information about this and other Flask training products I have created!</p>
+                    
+
+                    <h1>About Miguel</h1>
+                    <img style="float: right; margin: 0px 8px 8px 0px; padding: 4px; border: 1px solid #ccc;" src="../static/miguel.jpg" />
+                    <p>Welcome to my blog!</p>
+                    <p>I'm a software engineer, photographer and filmmaker in Portland, Oregon, USA.</p>
+                    <p>You can also find me on <a href="https://www.facebook.com/miguelgrinbergblog">Facebook</a>, <a href="https://plus.google.com/u/0/117786742456929977820">Google+</a>, <a href="http://www.linkedin.com/in/miguelgrinberg">LinkedIn</a>, <a href="https://github.com/miguelgrinberg">Github</a> and <a href="https://twitter.com/#!/miguelgrinberg">Twitter</a>.</p>
+                    <p>Thank you for visiting!</p>
+
+                    
+
+                    
+                    <h1>Categories</h1>
+<ul>
+
+	<li>
+		<a href="../category/Arduino/feed">
+			<img src="../static/rss-small.png" title="Arduino RSS Feed" label="Arduino RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Arduino.html">Arduino</a></span> (7)
+	</li>
+
+	<li>
+		<a href="../category/Authentication/feed">
+			<img src="../static/rss-small.png" title="Authentication RSS Feed" label="Authentication RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Authentication.html">Authentication</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../category/Blog/feed">
+			<img src="../static/rss-small.png" title="Blog RSS Feed" label="Blog RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Blog.html">Blog</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/C%2b%2b/feed">
+			<img src="../static/rss-small.png" title="C++ RSS Feed" label="C++ RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/C%2b%2b.html">C++</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Cloud/feed">
+			<img src="../static/rss-small.png" title="Cloud RSS Feed" label="Cloud RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Cloud.html">Cloud</a></span> (2)
+	</li>
+
+	<li>
+		<a href="../category/Filmmaking/feed">
+			<img src="../static/rss-small.png" title="Filmmaking RSS Feed" label="Filmmaking RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Filmmaking.html">Filmmaking</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Flask/feed">
+			<img src="../static/rss-small.png" title="Flask RSS Feed" label="Flask RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Flask.html">Flask</a></span> (39)
+	</li>
+
+	<li>
+		<a href="../category/Games/feed">
+			<img src="../static/rss-small.png" title="Games RSS Feed" label="Games RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Games.html">Games</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Gear/feed">
+			<img src="../static/rss-small.png" title="Gear RSS Feed" label="Gear RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Gear.html">Gear</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/HTML5/feed">
+			<img src="../static/rss-small.png" title="HTML5 RSS Feed" label="HTML5 RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/HTML5.html">HTML5</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Heroku/feed">
+			<img src="../static/rss-small.png" title="Heroku RSS Feed" label="Heroku RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Heroku.html">Heroku</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Javascript/feed">
+			<img src="../static/rss-small.png" title="Javascript RSS Feed" label="Javascript RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Javascript.html">Javascript</a></span> (3)
+	</li>
+
+	<li>
+		<a href="../category/Movie%20Reviews/feed">
+			<img src="../static/rss-small.png" title="Movie Reviews RSS Feed" label="Movie Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Movie%20Reviews.html">Movie Reviews</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Netflix/feed">
+			<img src="../static/rss-small.png" title="Netflix RSS Feed" label="Netflix RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Netflix.html">Netflix</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Node.js/feed">
+			<img src="../static/rss-small.png" title="Node.js RSS Feed" label="Node.js RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Node.html">Node.js</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/OpenStack/feed">
+			<img src="../static/rss-small.png" title="OpenStack RSS Feed" label="OpenStack RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/OpenStack.html">OpenStack</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Personal/feed">
+			<img src="../static/rss-small.png" title="Personal RSS Feed" label="Personal RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Personal.html">Personal</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Photography/feed">
+			<img src="../static/rss-small.png" title="Photography RSS Feed" label="Photography RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Photography.html">Photography</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Product%20Reviews/feed">
+			<img src="../static/rss-small.png" title="Product Reviews RSS Feed" label="Product Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Product%20Reviews.html">Product Reviews</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Programming/feed">
+			<img src="../static/rss-small.png" title="Programming RSS Feed" label="Programming RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Programming.html">Programming</a></span> (47)
+	</li>
+
+	<li>
+		<a href="../category/Project%20Management/feed">
+			<img src="../static/rss-small.png" title="Project Management RSS Feed" label="Project Management RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Project%20Management.html">Project Management</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Python/feed">
+			<img src="../static/rss-small.png" title="Python RSS Feed" label="Python RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Python.html">Python</a></span> (43)
+	</li>
+
+	<li>
+		<a href="../category/REST/feed">
+			<img src="../static/rss-small.png" title="REST RSS Feed" label="REST RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/REST.html">REST</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Rackspace/feed">
+			<img src="../static/rss-small.png" title="Rackspace RSS Feed" label="Rackspace RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Rackspace.html">Rackspace</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Raspberry%20Pi/feed">
+			<img src="../static/rss-small.png" title="Raspberry Pi RSS Feed" label="Raspberry Pi RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Raspberry%20Pi.html">Raspberry Pi</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/RhinoSteady/feed">
+			<img src="../static/rss-small.png" title="RhinoSteady RSS Feed" label="RhinoSteady RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/RhinoSteady.html">RhinoSteady</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Robotics/feed">
+			<img src="../static/rss-small.png" title="Robotics RSS Feed" label="Robotics RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Robotics.html">Robotics</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Video/feed">
+			<img src="../static/rss-small.png" title="Video RSS Feed" label="Video RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Video.html">Video</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../category/Windows/feed">
+			<img src="../static/rss-small.png" title="Windows RSS Feed" label="Windows RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Windows.html">Windows</a></span> (1)
+	</li>
+
+</ul>
+                    
+                </div>
+            </div>
+            <div class="col-md-8 col-md-pull-4">
+                <div id="main">
+                    
+                    
+                    
+                    
+                    
+
+<div class="post">
+
+<p class="date"><span class="flask-moment" data-timestamp="2013-03-24T06:28:17Z" data-format="format('LL')" data-refresh="0">2013-03-24T06:28:17Z</span></p>
+<h1 class="post-title"><a href="a-cheap-bluetooth-serial-port-for-your-raspberry-pi.html">A cheap Bluetooth serial port for your Raspberry Pi</a></h1>
+<div class="posted">Posted by <span class="label label-danger"><a href="http://blog.miguelgrinberg.com/author/Miguel Grinberg">Miguel Grinberg</a></span> under <span class="label label-primary"><a href="../category/Raspberry%20Pi.html">Raspberry Pi</a></span>. </div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/a-cheap-bluetooth-serial-port-for-your-raspberry-pi" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/a-cheap-bluetooth-serial-port-for-your-raspberry-pi" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="a-cheap-bluetooth-serial-port-for-your-raspberry-pi.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/a-cheap-bluetooth-serial-port-for-your-raspberry-pi" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+<div class="post_body"><p><center><img alt="Raspberry Pi Bluetooth" src="../static/images/raspberry-pi-bluetooth-01.jpg" /></center></p>
+<p>While working on my <a href="building-an-arduino-robot-part-i-hardware-components.html">Arduino based robot vehicle project</a> the idea came to me that the Bluetooth module that I'm using as a remote control receiver for my robot would make a great addition to my Raspberry Pi. </p>
+<p>In this article I describe how to enable the Raspberry Pi's serial port to talk to other devices over Bluetooth using this module.</p>
+<h2>Required hardware</h2>
+<p>The nice aspect of this project is that it requires very little hardware, most of the action happens in the software side. But of course we do need some hardware, which I list below:</p>
+<ul>
+<li>
+<p>A <a href="http://www.raspberrypi.org/">Raspberry Pi</a>.</p>
+<p>If you have been living under a rock or in another planet for the last year or two and never heard of the Raspberry Pi then you should know that this is a credit card sized Linux computer created in the UK that sells for just $35 USD. I've got mine through <a href="http://www.element14.com/community/groups/raspberry-pi">Element 14</a>.</p>
+</li>
+<li>
+<p>A Bluetooth slave module</p>
+<p>This is a small and inexpensive Bluetooth to serial adapter that is mainly targeted to Arduino users. I've got mine from the <a href="http://www.amazon.com/gp/product/B006RBK9ZW?tag=thirdwish-20">Virtuabotix store at Amazon.com</a> for $14.95. The Chinese electronics stores on Ebay sell it for less, but of course you have to wait longer to get it.</p>
+</li>
+<li>
+<p>Four female-to-female breadboard wires</p>
+<p>If you buy the Bluetooth module from the Virtuabotix store at Amazon (link above) then you get the wires included with it. If you are buying from another place you may want to ask if wires are included or sold separately.</p>
+</li>
+<li>
+<p>A computer or device with a Bluetooth terminal software</p>
+<p>To establish a communication with the Raspberry Pi over Bluetooth you need another device that can speak Bluetooth. If your computer has a Bluetooth adapter then you just need to find a terminal software that you can use to send and receive data, like HyperTerminal on Windows, or <code>screen</code> on OS X and Linux. A computer is not the only choice, though. For example, I will use my Android cell phone with the free <a href="https://play.google.com/store/apps/details?id=es.pymasde.blueterm&amp;hl=en">BlueTerm</a> app installed.</p>
+</li>
+</ul>
+<h2>Wiring</h2>
+<p>The wiring is very simple and is better explained with a diagram:</p>
+<p><center><img alt="Raspberry Pi Bluetooth" src="../static/images/raspberry-pi-bluetooth-02.png" /></center></p>
+<p>If you prefer to see it in table format, here are the four connections that you need to make:</p>
+<table class="data">
+<tr><th>RPi GPIO pin</th><th>BT module pin</th></tr>
+<tr><td>5V (Pin #2)</td><td>VCC</td></tr>
+<tr><td>GND (Pin #6)</td><td>GND</td></tr>
+<tr><td>TXD (Pin #8)</td><td>RXD</td></tr>
+<tr><td>RXD (Pin #10)</td><td>TXD</td></tr>
+</table>
+
+<p>Note that the <code>TXD</code> and <code>RXD</code> connections between the RPi and the Bluetooth module are crossed, this is what makes one end receive what the other end sends.</p>
+<h2>Raspberry Pi configuration</h2>
+<p>I'm going to assume you are running a recent release of <a href="http://www.raspberrypi.org/downloads">Raspbian</a> on your Raspberry Pi. If you are running another OS then you will need to find out how the changes below are done in your system.</p>
+<p>By default the Raspberry Pi is configured to write boot time messages to the serial port, and also to start a login console on it. Unfortunately, the default baud rate that the RPi uses for its serial port is 115200 bps, while the Bluetooth module comes preconfigured from factory to 9600 bps.</p>
+<p>It is easier to configure the RPi to use 9600 bps so we will try that first. There are two config files that need to be updated.</p>
+<p>File <code>/boot/cmdline.txt</code> contains the kernel options that are used to boot the system. In my Raspbian based system this file contains the following options:</p>
+<pre><code>dwc_otg.lpm_enable=0 console=ttyAMA0,115200 kgdboc=ttyAMA0,115200 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4 elevator=deadline rootwait
+</code></pre>
+<p>The interesting options are <code>console</code> and <code>kgdboc</code>, because these configure the serial port device <code>/dev/ttyAMA0</code> to 115200 bps. You need to change these two configurations to 9600 bps. After you make these changes the file should read:</p>
+<pre><code>dwc_otg.lpm_enable=0 console=ttyAMA0,9600 kgdboc=ttyAMA0,9600 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4 elevator=deadline rootwait
+</code></pre>
+<p>The second configuration file is <code>/etc/inittab</code>. Inside this file you have to locate the following line:</p>
+<pre><code>T0:23:respawn:/sbin/getty -L ttyAMA0 115200 vt100
+</code></pre>
+<p>This tells the system to start a terminal on the serial port, and again it uses 115200 bps to configure the port. You have to change this line to use 9600 bps:</p>
+<pre><code>T0:23:respawn:/sbin/getty -L ttyAMA0 9600 vt100
+</code></pre>
+<p>Remeber that these are configuration files so they are not writable to the default <code>pi</code> user, to edit these files you have to use <code>sudo</code>. As far as text editors, Raspbian provides two, <code>vi</code> and <code>pico</code>. If you don't know either then you will probably be more confortable using <code>pico</code>. For example, to edit <code>cmdline.txt</code> with <code>pico</code> you would run the following command:</p>
+<pre><code>$ sudo pico /boot/cmdline.txt
+</code></pre>
+<p>The system will ask for your password and after that you will be able to make changes to this file. I recommend that you save original copies of these config files in case you make a mistake.</p>
+<p>With those changes made the RPi is configured to talk to the Bluetooth module. If you now power up your Raspberry Pi you will notice that the LED in the Bluetooth module blinks rapidly. This is the sign that the Bluetooth module is ready and waiting to be paired with another device.</p>
+<h2>Connecting from a Bluetooth terminal</h2>
+<p>Now leave the RPi running with the Bluetooth module in its blinking state and go to the Bluetooth enabled computer or smartphone that you will connect to it. Your device should now find the Bluetooth module with the name <code>linvor</code> when you set it to discover devices.</p>
+<p>If you are using an Android device with BlueTerm then start the app and from the app menu select "Connect device". Android does the baud selection automatically so you don't have to configure it. From a terminal software running in a computer it is likely that you will need to configure the speed, number of data bits per character, parity, and number of stop bits per character. The values you need to use are:</p>
+<ul>
+<li>Speed: 9600 bps</li>
+<li>Data bits: 8 bits</li>
+<li>Parity: None</li>
+<li>Stop bits: 1 bit</li>
+</ul>
+<p>The Bluetooth module comes preconfigured with a PIN number. To complete the connection your computer or smartphone will ask you to enter this PIN. The factory default PIN is <code>1234</code>.</p>
+<p>The LED in the Bluetooth module will now stop blinking and remain lit, indicating that it has made a connection.</p>
+<p>And here comes the fun part. You need to reboot the Raspberry Pi so that the new serial port settings take effect. To reboot the RPi run the following command in a local or network shell:</p>
+<pre><code>$ sudo reboot
+</code></pre>
+<p>Now watch the Bluetooth terminal on your PC or smartphone while the Pi reboots. Boot messages should be appearing on your terminal, and as soon as the RPi is up you should get a login prompt there as well.</p>
+<p>You can now login from your Bluetooth terminal and use the command line prompt as you normally would over a local or network shell.</p>
+<p>Below is a short video that shows my Raspberry Pi connected to my Android smartphone:</p>
+<p><center><iframe width="450" height="253" src="http://www.youtube-nocookie.com/embed/b1crJukKmHg?rel=0" frameborder="0" allowfullscreen></iframe></center></p>
+<h2>Direct serial port access</h2>
+<p>While you can't deny there is a coolness factor in being able to run a Raspberry Pi from a smartphone, let's be honest, that isn't extremely useful. But having a wireless serial connection into the RPi can be useful for regular applications, for example for debugging or for remote control.</p>
+<p>To be able to use the serial port from a user application running in the Raspberry Pi we first need to tell the system to not use it as a console. To do this we need to go back to the two configuration files we touched before. I once again recommend that you back up your config files before changing them, in case things don't work out well and you need to revert the changes.</p>
+<p>In file <code>/boot/cmdline.txt</code> we are going to remove the two serial references by taking away the first <code>console</code> and <code>kgdboc</code> sections:</p>
+<pre><code>dwc_otg.lpm_enable=0 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4 elevator=deadline rootwait
+</code></pre>
+<p>And in file <code>/etc/inittab</code> we will comment out the serial console task:</p>
+<pre><code>#T0:23:respawn:/sbin/getty -L ttyAMA0 115200 vt100
+</code></pre>
+<p>After making these changes reboot the system so that they take effect. With these changes the RPi will not use the serial port at all, so the port will be free to any application that wants to use it as <code>/dev/ttyAMA0</code>.</p>
+<p>If you want to play with sending and receiving data through the serial port then you can install <code>minicom</code> into your RPi using the following command:</p>
+<pre><code>$ sudo apt-get install minicom
+</code></pre>
+<p>And then you can open a terminal on the serial port with this command:</p>
+<pre><code>$ minicom -b 9600 -o -D /dev/ttyAMA0
+</code></pre>
+<p>Anything you type inside the <code>minicom</code> terminal will be sent to the serial port, and anything the other side sends will be displayed.</p>
+<h2>Configuring the Bluetooth module</h2>
+<p>The Bluetooth module comes preconfigured from the factory with a set of defaults, which are:</p>
+<ul>
+<li>Baud rate: 9600</li>
+<li>Bluetooth ID: linvor</li>
+<li>PIN: 1234</li>
+</ul>
+<p>But these values can be changed by sending special commands through the communication channel. Now that the Raspberry Pi is connected to the module we can try this.</p>
+<p>These special commands that configure the Bluetooth module can be sent from a connected remote device, or they can be sent from the local system, in this case the Raspberry Pi. Since the Raspberry Pi is the star of the article I'm going to also use it to do the configuration.</p>
+<p>Here is a quick summary of the most useful configuration commands:</p>
+<table class="data">
+<tr><th>Command</th><th>Description</th></tr>
+<tr><td>AT</th><td>Test the communication with the Bluetooth module.</td</tr>
+<tr><td>AT+VERSION</th><td>Report the module's version number</td</tr>
+<tr><td>AT+NAME<i>name</i></th><td>Change the Bluetooth ID to <i>name</i> (maximum 20 characters).</td</tr>
+<tr><td>AT+PIN<i>nnnn</i></th><td>Change the PIN to <i>nnnn</i>, which must be a four digit number.</td</tr>
+<tr><td>AT+BAUD<i>n</i></th><td>Change the baud rate. Use one of the following values for <i>n</i>:<br />
+2: 2400bps<br />
+3: 4800bps<br />
+4: 9600bps<br />
+5: 19200bps<br />
+6: 38400bps<br />
+7: 57600bps<br />
+8: 115200bps
+</td</tr>
+</table>
+
+<p>One tricky aspect of sending these commands is that the Bluetooth module has a very short timeout, so all the characters in a command must be entered really quickly. The safest way to get the entire command in time is to type it in a text editor window and then use copy/paste to send it really fast.</p>
+<p>If your Raspberry Pi session is local, then there is no clipboard support unless you work inside the X environment, so you will need to run <code>startx</code> and then open a Terminal window. If you are using a remote shell over the network then you can use the clipboard in your host operating system.</p>
+<p>To send the commands we can use <code>minicom</code>. So let's fire it up one more time:</p>
+<pre><code>$ minicom -b 9600 -o -D /dev/ttyAMA0
+</code></pre>
+<p>Note that it isn't necessary to have a connection to do this, so you can do this while the Bluetooth module is in its blinking state.</p>
+<p>You now need to use any method to get the string <code>AT</code> into the clipboard, and then hit paste inside the minicom window to send the command to the module.</p>
+<p>When you send <code>AT</code> the module should respond with this in the <code>minicom</code> window:</p>
+<pre><code>OK
+</code></pre>
+<p>If you get this response then you know that everything is all right. If you don't get a response then for some reason the Raspberry Pi is unable to communicate with the Bluetooth module.</p>
+<p>When I send <code>AT+VERSION</code> to the module I get the following response:</p>
+<pre><code>OKlinvorV1.5
+</code></pre>
+<p>To change the baud rate to the fastest rate of 115200 we need to issue the command <code>AT+BAUD8</code>, and the module will respond with:</p>
+<pre><code>OK115200
+</code></pre>
+<p>Because the baud rate was changed now the communication will break, and we will need to exit and restart minicom with the updated speed:</p>
+<pre><code>$ minicom -b 115200 -o -D /dev/ttyAMA0
+</code></pre>
+<p>To change the name of the module to MyBT we must issue the command <code>AT+NAMEMyBT</code>, and the module will respond with:</p>
+<pre><code>OKsetname
+</code></pre>
+<p>And to change the PIN to 4321 the command is <code>AT+PIN4321</code> and the response from the Bluetooth module will be:</p>
+<pre><code>OKsetPIN
+</code></pre>
+<p>Note that when the name and/or the PIN change the module requires a power cycle for the changes to take effect.</p>
+<p>Also don't forget that if you change the baud rate and later want to reestablish the serial console you will need to change the two config files to reflect the new baud rate you have selected in the Bluetooth module.</p>
+<h2>Conclusion</h2>
+<p>I hope this article gives you some ideas to bring new life to the serial port in your Raspberry Pi. If you have any questions feel free to ask below in the comments!</p>
+<p>Miguel</p></div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/a-cheap-bluetooth-serial-port-for-your-raspberry-pi" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/a-cheap-bluetooth-serial-port-for-your-raspberry-pi" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="a-cheap-bluetooth-serial-port-for-your-raspberry-pi.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/a-cheap-bluetooth-serial-port-for-your-raspberry-pi" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+
+
+<h4 style="text-align: right"><a name="comments"></a>57 comments</h4>
+
+
+<div class="comment">
+    <ul>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/a4abb8a109cabc11a429bbaecaa7a476ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#1</span> <span class="label label-primary">Fooky Barrall</span> said
+                    <span class="flask-moment" data-timestamp="2013-05-01T19:56:21Z" data-format="fromNow(0)" data-refresh="0">2013-05-01T19:56:21Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">What kind of security it provided to the password set in plain text over the bluetooth link?    Could a bluetooth sniffer decode the characters as they were sent?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#2</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-05-01T20:27:35Z" data-format="fromNow(0)" data-refresh="0">2013-05-01T20:27:35Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Fooky: I&#39;m not an expert on this, but my understanding is that there is no encryption for the PIN. Bluetooth has a pretty short range though, the sniffer would need to be located pretty close to intercept the communication.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/422561a2b238d23554c98e7cfa44343bce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#3</span> <span class="label label-primary">maihoaomv</span> said
+                    <span class="flask-moment" data-timestamp="2013-05-18T05:54:35Z" data-format="fromNow(0)" data-refresh="0">2013-05-18T05:54:35Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">would this also work with an ipad? if so any suggestions as to how i would go about setting up the ipad to talk to the bluetooth?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#4</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-05-28T04:44:47Z" data-format="fromNow(0)" data-refresh="0">2013-05-28T04:44:47Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@maihoaomv: I haven&#39;t tried this myself, but I believe you should be able to connect using nBlueTerm, a free BlueTooth terminal app for iOS (https://itunes.apple.com/app/id516628472).</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/19fb2c21450e20cfc2a3853bab2de062ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#5</span> <span class="label label-primary">Josh</span> said
+                    <span class="flask-moment" data-timestamp="2013-06-05T14:16:02Z" data-format="fromNow(0)" data-refresh="0">2013-06-05T14:16:02Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Could this be used to connect bluetooth keyboard/mouse to the pi?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#6</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-06-05T16:23:07Z" data-format="fromNow(0)" data-refresh="0">2013-06-05T16:23:07Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Josh: in theory yes, but you would need a device driver on the Pi that reads the serial port and translates the keyboard/mouse commands to the proper actions. I do not think this driver exists right now.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/b6aaf431ee4ee43176a3bddf21829dcdce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#7</span> <span class="label label-primary"><a href="http://www.jimmiedave.com/">David Cain</a></span> said
+                    <span class="flask-moment" data-timestamp="2013-06-05T17:42:01Z" data-format="fromNow(0)" data-refresh="0">2013-06-05T17:42:01Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Any way to get the Raspberry Pi to stop saying &#34;Uncompressing Linux... done, booting the kernel.&#34; on the serial port after I&#39;ve taken out the boot messages and the login prompt? I&#39;m afraid it&#39;s going to confuse the device I plan to hook up.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#8</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-06-06T05:49:08Z" data-format="fromNow(0)" data-refresh="0">2013-06-06T05:49:08Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@David: I didn&#39;t even notice this message still goes to the serial port. Search in all files in /etc and subfolders for the string &#34;ttyAMA0&#34;, maybe there is something still referencing the serial port? Another thing to try could be to configure the console to go to /dev/null or anything other than /dev/ttyAMA0.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/34fd55e949d3141a018d1c84a32850efce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#9</span> <span class="label label-primary">Jhonmont</span> said
+                    <span class="flask-moment" data-timestamp="2013-06-10T03:41:54Z" data-format="fromNow(0)" data-refresh="0">2013-06-10T03:41:54Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi, great guide, just come up with this trying to figure if i would be able to use the serial console from the raspberry to an android phone via cable. This sounds better. Just a quick question, my situation is:
+Want to use the raspberry pi as SD Cards backup device while traveling (because its cheap and tinny).
+will be running mount/copy/move/delete commands to do that over the console.
+Will this be enough to run those commands over my phone via BT?
+Thanks again.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#10</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-06-10T05:53:48Z" data-format="fromNow(0)" data-refresh="0">2013-06-10T05:53:48Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Jhonmont: the SD card is not used as secondary storage, it is the main storage, that&#39;s where the root file system is. You will not be able to remove the boot SD card to mount another one.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/34fd55e949d3141a018d1c84a32850efce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#11</span> <span class="label label-primary">Jhonmont</span> said
+                    <span class="flask-moment" data-timestamp="2013-06-10T13:38:30Z" data-format="fromNow(0)" data-refresh="0">2013-06-10T13:38:30Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Miguel,
+Sorry for the confusion, i did mean putting an extra SD card reader via an USB Port. this is the one i would use for copying/backup the SD cards. not touching the Pi main SD slot.
+Its possible?
+thanks</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#12</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-06-11T04:01:32Z" data-format="fromNow(0)" data-refresh="0">2013-06-11T04:01:32Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Jhonmont: Ah, that makes more sense :)
+Assuming the Pi can recognize your USB card reader I don&#39;t see any problems with your plan. Of course you will also need network access so that you can write the data from the SD cards somewhere.
+If I had to do this myself I would not worry about bluetooth console access, I would just have a script that runs after boot that mounts the SD card and backs it up unattended.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/8bff920620881de13d9f29d00eaed360ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#13</span> <span class="label label-primary">taher</span> said
+                    <span class="flask-moment" data-timestamp="2013-06-19T11:18:00Z" data-format="fromNow(0)" data-refresh="0">2013-06-19T11:18:00Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">i want to do some controlling using bluetooth. can anyone here tell me how can i compare bluetooth data in linux terminal</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/446cb9415b2f382686c76ddf11744222ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#14</span> <span class="label label-primary"><a href="http://blog.miguelgrinberg.com/index">Ian</a></span> said
+                    <span class="flask-moment" data-timestamp="2013-06-21T00:33:34Z" data-format="fromNow(0)" data-refresh="0">2013-06-21T00:33:34Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Fantastic! Thank you so much for your hard work. </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/290daaa6b9b9e325ea90dab2957610eace2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#15</span> <span class="label label-primary"><a href="http://www.btinterface.com/">Ian</a></span> said
+                    <span class="flask-moment" data-timestamp="2013-06-22T11:10:30Z" data-format="fromNow(0)" data-refresh="0">2013-06-22T11:10:30Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I put a link to your genius on my forum, hope that&#39;s ok.
+http://btinterface.com/BTInterface/forum/viewtopic.php?f=4&amp;t=101</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/f59e10d11ce4b28ee31cdd080eacd5b8ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#16</span> <span class="label label-primary">Jped</span> said
+                    <span class="flask-moment" data-timestamp="2013-07-04T00:15:34Z" data-format="fromNow(0)" data-refresh="0">2013-07-04T00:15:34Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hey, Great tutorial. THis helped me alot! I am trying to connect an arduino to the raspberry pi  through bluetooth. I have successfully got them to communicate with minicomm. However, I can not seem to figure out how to read the serial port into a python script. I have tried to use pyserial, but I do not get any communication. </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#17</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-07-04T06:00:00Z" data-format="fromNow(0)" data-refresh="0">2013-07-04T06:00:00Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Jped: have you seen this tutorial? http://www.doctormonk.com/2012/04/raspberry-pi-and-arduino.html</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/f59e10d11ce4b28ee31cdd080eacd5b8ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#18</span> <span class="label label-primary">Jped</span> said
+                    <span class="flask-moment" data-timestamp="2013-07-04T21:02:41Z" data-format="fromNow(0)" data-refresh="0">2013-07-04T21:02:41Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Miguel, I tried this.. did not work..</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/a856349518a4b1a2304fbe0a2b1497e4ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#19</span> <span class="label label-primary">Alex</span> said
+                    <span class="flask-moment" data-timestamp="2013-07-24T18:36:56Z" data-format="fromNow(0)" data-refresh="0">2013-07-24T18:36:56Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi,
+Thanks for the tutorial. I have a question regarding the use of a master Bluetooth module in place of the slave module. would it be possible to use a master module (which is what I have at this time) and for it to communicate to an android device? (e.g. nexus 7)
+
+Thanks,
+Alex
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#20</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-07-25T05:46:46Z" data-format="fromNow(0)" data-refresh="0">2013-07-25T05:46:46Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Alex: My understanding is that phones are typically masters, so you need a slave connected to the Arduino.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/d01dfc109a4817533a9d86f07500ab04ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#21</span> <span class="label label-primary">Joe Guerra</span> said
+                    <span class="flask-moment" data-timestamp="2013-08-22T17:53:33Z" data-format="fromNow(0)" data-refresh="0">2013-08-22T17:53:33Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I burned out my raspberry pi (in 5 minutes). Using a 700ma supply, I had usb keyboard / mouse &amp; Livnor bluetooth module hooked up to the GPIO pins. 
+
+
+I got my credit back, RMAing the unit. 
+
+Just afraid to attempt the same hookup.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/1a5a0822eb1f28efa672f68525ddd144ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#22</span> <span class="label label-primary">Ajith</span> said
+                    <span class="flask-moment" data-timestamp="2013-09-30T04:19:24Z" data-format="fromNow(0)" data-refresh="0">2013-09-30T04:19:24Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi, Great reading this. I would like to ask if I can use the  same Bluetooth module to pair with another device which is not a PC. I want to use the serial port to send commands to my Vehicle OBD Adapater.  How I can pair this device with that?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#23</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-09-30T06:52:58Z" data-format="fromNow(0)" data-refresh="0">2013-09-30T06:52:58Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Ajith: you can pair this Bluetooth module with any BT master, but not with another BT slave. There is a BT master module that you can get, which should enable you to connect the Pi to a device that has a BT slave.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/3e4930e0f57c53ac4289f4b2a0a495b2ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#24</span> <span class="label label-primary">Craig Swanson</span> said
+                    <span class="flask-moment" data-timestamp="2013-10-16T19:36:41Z" data-format="fromNow(0)" data-refresh="0">2013-10-16T19:36:41Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">How can I send a python executable file from my Windows 7 laptop to my Raspberry Pi using bluetooth?  I have the bluetooth connections established right now.  I want to be able to create Python code on my laptop, then transfer it via bluetooth to the Pi and then have the Pi execute the code.
+Craig</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#25</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-10-17T04:21:30Z" data-format="fromNow(0)" data-refresh="0">2013-10-17T04:21:30Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Craig: I showed in this article how I had a terminal in my cell phone controlling the Pi. That&#39;s what you need but instead of your cell phone you use your computer. If you can login to your Pi from your computer you can (for example) copy/paste your scripts and then run them.</p>
+                </div>
+            </div>
+        </li>
+        
+    </ul>
+</div>
+
+<div class="page">
+<ul class="pager">
+  <li class="previous disabled">
+    <a href="#">&laquo;&laquo;</a>
+  </li>
+  <li class="previous disabled">
+    <a href="#">&laquo;</a>
+  </li>
+  <li class="next">
+    <a href="a-cheap-bluetooth-serial-port-for-your-raspberry-pi/page/0.html#comments">&raquo;&raquo;</a>
+  </li>
+  <li class="next">
+    <a href="a-cheap-bluetooth-serial-port-for-your-raspberry-pi/page/2.html#comments">&raquo;</a>
+  </li>
+</ul>
+</div>
+
+<h3><a name="commentform"></a>Leave a Comment</h3>
+
+<form action="#commentform" method="post"
+  class="form" role="form">
+  <div style="display:none;"><input id="csrf_token" name="csrf_token" type="hidden" value="1439536836.69##b886c184600c447630fea7d4de01c573a4c1bb72"></div>
+  
+    
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="name">Name</label>
+        <input class="form-control" id="name" name="name" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="url">URL</label>
+        <input class="form-control" id="url" name="url" type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="email">Email</label>
+        <input class="form-control" id="email" name="email" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="comment">Comment</label>
+        <textarea class="form-control" id="comment" name="comment" required></textarea>
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="captcha">Captcha</label>
+        
+<script type="text/javascript">var RecaptchaOptions = {"custom_translations": {"audio_challenge": "Get an audio challenge", "cant_hear_this": "Download sound as MP3", "help_btn": "Help", "image_alt_text": "reCAPTCHA challenge image", "incorrect_try_again": "Incorrect. Try again.", "instructions_audio": "Type what you hear", "instructions_visual": "Type the text", "play_again": "Play sound again", "privacy_and_terms": "Privacy & Terms", "refresh_btn": "Get a new challenge", "visual_challenge": "Get a visual challenge"}, "theme": "white"};</script>
+<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S"></script>
+<noscript>
+  <iframe src="http://www.google.com/recaptcha/api/noscript?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S" height="300" width="500" frameborder="0"></iframe><br>
+  <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+  <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
+</noscript>
+
+  </div>
+
+
+    
+
+
+
+
+
+  
+
+
+    <input class="btn btn-default" id="submit" name="submit" type="submit" value="Submit">
+  
+
+
+
+
+
+</form>
+
+
+</div>
+
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <p class="elapsed">This page was generated in None seconds.</p>
+            <p>&copy; 2014 by Miguel Grinberg. All rights reserved. <a href="mailto:webmaster _at_ miguelgrinberg _dot_ com">Questions?</a></p>
+        </div>
+    </div>
+
+
+    
+    
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.33/jquery.colorbox-min.js"></script>
+    <script type="text/javascript" src="../static/prettify.js"></script>
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment-with-langs.min.js"></script>
+<script>
+function flask_moment_render(elem) {
+    $(elem).text(eval('moment("' + $(elem).data('timestamp') + '").' + $(elem).data('format') + ';'));
+    $(elem).removeClass('flask-moment');
+}
+function flask_moment_render_all() {
+    $('.flask-moment').each(function() {
+        flask_moment_render(this);
+        if ($(this).data('refresh')) {
+            (function(elem, interval) { setInterval(function() { flask_moment_render(elem) }, interval); })(this, $(this).data('refresh'));
+        }
+    })
+}
+$(document).ready(function() {
+    flask_moment_render_all();
+});
+</script>
+    
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4777284-15']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".gallery").colorbox({rel:".gallery",maxWidth:"95%",maxHeight:"95%",scalePhotos:true});
+            // add prettyprint class to all <pre><code></code></pre> blocks
+            var prettify = false;
+            $("pre code").parent().each(function() {
+                $(this).addClass('prettyprint');
+                prettify = true;
+            });
+            prettyPrint();
+        });
+    </script>
+
+
+  </body>
+
+<!-- Mirrored from blog.miguelgrinberg.com/post/a-cheap-bluetooth-serial-port-for-your-raspberry-pi by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:52:31 GMT -->
+</html>

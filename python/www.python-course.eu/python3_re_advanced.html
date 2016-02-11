@@ -1,0 +1,458 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from www.python-course.eu/python3_re_advanced.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:09:06 GMT -->
+<head>
+
+<!-- Dieses Tag in den Head-Bereich oder direkt vor dem schlieÃŸenden Body-Tag einfÃ¼gen -->
+<script type="text/javascript" src="../apis.google.com/js/plusone.js"></script>
+
+
+
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "../connect.facebook.net/en_GB/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script><title>Python3 Tutorial: Regular Expression for Advanced Users</title>
+<meta http-equiv="content-type" content="text/html; charset="ISO-8859-1">
+<meta name="Description" content="Introduction into Regular Expression under Python. Finding all Matched Substrings
+and splitting Strings by using regular expression and other topics." />
+<meta name="Keywords" content="Python, introduction, regular expression, find all, findall, split" />
+
+<link href="favicon.ico" rel="shortcut icon">
+
+<link href="moderna.css" rel="stylesheet" type="text/css" />
+<link href="moderna_print.css" media="print" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+<div id="container">
+
+<div id="banner">
+<!-- <a href="impressum.php">Impressum</a> | <a href="mailto:">contact</a> | --><h1>Python Course</h1>
+
+</div>
+
+	<!-- Begin Top Menu -->
+<ul id="navlist">
+<li><a href="index-2.html" >Home</a></li><li><a href="course.html" >Python 2 Tutorial</a></li><li class="active"><a id="current" href="python3_course.html" >Python 3 Tutorial</a></li><li><a href="advanced_topics.html" >Advanced Topics</a></li><li><a href="python_books.html" >Python Books</a></li><li><a href="python_tkinter.html" >Tkinter Tutorial</a></li><li><a href="contact.html" rel="nofollow">Contact</a></li>                          
+</ul>
+	<!-- End Top Menu -->
+<div id="sidebar-a">
+<img class="border" src="images/stairs_green_small.jpg" alt="box" />    <h2>Python 3 Tutorial</h2>
+
+<div class="menu">
+
+<ul>
+<li><a href="python3_history_and_philosophy.html">The Origins of Python</a></li><li><a href="python3_interactive.html">Starting with Python: The Interactive Shell</a></li><li><a href="python3_execute_script.html">Executing a Script</a></li><li><a href="python3_blocks.html">Indentation</a></li><li><a href="python3_variables.html">Data Types and Variables</a></li><li><a href="python3_operators.html">Operators</a></li><li><a href="python3_sequential_data_types.html">Sequential Data Types: Lists and Strings</a></li><li><a href="python3_deep_copy.html">Shallow and Deep Copy</a></li><li><a href="python3_dictionaries.html">Dictionaries</a></li><li><a href="python3_sets_frozensets.html">Sets and Frozen Sets</a></li><li><a href="python3_input.html">input via the keyboard</a></li><li><a href="python3_conditional_statements.html">Conditional Statements</a></li><li><a href="python3_loops.html">Loops, while Loop</a></li><li><a href="python3_for_loop.html">For Loops</a></li><li><a href="python3_print.html">Output with Print</a></li><li><a href="python3_formatted_output.html">Formatted output with string modulo and the format method</a></li><li><a href="python3_functions.html">Functions</a></li><li><a href="python3_recursive_functions.html">Recursion and Recursive Functions</a></li><li><a href="python3_tests.html">Tests, DocTests, UnitTests</a></li><li><a href="python3_memoization.html">Memoization and Decorators</a></li><li><a href="python3_passing_arguments.html">Parameter Passing in Functions</a></li><li><a href="python3_namespaces.html">Namespaces</a></li><li><a href="python3_global_vs_local_variables.html">Global and Local Variables</a></li><li><a href="python3_file_management.html">Read and Write Files</a></li><li><a href="python3_modules_and_modular_programming.html">Modular Programming and Modules</a></li><li><a href="python3_re.html">Regular Expressions</a></li><li><a href="python3_re_advanced.html">Regular Expressions, Advanced</a></li><li><a href="python3_lambda.html">Lambda Operator, Filter, Reduce and Map</a></li><li><a href="python3_list_comprehension.html">List Comprehension</a></li><li><a href="python3_generators.html">Iterators and Generators</a></li><li><a href="python3_exception_handling.html">Exception Handling</a></li><li><a href="python3_object_oriented_programming.html">Object Oriented Programming</a></li><li><a href="python3_class_and_instance_attributes.html">Class and Instance Attributes</a></li><li><a href="python3_properties.html">Properties vs. getters and setters</a></li><li><a href="python3_inheritance.html">Inheritance</a></li><li><a href="python3_multiple_inheritance.html">Multiple Inheritance</a></li><li><a href="python3_magic_methods.html">Magic Methods and Operator Overloading</a></li><li><a href="python3_inheritance_example.html">OOP, Inheritance Example</a></li></ul>
+
+</div>
+
+<p>
+<br>
+<hr>
+<br>
+<h3>Matching</h3>
+<i>"Since we cannot match it let us take our revenge by abusing it."</i>
+<br>
+(Michel de Montaigne, 1533 - 1592)
+<br>
+<h3>Advanced</h3>
+<i>"Any sufficiently advanced technology is indistinguishable from magic."</i>
+<br>
+(Arthur C. Clarke)
+<br><br>
+<i>"Any sufficiently advanced bureaucracy is indistinguishable from molasses."</i>
+<br>
+(unknown)
+<br><br>
+<i>"Any sufficiently advanced regular expression is indistinguishable from chaos."</i>
+<br>
+(Bernard Bychan)
+<br>
+<h3>Search and Replace</h3>
+<i>"Education's purpose is to replace an empty mind with an open one."</i>
+<br>
+(Malcolm Forbes)
+<br><br>
+<i>"Not even computers will replace committees, because committees buy computers."</i>
+<br>
+(Edward Shepherd Mead)
+<br><br>
+<i>"When a thing is funny, search it carefully for a hidden truth."</i>
+<br>
+(George Bernard Shaw)
+
+<h3>Complexity of Regular Expressions</h3>
+"Regular expressions tend to be easier to write than they are to read. 
+This is less of a problem if you are the only one who ever needs to maintain the 
+program (or sed routine, or shell script, or what have you), but if several people 
+need to watch over it, the syntax can turn into more of a hindrance than an aid."
+<br>
+(Stephen Ramsay, University of Virginia)
+<br>
+<hr>
+Supported by:<br>
+<a href="http://www.bodenseo.com/"><img style="width: 150px;" alt="Bodenseo, courses, seminars and training 
+in Linux and Python"
+		     src="images/bodenseo_python_training.gif"><br>Courses and Seminars for Linux and Python</a>
+		     <br><br>		     
+
+</div><div id="sidebar-b"><img style="width: 150px;" alt="Python-Logo"
+		     src="images/python-logo.png"><!-- Dieses Tag dort einfügen, wo die +1-Schaltfläche dargestellt werden soll -->
+<g:plusone></g:plusone>
+<br><br>
+
+<div class="fb-like" data-href="www.python-course.eu" data-send="false" data-layout="button_count" 
+data-width="130" data-show-faces="true" data-action="recommend"></div>
+
+<br><br>
+This topic in German / Deutsche Übersetzung:
+    <a href="http://www.python-kurs.eu/python3_re_fortgeschrittene.php">Reguläre Ausdrücke für Fortgeschrittene</a><h3>Python3</h3>This is a tutorial in Python3, but this chapter of our course is available in a version for Python 2.x as well: <a href="re_advanced.html">Regular Expression for Advanced Users in Python 2.x</a><p>
+<h3>Classroom Training Courses</h3>
+The goal of this website is to provide educational material, 
+allowing you to learn Python on your own.
+Nevertheless, it is faster and more efficient to attend a "real" 
+Python course in a classroom, with
+an experienced trainer. So why not attend one of the live 
+<a href="python_classes.html">Python courses</a> in Paris, London, Berlin, Munich
+or Lake Constance by Bernd Klein, the author of this tutorial?
+<br><br>
+You can also check the   
+<a href="http://www.bodenseo.com/courses.php?topic=Python">Python Training courses
+<img style="width: 150px;" alt="Bodenseo Kurse in Python"
+		     src="images/bodenseo_stairs_to_python.png"></a>
+		     delivered by Bodenseo and Bernd Klein.
+<br><br>
+You can book on-site classes at your company or organization, e.g. in England, Switzerland, Austria, Germany,
+France, Belgium, the Netherlands, Luxembourg, Poland, UK, Italy and other locations in Europe.
+<br><br>
+<h3>Python3</h3>This is a tutorial in Python3, but this chapter of our course is available in a version for Python 2.x as well: <a href="re_advanced.html">Regular Expression for Advanced Users in Python 2.x</a>
+ </p>
+
+
+
+
+    
+</p></div>
+<div id="content">
+
+<div id="contextlinks">Previous Chapter: <a href="python3_re.html">Regular Expressions</a><br>
+<LINK rel="prev" href="python3_re.html">Next Chapter: <a href="python3_lambda.html">Lambda Operator, Filter, Reduce and Map</a><br>
+<LINK rel="next" href="python3_lambda.html"></div>
+<h2>Advanced Regular Expressions</h2>
+<p>
+<br>
+<h3>Introduction</h3>
+<img class="imgright" src="images/stairs_green_fog.jpg" alt="stairway to success with Python" />  
+<br>
+In our <a href="re.html">introduction to regular expressions</a> of our tutorial we have covered 
+the basic basic principles of regular expressions. We have shown, what the simplest regular 
+expression looks like. We have also learnt, how to use regular expressions in Python by using 
+the search() and the match() methods of the re module. The concept of formulating and using 
+character classes should be well known by now, as well as the predefined character classes 
+like \d, \D, \s, \S, and so on. You should have learnt how to match the beginning and the 
+end of a string with a regular expression. You should know the special meaning of the question 
+mark to make items optional. We have also introduced the quantifiers to repeat characters
+and groups arbitrarily or in certain ranges.
+<br><br>
+You should also be familiar with the use of grouping and the syntax and usage of backreferences. 
+<br><br>
+Furthermore, we had explained the match objects of the re module and the information they contain 
+and how to retrieve this information by using the methods span(), start(), end(), and group().
+
+<br><br>
+The introduction ended with a comprehensive example in Python.
+<br><br>
+In this chapter we will continue with our explanations of the syntax of the regular expressions. 
+We will also explain further methods of the Python module re. E.g. how to find all the matched 
+substrings of a regular expression. A task which needs programming in other programming languages
+like Perl or Java, but can be dealt with the call of one method of the re module of Python. So far, we 
+only know how to define a choice of characters with a character class. We will demonstrate in this
+chapter of our tutorial, how to formulate alternations of substrings.
+
+
+<br><br>
+<h3>Finding all Matched Substrings</h3>
+The Python module re provides another great method, which other languages like Perl and Java don't provide.
+If you want to find all the substrings in a string, which match a regular expression, you have to use 
+a loop in Perl and other languages, as can be seen in the following Perl snippet:
+<pre>
+while ($string =~ m/regex/g) {
+  print "Found '$&'.  Next attempt at character " . pos($string)+1 . "\n";
+}
+</pre>
+It's a lot easier in Python. No need to loop. We can just use the findall method of the re module:
+<pre>
+re.findall(pattern, string[, flags])
+</pre>
+findall returns all non-overlapping matches of pattern in string, as a list of strings. 
+The string is scanned left-to-right, and matches are returned in the order in which they are found. 
+<pre>
+>>> t="A fat cat doesn't eat oat but a rat eats bats."
+>>> mo = re.findall("[force]at", t)
+>>> print(mo)
+['fat', 'cat', 'eat', 'oat', 'rat', 'eat']
+</pre>
+If one or more groups are present in the pattern, findall returns a list of groups; this will be a list 
+of tuples if the pattern has more than one group. We demonstrate this in our next example. We have a long
+string with various Python training courses and their dates. With the first call to findall, we don't use
+any grouping and receive the complete string as a result. In the next call, we use grouping and findall
+returns a list of 2-tuples, each having the course name as the first component and the dates as the second
+component:
+<pre>
+>>> import re
+>>> courses = "Python Training Course for Beginners: 15/Aug/2011 - 19/Aug/2011;Python Training Course Intermediate: 12/Dec/2011 - 16/Dec/2011;Python Text Processing Course:31/Oct/2011 - 4/Nov/2011"
+>>> items = re.findall("[^:]*:[^;]*;?", courses)
+>>> items
+['Python Training Course for Beginners: 15/Aug/2011 - 19/Aug/2011;', 'Python Training Course Intermediate: 12/Dec/2011 - 16/Dec/2011;', 'Python Text Processing Course:31/Oct/2011 - 4/Nov/2011']
+>>> items = re.findall("([^:]*):([^;]*;?)", courses)
+>>> items
+[('Python Training Course for Beginners', ' 15/Aug/2011 - 19/Aug/2011;'), ('Python Training Course Intermediate', ' 12/Dec/2011 - 16/Dec/2011;'), ('Python Text Processing Course', '31/Oct/2011 - 4/Nov/2011')]
+>>> 
+</pre>
+<br>
+<h3>Alternations</h3>
+In our introduction to regular expressions we had introduced character classes. Character classes 
+offer a choice out of a set of characters. Sometimes we need a choice between several regular expression.
+It's a logical "or" and that's why the symbol for this construct is the  "|" symbol. 
+<br>
+In the following example, we check, if one of the cities London, Paris, Zurich, Konstanz Bern, or 
+Strasbourg appear in a string preceded by the word "destination":
+
+<pre>
+>>> import re
+>>> str = "Course location is London or Paris!"
+>>> mo = re.search(r"location.*(London|Paris|Zurich|Strasbourg)",str)
+>>> if mo: print(mo.group())
+... 
+location is London or Paris
+>>> 
+</pre>
+
+If you consider the previous example as too artificial, here is another one.
+Let's assume, you want to filter your email. You want to find all the correspondence 
+(conversations) between you and Guido van Rossum, the creator and designer of Python. 
+The following regular expression is helpful for this purpose:
+<pre>
+r"(^To:|^From:) (Guido|van Rossum)"
+</pre>
+
+This expression matches all lines starting with either 'To:' or 'From:', followed by a 
+space and then either by the first name 'Guido' or the surnae 'van Rossum'.
+<br><br>
+<h3>Compiling Regular Expressions</h3>
+If you want to use the same regexp more than once in a script, it might be a good idea 
+to use a regular expression object, i.e. the regex is compiled. 
+<br><br>
+The general syntax:
+<pre>
+re.compile(pattern[, flags])
+</pre>
+
+compile returns a regex object, which can be used later for searching and replacing.
+The expressions behaviour can be modified by specifying a flag value.
+<br><br>
+
+<table cellpadding="2" cellspacing="2" border="1">
+<tr><td><b>Abbreviation</b></td><td><b>Full name</b></td><td><b>Description</b></td></tr>
+<tr><td>re.I</td><td>re.IGNORECASE</td><td>Makes the regular expression case-insensitive</td></tr>
+<tr><td>re.L</td><td>re.LOCALE</td><td>The behavious of some special sequences like 
+\w, \W, \b,\s, \S will be made dependant on the current locale, i.e. the user's language, country aso.</td></tr>
+<tr><td>re.M</td><td>re.MULTILINE</td><td>^ and $ will match at the beginning and at the end of each line and
+not just at the beginning and the end of the string</td></tr>
+<tr><td>re.S</td><td>re.DOTALL</td><td>The dot "." will match every character <b>plus the newline</b></td></tr>
+<tr><td>re.U</td><td>re.UNICODE</td><td>Makes \w, \W, \b, \B, \d, \D, \s, \S dependent on Unicode 
+character properties</td></tr>
+<tr><td>re.X</td><td>re.VERBOSE</td><td>Allowing "verbose regular expressions", i.e. 
+whitespace are ignored. This means that spaces, tabs, and carriage returns are not matched as such. 
+If you want to match a space in a verbose regular expression, you'll need to escape it by escaping it 
+with a backslash in front of it or include it in a character class.<br>
+# are also ignored, except when in a character class or preceded by an non-escaped backslash.
+Everything following a "#" will be ignored until the end of the line, so this character can be
+used to start a comment. 
+</td></tr>
+</table>
+
+<br><br>
+
+Compiled regular objects usually are not saving much time, because Python internally compiles 
+AND CACHES regexes whenever you use them with re.search() or re.match(). The only extra time 
+a non-compiled regex takes is the time it needs to check the cache, which is a key lookup of
+a dictionary.<br>
+<br>
+A good reason to use them is to separate the defintion of a regex from its use.
+<br><br>
+<h4>Example</h4>
+We have already introduced a regular expression for matching a superset of UK postcodes 
+in our introductory chapter:
+<pre>
+r"[A-z]{1,2}[0-9R][0-9A-Z]? [0-9][ABD-HJLNP-UW-Z]{2}"
+</pre>
+<br><br>
+We demonstrate with this regular expression, how we can use the compile functionality of the module re
+in the following interactive session. The regular expression "regex" is compiled with re.compile(regex) and
+the compiled object is saved in the object compiled_re. Now we call the method search() of the object
+compiled_re: 
+
+<pre>
+>>> import re
+>>> regex = r"[A-z]{1,2}[0-9R][0-9A-Z]? [0-9][ABD-HJLNP-UW-Z]{2}"
+>>> address = "BBC News Centre, London, W12 7RJ"
+>>> compiled_re = re.compile(regex)
+>>> res = compiled_re.search(address)
+>>> print(res)
+<_sre.SRE_Match object at 0x174e578>
+>>> 
+
+</pre>
+<br><br>
+<h3>Splitting a String With or Without with Regular Expressions</h3>
+There is a string method split, which can be used to split a string into a list of substrings.
+
+<br><br>
+<code>
+str.split([sep[, maxsplit]])
+</code>
+<br><br>
+As you can see, the method split has two optional parameters. If none is given (or is None) , 
+a string will be separated into substring using whitespaces as delimiters, i.e. every
+substring consisting purely of whitespaces is used as a delimiter. 
+<br><br>
+<img src="images/re_split.gif" alt="Splitting an image" />  
+
+<br><br>
+
+We demonstrate this 
+behaviour with a famous quotation by Abraham Lincoln:
+<br>
+<pre>
+>>> law_courses = "Let reverence for the laws be breathed by every American mother to the lisping babe that prattles on her lap. Let it be taught in schools, in seminaries, and in colleges. Let it be written in primers, spelling books, and in almanacs. Let it be preached from the pulpit, proclaimed in legislative halls, and enforced in the courts of justice. And, in short, let it become the political religion of the nation."
+>>> law_courses.split()
+['Let', 'reverence', 'for', 'the', 'laws', 'be', 'breathed', 'by', 'every', 'American', 'mother', 'to', 'the', 'lisping', 'babe', 'that', 'prattles', 'on', 'her', 'lap.', 'Let', 'it', 'be', 'taught', 'in', 'schools,', 'in', 'seminaries,', 'and', 'in', 'colleges.', 'Let', 'it', 'be', 'written', 'in', 'primers,', 'spelling', 'books,', 'and', 'in', 'almanacs.', 'Let', 'it', 'be', 'preached', 'from', 'the', 'pulpit,', 'proclaimed', 'in', 'legislative', 'halls,', 'and', 'enforced', 'in', 'the', 'courts', 'of', 'justice.', 'And,', 'in', 'short,', 'let', 'it', 'become', 'the', 'political', 'religion', 'of', 'the', 'nation.']
+>>> 
+</pre>
+
+
+<br>
+Now we look at a string, which could stem from an Excel or an OpenOffice calc file. 
+We have seen in our previous example, that split takes whitespaces as default separators. 
+We want to split the string in the following little example using semicolons as separators. The only thing
+we have to do is to use ";" as an argument of split(): 
+<pre>
+>>> line = "James;Miller;teacher;Perl"
+>>> line.split(";")
+['James', 'Miller', 'teacher', 'Perl']
+</pre> 
+
+The method split() has another optional parameter: maxsplit
+<br>
+If maxsplit is given, at most maxsplit splits are done. This means that the resulting
+list will have at most "maxsplit + 1" elements.
+<br>
+We will illustrate the mode of operation of maxsplit in the next example:
+<pre>
+>>> mammon = "The god of the world's leading religion. The chief temple is in the holy city of New York."
+>>> mammon.split(" ",3)
+['The', 'god', 'of', "the world's leading religion. The chief temple is in the holy city of New York."]
+</pre>
+We used a Blank as a delimiter string in the previous example, which can be a problem:
+If multiple blanks or whitespaces are connected, split() will split the string after every single blank, so that
+we will get emtpy strings and strings with only a tab inside ('\t') in our result list:
+<pre>
+>>> mammon = "The god  \t of the world's leading religion. The chief temple is in the holy city of New York."
+>>> mammon.split(" ",5)
+['The', 'god', '', '\t', 'of', "the world's leading religion. The chief temple is in the holy city of New York."]
+>>> 
+</pre> 
+We can prevent the separation of empty strings by using None as the first argument. Now split will use the default 
+behaviour, i.e. every substring consisting of connected whitespace characters will be
+taken as one separator:
+<pre>
+>>> mammon.split(None,5)
+['The', 'god', 'of', 'the', "world's", 'leading religion. The chief temple is in the holy city of New York.']
+</pre>
+<br>
+<h4>Regular Expression Split</h4>
+The string method split() is the right tool in many cases, but what, if you want e.g.
+to get the bare words of a text, i.e. without any special characters and whitespaces.
+If we want this, we have to use the split function from the re module. We illustrate 
+this method with a short text from the beginning of Metamorphoses by Ovid:
+<pre>
+>>> import re
+>>> metamorphoses = "OF bodies chang'd to various forms, I sing: Ye Gods, from whom these miracles did spring, Inspire my numbers with coelestial heat;"
+>>> re.split("\W+",metamorphoses)
+['OF', 'bodies', 'chang', 'd', 'to', 'various', 'forms', 'I', 'sing', 'Ye', 'Gods', 'from', 'whom', 'these', 'miracles', 'did', 'spring', 'Inspire', 'my', 'numbers', 'with', 'coelestial', 'heat', '']
+</pre>
+
+The following example is a good case, where the regular expression is really superior to the string split. 
+Let''s assume that we have data lines with surnames, firstnames and profesions of names. We want to clear the 
+data line of the superfluous and redundant text descriptions, i.e. "surname: ", "prename: " and so on, so that
+we have solely the surname in the first column, the firstname in the second column and the profession in the third
+column:
+<br>
+<pre>
+>>> import re
+>>> lines = ["surname: Obama, prename: Barack, profession: president", "surname: Merkel, prename: Angela, profession: chancellor"]
+>>> for line in lines:
+...     re.split(",* *\w*: ", line)
+... 
+['', 'Obama', 'Barack', 'president']
+['', 'Merkel', 'Angela', 'chancellor']
+>>> 
+</pre>
+
+We can easily improve the script by using a slice operator,
+so that we don't have the empty string as the first element of our result lists:
+<pre>
+>>> import re
+>>> lines = ["surname: Obama, prename: Barack, profession: president", "surname: Merkel, prename: Angela, profession: chancellor"]
+>>> for line in lines:
+...     re.split(",* *\w*: ", line)[1:]
+... 
+['Obama', 'Barack', 'president']
+['Merkel', 'Angela', 'chancellor']
+>>> 
+</pre>
+<br>
+And now for something completely different: There is a connection between Barack Obama and Python, or better
+Monty Python. John Cleese, one of the members of Monty Python told the Western Daily Press in April 2008:
+"I'm going to offer my services to him as a speechwriter because I think he is a brilliant man"
+<br><br>
+
+<h3>Search and Replace with sub</h3>
+<pre>
+re.sub(regex, replacement, subject)
+</pre>
+
+Every match of the regular expression  regex in the string subject will be replaced by the string replacement.
+<br>
+Example:
+<pre>
+>>> import re
+>>> str = "yes I said yes I will Yes."
+>>> res = re.sub("[yY]es","no", str)
+>>> print(res)
+no I said no I will no.
+</pre>
+
+
+<br><br>
+<div id="contextlinks">Previous Chapter: <a href="python3_re.html">Regular Expressions</a><br>
+<LINK rel="prev" href="python3_re.html">Next Chapter: <a href="python3_lambda.html">Lambda Operator, Filter, Reduce and Map</a><br>
+<LINK rel="next" href="python3_lambda.html"></div><br><br><br>
+
+</div>
+<div id="footer">  &copy; 2011 - 2014 <a href="http://www.bklein.de/">Bernd Klein</a>,
+Bodenseo; 
+Design by Denise Mitchinson adapted for python-course.eu by Bernd Klein</div>
+</div>
+</body>
+
+<!-- Mirrored from www.python-course.eu/python3_re_advanced.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:09:06 GMT -->
+</html>

@@ -1,0 +1,443 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+<!-- Mirrored from www.tangowithdjango.com/book17/chapters/cookie.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 10 Jan 2016 04:10:03 GMT -->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>11. Cookies and Sessions &mdash; How to Tango with Django 1.7</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/twd.ico"/>
+    <link rel="top" title="How to Tango with Django 1.7" href="../index-2.html" />
+    <link rel="next" title="12. User Authentication with Django-Registration-Redux" href="login_redux.html" />
+    <link rel="prev" title="10. Working with Templates" href="templates.html" />
+ <style type="text/css">
+	img{
+	    width: 85%; /* you can use % */
+	    height: auto;
+	}
+	
+	table {
+		margin: auto;
+	}
+	
+	p.caption {
+		font-size: 10pt;
+		font-style: italic;
+	}
+ </style>
+ <script type="text/javascript">
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','../../../www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-44397330-1', 'tangowithdjango.com');
+  ga('send', 'pageview');
+     
+
+  </script>      
+
+  </head>
+  <body role="document">
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        
+        <li class="right" >
+          <a href="login_redux.html" title="12. User Authentication with Django-Registration-Redux"
+             accesskey="N">next</a>
+          </li>
+		
+        <li class="right" >
+          <a href="templates.html" title="10. Working with Templates"
+             accesskey="P">previous</a>
+          </li>
+		
+        <li><a href="../index-2.html">How to Tango with Django 1.7</a> &raquo;</li> 
+
+      </ul>
+
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index-2.html">
+              <img class="logo" src="../_static/twd200x200.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index-2.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">11. Cookies and Sessions</a><ul>
+<li><a class="reference internal" href="#cookies-cookies-everywhere">11.1. Cookies, Cookies Everywhere!</a></li>
+<li><a class="reference internal" href="#sessions-and-the-stateless-protocol">11.2. Sessions and the Stateless Protocol</a></li>
+<li><a class="reference internal" href="#setting-up-sessions-in-django">11.3. Setting up Sessions in Django</a></li>
+<li><a class="reference internal" href="#a-cookie-tasting-session">11.4. A Cookie Tasting Session</a><ul>
+<li><a class="reference internal" href="#testing-cookie-functionality">11.4.1. Testing Cookie Functionality</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#client-side-cookies-a-site-counter-example">11.5. Client Side Cookies: A Site Counter Example</a></li>
+<li><a class="reference internal" href="#session-data">11.6. Session Data</a></li>
+<li><a class="reference internal" href="#browser-length-and-persistent-sessions">11.7. Browser-Length and Persistent Sessions</a></li>
+<li><a class="reference internal" href="#clearing-the-sessions-database">11.8. Clearing the Sessions Database</a></li>
+<li><a class="reference internal" href="#basic-considerations-and-workflow">11.9. Basic Considerations and Workflow</a></li>
+<li><a class="reference internal" href="#exercises">11.10. Exercises</a><ul>
+<li><a class="reference internal" href="#hint">11.10.1. Hint</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="templates.html"
+                        title="previous chapter">10. Working with Templates</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="login_redux.html"
+                        title="next chapter">12. User Authentication with Django-Registration-Redux</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/chapters/cookie.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="http://www.tangowithdjango.com/book17/search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="cookies-and-sessions">
+<span id="cookie-label"></span><h1>11. Cookies and Sessions<a class="headerlink" href="#cookies-and-sessions" title="Permalink to this headline">¶</a></h1>
+<p>In this chapter, we will be going through <em>sessions</em> and <em>cookies</em>, both of which go hand in hand, and are of paramount importance in modern day web applications. In the previous chapter, the Django framework used sessions and cookies to handle the login and logout functionality (all behind the scenes). Here we will explore how to explicitly use cookies for other purposes.</p>
+<div class="section" id="cookies-cookies-everywhere">
+<h2>11.1. Cookies, Cookies Everywhere!<a class="headerlink" href="#cookies-cookies-everywhere" title="Permalink to this headline">¶</a></h2>
+<p>If you are already comfortable with the ideas and concepts behind cookies, then skip straight to Section <a class="reference internal" href="#model-cookies-protocols-label">11.2</a>, if not read on.</p>
+<p>Whenever a request to a website is made, the webserver returns the content of the requested page. In addition, one or more cookies may also be sent to the client, which are in turn stored in a persistent browser cache. When a user requests a new page from the same web server, any cookies that are matched to that server are sent with the request. The server can then interpret the cookies as part of the request&#8217;s context and generate a response to suit.</p>
+<p>The term <em>cookie</em> wasn&#8217;t actually derived from the food that you eat, but from the term <em>magic cookie</em>, a packet of data a program receives and sends again unchanged. In 1994, MCI sent a request to <em>Netscape Communications</em> to implement a way of implementing persistence across HTTP requests. This was in response to their need to reliably store the contents of a user&#8217;s virtual shopping basket for an e-commerce solution they were developing. Netscape programmer Lou Montulli took the concept of a magic cookie and applied it to web communications. You can find out more about <a class="reference external" href="http://en.wikipedia.org/wiki/HTTP_cookie#History">cookies and their history on Wikipedia</a>. Of course, with such a great idea came a software patent - and you can read <a class="reference external" href="http://patft.uspto.gov/netacgi/nph-Parser?Sect1=PTO1&amp;Sect2=HITOFF&amp;d=PALL&amp;p=1&amp;u=%2Fnetahtml%2FPTO%2Fsrchnum.htm&amp;r=1&amp;f=G&amp;l=50&amp;s1=5774670.PN.&amp;OS=PN/5774670&amp;RS=PN/5774670">US patent 5774670</a> that was submitted by Montulli himself.</p>
+<p>As an example, you may login to a site with a particular username and password. When you have been authenticated, a cookie may be returned to your browser containing your username, indicating that you are now logged into the site. At every request, this information is passed back to the server where your login information is used to render the appropriate page - perhaps including your username in particular places on the page. Your session cannot last forever, however - cookies <em>have</em> to expire at some point in time - they cannot be of infinite length. A web application containing sensitive information may expire after only a few minutes of inactivity. A different web application with trivial information may expire half an hour after the last interaction - or even weeks into the future.</p>
+<p>The passing of information in the form of cookies can open up potential security holes in your web application&#8217;s design. This is why developers of web applications need to be extremely careful when using cookies - does the information you want to store as a cookie <em>really</em> need to be sent? In many cases, there are alternate - and more secure - solutions to the problem. Passing a user&#8217;s credit card number on an e-commerce site as a cookie for example would be highly unwise. What if the user&#8217;s computer is compromised? The cookie could be taken by a malicious program. From there, hackers would have his or her credit card number - all because your web application&#8217;s design is fundamentally flawed. You&#8217;ll however be glad to know that a majority of websites use cookies for application specific functionality.</p>
+<div class="align-center figure" id="id2">
+<span id="fig-bbcnews-cookies"></span><img alt="../_images/bbcnews-cookies.png" src="../_images/bbcnews-cookies.png" />
+<p class="caption"><span class="caption-text">Figure 1: A screenshot of the BBC News website (hosted in the United Kingdom) with the cookie warning message presented at the top of the page.</span></p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Note in 2011, the European Union (EU) introduced an EU-wide &#8216;cookie law&#8217;, where all hosted sites within the EU should present a cookie warning message when a user visits the site for the first time. Check out Figure <a class="pageref" href="#fig-bbcnews-cookies">1</a>, demonstrating such a warning on the BBC News website. You can read about <a class="reference external" href="http://www.ico.org.uk/for_organisations/privacy_and_electronic_communications/the_guide/cookies">the law here</a>.</p>
+</div>
+</div>
+<div class="section" id="sessions-and-the-stateless-protocol">
+<span id="model-cookies-protocols-label"></span><h2>11.2. Sessions and the Stateless Protocol<a class="headerlink" href="#sessions-and-the-stateless-protocol" title="Permalink to this headline">¶</a></h2>
+<p>All correspondence between web browsers (clients) and servers is achieved through the <a class="reference external" href="http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP protocol</a>. As we <em>very briefly</em> touched upon in Chapter <a class="reference internal" href="forms.html#forms-label">8</a>, HTTP is a <a class="reference external" href="http://en.wikipedia.org/wiki/Stateless_protocol">stateless protocol</a>. This therefore means that a client computer running a web browser must establish a new network connection (a TCP connection) to the server each time a resource is requested (HTTP <code class="docutils literal"><span class="pre">GET</span></code>) or sent (HTTP <code class="docutils literal"><span class="pre">POST</span></code>) <a class="footnote-reference" href="#stateless-http11" id="id1"><sup>1</sup></a>.</p>
+<p>Without a persistent connection between client and server, the software on both ends cannot simply rely on connections alone to <em>hold session state</em>. For example, the client would need to tell the server each time who is logged on to the web application on a particular computer. This is known as a form of <em>dialogue</em> between the client and server, and is the basis of a <em>session</em> - a <a class="reference external" href="http://en.wikipedia.org/wiki/Session_(computer_science)">semi-permanent exchange of information</a>. Being a stateless protocol, HTTP makes holding session state pretty challenging (and frustrating) - but there are luckily several techniques we can use to circumnavigate this problem.</p>
+<p>The most commonly used way of holding state is through the use of a <em>session ID</em> stored as a cookie on a client&#8217;s computer. A session ID can be considered as a token (a sequence of characters) to identify a unique session within a particular web application. Instead of storing all kinds of information as cookies on the client (such as usernames, names, passwords...), only the session ID is stored, which can then be mapped to a data structure on the web server. Within that data structure, you can store all of the information you require. This approach is a <strong>much more secure</strong> way to store information about users. This way, the information cannot be compromised by a insecure client or a connection which is being snooped.</p>
+<p>If your browser supports cookies, pretty much all websites create a new session for you when you visit. You can see this for yourself now - check out Figure <a class="pageref" href="#fig-session-id">2</a>. In Google Chrome&#8217;s developer tools, you can view cookies which are sent by the web server you&#8217;ve accessed. In Figure <a class="pageref" href="#fig-session-id">2</a>, you can observe the selected cookie <code class="docutils literal"><span class="pre">sessionid</span></code>. The cookie contains a series of letters and numbers which Django uses to uniquely identify your session. From there, all your session details can be accessed - but only on the server side.</p>
+<div class="align-center figure" id="id3">
+<span id="fig-session-id"></span><img alt="../_images/session-id.png" src="../_images/session-id.png" />
+<p class="caption"><span class="caption-text">Figure 2: A screenshot of Google Chrome with the Developer Tools opened - check out the cookie <code class="docutils literal"><span class="pre">sessionid</span></code>...</span></p>
+</div>
+<p>Session IDs don&#8217;t have to be stored with cookies, either. Legacy PHP applications typically include them as a <em>querystring</em>, or part of the URL to a given resource. If you&#8217;ve ever come across a URL like <code class="docutils literal"><span class="pre">http://www.site.com/index.php?sessid=omgPhPwtfIsThisIdDoingHere332i942394</span></code>, that&#8217;s probably uniquely identifying you to the server. Interesting stuff!</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Have a closer look at Figure <a class="pageref" href="#fig-session-id">2</a>. Do you notice the token <code class="docutils literal"><span class="pre">csrftoken</span></code>? This cookie is to help prevent any cross-site forgery.</p>
+</div>
+</div>
+<div class="section" id="setting-up-sessions-in-django">
+<h2>11.3. Setting up Sessions in Django<a class="headerlink" href="#setting-up-sessions-in-django" title="Permalink to this headline">¶</a></h2>
+<p>Although this should already be setup and working correctly, it&#8217;s nevertheless good practice to learn which Django modules provide which functionality. In the case of sessions, Django provides <a class="reference external" href="https://docs.djangoproject.com/en/1.7/topics/http/middleware/">middleware</a> that implements session functionality.</p>
+<p>To check that everything is in order, open your Django project&#8217;s <code class="docutils literal"><span class="pre">settings.py</span></code> file. Within the file, locate the <code class="docutils literal"><span class="pre">MIDDLEWARE_CLASSES</span></code> tuple. You should find the <code class="docutils literal"><span class="pre">django.contrib.sessions.middleware.SessionMiddleware</span></code> module listed as a string in the tuple - if you don&#8217;t, add it to the tuple now. It is the <code class="docutils literal"><span class="pre">SessionMiddleware</span></code> middleware which enables the creation of unique <code class="docutils literal"><span class="pre">sessionid</span></code> cookies.</p>
+<p>The <code class="docutils literal"><span class="pre">SessionMiddleware</span></code> is designed to work flexibly with different ways to store session information. There are many approaches that can be taken - you could store everything in a file, in a database, or even in a cache. The most straightforward approach is to use the <code class="docutils literal"><span class="pre">django.contrib.sessions</span></code> application to store session information in a Django model/database (specifically, the model <code class="docutils literal"><span class="pre">django.contrib.sessions.models.Session</span></code>). To use this approach, you&#8217;ll also need to make sure that <code class="docutils literal"><span class="pre">django.contrib.sessions</span></code> is in the <code class="docutils literal"><span class="pre">INSTALLED_APPS</span></code> tuple of your Django project&#8217;s <code class="docutils literal"><span class="pre">settings.py</span></code> file. If you add the application now, you&#8217;ll need to update your database with the migration commands.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you are looking for lightning fast performance, you may want to consider a cached approach for storing session information. You can check out the <a class="reference external" href="https://docs.djangoproject.com/en/1.7/topics/http/sessions/#using-cached-sessions">official Django documentation for advice on cached sessions</a>.</p>
+</div>
+</div>
+<div class="section" id="a-cookie-tasting-session">
+<h2>11.4. A Cookie Tasting Session<a class="headerlink" href="#a-cookie-tasting-session" title="Permalink to this headline">¶</a></h2>
+<p>We can now test out whether your browser supports cookies. While all modern web browsers do support cookies it is  worthwhile checking your browser&#8217;s settings regarding cookies. If you have your browser&#8217;s security level set to a high level, certain cookies may get blocked. Look up your browser&#8217;s documentation for more information, and enable cookies.</p>
+<div class="section" id="testing-cookie-functionality">
+<h3>11.4.1. Testing Cookie Functionality<a class="headerlink" href="#testing-cookie-functionality" title="Permalink to this headline">¶</a></h3>
+<p>To test out cookies, you can make use of some convenience methods provided by Django&#8217;s <code class="docutils literal"><span class="pre">request</span></code> object. The three of particular interest to us are <code class="docutils literal"><span class="pre">set_test_cookie()</span></code>, <code class="docutils literal"><span class="pre">test_cookie_worked()</span></code> and <code class="docutils literal"><span class="pre">delete_test_cookie()</span></code>. In one view, you will need to set a cookie. In another, you&#8217;ll need to test that the cookie exists. Two different views are required for testing cookies because you need to wait to see if the client has accepted the cookie from the server.</p>
+<p>We&#8217;ll use two pre-existing views for this simple exercise, <code class="docutils literal"><span class="pre">index()</span></code> and <code class="docutils literal"><span class="pre">register()</span></code>. You&#8217;ll need to make sure that you are logged out of Rango if you&#8217;ve implemented the user authentication functionality. Instead of displaying anything on the pages themselves, we&#8217;ll be making use of the terminal output from the Django development server to verify whether cookies are working correctly. After we successfully determine that cookies are indeed working, we can remove the code we add to restore the two views to their previous state.</p>
+<p>In Rango&#8217;s <code class="docutils literal"><span class="pre">views.py</span></code> file, locate your <code class="docutils literal"><span class="pre">index()</span></code> view. Add the following line to the view. To ensure the line is executed, make sure you put it as the first line of the view, outside any conditional blocks.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">set_test_cookie</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>In the <code class="docutils literal"><span class="pre">register()</span></code> view, add the following three lines to the top of the function - again, to ensure that they are executed.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">test_cookie_worked</span><span class="p">():</span>
+    <span class="k">print</span> <span class="s">&quot;&gt;&gt;&gt;&gt; TEST COOKIE WORKED!&quot;</span>
+    <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">delete_test_cookie</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>With these small changes saved, run the Django development server and navigate to Rango&#8217;s homepage,  <code class="docutils literal"><span class="pre">http://127.0.0.1:8000/rango/</span></code>. Once the page is loaded, navigate to the registration page. When the registration page is loaded, you should see <code class="docutils literal"><span class="pre">&gt;&gt;&gt;&gt;</span> <span class="pre">TEST</span> <span class="pre">COOKIE</span> <span class="pre">WORKED!</span></code> appear in your Django development server&#8217;s console, like in Figure <a class="pageref" href="#fig-test-cookie">3</a>. If you do, everything works as intended!</p>
+<div class="align-center figure" id="id4">
+<span id="fig-test-cookie"></span><img alt="../_images/test-cookie.png" src="../_images/test-cookie.png" />
+<p class="caption"><span class="caption-text">Figure 3: A screenshot of the Django development server&#8217;s console output with the <code class="docutils literal"><span class="pre">&gt;&gt;&gt;&gt;</span> <span class="pre">TEST</span> <span class="pre">COOKIE</span> <span class="pre">WORKED!</span></code> message.</span></p>
+</div>
+<p>If the message isn&#8217;t displayed, you&#8217;ll want to check your browser&#8217;s security settings. The settings may be preventing the browser from accepting the cookie.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You can delete the code you added in this section - we only used it to demonstrate cookies in action.</p>
+</div>
+</div>
+</div>
+<div class="section" id="client-side-cookies-a-site-counter-example">
+<h2>11.5. Client Side Cookies: A Site Counter Example<a class="headerlink" href="#client-side-cookies-a-site-counter-example" title="Permalink to this headline">¶</a></h2>
+<p>Now we know cookies work, let&#8217;s implement a very simple site visit counter. To achieve this, we&#8217;re going to be creating two cookies: one to track the number of times the user has visited the Rango website, and the other to track the last time he or she accessed the site. Keeping track of the date and time of the last access will allow us to only increment the site counter once per day, for example.</p>
+<p>The sensible place to assume a user enters the Rango site is at the index page. Open <code class="docutils literal"><span class="pre">rango/views.py</span></code> and edit the <code class="docutils literal"><span class="pre">index()</span></code> view as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+
+    <span class="n">category_list</span> <span class="o">=</span> <span class="n">Category</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="n">page_list</span> <span class="o">=</span> <span class="n">Page</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;-views&#39;</span><span class="p">)[:</span><span class="mi">5</span><span class="p">]</span>
+    <span class="n">context_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;categories&#39;</span><span class="p">:</span> <span class="n">category_list</span><span class="p">,</span> <span class="s">&#39;pages&#39;</span><span class="p">:</span> <span class="n">page_list</span><span class="p">}</span>
+
+    <span class="c"># Get the number of visits to the site.</span>
+    <span class="c"># We use the COOKIES.get() function to obtain the visits cookie.</span>
+    <span class="c"># If the cookie exists, the value returned is casted to an integer.</span>
+    <span class="c"># If the cookie doesn&#39;t exist, we default to zero and cast that.</span>
+    <span class="n">visits</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">COOKIES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;visits&#39;</span><span class="p">,</span> <span class="s">&#39;1&#39;</span><span class="p">))</span>
+
+    <span class="n">reset_last_visit_time</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&#39;rango/index.html&#39;</span><span class="p">,</span> <span class="n">context_dict</span><span class="p">)</span>
+    <span class="c"># Does the cookie last_visit exist?</span>
+    <span class="k">if</span> <span class="s">&#39;last_visit&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">COOKIES</span><span class="p">:</span>
+        <span class="c"># Yes it does! Get the cookie&#39;s value.</span>
+        <span class="n">last_visit</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">COOKIES</span><span class="p">[</span><span class="s">&#39;last_visit&#39;</span><span class="p">]</span>
+        <span class="c"># Cast the value to a Python date/time object.</span>
+        <span class="n">last_visit_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">last_visit</span><span class="p">[:</span><span class="o">-</span><span class="mi">7</span><span class="p">],</span> <span class="s">&quot;%Y-%m-</span><span class="si">%d</span><span class="s"> %H:%M:%S&quot;</span><span class="p">)</span>
+
+        <span class="c"># If it&#39;s been more than a day since the last visit...</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">last_visit_time</span><span class="p">)</span><span class="o">.</span><span class="n">days</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">visits</span> <span class="o">=</span> <span class="n">visits</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="c"># ...and flag that the cookie last visit needs to be updated</span>
+            <span class="n">reset_last_visit_time</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c"># Cookie last_visit doesn&#39;t exist, so flag that it should be set.</span>
+        <span class="n">reset_last_visit_time</span> <span class="o">=</span> <span class="bp">True</span>
+
+        <span class="n">context_dict</span><span class="p">[</span><span class="s">&#39;visits&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">visits</span>
+
+        <span class="c">#Obtain our Response object early so we can add cookie information.</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&#39;rango/index.html&#39;</span><span class="p">,</span> <span class="n">context_dict</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">reset_last_visit_time</span><span class="p">:</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">set_cookie</span><span class="p">(</span><span class="s">&#39;last_visit&#39;</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">set_cookie</span><span class="p">(</span><span class="s">&#39;visits&#39;</span><span class="p">,</span> <span class="n">visits</span><span class="p">)</span>
+
+    <span class="c"># Return response back to the user, updating any cookies that need changed.</span>
+    <span class="k">return</span> <span class="n">response</span>
+</pre></div>
+</div>
+<p>For reading through the code, you will see that a majority of the code deals with checking the current date and time. For this, you&#8217;ll need to include Python&#8217;s <code class="docutils literal"><span class="pre">datetime</span></code> module by adding the following import statement at the top of the <code class="docutils literal"><span class="pre">views.py</span></code> file.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+</pre></div>
+</div>
+<p>Make sure you also import the <code class="docutils literal"><span class="pre">datetime</span></code> object within the <code class="docutils literal"><span class="pre">datetime</span></code> module.</p>
+<p>In the added code we check to see if the cookie <code class="docutils literal"><span class="pre">last_visit</span></code> exists. If it does, we can take the value from the cookie using the syntax <code class="docutils literal"><span class="pre">request.COOKIES['cookie_name']</span></code>, where <code class="docutils literal"><span class="pre">request</span></code> is the name of the <code class="docutils literal"><span class="pre">request</span></code> object, and <code class="docutils literal"><span class="pre">'cookie_name'</span></code> is the name of the cookie you wish to retrieve. <strong>Note that all cookie values are returned as strings</strong>; <em>do not assume that a cookie storing whole numbers will return an integer.</em> You have to manually cast this to the correct type yourself. If a cookie does not exist, you can create a cookie with the <code class="docutils literal"><span class="pre">set_cookie()</span></code> method of the <code class="docutils literal"><span class="pre">response</span></code> object you create. The method takes in two values, the name of the cookie you wish to create (as a string), and the value of the cookie. In this case, it doesn&#8217;t matter what type you pass as the value - it will be automatically cast to a string.</p>
+<div class="align-center figure" id="id5">
+<span id="fig-cookie-visits"></span><img alt="../_images/cookie-visits.png" src="../_images/cookie-visits.png" />
+<p class="caption"><span class="caption-text">Figure 4: A screenshot of Google Chrome with the Developer Tools open showing the cookies for Rango. Note the <code class="docutils literal"><span class="pre">visits</span></code> cookie - the user has visited a total of six times, with each visit at least one day apart.</span></p>
+</div>
+<p>Now if you visit the Rango homepage, and inspect the developer tools provided by your browser, you should be able to see the cookies <code class="docutils literal"><span class="pre">visits</span></code> and <code class="docutils literal"><span class="pre">last_visit</span></code>. Figure <a class="pageref" href="#fig-cookie-visits">4</a> demonstrates the cookies in action.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>You may notice that the <code class="docutils literal"><span class="pre">visits</span></code> cookie doesn&#8217;t increment when you refresh your web browser. Why? The sample code we provide above only increments the counter <em>at least one whole day</em> after a user revisits the Rango homepage. This is an unacceptable time to wait when testing - so why not temporarily change the delay to a shorter time period? In the updated <code class="docutils literal"><span class="pre">index</span></code> view, find the following line.</p>
+<p><code class="docutils literal"><span class="pre">if</span> <span class="pre">(datetime.now()</span> <span class="pre">-</span> <span class="pre">last_visit_time).days</span> <span class="pre">&gt;</span> <span class="pre">0:</span></code></p>
+<p>We can easily change this line to compare the number of <em>seconds</em> between visits. In the example below, we check if the user visited at least five seconds prior.</p>
+<p><code class="docutils literal"><span class="pre">if</span> <span class="pre">(datetime.now()</span> <span class="pre">-</span> <span class="pre">last_visit_time).seconds</span> <span class="pre">&gt;</span> <span class="pre">5:</span></code></p>
+<p>This means you need only wait five seconds to see your <code class="docutils literal"><span class="pre">visits</span></code> cookie increment, rather than a whole day. When you&#8217;re happy your code works, you can revert the comparison back to the original per-day timespan.</p>
+<p class="last">Being able to find the difference between times using the <code class="docutils literal"><span class="pre">-</span></code> operator is one of the many awesome features that Python provides. When times are subtracted, a <code class="docutils literal"><span class="pre">timedelta</span></code> object is returned, which provides the <code class="docutils literal"><span class="pre">days</span></code> and <code class="docutils literal"><span class="pre">seconds</span></code> attributes we use in the code snippets above. You can check out the <a class="reference external" href="http://docs.python.org/2/library/datetime.html#timedelta-objects">official Python documentation</a> for more information on this type of object, and what other attributes it provides.</p>
+</div>
+<p>Instead of using the developer tools you can update the <code class="docutils literal"><span class="pre">index.html</span></code> and add, <code class="docutils literal"><span class="pre">&lt;p&gt;</span> <span class="pre">visits:</span> <span class="pre">{{</span> <span class="pre">visits</span> <span class="pre">}}&lt;/p&gt;</span></code> to show the number of visits.</p>
+</div>
+<div class="section" id="session-data">
+<h2>11.6. Session Data<a class="headerlink" href="#session-data" title="Permalink to this headline">¶</a></h2>
+<p>In the previous example, we used client side cookies. However, a more secure way to save session information is to store any such data on the server side. We can then use the session ID cookie which is stored on the client side (but is effectively anonymous) as the key to unlock the data.</p>
+<p>To use session based cookies you need to perform the following steps.</p>
+<ol class="arabic simple">
+<li>Make sure that <code class="docutils literal"><span class="pre">MIDDLEWARE_CLASSES</span></code> in <code class="docutils literal"><span class="pre">settings.py</span></code> contains <code class="docutils literal"><span class="pre">django.contrib.sessions.middleware.SessionMiddleware</span></code>.</li>
+<li>Configure your session backend. Make sure that <code class="docutils literal"><span class="pre">django.contrib.sessions</span></code> is in your <code class="docutils literal"><span class="pre">INSTALLED_APPS</span></code> in <code class="docutils literal"><span class="pre">settings.py</span></code>. If not, add it, and run the database migration command, <code class="docutils literal"><span class="pre">python</span> <span class="pre">manage.py</span> <span class="pre">migrate</span></code>.</li>
+<li>By default a database backend is assumed, but you might want to another setup (i.e. a cache). See the <a class="reference external" href="https://docs.djangoproject.com/en/1.7/topics/http/sessions/">official Django Documentation on Sessions for other backend configurations</a>.</li>
+</ol>
+<p>Now instead of storing the cookies directly in the request (and thus on the client&#8217;s machine), you can access the server side cookies via the method call <code class="docutils literal"><span class="pre">request.session.get()</span></code> and store them with <code class="docutils literal"><span class="pre">request.session[]</span></code>. Note that a session ID cookie is still used to remember the client&#8217;s machine (so technically a browser side cookie exists), however all the data is stored serve side. Below we have updated the <code class="docutils literal"><span class="pre">index()</span></code> function with the session based cookies:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+
+    <span class="n">category_list</span> <span class="o">=</span> <span class="n">Category</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;-likes&#39;</span><span class="p">)[:</span><span class="mi">5</span><span class="p">]</span>
+    <span class="n">page_list</span> <span class="o">=</span> <span class="n">Page</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;-views&#39;</span><span class="p">)[:</span><span class="mi">5</span><span class="p">]</span>
+
+    <span class="n">context_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;categories&#39;</span><span class="p">:</span> <span class="n">category_list</span><span class="p">,</span> <span class="s">&#39;pages&#39;</span><span class="p">:</span> <span class="n">page_list</span><span class="p">}</span>
+
+    <span class="n">visits</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;visits&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">visits</span><span class="p">:</span>
+        <span class="n">visits</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">reset_last_visit_time</span> <span class="o">=</span> <span class="bp">False</span>
+
+    <span class="n">last_visit</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;last_visit&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">last_visit</span><span class="p">:</span>
+        <span class="n">last_visit_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">last_visit</span><span class="p">[:</span><span class="o">-</span><span class="mi">7</span><span class="p">],</span> <span class="s">&quot;%Y-%m-</span><span class="si">%d</span><span class="s"> %H:%M:%S&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">last_visit_time</span><span class="p">)</span><span class="o">.</span><span class="n">seconds</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c"># ...reassign the value of the cookie to +1 of what it was before...</span>
+            <span class="n">visits</span> <span class="o">=</span> <span class="n">visits</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="c"># ...and update the last visit cookie, too.</span>
+            <span class="n">reset_last_visit_time</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c"># Cookie last_visit doesn&#39;t exist, so create it to the current date/time.</span>
+        <span class="n">reset_last_visit_time</span> <span class="o">=</span> <span class="bp">True</span>
+
+    <span class="k">if</span> <span class="n">reset_last_visit_time</span><span class="p">:</span>
+        <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s">&#39;last_visit&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
+        <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s">&#39;visits&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">visits</span>
+    <span class="n">context_dict</span><span class="p">[</span><span class="s">&#39;visits&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">visits</span>
+
+
+    <span class="n">response</span> <span class="o">=</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span><span class="s">&#39;rango/index.html&#39;</span><span class="p">,</span> <span class="n">context_dict</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">response</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">It&#8217;s highly recommended that you delete any client-side cookies for Rango <em>before</em> you start using session-based data. You can do this in your browser&#8217;s developer tools by deleting each cookie individually, or simply clear your browser&#8217;s cache entirely - ensuring that cookies are deleted in the process.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">An added advantage of storing session data server-side is its ability to cast data from strings to the desired type. This only works however for <a class="reference external" href="http://docs.python.org/2/library/stdtypes.html">built-in types</a>, such as <code class="docutils literal"><span class="pre">int</span></code>, <code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">long</span></code>, <code class="docutils literal"><span class="pre">complex</span></code> and <code class="docutils literal"><span class="pre">boolean</span></code>. If you wish to store a dictionary or other complex type, don&#8217;t expect this to work. In this scenario, you might want to consider <a class="reference external" href="https://wiki.python.org/moin/UsingPickle">pickling your objects</a>.</p>
+</div>
+</div>
+<div class="section" id="browser-length-and-persistent-sessions">
+<h2>11.7. Browser-Length and Persistent Sessions<a class="headerlink" href="#browser-length-and-persistent-sessions" title="Permalink to this headline">¶</a></h2>
+<p>When using cookies you can use Django&#8217;s session framework to set cookies as either <em>browser-length sessions</em> or <em>persistent sessions</em>. As the names of the two types suggest:</p>
+<ul class="simple">
+<li>browser-length sessions expire when the user closes his or her browser; and</li>
+<li>persistent sessions can last over several browser instances - expiring at a time of your choice. This could be half an hour, or even as far as a month in the future.</li>
+</ul>
+<p>By default, browser-length sessions are disabled. You can enable them by modifying your Django project&#8217;s <code class="docutils literal"><span class="pre">settings.py</span></code> file. Add the variable <code class="docutils literal"><span class="pre">SESSION_EXPIRE_AT_BROWSER_CLOSE</span></code>, setting it to <code class="docutils literal"><span class="pre">True</span></code>.</p>
+<p>Alternatively, persistent sessions are enabled by default, with <code class="docutils literal"><span class="pre">SESSION_EXPIRE_AT_BROWSER_CLOSE</span></code> either set to <code class="docutils literal"><span class="pre">False</span></code>, or not being present in your project&#8217;s <code class="docutils literal"><span class="pre">settings.py</span></code> file. Persistent sessions have an additional setting, <code class="docutils literal"><span class="pre">SESSION_COOKIE_AGE</span></code>, which allows you to specify the age of which a cookie can live to. This value should be an integer, representing the number of seconds the cookie can live for. For example, specifying a value of <code class="docutils literal"><span class="pre">1209600</span></code> will mean your website&#8217;s cookies expire after a two week period.</p>
+<p>Check out the available settings you can use on the <a class="reference external" href="https://docs.djangoproject.com/en/1.7/ref/settings/#session-cookie-age">official Django documentation on cookies</a> for more details. You can also check out <a class="reference external" href="http://eli.thegreenplace.net/2011/06/24/django-sessions-part-i-cookies/">Eli Bendersky&#8217;s blog</a> for an excellent tutorial on cookies and Django.</p>
+</div>
+<div class="section" id="clearing-the-sessions-database">
+<h2>11.8. Clearing the Sessions Database<a class="headerlink" href="#clearing-the-sessions-database" title="Permalink to this headline">¶</a></h2>
+<p>Session cookies accumulate. So if you are using the database backend you will have to periodically clear the database that stores the cookies. This can be done using <code class="docutils literal"><span class="pre">python</span> <span class="pre">manage.py</span> <span class="pre">clearsessions</span></code>. The Django documentations suggests running this daily as a cron job. See <a class="reference external" href="https://docs.djangoproject.com/en/1.7/topics/http/sessions/#clearing-the-session-store">https://docs.djangoproject.com/en/1.7/topics/http/sessions/#clearing-the-session-store</a></p>
+</div>
+<div class="section" id="basic-considerations-and-workflow">
+<h2>11.9. Basic Considerations and Workflow<a class="headerlink" href="#basic-considerations-and-workflow" title="Permalink to this headline">¶</a></h2>
+<p>When using cookies within your Django application, there&#8217;s a few things you should consider:</p>
+<ul class="simple">
+<li>First, consider what type of cookies your web application requires. Does the information you wish to store need to persist over a series of user browser sessions, or can it be safely disregarded upon the end of one session?</li>
+<li>Think carefully about the information you wish to store using cookies. Remember, storing information in cookies by their definition means that the information will be stored on client&#8217;s computers, too. This is a potentially huge security risk: you simply don&#8217;t know how compromised a user&#8217;s computer will be. Consider server-side alternatives if potentially sensitive information is involved.</li>
+<li>As a follow-up to the previous bullet point, remember that users may set their browser&#8217;s security settings to a high level which could potentially block your cookies. As your cookies could be blocked, your site may function incorrectly. You <em>must</em> cater for this scenario - <em>you have no control over the client browser&#8217;s setup</em>.</li>
+</ul>
+<p>If client-side cookies are the right approach for you then work through the following steps:</p>
+<ol class="arabic simple">
+<li>You must first perform a check to see if the cookie you want exists. This can be done by checking the <code class="docutils literal"><span class="pre">request</span></code> parameter. The <code class="docutils literal"><span class="pre">request.COOKIES.has_key('&lt;cookie_name&gt;')</span></code> function returns a boolean value indicating whether a cookie &lt;cookie_name&gt; exists on the client&#8217;s computer or not.</li>
+<li>If the cookie exists, you can then retrieve its value - again via the <code class="docutils literal"><span class="pre">request</span></code> parameter - with <code class="docutils literal"><span class="pre">request.COOKIES[]</span></code>. The <code class="docutils literal"><span class="pre">COOKIES</span></code> attribute is exposed as a dictionary, so pass the name of the cookie you wish to retrieve as a string between the square brackets. Remember, cookies are all returned as strings, regardless of what they contain. You must therefore be prepared to cast to the correct type.</li>
+<li>If the cookie doesn&#8217;t exist, or you wish to update the cookie, pass the value you wish to save to the response you generate. <code class="docutils literal"><span class="pre">response.set_cookie('&lt;cookie_name&gt;',</span> <span class="pre">value)</span></code> is the function you call, where two parameters are supplied: the name of the cookie, and the <code class="docutils literal"><span class="pre">value</span></code> you wish to set it to.</li>
+</ol>
+<p>If you need more secure cookies, then use session based cookies:</p>
+<ol class="arabic simple">
+<li>Make sure that <code class="docutils literal"><span class="pre">MIDDLEWARE_CLASSES</span></code> in <code class="docutils literal"><span class="pre">settings.py</span></code> contains &#8216;django.contrib.sessions.middleware.SessionMiddleware&#8217;.</li>
+<li>Configure your session backend <code class="docutils literal"><span class="pre">SESSION_ENGINE</span></code>. See the <a class="reference external" href="https://docs.djangoproject.com/en/1.7/topics/http/sessions/">official Django Documentation on Sessions</a> for the various backend configurations.</li>
+<li>Check to see if the cookie exists via <code class="docutils literal"><span class="pre">requests.sessions.get()</span></code></li>
+<li>Update or set the cookie via the session dictionary, <code class="docutils literal"><span class="pre">requests.session['&lt;cookie_name&gt;']</span></code></li>
+</ol>
+</div>
+<div class="section" id="exercises">
+<h2>11.10. Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline">¶</a></h2>
+<p>Now you&#8217;ve read through this chapter and tried out the code, give these exercises a go.</p>
+<ul class="simple">
+<li>Check that your cookies are server side. Clear the browser&#8217;s cache and cookies, then check to make sure you can&#8217;t see the <code class="docutils literal"><span class="pre">last_visit</span></code> and <code class="docutils literal"><span class="pre">visits</span></code> variables in the browser. Note you will still see the <code class="docutils literal"><span class="pre">sessionid</span></code> cookie. Django uses this cookie to look up the session in the database where it stores all the server side cookies about that session.</li>
+<li>Update the <em>About</em> page view and template telling the visitors how many times they have visited the site.</li>
+</ul>
+<div class="section" id="hint">
+<h3>11.10.1. Hint<a class="headerlink" href="#hint" title="Permalink to this headline">¶</a></h3>
+<p>To aid you in your quest to complete the above exercises, the following hint may help you.</p>
+<p>You&#8217;ll have to pass the value from the cookie to the template context for it to be rendered as part of the page, as shown in the example below.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># If the visits session varible exists, take it and use it.</span>
+<span class="c"># If it doesn&#39;t, we haven&#39;t visited the site so set the count to zero.</span>
+<span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;visits&#39;</span><span class="p">):</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;visits&#39;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="c"># remember to include the visit data</span>
+<span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&#39;rango/about.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;visits&#39;</span><span class="p">:</span> <span class="n">count</span><span class="p">})</span>
+</pre></div>
+</div>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="stateless-http11" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>The latest version of the HTTP standard HTTP 1.1 actually supports the ability for multiple requests to be sent in one TCP network connection. This provides huge improvements in performance, especially over high-latency network connections (such as via a traditional dial-up modem and satellite). This is referred to as <em>HTTP pipelining</em>, and you can read more about this technique on <a class="reference external" href="http://en.wikipedia.org/wiki/HTTP_pipelining">Wikipedia</a>.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        
+        <li class="right" >
+          <a href="login_redux.html" title="12. User Authentication with Django-Registration-Redux"
+             >next</a>
+          </li>
+		
+        <li class="right" >
+          <a href="templates.html" title="10. Working with Templates"
+             >previous</a>
+          </li>
+		
+        <li><a href="../index-2.html">How to Tango with Django 1.7</a> &raquo;</li> 
+
+      </ul>
+
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2013, Leif Azzopardi and David Maxwell.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+
+<!-- Mirrored from www.tangowithdjango.com/book17/chapters/cookie.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 10 Jan 2016 04:10:21 GMT -->
+</html>

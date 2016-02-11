@@ -1,0 +1,506 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from www.python-course.eu/python3_inheritance.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:09:50 GMT -->
+<head>
+
+<!-- Dieses Tag in den Head-Bereich oder direkt vor dem schlieÃŸenden Body-Tag einfÃ¼gen -->
+<script type="text/javascript" src="../apis.google.com/js/plusone.js"></script>
+
+
+
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "../connect.facebook.net/en_GB/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script><title>Python3 Tutorial: Inheritance</title>
+<meta http-equiv="content-type" content="text/html; charset="ISO-8859-1">
+<meta name="Description" content="Tutorial on Python: Inheritance and the difference between 
+overloading and overriding.   " />
+<meta name="Keywords" content="Python, Python3, course, tutorial, object-oriented programming, 
+overriding, overloading, inheritance, example" />
+
+<link href="favicon.ico" rel="shortcut icon">
+
+<link href="moderna.css" rel="stylesheet" type="text/css" />
+<link href="moderna_print.css" media="print" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+<div id="container">
+
+<div id="banner">
+<!-- <a href="impressum.php">Impressum</a> | <a href="mailto:">contact</a> | --><h1>Python Course</h1>
+
+</div>
+
+	<!-- Begin Top Menu -->
+<ul id="navlist">
+<li><a href="index-2.html" >Home</a></li><li><a href="course.html" >Python 2 Tutorial</a></li><li class="active"><a id="current" href="python3_course.html" >Python 3 Tutorial</a></li><li><a href="advanced_topics.html" >Advanced Topics</a></li><li><a href="python_books.html" >Python Books</a></li><li><a href="python_tkinter.html" >Tkinter Tutorial</a></li><li><a href="contact.html" rel="nofollow">Contact</a></li>                          
+</ul>
+	<!-- End Top Menu -->
+<div id="sidebar-a">
+<img class="border" src="images/logo100.png" alt="box" />    <h2>Python 3 Tutorial</h2>
+
+<div class="menu">
+
+<ul>
+<li><a href="python3_history_and_philosophy.html">The Origins of Python</a></li><li><a href="python3_interactive.html">Starting with Python: The Interactive Shell</a></li><li><a href="python3_execute_script.html">Executing a Script</a></li><li><a href="python3_blocks.html">Indentation</a></li><li><a href="python3_variables.html">Data Types and Variables</a></li><li><a href="python3_operators.html">Operators</a></li><li><a href="python3_sequential_data_types.html">Sequential Data Types: Lists and Strings</a></li><li><a href="python3_deep_copy.html">Shallow and Deep Copy</a></li><li><a href="python3_dictionaries.html">Dictionaries</a></li><li><a href="python3_sets_frozensets.html">Sets and Frozen Sets</a></li><li><a href="python3_input.html">input via the keyboard</a></li><li><a href="python3_conditional_statements.html">Conditional Statements</a></li><li><a href="python3_loops.html">Loops, while Loop</a></li><li><a href="python3_for_loop.html">For Loops</a></li><li><a href="python3_print.html">Output with Print</a></li><li><a href="python3_formatted_output.html">Formatted output with string modulo and the format method</a></li><li><a href="python3_functions.html">Functions</a></li><li><a href="python3_recursive_functions.html">Recursion and Recursive Functions</a></li><li><a href="python3_tests.html">Tests, DocTests, UnitTests</a></li><li><a href="python3_memoization.html">Memoization and Decorators</a></li><li><a href="python3_passing_arguments.html">Parameter Passing in Functions</a></li><li><a href="python3_namespaces.html">Namespaces</a></li><li><a href="python3_global_vs_local_variables.html">Global and Local Variables</a></li><li><a href="python3_file_management.html">Read and Write Files</a></li><li><a href="python3_modules_and_modular_programming.html">Modular Programming and Modules</a></li><li><a href="python3_re.html">Regular Expressions</a></li><li><a href="python3_re_advanced.html">Regular Expressions, Advanced</a></li><li><a href="python3_lambda.html">Lambda Operator, Filter, Reduce and Map</a></li><li><a href="python3_list_comprehension.html">List Comprehension</a></li><li><a href="python3_generators.html">Iterators and Generators</a></li><li><a href="python3_exception_handling.html">Exception Handling</a></li><li><a href="python3_object_oriented_programming.html">Object Oriented Programming</a></li><li><a href="python3_class_and_instance_attributes.html">Class and Instance Attributes</a></li><li><a href="python3_properties.html">Properties vs. getters and setters</a></li><li><a href="python3_inheritance.html">Inheritance</a></li><li><a href="python3_multiple_inheritance.html">Multiple Inheritance</a></li><li><a href="python3_magic_methods.html">Magic Methods and Operator Overloading</a></li><li><a href="python3_inheritance_example.html">OOP, Inheritance Example</a></li></ul>
+
+</div>
+
+<p>
+<hr>
+<h3>Object-oriented Programming</h3>
+"Certainly not every good program is object-oriented, and not every object-oriented program is good."
+<br>
+(Bjarne Stroustrup, Danish computer scientist, best known for the creation and the development 
+of the widely used C++ programming language.)
+<br><br>
+"Object-oriented programming is an exceptionally bad idea which could only have originated in California."
+<br>
+(Edsger Dijkstra, (Dutch computer Scientist, 1930-2002)
+<br><br>
+Dijkstra also said: 
+<br>
+<i>"... what society over&shy;whel&shy;mingly asks for is snake oil. Of course, 
+the snake oil has the most impressive names - otherwise you would be selling nothing - like 
+"Structured Analysis and Design", "Software Engineering", "Maturity Models", "Management 
+Information Systems", "Integrated Project Support Environments" "Object Orientation" and "Business
+ Process Re-engineering"
+</i>
+<br><br>
+<h3>Japanese Food and OOP</h3>
+<i>
+"Public opinion is that both OOP and Japanese food are "good and good for you", 
+and both simple and pretty. And they are! But that doesn't automatically make 
+them intuitive, much less easy. Both are, in fact, much harder than they look.", Sean M. Burke
+</i>
+<i>
+"When given a programming project, you don't "solve" anything by declaring that this project will 
+be done in OOP, any more than you "solve" anything be surveying a set of ingredients and declaring 
+that they are to be cooked Japanese-style.", Sean M. Burke
+</i>
+<hr>
+<br>
+This website is supported by:<br>
+<a href="http://www.bodenseo.com/courses.php"><img style="width: 150px;" alt="Bodenseo,
+Linux, courses and seminars"
+		     src="images/bodenseo_python_training.gif"><br>Linux and Python Courses and Seminars</a>
+<br>
+<hr>
+</div><div id="sidebar-b"><img style="width: 150px;" alt="Python-Logo"
+		     src="images/python-logo.png"><!-- Dieses Tag dort einfügen, wo die +1-Schaltfläche dargestellt werden soll -->
+<g:plusone></g:plusone>
+<br><br>
+
+<div class="fb-like" data-href="www.python-course.eu" data-send="false" data-layout="button_count" 
+data-width="130" data-show-faces="true" data-action="recommend"></div>
+
+<br><br>
+This topic in German / Deutsche Übersetzung:
+    <a href="http://www.python-kurs.eu/python3_vererbung.php">Vererbung</a><p>
+<h3>Classroom Training Courses</h3>
+The goal of this website is to provide educational material, 
+allowing you to learn Python on your own.
+Nevertheless, it is faster and more efficient to attend a "real" 
+Python course in a classroom, with
+an experienced trainer. So why not attend one of the live 
+<a href="python_classes.html">Python courses</a> in Paris, London, Berlin, Munich
+or Lake Constance by Bernd Klein, the author of this tutorial?
+<br><br>
+You can also check the   
+<a href="http://www.bodenseo.com/courses.php?topic=Python">Python Training courses
+<img style="width: 150px;" alt="Bodenseo Kurse in Python"
+		     src="images/bodenseo_stairs_to_python.png"></a>
+		     delivered by Bodenseo and Bernd Klein.
+<br><br>
+You can book on-site classes at your company or organization, e.g. in England, Switzerland, Austria, Germany,
+France, Belgium, the Netherlands, Luxembourg, Poland, UK, Italy and other locations in Europe.
+<br><br>
+
+ </p>
+
+
+
+
+    
+</p></div>
+<div id="content">
+
+<div id="contextlinks">Previous Chapter: <a href="python3_properties.html">Properties vs. getters and setters</a><br>
+<LINK rel="prev" href="python3_properties.html">Next Chapter: <a href="python3_multiple_inheritance.html">Multiple Inheritance</a><br>
+<LINK rel="next" href="python3_multiple_inheritance.html"></div>
+<h2>Inheritance</h2>
+<br><br>
+<h3>Introduction</h3>
+
+
+<img class="imgright" width=450 src="images/vehicles_classification.png" alt="Classification of vehicles" />
+
+Every object-oriented programming language would not be worthy to look at or use,
+if it weren't to support inheritance. Of course, Python supports inheritance, it
+even supports multiple inheritance. 
+<br>
+Classes can inherit from other classes. A class can inherit attributes and behaviour 
+methods from another class, called the superclass. A class which inherits from a
+superclass is called a subclass, also called heir class or child class.
+Superclasses are sometimes called ancestors as well. There exists a hierarchy 
+relationship between classes. 
+It's similar to relationships or categorizations that we know from real life. Think 
+about vehicles for example. Bikes, cars, buses and trucks are vehicles. pick-ups, vans,
+sports cars, convertibles and estate cars are all cars and by being cars they are vehicles
+as well. We could implement a vehicle class in Python, which might have methods like 
+accelerate and brake. Cars, Buses and Trucks and Bikes can be implemented as subclasses
+which will inherit these methods from vehicle.
+
+<br><br>
+
+
+
+
+
+<h3>Syntax and Simple Inheritance Example</h3>
+
+We demonstrate inheritance in a very simple example. 
+We create a Person class with the two attributes "firstname" and "lastname".
+This class has only one method, the Name method, essentially a getter, but
+we don't have an attribute name. This method is a further example for a "getter",
+which creates an output by creating it from more than one private attribute.
+Name returns the concatenation of the first name and the last name of a person, 
+separated by a space. It goes without saying, that a useful person class would 
+have additional attributes and further methods.
+<br><br>This chapter of our tutorial is about inheritance, so we need a class,
+which inherits from Person. So far employees are Persons in companies, even though
+they may not be treated as such in some firms. If we created an Employee class
+without inheriting from Person, we would have to define all the attributes and methods
+in the Employee class again. This means we would create a design and maybe even
+a data redundancy. With this in mind, we have to let Employee inherit from Person.
+<br><br>
+The syntax for a subclass definition looks like this:
+
+<pre>
+class DerivedClassName(BaseClassName):
+    pass
+</pre>
+
+Of course, usually we will have an indented block with the class attributes and 
+methods instead of merely a pass statement. The name BaseClassName must be defined 
+in a scope containing the derived class definition. 
+
+
+With all this said, we can implement our Person and Employee class:
+
+<br><br>
+<pre>
+class Person:
+
+    def __init__(self, first, last):
+        self.firstname = first
+        self.lastname = last
+
+    def Name(self):
+        return self.firstname + " " + self.lastname
+
+class Employee(Person):
+
+    def __init__(self, first, last, stuffnum):
+        Person.__init__(self,first, last)
+        self.stuffnumber = stuffnum
+
+    def GetEmployee(self):
+        return self.Name() + ", " +  self.stuffnumber
+
+x = Person("Marge", "Simpson")
+y = Employee("Homer", "Simpson", "1007")
+
+print(x.Name())
+print(y.GetEmployee())
+</pre>
+<br>
+
+Our program returns the following output:
+<br><br>
+<pre>
+$ python3 person.py 
+Marge Simpson
+Homer Simpson, 1007
+</pre>
+<br>
+
+The __init__ method of our Employee class explicitly invokes the __init__method of the
+Person class. We could have used super instead. super().__init__(first, last) is automatically
+replaced by a call to the superclasses method, in this case __init__:
+
+<pre>
+    def __init__(self, first, last, stuffnum):
+        super().__init__(first, last)
+        self.stuffnumber = stuffnum
+</pre>
+
+Please note, that we used super()) without arguments. This is only possible in Python3. We could
+have written "super(Employee, self).__init__(first, last, age)" which still works in Python3 and
+is compatible with Python2.
+ 
+
+<br><br>
+<h3>Overloading and Overriding</h3>
+
+Instead of using the methods "Name" and "GetEmployee" in our previous example,
+it might have been better to put this functionality into the "__str__" method.
+In doing so, we gain a lot, especially a leaner design.
+We have a string casting for our classes and we can simply print out instances.
+Let's start with a __str__ method in Person:
+
+<pre>
+class Person:
+
+    def __init__(self, first, last):
+        self.firstname = first
+        self.lastname = last
+
+    def __str__(self):
+        return self.firstname + " " + self.lastname
+
+class Employee(Person):
+
+    def __init__(self, first, last, stuffnum):
+        super().__init__(first, last)
+        self.stuffnumber = stuffnum
+
+
+x = Person("Marge", "Simpson")
+y = Employee("Homer", "Simpson", "1007")
+
+print(x)
+print(y)
+</pre>
+
+The output looks like this:
+
+<pre>
+$ python3 person2.py 
+Marge Simpson
+Homer Simpson
+</pre>
+
+First of all, we can see, that if we print an instance of the Employee class, 
+the __str__ method of Person is used. This is due to inheritance. The only problem
+we have now is the fact, that the output of "print(y)" is not the same as the 
+"print(y.GetEmployee())".
+This means that our Employee class needs its own __str__ method. We could write it 
+like this:
+
+<pre>
+    def __str__(self):
+        return self.firstname + " " + self.lastname + ", " +  self.stuffnumber
+</pre>
+
+But it is a lot better to use the __str__ method of Person inside of the new definition.
+This way, we can make sure, that the output of the Employee __str__method will automatically
+change, if the __str__ method from the superclass Person changes. We could for example
+add a new attribute age in Person:
+<br><br>
+<pre>
+class Person:
+
+    def __init__(self, first, last, age):
+        self.firstname = first
+        self.lastname = last
+        self.age = age
+
+    def __str__(self):
+        return self.firstname + " " + self.lastname + ", " + str(self.age)
+
+class Employee(Person):
+
+    def __init__(self, first, last, age, stuffnum):
+        super().__init__(first, last, age)
+        self.stuffnumber = stuffnum
+
+    def __str__(self):
+        return super().__str__() + ", " +  self.stuffnumber
+
+
+x = Person("Marge", "Simpson", 36)
+y = Employee("Homer", "Simpson", 28, "1007")
+
+print(x)
+print(y)
+</pre>
+
+
+We have overridden the method __str__ from Person in Employee. By the way, we have 
+overridden __init__ also. Method overriding is an object-oriented programming feature 
+that allows a subclass to provide a different implementation of a method that is 
+already defined by its superclass or by one of its superclasses. 
+The implementation in the subclass overrides the implementation of the superclass 
+by providing a method with the same name, same parameters or signature, and same 
+return type as the method of the parent class. 
+<br><br>
+Overwriting is not a different concept but usually a term wrongly used for overriding!
+<br><br>
+
+In the context of object-oriented programming, you might have heard about "overloading"
+as well. Overloading is the ability to define the same method, with the same name but with 
+a different number of arguments and types. It's the ability of one function to perform 
+different tasks, depending on the number of parameters or the types of the parameters.
+<br><br>
+Let's look first at the case, in which we have the same number of parameters but different
+types for the parameters. When we define a function in Python, we don't have to and we can't
+declare the types of the parameters. So if we define the function "successor" in the following
+example, we implicitly define a family of function, i.e. a function, which can work on integer
+values, one which can cope with float values and so. Of course, there are types which
+will lead to an error if used:
+
+<br><br>
+<pre>
+>>> def successor(number):
+...     return number + 1
+... 
+>>> successor(1)
+2
+>>> successor(1.6)
+2.6
+>>> successor([3,5,9])
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+  File "&lt;stdin&gt;", line 2, in successor
+TypeError: can only concatenate list (not "int") to list
+>>> 
+</pre> 
+<br><br>
+You can skip the following paragraphs with the comparisons with C++, if you want to.
+<br><br>
+This course is not about C++ and we have so far avoided using any C++ code. 
+We want to make an exception now, so that you can see, how overloading works in
+C++. While we had just one definition in Python, we have two function definitions
+in C++, i.e. one for the type "int" and one for "double":
+<br><br>
+<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdlib&gt;
+ 
+using namespace std;
+ 
+int successor(int number) {
+    return number + 1;
+}
+
+double successor(double number) {
+    return number + 1;
+}
+
+int main() {
+    
+    cout &lt;&lt; successor(10) &lt;&lt; endl;
+    cout &lt;&lt; successor(10.3) &lt;&lt; endl;
+
+    return 0;
+}
+</pre>
+<br><br>
+Having a function with a different number of parameters is another way of 
+function overloading. The following C++ program shows such an example. 
+The function f can be called with either one or two integer arguments: 
+<br><br>
+<pre>
+#include &lt;iostream&gt;
+using namespace std;
+
+
+int f(int n);
+int f(int n, int m);
+
+int main() {
+    
+    cout &lt;&lt; "f(3): " &lt;&lt; f(3) &lt;&lt; endl;
+    cout &lt;&lt; "f(3, 4): " &lt;&lt; f(3, 4) &lt;&lt; endl;
+    return 0;
+}
+
+int f(int n) {
+    return n + 42;
+}
+int f(int n, int m) {
+    return n + m + 42; 
+}
+</pre>
+
+<br><br>
+This doesn't work in Python, as we can see in the following example.
+The second definition of f with two parameters redefines or overrides the 
+first definition with one argument. Overriding means, that the first definition is
+not available anymore. This explains the error message:
+
+<br><br>
+<pre>
+>>> def f(n):
+...     return n + 42
+... 
+>>> def f(n,m):
+...     return n + m + 42
+... 
+>>> f(3,4)
+49
+>>> f(3)
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+TypeError: f() takes exactly 2 arguments (1 given)
+>>> 
+</pre>
+<br>
+If we need such a behaviour, we can simulate it with default parameters:
+<br><br>
+<pre>
+def f(n, m=None):
+    if m:
+        return n + m +42
+    else:
+        return n + 42
+</pre>
+<br>
+
+The * operator can be used as a more general approach for a family of functions 
+with 1, 2, 3, or even more parameters:
+
+<br><br>
+<pre>
+def f(*x):
+    if len(x) == 1:
+        return x[0] + 42
+    else: 
+        return x[0] + x[1] + 42
+</pre>
+<br><br>
+
+
+
+
+
+
+
+<br><br><br>
+
+<br>
+<div id="contextlinks">Previous Chapter: <a href="python3_properties.html">Properties vs. getters and setters</a><br>
+<LINK rel="prev" href="python3_properties.html">Next Chapter: <a href="python3_multiple_inheritance.html">Multiple Inheritance</a><br>
+<LINK rel="next" href="python3_multiple_inheritance.html"></div><br><br><br>
+
+</div>
+<div id="footer">  &copy; 2011 - 2014 <a href="http://www.bklein.de/">Bernd Klein</a>,
+Bodenseo; 
+Design by Denise Mitchinson adapted for python-course.eu by Bernd Klein</div>
+</div>
+</body>
+
+<!-- Mirrored from www.python-course.eu/python3_inheritance.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:09:57 GMT -->
+</html>
+
+
+

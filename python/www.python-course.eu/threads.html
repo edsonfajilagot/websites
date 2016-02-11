@@ -1,0 +1,541 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from www.python-course.eu/threads.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:06:01 GMT -->
+<head>
+
+<!-- Dieses Tag in den Head-Bereich oder direkt vor dem schlieÃŸenden Body-Tag einfÃ¼gen -->
+<script type="text/javascript" src="../apis.google.com/js/plusone.js"></script>
+
+
+
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "../connect.facebook.net/en_GB/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script><title>Python Advanced: Threads and Threading</title>
+<meta http-equiv="content-type" content="text/html; charset="ISO-8859-1">
+<meta name="Description" content="Introduction into Threads and how to use them in Python" />
+<meta name="Keywords" content="Python, course, threads, thread, definition, thread of execution" />
+
+<link href="favicon.ico" rel="shortcut icon">
+
+<link href="moderna.css" rel="stylesheet" type="text/css" />
+<link href="moderna_print.css" media="print" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+<div id="container">
+
+<div id="banner">
+<!-- <a href="impressum.php">Impressum</a> | <a href="mailto:">contact</a> | --><h1>Python Course</h1>
+
+</div>
+
+	<!-- Begin Top Menu -->
+<ul id="navlist">
+<li><a href="index-2.html" >Home</a></li><li><a href="course.html" >Python 2 Tutorial</a></li><li><a href="python3_course.html" >Python 3 Tutorial</a></li><li class="active"><a id="current" href="advanced_topics.html" >Advanced Topics</a></li><li><a href="python_books.html" >Python Books</a></li><li><a href="python_tkinter.html" >Tkinter Tutorial</a></li><li><a href="contact.html" rel="nofollow">Contact</a></li>                          
+</ul>
+	<!-- End Top Menu -->
+<div id="sidebar-a">
+<img class="border" src="images/threads_100.jpg" alt="box" />    <h2>Advanced Topics</h2>
+
+<div class="menu">
+
+<ul>
+<li><a href="sys_module.html">Introduction into the sys module</a></li><li><a href="os_module_shell.html">Python and the Shell</a></li><li><a href="forking.html">Forks and Forking in Python</a></li><li><a href="threads.html">Introduction into Threads</a></li><li><a href="pipes.html">Pipe, Pipes and "99 Bottles of Beer"</a></li><li><a href="graphs_python.html">Graph Theory and Graphs in Python"</a></li><li><a href="pygraph.html">Graphs: PyGraph"</a></li><li><a href="networkx.html">Graphs: NetworkX"</a></li><li><a href="finite_state_machine.html">Finite State Machine in Python</a></li><li><a href="turing_machine.html">Turing Machine in Python</a></li><li><a href="numpy.html">NumPy Module</a></li><li><a href="matrix_arithmetic.html">Matrix Arithmetic</a></li><li><a href="linear_combinations.html">Linear Combinations</a></li><li><a href="text_classification_introduction.html">Introduction into Text Classification using Naive Bayes</a></li><li><a href="text_classification_python.html">Python Implementation of Text Classification</a></li><li><a href="towers_of_hanoi.html">Example for recursive Programming: Towers of Hanoi</a></li><li><a href="mastermind.html">Mastermind / Bulls and Cows</a></li><li><a href="dynamic_websites_wsgi.html">Creating dynamic websites with WSGI</a></li><li><a href="dynamic_websites.html">Dynamic websites with mod_python</a></li><li><a href="pylons.html">Dynamic websites with Pylons</a></li><li><a href="sql_python.html">Python, SQL, MySQL and SQLite</a></li><li><a href="python_scores.html">Python Scores</a></li></ul>
+
+</div>
+
+<p>
+<hr>
+This website is created by:<br><br>
+<a href="http://www.python-training-courses.com/"><img style="width: 150px;" alt="Python Training Courses"
+		     src="images/toronto_building.jpg"><br><br>Python Training Courses in Toronto, Canada</a>
+<br>
+On site trainings in Europe, Canada and the US.
+<br>
+<br>
+<hr>
+
+<br>
+Email threading has been popularized by Google Gmail service. Email threading means, that an email conversation, i.e. an email, 
+and all the answers to it are kept together. 
+It is also used in Internet forums, boards and newsgroups where messages are grouped according to some topics. 
+ A set of messages grouped in this way is called a topic thread or simply "thread". 
+ A discussion forum, e-mail client,Social networking site such as Facebook or news client is said to have 
+ "threaded topics" if it groups messages on the same topic together for easy reading in this manner. 
+<br>
+
+</div><div id="sidebar-b"><img style="width: 150px;" alt="Python-Logo"
+		     src="images/python-logo.png"><!-- Dieses Tag dort einfügen, wo die +1-Schaltfläche dargestellt werden soll -->
+<g:plusone></g:plusone>
+<br><br>
+
+<div class="fb-like" data-href="www.python-course.eu" data-send="false" data-layout="button_count" 
+data-width="130" data-show-faces="true" data-action="recommend"></div>
+
+<br><br>
+This topic in German / Deutsche Übersetzung:
+    <a href="http://www.python-kurs.eu/threads.php">Threads in Python</a><h3>Classroom Training Courses</h3>
+<p>
+This website contains a free and extensive online tutorial by Bernd Klein with 
+material from his live <a href="python_classes.html">Python courses</a>.
+<br><br>
+If you are interested in an instructor-led classroom training course, you may have a look at the 
+<a href="http://ca.bodenseo.com/courses.php?topic=Python">Python courses
+<br><img style="width: 150px;" 
+alt="Bodenseo, Python courses and seminars"
+		     src="images/classroom_training_courses.jpg">
+</a>
+by Bernd Klein at Bodenseo.
+<br>
+<font size="1">© kabliczech - Fotolia.com</font>
+
+
+<br><br>
+<h3>Python Tricks</h3>
+<i>
+"Python tricks" is a tough one, cuz the language is so clean. E.g., C makes an art of confusing 
+pointers with arrays and strings, which leads to lotsa neat pointer tricks; APL mistakes 
+everything for an array, leading to neat one-liners; and Perl confuses everything period, 
+making each line a joyous adventure <wink>.
+</i>
+(Tim Peters, Pythoneer who formulated the "Zen of Python")
+<h3>Python compared to Lisp</h3>
+Greenspun's "Tenth Rule of Programming" states:
+<br>
+<i>
+Any sufficiently complicated C or Fortran program contains an ad hoc, informally-specified, 
+bug-ridden, slow implementation of half of Common Lisp.
+</i>
+Sounds complicated? Lisp is complicated. Guido van Rossum compared it - or to be precise 
+Common Lisp and Scheme - to Python with the following words:
+<i>
+"These languages are close to Python in their dynamic semantics, but so different in their approach 
+to syntax that a comparison becomes almost a religious argument: is Lisp's lack of syntax an 
+advantage or a disadvantage? It should be noted that Python has introspective capabilities 
+similar to those of Lisp, and Python programs can construct and execute program fragments on 
+the fly. Usually, real-world properties are decisive: Common Lisp is big (in every sense), 
+and the Scheme world is fragmented between many incompatible versions, where Python has a 
+single, free, compact implementation."
+</i>
+<br>(excerpt from "Comparing Python to Other Languages" by Guido van Rossum)
+
+<h3>Wizards and Magic</h3>
+<i>
+"Things in Python are very clear, but are harder to find than the secrets of wizards. 
+Things in Perl are easy to find, but look like arcane spells to invoke magic."
+</i>
+
+ </p>
+
+</p></div>
+<div id="content">
+
+<div id="contextlinks">Previous Chapter: <a href="forking.html">Forks and Forking in Python</a><br>
+<LINK rel="prev" href="forking.html">Next Chapter: <a href="pipes.html">Pipe, Pipes and "99 Bottles of Beer"</a><br>
+<LINK rel="next" href="pipes.html"></div>
+<h2>Threads in Python</h2>
+<h3>Definition of a  Thread</h3>
+<img class="imgright" src="images/threads.jpg" alt="Threads" />
+<br>A Thread or a Thread of Execution is defined in computer science as the smallest unit that can be 
+scheduled in an operating system. 
+Threads are normally created by a fork of a computer script or program in two or more parallel 
+(which is implemented on a single processor by multitasking) tasks. Threads are usually contained in processes.
+More than one thread can exist within the same process. These threads share the memory and the state of the 
+process. In other words: They share the code or instructions and the values of its variables.
+<br><br>
+There are two different kind of threads: 
+<ul>
+<li>Kernel threads</li>
+<li>User-space Threads or user threads</li>
+</ul>
+Kernel Threads are part of the operating system, while User-space threads are not implemented in the kernel.
+<br><br>
+In a certain way, user-space threads can be seen as an extension of the function concept of a programming language.
+So a thread user-space thread is similiar to a function or procedure call. But there are differences to regular functions, 
+especially the return behaviour.
+<br><br>
+<img class="imgright" src="images/threads_400.png" alt="Threads and global Variables" />
+Every process has at least one thread, i.e. the process itself. A process can start multiple threads. 
+The operating system executes these threads like parallel "processes". On a single processor machine, this 
+parallelism is achieved by thread scheduling or timeslicing. 
+<br>
+<br>
+Advantages of Threading:
+<ul>
+<li>Multithreaded programs can run faster on computer systems with multiple CPUs, because theses threads can
+be executed truly concurrent.</li>
+<li>A program can remain responsive to input. This is true both on single and on multiple CPU</li>
+<li>Threads of a process can share the memory of global variables. If a global variable is changed
+in one thread, this change is valid for all threads. A thread can have local variables.</li>
+</ul>
+ 
+<br><br>
+The handling of threads is simpler than the handling of processes for an operating system.
+That's why they are sometimes called light-weight process (LWP)
+<br>
+<h3>Threads in Python</h3>
+There are two modules which support the usage of threads in Python:
+<ul>
+<li>thread<br>and</li>
+<li>threading</li>
+</ul>
+<br>
+Please note: The thread module has been considered as "deprecated" for quite a long time.
+Users have been encouraged to use the threading module instead.
+So,in Python 3 the module "thread" is not available anymore. But that's not really true:
+It has been renamed to "_thread" for backwards incompatibilities in Python3.
+<br><br>
+
+The module "thread" treats a thread as a function, while the module "threading" is 
+implemented in an object oriented way, i.e. every thread corresponds to an object.
+<h3>The thread Module</h3>
+It's possible to execute functions in a separate thread with the module Thread.
+To do this, we can use the function thread.start_new_thread:<br> <br>
+<code>thread.start_new_thread(function, args[, kwargs])</code>
+<br><br>
+This methode starts a new thread and return its identifier. The thread executes 
+the function "function" (function is a reference to a function) with the argument list args 
+(which must be a list or a tuple). 
+The optional kwargs argument specifies a dictionary of keyword arguments. When the function 
+returns, the thread silently exits. When the function terminates with an unhandled exception, 
+a stack trace is printed and then the thread exits (but other threads continue to run).
+
+<br><br>
+Example for a Thread in Python:
+<br>
+<pre>
+from thread import start_new_thread
+
+def heron(a):
+    """Calculates the square root of a"""
+    eps = 0.0000001
+    old = 1
+    new = 1
+    while True:
+        old,new = new, (new + a/new) / 2.0
+        print old, new
+        if abs(new - old) < eps:
+            break
+    return new
+
+start_new_thread(heron,(99,))
+start_new_thread(heron,(999,))
+start_new_thread(heron,(1733,))
+
+c = raw_input("Type something to quit.")
+</pre>
+The raw_input() in the previous example is necessary, because otherwise
+all the threads would be exited, if the main program finishes. 
+raw_input() waits until something has been typed in.
+<br><br>
+We expand the previous example with counters for the threads. 
+<pre>
+from thread import start_new_thread
+
+num_threads = 0
+def heron(a):
+    global num_threads
+    num_threads += 1
+    
+    # code has been left out, see above
+    num_threads -= 1
+    return new
+
+start_new_thread(heron,(99,))
+start_new_thread(heron,(999,))
+start_new_thread(heron,(1733,))
+start_new_thread(heron,(17334,))
+
+while num_threads > 0:
+    pass
+</pre>
+The script above doesn't work the way we might expect it to work. What is wrong?
+<br>
+The problem is, that the final while loop will be reached even before one of the threads could 
+have incremented the counter  num_threads. 
+
+<br><br>
+But there is another serious problem:<br>
+The problem arises by the assignments to num_thread<br>  
+<code>num_threads += 1</code><br>and
+<br>
+<code>num_threads -= 1</code><br>
+These assignment statements are not atomic. Such an assignment consists of three actions:
+<ul>
+<li>Reading the value of num_thread</li>
+<li>A new int instance will be incremented or decremented by 1</li>
+<li>the new value has to be assigned to num_threads</li>
+</ul>
+<br>
+Errors like this happen in the case of increment assignments:<br>
+The first thread reads the variable num_threads, which still has the value 0. After having read this value,
+the thread is put to sleep by the operating system. Now it't the second thread's turn: It also reads
+the value of the variable num_threads, which is still 0, because the first thread has been put to sleep 
+too early, i.e. before it had been able to increment its value by 1. Now the second thread
+is put to sleep. Now it't the third thread's turn, which again reads a 0, but the counter should have
+been 2 by now. Each of these threads assigns now the value 1 to the counter.
+Similiar problems occur with the decrement operation. 
+<br><br>
+<h4>Solution</h4>
+Problems of this kind can be solved by defining critical sections with lock objects. These sections
+will be treated atomically, i.e. during the execution of such a section a thread will not be interrupted 
+or put to sleep.  
+<br>
+The methode thread.allocate_lock is used to create a new lock object:<br><br>
+<code>lock_objekt = thread.allocate_lock()</code>
+ <br><br>
+The beginning of a critical section is tagged with <code>lock_object.acquire()</code> and the end 
+with <code>lock_object.release()</code>.
+<br>The solution with locks looks like this:<br>
+<pre>
+from thread import start_new_thread, allocate_lock
+num_threads = 0
+thread_started = False
+lock = allocate_lock()
+def heron(a):
+    global num_threads, thread_started
+    lock.acquire()
+    num_threads += 1
+    thread_started = True
+    lock.release()
+    
+    ...
+
+    lock.acquire()
+    num_threads -= 1
+    lock.release()
+    return new
+
+start_new_thread(heron,(99,))
+start_new_thread(heron,(999,))
+start_new_thread(heron,(1733,))
+
+while not thread_started:
+    pass
+while num_threads > 0:
+    pass
+</pre>
+<h3>threading Module</h3>
+We want to introduce the threading module with an example.
+The Thread of the example doesn't do a lot, essentially it just sleeps for 5 seconds and
+then prints out a message:
+<br>
+<pre>
+import time
+from threading import Thread
+
+def sleeper(i):
+    print "thread %d sleeps for 5 seconds" % i
+    time.sleep(5)
+    print "thread %d woke up" % i
+
+for i in range(10):
+    t = Thread(target=sleeper, args=(i,))
+    t.start()
+</pre>
+Method of operation of the threding.Thread class: The class threading.Thread has a method start(), 
+which can start a Thread. It triggers off the method run(), which has to be overloaded. 
+The join() method makes sure that the main program waits until all threads have terminated.
+<br><br>The previous script returns the following output:
+<br>
+<pre>
+thread 0 sleeps for 5 seconds
+thread 1 sleeps for 5 seconds
+thread 2 sleeps for 5 seconds
+thread 3 sleeps for 5 seconds
+thread 4 sleeps for 5 seconds
+thread 5 sleeps for 5 seconds
+thread 6 sleeps for 5 seconds
+thread 7 sleeps for 5 seconds
+thread 8 sleeps for 5 seconds
+thread 9 sleeps for 5 seconds
+thread 1 woke up
+thread 0 woke up
+thread 3 woke up
+thread 2 woke up
+thread 5 woke up
+thread 9 woke up
+thread 8 woke up
+thread 7 woke up
+thread 6 woke up
+thread 4 woke up
+</pre>
+The next example shows a thread, which determines, if a number is prime or not. The Thread 
+is defined with the threading module:
+<pre>
+import threading 
+ 
+class PrimeNumber(threading.Thread): 
+  def __init__(self, number): 
+    threading.Thread.__init__(self) 
+    self.Number = number
+ 
+  def run(self): 
+    counter = 2 
+    while counter*counter < self.Number: 
+      if self.Number % counter == 0: 
+        print "%d is no prime number, because %d = %d * %d" % ( self.Number, self.Number, counter, self.Number / counter) 
+                return 
+            counter += 1 
+        print "%d is a prime number" % self.Number
+threads = [] 
+while True: 
+    input = long(raw_input("number: ")) 
+    if input < 1: 
+        break 
+ 
+    thread = PrimeNumber(input) 
+    threads += [thread] 
+    thread.start() 
+ 
+for x in threads: 
+    x.join()
+</pre>
+With locks it should look like this:
+<pre>
+class PrimeNumber(threading.Thread):
+    prime_numbers = {} 
+    lock = threading.Lock()
+    
+    def __init__(self, number): 
+        threading.Thread.__init__(self) 
+        self.Number = number
+        PrimeNumber.lock.acquire() 
+        PrimeNumber.prime_numbers[number] = "None" 
+        PrimeNumber.lock.release() 
+ 
+    def run(self): 
+        counter = 2
+        res = True
+        while counter*counter < self.Number and res: 
+            if self.Number % counter == 0: 
+               res = False 
+            counter += 1 
+        PrimeNumber.lock.acquire() 
+        PrimeNumber.prime_numbers[self.Number] = res 
+        PrimeNumber.lock.release() 
+threads = [] 
+while True: 
+    input = long(raw_input("number: ")) 
+    if input < 1: 
+        break 
+ 
+    thread = PrimeNumber(input) 
+    threads += [thread] 
+    thread.start() 
+ 
+for x in threads: 
+    x.join()
+</pre>
+<h3>Pinging with Threads</h3>
+<img class="imgright" src="images/network_ping.png"  style="width: 110px;"  alt="Ping in a network" />
+The previous examples of this chapter are of purely didactical interst, and have no practical applicabillity.
+The following example shows an interesting application, which can be easily used.
+If you want to determine in a local network which addresses are active or which computers are active, this 
+script can be used. But you have to be careful with the range, because it can jam the network, if too many 
+pings are started at once. Manually we would do the following for a network 192.168.178.x: 
+We would ping the addresses 192.168.178.0, 192.168.178.1, 192.168.178.3 until 192.168.178.255 in turn.
+Every time we would have to wait a few seconds for the return values. This can be programmed
+in Python with a for loop over the address range of the IP addresses and a os.popen("ping -q -c2 "+ip,"r"). 
+<br><br>
+A solution without threads is highly inefficient, because the script will have to wait for every ping.
+<br><br>
+Solution with threads:
+<br>
+<pre>
+import os, re
+
+received_packages = re.compile(r"(\d) received")
+status = ("no response","alive but losses","alive")
+
+for suffix in range(20,30):
+   ip = "192.168.178."+str(suffix)
+   ping_out = os.popen("ping -q -c2 "+ip,"r")
+   print "... pinging ",ip
+   while True:
+      line = ping_out.readline()
+      if not line: break
+      n_received = received_packages.findall(line)
+      if n_received:
+         print ip + ": " + status[int(n_received[0])]
+</pre>
+To understand this script, we have to look at the results of a ping on a shell command line:
+<pre>
+$ ping -q -c2 192.168.178.26
+PING 192.168.178.26 (192.168.178.26) 56(84) bytes of data.
+
+--- 192.168.178.26 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 999ms
+rtt min/avg/max/mdev = 0.022/0.032/0.042/0.010 ms
+</pre>
+Falls ein Ping nicht zum Erfolg führt, gibt es folgende Ausgabe:
+<pre>
+$ ping -q -c2 192.168.178.23
+PING 192.168.178.23 (192.168.178.23) 56(84) bytes of data.
+
+--- 192.168.178.23 ping statistics ---
+2 packets transmitted, 0 received, +2 errors, 100% packet loss, time 1006ms
+</pre>
+<br>
+This is the fast solution with threads:
+<pre>
+import os, re, threading
+
+class ip_check(threading.Thread):
+   def __init__ (self,ip):
+      threading.Thread.__init__(self)
+      self.ip = ip
+      self.__successful_pings = -1
+   def run(self):
+      ping_out = os.popen("ping -q -c2 "+self.ip,"r")
+      while True:
+        line = ping_out.readline()
+        if not line: break
+        n_received = re.findall(received_packages,line)
+        if n_received:
+           self.__successful_pings = int(n_received[0])
+   def status(self):
+      if self.__successful_pings == 0:
+         return "no response"
+      elif self.__successful_pings == 1:
+         return "alive, but 50 % package loss"
+      elif self.__successful_pings == 2:
+         return "alive"
+      else:
+         return "shouldn't occur"
+received_packages = re.compile(r"(\d) received")
+
+check_results = []
+for suffix in range(20,70):
+   ip = "192.168.178."+str(suffix)
+   current = ip_check(ip)
+   check_results.append(current)
+   current.start()
+
+for el in check_results:
+   el.join()
+   print "Status from ", el.ip,"is",el.status()
+</pre>
+</p>
+<br><br>
+<div id="contextlinks">Previous Chapter: <a href="forking.html">Forks and Forking in Python</a><br>
+<LINK rel="prev" href="forking.html">Next Chapter: <a href="pipes.html">Pipe, Pipes and "99 Bottles of Beer"</a><br>
+<LINK rel="next" href="pipes.html"></div><br><br><br>
+
+</div>
+<div id="footer">  &copy; 2011 - 2014 <a href="http://www.bklein.de/">Bernd Klein</a>,
+Bodenseo; 
+Design by Denise Mitchinson adapted for python-course.eu by Bernd Klein</div>
+</div>
+</body>
+
+<!-- Mirrored from www.python-course.eu/threads.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:06:09 GMT -->
+</html>

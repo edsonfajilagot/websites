@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from zetcode.com/databases/mysqltutorial/transactions/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Jul 2015 02:47:03 GMT -->
+<head>
+<title>Transactions in MySQL</title>
+<link rel="stylesheet" href="../../../cfg/format2.css" type="text/css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="MySQL, SQL, database, transaction">
+<meta name="description" content="In this part of the MySQL tutorial, we
+will mention transactions.">
+<meta name="author" content="Jan Bodnar">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div id="wide_ad" class="ltow">
+<script async src="../../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- 160x600, August 2011 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:600px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="2484182563"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+
+<div class="content">
+
+
+<header>
+
+<nav>
+<a href="http://zetcode.com/" title="Home">Home</a>&#160;
+<a href="../index.html">Contents</a>
+</nav>
+
+</header>
+
+
+<h1>Transactions in MySQL</h1>
+
+
+<p>
+In this part of the MySQL tutorial, we will mention transactions.
+</p>
+
+<div class="med_rec">
+<script async src="../../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- NewSquare -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:250px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="0364418177"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<h2 id="definition">Definition of a transaction</h2>
+
+<p>
+A <em>transaction</em> is an atomic unit of database operations against the data
+in one or more databases. The effects of all the SQL statements in a transaction
+can be either all committed to the database or all rolled back.
+</p>
+
+<p>
+MySQL supports several storage engines. The InnoDB is fully ACID compliant. The
+ACID stands for Atomicity, Consistency, Isolation and Durability. Reliable 
+transactions must support all these four properties. 
+</p>
+
+<p>
+Operations within a transaction must be <em>atomic</em>. This means that either
+all operations succeed or fail. This is all or nothing rule. 
+The <em>consistency</em> property ensures that the database is in a consistent
+state after the transaction is finished. The data is valid and there are no
+half-finished records. For example there are no customers left with 
+no payment records or there are no payment records without customers.
+<em>Isolation</em> is the requirement that other operations cannot access data 
+that has been modified during a transaction that has not yet completed. 
+The question of isolation occurs in case of concurrent transactions.
+Without isolation, the data may end up in inconsistent state. 
+<em>Durability</em> is the ability of the database system to recover the 
+committed transaction updates against any kind of system failure.
+</p>
+
+
+<h2 id="isolation">Isolation levels</h2>
+
+<p>
+In a highly concurrent environment, highly isolated transactions may lead to 
+deadlocks. A deadlock is a situation, where transactions compete over resources
+and effectively prevent each other from accessing the resource. 
+Furthermore there is a tradeoff between isolation level and performance of the
+database. Therefore, database systems offer several levels of isolation for
+transactions. 
+</p>
+
+<p>
+MySQL offers four levels of transaction isolation:
+</p>
+
+<ul>
+  <li>Serializable</li>
+  <li>Repeatable read</li>
+  <li>Read committed</li>
+  <li>Read uncommitted</li>
+</ul>
+
+<p>
+In the <em>serializable</em> isolation level all transactions occur in a completely
+isolated fashion. All transactions are executed one after the other. In a
+<em>repeatable read</em> isolation level statements cannot read data that has been 
+modified but not yet committed by other transactions. No other transactions can modify 
+data that has been read by the current transaction until the current transaction completes.
+It is the default isolation level for InnoDB. In a <em>read committed</em> isolation level
+statements cannot read data that has been modified but not committed by other transactions.
+Statements wait until rows of data that are write-locked by other transactions are unlocked
+before they acquire their own locks. This prevents them from reading dirty data.
+In a <em>read uncommitted</em> isolation level, statements can read rows that have been 
+modified by other transactions but not yet committed.
+</p>
+
+<p>
+Phantom reads, non-repeatable reads and dirty reads are issues, which can be 
+encountered, when the transactions are not completely separated.
+A <em>phantom read</em> occurs when a transaction re-executes a query
+returning a set of rows that satisfy a search condition and finds that 
+the set of rows satisfying the condition has changed due to another 
+recently-committed transaction. A <em>non-repeatable read</em> occurs when a 
+transaction re-reads data it has previously read and finds that data has been 
+modified by another transaction. That committed since the initial read.
+A <em>dirty read</em> occurs when a transaction reads data from a row that
+has been modified by another transaction, but not yet committed. 
+</p>
+
+<p>
+The following table shows all isolation levels and possible issues encountered with 
+them. 
+</p>
+
+<table> 
+  <tr> 
+    <th>Isolation level</th> 
+    <th>Phantom read</th>
+    <th>Nonrepeatable read</th> 
+    <th>Dirty read</th>
+  </tr> 
+  <tr> 
+    <td>Serializable</td> 
+    <td>Not possible</td>     
+    <td>Not possible</td>
+    <td>Not possible</td>
+  </tr> 
+  <tr class="gray"> 
+    <td>Repeatable read</td> 
+    <td>Possible</td>     
+    <td>Not possible</td>
+    <td>Not possible</td>
+  </tr> 
+  <tr> 
+    <td>Read committed</td> 
+    <td>Possible</td>     
+    <td>Possible</td>
+    <td>Not possible</td>
+  </tr> 
+  <tr class="gray"> 
+    <td>Read uncommitted</td> 
+    <td>Possible</td>     
+    <td>Possible</td>
+    <td>Possible</td>
+  </tr> 
+</table> 
+
+
+<p>
+The default transaction isolation level for MySQL is repeatable read.
+</p>
+
+<pre class="code">
+mysql> SELECT @@tx_isolation;
++-----------------+
+| @@tx_isolation  |
++-----------------+
+| REPEATABLE-READ |
++-----------------+
+</pre>
+
+<p>
+The current isolation level is stored in the tx_isolation server
+variable.
+</p>
+
+<pre class="code">
+mysql> SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+
+mysql> SELECT @@tx_isolation;
++----------------+
+| @@tx_isolation |
++----------------+
+| SERIALIZABLE   |
++----------------+
+</pre>
+
+<p>
+We can change the isolation level with the <code>SET TRANSACTION ISOLATION LEVEL</code>
+statement. 
+</p>
+
+
+<h2 id="autocommit">Autocommit</h2>
+
+<p>
+MySQL also automatically commits statements that are not part of a transaction. 
+The results of any <code>UPDATE</code> or <code>INSERT</code> statement not preceded 
+with a <code>START</code> will immediately be visible to all connections.
+</p>
+
+<pre class="code">
+mysql> SELECT @@autocommit;
++--------------+
+| @@autocommit |
++--------------+
+|            1 |
++--------------+
+</pre>
+
+<p>
+The autocommit variable is set by default. 
+</p>
+
+<pre class="code">
+mysql> SET autocommit=0;
+
+mysql> SELECT @@autocommit;
++--------------+
+| @@autocommit |
++--------------+
+|            0 |
++--------------+
+</pre>
+
+<p>
+The autocommit can be turned off.
+</p>
+
+<p>
+Now we are going to demonstrate the autocommint variable. 
+</p>
+
+<pre class="code">
+mysql> SELECT @@autocommit;
++--------------+
+| @@autocommit |
++--------------+
+|            1 |
++--------------+
+
+CREATE TABLE Test(Num INTEGER NOT NULL) engine=InnoDB;
+</pre>
+
+<p>
+The autocommit is set. We create a simple <code>Test</code> table with InnoDB 
+storage engine, which supports transactions. 
+</p>
+
+<pre class="code">
+mysql> INSERT INTO Test VALUES (1), (2), (3);
+
+mysql> SELECT * FROM Test;
++-----+
+| Num |
++-----+
+|   1 |
+|   2 |
+|   3 |
++-----+
+</pre>
+
+<p>
+We insert three rows into the column of the table. The values are immediately 
+committed. 
+</p>
+
+
+<pre class="code">
+mysql> SET autocommit=0;
+
+mysql> INSERT INTO Test VALUES (4), (5);
+
+mysql> SELECT * FROM Test;
++-----+
+| Num |
++-----+
+|   1 |
+|   2 |
+|   3 |
+|   4 |
+|   5 |
++-----+
+</pre>
+
+<p>
+Now we set the autocommit variable to false. We insert two values
+and select all data from the table. We have now 5 rows in the table.
+</p>
+
+<pre class="code">
+mysql> ROLLBACK;
+
+mysql> SELECT * FROM Test;
++-----+
+| Num |
++-----+
+|   1 |
+|   2 |
+|   3 |
++-----+
+</pre>
+
+<p>
+However, the data is not permanently written to the table. With 
+the <code>ROLLBACK</code> statement, we take them back. 
+</p>
+
+<pre class="code">
+mysql> INSERT INTO Test VALUES (4), (5);
+
+mysql> COMMIT;
+
+mysql> ROLLBACK;
+
+mysql> SELECT * FROM Test;
++-----+
+| Num |
++-----+
+|   1 |
+|   2 |
+|   3 |
+|   4 |
+|   5 |
++-----+
+</pre>
+
+<p>
+Now we insert values 4, 5 again. This time, the rows are committed
+with the <code>COMMIT</code> statement. Subsequent rollback statement
+has no effect. 
+</p>
+
+
+<h2 id="start">Starting transactions</h2>
+
+<p>
+With autocommit enabled, each single SQL statement is wrapped automatically
+in its own transaction. To start our own transaction, we issue the 
+<code>START TRANSACTION</code> statement. The transaction is later finished
+with the <code>COMMIT</code> or <code>ROLLBACK</code> statements. Multiple
+statements may be issued in the body of the transaction. All are either committed 
+or rolled back as one unit. 
+</p>
+
+<pre class="code">
+mysql> TRUNCATE Test;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> SELECT * FROM Test;
+Empty set (0.00 sec)
+</pre>
+
+<p>
+We will work with the same <code>Test</code> table. We truncate the data in the table. 
+</p>
+
+
+<pre class="code">
+mysql> START TRANSACTION;
+
+mysql> INSERT INTO Test VALUES (1), (2);
+
+mysql> INSERT INTO Test VALUES (3), (4);
+
+mysql> SELECT * FROM Test;
++-----+
+| Num |
++-----+
+|   1 |
+|   2 |
+|   3 |
+|   4 |
++-----+
+</pre>
+
+<p>
+In the above code, we start a transaction and insert four rows into 
+the table. The values are not yet committed. From the current connection
+the rows are visible. 
+</p>
+
+<pre class="code">
+$ mysql -uroot -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 65
+Server version: 5.1.41-3ubuntu12.9 (Ubuntu)
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> SELECT * FROM mydb.Test;
+Empty set (0.00 sec)
+</pre>
+
+<p>
+However, from a different connection, the Test table is empty. We launch a new
+instance of a <code>mysql</code> client program. This is a different connection 
+to the MySQL database. From this connection, the values are not yet visible. 
+</p>
+
+<pre class="code">
+mysql> COMMIT;
+</pre>
+
+<p>
+Finally, the <code>COMMIT</code> statement commits the data to the table.
+The rows are visible from both connections. 
+</p>
+
+<p>
+We start another transaction. This time the data will be rolled back.
+</p>
+
+<pre class="code">
+mysql> START TRANSACTION;
+
+mysql> INSERT INTO Test VALUES (5), (6);
+
+mysql> INSERT INTO Test VALUES (7), (8);
+
+mysql> ROLLBACK;
+
+mysql> SELECT * FROM Test;
++-----+
+| Num |
++-----+
+|   1 |
+|   2 |
+|   3 |
+|   4 |
++-----+
+</pre>
+
+<p>
+In the above SQL code, we start a new transaction. We insert four values
+into the Test table. We roll the changes back with the <code>ROLLBACK</code>
+statement. Subsequent select from the table shows that the data was not 
+committed to the table. 
+</p>
+
+<p>
+In this part of the MySQL tutorial, we have worked with transactions.
+</p>
+
+
+<footer>
+
+<nav class="center">
+<span class="botNavItem"><a href="http://zetcode.com/">Home</a></span> ‡ <span class="botNavItem"><a href="../index.html">Contents</a></span> ‡ 
+<span class="botNavItem"><a href="#">Top of Page</a></span>
+</nav>
+
+<div class="signature">
+<a href="http://zetcode.com/">ZetCode</a> last modified February 9, 2011  <span class="copyright">&copy; 2007 - 2015 Jan Bodnar</span>
+</div>
+
+</footer>
+
+</div> <!-- content -->
+
+</div> <!-- container -->
+
+</body>
+
+<!-- Mirrored from zetcode.com/databases/mysqltutorial/transactions/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Jul 2015 02:47:03 GMT -->
+</html>
+

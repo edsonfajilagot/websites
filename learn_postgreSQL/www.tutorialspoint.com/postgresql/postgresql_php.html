@@ -1,0 +1,634 @@
+<!doctype html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]> <html lang="en" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]> <html lang="en" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]> <html lang="en" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html lang="en"><!--<![endif]-->
+
+<!-- Mirrored from www.tutorialspoint.com/postgresql/postgresql_php.htm by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 03 Sep 2014 18:08:55 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="utf-8">
+<title>PostgreSQL - PHP Interface</title>
+<link rel="shortcut icon" href="http://www.tutorialspoint.com/favicon.ico" type="image/x-icon" />
+<meta name="Keywords" content="Learning, PostgreSQL, Programming, Database, Clauses, Commands, Functions, Administration, Queries, Simple, Steps, Basic, Advanced, Concepts" />
+<meta name="description" content="PostgreSQL PHP Interface - Learn PostgreSQL from basic to advanced convering database programming, select, insert, update,  like, with, having, group by, limit, like, distinct clauses, operators, expressions,  functions administration queries and usage along with php, perl, c, c++ and java in simple steps." />
+<base  />
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=yes">
+<script type="text/javascript" src="../scripts/jquery.min.js"></script>
+<script type="text/javascript" src="../scripts/mobile.js"></script>
+<link rel="stylesheet" type="text/css" href="../scripts/style.css" />
+<link rel="stylesheet" type="text/css" href="../scripts/prettify.css" />
+<script type="text/javascript" src="../scripts/prettify.js"></script>
+<style media="screen" type="text/css">
+/* PostgreSQL Scheme */
+#topmenu a:hover {text-decoration:none;color:#336791 !important;background-color:transparent;font-weight:bold;}
+#header{
+background:#336791 !important;
+}
+#topmenu
+{
+background-color:#252525 !important;
+}
+#leftcol ul.menu li.heading
+{
+background:#336791 !important;
+border:1px solid #252525 !important;
+}
+#middlecol  {min-height:1900px; padding:0px;}
+</style>
+<script src="../../www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-232293-6";
+urchinTracker();
+</script>
+</head>
+<body onload="prettyPrint()">
+<div id="header">
+<div class="wrapper">
+<h1 class="logo"><a href="http://www.tutorialspoint.com/index.htm">Tutorials Point - Simply Easy Learning</a></h1>
+<div id="search">
+<form method="get" id="searchform" name="searchform" action="http://www.google.com/search" target="_blank">
+<input type="hidden" name="sitesearch" value="www.tutorialspoint.com"/>
+<input type="text" name="as_q" id="s" value="Search this site..." onfocus="if (this.value == 'Search this site...') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search this site...';}"/>
+<input value="FORID:11" name="cof" type="hidden"/>
+<input type="hidden" name="ie" value="ISO-8859-1" />
+<input class="submit btn" type="image" src="../images/icon-search.png" alt="Go"/>
+</form>
+</div>
+</div>
+</div>
+<div id="topmenu">
+<div class="wrapper">
+<div id="mobileleft">
+<a href="http://www.tutorialspoint.com/index.htm" id="home"><img src="../images/home-icon.png" /></a>
+</div>
+<div id="left">
+<a href="http://www.tutorialspoint.com/index.htm" target="_top">Home </a>
+<a href="http://www.tutorialspoint.com/computer_programming_tutorials.htm">Programming </a>
+<a href="http://www.tutorialspoint.com/java_technology_tutorials.htm">Java </a>
+<a href="http://www.tutorialspoint.com/web_development_tutorials.htm">Web </a>
+<a href="http://www.tutorialspoint.com/database_tutorials.htm">Databases </a>
+<a href="http://www.tutorialspoint.com/academic_tutorials.htm">Academic</a>
+<a href="http://www.tutorialspoint.com/management_tutorials.htm" title="Management Tutorials">Management</a>
+<a href="http://www.tutorialspoint.com/software_quality_tutorials.htm" title="Software Quality Tutorials">Quality</a>
+<a href="http://www.tutorialspoint.com/telecom_tutorials.htm" title="Telecom Tutorials">Telecom</a>
+<a href="http://www.tutorialspoint.com/misc_tutorials.htm">More...</a>
+</div>
+<div id="mobileright">
+<a href="#" id="pull"><img src="../images/nav-icon.png" /></a>
+</div>
+<div id="right">
+<a href="http://www.tutorialspoint.com/references.htm" target="_top">REFERENCES</a> |
+<a href="http://www.tutorialspoint.com/forums/index.php" target="_top">FORUM</a> |
+<a href="http://www.tutorialspoint.com/about/index.htm" target="_top">ABOUT</a> |
+<a href="http://www.tutorialspoint.com/about/contact_us.htm" target="_top">CONTACT</a>
+</div>
+</div>
+</div>
+<div class="wrapper">
+<div id="leftcol">
+<div class="mini-logo">
+<img src="../images/postgresql-mini-logo.png" alt="PostgreSQL Tutorial" />
+</div>
+<ul class="menu">
+<li class="heading">Learn PostgreSQL</li>
+<li><a target="_top" href="index-2.html" >PostgreSQL - Home</a></li>
+<li><a target="_top" href="postgresql_overview.html" >PostgreSQL - Overview</a></li>
+<li><a target="_top" href="postgresql_environment.html" >PostgreSQL - Environment</a></li>
+<li><a target="_top" href="postgresql_syntax.html" >PostgreSQL - Syntax</a></li>
+<li><a target="_top" href="postgresql_data_types.html" >PostgreSQL - Data Types</a></li>
+<li><a target="_top" href="postgresql_create_database.html" >PostgreSQL - Create Database</a></li>
+<li><a target="_top" href="postgresql_select_database.html" >PostgreSQL - Select Database</a></li>
+<li><a target="_top" href="postgresql_drop_database.html" >PostgreSQL - Drop Database</a></li>
+<li><a target="_top" href="postgresql_create_table.html" >PostgreSQL - Create Table</a></li>
+<li><a target="_top" href="postgresql_drop_table.html" >PostgreSQL - Drop Table</a></li>
+<li><a target="_top" href="postgresql_schema.html" >PostgreSQL - Schema</a></li>
+<li><a target="_top" href="postgresql_insert_query.html" >PostgreSQL - Insert Query</a></li>
+<li><a target="_top" href="postgresql_select_query.html" >PostgreSQL - Select Query</a></li>
+<li><a target="_top" href="postgresql_operators.html" >PostgreSQL - Operators</a></li>
+<li><a target="_top" href="postgresql_expressions.html" >PostgreSQL - Expressions</a></li>
+<li><a target="_top" href="postgresql_where_clause.html" >PostgreSQL - Where Clause</a></li>
+<li><a target="_top" href="postgresql_and_or_clauses.html" >PostgreSQL - AND &amp; OR Clauses</a></li>
+<li><a target="_top" href="postgresql_update_query.html" >PostgreSQL - Update Query</a></li>
+<li><a target="_top" href="postgresql_delete_query.html" >PostgreSQL - Delete Query</a></li>
+<li><a target="_top" href="postgresql_like_clause.html" >PostgreSQL - Like Clause</a></li>
+<li><a target="_top" href="postgresql_limit_clause.html" >PostgreSQL - Limit Clause</a></li>
+<li><a target="_top" href="postgresql_order_by.html" >PostgreSQL - Order By</a></li>
+<li><a target="_top" href="postgresql_group_by.html" >PostgreSQL - Group By</a></li>
+<li><a target="_top" href="postgresql_with_clause.html" >PostgreSQL - With Clause</a></li>
+<li><a target="_top" href="postgresql_having_clause.html" >PostgreSQL - Having Clause</a></li>
+<li><a target="_top" href="postgresql_distinct_keyword.html" >PostgreSQL - Distinct Keyword</a></li>
+</ul>
+<ul class="menu">
+<li class="heading">Advanced PostgreSQL</li>
+<li><a target="_top" href="postgresql_constraints.html" >PostgreSQL - Constraints</a></li>
+<li><a target="_top" href="postgresql_using_joins.html" >PostgreSQL - Joins</a></li>
+<li><a target="_top" href="postgresql_unions_clause.html" >PostgreSQL - Unions Clause</a></li>
+<li><a target="_top" href="postgresql_null_values.html" >PostgreSQL - NULL Values</a></li>
+<li><a target="_top" href="postgresql_alias_syntax.html" >PostgreSQL - Alias Syntax</a></li>
+<li><a target="_top" href="postgresql_triggers.html" >PostgreSQL - Triggers</a></li>
+<li><a target="_top" href="postgresql_indexes.html" >PostgreSQL - Indexes</a></li>
+<li><a target="_top" href="postgresql_alter_command.html" >PostgreSQL - Alter Command</a></li>
+<li><a target="_top" href="postgresql_truncate_table.html" >PostgreSQL - Truncate Table</a></li>
+<li><a target="_top" href="postgresql_views.html" >PostgreSQL - Views</a></li>
+<li><a target="_top" href="postgresql_transactions.html" >PostgreSQL - Transactions</a></li>
+<li><a target="_top" href="postgresql_locks.html" >PostgreSQL - Locks</a></li>
+<li><a target="_top" href="postgresql_sub_queries.html" >PostgreSQL - Sub Queries</a></li>
+<li><a target="_top" href="postgresql_using_autoincrement.html" >PostgreSQL -  Autoincrement</a></li>
+<li><a target="_top" href="postgresql_privileges.html" >PostgreSQL - Privileges</a></li>
+<li><a target="_top" href="postgresql_date_time.html" >PostgreSQL - Date &amp; Time</a></li>
+<li><a target="_top" href="postgresql_functions.html" >PostgreSQL - Functions</a></li>
+<li><a target="_top" href="postgresql_useful_functions.html" >PostgreSQL - Useful Functions</a></li>
+</ul>
+<ul class="menu">
+<li class="heading">PostgreSQL Interfaces</li>
+<li><a target="_top" href="postgresql_c_cpp.html" >PostgreSQL - C/C++</a></li>
+<li><a target="_top" href="postgresql_java.html" >PostgreSQL - Java</a></li>
+<li><a target="_top" href="postgresql_php.html" ><b>PostgreSQL - PHP</b></a></li>
+<li><a target="_top" href="postgresql_perl.html" >PostgreSQL - Perl</a></li>
+<li><a target="_top" href="postgresql_python.html" >PostgreSQL - Python</a></li>
+</ul>
+<ul class="menu">
+<li class="heading">SQL Useful Resources</li>
+<li><a target="_top" href="postgresql_quick_guide.html" >PostgreSQL - Quick Guide</a></li>
+<li><a target="_top" href="postgresql_useful_resources.html" >PostgreSQL - Useful Resources</a></li>
+</ul>
+<ul class="menu">
+<li class="sreading">Selected Reading</li>
+<li><a target="_top" href="http://www.tutorialspoint.com/developers_best_practices/index.htm">Developer's Best Practices</a></li>
+<li><a target="_top" href="http://www.tutorialspoint.com/computer_glossary.htm">Computer Glossary</a></li>
+<li><a target="_top" href="http://www.tutorialspoint.com/computer_whoiswho.htm">Who is Who</a></li>
+</ul>
+</div><!-- leftcol -->
+<div id="middlecol">
+<!-- PRINTING STARTS HERE -->
+<div class="content">
+<h1>PostgreSQL - PHP Interface</h1>
+<div class="topgooglead">
+<div class="topadtag">Advertisements</div>
+<script async src="../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<ins class="adsbygoogle top_ad_slot"
+     style="display:inline-block;"
+     data-ad-client="ca-pub-7133395778201029"
+     data-ad-slot="2813390526">
+</ins>
+<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+<hr />
+<div class="pre-btn">
+<a href="postgresql_java.html">Previous Page</a>
+</div>
+<div class="nxt-btn">
+<a href="postgresql_perl.html">Next Page</a>
+</div>
+<div class="clearer"></div>
+<hr />
+<h2>Installation</h2>
+<p>The PostgreSQL extension is enabled by default in the latest releases of PHP 5.3.x. It's possible to disable it by using <b>--without-pgsql</b> at compile time. Still you can use yum command to install PHP -PostgreSQL interface:</p>
+<pre class="prettyprint">
+yum install php-pgsql
+</pre>
+<p>Before you start using PHP PostgreSQL interface, find <b>pg_hba.conf</b> file in your PostgreSQL installation directory and add the following line:</p>
+<pre class="result">
+# IPv4 local connections:
+host    all         all         127.0.0.1/32          md5
+</pre>
+<p>You can start/restart postgres server in case it is not running using the following command:</p>
+<pre class="prettyprint">
+[root@host]# service postgresql restart
+Stopping postgresql service:                               [  OK  ]
+Starting postgresql service:                               [  OK  ]
+</pre>
+<p>Windows users must enable php_pgsql.dll in order to use this extension. This DLL is included with Windows distributions in the latest releases of PHP 5.3.x</p>
+<p>For detailed installation instructions, kindly check our PHP tutorial and its official website.</p>
+<h2>PHP Interface APIs</h2>
+<p>Following are important PHP routines which can suffice your requirement to work with PostgreSQL database from your PHP program. If you are looking for a more sophisticated application, then you can look into PHP official documentation.</p>
+<table class="src">
+<tr><th>S.N.</th><th>API &amp; Description</th></tr>
+<tr><td>1</td><td><b>resource pg_connect ( string $connection_string [, int $connect_type ] )</b><br>
+<p>This opens a connection to a PostgreSQL database specified by the connection_string.</p>
+<p>If PGSQL_CONNECT_FORCE_NEW is passed as connect_type, then a new connection is created in case of a second call to pg_connect() , even if the connection_string is identical to an existing connection.</p>
+</td></tr>
+<tr><td>2</td><td><b>bool pg_connection_reset ( resource $connection )</b><br><p>This routine resets the connection. It is useful for error recovery. Returns TRUE on success or FALSE on failure.</p>
+</td></tr>
+<tr><td>3</td><td><b>int pg_connection_status ( resource $connection )</b><br><p>This routine returns the status of the specified connection. Returns PGSQL_CONNECTION_OK or PGSQL_CONNECTION_BAD.</p>
+</td></tr>
+<tr><td>4</td><td><b>string pg_dbname ([ resource $connection ] )</b><br><p>This routine returns the name of the database that the given PostgreSQL connection resource.</p>
+</td></tr>
+<tr><td>5</td><td><b>resource pg_prepare ([ resource $connection ], string $stmtname , string $query )</b><br><p>This submits a request to create a prepared statement with the given parameters and waits for completion.</p>
+</td></tr>
+<tr><td>6</td><td><b>resource pg_execute ([ resource $connection ], string $stmtname , array $params )</b><br><p>This routine sends a request to execute a prepared statement with given parameters and waits for the result.</p>
+</td></tr>
+<tr><td>7</td><td><b>resource pg_query ([ resource $connection ], string $query )</b><br><p>This routine executes the query on the specified database connection.</p>
+</td></tr>
+<tr><td>8</td><td><b>array pg_fetch_row ( resource $result [, int $row ] )</b><br><p>This routine fetches one row of data from the result associated with the specified result resource.</p>
+</td></tr>
+<tr><td>9</td><td><b>array pg_fetch_all ( resource $result )</b><br><p>This routine returns an array that contains all rows (records) in the result resource.</p>
+<tr><td>10</td><td><b>int pg_affected_rows ( resource $result )</b><br><p>This routine returns the number of rows affected by INSERT, UPDATE, and DELETE queries.</p>
+<tr><td>11</td><td><b>int pg_num_rows ( resource $result )</b><br><p>This routine returns the number of rows in a PostgreSQL result resource for example number of rows returned by SELECT statement.</p>
+<tr><td>12</td><td><b>bool pg_close ([ resource $connection ] )</b><br><p>This routine closes the non-persistent connection to a PostgreSQL database associated with the given connection resource.</p>
+<tr><td>13</td><td><b>string pg_last_error ([ resource $connection ] )</b><br><p>This routine  returns the last error message for a given connection.</p>
+<tr><td>14</td><td><b>string pg_escape_literal ([ resource $connection ], string $data )</b><br><p>This routine escapes a literal for insertion into a text field.</p>
+<tr><td>15</td><td><b>string pg_escape_string ([ resource $connection ], string $data )</b><br><p>This routine escapes a string for querying the database.</p>
+</table>
+<h2>Connecting To Database</h2>
+<p>Following PHP code shows how to connect to an existing database on a local machine and finally a database connection object will be returned.</p>
+<pre class="prettyprint">
+&lt;?php
+   $host        = "host=127.0.0.1";
+   $port        = "port=5432";
+   $dbname      = "dbname=testdb";
+   $credentials = "user=postgres password=pass123";
+
+   $db = pg_connect( "$host $port $dbname $credentials"  );
+   if(!$db){
+      echo "Error : Unable to open database\n";
+   } else {
+      echo "Opened database successfully\n";
+   }
+?&gt;
+</pre>
+<p>Now, let's run above program to open our database <b>testdb</b>, if database is successfully opened, then it will give the following message:</p>
+<pre class="result">
+Opened database successfully
+</pre>
+<h2>Create a Table</h2>
+<p>Following PHP program will be used to create a table in previously created database:</p>
+<pre class="prettyprint">
+&lt;?php
+   $host        = "host=127.0.0.1";
+   $port        = "port=5432";
+   $dbname      = "dbname=testdb";
+   $credentials = "user=postgres password=pass123";
+
+   $db = pg_connect( "$host $port $dbname $credentials"  );
+   if(!$db){
+      echo "Error : Unable to open database\n";
+   } else {
+      echo "Opened database successfully\n";
+   }
+   
+   $sql =&lt;&lt;&lt;EOF
+      CREATE TABLE COMPANY
+      (ID INT PRIMARY KEY     NOT NULL,
+      NAME           TEXT    NOT NULL,
+      AGE            INT     NOT NULL,
+      ADDRESS        CHAR(50),
+      SALARY         REAL);
+EOF;
+
+   $ret = pg_query($db, $sql);
+   if(!$ret){
+      echo pg_last_error($db);
+   } else {
+      echo "Table created successfully\n";
+   }
+   pg_close($db);
+?&gt;
+</pre>
+<p>When above program is executed, it will create COMPANY table in your <b>testdb</b> and it will display the following messages:</p>
+<pre class="result">
+Opened database successfully
+Table created successfully
+</pre>
+<h2>INSERT Operation</h2>
+<p>Following PHP program shows how we can create records in our COMPANY table created in above example:</p>
+<pre class="prettyprint">
+&lt;?php
+   $host        = "host=127.0.0.1";
+   $port        = "port=5432";
+   $dbname      = "dbname=testdb";
+   $credentials = "user=postgres password=pass123";
+
+   $db = pg_connect( "$host $port $dbname $credentials"  );
+   if(!$db){
+      echo "Error : Unable to open database\n";
+   } else {
+      echo "Opened database successfully\n";
+   }
+
+   $sql =&lt;&lt;&lt;EOF
+      INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY)
+      VALUES (1, 'Paul', 32, 'California', 20000.00 );
+
+      INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY)
+      VALUES (2, 'Allen', 25, 'Texas', 15000.00 );
+
+      INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY)
+      VALUES (3, 'Teddy', 23, 'Norway', 20000.00 );
+
+      INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY)
+      VALUES (4, 'Mark', 25, 'Rich-Mond ', 65000.00 );
+EOF;
+
+   $ret = pg_query($db, $sql);
+   if(!$ret){
+      echo pg_last_error($db);
+   } else {
+      echo "Records created successfully\n";
+   }
+   pg_close($db);
+?&gt;
+</pre>
+<p>When above program  is executed, it will create given records in COMPANY table and will display the following two lines:</p>
+<pre class="result">
+Opened database successfully
+Records created successfully
+</pre>
+<h2>SELECT Operation</h2>
+<p>Following PHP program shows how we can fetch and display records from our COMPANY table created in above example:</p>
+<pre class="prettyprint">
+&lt;?php
+   $host        = "host=127.0.0.1";
+   $port        = "port=5432";
+   $dbname      = "dbname=testdb";
+   $credentials = "user=postgres password=pass123";
+
+   $db = pg_connect( "$host $port $dbname $credentials"  );
+   if(!$db){
+      echo "Error : Unable to open database\n";
+   } else {
+      echo "Opened database successfully\n";
+   }
+
+   $sql =&lt;&lt;&lt;EOF
+      SELECT * from COMPANY;
+EOF;
+
+   $ret = pg_query($db, $sql);
+   if(!$ret){
+      echo pg_last_error($db);
+      exit;
+   } 
+   while($row = pg_fetch_row($ret)){
+      echo "ID = ". $row[0] . "\n";
+      echo "NAME = ". $row[1] ."\n";
+      echo "ADDRESS = ". $row[2] ."\n";
+      echo "SALARY =  ".$row[4] ."\n\n";
+   }
+   echo "Operation done successfully\n";
+   pg_close($db);
+?&gt;
+</pre>
+<p>When above program is executed, it will produce the following result. Keep a note that fields are returned in the sequence they were used while creating table.</p>
+<pre class="result">
+Opened database successfully
+ID = 1
+NAME = Paul
+ADDRESS = California
+SALARY =  20000
+
+ID = 2
+NAME = Allen
+ADDRESS = Texas
+SALARY =  15000
+
+ID = 3
+NAME = Teddy
+ADDRESS = Norway
+SALARY =  20000
+
+ID = 4
+NAME = Mark
+ADDRESS = Rich-Mond
+SALARY =  65000
+
+Operation done successfully
+</pre>
+<h2>UPDATE Operation</h2>
+<p>Following PHP code shows how we can use UPDATE statement to update any record and then fetch and display updated records from our COMPANY table:</p>
+<pre class="prettyprint">
+&lt;?php
+   $host        = "host=127.0.0.1";
+   $port        = "port=5432";
+   $dbname      = "dbname=testdb";
+   $credentials = "user=postgres password=pass123";
+
+   $db = pg_connect( "$host $port $dbname $credentials"  );
+   if(!$db){
+      echo "Error : Unable to open database\n";
+   } else {
+      echo "Opened database successfully\n";
+   }
+   $sql =&lt;&lt;&lt;EOF
+      UPDATE COMPANY set SALARY = 25000.00 where ID=1;
+EOF;
+   $ret = pg_query($db, $sql);
+   if(!$ret){
+      echo pg_last_error($db);
+      exit;
+   } else {
+      echo "Record updated successfully\n";
+   }
+   
+   $sql =&lt;&lt;&lt;EOF
+      SELECT * from COMPANY;
+EOF;
+
+   $ret = pg_query($db, $sql);
+   if(!$ret){
+      echo pg_last_error($db);
+      exit;
+   } 
+   while($row = pg_fetch_row($ret)){
+      echo "ID = ". $row[0] . "\n";
+      echo "NAME = ". $row[1] ."\n";
+      echo "ADDRESS = ". $row[2] ."\n";
+      echo "SALARY =  ".$row[4] ."\n\n";
+   }
+   echo "Operation done successfully\n";
+   pg_close($db);
+?&gt;
+</pre>
+<p>When above program is executed, it will produce the following result:</p>
+<pre class="result">
+Opened database successfully
+Record updated successfully
+ID = 2
+NAME = Allen
+ADDRESS = 25
+SALARY =  15000
+
+ID = 3
+NAME = Teddy
+ADDRESS = 23
+SALARY =  20000
+
+ID = 4
+NAME = Mark
+ADDRESS = 25
+SALARY =  65000
+
+ID = 1
+NAME = Paul
+ADDRESS = 32
+SALARY =  25000
+
+Operation done successfully
+</pre>
+<h2>DELETE Operation</h2>
+<p>Following PHP code shows how we can use DELETE statement to delete any record and then fetch and display remaining records from our COMPANY table:</p>
+<pre class="prettyprint">
+&lt;?php
+   $host        = "host=127.0.0.1";
+   $port        = "port=5432";
+   $dbname      = "dbname=testdb";
+   $credentials = "user=postgres password=pass123";
+
+   $db = pg_connect( "$host $port $dbname $credentials"  );
+   if(!$db){
+      echo "Error : Unable to open database\n";
+   } else {
+      echo "Opened database successfully\n";
+   }
+   $sql =&lt;&lt;&lt;EOF
+      DELETE from COMPANY where ID=2;
+EOF;
+   $ret = pg_query($db, $sql);
+   if(!$ret){
+      echo pg_last_error($db);
+      exit;
+   } else {
+      echo "Record deleted successfully\n";
+   }
+   
+   $sql =&lt;&lt;&lt;EOF
+      SELECT * from COMPANY;
+EOF;
+
+   $ret = pg_query($db, $sql);
+   if(!$ret){
+      echo pg_last_error($db);
+      exit;
+   } 
+   while($row = pg_fetch_row($ret)){
+      echo "ID = ". $row[0] . "\n";
+      echo "NAME = ". $row[1] ."\n";
+      echo "ADDRESS = ". $row[2] ."\n";
+      echo "SALARY =  ".$row[4] ."\n\n";
+   }
+   echo "Operation done successfully\n";
+   pg_close($db);
+?&gt;
+</pre>
+<p>When above program is executed, it will produce the following result:</p>
+<pre class="result">
+Opened database successfully
+Record deleted successfully
+ID = 3
+NAME = Teddy
+ADDRESS = 23
+SALARY =  20000
+
+ID = 4
+NAME = Mark
+ADDRESS = 25
+SALARY =  65000
+
+ID = 1
+NAME = Paul
+ADDRESS = 32
+SALARY =  25000
+
+Operation done successfully
+</pre>
+<hr />
+<div class="pre-btn">
+<a href="postgresql_java.html">Previous Page</a>
+</div>
+<div class="print-btn">
+<a href="http://www.tutorialspoint.com/cgi-bin/printpage.cgi" target="_blank">Print Version</a>
+</div>
+<div class="pdf-btn">
+<a href="pdf/postgresql_php.pdf" alt="PostgreSQL - PHP Interface" target="_blank">PDF Version</a>
+</div>
+<div class="nxt-btn">
+<a href="postgresql_perl.html">Next Page</a>
+</div>
+<div class="clearer"></div>
+<hr />
+</div>
+<!-- PRINTING ENDS HERE -->
+<div class="bottomgooglead">
+<div class="bottomadtag">Advertisements</div>
+<script async src="../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<ins class="adsbygoogle bottom_ad_slot"
+     style="display:inline-block;"
+     data-ad-client="ca-pub-7133395778201029"
+     data-ad-slot="2952991323">
+</ins>
+<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+</div><!-- middlecol -->
+<div id="rightcol">
+<!-- AddThis Button BEGIN -->
+<div class="addthis">
+<div class="addthis_toolbox addthis_default_style">
+<a class="addthis_button_facebook"></a>
+<a class="addthis_button_twitter"></a>
+<script type="text/javascript">
+<!--
+ document.write('<a class="addthis_button_google_plusone" g:plusone:count="false"></a>');
+//-->
+</script>
+<a class="addthis_button_linkedin"></a>
+<a class="addthis_button_email"></a>
+<a class="addthis_button_compact"></a>
+</div>
+<script type="text/javascript" src="../../s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4f661ec623a400f0"></script>
+</div>
+<!-- AddThis Button END -->
+<div class="localad">
+<a rel="nofollow" href="http://www.modernindianbabynames.com/" target="_blank" title="Modern Baby Names">Modern Baby Names</a>
+</div>
+<div class="localad">
+<a rel="nofollow" href="http://www.photofuntoos.com/" target="_blank" title="Online Photo Editing">Online Photo Editing</a>
+</div>
+<div class="rightgooglead">
+<div style="padding-bottom:5px;padding-left:10px;">Advertisements</div>
+<script type="text/javascript"><!--
+google_ad_client = "pub-7133395778201029";
+google_ad_width = 160;
+google_ad_height = 600;
+google_ad_format = "160x600_as";
+google_ad_type = "image";
+google_ad_channel ="";
+//--></script>
+<script type="text/javascript"
+src="../../pagead2.googlesyndication.com/pagead/f.txt">
+</script>
+</div>
+</div><!-- rightcol -->
+<div style="clear:both;"></div>
+</div><!-- wrapper -->
+<div id="footer">
+<div class="wrapper">
+<div id="bottommenu">
+<a href="http://www.tutorialspoint.com/asp.net/index.htm" target="_top">ASP.NET </a> |
+<a href="http://www.tutorialspoint.com/jquery/index.htm" target="_top">jQuery </a> |
+<a href="http://www.tutorialspoint.com/ajax/index.htm" target="_top">AJAX </a> |
+<a href="http://www.tutorialspoint.com/ant/index.htm" target="_top">ANT</a> |
+<a href="http://www.tutorialspoint.com/jsp/index.htm" target="_top">JSP </a> |
+<a href="http://www.tutorialspoint.com/servlets/index.htm" target="_top">Servlets </a> |
+<a href="http://www.tutorialspoint.com/log4j/index.htm" target="_top">log4j </a> |
+<a href="http://www.tutorialspoint.com/ibatis/index.htm" target="_top">iBATIS </a> |
+<a href="http://www.tutorialspoint.com/hibernate/index.htm" target="_top">Hibernate </a> |
+<a href="http://www.tutorialspoint.com/jdbc/index.htm" target="_top">JDBC </a> |
+<a href="http://www.tutorialspoint.com/struts_2/index.htm" target="_top">Struts </a> |
+<a href="http://www.tutorialspoint.com/html5/index.htm" target="_top">HTML5 </a> |
+<a href="http://www.tutorialspoint.com/sql/index.htm" target="_top">SQL </a> |
+<a href="http://www.tutorialspoint.com/mysql/index.htm" target="_top">MySQL </a> |
+<a href="http://www.tutorialspoint.com/cplusplus/index.htm" target="_top">C++ </a> |
+<a href="http://www.tutorialspoint.com/unix/index.htm" target="_top">UNIX </a>
+</div>
+<div id="copyright">
+<p>Copyright &copy; 2014 by tutorialspoint. All Rights Reserved.</p>
+</div>
+</div>
+</div>
+</body>
+
+<!-- Mirrored from www.tutorialspoint.com/postgresql/postgresql_php.htm by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 03 Sep 2014 18:08:55 GMT -->
+</html>

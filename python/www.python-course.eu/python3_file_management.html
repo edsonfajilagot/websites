@@ -1,0 +1,608 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from www.python-course.eu/python3_file_management.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:08:45 GMT -->
+<head>
+
+<!-- Dieses Tag in den Head-Bereich oder direkt vor dem schlieÃŸenden Body-Tag einfÃ¼gen -->
+<script type="text/javascript" src="../apis.google.com/js/plusone.js"></script>
+
+
+
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "../connect.facebook.net/en_GB/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script><title>Python3 Tutorial: File Management</title>
+<meta http-equiv="content-type" content="text/html; charset="ISO-8859-1">
+<meta name="Description" content="File management in Python. Covering both reading and writing and serializing
+objects with the pickle and shelve modules" />
+<meta name="Keywords" content="Python, course, file,files, management, read, write, serialize, reading, writing, serialize, pickle" />
+
+<link href="favicon.ico" rel="shortcut icon">
+
+<link href="moderna.css" rel="stylesheet" type="text/css" />
+<link href="moderna_print.css" media="print" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+<div id="container">
+
+<div id="banner">
+<!-- <a href="impressum.php">Impressum</a> | <a href="mailto:">contact</a> | --><h1>Python Course</h1>
+
+</div>
+
+	<!-- Begin Top Menu -->
+<ul id="navlist">
+<li><a href="index-2.html" >Home</a></li><li><a href="course.html" >Python 2 Tutorial</a></li><li class="active"><a id="current" href="python3_course.html" >Python 3 Tutorial</a></li><li><a href="advanced_topics.html" >Advanced Topics</a></li><li><a href="python_books.html" >Python Books</a></li><li><a href="python_tkinter.html" >Tkinter Tutorial</a></li><li><a href="contact.html" rel="nofollow">Contact</a></li>                          
+</ul>
+	<!-- End Top Menu -->
+<div id="sidebar-a">
+<img class="border" src="images/files.png" alt="box" />    <h2>Python 3 Tutorial</h2>
+
+<div class="menu">
+
+<ul>
+<li><a href="python3_history_and_philosophy.html">The Origins of Python</a></li><li><a href="python3_interactive.html">Starting with Python: The Interactive Shell</a></li><li><a href="python3_execute_script.html">Executing a Script</a></li><li><a href="python3_blocks.html">Indentation</a></li><li><a href="python3_variables.html">Data Types and Variables</a></li><li><a href="python3_operators.html">Operators</a></li><li><a href="python3_sequential_data_types.html">Sequential Data Types: Lists and Strings</a></li><li><a href="python3_deep_copy.html">Shallow and Deep Copy</a></li><li><a href="python3_dictionaries.html">Dictionaries</a></li><li><a href="python3_sets_frozensets.html">Sets and Frozen Sets</a></li><li><a href="python3_input.html">input via the keyboard</a></li><li><a href="python3_conditional_statements.html">Conditional Statements</a></li><li><a href="python3_loops.html">Loops, while Loop</a></li><li><a href="python3_for_loop.html">For Loops</a></li><li><a href="python3_print.html">Output with Print</a></li><li><a href="python3_formatted_output.html">Formatted output with string modulo and the format method</a></li><li><a href="python3_functions.html">Functions</a></li><li><a href="python3_recursive_functions.html">Recursion and Recursive Functions</a></li><li><a href="python3_tests.html">Tests, DocTests, UnitTests</a></li><li><a href="python3_memoization.html">Memoization and Decorators</a></li><li><a href="python3_passing_arguments.html">Parameter Passing in Functions</a></li><li><a href="python3_namespaces.html">Namespaces</a></li><li><a href="python3_global_vs_local_variables.html">Global and Local Variables</a></li><li><a href="python3_file_management.html">Read and Write Files</a></li><li><a href="python3_modules_and_modular_programming.html">Modular Programming and Modules</a></li><li><a href="python3_re.html">Regular Expressions</a></li><li><a href="python3_re_advanced.html">Regular Expressions, Advanced</a></li><li><a href="python3_lambda.html">Lambda Operator, Filter, Reduce and Map</a></li><li><a href="python3_list_comprehension.html">List Comprehension</a></li><li><a href="python3_generators.html">Iterators and Generators</a></li><li><a href="python3_exception_handling.html">Exception Handling</a></li><li><a href="python3_object_oriented_programming.html">Object Oriented Programming</a></li><li><a href="python3_class_and_instance_attributes.html">Class and Instance Attributes</a></li><li><a href="python3_properties.html">Properties vs. getters and setters</a></li><li><a href="python3_inheritance.html">Inheritance</a></li><li><a href="python3_multiple_inheritance.html">Multiple Inheritance</a></li><li><a href="python3_magic_methods.html">Magic Methods and Operator Overloading</a></li><li><a href="python3_inheritance_example.html">OOP, Inheritance Example</a></li></ul>
+
+</div>
+
+<p>
+<hr>
+<h3>Internet and Files</h3>
+<i>"The Internet has no such organization - files are made available at random locations. 
+To search through this chaos, we need smart tools, programs that find resources for us."</i>
+<br>(Clifford Stoll, Silicon Snake Oil)
+<br><br>
+<h3>Files and Communication</h3>
+<i>"True interactivity is not about clicking on icons or downloading files, it's about 
+encouraging communication."</i>
+<br>
+(Edwin Schlossberg, 2002)
+<br><br>
+<h3>True Illiterates</h3>
+<i>"The illiterate of the 21st century will not be those who cannot read and write, but 
+those who cannot learn, unlearn, and relearn."</i>
+<br>
+(Alvin Toffler, American Science Fiction author)
+<br><br>
+<h3>Read and Write</h3>
+<i>"Just because some of us can read and write and do a little math, that doesn't mean we 
+deserve to conquer the Universe."</i>
+<br>
+(Kurt Vonnegut, from his novel "Hocus Pocus")
+<br><br>
+<hr>
+<br>
+This website is supported by:<br>
+<a href="http://www.bodenseo.com/courses.php"><img style="width: 150px;" alt="Bodenseo,
+Python courses"
+		     src="images/bodenseo_python_training.gif"><br>Linux and Python Training Courses</a>
+<br>
+<hr>
+</div><div id="sidebar-b"><img style="width: 150px;" alt="Python-Logo"
+		     src="images/python-logo.png"><!-- Dieses Tag dort einfügen, wo die +1-Schaltfläche dargestellt werden soll -->
+<g:plusone></g:plusone>
+<br><br>
+
+<div class="fb-like" data-href="www.python-course.eu" data-send="false" data-layout="button_count" 
+data-width="130" data-show-faces="true" data-action="recommend"></div>
+
+<br><br>
+This topic in German / Deutsche Übersetzung:
+    <a href="http://www.python-kurs.eu/python3_dateien.php">Dateien lesen und schreiben in Python</a><h3>Python3</h3>This is a tutorial in Python3, but this chapter of our course is available in a version for Python 2.x as well: <a href="file_management.html">File Management in Python 2.x</a><p>
+<h3>Classroom Training Courses</h3>
+The goal of this website is to provide educational material, 
+allowing you to learn Python on your own.
+Nevertheless, it is faster and more efficient to attend a "real" 
+Python course in a classroom, with
+an experienced trainer. So why not attend one of the live 
+<a href="python_classes.html">Python courses</a> in Paris, London, Berlin, Munich
+or Lake Constance by Bernd Klein, the author of this tutorial?
+<br><br>
+You can also check the   
+<a href="http://www.bodenseo.com/courses.php?topic=Python">Python Training courses
+<img style="width: 150px;" alt="Bodenseo Kurse in Python"
+		     src="images/bodenseo_stairs_to_python.png"></a>
+		     delivered by Bodenseo and Bernd Klein.
+<br><br>
+You can book on-site classes at your company or organization, e.g. in England, Switzerland, Austria, Germany,
+France, Belgium, the Netherlands, Luxembourg, Poland, UK, Italy and other locations in Europe.
+<br><br>
+<h3>Python3</h3>This is a tutorial in Python3, but this chapter of our course is available in a version for Python 2.x as well: <a href="file_management.html">File Management in Python 2.x</a>
+ </p>
+
+
+
+
+    
+</p></div>
+<div id="content">
+
+<div id="contextlinks">Previous Chapter: <a href="python3_global_vs_local_variables.html">Global and Local Variables</a><br>
+<LINK rel="prev" href="python3_global_vs_local_variables.html">Next Chapter: <a href="python3_modules_and_modular_programming.html">Modular Programming and Modules</a><br>
+<LINK rel="next" href="python3_modules_and_modular_programming.html"></div>
+<h2>File Management</h2>
+<br>
+<h3>Files in General</h3>
+<p>
+<br>
+<img class="imgright" src="images/files2.png" alt="Files" />
+It's hard to find anyone in the 21st Century, who doesn't know what a file is. 
+If we say file, we mean of course, a file on a computer. There may be people 
+who don't know anymore the "container", like a cabinet or a folder, for keeping 
+papers archived in a convenient order. A file on a computer is the modern counterpart
+of this. It is a collection of information, which can be accessed and used by a computer program. Usually,
+a file resides on a durable storage. Durable means that the data is persistent, 
+i.e. it can be used by other programs after the program which has created or manipulated it
+has terminated. 
+<br><br>
+The term file management in the context of computers refers to the manipulation of data in a file 
+or files and documents on a computer. Though everybody has an understanding of the term file, we 
+present a formal definition anyway: 
+<br><br>
+A file or a computer file is a chunk of logically related data or information which can be used by 
+computer programs. Usually a file is kept on a permanent storage media, e.g. a hard drive disk. 
+A unique name and path is used by human users or in programs or scripts to access a file 
+for reading and modification purposes.
+<br><br>
+The term "file" - as we have described it in the previous paragraph - appeared in the history of computers 
+very early. Usage can be tracked down to the year 1952, when punch cards where used.
+<br><br>  
+A programming language without the capability to store and retrieve previously stored 
+information would be hardly useful. 
+<br><br>
+The most basic tasks involved in file manipulation are reading data from files and 
+writing or appending data to files. 
+<br><br>
+<h3>Reading and Writing Files in Python</h3>
+The syntax for reading and writing files in Python is similar to programming languages like C, 
+C++, Java, Perl, and others but a lot easier to handle.
+<br><br>
+In our first example we want to show how to read data from a file. The way of telling Python
+that we want to read from a file is to use the open  function. The first parameter is the name 
+of the file we want to read and with the second parameter, assigned to the value "r", we state
+that we want to read from the file:
+<br>
+<pre>
+fobj = open("ad_lesbiam.txt", "r")
+</pre>
+The "r" is optional. An open() command with just a file name is opened for reading per default.
+The open() function returns a file object, which offers attributes and methods. 
+<br>
+<pre>
+fobj = open("ad_lesbiam.txt")
+</pre>
+
+After we have finished working with a file, we have to close it again by using the 
+file object method close():
+<br>
+<pre>
+fobj.close()
+</pre>
+<br>Now we want to finally open and read a file. The method rstrip() in the following example is
+used to strip off whitespaces (newlines included) from the right side of the string "line":
+<br>
+<pre>
+fobj = open("ad_lesbiam.txt")
+for line in fobj:
+    print(line.rstrip())
+fobj.close()
+</pre>
+<br>
+If we save this script and call it, we get the following output, provided that the text file "ad_lesbiam.txt" is available:
+<br>
+<pre>
+$ python file_read.py 
+V. ad Lesbiam
+
+VIVAMUS mea Lesbia, atque amemus,
+rumoresque senum severiorum
+omnes unius aestimemus assis!
+soles occidere et redire possunt:
+nobis cum semel occidit breuis lux,
+nox est perpetua una dormienda.
+da mi basia mille, deinde centum,
+dein mille altera, dein secunda centum,
+deinde usque altera mille, deinde centum.
+dein, cum milia multa fecerimus,
+conturbabimus illa, ne sciamus,
+aut ne quis malus inuidere possit,
+cum tantum sciat esse basiorum.
+(GAIUS VALERIUS CATULLUS)
+</pre>
+By the way, the poem above is a love poem of the ancient Roman poet Catull, who was hopelessly in love 
+with a woman called Lesbia. 
+</p>
+<br><br>
+<h3>Write into a File</h3>
+<p>
+Writing to a file is as easy as reading from a file. To open a file for writing
+we set the second parameter to "w" instead of "r". To actually write the data
+into this file, we use the method write() of the file handle object. 
+<br><br>
+Let's start with a very simple and straightforward example:
+<br>
+<pre>
+fh = open("example.txt", "w")
+fh.write("To write or not to write\nthat is the question!\n")
+fh.close()
+</pre>
+
+Especially if you are writing to a file, you should never forget to close the 
+file handle again. Otherwise you will risk to end up in a non consistent state of your
+data.
+<br><br>
+You will often find the with statement for reading and writing files. The 
+advantage is that the file will be automatically closed after the indented
+block after the with has finished execution:
+<br>
+<pre>
+with open("example.txt", "w") as fh:
+    fh.write("To write or not to write\nthat is the question!\n")
+</pre>
+
+<br><br>
+Our first example can also be rewritten like this with the with statement:
+<pre>
+with open("ad_lesbiam.txt") as fobj:
+    for line in fobj:
+        print(line.rstrip())
+</pre>
+
+
+
+<br>Example for simultaneously reading and writing:
+<br>
+<pre>
+fobj_in = open("ad_lesbiam.txt")
+fobj_out = open("ad_lesbiam2.txt","w")
+i = 1
+for line in fobj_in:
+    print(line.rstrip())
+    fobj_out.write(str(i) + ": " + line)
+    i = i + 1
+fobj_in.close()
+fobj_out.close()
+</pre>
+</p>
+Every line of the input text file is prefixed by its line number. So the result looks 
+like this:
+<pre>
+$ more ad_lesbiam2.txt 
+1: V. ad Lesbiam 
+2: 
+3: VIVAMUS mea Lesbia, atque amemus,
+4: rumoresque senum severiorum
+5: omnes unius aestimemus assis!
+6: soles occidere et redire possunt:
+7: nobis cum semel occidit breuis lux,
+8: nox est perpetua una dormienda.
+9: da mi basia mille, deinde centum,
+10: dein mille altera, dein secunda centum,
+11: deinde usque altera mille, deinde centum.
+12: dein, cum milia multa fecerimus,
+13: conturbabimus illa, ne sciamus,
+14: aut ne quis malus inuidere possit,
+15: cum tantum sciat esse basiorum.
+16: (GAIUS VALERIUS CATULLUS)
+</pre>
+
+There is one possible problem, which we have to point out: What happens if we open a file for writing, 
+and this file already exists. You can consider yourself fortunate, if the content of this file was of
+no importance, or if you have a backup of it. Otherwise you have a problem, because as soon as an open()
+with a "w" has been executed the file will be removed. This is often what you want, but sometimes you just
+want to append to the file, like it's the case with logfiles.
+<br><br>
+If you want to append something to an existing file, you have to use "a" instead of "w".
+<br><br>
+<h3>Reading in one go</h3>
+So far we worked on files line by line by using a for loop. Very often, especially if the file is not
+too large, it's more convenient to read the file into a complete data structure, e.g. a string or a list.
+The file can be closed after reading and the work is accomplished on this data structure:
+<pre>
+>>> poem = open("ad_lesbiam.txt").readlines()
+>>> print(poem)
+['V. ad Lesbiam \n', '\n', 'VIVAMUS mea Lesbia, atque amemus,\n', 'rumoresque senum severiorum\n', 'omnes unius aestimemus assis!\n', 'soles occidere et redire possunt:\n', 'nobis cum semel occidit breuis lux,\n', 'nox est perpetua una dormienda.\n', 'da mi basia mille, deinde centum,\n', 'dein mille altera, dein secunda centum,\n', 'deinde usque altera mille, deinde centum.\n', 'dein, cum milia multa fecerimus,\n', 'conturbabimus illa, ne sciamus,\n', 'aut ne quis malus inuidere possit,\n', 'cum tantum sciat esse basiorum.\n', '(GAIUS VALERIUS CATULLUS)']
+>>> print(poem[2])
+VIVAMUS mea Lesbia, atque amemus,
+</pre>
+In the above example, the complete poem is read into the list poem. We can acces e.g. the 3rd line with
+<code>poem[2]</code>.
+<br><br>
+Another convenient way to read in a file might be the method read() of open. With this method we can read the 
+complete file into a string, as we can see in the next example:
+<pre>
+>>> poem = open("ad_lesbiam.txt").read()
+>>> print(poem[16:34])
+VIVAMUS mea Lesbia
+>>> type(poem)
+&lt;type 'str'&gt;
+>>> 
+</pre>
+
+This string contains the complete content of the file, which includes the carriage returns and line feeds.
+<br><br>
+
+<h3>Resetting the Files Current Position</h3>
+
+It's possible to set - or reset - a file's position to a certain position, also called the offset. 
+To do this, we use the method seek. It has only one parameter in Python3 (no "whence" is availabe as in Python2). 
+The parameter of seek determines the offset which we want to set the current position to. To work with seek, 
+we will often need the method tell, which "tells" us the current position. When we have just opened a file, 
+it will be zero. We will demonstrate the way of working with both seek and tell in the following example. 
+You have to create a file called "buck_mulligan.txt" with the content "Stately, plump Buck Mulligan came 
+from the stairhead, bearing a bowl of lather on which a mirror and a razor lay crossed.":
+
+<pre>
+>>> fh = open("buck_mulligan.txt")
+>>> fh.tell()
+0
+>>> fh.read(7)
+'Stately'
+>>> fh.tell()
+7
+>>> fh.read()
+', plump Buck Mulligan came from the stairhead, bearing a bowl of\nlather on which a mirror and a razor lay crossed.\n'
+>>> fh.tell()
+122
+>>> fh.seek(9)
+9
+>>> fh.read(5)
+'plump'
+</pre>
+
+It's also possible to set the file position relative to the current position by using tell correspondingly:
+
+<pre>
+>>> fh = open("buck_mulligan.txt")
+>>> fh.read(15)
+'Stately, plump '
+>>> # set the current position 6 characters to the left:
+... 
+>>> fh.seek(fh.tell() -6)
+9
+>>> fh.read(5)
+'plump'
+>>> # now, we will advance 29 characters to the  
+>>> # 'right' relative to the current position:
+...
+>>> fh.seek(fh.tell() + 29)
+43
+>>> fh.read(10)
+'stairhead,'
+>>> 
+</pre>
+
+<br><br>
+
+<h3>"How to get into a Pickle"</h3>
+<p>
+<img class="imgright" src="images/pickle.png" alt="Pickle" />
+We don't mean what the heading says. On the contrary, we want to prevent any nasty situation, like
+loosing the data, which your Python program has calculated. So, we will show you, how you can save 
+your data in an easy way, that you or better your programm can reread them at a later date again. 
+We are "pickling" the data, so that nothing gets lost.
+<br><br>
+Python offers for this purpose a module, which is called "pickle"
+With the algorithms of the pickle module we can serialize and de-serialize Python object structures. 
+"Pickling" denotes the process which converts a Python object hierarchy into a byte stream, 
+and "unpickling" on the other hand is the inverse operation, i.e. the byte stream is converted back 
+into an object hierarchy. What we call pickling (and unpickling) is also known as "serialization" 
+or "flattening" a data structure.
+<br><br>
+An object can be dumped with the dump method of the pickle module:
+<pre>
+pickle.dump(obj, file[,protocol, *, fix_imports=True])
+</pre>
+dump() writes a pickled representation of obj to the open file object file. The optional protocol 
+argument tells the pickler to use the given protocol:
+<ul>
+<li>Protocol version 0 is the original (before Python3) human-readable (ascii) protocol
+ and is backwards compatible with previous versions of Python
+</li>
+<li>Protocol version 1 is the old binary format which is also compatible with previous 
+versions of Python.</li>
+<li>Protocol version 2 was introduced in Python 2.3. It provides much more efficient 
+pickling of new-style classes.</li>
+<li>Protocol version 3 was introduced with Python 3.0. 
+It has explicit support for bytes and cannot be unpickled by Python 2.x pickle modules. 
+It's the recommended protocol of Python 3.x.</li>
+
+</ul>
+The default protocol of Python3 is 3.  
+<br><br>
+If <i>fix_imports</li> is True and protocol is less than 3, pickle will try to map the 
+new Python3 names to the old module names used in Python2, so that the pickle data stream 
+is readable with Python 2.
+ 
+<br><br>
+Objects which have been dumped to a file with <b>pickle.dump</b> can be reread into a program
+by using the method pickle.load(file). pickle.load recognizes automatically, which format
+had been used for writing the data.
+<br>
+A simple example:<br>
+<pre>
+>>> cities = ["Paris", "Dijon","Lyon","Strasbourg"]
+>>> fh = open("data.pkl","bw")
+>>> pickle.dump(cities,fh)
+>>> fh.close()
+</pre>
+
+The file data.pkl can be read in again by Python in the same or another session or 
+by a different program:
+
+<pre>
+>>> import pickle
+>>> f = open("data.pkl","rb")
+>>> villes = pickle.load(f)
+>>> print(villes)
+['Paris', 'Dijon', 'Lyon', 'Strasbourg']
+>>>
+</pre>
+Only the objects and not their names are saved. That's why we use the assignment to villes in the 
+previous example, i.e.data = pickle.load(f).
+<br><br>
+
+In our previous example, we had pickled only one object, i.e. a list of French cities. But what about 
+pickling multiple objects? The solution is easy: We pack the objects into another object, so we will 
+only have to pickle one object again. We will pack two lists "programming_languages" and "python_dialects"
+into a list pickle_objects in the following example:
+
+
+<pre>
+>>> import pickle
+>>> fh = open("data.pkl","bw")
+>>> programming_languages = ["Python", "Perl", "C++", "Java", "Lisp"]
+>>> python_dialects = ["Jython", "IronPython", "CPython"]
+>>> pickle_object = (programming_languages, python_dialects)
+>>> pickle.dump(pickle_object,fh)
+>>> fh.close()
+</pre>
+
+Obige gepickelte Datei kÃ¶nnen wir so einlesen, dass wir die beiden Listen wieder trennen kÃ¶nnen:
+
+<pre>
+>>> import pickle
+>>> f = open("data.pkl","rb")
+>>> (languages, dialects) = pickle.load(f)
+>>> print(languages, dialects)
+['Python', 'Perl', 'C++', 'Java', 'Lisp'] ['Jython', 'IronPython', 'CPython']
+>>> 
+</pre>
+
+<br><br>
+<h3>shelve Module</h3>
+
+One drawback of the pickle module is, that it is only capable of pickling one object at the time, which
+has to be unpickled in one go. Let's imagine this data object is a dictionary. It may be desirable, that
+we don't have to save and load every time the whole dictionary, but save and load just a single value 
+corresponding to just one key. The shelve module is the solution to this request. A "shelf" - as used in the
+shelve module - is a persistent, dictionary-like object.  The difference with dbm databases is that the 
+values (not the keys!) in a shelf can be essentially arbitrary Python objects -- anything that the "pickle"
+module can handle.  This includes most class instances, recursive data types, and objects containing 
+lots of shared sub-objects.  The keys have to be strings.
+<br><br>
+The shelve module can be easily used. Actually, it is as easy as using a dictionay in Python. Before we
+can use a shelf object, we have to import the module. After this, we have to open a shelve object with the shelve method
+open. The open method opens a special shelf file for reading and writing: 
+<br><br>
+<pre>
+>>> import shelve
+>>> s = shelve.open("MyShelve")
+</pre>
+<br><br>
+If the file "MyShelve" already exists, the open method will try to open it. If it isn't a shelf file, - i.e. a file
+which has been created with the shelve module, - we will get an error message. 
+If the file doesn't exist, it will be created.
+<br><br>
+We can use s like an ordinary dictionary, if we use strings as keys:
+<br><br>
+<pre>
+>>> s["street"] = "Fleet Str"
+>>> s["city"] = "London"
+>>> for key in s:
+...     print(key)
+... 
+city
+street
+</pre>
+<br><br>
+
+A shelf object has to be closed with the close method:
+<br><br>
+<pre>
+>>> s.close()
+</pre>
+<br><br>
+We can use the previously created shelf file in another program or in an interactive Python session:
+<br><br>
+<pre>
+$ python3
+Python 3.2.3 (default, Feb 28 2014, 00:22:33) 
+[GCC 4.7.2] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import shelve
+>>> s = shelve.open("MyShelve")
+>>> s["street"]
+'Fleet Str'
+>>> s["city"]
+'London'
+>>> 
+</pre>
+<br><br>
+It is also possible to cast a shelf object into an "ordinary" dictionary with the dict function:
+<br><br>
+<pre>
+>>> s
+&le;shelve.DbfilenameShelf object at 0xb7133dcc&gt;
+>>> dict(s)
+{'city': 'London', 'street': 'Fleet Str'}
+>>> 
+</pre>
+<br><br>
+The following example uses more complex values for our shelf object:
+<br><br>
+<pre>
+>>> import shelve
+>>> tele = shelve.open("MyPhoneBook")
+>>> tele["Mike"] = {"first":"Mike", "last":"Miller", "phone":"4689"}
+>>> tele["Steve"] = {"first":"Stephan", "last":"Burns", "phone":"8745"}
+>>> tele["Eve"] = {"first":"Eve", "last":"Naomi", "phone":"9069"}
+>>> tele["Eve"]["phone"]
+'9069'
+</pre>
+<br><br>
+The data is persistent!
+
+<br><br>
+To demonstrate this once more, we reopen our MyPhoneBook:
+<pre>
+$ python3
+Python 3.2.3 (default, Feb 28 2014, 00:22:33) 
+[GCC 4.7.2] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import shelve
+>>> tele = shelve.open("MyPhoneBook")
+>>> tele["Steve"]["phone"]
+'8745'
+>>> 
+
+</pre>
+<br><br>
+
+
+
+
+
+
+
+
+
+
+
+</p>
+
+
+
+
+
+<div id="contextlinks">Previous Chapter: <a href="python3_global_vs_local_variables.html">Global and Local Variables</a><br>
+<LINK rel="prev" href="python3_global_vs_local_variables.html">Next Chapter: <a href="python3_modules_and_modular_programming.html">Modular Programming and Modules</a><br>
+<LINK rel="next" href="python3_modules_and_modular_programming.html"></div><br><br><br>
+
+</div>
+<div id="footer">  &copy; 2011 - 2014 <a href="http://www.bklein.de/">Bernd Klein</a>,
+Bodenseo; 
+Design by Denise Mitchinson adapted for python-course.eu by Bernd Klein</div>
+</div>
+</body>
+
+<!-- Mirrored from www.python-course.eu/python3_file_management.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:08:45 GMT -->
+</html>

@@ -1,0 +1,531 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from www.python-course.eu/text_classification_introduction.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:06:48 GMT -->
+<head>
+
+<!-- Dieses Tag in den Head-Bereich oder direkt vor dem schlieÃŸenden Body-Tag einfÃ¼gen -->
+<script type="text/javascript" src="../apis.google.com/js/plusone.js"></script>
+
+
+
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "../connect.facebook.net/en_GB/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script><title>Python Advanced: Introduction into Text Classification</title>
+<meta http-equiv="content-type" content="text/html; charset="ISO-8859-1">
+<meta name="Description" content="Introduction into Text Classification with Naive Bayes using the programming language Python." />
+<meta name="Keywords" content="Python, course, Text, classification, naive bayes, bag of words, classifier, classify, text documents" />
+
+<link href="favicon.ico" rel="shortcut icon">
+
+<link href="moderna.css" rel="stylesheet" type="text/css" />
+<link href="moderna_print.css" media="print" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+<div id="container">
+
+<div id="banner">
+<!-- <a href="impressum.php">Impressum</a> | <a href="mailto:">contact</a> | --><h1>Python Course</h1>
+
+</div>
+
+	<!-- Begin Top Menu -->
+<ul id="navlist">
+<li><a href="index-2.html" >Home</a></li><li><a href="course.html" >Python 2 Tutorial</a></li><li><a href="python3_course.html" >Python 3 Tutorial</a></li><li class="active"><a id="current" href="advanced_topics.html" >Advanced Topics</a></li><li><a href="python_books.html" >Python Books</a></li><li><a href="python_tkinter.html" >Tkinter Tutorial</a></li><li><a href="contact.html" rel="nofollow">Contact</a></li>                          
+</ul>
+	<!-- End Top Menu -->
+<div id="sidebar-a">
+<img class="border" src="images/text_classification_formula_puzzle.png" alt="box" />    <h2>Advanced Topics</h2>
+
+<div class="menu">
+
+<ul>
+<li><a href="sys_module.html">Introduction into the sys module</a></li><li><a href="os_module_shell.html">Python and the Shell</a></li><li><a href="forking.html">Forks and Forking in Python</a></li><li><a href="threads.html">Introduction into Threads</a></li><li><a href="pipes.html">Pipe, Pipes and "99 Bottles of Beer"</a></li><li><a href="graphs_python.html">Graph Theory and Graphs in Python"</a></li><li><a href="pygraph.html">Graphs: PyGraph"</a></li><li><a href="networkx.html">Graphs: NetworkX"</a></li><li><a href="finite_state_machine.html">Finite State Machine in Python</a></li><li><a href="turing_machine.html">Turing Machine in Python</a></li><li><a href="numpy.html">NumPy Module</a></li><li><a href="matrix_arithmetic.html">Matrix Arithmetic</a></li><li><a href="linear_combinations.html">Linear Combinations</a></li><li><a href="text_classification_introduction.html">Introduction into Text Classification using Naive Bayes</a></li><li><a href="text_classification_python.html">Python Implementation of Text Classification</a></li><li><a href="towers_of_hanoi.html">Example for recursive Programming: Towers of Hanoi</a></li><li><a href="mastermind.html">Mastermind / Bulls and Cows</a></li><li><a href="dynamic_websites_wsgi.html">Creating dynamic websites with WSGI</a></li><li><a href="dynamic_websites.html">Dynamic websites with mod_python</a></li><li><a href="pylons.html">Dynamic websites with Pylons</a></li><li><a href="sql_python.html">Python, SQL, MySQL and SQLite</a></li><li><a href="python_scores.html">Python Scores</a></li></ul>
+
+</div>
+
+<p>
+<h3>Text Processing and Python</h3>
+
+What is text processing? Generally speaking it means taking some form of textual information and working on
+it, i.e. extracting, changing or adding information. Programmes and system administrators use text processing,
+when working with log files, configuration files, access files and so on.
+<br><br>
+Python is well suited for text processing.
+<br>
+<hr>
+This website is created by:<br><br>
+<a href="http://www.python-training-courses.com/"><img style="width: 150px;" alt="Python Training Courses"
+		     src="images/toronto_building.jpg"><br><br>Python Training Courses in Toronto, Canada</a>
+<br>
+On site trainings in Europe, Canada and the US.
+<br>
+<hr>
+<hr>
+We also like to thank Denise Mitchinson for providing the stylesheet of this website.<br> 
+</div><div id="sidebar-b"><img style="width: 150px;" alt="Python-Logo"
+		     src="images/python-logo.png"><!-- Dieses Tag dort einfügen, wo die +1-Schaltfläche dargestellt werden soll -->
+<g:plusone></g:plusone>
+<br><br>
+
+<div class="fb-like" data-href="www.python-course.eu" data-send="false" data-layout="button_count" 
+data-width="130" data-show-faces="true" data-action="recommend"></div>
+
+<br><br>
+This topic in German / Deutsche Übersetzung:
+    <a href="http://www.python-kurs.eu/text_klassifikation_einfuehrung.php">Einführung in die Text-Klassifikation</a><h3>Python Courses</h3>
+<p>
+This example is taken from the Python course 
+<a href="http://www.bodenseo.com/courses.php?topic=Python">
+<img class="imgright" src="images/radolfzell_segel_bodenseo_logo.jpg" alt="Bodenseo logo" />
+<br>"Python Text Processing Course"</a> by Bodenseo.
+<br><br>
+<h3>Text Classification</h3>
+Though the automated classification (categorization) of texts has been flourishing 
+in the last decade or so, is a history, which dates back to about 1960. The incredible 
+increase in online documents, which has been mostly due to the expanding internet, has 
+renewed the interst in automated document classification and data mining. While text 
+classification in the beginning was based mainly on heuristic methods, i.e. applying 
+a set of rules based on expert knowledge, nowadays the focus has turned to fully 
+automatic learning and even clustering methods. 
+<br>
+from:
+<a href="http://www.bklein.de/text_classification.php">Text Classification at Bernd Klein.</a>
+ </p>
+
+</p></div>
+<div id="content">
+
+<div id="contextlinks">Previous Chapter: <a href="linear_combinations.html">Linear Combinations</a><br>
+<LINK rel="prev" href="linear_combinations.html">Next Chapter: <a href="text_classification_python.html">Python Implementation of Text Classification</a><br>
+<LINK rel="next" href="text_classification_python.html"></div>
+<h2>Text Categorization and Classification</h2>
+<h3>Introduction</h3>
+<img class="imgright" src="images/prisma.png" alt="Prisma as a symbol of Text classification" />
+Document classification/categorization is a topic in information science, a science dealing with the collection, analysis, classification, categorization, manipulation, retrieval, storage and propagation of information.
+<br><br>
+This might sound very abstract, but there are lots of situations nowadays,
+where companies are in need of automatic classification or categorization of documents. Just think
+about a large company with thousands of incoming mail pieces per day, both electronic or paper based.
+Lot's of these mail pieces are without specific addressee names or departments. 
+Somebody has to read these texts and has to decide what kind of a letter it is ("change of address", 
+"complaints letter", "inquiry about products", and so on) and to whom the document should be proceeded.
+This "somebody" can be an automated text classification system.  
+<br><br>
+<img class="imgright" src="images/supervised_learning.png" alt="Supervised Learning and Prediction" />
+<br>
+Automated text classification, also called categorization of texts, has a history, which dates back 
+to the beginning of the 1960s. But the incredible increase in available online documents in the last two 
+decades, due to the expanding internet, has intensified and renewed the interest in automated document 
+classification and data mining. In the beginning text classification focussed on heuristic methods, i.e. 
+solving the task by applying a set of rules based on expert knowledge. This approach proved to be highly 
+inefficient, so nowadays the focus has turned to fully automatic learning and clustering methods.
+<br>
+<br><br>
+The task of text classification consists in assigning a document to one or more categories, based on the semantic content of the document. 
+Document (or text) classification runs in two modes: 
+<ul>
+<li>The training phase and the 
+<li>prediction (or classification) phase.
+</ul>
+<br>
+The training phase can be divided into three kinds: 
+<ul>
+<li>supervised document classification is performed by an external mechanism, usually human feedback, which
+provides the necessary information for the correct classification of documents,</li>
+<li>semi-supervised document classification, a mixture between supervised and unsupervised classification:
+some documents or parts of documents are labeled by external assistance,</li>
+ <li>unsupervised document classification is entirely executed without reference to external information.
+ </li>
+</ul>
+<br>
+We will implement a text classifier in Python using Naive Bayes. Naive Bayes is the most commonly used text
+classifier and it is the focus of research in text classification. A Naive Bayes classifier is based on the 
+application of Bayes' theorem with strong independence assumptions. "Strong independence" means: 
+the presence or absence of a particular feature of a class is unrelated to the presence or absence of any 
+other feature. Naive Bayes is well suited for multiclass text classification. 
+
+<h3>Formal Definition</h3>
+
+<P>
+Let C = { c<SUB>1</SUB>,
+c<SUB>2</SUB>, ... c<SUB>m</SUB>} be a set of categories (classes)
+and D = { d<SUB>1</SUB>, d<SUB>2</SUB>,  ... d<SUB>n</SUB>} a set of
+documents. 
+
+</P>
+<P STYLE="margin-bottom: 0cm">The
+task of the text classification consists in assigning to each
+pair ( c<SUB>i</SUB>, d<SUB>j </SUB>) of  C x D (with 1 &le;
+i &le; m  and 1 &le;
+j &le; n) a value of 0 or 1, i.e. the
+value 0, if the document d<SUB>j</SUB> doesn't belong to c<SUB>i</SUB></P>
+<br>
+This
+mapping is sometimes refered to as the decision matrix:
+<br><br>
+<TABLE WIDTH=50% BORDER=2 BORDERCOLOR="#6B9662" CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=43*>
+	<COL WIDTH=43*>
+	<COL WIDTH=43*>
+	<COL WIDTH=43*>
+	<COL WIDTH=43*>
+
+	<COL WIDTH=43*>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=17%>
+				<P><BR>
+				</P>
+			</TH>
+			<TH  ALIGN=CENTER WIDTH=17%>
+				<P>d<SUB>1</SUB></P>
+
+			</TH>
+			<TH WIDTH=17%>
+				<P>...</P>
+			</TH>
+			<TH  ALIGN=CENTER WIDTH=17%>
+				<P>d<SUB>j</SUB></P>
+			</TH>
+
+			<TH WIDTH=17%>
+				<P>...</P>
+			</TH>
+			<TH  ALIGN=CENTER WIDTH=17%>
+				<P ALIGN=CENTER>d<SUB>n</SUB></P>
+			</TH>
+		</TR>
+
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD  ALIGN=CENTER WIDTH=17%>
+				<P><B>c<SUB>1</SUB></B></P>
+			</TD>
+			<TD WIDTH=17%>
+				<P ALIGN=CENTER>a<SUB>11</SUB></P>
+
+			</TD>
+			<TD  ALIGN=CENTER WIDTH=17%>
+				<P ALIGN=CENTER>...</P>
+			</TD>
+			<TD WIDTH=17%>
+				<P ALIGN=CENTER>a<SUB>1j</SUB></P>
+			</TD>
+
+			<TD  ALIGN=CENTER WIDTH=17%>
+				<P ALIGN=CENTER>...</P>
+			</TD>
+			<TD WIDTH=17%>
+				<P ALIGN=CENTER>a<SUB>1n</SUB></P>
+			</TD>
+		</TR>
+
+		<TR VALIGN=TOP>
+			<TD  ALIGN=CENTER WIDTH=17%>
+				<P><B>...</B></P>
+			</TD>
+			<TD WIDTH=17%>
+				<P ALIGN=CENTER>...</P>
+			</TD>
+			<TD WIDTH=17%>
+
+				<P ALIGN=CENTER>...</P>
+			</TD>
+			<TD WIDTH=17%>
+				<P ALIGN=CENTER>...</P>
+			</TD>
+			<TD WIDTH=17%>
+				<P ALIGN=CENTER>...</P>
+
+			</TD>
+			<TD WIDTH=17%>
+				<P ALIGN=CENTER>...</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD  ALIGN=CENTER WIDTH=17%>
+				<P><B>c<SUB>i</SUB></B></P>
+
+			</TD>
+			<TD WIDTH=17%>
+				<P ALIGN=CENTER>a<SUB>i1</SUB></P>
+			</TD>
+			<TD WIDTH=17%>
+				<P ALIGN=CENTER>...</P>
+			</TD>
+
+			<TD WIDTH=17%>
+				<P ALIGN=CENTER>a<SUB>ij</SUB></P>
+			</TD>
+			<TD WIDTH=17%>
+				<P ALIGN=CENTER>...</P>
+			</TD>
+			<TD WIDTH=17%>
+
+				<P ALIGN=CENTER>a<SUB>in</SUB></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD  ALIGN=CENTER WIDTH=17%>
+				<P><B>...</B></P>
+			</TD>
+
+			<TD WIDTH=17%>
+				<P ALIGN=CENTER>...</P>
+			</TD>
+			<TD WIDTH=17%>
+				<P ALIGN=CENTER>...</P>
+			</TD>
+			<TD WIDTH=17%>
+				<P ALIGN=CENTER>...</P>
+
+			</TD>
+			<TD WIDTH=17%>
+				<P ALIGN=CENTER>...</P>
+			</TD>
+			<TD WIDTH=17%>
+				<P ALIGN=CENTER>...</P>
+			</TD>
+		</TR>
+
+		<TR VALIGN=TOP>
+			<TD  ALIGN=CENTER WIDTH=17%>
+				<P><B>c<SUB>m</SUB></B></P>
+			</TD>
+			<TD WIDTH=17%>
+				<P ALIGN=CENTER>a<SUB>m1</SUB></P>
+			</TD>
+
+			<TD WIDTH=17%>
+				<P ALIGN=CENTER>...</P>
+			</TD>
+			<TD WIDTH=17%>
+				<P ALIGN=CENTER>a<SUB>mj</SUB></P>
+			</TD>
+			<TD WIDTH=17%>
+
+				<P ALIGN=CENTER>...</P>
+			</TD>
+			<TD WIDTH=17%>
+				<P ALIGN=CENTER>a<SUB>mn</SUB></P>
+			</TD>
+		</TR>
+	</TBODY>
+
+</TABLE>
+<br>
+The main approaches to solve this task are:
+
+<ul>
+<li> Naive Bayes
+<li> Support Vector Machine
+<li> Nearest Neighbour
+
+</ul>
+
+
+<h3>Conditional Probability</h3>
+The Conditional probability P(A|B) is the probability of some event A, given the occurrence of some other event B. 
+When in a random experiment the event B is known to have occurred, the possible outcomes of the experiment are 
+reduced to B, and hence the probability of the occurrence of A is changed from the unconditional probability 
+into the conditional probability given B.
+The Joint probability is the probability of two events in conjunction. That is, it is the probability of both 
+events together. The joint probability of A and B is written as
+<br><br>
+P(A &cap; B), P(AB) or P(A,B)
+<br> <br>
+The conditional probability is defined by
+<br><br>
+P(A|B) = P( A &cap; B) / P(B)
+<h3>Example Conditional Probability</h3>
+A medical research lab proposes a screening to test a large group of people for a disease.  
+An argument against such screenings is the problem of false positive screening results.
+<br><br>
+Suppose 0,1% of the group suffer from the disease, and the rest is well:<br>
+P("sick") = 0,1 % = 0.01 and P("well") = 99,9 % = 0.999.
+<br><br>
+The following is true for a screening test: 
+<br>If you have the disease, the test will be 
+positive 99% of the time, and if you don't have it, the test will be negative 99% of the time:
+P("test positive" | "well") = 1 % and P("test negative" | "well") = 99 %.
+<br><br>
+Finally, suppose that when the test is applied to a person having the disease, there is a 
+1% chance of a false negative result (and 99% chance of getting a true positive result), i.e.
+P("test negative" | "sick") = 1 % and P("test positive" | "sick") = 99 %
+<br><br>
+<table style="text-align: left; width: 50%;" 102,="" 0)="" border="6"
+bordercolor="#476042" cellpadding="4" cellspacing="2">
+<tbody>
+<tr>
+<td
+style="vertical-align: top; background-color: rgb(71, 96, 66); color: rgb(255, 102, 0);"><br>
+</td>
+<td
+style="vertical-align: top; background-color: rgb(71, 96, 66); color: rgb(255, 102, 0); font-weight: bold; text-align: right;">Sick<br>
+</td>
+<td
+style="vertical-align: top; background-color: rgb(71, 96, 66); text-align: right;">
+<span style="color: rgb(255, 102, 0); font-weight: bold;">Healthy</span><br>
+</td>
+<td
+style="vertical-align: top; background-color: rgb(71, 96, 66); text-align: right;">
+<span style="color: rgb(255, 102, 0); font-weight: bold;">Totals</span><br>
+</td>
+</tr>
+<tr>
+<td
+style="vertical-align: top; background-color: rgb(107, 150, 98); color: rgb(0, 0, 0);">Test
+result positive<br>
+</td>
+<td
+style="vertical-align: top; background-color: rgb(107, 150, 98); text-align: right;">99<br>
+</td>
+<td
+style="vertical-align: top; background-color: rgb(107, 150, 98); text-align: right;"><span
+style="color: rgb(255, 0, 0);">999</span><br>
+</td>
+<td
+style="vertical-align: top; background-color: rgb(107, 150, 98); text-align: right;">1098<br>
+</td>
+</tr>
+<tr>
+<td
+style="vertical-align: top; background-color: rgb(107, 150, 98); color: rgb(0, 0, 0);">Test
+result negative<br>
+</td>
+<td
+style="vertical-align: top; background-color: rgb(107, 150, 98); text-align: right;"><span
+style="color: rgb(255, 0, 0);">1</span><br>
+</td>
+<td
+style="vertical-align: top; background-color: rgb(107, 150, 98); text-align: right;">98901<br>
+</td>
+<td
+style="vertical-align: top; background-color: rgb(107, 150, 98); text-align: right;">98902<br>
+</td>
+</tr>
+<tr>
+<td
+style="vertical-align: top; background-color: rgb(107, 150, 98); color: rgb(0, 0, 0);">Totals<br>
+</td>
+<td
+style="vertical-align: top; background-color: rgb(107, 150, 98); text-align: right;">100<br>
+</td>
+<td
+style="vertical-align: top; background-color: rgb(107, 150, 98); text-align: right;">99900<br>
+</td>
+<td
+style="vertical-align: top; background-color: rgb(107, 150, 98); text-align: right;">100000<br>
+</td>
+</tr>
+</tbody>
+</table>
+<br><br>
+There are 999 False Positives and 1 False Negative.<br>
+<b>Problem:</b><br>
+In many cases even medical professionals assume that "if you have this sickness, the test will be positive 
+in 99 % of the time and if you don't have it, the test will be negative 99 % of the time.
+Out of the 1098 cases that report positive results only 99 (9 %) cases are correct and 999 cases are false positives (91 %), i.e. if a person gets a positive test result, the probabiltiy that he or she actually has the disease is just about 9 %.
+P("sick" | "test positive")  = 99 / 1098 = 9.02 %
+<br><br>
+<h3>Naive Bayes Classifier</h3>
+A Bayes classifier is a simple probabilistic classifier based on applying Bayes' theorem with strong (naïve) 
+independence assumptions, i.e. an "independent feature model".
+<br>
+In other words: A naive Bayes classifier assumes that the presence (or absence) of a particular feature of a 
+class is unrelated to the presence (or absence) of any other feature.
+<br><br>
+<h4>The Bayes Theorem:</h4>
+
+P(A|B) = P(B|A)P(A) / P(B)
+<br><br>
+P(A|B) is the conditional probability  of A, given B (posterior probability), P(B) is the prior probability of B and P(A) the prior probability of A. P(B|A) is the conditional probabilty of B given A, called the likelyhood.
+<br><br>
+An advantage of the naive Bayes classifier is that it requires only a small amount of training data to estimate the parameters necessary for classification. 
+<br>
+Because independent variables are assumed, only the variances of the variables for each class need to be determined and not the entire covariance matrix.
+<br><br>
+Definition of independent events:<br>
+Two events E and F are independent, if both E and F have positive probability and if
+P(E|F) = P(E) and P(F|E) = P(F)
+<br><br>
+<h4>Formal Derivation of the Naive Bayes Classifier:</h4>
+
+<img class="imgright" src="images/text_classification_sphere.png" alt="Text classification formula as a sphere" />
+
+Let C = { c<SUB>1</SUB>,
+c<SUB>2</SUB>, ... c<SUB>m</SUB>} be a set of classes or categories 
+and D = { d<SUB>1</SUB>, d<SUB>2</SUB>,  ... d<SUB>n</SUB>} be a set of
+documents. <br>
+Each document is labeled with a class.
+<br>
+The set D of documents is used to train the classifier.
+<br>
+Classification consists in selecting the most probable class for an unknown document.  
+<br><br>
+The number of times a word w<sub>t</sub> occurs within a document d<sub>i</sub> will be denoted as N<sub>it</sub>.
+N<sub>t</sub><sup>C</sup>     denotes the number of times a word w<sub>t</sub> ocurs in all documents of a given 
+class C.
+<br>
+P(d<sub>i</sub>|c<sub>j</sub>) is 1, if d<sub>i</sub> is labelled as c<sub>j</sub>, 0 otherwise 
+<br><br>
+The probability for a word wt given a class cj:
+<br><br>
+<img class="img" height=60 src="images/naive_bayes_probability1.png" alt="Probability of a word given a class" />
+<br>
+The probability for a class c<sub>j</sub> is the quotient of the number of Documents of c<sub>j</sub> and the 
+number of documents of all classes, i.e. the learn set:
+<br><br>
+<img class="img" height=60 src="images/naive_bayes_probability2.png" alt="Probability of a document class" />
+<br><br>
+Finally, we come to the formula we need to classify an unknown document, i.e. the probability for a class 
+c<sub>j</sub> given a document d<sub>i</sub>:
+<br><br>
+<img class="img" height=80 src="images/naive_bayes_probability3.png" alt="The classification formula: the probability of a class given a document" />
+<br>
+Unfortunately, the formula of P(c|d<sub>i</sub>) we have just given is numerically not stable, because the 
+denominator can be zero due to rounding errors. We change this by calculating the reciprocal and reformulate the
+expression as a sum of stable quotients:
+<br><br>
+<img class="img" height=170 src="images/naive_bayes_formula.png" alt="The classification formula: Numerically stable" />
+<br><br>
+We can rewrite the previous formula into the following form, our final Naive Bayes classification formula, the
+one we will use in our Python implementation in the following chapter:
+<br><br>
+<img class="img" height=110 src="images/naive_bayes_formula_final.png" alt="The classification formula: Numerically stable" />
+
+
+<br><br>
+<h3>Further Reading</h3>
+There are lots of articles on text classification. We just name a few, which we have used for our work:
+<ul>
+<li>Fabrizio Sebastiani. A tutorial on automated text categorisation. In Analia Amandi and Alejandro Zunino (eds.), Proceedings of the 1st Argentinian Symposium on Artificial Intelligence (ASAI'99), Buenos Aires, AR, 1999, pp. 7-35. </li>
+<li>Lewis, David D., Naive (Bayes) at Forty: The independence assumption in informal retrieval, Lecture Notes in Computer Science (1998), 1398, Issue: 1398, Publisher: Springer, Pages: 4-15</li>
+<li>K. Nigam, A. McCallum, S. Thrun and T. Mitchell, Text classification from labeled and unlabeled documents 
+using EM, Machine Learning 39 (2000) (2/3), pp. 103-134.</li>
+</ul>
+<br><br>
+</div>
+<div id="contextlinks">Previous Chapter: <a href="linear_combinations.html">Linear Combinations</a><br>
+<LINK rel="prev" href="linear_combinations.html">Next Chapter: <a href="text_classification_python.html">Python Implementation of Text Classification</a><br>
+<LINK rel="next" href="text_classification_python.html"></div><br><br><br>
+
+</div>
+<div id="footer">  &copy; 2011 - 2014 <a href="http://www.bklein.de/">Bernd Klein</a>,
+Bodenseo; 
+Design by Denise Mitchinson adapted for python-course.eu by Bernd Klein</div>
+</div>
+</body>
+
+<!-- Mirrored from www.python-course.eu/text_classification_introduction.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:07:00 GMT -->
+</html>

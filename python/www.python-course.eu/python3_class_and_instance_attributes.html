@@ -1,0 +1,625 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from www.python-course.eu/python3_class_and_instance_attributes.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:09:43 GMT -->
+<head>
+
+<!-- Dieses Tag in den Head-Bereich oder direkt vor dem schlieÃŸenden Body-Tag einfÃ¼gen -->
+<script type="text/javascript" src="../apis.google.com/js/plusone.js"></script>
+
+
+
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "../connect.facebook.net/en_GB/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script><title>Python3 Tutorial: Class vs. Instance Attributes</title>
+<meta http-equiv="content-type" content="text/html; charset="ISO-8859-1">
+<meta name="Description" content="Object-oriented programming in Python: instance attributes vs. class attributes
+and their proper usage." />
+<meta name="Keywords" content="Python, Python3, OOP, tutorial, class attributes, instance attributes" />
+
+<link href="favicon.ico" rel="shortcut icon">
+
+<link href="moderna.css" rel="stylesheet" type="text/css" />
+<link href="moderna_print.css" media="print" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+<div id="container">
+
+<div id="banner">
+<!-- <a href="impressum.php">Impressum</a> | <a href="mailto:">contact</a> | --><h1>Python Course</h1>
+
+</div>
+
+	<!-- Begin Top Menu -->
+<ul id="navlist">
+<li><a href="index-2.html" >Home</a></li><li><a href="course.html" >Python 2 Tutorial</a></li><li class="active"><a id="current" href="python3_course.html" >Python 3 Tutorial</a></li><li><a href="advanced_topics.html" >Advanced Topics</a></li><li><a href="python_books.html" >Python Books</a></li><li><a href="python_tkinter.html" >Tkinter Tutorial</a></li><li><a href="contact.html" rel="nofollow">Contact</a></li>                          
+</ul>
+	<!-- End Top Menu -->
+<div id="sidebar-a">
+<img class="border" src="images/logo100.png" alt="box" />    <h2>Python 3 Tutorial</h2>
+
+<div class="menu">
+
+<ul>
+<li><a href="python3_history_and_philosophy.html">The Origins of Python</a></li><li><a href="python3_interactive.html">Starting with Python: The Interactive Shell</a></li><li><a href="python3_execute_script.html">Executing a Script</a></li><li><a href="python3_blocks.html">Indentation</a></li><li><a href="python3_variables.html">Data Types and Variables</a></li><li><a href="python3_operators.html">Operators</a></li><li><a href="python3_sequential_data_types.html">Sequential Data Types: Lists and Strings</a></li><li><a href="python3_deep_copy.html">Shallow and Deep Copy</a></li><li><a href="python3_dictionaries.html">Dictionaries</a></li><li><a href="python3_sets_frozensets.html">Sets and Frozen Sets</a></li><li><a href="python3_input.html">input via the keyboard</a></li><li><a href="python3_conditional_statements.html">Conditional Statements</a></li><li><a href="python3_loops.html">Loops, while Loop</a></li><li><a href="python3_for_loop.html">For Loops</a></li><li><a href="python3_print.html">Output with Print</a></li><li><a href="python3_formatted_output.html">Formatted output with string modulo and the format method</a></li><li><a href="python3_functions.html">Functions</a></li><li><a href="python3_recursive_functions.html">Recursion and Recursive Functions</a></li><li><a href="python3_tests.html">Tests, DocTests, UnitTests</a></li><li><a href="python3_memoization.html">Memoization and Decorators</a></li><li><a href="python3_passing_arguments.html">Parameter Passing in Functions</a></li><li><a href="python3_namespaces.html">Namespaces</a></li><li><a href="python3_global_vs_local_variables.html">Global and Local Variables</a></li><li><a href="python3_file_management.html">Read and Write Files</a></li><li><a href="python3_modules_and_modular_programming.html">Modular Programming and Modules</a></li><li><a href="python3_re.html">Regular Expressions</a></li><li><a href="python3_re_advanced.html">Regular Expressions, Advanced</a></li><li><a href="python3_lambda.html">Lambda Operator, Filter, Reduce and Map</a></li><li><a href="python3_list_comprehension.html">List Comprehension</a></li><li><a href="python3_generators.html">Iterators and Generators</a></li><li><a href="python3_exception_handling.html">Exception Handling</a></li><li><a href="python3_object_oriented_programming.html">Object Oriented Programming</a></li><li><a href="python3_class_and_instance_attributes.html">Class and Instance Attributes</a></li><li><a href="python3_properties.html">Properties vs. getters and setters</a></li><li><a href="python3_inheritance.html">Inheritance</a></li><li><a href="python3_multiple_inheritance.html">Multiple Inheritance</a></li><li><a href="python3_magic_methods.html">Magic Methods and Operator Overloading</a></li><li><a href="python3_inheritance_example.html">OOP, Inheritance Example</a></li></ul>
+
+</div>
+
+<p>
+<hr>
+<h3>Object-oriented Programming</h3>
+"Certainly not every good program is object-oriented, and not every object-oriented program is good."
+<br>
+(Bjarne Stroustrup, Danish computer scientist, best known for the creation and the development 
+of the widely used C++ programming language.)
+<br><br>
+"Object-oriented programming is an exceptionally bad idea which could only have originated in California."
+<br>
+(Edsger Dijkstra, (Dutch computer Scientist, 1930-2002)
+<br><br>
+Dijkstra also said: 
+<br>
+<i>"... what society over&shy;whel&shy;mingly asks for is snake oil. Of course, 
+the snake oil has the most impressive names - otherwise you would be selling nothing - like 
+"Structured Analysis and Design", "Software Engineering", "Maturity Models", "Management 
+Information Systems", "Integrated Project Support Environments" "Object-Orientation" and "Business
+ Process Re-engineering"
+</i>
+<br><br>
+
+<hr>
+<br>
+This website is supported by:<br>
+<a href="http://www.bodenseo.com/courses.php"><img style="width: 150px;" alt="Bodenseo,
+Linux, courses and seminars"
+		     src="images/bodenseo_python_training.gif"><br>Linux and Python Courses and Seminars</a>
+<br>
+<hr>
+</div><div id="sidebar-b"><img style="width: 150px;" alt="Python-Logo"
+		     src="images/python-logo.png"><!-- Dieses Tag dort einfügen, wo die +1-Schaltfläche dargestellt werden soll -->
+<g:plusone></g:plusone>
+<br><br>
+
+<div class="fb-like" data-href="www.python-course.eu" data-send="false" data-layout="button_count" 
+data-width="130" data-show-faces="true" data-action="recommend"></div>
+
+<br><br>
+This topic in German / Deutsche Übersetzung:
+    <a href="http://www.python-kurs.eu/python3_klassen_instanzattribute.php">Klassen- und Instanzattribute</a><p>
+<h3>Classroom Training Courses</h3>
+The goal of this website is to provide educational material, 
+allowing you to learn Python on your own.
+Nevertheless, it is faster and more efficient to attend a "real" 
+Python course in a classroom, with
+an experienced trainer. So why not attend one of the live 
+<a href="python_classes.html">Python courses</a> in Paris, London, Berlin, Munich
+or Lake Constance by Bernd Klein, the author of this tutorial?
+<br><br>
+You can also check the   
+<a href="http://www.bodenseo.com/courses.php?topic=Python">Python Training courses
+<img style="width: 150px;" alt="Bodenseo Kurse in Python"
+		     src="images/bodenseo_stairs_to_python.png"></a>
+		     delivered by Bodenseo and Bernd Klein.
+<br><br>
+You can book on-site classes at your company or organization, e.g. in England, Switzerland, Austria, Germany,
+France, Belgium, the Netherlands, Luxembourg, Poland, UK, Italy and other locations in Europe.
+<br><br>
+
+ </p>
+
+
+
+
+    
+</p></div>
+<div id="content">
+
+<div id="contextlinks">Previous Chapter: <a href="python3_object_oriented_programming.html">Object Oriented Programming</a><br>
+<LINK rel="prev" href="python3_object_oriented_programming.html">Next Chapter: <a href="python3_properties.html">Properties vs. getters and setters</a><br>
+<LINK rel="next" href="python3_properties.html"></div>
+<h2>Class and Instance Attributes</h2>
+<br><br>
+<h3>Class Attributes</h3>
+
+<img class="imgright" width=300 src="images/robots_asinow.png" alt="Obey Asimoivs Gesetzen / Gehorche Asimovs Gesetzen" />
+
+
+Instance attributes are owned by the specific instances of a class. This means for two different
+instances the instance attributes are usually different. You should by now be familiar with this 
+concept which we introduced the previous chapter.
+<br><br>
+We can also define attributes at the class level. Class attributes are attributes which 
+are owned by the class itself. They will be shared by all the instances of the class. 
+Therefore they have the same value for every instance. We define class attributes 
+outside of all the methods, usually they are placed at the top, right below the class
+header. 
+<br><br>
+
+We can see in the following interactive Python session, that the class attribute "a" is the
+same for all instances, in our example "x" and "y". Besides this, we see, that we can access
+a class attribute via an instance or via the class name:
+<br><br>
+<pre>
+>>> class A:
+...     a = "I am a class attribute!"
+... 
+>>> x = A()
+>>> y = A()
+>>> x.a
+'I am a class attribute!'
+>>> y.a
+'I am a class attribute!'
+>>> A.a
+'I am a class attribute!'
+>>> 
+</pre>
+
+But be careful, if you want to change a class attribute, you have to do it with the 
+notation ClassName.AttributeName. Otherwise, you will create a new instance variable. 
+We demonstrate this in the following example:
+
+<pre>
+>>> class A:
+...     a = "I am a class attribute!"
+... 
+>>> x = A()
+>>> y = A()
+>>> x.a = "This creates a new instance attribute for x!"
+>>> y.a
+'I am a class attribute!'
+>>> A.a
+'I am a class attribute!'
+>>> A.a = "This is changing the class attribute 'a'!"
+>>> A.a
+"This is changing the class attribute 'a'!"
+>>> y.a
+"This is changing the class attribute 'a'!"
+>>> # but x.a is still the previously created instance variable:
+... 
+>>> x.a
+'This creates a new instance attribute for x!'
+>>> 
+</pre>
+
+ 
+ 
+Python's class attributes and object attributes are stored in separate dictionaries, as
+we can see here:
+
+<pre>
+>>> x.__dict__
+{'a': 'This creates a new instance attribute for x!'}
+>>> y.__dict__
+{}
+>>> A.__dict__
+dict_proxy({'a': "This is changing the class attribute 'a'!", '__dict__': &lt;attribute '__dict__' of 'A' objects&gt;, '__module__': '__main__', '__weakref__': &lt;attribute '__weakref__' of 'A' objects&gt;, '__doc__': None})
+>>> x.__class__.__dict__
+dict_proxy({'a': "This is changing the class attribute 'a'!", '__dict__': &lt;attribute '__dict__' of 'A' objects&gt;, '__module__': '__main__', '__weakref__': &lt;attribute '__weakref__' of 'A' objects&gt;, '__doc__': None})
+>>> 
+</pre>
+
+
+ 
+<br><br>
+
+<h3>Example with Class Attributes</h3>
+
+Isaac Asimov devised and introduced the so-called "Three Laws of Robotics" in 1942. The appeared
+in his story "Runaround". His three laws have been picked up by many science fiction writers. 
+As we have started manufacturing robots in Python, it's high time to make sure that 
+they obey Asimovs three laws. As they are the same for every instance, i.e. robot, we will 
+create a class attribute Three_Laws. This attribute is a tuple with the three laws.
+
+<br><br>
+<pre>
+class Robot:
+
+    Three_Laws = (
+"""A robot may not injure a human being or, through inaction, allow a human being to come to harm.""",
+"""A robot must obey the orders given to it by human beings, except where such orders would conflict with the First Law.,""",
+"""A robot must protect its own existence as long as such protection does not conflict with the First or Second Law."""
+)
+
+    def __init__(self, name, build_year):
+        self.name = name
+        self.build_year = build_year
+
+    # other methods as usual
+</pre>
+<br>
+As we mentioned before, we can access a class attribute via instance or via the class name. You can 
+see in the following, that we need no instance:
+
+<br><br>
+<pre>
+>>> from robot_asimov import Robot
+>>> for number, text in enumerate(Robot.Three_Laws):
+...     print(str(number+1) + ":\n" + text) 
+... 
+1:
+A robot may not injure a human being or, through inaction, allow a human being to come to harm.
+2:
+A robot must obey the orders given to it by human beings, except where such orders would conflict with the First Law.,
+3:
+A robot must protect its own existence as long as such protection does not conflict with the First or Second Law.
+>>> 
+</pre>
+<br>
+
+
+We demonstrate in the following example, how you can count instance with class attributes. 
+All we have to do is 
+
+<ul>
+<li>to create a class attribute, which we call "counter" in our example </li>
+<li>to increment this attribute by 1 every time a new instance will be create </li>
+<li>to decrement the attribute by 1 every time an instance will be destroyed</li>
+</ul>
+
+ 
+
+
+<br><br>
+<pre>
+class C: 
+
+    counter = 0
+    
+    def __init__(self): 
+        C.counter += 1
+
+    def __del__(self):
+        C.counter -= 1
+
+if __name__ == "__main__":
+    x = C()
+    print("Number of instances: : " + str(C.counter))
+    y = C()
+    print("Number of instances: : " + str(C.counter))
+    del x
+    print("Number of instances: : " + str(C.counter))
+    del y
+    print("Number of instances: : " + str(C.counter))
+</pre>
+
+<br>
+Principially, we could have written C.counter instead of type(self).counter, 
+because type(self) will be evaluated to  "C" anyway. But we will see later,
+that type(self) makes sense, if we use such a class as a superclass. 
+<br><br>
+Starting the previous program, we will get the following results:
+<br><br>
+<pre>
+$ python3 counting_instances.py 
+Number of instances: : 1
+Number of instances: : 2
+Number of instances: : 1
+Number of instances: : 0
+</pre>
+<br>
+But as nice as it looks, there is a rub in it. Let's assume, that we do not
+destroy the instances explicitly with __del__ and substitute type(self).counter with C.counter, 
+as is is done in the following program:
+<br><br>
+<pre>
+class C: 
+
+    counter = 0
+    
+    def __init__(self):
+        #print(type(self).__dict__)
+        C.counter += 1
+
+    def __del__(self):
+        #print(type(self).__dict__)
+        #print(C.__dict__)
+        #print(C)
+        C.counter -= 1
+
+if __name__ == "__main__":
+    x = C()
+    print("Number of instances: : " + str(C.counter))
+    y = C()
+    print("Number of instances: : " + str(C.counter))
+</pre>
+
+<br>
+
+We get the following exceptions:
+<br><br>
+<pre>
+$ python3 counting_instances2.py 
+Number of instances: : 1
+Number of instances: : 2
+Exception AttributeError: "'NoneType' object has no attribute 'counter'" in &lt;bound method C.__del__ of &lt;__main__.C object at 0xb71a940c&gt;&gt; ignored
+Exception AttributeError: "'NoneType' object has no attribute 'counter'" in &lt;bound method C.__del__ of &lt;__main__.C object at 0xb71a93ac&gt;&gt; ignored
+<br><br>
+</pre>
+<br>
+
+The reason why it works with type(self).counter and not with C.counter is that the name C doesn't 
+reference anymore the class definition but None. type(self) on the other hand still references
+the class definition, especially type(self).__dict__ corresponds to the former C__dict__ object.
+
+It's enough, if you change C.counter in __del__ into type(self).counter. We also print the value of
+type(self).__dict__, so that you can see what it contains:
+
+<br><br>
+<pre>
+class C: 
+
+    counter = 0
+    
+    def __init__(self):
+        C.counter += 1
+
+    def __del__(self):
+        print(type(self).__dict__)
+        type(self).counter -= 1
+
+if __name__ == "__main__":
+    x = C()
+    print("Number of instances: : " + str(C.counter))
+    y = C()
+    print("Number of instances: : " + str(C.counter))
+</pre>
+<br>
+
+This is the result of the program above:
+<br><br>
+
+<pre>
+$ python3 counting_instances2.py 
+Number of instances: : 1
+Number of instances: : 2
+{'__module__': '__main__', '__del__': &lt;function __del__ at 0xb7210a6c&gt;, 'counter': 2, '__dict__': &lt;attribute '__dict__' of 'C' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'C' objects&gt;, '__doc__': None, '__init__': <function __init__ at 0xb7210a2c>}
+{'__module__': '__main__', '__del__': &lt;function __del__ at 0xb7210a6c&gt;, 'counter': 1, '__dict__': &lt;attribute '__dict__' of 'C' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'C' objects&gt;, '__doc__': None, '__init__': <function __init__ at 0xb7210a2c>}
+</pre>
+
+<br><br>
+
+
+<h3>Static Methods</h3>
+
+We used class attributes as public attributes in the previous section. 
+Of course, we can make public attributes private as well. We can do this by adding the
+double underscore again. If we do so, we need a possibility to access and change these 
+private class attributes. We could use instance methods for this purpose:
+
+<br><br>
+<pre>
+class Robot:
+    __counter = 0
+    
+    def __init__(self):
+        type(self).__counter += 1
+        
+    def RobotInstances(self):
+        return Robot.__counter
+        
+
+if __name__ == "__main__":
+    x = Robot()
+    print(x.RobotInstances())
+    y = Robot()
+    print(x.RobotInstances())
+</pre>
+<br>
+
+This is not a good idea for two reasons: First of all, because the number of robots has 
+nothing to do with a single robot instance and secondly because we can't inquire the number
+of robots before we haven't created an instance.
+<br>
+If we try to invoke the method with the class name Robot.RobotInstances(), we get an error 
+message, because it needs an instance as an argument:
+
+<br>
+
+
+
+<pre>
+>>> Robot.RobotInstances()
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+TypeError: RobotInstances() takes exactly 1 argument (0 given)
+</pre>
+<br>
+
+
+The next idea, which still doesn't solve our problem, consists in 
+omitting the parameter "self":
+
+<br><br>
+<pre>
+class Robot:
+    __counter = 0
+    
+    def __init__(self):
+        type(self).__counter += 1
+        
+    def RobotInstances():
+        return Robot.__counter
+</pre>
+<br>
+
+Now it's possible to access the method via the class name, but we can't call it via an instance:
+
+
+<br><br>
+<pre>
+>>> from static_methods2 import Robot
+>>> Robot.RobotInstances()
+0
+>>> x = Robot()
+>>> x.RobotInstances()
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+TypeError: RobotInstances() takes no arguments (1 given)
+>>> 
+</pre>
+<br>
+The call "x.RobotInstances()" is treated as an instance method call and an instance
+method needs a reference to the instance as the first parameter. 
+<br><br>
+So, what do we want? We want a method, which we can call via the class name or via the
+instance name without the necessity of passing a reference to an instance to it.
+
+<br><br>
+The solution consists in static methods, which don't need a reference to an instance. 
+
+<br>It's easy to turn a method into a static method. All we have to do is to add
+a line with "@staticmethod" directly in front of the method header. It's the decorator syntax.
+<br><br>
+You can see in the following example, that we can now use our method RobotInstances the 
+way we wanted:
+<br><br>
+
+<pre>
+class Robot:
+    __counter = 0
+    
+    def __init__(self):
+        type(self).__counter += 1
+        
+    @staticmethod
+    def RobotInstances():
+        return Robot.__counter
+        
+
+if __name__ == "__main__":
+    print(Robot.RobotInstances())
+    x = Robot()
+    print(x.RobotInstances())
+    y = Robot()
+    print(x.RobotInstances())
+    print(Robot.RobotInstances())
+</pre>
+<br><br>
+
+
+<h3>Class Methods</h3>
+
+Static methods shouldn't be confused with class methods.
+Like static methods class methods are not bound to instances, but unlike 
+static methods class methods are bound to a class. The first name of a class 
+method is a reference to a class, i.e. a class object. They can be called 
+via an instance or the class name.
+
+
+<br><br>
+<pre>
+class Robot:
+    __counter = 0
+    
+    def __init__(self):
+        type(self).__counter += 1
+        
+    @classmethod
+    def RobotInstances(cls):
+        return cls, Robot.__counter
+        
+
+if __name__ == "__main__":
+    print(Robot.RobotInstances())
+    x = Robot()
+    print(x.RobotInstances())
+    y = Robot()
+    print(x.RobotInstances())
+    print(Robot.RobotInstances())
+</pre>
+
+The output looks like this:
+
+<pre>
+$ python3 static_methods4.py 
+&lt;class '__main__.Robot'&gt;, 0)
+&lt;class '__main__.Robot'&gt;, 1)
+&lt;class '__main__.Robot'&gt;, 2)
+&lt;class '__main__.Robot'&gt;, 2)
+</pre>
+
+
+
+<br>
+The are mainly two use cases for class methods: First, the so-called factory methods, 
+which we will not cover here, and the second, the cases, where we have static methods,
+which have to call other static methods. To do this, we would have to hard code the class
+name, if we had to use static methods. This is a problem, if we are in a use case, where
+we have inherited classes.
+
+<br><br>
+
+The following program contains a fraction class, which is still not complete.
+If you work with fractions, you need to be capable of reducing fractions, e.g.
+the fraction 8/24 can be reduced to 1/3.  We can reduce a fraction to lowest
+terms by dividing both the numerator and denominator by the Greatest Common Divisor
+(GCD). 
+<br><br>
+We have defined a static gcd function to calculate the greatest common divisor of 
+two numbers. the greatest common divisor (gcd) of two or more integers (at least one of 
+which is not zero), is the largest positive integer that divides the numbers without a 
+remainder. For example, the 'GCD of 8 and 24 is 8. The static method "gcd" is called 
+by our class method "reduce" with "cls.gcd(n1, n2)". "CLS" is a reference to "fraction".
+
+<br><br>
+<pre>
+class fraction(object):
+
+    def __init__(self, n, d):
+        self.numerator, self.denominator = fraction.reduce(n, d)
+        
+
+    @staticmethod
+    def gcd(a,b):
+        while b != 0:
+            a,b = b,a%b
+        return a
+
+    @classmethod
+    def reduce(cls, n1, n2):
+        g = cls.gcd(n1, n2)
+        return (n1 // g, n2 // g)
+
+    def __str__(self):
+        return str(self.numerator)+'/'+str(self.denominator)
+
+</pre>
+<br>
+
+Using this class:
+
+<pre>
+>>> from fraction1 import fraction
+>>> x = fraction(8,24)
+>>> print(x)
+1/3
+>>> 
+</pre>
+
+
+
+<br><br>
+<div id="contextlinks">Previous Chapter: <a href="python3_object_oriented_programming.html">Object Oriented Programming</a><br>
+<LINK rel="prev" href="python3_object_oriented_programming.html">Next Chapter: <a href="python3_properties.html">Properties vs. getters and setters</a><br>
+<LINK rel="next" href="python3_properties.html"></div><br><br><br>
+
+</div>
+<div id="footer">  &copy; 2011 - 2014 <a href="http://www.bklein.de/">Bernd Klein</a>,
+Bodenseo; 
+Design by Denise Mitchinson adapted for python-course.eu by Bernd Klein</div>
+</div>
+</body>
+
+<!-- Mirrored from www.python-course.eu/python3_class_and_instance_attributes.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:09:45 GMT -->
+</html>
+
+
+

@@ -1,0 +1,317 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+<!-- Mirrored from www.tangowithdjango.com/book17/chapters/tango_too.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 10 Jan 2016 04:11:36 GMT -->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>17. Making Rango Tango! Code and Hints &mdash; How to Tango with Django 1.7</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/twd.ico"/>
+    <link rel="top" title="How to Tango with Django 1.7" href="../index-2.html" />
+    <link rel="next" title="18. JQuery and Django" href="jquery.html" />
+    <link rel="prev" title="16. Making Rango Tango! Exercises" href="tango.html" />
+ <style type="text/css">
+	img{
+	    width: 85%; /* you can use % */
+	    height: auto;
+	}
+	
+	table {
+		margin: auto;
+	}
+	
+	p.caption {
+		font-size: 10pt;
+		font-style: italic;
+	}
+ </style>
+ <script type="text/javascript">
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','../../../www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-44397330-1', 'tangowithdjango.com');
+  ga('send', 'pageview');
+     
+
+  </script>      
+
+  </head>
+  <body role="document">
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        
+        <li class="right" >
+          <a href="jquery.html" title="18. JQuery and Django"
+             accesskey="N">next</a>
+          </li>
+		
+        <li class="right" >
+          <a href="tango.html" title="16. Making Rango Tango! Exercises"
+             accesskey="P">previous</a>
+          </li>
+		
+        <li><a href="../index-2.html">How to Tango with Django 1.7</a> &raquo;</li> 
+
+      </ul>
+
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index-2.html">
+              <img class="logo" src="../_static/twd200x200.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index-2.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">17. Making Rango Tango! Code and Hints</a><ul>
+<li><a class="reference internal" href="#track-page-click-throughs">17.1. Track Page Click Throughs</a><ul>
+<li><a class="reference internal" href="#creating-a-url-tracking-view">17.1.1. Creating a URL Tracking View</a></li>
+<li><a class="reference internal" href="#mapping-url">17.1.2. Mapping URL</a></li>
+<li><a class="reference internal" href="#updating-the-category-template">17.1.3. Updating the Category Template</a></li>
+<li><a class="reference internal" href="#updating-category-view">17.1.4. Updating Category View</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#searching-within-a-category-page">17.2. Searching Within a Category Page</a><ul>
+<li><a class="reference internal" href="#decommissioning-generic-search">17.2.1. Decommissioning Generic Search</a></li>
+<li><a class="reference internal" href="#creating-a-search-form-template">17.2.2. Creating a Search Form Template</a></li>
+<li><a class="reference internal" href="#updating-the-category-view">17.2.3. Updating the Category View</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="tango.html"
+                        title="previous chapter">16. Making Rango Tango! Exercises</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="jquery.html"
+                        title="next chapter">18. JQuery and Django</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/chapters/tango_too.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="http://www.tangowithdjango.com/book17/search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="making-rango-tango-code-and-hints">
+<span id="tango-too-label"></span><h1>17. Making Rango Tango! Code and Hints<a class="headerlink" href="#making-rango-tango-code-and-hints" title="Permalink to this headline">¶</a></h1>
+<p>Hopefully, you will have been able to complete the exercises given the workflows we provided, if not, or if you need a little help checkout snippets of code and use them within your version of Rango.</p>
+<div class="section" id="track-page-click-throughs">
+<h2>17.1. Track Page Click Throughs<a class="headerlink" href="#track-page-click-throughs" title="Permalink to this headline">¶</a></h2>
+<p>Currently, Rango provides a direct link to external pages. This is not very good if you want to track the number of times each page is clicked and viewed. To count the number of times a page is viewed via Rango you will need to perform the following steps.</p>
+<div class="section" id="creating-a-url-tracking-view">
+<h3>17.1.1. Creating a URL Tracking View<a class="headerlink" href="#creating-a-url-tracking-view" title="Permalink to this headline">¶</a></h3>
+<p>Create a new view called <code class="docutils literal"><span class="pre">track_url()</span></code> in <code class="docutils literal"><span class="pre">/rango/views.py</span></code> which takes a parameterised HTTP <code class="docutils literal"><span class="pre">GET</span></code> request (i.e. <code class="docutils literal"><span class="pre">rango/goto/?page_id=1</span></code>) and updates the number of views for the page. The view should then redirect to the actual URL.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">redirect</span>
+
+<span class="k">def</span> <span class="nf">track_url</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">page_id</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="s">&#39;/rango/&#39;</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;GET&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s">&#39;page_id&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="p">:</span>
+            <span class="n">page_id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="p">[</span><span class="s">&#39;page_id&#39;</span><span class="p">]</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">page</span> <span class="o">=</span> <span class="n">Page</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">page_id</span><span class="p">)</span>
+                <span class="n">page</span><span class="o">.</span><span class="n">views</span> <span class="o">=</span> <span class="n">page</span><span class="o">.</span><span class="n">views</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">page</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+                <span class="n">url</span> <span class="o">=</span> <span class="n">page</span><span class="o">.</span><span class="n">url</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Be sure that you import the <code class="docutils literal"><span class="pre">redirect()</span></code> function to <code class="docutils literal"><span class="pre">views.py</span></code> if it isn&#8217;t included already!</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">redirect</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="mapping-url">
+<h3>17.1.2. Mapping URL<a class="headerlink" href="#mapping-url" title="Permalink to this headline">¶</a></h3>
+<p>In <code class="docutils literal"><span class="pre">/rango/urls.py</span></code> add the following code to the <code class="docutils literal"><span class="pre">urlpatterns</span></code> tuple.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">url</span><span class="p">(</span><span class="s">r&#39;^goto/$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">track_url</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;goto&#39;</span><span class="p">),</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="updating-the-category-template">
+<h3>17.1.3. Updating the Category Template<a class="headerlink" href="#updating-the-category-template" title="Permalink to this headline">¶</a></h3>
+<p>Update the <code class="docutils literal"><span class="pre">category.html</span></code> template so that it uses <code class="docutils literal"><span class="pre">rango/goto/?page_id=XXX</span></code> instead of providing the direct URL for users to click.</p>
+<div class="highlight-html"><div class="highlight"><pre>{% for page in pages %}
+            <span class="nt">&lt;li&gt;</span>
+            <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;{% url &#39;goto&#39; %}?page_id={{page.id}}&quot;</span><span class="nt">&gt;</span>{{ page.title }}<span class="nt">&lt;/a&gt;</span>
+        {% if page.views &gt; 1 %}
+            ({{ page.views }} views)
+            {% elif page.views == 1 %}
+            ({{ page.views }} view)
+        {% endif %}
+            <span class="nt">&lt;/li&gt;</span>
+{% endfor %}
+</pre></div>
+</div>
+<p>Here you can see that in the template we have added some control statements to display <code class="docutils literal"><span class="pre">view</span></code>, <code class="docutils literal"><span class="pre">views</span></code> or nothing depending on the value of <code class="docutils literal"><span class="pre">page.views</span></code>.</p>
+</div>
+<div class="section" id="updating-category-view">
+<h3>17.1.4. Updating Category View<a class="headerlink" href="#updating-category-view" title="Permalink to this headline">¶</a></h3>
+<p>Since we are tracking the number of click throughs you can now update the <code class="docutils literal"><span class="pre">category()</span></code> view so that you order the pages by the number of views, i.e:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">pages</span> <span class="o">=</span> <span class="n">Page</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">category</span><span class="o">=</span><span class="n">category</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;-views&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now, confirm it all works, by clicking on links, and then going back to the category page. Don&#8217;t forget to refresh or click to another category to see the updated page.</p>
+</div>
+</div>
+<div class="section" id="searching-within-a-category-page">
+<h2>17.2. Searching Within a Category Page<a class="headerlink" href="#searching-within-a-category-page" title="Permalink to this headline">¶</a></h2>
+<p>Rango aims to provide users with a helpful directory of page links. At the moment, the search functionality is essentially independent of the categories. It would be nicer however to have search integrated into category browsing. Let&#8217;s assume that a user will first browse their category of interest first. If they can&#8217;t find the page that they want, they can then search for it. If they find a page that is suitable, then they can add it to the category that they are in. Let&#8217;s tackle the first part of this description here.</p>
+<p>We first need to remove the global search functionality and only let users search within a category. This will mean that we essentially decommission the current search page and search view. After this, we&#8217;ll need to perform the following.</p>
+<div class="section" id="decommissioning-generic-search">
+<h3>17.2.1. Decommissioning Generic Search<a class="headerlink" href="#decommissioning-generic-search" title="Permalink to this headline">¶</a></h3>
+<p>Remove the generic <em>Search</em> link from the menu bar by editing the <code class="docutils literal"><span class="pre">base.html</span></code> template. You can also remove or comment out the URL mapping in <code class="docutils literal"><span class="pre">rango/urls.py</span></code>.</p>
+</div>
+<div class="section" id="creating-a-search-form-template">
+<h3>17.2.2. Creating a Search Form Template<a class="headerlink" href="#creating-a-search-form-template" title="Permalink to this headline">¶</a></h3>
+<p>Take the search form from <code class="docutils literal"><span class="pre">search.html</span></code> and put it into the <code class="docutils literal"><span class="pre">category.html</span></code>. Be sure to change the action to point to the <code class="docutils literal"><span class="pre">category()</span></code> view as shown below.</p>
+<div class="highlight-html"><div class="highlight"><pre> <span class="nt">&lt;form</span> <span class="na">class=</span><span class="s">&quot;form-inline&quot;</span> <span class="na">id=</span><span class="s">&quot;user_form&quot;</span> <span class="na">method=</span><span class="s">&quot;post&quot;</span> <span class="na">action=</span><span class="s">&quot;{% url &#39;category&#39;  category.slug %}&quot;</span><span class="nt">&gt;</span>
+     {% csrf_token %}
+     <span class="c">&lt;!-- Display the search form elements here --&gt;</span>
+     <span class="nt">&lt;input</span> <span class="na">class=</span><span class="s">&quot;form-control&quot;</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">size=</span><span class="s">&quot;50&quot;</span> <span class="na">name=</span><span class="s">&quot;query&quot;</span> <span class="na">value=</span><span class="s">&quot;{{query}}&quot;</span> <span class="na">id=</span><span class="s">&quot;query&quot;</span> <span class="nt">/&gt;</span>
+     <span class="nt">&lt;input</span> <span class="na">class=</span><span class="s">&quot;btn btn-primary&quot;</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span> <span class="na">name=</span><span class="s">&quot;submit&quot;</span> <span class="na">value=</span><span class="s">&quot;Search&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/form&gt;</span>
+</pre></div>
+</div>
+<p>Also include a <code class="docutils literal"><span class="pre">&lt;div&gt;</span></code> to house the results underneath.</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;panel&quot;</span><span class="nt">&gt;</span>
+        {% if result_list %}
+        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;panel-heading&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;h3</span> <span class="na">class=</span><span class="s">&quot;panel-title&quot;</span><span class="nt">&gt;</span>Results<span class="nt">&lt;/h3&gt;</span>
+                <span class="c">&lt;!-- Display search results in an ordered list --&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;panel-body&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;list-group&quot;</span><span class="nt">&gt;</span>
+                        {% for result in result_list %}
+                    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;list-group-item&quot;</span><span class="nt">&gt;</span>
+                        <span class="nt">&lt;h4</span> <span class="na">class=</span><span class="s">&quot;list-group-item-heading&quot;</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;{{ result.link }}&quot;</span><span class="nt">&gt;</span>{{ result.title }}<span class="nt">&lt;/a&gt;&lt;/h4&gt;</span>
+                        <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">&quot;list-group-item-text&quot;</span><span class="nt">&gt;</span>{{ result.summary }}<span class="nt">&lt;/p&gt;</span>
+                    <span class="nt">&lt;/div&gt;</span>
+                {% endfor %}
+            <span class="nt">&lt;/div&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+    {% endif %}
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="updating-the-category-view">
+<h3>17.2.3. Updating the Category View<a class="headerlink" href="#updating-the-category-view" title="Permalink to this headline">¶</a></h3>
+<p>Update the category view to handle a HTTP <code class="docutils literal"><span class="pre">POST</span></code> request (i.e. when the user submits a search) and inject the results list into the context. The following code demonstrates this new functionality.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">category</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">category_name_slug</span><span class="p">):</span>
+    <span class="n">context_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">context_dict</span><span class="p">[</span><span class="s">&#39;result_list&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">context_dict</span><span class="p">[</span><span class="s">&#39;query&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;POST&#39;</span><span class="p">:</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s">&#39;query&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">query</span><span class="p">:</span>
+            <span class="c"># Run our Bing function to get the results list!</span>
+            <span class="n">result_list</span> <span class="o">=</span> <span class="n">run_query</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+
+            <span class="n">context_dict</span><span class="p">[</span><span class="s">&#39;result_list&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">result_list</span>
+            <span class="n">context_dict</span><span class="p">[</span><span class="s">&#39;query&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">query</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">category</span> <span class="o">=</span> <span class="n">Category</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">slug</span><span class="o">=</span><span class="n">category_name_slug</span><span class="p">)</span>
+        <span class="n">context_dict</span><span class="p">[</span><span class="s">&#39;category_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">pages</span> <span class="o">=</span> <span class="n">Page</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">category</span><span class="o">=</span><span class="n">category</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;-views&#39;</span><span class="p">)</span>
+        <span class="n">context_dict</span><span class="p">[</span><span class="s">&#39;pages&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pages</span>
+        <span class="n">context_dict</span><span class="p">[</span><span class="s">&#39;category&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">category</span>
+    <span class="k">except</span> <span class="n">Category</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">context_dict</span><span class="p">[</span><span class="s">&#39;query&#39;</span><span class="p">]:</span>
+        <span class="n">context_dict</span><span class="p">[</span><span class="s">&#39;query&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&#39;rango/category.html&#39;</span><span class="p">,</span> <span class="n">context_dict</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Notice that in the <code class="docutils literal"><span class="pre">context_dict</span></code>     that we pass through, we will include the <code class="docutils literal"><span class="pre">result_list</span></code> and <code class="docutils literal"><span class="pre">query</span></code>, and if there is no query, we provide a default query, i.e. the category name. The query box then displays this variable.</p>
+<blockquote>
+<div></div></blockquote>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        
+        <li class="right" >
+          <a href="jquery.html" title="18. JQuery and Django"
+             >next</a>
+          </li>
+		
+        <li class="right" >
+          <a href="tango.html" title="16. Making Rango Tango! Exercises"
+             >previous</a>
+          </li>
+		
+        <li><a href="../index-2.html">How to Tango with Django 1.7</a> &raquo;</li> 
+
+      </ul>
+
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2013, Leif Azzopardi and David Maxwell.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+
+<!-- Mirrored from www.tangowithdjango.com/book17/chapters/tango_too.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 10 Jan 2016 04:11:36 GMT -->
+</html>

@@ -1,0 +1,1321 @@
+﻿<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from blog.miguelgrinberg.com/post/easy-web-scraping-with-nodejs/page/2 by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:52:41 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    
+    <title>
+    
+        Easy Web Scraping With Node.js - miguelgrinberg.com
+    
+</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="description" content="miguelgrinberg.com">
+	<meta name="copyright" content="Copyright (c) 2012-2015 Miguel Grinberg">
+	<meta name="author" content="Miguel Grinberg">
+    
+    <meta name="keywords" content="javascript, node, nodejs, web scraping, cheerio">
+    
+
+    
+    <!-- Bootstrap -->
+    <link href="../../../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../../../static/prettify.css" type="text/css" rel="stylesheet" />
+    <link href="../../../static/colorbox/colorbox.css" rel="stylesheet" type="text/css" />
+    <link href="../../../static/style.css" rel="stylesheet" type="text/css" />
+
+    <link rel="shortcut icon" href="../../../static/favicon.ico">
+	<link rel="alternate" type="application/rss+xml" href="../../../feed" title="miguelgrinberg.com RSS feed">
+
+  </head>
+  <body>
+    
+    <!-- facebook sdk -->
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "../../../../connect.facebook.net/en_US/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    <!-- google plus sdk -->
+    <script type="text/javascript" src="../../../../apis.google.com/js/plusone.js"></script>
+    <!-- twitter sdk -->
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="../../../../platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <!-- linkedin sdk -->
+    <script src="../../../../platform.linkedin.com/in.js" type="text/javascript"></script>
+
+    
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://blog.miguelgrinberg.com/index">miguelgrinberg.com</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="http://blog.miguelgrinberg.com/index">Home</a></li>
+                        <li><a href="../../about-me.html">About Me</a></li>
+                        <li><a href="../../about-this-blog.html">About This Blog</a></li>
+                        
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <p class="navbar-text" style="margin-top: 10px; margin-bottom: 0px;">
+                                <a type="application/rss+xml" href="../../../feed"><img src="../../../static/rss.png" alt="RSS Feed" title="RSS Feed" /></a>
+                                <a href="https://www.facebook.com/miguelgrinbergblog"><img src="../../../static/facebook.png" alt="Facebook" title="Facebook" /></a>
+                                <a href="https://plus.google.com/u/0/117786742456929977820"><img src="../../../static/googleplus.png" alt="Google+" title="Google+" /></a>
+                                <a href="http://www.linkedin.com/in/miguelgrinberg"><img src="../../../static/linkedin.png" alt="LinkedIn" title="LinkedIn" /></a>
+                                <a href="http://github.com/miguelgrinberg"><img src="../../../static/github.png" alt="GitHub" title="GitHub" /></a>
+                                <a href="https://twitter.com/#!/miguelgrinberg"><img src="../../../static/twitter.png" alt="Twitter" title="Twitter" /></a>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </nav>
+
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-push-9 sidebar-bg">
+                <div id="sidebar">
+                    
+
+                    
+                    <h1>Building Web APIs with Flask</h1>
+                    <p>Flask is the ideal Python framework for building REST APIs that are flexible, easy to maintain and efficient. I have created a training video with O'Reilly in which I show all my techniques:</p>
+                    <p><center><a href="http://bit.ly/flaskapi"><img style="border: 1px solid black;" src="../../../static/flask-api-cover-tiny.png"></a></center></p>
+                    <p>Visit <a href="http://flaskbook.com/">http://flaskbook.com</a> for information about this and other Flask training products I have created!</p>
+                    
+
+                    <h1>About Miguel</h1>
+                    <img style="float: right; margin: 0px 8px 8px 0px; padding: 4px; border: 1px solid #ccc;" src="../../../static/miguel.jpg" />
+                    <p>Welcome to my blog!</p>
+                    <p>I'm a software engineer, photographer and filmmaker in Portland, Oregon, USA.</p>
+                    <p>You can also find me on <a href="https://www.facebook.com/miguelgrinbergblog">Facebook</a>, <a href="https://plus.google.com/u/0/117786742456929977820">Google+</a>, <a href="http://www.linkedin.com/in/miguelgrinberg">LinkedIn</a>, <a href="https://github.com/miguelgrinberg">Github</a> and <a href="https://twitter.com/#!/miguelgrinberg">Twitter</a>.</p>
+                    <p>Thank you for visiting!</p>
+
+                    
+
+                    
+                    <h1>Categories</h1>
+<ul>
+
+	<li>
+		<a href="../../../category/Arduino/feed">
+			<img src="../../../static/rss-small.png" title="Arduino RSS Feed" label="Arduino RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Arduino.html">Arduino</a></span> (7)
+	</li>
+
+	<li>
+		<a href="../../../category/Authentication/feed">
+			<img src="../../../static/rss-small.png" title="Authentication RSS Feed" label="Authentication RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Authentication.html">Authentication</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../../../category/Blog/feed">
+			<img src="../../../static/rss-small.png" title="Blog RSS Feed" label="Blog RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Blog.html">Blog</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/C%2b%2b/feed">
+			<img src="../../../static/rss-small.png" title="C++ RSS Feed" label="C++ RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/C%2b%2b.html">C++</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../../../category/Cloud/feed">
+			<img src="../../../static/rss-small.png" title="Cloud RSS Feed" label="Cloud RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Cloud.html">Cloud</a></span> (2)
+	</li>
+
+	<li>
+		<a href="../../../category/Filmmaking/feed">
+			<img src="../../../static/rss-small.png" title="Filmmaking RSS Feed" label="Filmmaking RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Filmmaking.html">Filmmaking</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/Flask/feed">
+			<img src="../../../static/rss-small.png" title="Flask RSS Feed" label="Flask RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Flask.html">Flask</a></span> (39)
+	</li>
+
+	<li>
+		<a href="../../../category/Games/feed">
+			<img src="../../../static/rss-small.png" title="Games RSS Feed" label="Games RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Games.html">Games</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Gear/feed">
+			<img src="../../../static/rss-small.png" title="Gear RSS Feed" label="Gear RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Gear.html">Gear</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/HTML5/feed">
+			<img src="../../../static/rss-small.png" title="HTML5 RSS Feed" label="HTML5 RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/HTML5.html">HTML5</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Heroku/feed">
+			<img src="../../../static/rss-small.png" title="Heroku RSS Feed" label="Heroku RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Heroku.html">Heroku</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Javascript/feed">
+			<img src="../../../static/rss-small.png" title="Javascript RSS Feed" label="Javascript RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Javascript.html">Javascript</a></span> (3)
+	</li>
+
+	<li>
+		<a href="../../../category/Movie%20Reviews/feed">
+			<img src="../../../static/rss-small.png" title="Movie Reviews RSS Feed" label="Movie Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Movie%20Reviews.html">Movie Reviews</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../../../category/Netflix/feed">
+			<img src="../../../static/rss-small.png" title="Netflix RSS Feed" label="Netflix RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Netflix.html">Netflix</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../../../category/Node.js/feed">
+			<img src="../../../static/rss-small.png" title="Node.js RSS Feed" label="Node.js RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Node.html">Node.js</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/OpenStack/feed">
+			<img src="../../../static/rss-small.png" title="OpenStack RSS Feed" label="OpenStack RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/OpenStack.html">OpenStack</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Personal/feed">
+			<img src="../../../static/rss-small.png" title="Personal RSS Feed" label="Personal RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Personal.html">Personal</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Photography/feed">
+			<img src="../../../static/rss-small.png" title="Photography RSS Feed" label="Photography RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Photography.html">Photography</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/Product%20Reviews/feed">
+			<img src="../../../static/rss-small.png" title="Product Reviews RSS Feed" label="Product Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Product%20Reviews.html">Product Reviews</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Programming/feed">
+			<img src="../../../static/rss-small.png" title="Programming RSS Feed" label="Programming RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Programming.html">Programming</a></span> (47)
+	</li>
+
+	<li>
+		<a href="../../../category/Project%20Management/feed">
+			<img src="../../../static/rss-small.png" title="Project Management RSS Feed" label="Project Management RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Project%20Management.html">Project Management</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Python/feed">
+			<img src="../../../static/rss-small.png" title="Python RSS Feed" label="Python RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Python.html">Python</a></span> (43)
+	</li>
+
+	<li>
+		<a href="../../../category/REST/feed">
+			<img src="../../../static/rss-small.png" title="REST RSS Feed" label="REST RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/REST.html">REST</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../../../category/Rackspace/feed">
+			<img src="../../../static/rss-small.png" title="Rackspace RSS Feed" label="Rackspace RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Rackspace.html">Rackspace</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Raspberry%20Pi/feed">
+			<img src="../../../static/rss-small.png" title="Raspberry Pi RSS Feed" label="Raspberry Pi RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Raspberry%20Pi.html">Raspberry Pi</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/RhinoSteady/feed">
+			<img src="../../../static/rss-small.png" title="RhinoSteady RSS Feed" label="RhinoSteady RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/RhinoSteady.html">RhinoSteady</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/Robotics/feed">
+			<img src="../../../static/rss-small.png" title="Robotics RSS Feed" label="Robotics RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Robotics.html">Robotics</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/Video/feed">
+			<img src="../../../static/rss-small.png" title="Video RSS Feed" label="Video RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Video.html">Video</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../../../category/Windows/feed">
+			<img src="../../../static/rss-small.png" title="Windows RSS Feed" label="Windows RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Windows.html">Windows</a></span> (1)
+	</li>
+
+</ul>
+                    
+                </div>
+            </div>
+            <div class="col-md-8 col-md-pull-4">
+                <div id="main">
+                    
+                    
+                    
+                    
+                    
+
+<div class="post">
+
+<p class="date"><span class="flask-moment" data-timestamp="2013-02-10T21:32:50Z" data-format="format('LL')" data-refresh="0">2013-02-10T21:32:50Z</span></p>
+<h1 class="post-title"><a href="../../easy-web-scraping-with-nodejs.html">Easy Web Scraping With Node.js</a></h1>
+<div class="posted">Posted by <span class="label label-danger"><a href="http://blog.miguelgrinberg.com/author/Miguel Grinberg">Miguel Grinberg</a></span> under <span class="label label-primary"><a href="../../../category/Javascript.html">Javascript</a></span>, <span class="label label-primary"><a href="../../../category/Programming.html">Programming</a></span>, <span class="label label-primary"><a href="../../../category/Node.html">Node.js</a></span>. </div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/easy-web-scraping-with-nodejs" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/easy-web-scraping-with-nodejs" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="../../easy-web-scraping-with-nodejs.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/easy-web-scraping-with-nodejs" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+<div class="post_body"><p><a href="http://en.wikipedia.org/wiki/Web_scraping">Web scraping</a> is a technique used to extract data from websites using a computer program that acts as a web browser. The program requests pages from web servers in the same way a web browser does, and it may even simulate a user logging in to obtain access. It downloads the pages containing the desired data and extracts the data out of the HTML code. Once the data is extracted it can be reformatted and presented in a more useful way.</p>
+<p>In this article I'm going to show you how to write web scraping scripts in Javascript using <a href="http://nodejs.org/">Node.js</a>.</p>
+<h2>Why use web scraping?</h2>
+<p>Here are a few of examples where web scraping can be useful:</p>
+<ul>
+<li>You have several bank accounts with different institutions and you want to generate a combined report that includes all your accounts.</li>
+<li>You want to see data presented by a website in a different format. For example, the website shows a table, but you want to see a chart.</li>
+<li>A web site presents related data across multiple pages. You want to see all or part of this data combined in a single report.</li>
+<li>You are an app developer with apps in iTunes and several Android app stores, and you want to have a report of monthly sales across all app stores.</li>
+</ul>
+<p>Web scraping can also be used in ways that are dishonest and sometimes even illegal. Harvesting of email addresses for spam purposes, or sniping Ebay auctions are examples of such uses. As a matter of principle I only use web scraping to collect and organize information that is either available to everyone (stock prices, movie showtimes, etc.) or only available to me (personal bank accounts, etc.). I avoid using this technique for profit, I just do it to simplify the task of obtaining information.</p>
+<p>In this article I'm going to show you a practical example that implements this technique. Ready? Then let's get started!</p>
+<h2>Tools for web scraping</h2>
+<p>In its most basic form, a web scraping script just needs to have a way to download web pages and then search for data in them. All modern languages provide functions to download web pages, or at least someone wrote a library or extension that can do it, so this is not a problem. Locating and isolating data in HTML pages, however, is difficult. An HTML page has content, layout and style elements all intermixed, so a non trivial effort is required to parse and identify the interesting parts of the page.</p>
+<p>For example, consider the following HTML page:</p>
+<pre><code>&lt;html&gt;
+    &lt;head&gt;...&lt;/head&gt;
+    &lt;body&gt;
+        &lt;div id="content"&gt;
+            &lt;div id="sidebar"&gt;
+            ...
+            &lt;/div&gt;
+            &lt;div id="main"&gt;
+                &lt;div class="breadcrumbs"&gt;
+                ...
+                &lt;/div&gt;
+                &lt;table id="data"&gt;
+                    &lt;tr&gt;&lt;th&gt;Name&lt;/th&gt;&lt;th&gt;Address&lt;/th&gt;&lt;/tr&gt;
+                    &lt;tr&gt;&lt;td class="name"&gt;John&lt;/td&gt;&lt;td class="address"&gt;Address of John&lt;/td&gt;&lt;/tr&gt;
+                    &lt;tr&gt;&lt;td class="name"&gt;Susan&lt;/td&gt;&lt;td class="address"&gt;Address of Susan&lt;/td&gt;&lt;/tr&gt;
+                &lt;/table&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>Let's say we want to extract the names of the people that appear in the table with <code>id="data"</code> that is in the page. How do we get to those?</p>
+<p>Typically the web page will be downloaded into a string, so it would be simple to just search this string for all the occurrences of <code>&lt;td class="name"&gt;</code> and extract what comes after that and until the following <code>&lt;/td&gt;</code>.</p>
+<p>But this could easily make us find incorrect data. The page could have other tables, either before or after the one we want that use the same CSS classes for some of its cells. Or worst, maybe this simple search algoritm works fine for a while, but one day the layout of the page changes so that the old <code>&lt;td class="name"&gt;</code> becomes <code>&lt;td align="left" class="name"&gt;</code> making our search find nothing.</p>
+<p>While there is always a risk that a change to the target web page can break a scraping script, it is a good idea to be smart about how items are located in the HTML so that the script does not need to be revised every time the web site changes.</p>
+<p>If you have ever written client-side Javascript for the browser using a library like <a href="http://jquery.com/">jQuery</a> then you know how the tricky task of locating DOM elements becomes much easier using <a href="http://www.w3schools.com/cssref/css_selectors.asp">CSS selectors</a>.</p>
+<p>For example, in the browser we could easily extract the names from the above web page as follows:</p>
+<pre><code>$('#data .name').each(function() {
+    alert($(this).text());
+});
+</code></pre>
+<p>The CSS selector is what goes inside jQuery's <code>$</code> function, <code>#data .name</code> in this example, This is saying that we want to locate all the elements that are children of an element with the id <code>data</code> and have a CSS class <code>name</code>. Note that we are not saying anything about the data being in a table in this case. CSS selectors have great flexibility in how you specify search terms for elements, and you can be as specific or vague as you want.</p>
+<p>The <code>each</code> function will just call the function given as an argument for all the elements that match the selector, with the <code>this</code> context set to the matching element. If we were to run this in the browser we would see an alert box with the name John, and then another one with the name "Susan".</p>
+<p>Wouldn't it be nice if we could do something similar outside of the context of a web browser? Well, this is exactly what we are about to do.</p>
+<h2>Introducing Node.js</h2>
+<p>Javascript was born as a language to be embedded in web browsers, but thanks to the open source <a href="http://nodejs.org/">Node.js</a> project we can now write stand-alone scripts in Javascript that can run on a desktop computer or even on a web server.</p>
+<p>Manipulating the DOM inside a web browser is something that Javascript and libraries like jQuery do really well so to me it makes a lot of sense to write web scraping scripts in Node.js, since we can use many techniques that we know from DOM manipulation in the client-side code for the web browser.</p>
+<p>If you would like to try the examples I will present in the rest of this article then this is the time to download and install Node.js. Installers for Windows, Linux and OS X are available at <a href="http://nodejs.org/">http://nodejs.org</a>.</p>
+<p>Node.js has a large library of packages that simplify different tasks. For web scraping we will use two packages called <code>request</code> and <code>cheerio</code>. The <code>request</code> package is used to download web pages, while <code>cheerio</code> generates a DOM tree and provides a subset of the jQuery function set to manipulate it. To install Node.js packages we use a package manager called <code>npm</code> that is installed with Node.js. This is equivalent to Ruby's <code>gem</code> or Python's <code>easy_install</code> and <code>pip</code>, it simplifies the download and installation of packages.</p>
+<p>So let's start by creating a new directory where we will put our web scraping scripts and install these two modules in it:</p>
+<pre><code>$ mkdir scraping
+$ cd scraping
+$ npm install request cheerio
+</code></pre>
+<p>Node.js modules will be installed in the <code>scraping/node_modules</code> subdirectory and will only be accessible to scripts that are in the <code>scraping</code> directory. It is also possible to install Node.js packages globally, but I prefer to keep things organized by installing modules locally.</p>
+<p>Now that we have all the tools installed let's see how we can implement the above scraping example using <code>cheerio</code>. Let's call this script <code>example.js</code>:</p>
+<pre><code>var cheerio = require('cheerio');
+$ = cheerio.load('&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;div id="content"&gt;&lt;div id="sidebar"&gt;&lt;/div&gt;&lt;div id="main"&gt;&lt;div id="breadcrumbs"&gt;&lt;/div&gt;&lt;table id="data"&gt;&lt;tr&gt;&lt;th&gt;Name&lt;/th&gt;&lt;th&gt;Address&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class="name"&gt;John&lt;/td&gt;&lt;td class="address"&gt;Address of John&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class="name"&gt;Susan&lt;/td&gt;&lt;td class="address"&gt;Address of Susan&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;');
+
+$('#data .name').each(function() {
+    console.log($(this).text());
+});
+</code></pre>
+<p>The first line imports the <code>cheerio</code> package into the script. The <code>require</code> statement is similar to <code>#include</code> in C/C++, <code>require</code> in Ruby or <code>import</code> in Python.</p>
+<p>In the second line we instantiate a DOM for our example HTML, by sending the HTML string to <code>cheerio.load()</code>. The return value is the constructed DOM, which we store in a variable called <code>$</code> to match how the DOM is accessed in the browser when using jQuery.</p>
+<p>Once we have a DOM created we just go about business as if we were using jQuery on the client side. So we use the proper selector and the <code>each</code> iterator to find all the occurrences of the data we want to extract. In the callback function we use the <code>console.log</code> function to write the extracted data. In Node.js <code>console.log</code> writes to the console, so it is handy to dump data to the screen.</p>
+<p>Here is how to run the script and what output it produces:</p>
+<pre><code>$ node example.js
+John
+Susan
+</code></pre>
+<p>Easy, right? In the following section we'll write a more complex scraping script.</p>
+<h2>Real world scraping</h2>
+<p>Let's use web scraping to solve a real problem.</p>
+<p>The <a href="http://www.thprd.org/">Tualatin Hills Park and Recreation District (THPRD)</a> is a Beaverton, Oregon organization that offers area residents a number of recreational options, among them swimming. There are eight swimming pools, all in the area, each offering swimming instruction, lap swimming, open swim and a variety of other programs. The problem is that THPRD does not publish a combined schedule for the pools, it only publishes individual schedules for each pool. But the pools are all located close to each other, so many times the choice of pool is less important than what programs are offered at a given time. If I wanted to find the time slots a given program is offered at any of the pools I would need to access eight different web pages and search eight schedules.</p>
+<p>For this example we will say that we want to obtain the list of times during the current week when there is an open swim program offered in any of the pools in the district. This requires obtaining the schedule pages for all the pools, locating the open swim entries and listing them.</p>
+<p>Before we start, <a href="http://www.thprd.org/schedules/schedule.cfm?cs_id=15" target="_blank">click here</a> to open one of the pool schedules in another browser tab. Feel free to inspect the HTML for the page to familiarize yourself with the structure of the schedule.</p>
+<p>The schedule pages for the eight pools have a URL with the following structure:</p>
+<pre><code>http://www.thprd.org/schedules/schedule.cfm?cs_id=&lt;id&gt;
+</code></pre>
+<p>The <code>id</code> is what selects which pool to show a schedule for. I took the effort to open all the schedules manually to take note of the names of each pool and its corresponding <code>id</code>, since we will need those in the script. We will also use an array with the names of the days of the week. We can scrape these names from the web pages, but since this is information that will never change we can simplify the script by incorporating the data as constants.</p>
+<h3>Web scraping skeleton</h3>
+<p>With the above information we can sketch out the structure of our scraping script. Let's call the script <code>thprd.js</code>:</p>
+<pre><code>var request = require('request');
+var cheerio = require('cheerio');
+
+pools = {
+    'Aloha': 3,
+    'Beaverton': 15,
+    'Conestoga': 12,
+    'Harman': 11,
+    'Raleigh': 6,
+    'Somerset': 22,
+    'Sunset': 5,
+    'Tualatin Hills': 2
+};
+days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+for (pool in pools) {
+    var url = 'http://www.thprd.org/schedules/schedule.cfm?cs_id=' + pools[pool];
+    request(url, function(err, resp, body) {
+        if (err)
+            throw err;
+        $ = cheerio.load(body);
+        console.log(pool);
+        // TODO: scraping goes here!
+    });
+}
+</code></pre>
+<p>We begin the script importing the two packages that we are going to use and defining the constants for the eight pools and the days of the week.</p>
+<p>Then we download the schedule web pages of each of the pools in a loop. For this we construct the URL of each pool schedule and send it to the <code>request</code> function. This is an asynchronous function that takes a callback as its second argument. If you are not very familiar with Javascript this may seem odd, but in this language asynchronous functions are very common. The <code>request()</code> function returns immediately, so it is likely that the eight <code>request()</code> calls will be issued almost simultaneously and will be processed concurrently by background threads.</p>
+<p>When a request completes its callback function will be invoked with three arguments, an error code, a response object and the body of the response. Inside the callback we make sure there is no error and then we just send the body of the response into <code>cheerio</code> to create a DOM from it. When we reach this point we are ready to start scraping.</p>
+<p>We will look at how to scrape this content later, for now we just print the name of the pool as a placeholder. If you run this first version of our script you'll get a surprise:</p>
+<pre><code>$ node thprd.js
+Tualatin Hills
+Tualatin Hills
+Tualatin Hills
+Tualatin Hills
+Tualatin Hills
+Tualatin Hills
+Tualatin Hills
+Tualatin Hills
+</code></pre>
+<p>What? Why do we get the same pool name eight times? Shouldn't we see all the pool names here?</p>
+<h3>Javascript scoping</h3>
+<p>Remember I said above that the <code>request()</code> function is asynchronous? The <code>for</code> loop will do its eight iterations, spawning a background job in each. The loop then ends, leaving the loop variable set to the pool name that was used in the last iteration. When the callback functions are invoked a few seconds later they will all see this value and print it.</p>
+<p>I made this mistake on purpose to demonstrate one of the main sources of confusion among developers that are used to traditional languages and are new to Javascript's asynchronous model.</p>
+<p>How can we get the correct pool name to be sent to each callback function then?</p>
+<p>The solution is to <em>bind</em> the name of the pool to the callback function at the time the callback is created and sent to the <code>request()</code> function, because that is when the <code>pool</code> variable has the correct value.</p>
+<p>As we've seen before the callback function will execute some time in the future, after the loop in the main script completed. But the callback function can still access the <code>loop</code> variable even though the callback runs outside of the context of the main script. This is because the scope of Javascript functions is defined at the time the function is created. When we created the callback function the <code>loop</code> variable was in scope, so the variable is accessible to the callback. The <code>url</code> variable is also in the scope, so the callback can also make use of it if necessary, though the same problem will exist with it, its last value will be seen by all callbacks.</p>
+<p>So what I'm basically saying is that the scope of a function is determined at the time the function is created, but the values of the variables in the scope are only retrieved at the time the function is called.</p>
+<p>We can take advantage of these seemingly odd scoping rules of Javascript to insert any variable into the scope of a callback function. Let's do this with a simple function:</p>
+<pre><code>function main()
+{
+    var a = 1;
+    var f = function() { console.log(a); }
+    a = 2;
+    f();
+}
+main();
+</code></pre>
+<p>Can you guess what the output of this script will be? The output will be <code>2</code>, because that's the value of variable <code>a</code> at the time the function stored in variable <code>f</code> is invoked.</p>
+<p>To freeze the value of <code>a</code> at the time <code>f</code> is created we need to insert the current value of <code>a</code> into the scope:</p>
+<pre><code>function main()
+{
+    var a = 1;
+    var f = ( function(a) { return function() { console.log(a); } } )(a);
+    a = 2;
+    f();
+}
+main();
+</code></pre>
+<p>Let's analyze this alternative way to create <code>f</code> one step at a time:</p>
+<pre><code>var f = (...)(a);
+</code></pre>
+<p>We clearly see that the expression enclosed in parenthesis supposedly returns a function, and we invoke that function and pass the current value of <code>a</code> as an argument. This is not a callback function that will execute later, this is executing right away, so the current value of <code>a</code> that is passed into the function is 1.</p>
+<pre><code>var f = ( function(a) { return ... } )(a);
+</code></pre>
+<p>Here we see a bit more of what's inside the parenthesis. The expression is, in fact, a function that expects one argument. We called that argument <code>a</code>, but we could have used a different name.</p>
+<p>In Javascript a construct like the above is called a <em>self-executing function</em>. You could consider this the reverse of a callback function. While a callback function is a function that is created now but runs later, a self-executing function is created and immediately executed. Whatever this function returns will be the result of the whole expression, and will get assigned to <code>f</code> in our example.</p>
+<p>Why would you want to use a self-executing function when you can make any code execute directly without enclosing it inside a function? The difference is subtle. By putting code inside a function we are creating a new scope level, and that gives us the chance to insert variables into that scope simply by passing them as arguments to the self-executing function.</p>
+<p>We know <code>f</code> should be a function, since later in the script we want to invoke it. So the return value of our self-executing function must be the function that will get assigned to <code>f</code>:</p>
+<pre><code>var f = ( function(a) { return function() { console.log(a); } } )(a);
+</code></pre>
+<p>Does it make a bit more sense now? The function that is assigned to <code>f</code> now has a parent function that received <code>a</code> as an argument. That <code>a</code> is a level closer than the original <code>a</code> in the scope of <code>f</code>, so that is the <code>a</code> that the scope of <code>f</code> sees. When you run the modified script you will get a 1 as output.</p>
+<p>Here is how the self-executing trick can be applied to our web scraping script:</p>
+<pre><code>for (pool in pools) {
+    var url = 'http://www.thprd.org/schedules/schedule.cfm?cs_id=' + pools[pool];
+    request(url, ( function(pool) {
+        return function(err, resp, body) {
+            if (err)
+                throw err;
+            $ = cheerio.load(body);
+            console.log(pool);
+            // TODO: scraping goes here!
+        }
+    } )(pool));
+}
+</code></pre>
+<p>This is pretty much identical to the simpler example above using the <code>pool</code> variable instead of <code>a</code>. Running this script again gives us the expected result:</p>
+<pre><code>$ node thprd.js
+Aloha
+Raleigh
+Conestoga
+Beaverton
+Harman
+Somerset
+Tualatin Hills
+Sunset
+</code></pre>
+<h3>Scraping the swimming pool schedules</h3>
+<p>To be able to scrape the contents of the schedule tables we need to discover how these schedules are structured. In rough terms the schedule table is located inside a page that looks like this:</p>
+<pre><code>&lt;html&gt;
+&lt;head&gt; ... &lt;/head&gt;
+&lt;body&gt;
+    &lt;div id="container"&gt;
+        &lt;div id="mainContent_lv13"&gt;
+            &lt;div id="level3body"&gt;
+                &lt;div&gt;
+                    &lt;table id="calendar"&gt;
+                        &lt;tr class="header"&gt; ... &lt;/tr&gt;
+                        &lt;tr class="days"&gt;
+                            &lt;td&gt;&lt;!-- schedule for Monday --&gt;&lt;/td&gt;
+                            &lt;td&gt;&lt;!-- schedule for Tuesday --&gt;&lt;/td&gt;
+                            &lt;td&gt;&lt;!-- schedule for Wednesday --&gt;&lt;/td&gt;
+                            &lt;td&gt;&lt;!-- schedule for Thursday --&gt;&lt;/td&gt;
+                            &lt;td&gt;&lt;!-- schedule for Friday --&gt;&lt;/td&gt;
+                            &lt;td&gt;&lt;!-- schedule for Saturday --&gt;&lt;/td&gt;
+                            &lt;td&gt;&lt;!-- schedule for Sunday --&gt;&lt;/td&gt;
+                        &lt;/tr&gt;
+                        &lt;tr class="footer"&gt; ... &lt;/tr&gt;
+                    &lt;/table&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>Inside each of these <code>&lt;td&gt;</code> elements that hold the daily schedules there is a <code>&lt;div&gt;</code> wrapper around each scheduled event. Here is a simplified structure for a day:</p>
+<pre><code>&lt;td&gt;
+    &lt;a href="..."&gt;link&lt;/a&gt;
+    &lt;div&gt;
+        &lt;a href="..."&gt;
+            &lt;strong&gt;FROM-TO&lt;/strong&gt;
+            &lt;br&gt;
+            EVENT NAME
+            &lt;br&gt;
+        &lt;/a&gt;
+    &lt;/div&gt;
+    &lt;div&gt;
+        &lt;a href="..."&gt;
+            &lt;strong&gt;FROM-TO&lt;/strong&gt;
+            &lt;br&gt;
+            EVENT NAME
+            &lt;br&gt;
+        &lt;/a&gt;
+    &lt;/div&gt;
+    ...
+&lt;/td&gt;
+</code></pre>
+<p>Each <code>&lt;td&gt;</code> element contains a link at the top that we are not interested in, then a sequence of <code>&lt;div&gt;</code> elements, each containing the information for an event.</p>
+<p>One way we can get to these event <code>&lt;div&gt;</code> elements is with the following selector:</p>
+<pre><code>$('#calendar .days td div').each(...);
+</code></pre>
+<p>The problem with the above selector, though, is that we will get all the events of all the days in sequence, so we will not know what events happen on which day.</p>
+<p>Instead, we can separate the search in two parts. First we locate the <code>&lt;td&gt;</code> element that defines a day, then we search for <code>&lt;div&gt;</code> elements within it:</p>
+<pre><code>$('#calendar .days td').each(function(day) {
+    $(this).find('div').each(function() {
+        console.log(pool + ',' + days[day] + ',' + $(this).text());
+    });
+});
+</code></pre>
+<p>The function that we pass to the <code>each()</code> iterator receives the index number of the found element as a first argument. This is handy because for our outer search this is telling us which day we are in. We do not need an index number in the inner search, so there we do not need to use an argument in our function.</p>
+<p>Running the script now shows the pool name, then the day of the week and then the text inside the event <code>&lt;div&gt;</code>, which has the information that we want. The <code>text()</code> function applied to any element of the DOM returns the constant text filtering out any HTML elements, so this gets rid of the <code>&lt;strong&gt;</code> and <code>&lt;br&gt;</code> elements that exist there and just returns the filtered text.</p>
+<p>We are now very close. The only remaining problem is that the text we extracted from the <code>&lt;div&gt;</code> element has a lot of whitespace in it. There is whitespace at the start and end of the text and also in between the event time and event description. We can eliminate the leading and trailing whitespace with <code>trim()</code>:</p>
+<pre><code>console.log(pool + ',' + days[day] + ',' + $(this).text().trim());
+</code></pre>
+<p>This leaves us with a few lines of whitespace in between the event time and the description. To remove that we can use <code>replace()</code>:</p>
+<pre><code>console.log(pool + ',' + days[day] + ',' + $(this).text().trim().replace(/\s\s+/g, ','));
+</code></pre>
+<p>Note the regular expression that we use to remove the spaces requires at least two whitespace characters. This is because the event description can contain spaces as well, if we search for two or more spaces we will just find the large whitespace block in the middle and not affect the description.</p>
+<p>When we run the script now this is what we get:</p>
+<pre><code>$ node thprd.js
+Raleigh,Monday,6:00a-10:00p,Pool Closed
+Raleigh,Tuesday,6:00a-10:00p,Pool Closed
+Raleigh,Wednesday,6:00a-10:00p,Pool Closed
+Raleigh,Thursday,6:00a-10:00p,Pool Closed
+Raleigh,Friday,6:00a-10:00p,Pool Closed
+Raleigh,Saturday,6:00a-10:00p,Pool Closed
+Raleigh,Sunday,6:00a-10:00p,Pool Closed
+Beaverton,Monday,7:00a-8:00a,Deep Water Aerobics (7-8)
+Beaverton,Monday,7:00a-8:50a,Aquajog lane
+Beaverton,Monday,7:00a-8:50a,All Age Lap
+Beaverton,Monday,8:55a-10:30a,Aquajog lane^
+...
+</code></pre>
+<p>And this is just a CSV version of all the pool schedules combined!</p>
+<p>We said that for this exercise we were only interested in obtaining the open swim events, so we need to add one more filtering layer to just print the targeted events:</p>
+<pre><code>event = $(this).text().trim().replace(/\s\s+/g, ',').split(',');
+if (event.length &gt;= 2 &amp;&amp; event[1].match(/open swim/i))
+    console.log(pool + ',' + days[day] + ',' + event[0] + ',' + event[1]);
+</code></pre>
+<p>And now we have completed our task. Here is the final version of our web scraping script:</p>
+<pre><code>var request = require('request');
+var cheerio = require('cheerio');
+
+days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+pools = {
+    'Aloha': 3,
+    'Beaverton': 15,
+    'Conestoga': 12,
+    'Harman': 11,
+    'Raleigh': 6,
+    'Somerset': 22,
+    'Sunset': 5,
+    'Tualatin Hills': 2
+};
+for (pool in pools) {
+    var url = 'http://www.thprd.org/schedules/schedule.cfm?cs_id=' + pools[pool];
+
+    request(url, (function(pool) { return function(err, resp, body) {
+        $ = cheerio.load(body);
+        $('#calendar .days td').each(function(day) {
+            $(this).find('div').each(function() {
+                event = $(this).text().trim().replace(/\s\s+/g, ',').split(',');
+                if (event.length &gt;= 2 &amp;&amp; (event[1].match(/open swim/i) || event[1].match(/family swim/i)))
+                    console.log(pool + ',' + days[day] + ',' + event[0] + ',' + event[1]);
+            });
+        });
+    }})(pool));
+}
+</code></pre>
+<p>Running the script gives us this output:</p>
+<pre><code>$ node thprd.js
+Conestoga,Monday,4:15p-5:15p,Open Swim - M/L
+Conestoga,Monday,7:45p-9:00p,Open Swim - M/L
+Conestoga,Tuesday,7:30p-9:00p,Open Swim - M/L
+Conestoga,Wednesday,4:15p-5:15p,Open Swim - M/L
+Conestoga,Wednesday,7:45p-9:00p,Open Swim - M/L
+Conestoga,Thursday,7:30p-9:00p,Open Swim - M/L
+Conestoga,Friday,6:30p-8:30p,Open Swim - M/L
+Conestoga,Saturday,1:00p-4:15p,Open Swim - M/L
+Conestoga,Sunday,2:00p-4:15p,Open Swim - M/L
+Aloha,Monday,1:05p-2:20p,Open Swim
+Aloha,Monday,7:50p-8:25p,Open Swim
+Aloha,Tuesday,1:05p-2:20p,Open Swim
+Aloha,Tuesday,8:45p-9:30p,Open Swim
+Aloha,Wednesday,1:05p-2:20p,Open Swim
+Aloha,Wednesday,7:50p-8:25p,Open Swim
+Aloha,Thursday,1:05p-2:20p,Open Swim
+Aloha,Thursday,8:45p-9:30p,Open Swim
+Aloha,Friday,1:05p-2:20p,Open Swim
+Aloha,Friday,7:50p-8:25p,Open Swim
+Aloha,Saturday,2:00p-3:30p,Open Swim
+Aloha,Saturday,4:30p-6:00p,Open Swim
+Aloha,Sunday,2:00p-3:30p,Open Swim
+Aloha,Sunday,4:30p-6:00p,Open Swim
+Harman,Monday,4:25p-5:30p,Open Swim*
+Harman,Monday,7:30p-8:55p,Open Swim
+Harman,Tuesday,4:25p-5:10p,Open Swim*
+Harman,Wednesday,4:25p-5:30p,Open Swim*
+Harman,Wednesday,7:30p-8:55p,Open Swim
+Harman,Thursday,4:25p-5:10p,Open Swim*
+Harman,Friday,2:00p-4:55p,Open Swim*
+Harman,Saturday,1:30p-2:25p,Open Swim
+Harman,Sunday,2:00p-2:55p,Open Swim
+Beaverton,Tuesday,10:45a-12:55p,Open Swim (No Diving Well)
+Beaverton,Tuesday,8:35p-9:30p,Open Swim No Diving Well
+Beaverton,Thursday,10:45a-12:55p,Open Swim (No Diving Well)
+Beaverton,Thursday,8:35p-9:30p,Open Swim No Diving Well
+Beaverton,Saturday,2:30p-4:00p,Open Swim
+Beaverton,Sunday,4:15p-6:00p,Open Swim
+Sunset,Tuesday,1:00p-2:30p,Open Swim/One Lap Lane
+Sunset,Thursday,1:00p-2:30p,Open Swim/One Lap Lane
+Sunset,Sunday,1:30p-3:00p,Open Swim/One Lap Lane
+Tualatin Hills,Monday,7:35p-9:00p,Open Swim-Diving area opens at 8pm
+Tualatin Hills,Wednesday,7:35p-9:00p,Open Swim-Diving area opens at 8pm
+Tualatin Hills,Sunday,1:30p-3:30p,Open Swim
+Tualatin Hills,Sunday,4:00p-6:00p,Open Swim
+</code></pre>
+<p>From this point on it is easy to continue to massage this data to get it into a format that is useful. My next step would be to sort the list by day and time instead of by pool, but I'll leave that as an exercise to interested readers.</p>
+<h2>Final words</h2>
+<p>I hope this introduction to web scraping was useful to you and the example script serves you as a starting point for your own projects.</p>
+<p>If you have any questions feel free to leave them below in the comments section.</p>
+<p>Thanks!</p>
+<p>Miguel</p></div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/easy-web-scraping-with-nodejs" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/easy-web-scraping-with-nodejs" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="../../easy-web-scraping-with-nodejs.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/easy-web-scraping-with-nodejs" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+
+
+<h4 style="text-align: right"><a name="comments"></a>61 comments</h4>
+
+
+<div class="comment">
+    <ul>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#26</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-11-15T06:43:26Z" data-format="fromNow(0)" data-refresh="0">2013-11-15T06:43:26Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@sotiris: the demo accordion in the jQuery UI page does not remove anything, it just hides the sections that are closed. But even if they are hidden they are in the DOM, you can get them. If you are using a different accordion widget that only has the content for the active section then you may need to use something like Selenium that can fake mouse clicks and execute Javascript.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/8153887301a05048dbb0a07b9077b683ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#27</span> <span class="label label-primary"><a href="http://iansinnott.com/">Ian</a></span> said
+                    <span class="flask-moment" data-timestamp="2013-12-03T15:36:12Z" data-format="fromNow(0)" data-refresh="0">2013-12-03T15:36:12Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">This is great for Node beginners like myself. How does scraping with Node compare to scraping with Python? </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#28</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-12-04T05:29:08Z" data-format="fromNow(0)" data-refresh="0">2013-12-04T05:29:08Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Ian: The techniques are similar. The asynchronous style of JS it can be confusing if you are used to traditional languages. On the other side, it&#39;s nice that you can scrape using jQuery-like selectors instead of having to learn a different API like Python&#39;s BeautifulSoup.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/406cc6d189230a9b38e97ebfdfc898bace2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#29</span> <span class="label label-primary">Maqbool Fida</span> said
+                    <span class="flask-moment" data-timestamp="2013-12-10T09:39:03Z" data-format="fromNow(0)" data-refresh="0">2013-12-10T09:39:03Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Great tutorial! Are there any client-side/browser technologies/tutorials one can use for screen-scraping?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#30</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-12-10T16:37:56Z" data-format="fromNow(0)" data-refresh="0">2013-12-10T16:37:56Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Maqbool: I don&#39;t know of any. The technologies are similar, you could use jQuery to scrape, but to me it seems you have more control doing scraping outside of the browser.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/62c64749c216f73a110880f8c9eee79fce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#31</span> <span class="label label-primary">Uni Parmad</span> said
+                    <span class="flask-moment" data-timestamp="2013-12-15T22:49:44Z" data-format="fromNow(0)" data-refresh="0">2013-12-15T22:49:44Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Miguel Grinberg,
+
+I would like to scrap http://arsip.siap-ppdb.com/2012/bekasi/seleksi/sma/#!/s/31001004/1, and want to retrieve all of the name (column Nama).
+
+Could you advise me how to do it?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#32</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-12-16T01:47:50Z" data-format="fromNow(0)" data-refresh="0">2013-12-16T01:47:50Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Uni: It looks like that website loads the data in the table through ajax, so regular scraping techniques will not find anything, since they do not interpret the Javascript code that loads the data. One approach is to use Selenium or PhantomJS, which act like a browser and issue all the ajax calls. Another option is to try to figure out what ajax calls are made to load the data and then just issue those calls directly.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/6db4af3fb3d3b83e3e5ec89296e3a4cdce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#33</span> <span class="label label-primary">Nik</span> said
+                    <span class="flask-moment" data-timestamp="2014-01-07T02:47:57Z" data-format="fromNow(0)" data-refresh="0">2014-01-07T02:47:57Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Very nice tutorial.  Thank you Miguel.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/fcfd5e14ca9c91790e95dfdb1d2ad756ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#34</span> <span class="label label-primary"><a href="http://pure-essence.net/">Ying Zhang</a></span> said
+                    <span class="flask-moment" data-timestamp="2014-01-11T03:10:13Z" data-format="fromNow(0)" data-refresh="0">2014-01-11T03:10:13Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Very good stuff. What if instead of console.log the parsing, I want to collect all of the data and assign them to a global variable?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/fcfd5e14ca9c91790e95dfdb1d2ad756ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#35</span> <span class="label label-primary"><a href="http://pure-essence.net/">Ying Zhang</a></span> said
+                    <span class="flask-moment" data-timestamp="2014-01-11T03:51:10Z" data-format="fromNow(0)" data-refresh="0">2014-01-11T03:51:10Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I ended up using https://github.com/kriszyp/promised-io to solve the issue
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/8d5e1ffd38318bb24e3281b11fc20185ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#36</span> <span class="label label-primary"><a href="bosslee.html">Bryan</a></span> said
+                    <span class="flask-moment" data-timestamp="2014-01-25T13:47:44Z" data-format="fromNow(0)" data-refresh="0">2014-01-25T13:47:44Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">learning this in 2014, useful as ever.
+thanks for sharing :D
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/9352bf697c1e16a1456d2743345f31e3ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#37</span> <span class="label label-primary">Antonio</span> said
+                    <span class="flask-moment" data-timestamp="2014-02-17T14:23:51Z" data-format="fromNow(0)" data-refresh="0">2014-02-17T14:23:51Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Great tutorial. I need auto scrapping 24 h webpages about books for searching the best price but its difficult know in same pages take a default URL + id because there are very topics romances, comedy, history. I should study the all websites and extract all URLs??? </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/7b6779aa00d4d2a183562d7f97b20156ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#38</span> <span class="label label-primary">Sven</span> said
+                    <span class="flask-moment" data-timestamp="2014-02-17T16:35:24Z" data-format="fromNow(0)" data-refresh="0">2014-02-17T16:35:24Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hey,
+thx for that awesome Tutorial!
+
+Can you maybe tell me how i can store the every line of the outpout into a new line of an array or buffer or something?
+
+Thx!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/afb9f5a9148e7cf12514b6607a4eb5dbce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#39</span> <span class="label label-primary">André</span> said
+                    <span class="flask-moment" data-timestamp="2014-02-24T16:33:18Z" data-format="fromNow(0)" data-refresh="0">2014-02-24T16:33:18Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Thanks a lot for this tutorial Miguel! Very helpful and very well structured!
+
+I&#39;ll try to use it wisely! ;D</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/416f499a9e746925e1d89eea0974d6dbce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#40</span> <span class="label label-primary">az0000</span> said
+                    <span class="flask-moment" data-timestamp="2014-03-29T03:36:33Z" data-format="fromNow(0)" data-refresh="0">2014-03-29T03:36:33Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">thnx</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/805e87b8e6552dffec58ad450dbf5cfece2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#41</span> <span class="label label-primary">Ruben Barreiro</span> said
+                    <span class="flask-moment" data-timestamp="2014-04-15T19:52:56Z" data-format="fromNow(0)" data-refresh="0">2014-04-15T19:52:56Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">hi.
+
+your article is awesome. it helped me greatly... by the way as you say &#34; it gets a bit more complicated to handle logins&#34;  I had that issue. example: I needed to get &lt;title&gt; from a given url, it works just fine from too much sites but from others like facebook I needed to add a &#39;User-Agent&#39; header.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/75154c459809df1d246875557da51d12ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#42</span> <span class="label label-primary">yuvi</span> said
+                    <span class="flask-moment" data-timestamp="2014-04-24T07:04:11Z" data-format="fromNow(0)" data-refresh="0">2014-04-24T07:04:11Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">very Nice article, I was unaware if these terms your articled helped me to understand. I was doing using regular java program to find out exchange rates on daily basis, but my problem was to write separate code for each site response. I was doing scrapping actually. I ll try this js. 
+
+but I wanted to know which is more better?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#43</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-04-24T07:07:15Z" data-format="fromNow(0)" data-refresh="0">2014-04-24T07:07:15Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@yuvi: there is no better or worse, it&#39;s just a matter of preference.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/754d3762f983dc86f3f4bc8a99b0ed88ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#44</span> <span class="label label-primary">ramesh</span> said
+                    <span class="flask-moment" data-timestamp="2014-05-07T06:27:58Z" data-format="fromNow(0)" data-refresh="0">2014-05-07T06:27:58Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Running this above code having this error..
+
+TypeError: Cannot read property &#39;parent&#39; of undefined
+    at exports.update (C:\scraping\node_modules\cheerio\lib\parse.js:68:27)
+    at module.exports (C:\scraping\node_modules\cheerio\lib\parse.js:28:3)
+    at Function.exports.load (C:\scraping\node_modules\cheerio\lib\static.js:20
+14)
+    at Request._callback (C:\scraping\second.js:19:21)
+    at self.callback (C:\scraping\node_modules\request\request.js:121:22)
+    at Request.EventEmitter.emit (events.js:95:17)
+    at ClientRequest.self.clientErrorHandler (C:\scraping\node_modules\request\
+equest.js:230:10)
+    at ClientRequest.EventEmitter.emit (events.js:95:17)
+    at Socket.socketErrorListener (http.js:1547:9)
+    at Socket.EventEmitter.emit (events.js:95:17)</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#45</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-05-08T04:01:21Z" data-format="fromNow(0)" data-refresh="0">2014-05-08T04:01:21Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@ramesh: you&#39;ll need to run this inside a debugger to figure out exactly where in the script this is happening. It appears the problem is while cheerio is parsing the HTML body, if you confirm that then you should probably print the HTML that you are getting to confirm it is okay.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/ff3772cc2c3882c44ca91f45169c6a5cce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#46</span> <span class="label label-primary">Dan</span> said
+                    <span class="flask-moment" data-timestamp="2014-05-12T16:00:50Z" data-format="fromNow(0)" data-refresh="0">2014-05-12T16:00:50Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel,
+
+You mentioned that you might do a follow-up article on how to handle sites that need login information for scraping. I was wondering if you would consider doing that article and posting it? Thanks!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/5de6206b1c55160c18b9a811d60696aace2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#47</span> <span class="label label-primary">Aldo</span> said
+                    <span class="flask-moment" data-timestamp="2014-06-02T18:07:45Z" data-format="fromNow(0)" data-refresh="0">2014-06-02T18:07:45Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi... I was wondering if you could give me a bit of advice.
+I am pulling data for a school project from a gaming charts site.
+
+I am getting duplicate console log inputs because the selector I am using has the exact same info within a duplicate selector. The site structure is like this (I simplified it):
+
+                        &lt;table id=&#34;chart_body&#34;&gt;
+                            &lt;tr&gt;&lt;!-- 1 Info I need --&gt;&lt;/td&gt;
+                            &lt;tr&gt;&lt;!-- 2 Info I need --&gt;&lt;/td&gt;
+                                &lt;table&gt;
+                                    &lt;tbody&gt;
+                                        &lt;tr&gt; Duplicate info as 1  &lt;/tr&gt;
+                                    &lt;/tbody&gt;
+                                &lt;/table&gt;
+                            &lt;tr&gt;&lt;!-- 3 Info I need --&gt;&lt;/td&gt;
+                            &lt;tr&gt;&lt;!-- 4 Info I need --&gt;&lt;/td&gt;
+                            &lt;tr&gt;&lt;!-- 5 Info I need --&gt;&lt;/td&gt;
+                            &lt;tr&gt;&lt;!-- 6 Info I need --&gt;&lt;/td&gt;
+                        &lt;/table&gt;
+
+I set up the script as follows:
+...
+var $ = cheerio.load(body);
+		$(&#39;tr&#39;, &#39;#chart_body&#39;).each(function(){
+			var rank = $(this).text().trim().replace(/\s\s+/g, &#39;;&#39;);
+			chart.push(rank);
+		});
+
+		console.log(chart);           
+...
+
+My console log returns:
+&#39;1;Wolfenstein;330,703;330,703;1&#39;,
+  &#39;Wolfenstein: The New Order (PS4)Bethesda Softworks, Shooter&#39;,
+  &#39;2;Wolfenstein;188,200;188,200;1&#39;,
+  &#39;Wolfenstein: The New Order (XOne)Bethesda Softworks, Shooter&#39;,
+  &#39;3;Minecraft;126,041;215,109;2&#39;,
+  &#39;Minecraft (PS3)Sony Computer Entertainment, Adventure&#39;,
+
+
+All which is fine except the duplicate information.
+And also I can&#39;t seem to get rid of the single quote (&#39;) between returns. I just want a split after the returns.
+
+
+Thanks.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#48</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-06-03T16:30:23Z" data-format="fromNow(0)" data-refresh="0">2014-06-03T16:30:23Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Aldo: the example HTML that you should is invalid, that inner table is not parented to anything, it appears just between table rows. I assume that is your own mistake, correct?
+
+In any case, you can just eliminate the duplicates after you are done, or else look in the actual code if there is a way to use a more specific selector that can get the top level rows but not those from the inner table.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/09bb57af23d0aed90b466331bafb1df3ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#49</span> <span class="label label-primary">JD</span> said
+                    <span class="flask-moment" data-timestamp="2014-06-09T18:14:29Z" data-format="fromNow(0)" data-refresh="0">2014-06-09T18:14:29Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">for  faster much more concise web scraping and data extraction check out 
+https://github.com/rc0x03/node-promise-parser</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/248e34536f2500ff83777c7e00626fc5ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#50</span> <span class="label label-primary">Mike</span> said
+                    <span class="flask-moment" data-timestamp="2014-06-09T22:59:25Z" data-format="fromNow(0)" data-refresh="0">2014-06-09T22:59:25Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Can you explain the part of using CSS selectors? More specifically, why do you jump directly to the calendar tag and don&#39;t take into account the 
+container, maincontent, level3body tags?
+
+Thanks :). </p>
+                </div>
+            </div>
+        </li>
+        
+    </ul>
+</div>
+
+<div class="page">
+<ul class="pager">
+  <li class="previous">
+    <a href="1.html#comments">&laquo;&laquo;</a>
+  </li>
+  <li class="previous">
+    <a href="1.html#comments">&laquo;</a>
+  </li>
+  <li class="next">
+    <a href="0.html#comments">&raquo;&raquo;</a>
+  </li>
+  <li class="next">
+    <a href="3.html#comments">&raquo;</a>
+  </li>
+</ul>
+</div>
+
+<h3><a name="commentform"></a>Leave a Comment</h3>
+
+<form action="#commentform" method="post"
+  class="form" role="form">
+  <div style="display:none;"><input id="csrf_token" name="csrf_token" type="hidden" value="1439536856.99##d2332736acfee965d46b6c67cf415ad8744f9f7a"></div>
+  
+    
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="name">Name</label>
+        <input class="form-control" id="name" name="name" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="url">URL</label>
+        <input class="form-control" id="url" name="url" type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="email">Email</label>
+        <input class="form-control" id="email" name="email" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="comment">Comment</label>
+        <textarea class="form-control" id="comment" name="comment" required></textarea>
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="captcha">Captcha</label>
+        
+<script type="text/javascript">var RecaptchaOptions = {"custom_translations": {"audio_challenge": "Get an audio challenge", "cant_hear_this": "Download sound as MP3", "help_btn": "Help", "image_alt_text": "reCAPTCHA challenge image", "incorrect_try_again": "Incorrect. Try again.", "instructions_audio": "Type what you hear", "instructions_visual": "Type the text", "play_again": "Play sound again", "privacy_and_terms": "Privacy & Terms", "refresh_btn": "Get a new challenge", "visual_challenge": "Get a visual challenge"}, "theme": "white"};</script>
+<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S"></script>
+<noscript>
+  <iframe src="http://www.google.com/recaptcha/api/noscript?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S" height="300" width="500" frameborder="0"></iframe><br>
+  <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+  <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
+</noscript>
+
+  </div>
+
+
+    
+
+
+
+
+
+  
+
+
+    <input class="btn btn-default" id="submit" name="submit" type="submit" value="Submit">
+  
+
+
+
+
+
+</form>
+
+
+</div>
+
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <p class="elapsed">This page was generated in None seconds.</p>
+            <p>&copy; 2014 by Miguel Grinberg. All rights reserved. <a href="mailto:webmaster _at_ miguelgrinberg _dot_ com">Questions?</a></p>
+        </div>
+    </div>
+
+
+    
+    
+    <script src="../../../../cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="../../../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../../../cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.33/jquery.colorbox-min.js"></script>
+    <script type="text/javascript" src="../../../static/prettify.js"></script>
+    <script src="../../../../cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment-with-langs.min.js"></script>
+<script>
+function flask_moment_render(elem) {
+    $(elem).text(eval('moment("' + $(elem).data('timestamp') + '").' + $(elem).data('format') + ';'));
+    $(elem).removeClass('flask-moment');
+}
+function flask_moment_render_all() {
+    $('.flask-moment').each(function() {
+        flask_moment_render(this);
+        if ($(this).data('refresh')) {
+            (function(elem, interval) { setInterval(function() { flask_moment_render(elem) }, interval); })(this, $(this).data('refresh'));
+        }
+    })
+}
+$(document).ready(function() {
+    flask_moment_render_all();
+});
+</script>
+    
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4777284-15']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".gallery").colorbox({rel:".gallery",maxWidth:"95%",maxHeight:"95%",scalePhotos:true});
+            // add prettyprint class to all <pre><code></code></pre> blocks
+            var prettify = false;
+            $("pre code").parent().each(function() {
+                $(this).addClass('prettyprint');
+                prettify = true;
+            });
+            prettyPrint();
+        });
+    </script>
+
+
+  </body>
+
+<!-- Mirrored from blog.miguelgrinberg.com/post/easy-web-scraping-with-nodejs/page/2 by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:52:57 GMT -->
+</html>

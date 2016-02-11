@@ -1,0 +1,1057 @@
+<html>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch19s06.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:42 GMT -->
+<head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>19.6. Object-oriented design patterns</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><meta name="keywords" content="python, biology, bioinformatics, programming, computational biology"><link rel="home" href="index-2.html" title="Introduction to Programming using Python"><link rel="up" href="ch19.html" title="Chapter 19. Object-oriented design"><link rel="previous" href="ch19s05.html" title="19.5. Flexibility"><link rel="next" href="ch19s07.html" title="19.7. Solutions"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">19.6. Object-oriented design patterns</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch19s05.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><th width="60%" align="center">Chapter 19. Object-oriented design</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch19s07.html"><img src="images/next.png" alt="Next"></a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="sect_class_patterns"></a>19.6. Object-oriented design patterns</h2></div></div><p>
+      Presenting Python classes and various related mechanisms without
+      any description of their common uses would be like
+      defining the <tt>for</tt> and
+      <tt>while</tt> statements without any description of
+      the typical uses of these constructions, and how they adapt to
+      various programming needs. It is the purpose of this section
+      to present common uses of classes and objects, the so-called
+      <span class="emphasis"><em>design patterns</em></span>, that have been used
+      for a long time by programmers since object-oriented programming
+      was born.
+      </p><p>
+	Computer science is full of design patterns, and there is no
+	exception for object-oriented programming. A catalog of
+	object-oriented has been published by [Gamma95], and
+	[Christopher2002] has a chapter dedicated to a few of them,
+	with examples implemented in Python. Design patterns are not
+	programs: they are widely used <span class="emphasis"><em>design</em></span>
+	choices to build 
+	programs. As such, they form a kind of conceptual catalog that
+	you are encouraged to <span class="emphasis"><em>reuse</em></span> to build your
+	application. Not only are
+	they useful in order not to reinvent the wheel and to save
+	your time, but also because they provide a <span class="emphasis"><em>comprehension
+	framework</em></span> for programmers who intend to reuse your code and
+	who need to understand it. This part does not aim at an
+	exhaustive presentation of object-oriented design patterns,
+	which are very well described elsewhere. Its main purpose is
+	to give a taste of it, with examples in bioinformatics, and to
+	introduce the main related ideas. 
+      </p><p>
+	There are three categories of object-oriented patterns:
+	</p><div class="itemizedlist"><ul type="disc"><li><span class="emphasis"><em>Creational</em></span> patterns: patterns that can
+	  be used to <span class="emphasis"><em>create</em></span> objects.
+	  </li><li><span class="emphasis"><em>Structural</em></span> patterns: patterns that can
+	  be used to <span class="emphasis"><em>combine</em></span> objects and classes
+	  in order to build structured objects.
+	  </li><li><span class="emphasis"><em>Behavioral</em></span> patterns: patterns that can be
+	  used to build a computation and to control data flows.
+	  </li></ul></div><p>
+
+	
+      </p><p><b>Creational patterns.&nbsp;</b>
+     There are two main categories of creational patterns: those for
+     creating objects without having to know the class name, that you
+     could call "abstract object makers" (<span class="emphasis"><em>abstract
+     factory</em></span> and <span class="emphasis"><em>factory method</em></span>), and those to
+     ensure a certain property regarding object creation, such as
+     prohibiting more than one instance for a class
+     (<span class="emphasis"><em>singleton</em></span>), building a set of
+     instances from different classes in a consistent way
+     (<span class="emphasis"><em>builder</em></span>), or creating an instance with a
+     specific state (<span class="emphasis"><em>prototype</em></span>). 
+
+	  <div class="itemizedlist"><ul type="disc"><li><p>
+		<span class="emphasis"><em>Factory method:</em></span> a factory method
+       (or a factory function) is a function that creates an
+       object. You don't necessarily know the exact name of the class
+       of this object, but you know its interface.      
+		</p><div class="itemizedlist"><ul type="round"><li><p>
+		    A function reading a Fasta formatted file may return an
+		    instance of the <tt>DNA</tt> class,
+		    of the <tt>Protein</tt> class,
+		    or any class providing it has a similar interface:
+		      <pre class="programlisting">
+&gt;&gt;&gt; fh = open(myfile)
+&gt;&gt;&gt; my_seq = fasta_read(fh)
+&gt;&gt;&gt; print my_seq
+s1
+atgaaa
+		      </pre>
+
+		    </p></li><li><p>
+       For instance, you can create a sequence
+       object (<tt>Bio.Seq.Seq</tt> in Biopython) by
+       asking the <tt>get_seq_by_num</tt> method of
+       an alignment object
+       (<tt>Bio.Align.Generic.Alignment</tt>): 
+		      <pre class="programlisting">
+first_seq = align.get_seq_by_num(0)
+		      </pre>
+     The method which creates this instance of
+     <tt>Bio.Seq.Seq</tt> is a factory method.
+     The difference with a factory class is also that the factory method is
+     often more than an object maker: it sometimes incorporates  much more
+     knowledge about the way to create the object than a factory
+     would. 
+		    </p></li><li><p>
+		      A simple factory method would be a
+		      <tt>new</tt> method defined in a class to create new
+		      instances of the same class:
+		      <pre class="programlisting">
+other_seq = seq.new()
+		      </pre>
+		    </p></li></ul></div><p>
+	      </p></li><li><p>
+		<span class="emphasis"><em>Abstract factory:</em></span> an abstract factory is
+       an object maker, where, instead of specifying a class name, you
+       specify the kind of object you want.  It is very
+       similar to an abstract method: just, instead of being a method,
+		it is a class. For example,
+       the <tt>FastaLoader</tt> is a factory of
+       sequences. Given a filehandle, it returns a list of sequence
+       objects of the proper class:
+		    <pre class="programlisting">
+seq_factory = FastaLoader()
+fh = open(my_fasta_file)
+my_seqs = seq_factory.load(fh)
+fh.close()
+		    </pre>
+
+		</p><div class="exercise"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/exercise.png"></td><td><a name="quest_point_factory"></a><p class="title"><b>Exercise 19.5. Point factory</b></p></td></tr><tr><td colspan="2" align="left" valign="top">
+		  
+		  <p>
+		    Let's define a class that can create points for us. We
+		could ask to such a <span class="emphasis"><em>factory</em></span> to
+		create new points by just providing the
+		coordinates. This class could help us maintain a set
+		of unique points by checking that a point of the sme
+		coordinates does not already exist.
+
+		    <pre class="programlisting">
+factory = PointFactory()
+p1 = factory.create(3,4)
+p2 = factory.create(4,5)
+p3 = factory.create(4,5)
+p = factory.search(3,4)
+p.show()
+factory.delete(4,5)
+		    </pre>
+		    <a href="ch19s07.html#sol_point_factory" title="Solution 19.1. ">Solution 19.1</a>
+		  </p>
+		</td></tr></table></div><p>
+
+	      </p><p>
+For instance, say that you
+       want to create an agent to run analysis programs, you can
+       ask a factory to do it for you:
+		<pre class="programlisting">
+clustalw = AnalysisFactory.program('clustalw')
+result = clustalw.run(seqfile = 'myseqs')
+print result.alig
+		</pre>
+     The <tt>clustalw</tt> object is an instance of, say, the
+     <tt>AnalysisAgent.Clustalw</tt> class, but you do not have
+     to know about it at creation time. The only thing you know is the
+     name of the program you want ('clustalw'), and the factory will
+     do the rest for you.
+	      </p></li><li><p>
+		<span class="emphasis"><em>Singleton:</em></span> ensures that you cannot create
+       more than one instance. A class attribute could be used to
+       check the number of instanciations:
+
+		<pre class="programlisting">
+class Singleton:
+
+    _nb = 0
+    
+    def __init__(self):
+        if Singleton._nb &gt; 0:
+            raise Exception, "not more than one instance of " + str(self.__class__)
+        Singleton._nb = 1
+
+print "creating a 1st instance"
+s1 = Singleton()
+
+print "creating a 2nd instance"
+s2 = Singleton()
+
+Exception: not more than one instance of __main__.Singleton
+
+		</pre>
+
+	      </p><p>
+For example, if you can define a class to
+       contain operations and data for genetic code: you need only one
+       instance of this class to perform the task. Actually, this
+       pattern would not be implemented with a class in Python, but
+       rather with a module, at least if you can define it statically
+       (a dynamic singleton could not be a module, for a module has to
+       be a file):
+		<pre class="programlisting">
+&gt;&gt;&gt; import genetic_code
+&gt;&gt;&gt; genetic_code.aa('TTT')
+F
+		</pre>
+	      </p></li><li><p>
+		<span class="emphasis"><em>Prototype:</em></span> this pattern also lets you
+ create a new object without knowing its class, but here, the new
+ target object is created with the same state as the source object:
+		<pre class="programlisting">
+another_seq = seq.copy()
+		</pre>
+ The interest is that you do not get an "empty" object here, but an
+     object identical to <tt>seq</tt>. You can thus play with
+     <tt>another_seq</tt>, change its attributes,
+     etc... without breaking the original object. 
+
+	      </p></li><li><p>
+       <span class="emphasis"><em>Builder:</em></span> you sometimes need to create a
+       complex object composed of several parts. This is the role of the
+       builder. 
+		</p><div class="itemizedlist"><ul type="round"><li><p>
+       For instance, a builder is needed to build the whole
+       set of nodes and leafs of a tree. 
+		    </p></li><li><p>
+	 The Blast parser in Biopython simultaneously instantiates
+	 several classes that are all component parts of of hit:
+	 <tt>Description</tt>,
+	 <tt>Alignment</tt> and
+	 <tt>Header</tt>. 
+		    </p></li></ul></div><p>
+	      </p></li></ul></div>
+
+	</p><p><b>Structural patterns.&nbsp;</b>
+     Structural patterns address issues regarding how to combine and
+     structure objects. For this reason, several
+     structural patterns provide alternative solutions to
+     design problems that would else involve inheritance relationships
+     between classes. 
+
+	  <div class="itemizedlist"><ul type="disc"><li><p>
+	<span class="emphasis"><em>Decorator, proxy, adapter:</em></span> these patterns all
+	enable to combine two (or more) components, as shown
+	in <a href="ch19s06.html#fig_delegate_dp" title="Figure 19.7. Delegation">Figure 19.7</a>. There is one component, A,
+	      "in front" of another one, B. A is the visible object
+	a client will see. The role of A is either to extend or
+	restrict B, or help in using B. So, this pattern is similar to
+	subclassing, except
+	that, where a sub-class <span class="emphasis"><em>inherits</em></span> a method
+	from a base 
+	class, the decorator <span class="emphasis"><em>delegates</em></span> to its
+	decoratee when it does not have the required method. The advantage is
+	flexibility (see <a href="ch19s04.html#sect_class_inherit_comment" title="19.4.2. Discussion">Section 19.4.2</a>): you can combine
+	several of these components in any order at run 
+	time without having to create a big and complex hierarchy of
+	subclasses. 
+
+	  </p><div class="figure"><a name="fig_delegate_dp"></a><p class="title"><b>Figure 19.7. Delegation</b></p><div class="mediaobject"><img src="images/delegate_dp.png"></div></div><p>
+
+	      Generally, the Python code of the
+	      <tt>A</tt> class looks like: 
+	      <pre class="programlisting">
+class A:
+        def __init__(self, b):
+            """storing of the decoratee b (b is an instance of class B)"""
+            self.b = b
+
+        def __getattr__(self, name):
+            """
+               methods/attributes A does not know about are delegated
+               to b 
+            """
+            return getattr(self.b, name)
+
+class B:
+
+    def f(self):
+       return "result of f"
+
+	      </pre>
+
+             At use time, an instance of class
+             <tt>A</tt> is created by 
+             providing a <tt>b</tt> instance.
+	      <pre class="programlisting">
+&gt;&gt;&gt; b = B()
+&gt;&gt;&gt; a = A(b)
+&gt;&gt;&gt; print a.f()
+'result of f'
+	      </pre>
+	      Everything that class <tt>A</tt> cannot
+	      perform is forwarded to <tt>b</tt> 
+	      (providing that class <tt>B</tt> knows
+	      about it). 
+
+	      </p><div class="itemizedlist"><ul type="round"><li><p>
+	The <span class="emphasis"><em>decorator</em></span> enables to add functionalities
+	to another object. <a href="ch19s06.html#exa_dp_deco" title="Example 19.6. An uppercase sequence class">Example 19.6</a> shows a very
+
+	simple decorator that prints a sequence in uppercase.
+		    </p><div class="example"><a name="exa_dp_deco"></a><p class="title"><b>Example 19.6. An uppercase sequence class</b></p><p>
+			<pre class="programlisting">
+			  
+import string
+
+class UpSeq:
+
+    def __init__(self, seqobj):
+        self.seqobj = seqobj
+
+    def __str__(self):
+        return string.upper(self.seqobj.seq)
+
+    def __getattr__(self,attr):
+        return getattr(self.seqobj, attr)
+
+			</pre>
+			The way to use it is for instance:
+			<pre class="programlisting">
+&gt;&gt;&gt; s=UpSeq(DNA(name='name1', seq='atcgctgtc'))
+&gt;&gt;&gt; print s
+ATCGCTGTC
+&gt;&gt;&gt; s[0:3]
+'atc'
+&gt;&gt;&gt; len(s)
+9
+			</pre>
+		      </p></div><p> 
+
+		    </p><div class="exercise"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/exercise.png"></td><td><p class="title"><b>Exercise 19.6. An analyzed sequence class</b></p></td></tr><tr><td colspan="2" align="left" valign="top">
+			
+			<p>
+	  How would you design sequence classes where all sequence analyses
+	  of type <tt>f</tt> would be available as:
+		      <pre class="programlisting">
+seq.f()
+		      </pre>
+			without actually defining all the possible
+			<tt>f</tt> methods within the
+			sequence class?
+		      </p>
+		    </td></tr></table></div><p>
+		  </p></li><li><p>
+		      The <span class="emphasis"><em>proxy</em></span> rather handles
+		      the access to an object. There are several kinds
+		      of proxy: 
+		      </p><div class="itemizedlist"><ul type="square"><li><p>
+			    <span class="emphasis"><em>protection proxy</em></span>: to
+			    protect the access to an object.  
+
+			    </p><div class="example"><a name="exa_pattern_imm_list"></a><p class="title"><b>Example 19.7. <tt>ImmutableList</tt> class</b></p><p>
+			      The following example illustrates how to use this
+			      pattern. As you know, lists are mutable objects in
+			      Python: you can change them. In order to
+			      get an immutable list, you can use
+			      the <tt>UserList</tt> module
+			      provided by python that has
+			      a  <tt>UserList</tt> class, an redefine the
+			      methods that enable to change the list.
+			      <pre class="programlisting">
+import UserList
+
+class ImmutableList(UserList.UserList):
+
+    def __setitem__(self, i, value):
+        raise ValueError, "operation not supported"
+
+    def __delitem__(self, i):
+        raise ValueError, "operation not supported"
+
+    def append(self, item):
+        raise ValueError, "operation not supported"
+
+    def extend(self, other):
+        raise ValueError, "operation not supported"
+
+    def insert(self, other):
+        raise ValueError, "operation not supported"
+
+    def pop(self, i):
+        raise ValueError, "operation not supported"
+
+    def remove(self, i):
+        raise ValueError, "operation not supported"
+
+    def reverse(self):
+        raise ValueError, "operation not supported"
+
+    def sort(self):
+        raise ValueError, "operation not supported"
+
+
+l = ImmutableList([3, 4, 5])
+try:
+  l.append(10)
+except ValueError, e:
+  print e
+
+			      </pre>
+			      You could now consider that a list your
+			      program is managing can be temporarily
+			      made mutable. In contrast with the
+			      example above which is using
+			      inheritance, you can use the following
+			      class definition:
+			      <pre class="programlisting">
+class ImmutableList:
+
+    def __init__(self, l):
+        self.l = l
+
+    def __getattr__(self, attr):
+        return getattr(self.l, attr)
+
+    def __setitem__(self, i, value):
+        raise ValueError, "operation not supported"
+
+    def __delitem__(self, i):
+        raise ValueError, "operation not supported"
+
+    def append(self, item):
+        raise ValueError, "operation not supported"
+
+    def extend(self, other):
+        raise ValueError, "operation not supported"
+
+    def insert(self, other):
+        raise ValueError, "operation not supported"
+
+    def pop(self, i):
+        raise ValueError, "operation not supported"
+
+    def remove(self, i):
+        raise ValueError, "operation not supported"
+
+    def reverse(self):
+        raise ValueError, "operation not supported"
+
+    def sort(self):
+        raise ValueError, "operation not supported"
+
+l1 = [3, 4, 5]
+l2 = ImmutableList(l1)
+
+# provide l2 to another component, preventing temporarily the list to be changed
+# by this component
+other_function(l2)
+
+l1.append(8)
+
+			      </pre>
+			      
+			      </p></div><p>
+
+			  </p><div class="exercise"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/exercise.png"></td><td><p class="title"><b>Exercise 19.7. A partially editable sequence</b></p></td></tr><tr><td colspan="2" align="left" valign="top">
+			    
+			    <p>
+	  How would you design a sequence class where the only allowed
+			     editions would be:
+			      <pre class="programlisting">
+del seq[i]
+			      </pre>
+			      on a gap character, and:
+			      <pre class="programlisting">
+seq[i] = 'A'
+			      </pre>
+			      on a 'N' character?
+			    </p>
+			  </td></tr></table></div><p>
+			  
+			</p></li><li><p>
+			    <span class="emphasis"><em>virtual proxy</em></span>: to
+			    physically fetch data only when needed.
+			    Database dictionaries in Biopython work
+			    this way:
+		      <pre class="programlisting">
+prosite = Bio.Prosite.ExPASyDictionary()
+entry = prosite['PS00079']
+		      </pre>
+		      Data are fetched only when an access to an entry
+		      is actually requested.
+			  </p></li><li><p>
+			    <span class="emphasis"><em>remote proxy</em></span>: to
+			    simulate a local access for a remotely
+			    activated procedure.
+			  </p></li></ul></div><p>
+ 		      
+		    </p></li><li><p>
+	   The <span class="emphasis"><em>adapter</em></span> (or
+	<span class="emphasis"><em>wrapper</em></span>) helps in connecting two 
+	components that have been developped independantly and that
+	have a different interface. 
+
+		    </p><p>
+For instance, the
+	<tt>Pise</tt> package transforms Unix programs
+	interfaces in standardized interfaces, either Web interfaces,
+	or API. For instance, the  <b>golden</b> Unix
+		     command has the following interface:
+		      <pre class="programlisting">
+bash&gt; golden embl:MMVASP 
+		      </pre>
+		      But the <tt>Pise</tt> wrapper enables
+		      to run it and get the result by a Python
+		      program, having an interface defined in the
+		      Python language:
+		      <pre class="programlisting">
+factory = PiseFactory()
+golden = factory.program("golden",db="embl",query="MMVASP")
+job = golden.run()
+print job-&gt;content()
+		      </pre>
+
+		    </p></li></ul></div></li><li><p>
+		<span class="emphasis"><em>Collection</em></span>:
+		this is a general pattern on how to collect items. You
+		may need your own collection classes in numerous cases
+		where you have several items to manage as a set,
+		either ordered (list-like) or not ordered but accessible
+		through keys (dictionary-like). Generally, you will
+		need accessors to access the items, in various way:
+		</p><div class="itemizedlist"><ul type="round"><li>
+		      either
+		      by an indice or
+		      slice: <pre class="programlisting">my_collection[i]</pre>
+		      or by a key:  <pre class="programlisting">my_collection[key]</pre>
+		    </li><li>
+		      by a search on values:
+		      <pre class="programlisting">my_collection.search(value)</pre>
+		    </li><li>
+		      by iterating on all the items:
+		      <pre class="programlisting">for item in my_collection:
+		      ...</pre>
+		      or all the keys:
+		      <pre class="programlisting">for item in my_collection.keys():
+		      ...</pre>
+		    </li><li>
+		      printing:
+		      <pre class="programlisting">
+        def __str__(self):
+            output = ""
+            for x in my_collection:
+                 output = output + str(x)
+            return output
+		      </pre>
+		      (as you can notice,
+		      the collection's <tt>__str__</tt> method in turn
+		      invokes the items' <tt>__str__</tt>
+		      method, since the
+		      python <tt>str()</tt> function does
+		      invoke this special method when defined)
+		    </li><li>
+		      filtering:
+		      <pre class="programlisting">[x for x in my_collection if f(x)]</pre>
+		      (see <a href="ch11s07.html" title="11.7. List comprehensions">Section 11.7</a>)
+		    </li><li>
+		      saving items into a file:
+		      <pre class="programlisting">my_collection.save(fh)</pre>
+		    </li></ul></div><p>
+		You will also have a set of modificators, defined with
+		your own specific rules:
+		</p><div class="itemizedlist"><ul type="round"><li>
+		      adding/removing elements:
+		      <pre class="programlisting">my_collection.append(value)</pre>
+		      (here, for instance, you can check that the
+		      collection has unique values, or that the item
+		      is added at the right place to keep the
+		      collection sorted, etc...)
+		      <pre class="programlisting">my_collection.remove(value)</pre>
+		      or
+		      <pre class="programlisting">del my_collection[key]</pre>
+
+		    </li><li>
+		      modification, but also creation, can be enabled by assignation if the
+		      collection has a dictionary behaviour: <pre class="programlisting">my_collection[i] = value</pre>
+		      or assignation of an element and its key:
+		      <pre class="programlisting">my_collection[key] = value</pre>
+		    </li><li>
+		      loading items from a file:
+		      <pre class="programlisting">my_collection.load(fh)</pre>
+		    </li><li>
+		      re-ordering:
+		      <pre class="programlisting">my_collection.sort()</pre> or:
+		      <pre class="programlisting">my_collection.reverse()</pre>
+		    </li></ul></div><p>
+
+		</p><div class="example"><a name="exa_pattern_seqdb"></a><p class="title"><b>Example 19.8. <tt>SequenceDB</tt>
+		  class</b></p><p>
+		The following <tt>SequenceDB</tt> class
+		is an example of a collection for managing
+		sequences. You can load your sequences from a Fasta file and
+		save it after modifications. You can access to an
+		entry by name or search the database by
+		sub-sequence. The database is either a DNA
+		database (<tt>DnaDB</tt> class) or a
+		protein database (<tt>ProteinDB</tt> class).
+
+		This is an example of how to use such a collection:
+		<pre class="programlisting">
+# loading
+fh = open(fastafile)
+seqdb = DnaDB(fh)
+fh.close()
+# searching
+l = seqdb.search('cctac')
+for seq in l:
+    print l
+# modifying:
+seqdb['new_seq'] = 'ccaggaggccctggcctctcactgaacccggccactcctctttggc'
+print seqdb['new_seq']
+# output the whole db:
+print seqdb
+# saving:
+fh = open(fastafile, 'w')
+seqdb.save(fh)
+fh.close()
+		</pre>
+		The code of the classes would be:
+		<pre class="programlisting">
+class SequenceDB:
+
+    def __init__(self, fh=None):
+        self._db = {}
+        if fh is not None:
+            self.load(fh)
+
+    def load(self, fh):
+        seq = ""
+        line = fh.readline()
+        while line:
+            if line[0] == '&gt;':
+                if seq != '':
+                    self[name] = seq
+                name = line[1:-1]
+            else:
+                seq += line
+            line = fh.readline()
+
+        if seq != '':
+            self[name] = seq
+ 
+    def save(self, fh):
+        for k in self._db.keys():
+            seq = self._db[k]
+            fh.write(str(seq))
+
+    def __str__(self):
+        result = ""
+        for seq in self._db.values():
+            result += str(seq) + "\n"
+        return result[:-1]
+
+    def search (self, keywd) :
+        return [seq for seq in self._db.values() if keywd in seq.name or keywd in seq.seq]
+
+    def __getattr__(self, attr):
+        return getattr(self._db, attr)
+
+
+class DnaDB(SequenceDB):
+
+    def __setitem__(self, name, seq):
+        if self._db.has_key(name):
+            raise KeyError, name + ": this sequence already exists"
+        self._db[name] = DNA(name=name, seq=seq)
+
+class ProteinDB(SequenceDB):
+
+    def __setitem__(self, name, seq):
+        if self._db.has_key(name):
+            raise KeyError, name + ": this sequence already exists"
+        self._db[name] = Protein(name=name, seq=seq)
+		</pre>
+
+		As you can notice, this example is not only a
+		collection, it illustrates in fact several
+		patterns. The <span class="emphasis"><em>decorator</em></span>
+		since <tt>SequenceDB</tt> is composed
+		with a Python dictionary and delegates most native dictionary
+		methods through the <tt>__getattr__</tt>
+		special method. Thanks to this delegation, you can do
+		anything a dictionary could do with your database,
+		although it does not use inheritance. Its also
+		an <span class="emphasis"><em>abstract factory</em></span> for the class
+		creates of set of objects which class does not have to
+		be specified. It also uses the <span class="emphasis"><em>protection
+		proxy</em></span>, since
+		the <tt>__setitem__</tt> method does not
+		allow to override an existing entry.
+		  </p></div><p>
+
+	      </p></li><li><p>
+		<span class="emphasis"><em>Composite</em></span>:
+		this pattern is often used to handle complex composite
+		recursive structures. <a href="ch19s06.html#exa_tree_composite" title="Example 19.9. A composite tree">Example 19.9</a> shows a set of classes for a
+		tree structure, illustrated in <a href="ch19s06.html#fig_tree_composite" title="Figure 19.8. A composite tree">Figure 19.8</a>. The main idea of the
+		composite design pattern is to provide an <span class="emphasis"><em>uniform
+		interface</em></span> to instances from different
+		classes in the 
+		same hierarchy, where instances are all components of
+		the same composite complex object. In <a href="ch19s06.html#exa_tree_composite" title="Example 19.9. A composite tree">Example 19.9</a>, you have two types of nodes:   
+		<tt>Node</tt> and
+			<tt>Leaf</tt>, but you want a
+		similar interface for them, that is at least defined by a
+		common base class,
+		<tt>AbstractNode</tt>, with two
+		operations: <tt>print</tt>
+		<tt>subtree</tt>. These
+		operations should be callable on any node
+		instance, without knowing its
+		actual sub-class.
+
+		<pre class="programlisting">
+&gt;&gt;&gt; t1 = Leaf( 'A', 0.71399)
+&gt;&gt;&gt; t2 = Node (Leaf('B', -0.00804), 
+               Leaf('C', 0.07470))
+&gt;&gt;&gt; t3 = Node ( Leaf ( 'A', 0.71399),
+                Node ( Node ( Leaf('B', -0.00804), 
+                              Leaf('C', 0.07470), 
+                              0.15685),
+                       Leaf ('D', -0.04732),
+                       0.0666),
+              ) 
+
+&gt;&gt;&gt; print t3
+(A: 0.71399, ((B: -0.00804, C: 0.0747): 0.15685, D: -0.04732): 0.0666)
+&gt;&gt;&gt; t4 = t3.right.subtree()
+&gt;&gt;&gt; print t4
+((B: -0.00804, C: 0.0747): 0.15685, D: -0.04732)
+&gt;&gt;&gt; t5 = t3.left.subtree()
+&gt;&gt;&gt; print t5
+'A': 0.71399
+		</pre>
+
+		</p><div class="figure"><a name="fig_tree_composite"></a><p class="title"><b>Figure 19.8. A composite tree</b></p><div class="mediaobject"><img src="images/tree_composite.png"></div></div><p>
+		
+		</p><div class="example"><a name="exa_tree_composite"></a><p class="title"><b>Example 19.9. A composite tree</b></p><div class="programlistingco"><pre class="programlisting">
+		                                                                        <span class="co"><img src="images/callouts/1.png" alt="(1)"></span>
+class AbstractNode:
+
+    def __str__(self):
+        pass
+
+    def subtree(self):
+        pass
+                                                                          <span class="co"><img src="images/callouts/2.png" alt="(2)"></span>
+class Node(AbstractNode):
+    def __init__(self, left=None, right=None, length=None):
+        self.left=left
+        self.right=right
+        self.length=length
+
+    def __str__(self):
+	if self.length:
+	    return "(" + self.left.__str__() + ", " + self.right.__str__() + ")" + ": " + str(self.length) 
+	else:
+	    return "(" + self.left.__str__() + ", " + self.right.__str__() + ")"
+    
+    def subtree(self):                                                    <span class="co"><img src="images/callouts/3.png" alt="(3)"></span>
+        return Node(self.left, self.right)
+
+class Leaf(AbstractNode):
+    def __init__(self, name, length=None):
+        self.name = name
+        self.length=length
+        self.left = None
+        self.right = None
+
+    def __str__(self):
+        return self.name + ": " + str(self.length)
+
+    def subtree(self):
+        return Leaf(self.name, self.length)
+
+
+if __name__ == "__main__":
+    t1 = Leaf( 'A', 0.71399)
+    print t1
+    t2 = Node (Leaf('B', -0.00804), 
+	       Leaf('C', 0.07470))
+    print t2
+    t3 = Node ( Leaf ( 'A', 0.71399),
+		Node ( Node ( Leaf('B', -0.00804), 
+			      Leaf('C', 0.07470), 
+			      0.15685),
+		       Leaf ('D', -0.04732),
+		       0.0666),
+		)
+
+    print t3
+
+
+
+
+
+		    </pre><div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><img src="images/callouts/1.png" alt="1" border="0"></td><td valign="top" align="left"><p>Abstract class
+			<tt>AbstractNode</tt>, base
+			class for both <tt>Node</tt> and
+			<tt>Leaf</tt>
+			</p></td></tr><tr><td width="5%" valign="top" align="left"><img src="images/callouts/2.png" alt="2" border="0"></td><td valign="top" align="left"><p>Internal nodes are instances of
+			<tt>Node</tt> class.
+			</p></td></tr><tr><td width="5%" valign="top" align="left"><img src="images/callouts/3.png" alt="3" border="0"></td><td valign="top" align="left"><p>Leafs are instances of
+			<tt>Leaf</tt> class.
+			</p></td></tr></table></div></div></div><p>
+	      </p></li></ul></div>
+
+	</p><p><b>Behavioral patterns.&nbsp;</b>
+	  Patterns of this category are very useful in sequence
+	  analysis, where you often have to combine algorithms and to
+	  analyze complex data structure in a flexible way.
+
+	  <div class="itemizedlist"><ul type="disc"><li><p>
+		<span class="emphasis"><em>Template</em></span>: this pattern consists
+		in separating the invariant part of an algorithm from
+		the variant part. In a sorting procedure, you can generally
+		separate the function which compares items from the main body
+		of the algorithm. The template method, in this case,
+		is the <tt>sort()</tt> method, whereas the
+		<tt>compare()</tt> can be defined by each
+		subclass depending on its implementation or data
+		types. 
+
+	      </p><p>
+		The following function defines a typical search, which
+		objective is to verify a property on the whole
+		sequence. So it stops
+		whenever a property is not verified on a single element of
+		the sequence. The structure of this search is a kind
+		of template.
+		<pre class="programlisting">
+def check_whole_seq(seq, check_fn):
+    for c in seq:
+        if not check_fn(c):
+            return False
+    return True
+		</pre>
+		This type of search is so common that
+		you could imagine to provide an boolean function to
+		this function for the control to perform, in order to
+		have a generic function.
+	      </p><p>
+		A related template would be to search in the sequence
+		whether a propoerty is verified at least once:
+		<pre class="programlisting">
+def check_has_seq(seq, check_fn):
+    for c in seq:
+        if check_fn(c):
+            return True
+    return False
+		</pre>
+	      </p></li><li><p>
+		<span class="emphasis"><em>Strategy</em></span>: the boolean function in
+		the examples above can be called a strategy, because it
+		provides the logic which decides for the result of the
+		search. Examples of such function are listed below:
+		<pre class="programlisting">
+def is_dna(c):
+    return c in 'atcgATCG'
+
+def is_gap(c):
+    return c in '-.'
+
+def is_amino_acid(c):
+    AA = upper(c) 
+    if AA &lt; 'A' or AA &gt; 'Z':
+        return False
+    if AA in 'JOU':
+        return False
+    return True
+
+def is_upper(c):
+    return c == upper(c)
+
+def is_letter(c):
+    return c in ascii_letters
+		  </pre>
+                You can use of of these in combination with the
+                template above:
+		  <pre class="programlisting">
+check_whole_seq('tgtcgt', is_dna)
+check_whole_seq('MAI', is_amino_acid)
+check_has_seq('tg-tcgt', is_gap)
+		  </pre>
+		</p><p>
+		In the following example, the
+		<tt>f_test</tt> method is a strategy:
+<pre class="programlisting">
+class MotifDB:
+
+    def __init__(self, fh=None, db=None):
+        self._db = []
+        if fh is not None:
+            self._load_fh(fh)
+        elif db is not None:
+            self._load_db(db)
+
+    def filter(self, f_test) :
+        return self.__class__(db=[motif for motif in self._db if f_test(motif)])
+</pre>
+       Applied to all elements of a set, this function is provided as
+       a parameter to filter the elements. It can be used the
+       following way:
+<pre class="programlisting">
+    new_db = db.filter(lambda(motif): 'kinase' in motif.get_desc())
+</pre>
+       where only elements of this motifs databse containing 'kinase'
+       in their description will be returned.
+	      </p></li><li><p>
+		<span class="emphasis"><em>Iterator</em></span>: an iterator is an
+		object that let you browse a sequence of items from
+		the beginning to the end. Generally, it provides:
+		</p><div class="itemizedlist"><ul type="round"><li>
+		    a method to start iteration
+		  </li><li>    
+		    a method to get the next item
+		  </li><li>    
+		    a method to test for the end of the iteration
+		  </li></ul></div><p>
+	      Usually, one distinguishes <span class="emphasis"><em>internal</em></span>
+	      versus <span class="emphasis"><em>external</em></span> iterators. An
+	      external iterator is an iterator which enables to do a
+	      <tt>for</tt> or a <tt>while</tt>
+	      loop on a range of values that 
+	      are returned by the iterator:
+		  <pre class="programlisting">
+for e in l.elements():
+     f(e)
+		  </pre>
+or:
+		  <pre class="programlisting">
+i = l.iterator()
+e = i.next()
+while e:
+   f(e)
+   e = i.next()
+		  </pre>
+	        In the above examples, you control the loop.
+
+		On the other hand, an internal iterator just lets you
+		define a function or 
+		a method (say, <tt>f</tt>, called
+		a <span class="emphasis"><em>visitor</em></span>, see below) to apply to
+		all elements: 
+		  <pre class="programlisting">
+l.iterate(f)
+		  </pre>
+
+	      </p><p>
+		In the Biopython
+		package, files and databases are generally available
+		through an iterator.
+		</p><div class="programlistingco"><pre class="programlisting">
+handle = open(...)                                                        <span class="co"><img src="images/callouts/1.png" alt="(1)"></span>
+iter = Bio.Fasta.Iterator(handle)                                         <span class="co"><img src="images/callouts/2.png" alt="(2)"></span>
+seq = iter.next()                                                         <span class="co"><img src="images/callouts/3.png" alt="(3)"></span>
+while seq:
+  print seq.name
+  print seq.seq                                                           <span class="co"><img src="images/callouts/4.png" alt="(4)"></span>
+  seq = iter.next()
+handle.close()
+		  </pre><div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><img src="images/callouts/1.png" alt="1" border="0"></td><td valign="top" align="left"><p>Starting the iterator.</p></td></tr><tr><td width="5%" valign="top" align="left"><img src="images/callouts/2.png" alt="2" border="0"></td><td valign="top" align="left"><p>Getting the next element.</p></td></tr><tr><td width="5%" valign="top" align="left"><img src="images/callouts/3.png" alt="3" border="0"></td><td valign="top" align="left"><p>Testing for the end of the iteration.</p></td></tr><tr><td width="5%" valign="top" align="left"><img src="images/callouts/4.png" alt="4" border="0"></td><td valign="top" align="left"><p>Getting the next element.</p></td></tr></table></div></div><p>
+
+	      </p></li><li><p>
+		<span class="emphasis"><em>Visitor</em></span>: this pattern is useful
+		to specify a function that will be applied on each
+		item of a collection. The Python
+		<tt>map</tt> function provides a way to use
+		visitors, such as the <tt>f</tt> function,
+		which visits each item of the <tt>l</tt>
+		list in turn:
+	      <pre class="programlisting">
+&gt;&gt;&gt; def f(x):
+	return x + 1
+&gt;&gt;&gt; l=[0,1,2]
+&gt;&gt;&gt; map(f,l)
+[1, 2, 3]
+	      </pre>
+	      The <tt>map</tt> is an example of an
+	      internal iterator (with the <tt>f</tt>
+	      function as a visitor). The <tt>f_test</tt>
+	      function in the <tt>MotifDB</tt> class
+	      above is also a visitor. A visitor is also a strategy
+	      that applies to all the elements of a set.
+	      </p><div class="example"><a name="exa_pattern_rec_visitor"></a><p class="title"><b>Example 19.10. A recursive visitor</b></p><p>
+		A visitor can be quite useful during the traversal of
+		a recursive data
+		structure. <a href="ch15s03.html" title="15.3. Recursive data structures">Section 15.3</a>
+		provide examples of typical recursive traversals
+		(<span class="emphasis"><em>templates</em></span>) of a
+		tree. The functions that traverse a tree could very
+		well be rewritten with
+		a <span class="emphasis"><em>visitor</em></span>. In the following
+		code, <tt>walk_leaves</tt> takes an
+		additional parameter, which is a function that will be
+		executed on each leaf of the tree. this function, for
+		example, can just print the leaf.
+		<pre class="programlisting">
+def walk_leaves(tree, visitor):
+    if type(tree) is types.ListType:
+        for child in tree:
+            walk_leaves(child, visitor)
+    else:
+        visitor(tree)
+
+def output(e):
+    print e
+
+        
+tree = [[[['human', 'chimpanzee'], 'gorilla'], 'orang-utan'], 'gibbon']
+walk_leaves(tree, output)
+		</pre>
+		Similarly, the following binary traversal takes a
+		function as a parameter (<tt>make</tt>&gt;), which purpose is to build the
+		result of the traversal.
+		<pre class="programlisting">
+def binary_traverse(tree, make):
+    if type(tree) is types.ListType:
+        left = binary_traverse(tree[0], make)
+        right = binary_traverse(tree[1], make)
+        print left, right
+        return make(left, right)
+    else:
+        return make(tree)
+
+def build_list(*l):
+    if len(l) == 1:
+        return [l[0]]
+    _l = []
+    for e in l:
+        _l = _l + e
+    return _l
+
+t1 = binary_traverse(tree, build_list)
+['human'] ['chimpanzee']
+['human', 'chimpanzee'] ['gorilla']
+['human', 'chimpanzee', 'gorilla'] ['orang-utan']
+['human', 'chimpanzee', 'gorilla', 'orang-utan'] ['gibbon']
+
+def build_string(*l):
+    if len(l) == 1:
+        return str(l[0])
+    _s = "("
+    for e in l:
+        _s = _s + str(e) + ","
+    return _s[:-1] + ")"
+
+t2 = binary_traverse(tree, build_string)
+human chimpanzee
+(human,chimpanzee) gorilla
+((human,chimpanzee),gorilla) orang-utan
+(((human,chimpanzee),gorilla),orang-utan) gibbon
+		</pre>
+		</p></div></li><li><p>
+		<span class="emphasis"><em>Observer</em></span>
+		The <span class="emphasis"><em>observer</em></span> pattern provides a
+		framework to maintain a consistent distributed state
+		between loosely coupled components.
+		One agent, the observer, is in charge of maintaining
+		a list of <span class="emphasis"><em>subscribers</em></span>, e.g
+		components that have subscribed to be informed about 
+	        changes in a given state. Whenever a change occurs in a state,
+		the observer has to inform each subscriber about it.
+	      </p><p>
+	      A well-known example is the Model-View-Controller
+	      [Krasner88] framework. The view components, the ones who
+	      actually display data, subscribe to "edit events" in
+	      order to be able to refresh and redisplay them whenever
+	      a change occurs. 
+	      </p></li></ul></div>
+	</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch19s05.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch19.html"><img src="images/up.png" alt="Up"></a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch19s07.html"><img src="images/next.png" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">19.5. Flexibility&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index-2.html"><img src="images/home.png" alt="Home"></a></td><td width="40%" align="right" valign="top">&nbsp;19.7. Solutions</td></tr></table></div></body>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch19s06.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:43 GMT -->
+</html>

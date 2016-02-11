@@ -1,0 +1,682 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from www.python-course.eu/python3_magic_methods.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:10:34 GMT -->
+<head>
+
+<!-- Dieses Tag in den Head-Bereich oder direkt vor dem schlieÃŸenden Body-Tag einfÃ¼gen -->
+<script type="text/javascript" src="../apis.google.com/js/plusone.js"></script>
+
+
+
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "../connect.facebook.net/en_GB/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script><title>Python3 Tutorial: Magic Methods</title>
+<meta http-equiv="content-type" content="text/html; charset="ISO-8859-1">
+<meta name="Description" content="Python Tutorial: Magic methods and operator overloading with examples." />
+<meta name="Keywords" content="Python, Python3, tutorial, course, magic methods, operator overloading, __add__, __init__" />
+
+<link href="favicon.ico" rel="shortcut icon">
+
+<link href="moderna.css" rel="stylesheet" type="text/css" />
+<link href="moderna_print.css" media="print" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+<div id="container">
+
+<div id="banner">
+<!-- <a href="impressum.php">Impressum</a> | <a href="mailto:">contact</a> | --><h1>Python Course</h1>
+
+</div>
+
+	<!-- Begin Top Menu -->
+<ul id="navlist">
+<li><a href="index-2.html" >Home</a></li><li><a href="course.html" >Python 2 Tutorial</a></li><li class="active"><a id="current" href="python3_course.html" >Python 3 Tutorial</a></li><li><a href="advanced_topics.html" >Advanced Topics</a></li><li><a href="python_books.html" >Python Books</a></li><li><a href="python_tkinter.html" >Tkinter Tutorial</a></li><li><a href="contact.html" rel="nofollow">Contact</a></li>                          
+</ul>
+	<!-- End Top Menu -->
+<div id="sidebar-a">
+<img class="border" src="images/logo100.png" alt="box" />    <h2>Python 3 Tutorial</h2>
+
+<div class="menu">
+
+<ul>
+<li><a href="python3_history_and_philosophy.html">The Origins of Python</a></li><li><a href="python3_interactive.html">Starting with Python: The Interactive Shell</a></li><li><a href="python3_execute_script.html">Executing a Script</a></li><li><a href="python3_blocks.html">Indentation</a></li><li><a href="python3_variables.html">Data Types and Variables</a></li><li><a href="python3_operators.html">Operators</a></li><li><a href="python3_sequential_data_types.html">Sequential Data Types: Lists and Strings</a></li><li><a href="python3_deep_copy.html">Shallow and Deep Copy</a></li><li><a href="python3_dictionaries.html">Dictionaries</a></li><li><a href="python3_sets_frozensets.html">Sets and Frozen Sets</a></li><li><a href="python3_input.html">input via the keyboard</a></li><li><a href="python3_conditional_statements.html">Conditional Statements</a></li><li><a href="python3_loops.html">Loops, while Loop</a></li><li><a href="python3_for_loop.html">For Loops</a></li><li><a href="python3_print.html">Output with Print</a></li><li><a href="python3_formatted_output.html">Formatted output with string modulo and the format method</a></li><li><a href="python3_functions.html">Functions</a></li><li><a href="python3_recursive_functions.html">Recursion and Recursive Functions</a></li><li><a href="python3_tests.html">Tests, DocTests, UnitTests</a></li><li><a href="python3_memoization.html">Memoization and Decorators</a></li><li><a href="python3_passing_arguments.html">Parameter Passing in Functions</a></li><li><a href="python3_namespaces.html">Namespaces</a></li><li><a href="python3_global_vs_local_variables.html">Global and Local Variables</a></li><li><a href="python3_file_management.html">Read and Write Files</a></li><li><a href="python3_modules_and_modular_programming.html">Modular Programming and Modules</a></li><li><a href="python3_re.html">Regular Expressions</a></li><li><a href="python3_re_advanced.html">Regular Expressions, Advanced</a></li><li><a href="python3_lambda.html">Lambda Operator, Filter, Reduce and Map</a></li><li><a href="python3_list_comprehension.html">List Comprehension</a></li><li><a href="python3_generators.html">Iterators and Generators</a></li><li><a href="python3_exception_handling.html">Exception Handling</a></li><li><a href="python3_object_oriented_programming.html">Object Oriented Programming</a></li><li><a href="python3_class_and_instance_attributes.html">Class and Instance Attributes</a></li><li><a href="python3_properties.html">Properties vs. getters and setters</a></li><li><a href="python3_inheritance.html">Inheritance</a></li><li><a href="python3_multiple_inheritance.html">Multiple Inheritance</a></li><li><a href="python3_magic_methods.html">Magic Methods and Operator Overloading</a></li><li><a href="python3_inheritance_example.html">OOP, Inheritance Example</a></li></ul>
+
+</div>
+
+<p>
+<hr>
+<h3>Some Magic</h3>
+<i>"And above all, watch with glittering eyes the whole world around you 
+because the greatest secrets are always hidden in the most unlikely places. 
+Those who don't believe in magic will never find it." (Roald Dahl)</i>
+<br><br>
+<i>"It's still magic even if you know how it's done." (Terry Pratchett, A Hat Full of Sky)</i> 
+
+<h3>Japanese Food and OOP</h3>
+<i>
+"I think both Object-Oriented Programming and Japanese food are significant aesthetic 
+and stylistic achievements - they're both about taking simple meager ingredients 
+and making something remarkable.", Sean M. Burke
+</i>
+<br><br>
+
+<h3>Object-oriented Programming</h3>
+"Certainly not every good program is object-oriented, and not every object-oriented program is good."
+<br>
+(Bjarne Stroustrup, Danish computer scientist, best known for the creation and the development 
+of the widely used C++ programming language.)
+<br><br>
+"Object-oriented programming is an exceptionally bad idea which could only have originated in California."
+<br>
+(Edsger Dijkstra, (Dutch computer Scientist, 1930-2002)
+<br><br>
+Dijkstra also said: 
+<br>
+<i>"... what society over&shy;whel&shy;mingly asks for is snake oil. Of course, 
+the snake oil has the most impressive names - otherwise you would be selling nothing - like 
+"Structured Analysis and Design", "Software Engineering", "Maturity Models", "Management 
+Information Systems", "Integrated Project Support Environments" "Object Orientation" and "Business
+ Process Re-engineering"
+</i>
+<br><br>
+
+<hr>
+<br>
+This website is supported by:<br>
+<a href="http://www.bodenseo.com/courses.php"><img style="width: 150px;" alt="Bodenseo,
+Linux, courses and seminars"
+		     src="images/bodenseo_python_training.gif"><br>Linux and Python Courses and Seminars</a>
+<br>
+<hr>
+</div><div id="sidebar-b"><img style="width: 150px;" alt="Python-Logo"
+		     src="images/python-logo.png"><!-- Dieses Tag dort einfügen, wo die +1-Schaltfläche dargestellt werden soll -->
+<g:plusone></g:plusone>
+<br><br>
+
+<div class="fb-like" data-href="www.python-course.eu" data-send="false" data-layout="button_count" 
+data-width="130" data-show-faces="true" data-action="recommend"></div>
+
+<br><br>
+This topic in German / Deutsche Übersetzung:
+    <a href="http://www.python-kurs.eu/python3_magische_methoden.php">Magische Methoden und Operator-Überladung</a><p>
+<h3>Classroom Training Courses</h3>
+The goal of this website is to provide educational material, 
+allowing you to learn Python on your own.
+Nevertheless, it is faster and more efficient to attend a "real" 
+Python course in a classroom, with
+an experienced trainer. So why not attend one of the live 
+<a href="python_classes.html">Python courses</a> in Paris, London, Berlin, Munich
+or Lake Constance by Bernd Klein, the author of this tutorial?
+<br><br>
+You can also check the   
+<a href="http://www.bodenseo.com/courses.php?topic=Python">Python Training courses
+<img style="width: 150px;" alt="Bodenseo Kurse in Python"
+		     src="images/bodenseo_stairs_to_python.png"></a>
+		     delivered by Bodenseo and Bernd Klein.
+<br><br>
+You can book on-site classes at your company or organization, e.g. in England, Switzerland, Austria, Germany,
+France, Belgium, the Netherlands, Luxembourg, Poland, UK, Italy and other locations in Europe.
+<br><br>
+
+ </p>
+
+
+
+
+    
+</p></div>
+<div id="content">
+
+<div id="contextlinks">Previous Chapter: <a href="python3_multiple_inheritance.html">Multiple Inheritance</a><br>
+<LINK rel="prev" href="python3_multiple_inheritance.html">Next Chapter: <a href="python3_inheritance_example.html">OOP, Inheritance Example</a><br>
+<LINK rel="next" href="python3_inheritance_example.html"></div>
+<h2>Magic Methods and Operator Overloading</h2>
+
+
+<h3>Introduction</h3>
+<img class="imgright" width=300 src="images/marvin_the_magician.png" alt="Marvin, the magician" />
+
+The so-called magic methods have nothing to do with wizardry. You have already seen them
+in previous chapters of our tutorial. They are the methods with this clumsy syntax, i.e. the 
+double underscores at the beginning and the end. They are also hard to talk about. How do you 
+pronounce or say a method name like __init__? "Underscore underscore init underscore underscore" 
+sounds horrible and is nearly a tongue twister. "Double underscore init double underscore" is
+a lot better, but the ideal way is "dunder init dunder"<sup>1</sup>
+That's why magic methods methods are sometimes called dunder methods!
+<br><br>
+So what's magic about the __init__ method? The answer is, you don't have to invoke it directly.
+The invocation is realized behind the scenes. When you create an instance x of a class A with
+the statement "x = A()", Python will do the necessary calls to __new__ and __init__.
+
+<br><br>
+We have encountered the concept of operator overloading many times in the course of this tutorial.
+We had used the plus sign to add numerical values, to concatenate strings or to combine lists:
+
+
+
+<br><br>
+<pre>
+>>> 4 + 5
+9
+>>> 3.8 + 9
+12.8
+>>> "Peter" + " " + "Pan"
+'Peter Pan'
+>>> [3,6,8] + [7,11,13]
+[3, 6, 8, 7, 11, 13]
+>>> 
+
+</pre>
+
+<img class="imgright" width=200 src="images/operator_overloading__add__.png" alt="Operator Overloading __add__" />
+
+It's even possible to overload the "+" operator as well as all the other operators for the 
+purposes of your own class. To do this, you need to understand the underlying 
+mechanism. There is a special (or a "magic") method for every operator sign. The method
+The magic method for the "+" sign is the __add__ method. For "-" it is "__sub__" and so on.
+We have a complete listing of all the magic methods a little bit further down. 
+<br><br>
+The mechanism works like this: If we have an expression "x + y" and x is an instance of
+class K, then Python will check the class definition of K. If K has a method __add__ it 
+will be called with x.__add__(y), otherwise we will get an error message.
+<br><br>
+<pre>
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+TypeError: unsupported operand type(s) for +: 'K' and 'K'
+</pre>
+
+<br><br>
+<h3>Overview of Magic Methods</h3>
+
+
+
+
+<h4>Binary Operators</h4>
+
+<table
+style="text-align: left; width: 100%; background-color: rgb(220, 255, 220);"
+border="0" cellpadding="2" cellspacing="2">
+<tbody>
+<tr>
+<th style="vertical-align: top;">Operator</th>
+<th style="vertical-align: top;">Method</th>
+</tr>
+
+<tr>
+<td style="vertical-align: top;">+</td>
+<td style="vertical-align: top;">object.__add__(self, other) </td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;">-</td>
+<td style="vertical-align: top;">object.__sub__(self, other)</td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;">*</td>
+<td style="vertical-align: top;">object.__mul__(self, other) </td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;">//</td>
+<td style="vertical-align: top;">object.__floordiv__(self, other)</td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;">/</td>
+<td style="vertical-align: top;">object.__div__(self, other)</td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;">%</td>
+<td style="vertical-align: top;">object.__mod__(self, other) </td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;">**</td>
+<td style="vertical-align: top;">object.__pow__(self, other[, modulo]) </td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;"><<</td>
+<td style="vertical-align: top;">object.__lshift__(self, other) </td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;">>></td>
+<td style="vertical-align: top;">object.__rshift__(self, other) </td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;">&</td>
+<td style="vertical-align: top;">object.__and__(self, other)</td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;">^</td>
+<td style="vertical-align: top;">object.__xor__(self, other) </td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;">|</td>
+<td style="vertical-align: top;">object.__or__(self, other) </td>
+</tr>
+</tbody>
+</table>
+
+
+
+<h4>Extended Assignments</h4>
+
+
+<table
+style="text-align: left; width: 100%; background-color: rgb(220, 255, 220);"
+border="0" cellpadding="2" cellspacing="2">
+<tbody>
+
+<tr>
+<th style="vertical-align: top;">Operator</th>
+<th style="vertical-align: top;">Method</th>
+</tr>
+
+<tr>
+<td style="vertical-align: top;">+=</td>
+<td style="vertical-align: top;">object.__iadd__(self, other) </td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;">-=</td>
+<td style="vertical-align: top;">object.__isub__(self, other) </td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;">*=</td>
+<td style="vertical-align: top;">object.__imul__(self, other) </td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;">/= </td>
+<td style="vertical-align: top;">object.__idiv__(self, other) </td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;">//=</td>
+<td style="vertical-align: top;">object.__ifloordiv__(self, other) </td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;">%=</td>
+<td style="vertical-align: top;">object.__imod__(self, other) </td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;">**=</td>
+<td style="vertical-align: top;">object.__ipow__(self, other[, modulo]) </td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;"><<=</td>
+<td style="vertical-align: top;">object.__ilshift__(self, other) </td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;">>>= </td>
+<td style="vertical-align: top;">object.__irshift__(self, other) </td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;">&=</td>
+<td style="vertical-align: top;">object.__iand__(self, other) </td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;">^=</td>
+<td style="vertical-align: top;">object.__ixor__(self, other) </td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;">|=</td>
+<td style="vertical-align: top;">object.__ior__(self, other) </td>
+</tr>
+</tbody>
+</table>
+
+<h4>Unary Operators</h4>
+
+
+<table
+style="text-align: left; width: 100%; background-color: rgb(220, 255, 220);"
+border="0" cellpadding="2" cellspacing="2">
+<tbody>
+
+<tr>
+<th style="vertical-align: top;">Operator</th>
+<th style="vertical-align: top;">Method</th>
+</tr>
+
+<tr>
+<td style="vertical-align: top;">- </td>
+<td style="vertical-align: top;">object.__neg__(self) </td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;">+</td>
+<td style="vertical-align: top;">object.__pos__(self) </td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;">abs()   </td>
+<td style="vertical-align: top;">object.__abs__(self) </td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;">~</td>
+<td style="vertical-align: top;">object.__invert__(self) </td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;">complex()       </td>
+<td style="vertical-align: top;">object.__complex__(self) </td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;">int()           </td>
+<td style="vertical-align: top;">object.__int__(self) </td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;">long()          </td>
+<td style="vertical-align: top;">object.__long__(self) </td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;">float()         </td>
+<td style="vertical-align: top;">object.__float__(self) </td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;">oct()           </td>
+<td style="vertical-align: top;">object.__oct__(self) </td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;">hex()           </td>
+<td style="vertical-align: top;">object.__hex__(self </td>
+</tr>
+
+</tbody>
+</table>
+
+<h4>Comparison Operators</h4>
+
+
+
+<table
+style="text-align: left; width: 100%; background-color: rgb(220, 255, 220);"
+border="0" cellpadding="2" cellspacing="2">
+<tbody>
+
+<tr>
+<th style="vertical-align: top;">Operator</th>
+<th style="vertical-align: top;">Method</th>
+</tr>
+
+<tr>
+<td style="vertical-align: top;"><        </td>
+<td style="vertical-align: top;">object.__lt__(self, other) </td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;"><=       </td>
+<td style="vertical-align: top;">object.__le__(self, other) </td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;">==       </td>
+<td style="vertical-align: top;">object.__eq__(self, other) </td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;">!=       </td>
+<td style="vertical-align: top;">object.__ne__(self, other) </td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;">>=       </td>
+<td style="vertical-align: top;">object.__ge__(self, other) </td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;">>        </th>
+<td style="vertical-align: top;">object.__gt__(self, other) </td>
+</tr>
+
+<tr>
+
+</tbody>
+</table>
+
+<br><br>
+
+<h3>Example class: Length</h3>
+
+We will demonstrate in the following Length class, how you can overload the "+"
+operator for your own class. To do this, we have to overload the __add__ method. 
+Our class contains the __str__ and __repr__ methods as well. The instances of the
+class Length contain length or distance information. The attributes of an instance
+are self.length and self.unit.
+
+
+<br><br>
+This class allows us to calculate expressions with mixed units like this one:
+<br><br>
+2.56 m + 3 yd + 7.8 in + 7.03 cm
+<br><br>
+The class can be used like this:
+<br><br>
+<pre>
+>>> from unit_conversions import Length
+>>> L = Length
+>>> print(L(2.56,"m") + L(3,"yd") + L(7.8,"in") + L(7.03,"cm"))
+5.57162
+>>> 
+</pre>
+<br>
+The listing of the class:
+<br><br>
+
+<pre>
+class Length:
+
+    __metric = {"mm" : 0.001, "cm" : 0.01, "m" : 1, "km" : 1000,
+                "in" : 0.0254, "ft" : 0.3048, "yd" : 0.9144,
+                "mi" : 1609.344 }
+    
+    def __init__(self, value, unit = "m" ):
+        self.value = value
+        self.unit = unit
+    
+    def Converse2Metres(self):
+        return self.value * Length.__metric[self.unit]
+    
+    def __add__(self, other):
+        l = self.Converse2Metres() + other.Converse2Metres()
+        return Length(l / Length.__metric[self.unit], self.unit )
+    
+    def __str__(self):
+        return str(self.Converse2Metres())
+    
+    def __repr__(self):
+        return "Length(" + str(self.value) + ", '" + self.unit + "')"
+
+if __name__ == "__main__":
+    x = Length(4)
+    print(x)
+    y = eval(repr(x))
+
+    z = Length(4.5, "yd") + Length(1)
+    print(repr(z))
+    print(z)
+</pre>
+
+<br><br>
+If we start this program, we get the following output:
+<br><br>
+<pre>
+4
+Length(5.593613298337708, 'yd')
+5.1148
+</pre>
+<br>
+We use the method__iadd__ to implement the extended assignment:
+<br><br>
+<pre>
+    def __iadd__(self, other):
+        l = self.Converse2Metres() + other.Converse2Metres()
+        self.value = l / Length.__metric[self.unit]
+        return self
+</pre>
+<br><br>
+Now we are capable to write the following assignments:
+<br><br>
+<pre>
+    x += Length(1)
+    x += Length(4, "yd")
+</pre>
+<br>
+We have added 1 metre in the example above by writing "x += Length(1))". Most certainly,
+you will agree with us, that it would be more convenient to simply write "x += 1" instead.
+We also wnat to treat expressions like "Length(5,"yd") + 4.8" similarly. So, if somebody 
+uses a type int or float, our class takes it automatically for "metre" and 
+converts it into a Length object. It's easy to adapt our __add__ and "__iadd__" method 
+for this task. All we have to do is to check the type of the parameter "other":
+
+<br><br>
+<pre>
+    def __add__(self, other):
+        if type(other) == int or type(other) == float:
+            l = self.Converse2Metres() + other
+        else:
+            l = self.Converse2Metres() + other.Converse2Metres()
+        return Length(l / Length.__metric[self.unit], self.unit )
+
+    def __iadd__(self, other):
+        if type(other) == int or type(other) == float:
+            l = self.Converse2Metres() + other
+        else:
+            l = self.Converse2Metres() + other.Converse2Metres()
+        self.value = l / Length.__metric[self.unit]
+        return self
+</pre>
+<br>
+It's a safe bet that if somebody works for a while with adding integers and floats 
+from the right sight, that he or she wants to to the same from the left side!
+So let's try it out:
+<br><br>
+<pre>
+>>> from unit_conversions import Length
+>>> x = Length(3, "yd") + 5
+>>> x = 5 + Length(3, "yd")
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+TypeError: unsupported operand type(s) for +: 'int' and 'Length'
+>>> 
+</pre>
+<br><br>
+
+Of course, the left side has to be of type "Length", because otherwise Python
+tries to apply the __add__ method from int, which can't cope with Length objects as
+second arguments!
+<br><br>
+Python provides a solution for this problem as well. It's the __radd__ method.
+It works like this: Python tries to evaluate the expression "5 + Length(3, 'yd')".
+First it calls int.__add__(5,Length(3, 'yd')), which will raise an exception. 
+After this it will try to invoke Length.__radd__(Length(3, "yd"), 5).
+It's easy to recognize that the implementation of __radd__ is analogue to __add__:
+
+
+<br><br>
+<pre>
+    def __radd__(self, other):
+        if type(other) == int or type(other) == float:
+            l = self.Converse2Metres() + otherLength.__radd__(Length(3, "yd"), 5)
+        else:
+            l = self.Converse2Metres() + other.Converse2Metres()
+        return Length(l / Length.__metric[self.unit], self.unit )
+</pre>
+<br>
+It's advisable to make use of the __add__ mathod in the __radd__ method:
+<br><br>
+<pre>
+    def __radd__(self, other):
+        return Length.__add__(self,other)  
+</pre>
+<br>
+The following diagram  illustrates the relationship between __add__ and __radd__:
+<br><br>
+
+<img width=450 src="images/operator_overloading__radd__.png" alt="relationship between __add__ and __radd__" >
+
+<br><br>
+<h3>Standard Classes as Base Classes</h3>
+
+It's possible to use standard classes - like int, float, dict or lists -  as base classes 
+as well.
+
+<br><br>
+
+We extend the list class by adding a push method:
+
+<pre>
+class Plist(list):
+
+    def __init__(self, l):
+        list.__init__(self, l)
+
+    def push(self, item):
+        self.append(item)
+
+
+if __name__ == "__main__":
+    x = Plist([3,4])
+    x.push(47)
+    print(x)
+</pre>
+
+
+
+<br><br>
+<h3>Footnotes</h3>
+<br>
+<sup>1</sup> as suggested by Mark Jackson
+
+
+<br><br><br>
+
+<br>
+<div id="contextlinks">Previous Chapter: <a href="python3_multiple_inheritance.html">Multiple Inheritance</a><br>
+<LINK rel="prev" href="python3_multiple_inheritance.html">Next Chapter: <a href="python3_inheritance_example.html">OOP, Inheritance Example</a><br>
+<LINK rel="next" href="python3_inheritance_example.html"></div><br><br><br>
+
+</div>
+<div id="footer">  &copy; 2011 - 2014 <a href="http://www.bklein.de/">Bernd Klein</a>,
+Bodenseo; 
+Design by Denise Mitchinson adapted for python-course.eu by Bernd Klein</div>
+</div>
+</body>
+
+<!-- Mirrored from www.python-course.eu/python3_magic_methods.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:10:42 GMT -->
+</html>
+
+
+

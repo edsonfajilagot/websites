@@ -1,0 +1,453 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from www.python-course.eu/os_module_shell.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:05:48 GMT -->
+<head>
+
+<!-- Dieses Tag in den Head-Bereich oder direkt vor dem schlieÃŸenden Body-Tag einfÃ¼gen -->
+<script type="text/javascript" src="../apis.google.com/js/plusone.js"></script>
+
+
+
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "../connect.facebook.net/en_GB/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script><title>Python Advanced: Python and the Shell</title>
+<meta http-equiv="content-type" content="text/html; charset="ISO-8859-1">
+<meta name="Description" content="System Programming under Python using the sys and the os Module." />
+<meta name="Keywords" content="Python, course, Shell, shells, system, programming, system programming,
+Bash, sys Module, os module, platform, independent, platform independent" />
+
+<link href="favicon.ico" rel="shortcut icon">
+
+<link href="moderna.css" rel="stylesheet" type="text/css" />
+<link href="moderna_print.css" media="print" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+<div id="container">
+
+<div id="banner">
+<!-- <a href="impressum.php">Impressum</a> | <a href="mailto:">contact</a> | --><h1>Python Course</h1>
+
+</div>
+
+	<!-- Begin Top Menu -->
+<ul id="navlist">
+<li><a href="index-2.html" >Home</a></li><li><a href="course.html" >Python 2 Tutorial</a></li><li><a href="python3_course.html" >Python 3 Tutorial</a></li><li class="active"><a id="current" href="advanced_topics.html" >Advanced Topics</a></li><li><a href="python_books.html" >Python Books</a></li><li><a href="python_tkinter.html" >Tkinter Tutorial</a></li><li><a href="contact.html" rel="nofollow">Contact</a></li>                          
+</ul>
+	<!-- End Top Menu -->
+<div id="sidebar-a">
+<img class="border" src="images/python_eye.png" alt="box" />    <h2>Advanced Topics</h2>
+
+<div class="menu">
+
+<ul>
+<li><a href="sys_module.html">Introduction into the sys module</a></li><li><a href="os_module_shell.html">Python and the Shell</a></li><li><a href="forking.html">Forks and Forking in Python</a></li><li><a href="threads.html">Introduction into Threads</a></li><li><a href="pipes.html">Pipe, Pipes and "99 Bottles of Beer"</a></li><li><a href="graphs_python.html">Graph Theory and Graphs in Python"</a></li><li><a href="pygraph.html">Graphs: PyGraph"</a></li><li><a href="networkx.html">Graphs: NetworkX"</a></li><li><a href="finite_state_machine.html">Finite State Machine in Python</a></li><li><a href="turing_machine.html">Turing Machine in Python</a></li><li><a href="numpy.html">NumPy Module</a></li><li><a href="matrix_arithmetic.html">Matrix Arithmetic</a></li><li><a href="linear_combinations.html">Linear Combinations</a></li><li><a href="text_classification_introduction.html">Introduction into Text Classification using Naive Bayes</a></li><li><a href="text_classification_python.html">Python Implementation of Text Classification</a></li><li><a href="towers_of_hanoi.html">Example for recursive Programming: Towers of Hanoi</a></li><li><a href="mastermind.html">Mastermind / Bulls and Cows</a></li><li><a href="dynamic_websites_wsgi.html">Creating dynamic websites with WSGI</a></li><li><a href="dynamic_websites.html">Dynamic websites with mod_python</a></li><li><a href="pylons.html">Dynamic websites with Pylons</a></li><li><a href="sql_python.html">Python, SQL, MySQL and SQLite</a></li><li><a href="python_scores.html">Python Scores</a></li></ul>
+
+</div>
+
+<p>
+<hr>
+<br>
+<h3>Other Shells</h3>
+
+There is hardly a word with so many completely different meanings than the expression shell:
+The most widely known meaning of course is the seashell of various marine animals or the eggshell, 
+i.e. the outer covering of a hard-shelled egg.<br>
+A shotgun shell (shotshell) is a self-contained cartridge loaded with shot designed to be 
+fired from a shotgun. In a similiar context the word shell is also used to describe a projectile
+which carries an explosive payload.
+<br>
+Shells are also known in theatres. Here they stand for a curved, hard surface designed to reflect 
+sound towards an audience. This kind of shells are most commonly used for orchestras, bands and choirs. 
+Often these shells are designed to be removable, either rolling away on wheels or flying into a flyspace. 
+<br>Do you know, that a shell can also be used for a rowing boat? In watercraft, a racing shell is an 
+extremely narrow, and often disproportionately long, rowing boat specifically designed for racing or 
+exercise.
+<br>
+Shells in science: An electron shell may be thought of as an orbit followed by electrons around an 
+atom nucleus.
+<br>
+And of course there is this large multinational energy company called Shell.<br>
+And believe it or not, there is a computer scientist called Shell: Donald L. Shell is a computer scientist 
+born in 1941, who designed the Shell sort sorting algorithm.  
+<br>
+<hr>
+<br>
+
+This website is created by:<br><br>
+<a href="http://www.python-training-courses.com/"><img style="width: 150px;" alt="Python Training Courses"
+		     src="images/toronto_building.jpg"><br><br>Python Training Courses in Toronto, Canada</a>
+<br>
+On site trainings in Europe, Canada and the US.
+<br>
+<hr>
+</div><div id="sidebar-b"><img style="width: 150px;" alt="Python-Logo"
+		     src="images/python-logo.png"><!-- Dieses Tag dort einfügen, wo die +1-Schaltfläche dargestellt werden soll -->
+<g:plusone></g:plusone>
+<br><br>
+
+<div class="fb-like" data-href="www.python-course.eu" data-send="false" data-layout="button_count" 
+data-width="130" data-show-faces="true" data-action="recommend"></div>
+
+<br><br>
+This topic in German / Deutsche Übersetzung:
+    <a href="http://www.python-kurs.eu/os_modul_shell.php">Python und die Shell, Systemprogrammierung</a><h3>Classroom Training Courses</h3>
+<p>
+This website contains a free and extensive online tutorial by Bernd Klein with 
+material from his live <a href="python_classes.html">Python courses</a>.
+<br><br>
+If you are interested in an instructor-led classroom training course, you may have a look at the 
+<a href="http://ca.bodenseo.com/courses.php?topic=Python">Python courses
+<br><img style="width: 150px;" 
+alt="Bodenseo, Python courses and seminars"
+		     src="images/classroom_training_courses.jpg">
+</a>
+by Bernd Klein at Bodenseo.
+<br>
+<font size="1">© kabliczech - Fotolia.com</font>
+
+
+<br><br>
+<h3>Python Tricks</h3>
+<i>
+"Python tricks" is a tough one, cuz the language is so clean. E.g., C makes an art of confusing 
+pointers with arrays and strings, which leads to lotsa neat pointer tricks; APL mistakes 
+everything for an array, leading to neat one-liners; and Perl confuses everything period, 
+making each line a joyous adventure <wink>.
+</i>
+(Tim Peters, Pythoneer who formulated the "Zen of Python")
+<h3>Python compared to Lisp</h3>
+Greenspun's "Tenth Rule of Programming" states:
+<br>
+<i>
+Any sufficiently complicated C or Fortran program contains an ad hoc, informally-specified, 
+bug-ridden, slow implementation of half of Common Lisp.
+</i>
+Sounds complicated? Lisp is complicated. Guido van Rossum compared it - or to be precise 
+Common Lisp and Scheme - to Python with the following words:
+<i>
+"These languages are close to Python in their dynamic semantics, but so different in their approach 
+to syntax that a comparison becomes almost a religious argument: is Lisp's lack of syntax an 
+advantage or a disadvantage? It should be noted that Python has introspective capabilities 
+similar to those of Lisp, and Python programs can construct and execute program fragments on 
+the fly. Usually, real-world properties are decisive: Common Lisp is big (in every sense), 
+and the Scheme world is fragmented between many incompatible versions, where Python has a 
+single, free, compact implementation."
+</i>
+<br>(excerpt from "Comparing Python to Other Languages" by Guido van Rossum)
+
+<h3>Wizards and Magic</h3>
+<i>
+"Things in Python are very clear, but are harder to find than the secrets of wizards. 
+Things in Perl are easy to find, but look like arcane spells to invoke magic."
+</i>
+
+ </p>
+
+</p></div>
+<div id="content">
+
+<div id="contextlinks">Previous Chapter: <a href="sys_module.html">Introduction into the sys module</a><br>
+<LINK rel="prev" href="sys_module.html">Next Chapter: <a href="forking.html">Forks and Forking in Python</a><br>
+<LINK rel="next" href="forking.html"></div><h2>Python and the Shell</h2>
+<h3>Shell</h3>
+<img class="imgright" src="images/python_shell_300.png" alt="Python and Shell" />
+Shell is a term, which is often used and often misunderstood. Like the shell of an egg, either hen
+or Python snake, or a mussel, the shell in computer science is generally seen as a piece 
+of software that provides an interface for a user to some other software or the operating
+system. So the shell can be an interface between the operating system and the services of the 
+kernel of this operating system. But a web browser or a program functioning as an email 
+client can be seen as shell as well. 
+<br><br>Understanding this, it's obvious that a shell can be either 
+<ul>
+<li>a command-line interface (CLI)<br>or</li>
+<li>a graphical user interface (GUI)</li>
+</ul>
+But in most cases the term shell is used as a synonym for a command line interface (CLI).
+The best known and most often used shells under Linux and Unix are the Bourne-Shell, 
+C-Shell or Bash shell. The Bourne shell (sh) was modelled after the Multics shell, and is the first
+Unix shell. 
+<br>
+Most operating system shells can be used in both interactive and batch mode.  
+
+<h3>System programming</h3>
+System programming (also known as systems programming) stands for the activity of programming
+system components or system software. System programming provides software or services to the
+computer hardware, while application programming produces software which provides tools or services
+for the user. 
+<br><br>
+"System focused programming" as it is made possible with the aid of the sys and the os module, 
+serves as an abstraction layer between the application, i.e. the Python script or program, and
+the operating system, e.g. Linux or Microsoft Windows.
+By means of the abstraction layer it is possible to implement platform independent applications
+in Python, even if they access operating specific functionalities.
+<br><br>Therefore Python is well suited for system programming, or even platform independent
+system programming. The general advantages of Python are valid in system focused programming as well:
+<ul>
+<li>simple and clear</li>
+<li>Well structured</li>
+<li>highly flexible</li>
+</ul>
+<h3>The os Module</h3>
+The os module is the most important module for interacting with the operating system. The os module 
+allows platform independent programming by providing abstract methods.
+Nevertheless it is also possible by using the system() and the exec*() function families to include system
+independent program parts.
+(Remark: The exec*()-Functions are introduced in detail in our chapter "<a href="forking.html">Forks and 
+Forking in Python</a>")
+<br>
+The os module provides various methods, e.g. the access to the file system.
+
+
+<h3>Executing Shell scripts with os.system()</h3>
+It's not possible in Python to read a character without having to type the return key as well.
+On the other hand this is very easy on the Bash shell. The Bash command "<code>read -n 1</code> 
+waits for a key (any key) to be typed. If you import os, it's easy to write a script providing getch()
+ by using os.system() and the Bash shell. getch() waits just for one character to be typed without a return:
+<pre>
+import os
+def getch():
+     os.system("bash -c \"read -n 1\"")
+ 
+getch()
+</pre>
+The script above works only under Linux. Under Windows you will have to import the module msvcrt.
+Pricipially we only have to import getch() from this module.
+<br>So this is the Windows solution of the problem:
+<pre>
+from msvcrt import getch
+</pre>
+The following script implements a platform independant solution to the problem:
+
+<pre>
+import os, platform
+if platform.system() == "Windows":
+    import msvcrt
+def getch():
+    if platform.system() == "Linux":
+        os.system("bash -c \"read -n 1\"")
+    else:
+        msvcrt.getch()
+
+print("Type a key!")
+getch()
+print("Okay")
+</pre>
+The previous script harbours a problem. You can't use the getch() function, if you are interested
+in the key which has been typed, because os.system() doesn't return the result of the called shell
+commands. 
+<br>
+
+We show in the following script, how we can execute shell scripts and return the output of these
+scripts into python by using os.popen():
+
+<pre>
+>>> import os
+>>> dir = os.popen("ls").readlines()
+>>> print dir
+['curses.py\n', 'curses.pyc\n', 'errors.txt\n', 'getch.py\n', 'getch.pyc\n', 'more.py\n',
+'numbers.txt\n', 'output.txt\n', 'redirecting_output.py\n', 'redirecting_stderr2.py\n', 
+'redirecting_stderr.py\n', 'streams.py\n',  'test.txt\n']
+>>> 
+</pre>
+The output of the shell script can be read line by line, as can be seen in the following example:
+
+<pre>
+import os
+
+command = " "
+while (command != "exit"):
+    command = raw_input("Command: ")
+    handle = os.popen(command)
+    line = " "
+    while line:
+        line = handle.read()
+        print line
+    handle.close()
+
+print "Ciao, that's it!"
+</pre>
+
+<h3>subprocess Module</h3>
+The subprocess module is available since Python 2.4.
+<br>
+It's possible to create spawn processes with the module subprocess, connect to their input, output, 
+and error pipes, and obtain their return codes. 
+<br>
+The module subprocess was created to replace various other modules: 
+<ul>
+<li>os.system</li>
+<li>os.spawn*</li>
+<li>os.popen*</li>
+<li>popen2.*</li>
+<li>commands.*</li>
+</ul>
+
+<h3>Working with the subprocess Module</h3>
+Instead of using the system method of the os-Module
+<br>
+<pre>
+os.system('touch xyz')
+</pre>
+we can use the the Popen() command of the subprocess Module. By using Popen() we are capable to
+get the output of the script: 
+<pre>
+>>> x = subprocess.Popen(['touch', 'xyz'])
+>>> print x
+<subprocess.Popen object at 0x7f29882f6f50>
+>>> x.poll()
+0
+>>> x.returncode
+0
+</pre>
+The shell command <code>cp -r xyz abc</code> can be send to the shell from Python 
+by using the Popen() method of the subprocess-Module in the following way:
+<pre>
+p = subprocess.Popen(['cp','-r', "xyz", "abc"])
+</pre>
+There is no need to escape the Shell metacharacters like $, &gt; usw.. <br>
+If you want to emulate the behaviour of os.system, the optional parameter shell has to be set
+to true, i.e. <pre>shell=True</pre> and we have to use a string instead of a list:
+<pre>
+p=subprocess.Popen("cp -r xyz abc", shell=True)
+</pre>
+<br>
+As we have said above, it is also possible to catch the output from the shell command or shell script
+into Python. To do this, we have to set the optional parameter stdout of Popen() to subprocess.PIPE:
+
+<pre>
+>>> process = subprocess.Popen(['ls','-l'], stdout=subprocess.PIPE)
+>>> print process.stdout.read()
+total 132
+-rw-r--r-- 1 bernd bernd   0 2010-10-06 10:03 abc
+-rw-r--r-- 1 bernd bernd   0 2010-10-06 10:04 abcd
+-rw-r--r-- 1 bernd bernd 660 2010-09-30 21:34 curses.py
+</pre>
+<br><br>
+If a shell command or shell script has been started with Popen(), the Python script doesn't wait until the
+shell command or shell script is finished. To wait until it is finished, you have to use the wait() method:
+<pre>
+>>> process = subprocess.Popen(['ls','-l'], stdout=subprocess.PIPE)
+>>> process.wait()
+0
+</pre>
+
+
+
+<h3>Functions to manipulate paths, files and directories</h3>
+
+<table cellpadding="3" cellspacing="3" border="1">
+<tr>
+<td><b>Function</b></td>
+<td><b>Description</b></td>
+</tr>
+
+<tr>
+<td>getcwd()</td>
+<td>returns a string with the path of the current working directory</td>
+</tr>
+
+<tr>
+<td>chdir(path)</td>
+<td>Change the current working directory to path.<br>
+Example under Windows:<br>
+<pre>
+>>> os.chdir("c:\Windows")
+>>> os.getcwd()
+'c:\\Windows'
+</pre>
+An similiar example under Linux:
+<pre>
+>>> import os
+>>> os.getcwd()
+'/home/homer'
+>>> os.chdir("/home/lisa")
+>>> os.getcwd()
+'/home/lisa'
+>>> 
+</pre>
+
+</td>
+</tr>
+
+<tr>
+<td>getcwdu()</td>
+<td>like getcwd() but unicode as output</td>
+</tr>
+
+<tr>
+<td>listdir(path)</td>
+<td>A list with the content of the directory defined by "path", i.e. subdirectories and file names.
+<pre>
+>>> os.listdir("/home/homer")
+['.gnome2', '.pulse', '.gconf', '.gconfd', '.beagle', '.gnome2_private', '.gksu.lock', 'Public', '.ICEauthority', '.bash_history', '.compiz', '.gvfs', '.update-notifier', '.cache', 'Desktop', 'Videos', '.profile', '.config', '.esd_auth', '.viminfo', '.sudo_as_admin_successful', 'mbox', '.xsession-errors', '.bashrc', 'Music', '.dbus', '.local', '.gstreamer-0.10', 'Documents', '.gtk-bookmarks', 'Downloads', 'Pictures', '.pulse-cookie', '.nautilus', 'examples.desktop', 'Templates', '.bash_logout']
+>>> 
+</pre>
+
+</td>
+</tr>
+
+<tr>
+<td>mkdir(path[, mode=0755])</td>
+<td>Create a directory named path with numeric mode "mode", if it doesn't already exist. 
+The default mode is 0777 (octal). 
+On some systems, mode is ignored. If it is used, the current umask value is first masked out. 
+If the directory already exists, OSError is raised. 
+Parent directories will not be created, if they don't exist.
+</td>
+</tr>
+
+<tr>
+<td>makedirs(name[, mode=511])</td>
+<td>Recursive directory creation function. Like mkdir(), but makes all intermediate-level directories 
+needed to contain the leaf directory. Raises an error exception if the leaf directory already exists 
+or cannot be created.</td>
+</tr>
+
+<tr>
+<td>rename(old, new)</td>
+<td>The file or directory "old" is renamed to "new"
+If "new" is a directory, an error will be raised. On Unix and Linux, if "new" exists and is a file, 
+it will be replaced silently if the user has permission to do so.</td>
+</tr>
+
+<tr>
+<td>renames(old, new)</td>
+<td>Works like rename(), except that it creates recursively any intermediate directories needed to make the 
+"new" pathname. 
+</td>
+</tr>
+
+<tr>
+<td>rmdir(path)</td>
+<td>remove (delete) the directory "path". rmdir() works only, if the direcotry "path" is empty, otherwise
+an error is raised. To remove whole directory trees, shutil.rmdtree() can be used.</td>
+</tr>
+
+</table>
+<br>
+Further function and methods working on files and directories can be found in the module shutil. 
+Amongst other possibilites it provides the possibility to copy files and directories with
+ shutil.copyfile(src,dst).
+<br><br>
+<div id="contextlinks">Previous Chapter: <a href="sys_module.html">Introduction into the sys module</a><br>
+<LINK rel="prev" href="sys_module.html">Next Chapter: <a href="forking.html">Forks and Forking in Python</a><br>
+<LINK rel="next" href="forking.html"></div><br><br><br>
+
+</div>
+<div id="footer">  &copy; 2011 - 2014 <a href="http://www.bklein.de/">Bernd Klein</a>,
+Bodenseo; 
+Design by Denise Mitchinson adapted for python-course.eu by Bernd Klein</div>
+</div>
+</body>
+
+<!-- Mirrored from www.python-course.eu/os_module_shell.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:05:48 GMT -->
+</html>

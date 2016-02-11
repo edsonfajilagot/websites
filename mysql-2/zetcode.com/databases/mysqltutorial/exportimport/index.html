@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from zetcode.com/databases/mysqltutorial/exportimport/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Jul 2015 02:47:03 GMT -->
+<head>
+<title>Exporting and importing data in MySQL</title>
+<link rel="stylesheet" href="../../../cfg/format2.css" type="text/css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="MySQL, SQL, database, export data, import data, backup data, restore data">
+<meta name="description" content="In this part of the MySQL tutorial, we will be
+exporting and importing data.">
+<meta name="author" content="Jan Bodnar">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div id="wide_ad" class="ltow">
+<script async src="../../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- 160x600, August 2011 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:600px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="2484182563"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<div class="content">
+
+
+<header>
+
+<nav>
+<a href="http://zetcode.com/" title="Home">Home</a>&#160;
+<a href="../index.html">Contents</a>
+</nav>
+
+</header>
+
+
+<h1>Exporting and importing data in MySQL</h1>
+
+
+<p>
+In this part of the MySQL tutorial, we will be exporting data from MySQL
+database and importing data back. 
+</p>
+
+<div class="med_rec">
+<script async src="../../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- NewSquare -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:250px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="0364418177"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+
+<h2 id="simple">Simple data export</h2>
+
+<p>
+In our first example, we will save data in a text file.
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM Cars INTO OUTFILE '/tmp/cars';
+Query OK, 8 rows affected (0.00 sec)
+</pre>
+
+<p>
+We select all rows (8) from the <code>Cars</code> table into the cars file located
+in the <code>/tmp</code> directory. We need to have permissions to write 
+to that directory.
+</p>
+
+<pre class="code">
+$ cat /tmp/cars
+1       Audi    52642
+2       Mercedes        57127
+3       Skoda   9000
+4       Volvo   29000
+5       Bentley 350000
+6       Citroen 21000
+7       Hummer  41400
+8       Volkswagen      21600
+</pre>
+
+<p>
+We show the contents of the file. 
+</p>
+
+<pre class="code">
+mysql> DELETE FROM Cars;
+
+mysql> LOAD DATA INFILE '/tmp/cars' INTO TABLE Cars;
+</pre>
+
+<p>
+In the first statement we delete all rows from the table.
+In the second statement we load all data from the text file into
+the Cars table. 
+</p>
+
+
+<pre class="code">
+mysql> SELECT * FROM Cars INTO OUTFILE '/tmp/cars.csv'
+    -> FIELDS TERMINATED BY ',';
+</pre>
+
+<p>
+In the above SQL statement, we dump all data from the Cars table
+into a cars.csv file. The <code>FIELDS TERMINATED BY</code> clause
+controls, how the data will be terminated in the text file. We have
+chosen a comma character.  The CSV stands for Comma Separated Values and
+it is a very common and very portable file format. It can be imported
+by numerous other applications like OpenOffice, other databases etc. 
+</p>
+
+<pre class="code">
+$ cat /tmp/cars.csv 
+1,Audi,52642
+2,Mercedes,57127
+3,Skoda,9000
+4,Volvo,29000
+5,Bentley,350000
+6,Citroen,21000
+7,Hummer,41400
+8,Volkswagen,21600
+</pre>
+
+<p>
+This is the contents of the cars.csv file. 
+</p>
+
+<pre class="code">
+mysql> DELETE FROM Cars;
+
+mysql> LOAD DATA INFILE '/tmp/cars.csv' INTO TABLE Cars
+    -> FIELDS TERMINATED BY ',';
+
+mysql> SELECT * FROM Cars;
++----+------------+--------+
+| Id | Name       | Cost   |
++----+------------+--------+
+|  1 | Audi       |  52642 |
+|  2 | Mercedes   |  57127 |
+|  3 | Skoda      |   9000 |
+|  4 | Volvo      |  29000 |
+|  5 | Bentley    | 350000 |
+|  6 | Citroen    |  21000 |
+|  7 | Hummer     |  41400 |
+|  8 | Volkswagen |  21600 |
++----+------------+--------+
+</pre>
+
+<p>
+We delete all the data and restore it from the <code>cars.csv</code> file. 
+</p>
+
+<h2 id="xml">Exporting to XML files</h2>
+
+<p>
+It is possible to export and import XML data using the <code>mysql</code> monitor.
+</p>
+
+<pre class="code">
+$ mysql -uroot -p --xml -e 'SELECT * FROM mydb.Cars' > /tmp/cars.xml
+</pre>
+
+<p>
+The <code>mysql</code> monitor has an <code>--xml</code> option, which enables us 
+to dump data in XML format. The <code>-e</code> option executes a statement and 
+quits the monitor.
+</p>
+
+<pre class="code">
+$ cat /tmp/cars.xml 
+&lt;?xml version="1.0"?&gt;
+
+&lt;resultset statement="SELECT * FROM mydb.Cars
+" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
+  &lt;row&gt;
+        &lt;field name="Id"&gt;1&lt;/field&gt;
+        &lt;field name="Name"&gt;Audi&lt;/field&gt;
+        &lt;field name="Cost"&gt;52642&lt;/field&gt;
+  &lt;/row&gt;
+
+  &lt;row&gt;
+        &lt;field name="Id"&gt;2&lt;/field&gt;
+        &lt;field name="Name"&gt;Mercedes&lt;/field&gt;
+        &lt;field name="Cost"&gt;57127&lt;/field&gt;
+  &lt;/row&gt;
+
+  &lt;row&gt;
+        &lt;field name="Id"&gt;3&lt;/field&gt;
+        &lt;field name="Name"&gt;Skoda&lt;/field&gt;
+        &lt;field name="Cost"&gt;9000&lt;/field&gt;
+  &lt;/row&gt;
+
+  &lt;row&gt;
+        &lt;field name="Id"&gt;4&lt;/field&gt;
+        &lt;field name="Name"&gt;Volvo&lt;/field&gt;
+        &lt;field name="Cost"&gt;29000&lt;/field&gt;
+  &lt;/row&gt;
+
+  &lt;row&gt;
+        &lt;field name="Id"&gt;5&lt;/field&gt;
+        &lt;field name="Name"&gt;Bentley&lt;/field&gt;
+        &lt;field name="Cost"&gt;350000&lt;/field&gt;
+  &lt;/row&gt;
+
+  &lt;row&gt;
+        &lt;field name="Id"&gt;6&lt;/field&gt;
+        &lt;field name="Name"&gt;Citroen&lt;/field&gt;
+        &lt;field name="Cost"&gt;21000&lt;/field&gt;
+  &lt;/row&gt;
+
+  &lt;row&gt;
+        &lt;field name="Id"&gt;7&lt;/field&gt;
+        &lt;field name="Name"&gt;Hummer&lt;/field&gt;
+        &lt;field name="Cost"&gt;41400&lt;/field&gt;
+  &lt;/row&gt;
+
+  &lt;row&gt;
+        &lt;field name="Id"&gt;8&lt;/field&gt;
+        &lt;field name="Name"&gt;Volkswagen&lt;/field&gt;
+        &lt;field name="Cost"&gt;21600&lt;/field&gt;
+  &lt;/row&gt;
+&lt;/resultset&gt;
+</pre>
+
+<p>
+This is the XML file generated by the <code>mysql</code> monitor. 
+</p>
+
+<pre class="code">
+mysql> TRUNCATE Cars;
+
+mysql> LOAD XML /tmp/cars.xml INTO TABLE Cars;
+</pre>
+
+<p>
+We truncate the Cars table. We load data from the XML file. 
+Note that <code>LOAD XML</code> statement is available for 
+MySQL 5.5 and newer.
+</p>
+
+
+<h2 id="dump">Using mysqldump tool</h2>
+
+<p>
+The <code>mysqldump</code> is a command tool to create backups for MySQL. 
+The word dump is used when we transfer data from one place to another.
+From a database file to a text file. From a memory to a file. And 
+similar. 
+</p>
+
+
+<h3>Dumping table structures</h3>
+
+<pre class="code">
+mysqldump -u root -p --no-data mydb > bkp1.sql
+</pre>
+
+<p>
+The above command dumps table structures of all tables in 
+the <code>mydb</code> database to the <code>bkq1.sql</code> file. 
+The <code>--no-data</code> option causes that the data is not saved, 
+only the table structures. 
+</p>
+
+<pre class="code">
+--
+-- Table structure for table `Cars`
+--
+
+DROP TABLE IF EXISTS `Cars`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Cars` (
+  `Id` int(11) NOT NULL,
+  `Name` varchar(50) DEFAULT NULL,
+  `Cost` int(11) DEFAULT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+</pre>
+
+<p>
+Here we see a portion of the <code>bkp1.sql</code> file. This is the 
+SQL for the creation of the <code>Cars</code> table. 
+</p>
+
+
+<h3>Dumping data only</h3>
+
+
+<pre class="code">
+$ mysqldump -uroot -p --no-create-info mydb > bkp2.sql
+</pre>
+
+<p>
+This command dumps all data from all tables of the <code>mydb</code> 
+databases. It omits the table structures. The omission of the table 
+structures is caused by the <code>--no-create-info</code> option. 
+</p>
+
+<pre class="code">
+--
+-- Dumping data for table `Cars`
+--
+
+LOCK TABLES `Cars` WRITE;
+/*!40000 ALTER TABLE `Cars` DISABLE KEYS */;
+INSERT INTO `Cars` VALUES (1,'Audi',52642),(2,'Mercedes',57127),(3,'Skoda',9000),
+(4,'Volvo',29000),(5,'Bentley',350000),(6,'Citroen',21000),
+(7,'Hummer',41400),(8,'Volkswagen',21600);
+/*!40000 ALTER TABLE `Cars` ENABLE KEYS */;
+UNLOCK TABLES;
+</pre>
+
+<p>
+Here we can see the data for the <code>Cars</code> table. 
+</p>
+
+
+<h3>Dumping the whole database</h3>
+
+<pre class="code">
+$ mysqldump -uroot -p mydb > bkp3.sql
+</pre>
+
+<p>
+This command dumps all tables from the <code>mydb</code> database 
+to the <code>bkp3.sql</code> file. 
+</p>
+
+
+<h3>Restoring data</h3>
+
+<p>
+We show, how to restore the database from the backup SQL files.
+</p>
+
+<pre class="code">
+mysql> DROP DATABASE mydb;
+ERROR 1010 (HY000): Error dropping database (can't rmdir './mydb/', errno: 17)
+
+mysql> SHOW TABLES;
+Empty set (0.00 sec)
+</pre>
+
+<p>
+We drop the <code>mydb</code> database. An error is shown. The tables 
+were dropped but not the database. 
+</p>
+
+<pre class="code">
+$ sudo ls /var/lib/mysql/mydb
+cars  cars.txt
+$ sudo rm /var/lib/mysql/mydb/cars
+$ sudo rm /var/lib/mysql/mydb/cars.txt
+</pre>
+
+<p>
+The reason is that (in my case) while doing backups, some of the data were
+written in the <code>mydb</code> directory, in which MySQL stores the 
+<code>mydb</code> database. These two alien files could not be removed, hence 
+the above error. By removing the files the error is fixed. 
+</p>
+
+<pre class="code">
+mysql> DROP DATABASE mydb;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| testdb             |
+| world              |
++--------------------+
+4 rows in set (0.00 sec)
+</pre>
+
+<p>
+The mydb database was fully removed. 
+</p>
+
+<pre class="code">
+mysql> CREATE DATABASE mydb;
+
+mysql> USE mydb;
+
+mysql> source bkp3.sql
+</pre>
+
+<p>
+We create the <code>mydb</code> database. Change to the database. And 
+use the source command to execute the <code>bkp3.sql</code> script. 
+The database is recreated. 
+</p>
+
+<pre class="code">
+mysql> SHOW TABLES;
++----------------+
+| Tables_in_mydb |
++----------------+
+| AA             |
+| Ages           |
+| Animals        |
+| Authors        |
+| BB             |
+| Books          |
+| Books2         |
+| Brands         |
+| Cars           |
+...
+
+mysql> SELECT * FROM Cars;
++----+------------+--------+
+| Id | Name       | Cost   |
++----+------------+--------+
+|  1 | Audi       |  52642 |
+|  2 | Mercedes   |  57127 |
+|  3 | Skoda      |   9000 |
+|  4 | Volvo      |  29000 |
+|  5 | Bentley    | 350000 |
+|  6 | Citroen    |  21000 |
+|  7 | Hummer     |  41400 |
+|  8 | Volkswagen |  21600 |
++----+------------+--------+
+</pre>
+
+<p>
+The data is verified. 
+</p>
+
+<p>
+In this part of the MySQL tutorial, we have shown several ways how we can
+export and import data in MySQL. 
+</p>
+
+
+<footer>
+
+<nav class="center">
+<span class="botNavItem"><a href="http://zetcode.com/">Home</a></span> ‡ <span class="botNavItem"><a href="../index.html">Contents</a></span> ‡ 
+<span class="botNavItem"><a href="#">Top of Page</a></span>
+</nav>
+
+<div class="signature">
+<a href="http://zetcode.com/">ZetCode</a> last modified February 4, 2011  <span class="copyright">&copy; 2007 - 2015 Jan Bodnar</span>
+</div>
+
+</footer>
+
+</div> <!-- content -->
+
+</div> <!-- container -->
+
+</body>
+
+<!-- Mirrored from zetcode.com/databases/mysqltutorial/exportimport/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Jul 2015 02:47:03 GMT -->
+</html>
+

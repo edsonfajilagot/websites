@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from zetcode.com/wxpython/layout/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Aug 2015 19:21:35 GMT -->
+<head>
+<title>Layout management in wxPython</title>
+<link rel="stylesheet" href="../../cfg/format2.css" type="text/css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="wxPython, layout management, sizers, 
+absolute positioning, wx.BoxSizer, wx.GridSizer, wx.FlexGridSizer, wx.GridBagSizer">
+<meta name="description" content="This part of the wxPython tutorial covers layout management of widgets.">
+<meta name="author" content="Jan Bodnar">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div id="wide_ad" class="ltow">
+<script async src="../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- 160x600, August 2011 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:600px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="2484182563"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<div class="content">
+
+
+<header>
+
+<nav>
+<a href="http://zetcode.com/" title="Home">Home</a>&#160;
+<a href="../index.html">Contents</a>
+</nav>
+
+</header>
+
+
+<h1>Layout management in wxPython</h1>
+
+
+<p>
+A typical application consists of various widgets. Those widgets are 
+placed inside container widgets. A programmer must manage the layout of 
+the application. This is not an easy task. In wxPython  it is possible to
+lay out widgets using absolute positioning or using sizers. 
+</p>
+
+<div class="med_rec">
+<script async src="../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- NewSquare -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:250px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="0364418177"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div> 
+
+
+<h2>Absolute Positioning</h2>
+
+<p>
+The programmer specifies the position and the size of each widget in pixels. 
+Absolute positioning has several disadvantages: 
+</p>
+
+<ul>
+  <li>The size and the position of a widget do not change if we resize a window.</li>
+  <li>Applications look different on various platforms.</li>
+  <li>Changing fonts in the application might spoil the layout.</li>
+  <li>
+  If we decide to change our layout, we must completely redo our 
+  layout, which is tedious and time consuming.
+  </li>
+</ul>
+
+<p>
+There might be situations where we can possibly use absolute positioning. 
+For instance, small test examples. But mostly, in real world programs, 
+programmers use sizers.
+</p>
+
+<p>
+In our example we have a simple skeleton of a text editor. If we resize 
+the window, the size of out <code>wx.TextCtrl</code> does not change as 
+we would expect.
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+# absolute.py
+
+import wx
+
+class Example(wx.Frame):
+  
+    def __init__(self, parent, title):
+        super(Example, self).__init__(parent, title=title, 
+            size=(260, 180))
+            
+        self.InitUI()
+        self.Centre()
+        self.Show()     
+        
+    def InitUI(self):
+    
+        panel = wx.Panel(self, -1)
+
+        menubar = wx.MenuBar()
+        filem = wx.Menu()
+        editm = wx.Menu()
+        helpm = wx.Menu()
+
+        menubar.Append(filem, '&amp;File')
+        menubar.Append(editm, '&amp;Edit')
+        menubar.Append(helpm, '&amp;Help')
+        self.SetMenuBar(menubar)
+
+        wx.TextCtrl(panel, pos=(3, 3), size=(250, 150))
+
+
+if __name__ == '__main__':
+  
+    app = wx.App()
+    Example(None, title='')
+    app.MainLoop()
+</pre>
+
+<p>
+In the above example, we position a text control in absolute coordinates.
+</p>
+
+<pre class="explanation">
+wx.TextCtrl(panel, pos=(3, 3), size=(250, 150))
+</pre>
+
+<p>
+We do the absolute positioning in the constructor of the 
+<code>wx.TextCtrl</code>. In our case, we position the <code>wx.TextCtrl</code> at x=3, y=3.
+The width is 250px and the height 150px.
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/absolute1.png" alt="absolute positioning 1">
+<figcaption>Figure: before resizement</figcaption>
+</figure> 
+
+<figure>
+<img style="margin-left:85px" src="../../img/gui/wxpython/absolute2.png" alt="absolute positioning 2">
+<figcaption>Figure: after resizement</figcaption>
+</figure>
+
+<h2>Using sizers</h2>
+
+<p>
+Sizers do address all those issues, we mentioned by absolute 
+positioning. We can choose among these sizers:
+</p>
+
+<ul>
+  <li>wx.BoxSizer</li>
+  <li>wx.StaticBoxSizer</li>
+  <li>wx.GridSizer</li>
+  <li>wx.FlexGridSizer</li>
+  <li>wx.GridBagSizer</li>
+</ul>
+
+<p>
+The following example uses a built-in sizer.
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+# sizer.py
+
+import wx
+
+class Example(wx.Frame):
+  
+    def __init__(self, parent, title):
+        super(Example, self).__init__(parent, title=title, 
+            size=(260, 180))
+            
+        self.InitUI()
+        self.Centre()
+        self.Show()     
+        
+    def InitUI(self):
+    
+        menubar = wx.MenuBar()
+        filem = wx.Menu()
+        editm = wx.Menu()
+        helpm = wx.Menu()
+
+        menubar.Append(filem, '&amp;File')
+        menubar.Append(editm, '&amp;Edit')
+        menubar.Append(helpm, '&amp;Help')
+        self.SetMenuBar(menubar)
+
+        wx.TextCtrl(self)
+
+
+if __name__ == '__main__':
+  
+    app = wx.App()
+    Example(None, title='')
+    app.MainLoop()
+</pre>
+
+<p>
+In this example, there is no sizer visible. We placed a <code>wx.TextCtrl</code> 
+inside the <code>wx.Frame</code> widget. 
+The <code>wx.Frame</code> widget has a special built-in sizer. 
+We can put only one widget inside the <code>wx.Frame</code> container. The child 
+widget occupies all the space, which is not given to the borders, 
+menu, toolbar and the statusbar. 
+</p>
+
+<div>
+<figure>
+<img src="../../img/gui/wxpython/absolute1.png" alt="Absolute positioning"> 
+<figcaption>Figure: before resizement</figcaption>
+</figure>
+
+<figure>
+<img style="margin-left:85px" src="../../img/gui/wxpython/sizer.png" alt="Sizer">
+<figcaption>Figure: after resizement</figcaption>
+</figure>
+</div>
+
+
+<h2>wx.BoxSizer</h2>
+
+<p>
+This sizer enables us to put several widgets into a row or a column. 
+We can put another sizer into an existing sizer. This way we can 
+create very complex layouts. 
+</p>
+
+<pre>
+ box = wx.BoxSizer(integer orient)
+ box.Add(wx.Window window, integer proportion=0, integer flag = 0, integer border = 0)
+</pre>
+
+<p>
+The orientation can be <code>wx.VERTICAL</code> or <code>wx.HORIZONTAL</code>. 
+Adding widgets into the <code>wx.BoxSizer</code> is done via the <code>Add()</code> 
+method. In order to understand it, we need to look at its parameters.
+</p>
+
+<p>
+The proportion parameter defines the ratio of how will the widgets 
+change in the defined orientation. Let's assume we have three buttons 
+with the proportions 0, 1, and 2. They are added into a horizontal 
+<code>wx.BoxSizer</code>. Button with proportion 0 will not change at all. 
+Button with proportion 2 will change twice more than the one 
+with proportion 1 in the horizontal dimension.
+</p>
+
+<p>
+With the flag parameter you can further configure the behaviour of 
+the widgets within a <code>wx.BoxSizer</code>. We can control the border between 
+the widgets. We add some space between widgets in pixels. In order 
+to apply border we need to define sides, where the border will be 
+used. We can combine them with the <code>|</code> operator. e.g. 
+<code>wx.LEFT | wx.BOTTOM</code>. We can choose between these flags:
+</p>
+
+<ul>
+<li>wx.LEFT</li>
+<li>wx.RIGHT</li>
+<li>wx.BOTTOM</li>
+<li>wx.TOP</li>
+<li>wx.ALL</li>
+</ul>
+
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+# border.py
+
+import wx
+
+class Example(wx.Frame):
+  
+    def __init__(self, parent, title):
+        super(Example, self).__init__(parent, title=title, 
+            size=(260, 180))
+            
+        self.InitUI()
+        self.Centre()
+        self.Show()     
+        
+    def InitUI(self):
+    
+        panel = wx.Panel(self)
+
+        panel.SetBackgroundColour('#4f5049')
+        vbox = wx.BoxSizer(wx.VERTICAL)
+
+        midPan = wx.Panel(panel)
+        midPan.SetBackgroundColour('#ededed')
+
+        vbox.Add(midPan, 1, wx.EXPAND | wx.ALL, 20)
+        panel.SetSizer(vbox)
+
+
+if __name__ == '__main__':
+  
+    app = wx.App()
+    Example(None, title='Border')
+    app.MainLoop()
+</pre>
+
+<p>
+In the above example, we place some space around a panel. 
+</p>
+
+<pre class="explanation">
+vbox.Add(midPan, 1, wx.EXPAND | wx.ALL, 20)
+</pre>
+
+<p>
+In <code>border.py</code> we have placed a 20 px border around a 
+<code>midPan</code> panel. <code>wx.ALL</code> applies the border 
+size to all four sides. 
+</p>
+
+<p>
+If we use <code>wx.EXPAND</code> flag, our widget will use all the space that 
+has been allotted to it. Lastly, we can also define the alignment 
+of our widgets. We do it with the following flags:
+</p>
+
+<ul>
+	<li>wx.ALIGN_LEFT</li>
+	<li>wx.ALIGN_RIGHT</li>
+	<li>wx.ALIGN_TOP</li>
+	<li>wx.ALIGN_BOTTOM</li>
+	<li>wx.ALIGN_CENTER_VERTICAL</li>
+	<li>wx.ALIGN_CENTER_HORIZONTAL</li>
+	<li>wx.ALIGN_CENTER</li> 
+</ul>
+
+<figure>
+<img src="../../img/gui/wxpython/border.png" alt="Border around a panel">
+<figcaption>Figure: Border around a panel</figcaption>
+</figure>
+
+
+<h2>GoToClass</h2>
+
+<p>
+In the following example we introduce several important ideas. 
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+# gotoclass.py
+
+import wx
+
+class Example(wx.Frame):
+  
+    def __init__(self, parent, title):
+        super(Example, self).__init__(parent, title=title, 
+            size=(390, 350))
+            
+        self.InitUI()
+        self.Centre()
+        self.Show()     
+        
+    def InitUI(self):
+    
+        panel = wx.Panel(self)
+
+        font = wx.SystemSettings_GetFont(wx.SYS_SYSTEM_FONT)
+        font.SetPointSize(9)
+
+        vbox = wx.BoxSizer(wx.VERTICAL)
+
+        hbox1 = wx.BoxSizer(wx.HORIZONTAL)
+        st1 = wx.StaticText(panel, label='Class Name')
+        st1.SetFont(font)
+        hbox1.Add(st1, flag=wx.RIGHT, border=8)
+        tc = wx.TextCtrl(panel)
+        hbox1.Add(tc, proportion=1)
+        vbox.Add(hbox1, flag=wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, border=10)
+
+        vbox.Add((-1, 10))
+
+        hbox2 = wx.BoxSizer(wx.HORIZONTAL)
+        st2 = wx.StaticText(panel, label='Matching Classes')
+        st2.SetFont(font)
+        hbox2.Add(st2)
+        vbox.Add(hbox2, flag=wx.LEFT | wx.TOP, border=10)
+
+        vbox.Add((-1, 10))
+
+        hbox3 = wx.BoxSizer(wx.HORIZONTAL)
+        tc2 = wx.TextCtrl(panel, style=wx.TE_MULTILINE)
+        hbox3.Add(tc2, proportion=1, flag=wx.EXPAND)
+        vbox.Add(hbox3, proportion=1, flag=wx.LEFT|wx.RIGHT|wx.EXPAND, 
+            border=10)
+
+        vbox.Add((-1, 25))
+
+        hbox4 = wx.BoxSizer(wx.HORIZONTAL)
+        cb1 = wx.CheckBox(panel, label='Case Sensitive')
+        cb1.SetFont(font)
+        hbox4.Add(cb1)
+        cb2 = wx.CheckBox(panel, label='Nested Classes')
+        cb2.SetFont(font)
+        hbox4.Add(cb2, flag=wx.LEFT, border=10)
+        cb3 = wx.CheckBox(panel, label='Non-Project classes')
+        cb3.SetFont(font)
+        hbox4.Add(cb3, flag=wx.LEFT, border=10)
+        vbox.Add(hbox4, flag=wx.LEFT, border=10)
+
+        vbox.Add((-1, 25))
+
+        hbox5 = wx.BoxSizer(wx.HORIZONTAL)
+        btn1 = wx.Button(panel, label='Ok', size=(70, 30))
+        hbox5.Add(btn1)
+        btn2 = wx.Button(panel, label='Close', size=(70, 30))
+        hbox5.Add(btn2, flag=wx.LEFT|wx.BOTTOM, border=5)
+        vbox.Add(hbox5, flag=wx.ALIGN_RIGHT|wx.RIGHT, border=10)
+
+        panel.SetSizer(vbox)
+
+
+if __name__ == '__main__':
+  
+    app = wx.App()
+    Example(None, title='Go To Class')
+    app.MainLoop()
+</pre>
+
+<p>
+The layout is straitforward. We create one vertical sizer. 
+We put then five horizontal sizers into it. 
+</p>
+
+<pre class="explanation">
+font = wx.SystemSettings_GetFont(wx.SYS_SYSTEM_FONT)
+font.SetPointSize(9)
+</pre>
+
+<p>
+The default system font was 10px. On my platform, it was too big 
+for this kind of window. So I set the font size to 9px.
+</p>
+
+<pre class="explanation">
+vbox.Add(hbox3, proportion=1, flag=wx.LEFT|wx.RIGHT|wx.EXPAND, 
+    border=10)
+
+vbox.Add((-1, 25))
+</pre>
+
+<p>
+We already know that we can control the distance among widgets by 
+combining the flag parameter with the border parameter. But there is one
+real constraint. In the <code>Add()</code> method we can specify only one border 
+for all given sides. In our example, we give 10px to the right and to the 
+left. But we cannot give 25 px to the bottom. What we can do is to give 
+10px to the bottom, or 0px. If we omit <code>wx.BOTTOM</code>.
+So if we need different values, we can add some extra space. 
+With the <code>Add()</code> method, we can insert widgets and space as well. 
+</p>
+
+<pre class="explanation">
+vbox.Add(hbox5, flag=wx.ALIGN_RIGHT|wx.RIGHT, border=10)
+</pre>
+
+<p>
+We place the two buttons on the right side of the window. How do we do it? 
+Three things are important to achieve this. The proportion, 
+the align flag and the <code>wx.EXPAND</code> flag. The proportion must be zero. 
+The buttons should not change their size, when we resize our window. 
+We must not specify <code>wx.EXPAND</code> flag. The buttons occopy only the area 
+that has been alotted to it. And finally, we must specify the 
+<code>wx.ALIGN_RIGHT</code> flag. The horizontal sizer spreads from the left 
+side of the window to the right side. So if we specify <code>wx.ALIGN_RIGHT</code> 
+flag, the buttons are placed to the right side. Exactly, as we wanted.
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/gotoclass.png" alt="GoToClass window">
+<figcaption>Figure: A GoToClass window</figcaption>
+</figure>
+
+
+
+<h2>wx.GridSizer</h2>
+
+<p>
+The <code>wx.GridSizer</code> lays out widgets in two dimensional table. 
+Each cell within the table has the same size.
+</p>
+
+<pre>
+wx.GridSizer(int rows=1, int cols=0, int vgap=0, int hgap=0)
+</pre>
+
+<p>
+In the constructor we specify the number of rows and columns 
+in the table. And the vertical and horizontal space between our cells.
+</p>
+
+<p>
+In our example we create a skeleton of a calculator. It is a 
+perfect example for <code>wx.GridSizer</code>. 
+</p>
+
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+# calculator.py
+
+import wx
+
+class Example(wx.Frame):
+  
+    def __init__(self, parent, title):
+        super(Example, self).__init__(parent, title=title, 
+            size=(300, 250))
+            
+        self.InitUI()
+        self.Centre()
+        self.Show()     
+        
+    def InitUI(self):
+    
+        menubar = wx.MenuBar()
+        fileMenu = wx.Menu()
+        menubar.Append(fileMenu, '&amp;File')
+        self.SetMenuBar(menubar)
+
+ 
+        vbox = wx.BoxSizer(wx.VERTICAL)
+        self.display = wx.TextCtrl(self, style=wx.TE_RIGHT)
+        vbox.Add(self.display, flag=wx.EXPAND|wx.TOP|wx.BOTTOM, border=4)
+        gs = wx.GridSizer(5, 4, 5, 5)
+
+        gs.AddMany( [(wx.Button(self, label='Cls'), 0, wx.EXPAND),
+            (wx.Button(self, label='Bck'), 0, wx.EXPAND),
+            (wx.StaticText(self), wx.EXPAND),
+            (wx.Button(self, label='Close'), 0, wx.EXPAND),
+            (wx.Button(self, label='7'), 0, wx.EXPAND),
+            (wx.Button(self, label='8'), 0, wx.EXPAND),
+            (wx.Button(self, label='9'), 0, wx.EXPAND),
+            (wx.Button(self, label='/'), 0, wx.EXPAND),
+            (wx.Button(self, label='4'), 0, wx.EXPAND),
+            (wx.Button(self, label='5'), 0, wx.EXPAND),
+            (wx.Button(self, label='6'), 0, wx.EXPAND),
+            (wx.Button(self, label='*'), 0, wx.EXPAND),
+            (wx.Button(self, label='1'), 0, wx.EXPAND),
+            (wx.Button(self, label='2'), 0, wx.EXPAND),
+            (wx.Button(self, label='3'), 0, wx.EXPAND),
+            (wx.Button(self, label='-'), 0, wx.EXPAND),
+            (wx.Button(self, label='0'), 0, wx.EXPAND),
+            (wx.Button(self, label='.'), 0, wx.EXPAND),
+            (wx.Button(self, label='='), 0, wx.EXPAND),
+            (wx.Button(self, label='+'), 0, wx.EXPAND) ])
+
+        vbox.Add(gs, proportion=1, flag=wx.EXPAND)
+        self.SetSizer(vbox)
+
+
+if __name__ == '__main__':
+  
+    app = wx.App()
+    Example(None, title='Calculator')
+    app.MainLoop()
+</pre>
+
+<p>
+Notice how we managed to put a space between the Bck and the 
+Close buttons. We simply put an empty <code>wx.StaticText</code> there. 
+</p>
+
+<p>
+In our example we have used the <code>AddMany()</code> method. It is a 
+convenience method for adding multiple widgets at one time. 
+</p>
+
+<pre class="explanation">
+gs.AddMany( [(wx.Button(self, label='Cls'), 0, wx.EXPAND),
+...
+</pre>
+
+<p>
+Widgets are placed inside the table in the order, they are added. 
+The first row is filled first, then the second row etc. 
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/calculator.png" alt="Calculator">
+<figcaption>Figure: Calculator</figcaption>
+</figure>
+
+
+<h2>wx.FlexGridSizer</h2>
+
+
+<p>
+This sizer is similar to <code>wx.GridSizer</code>. It does  also lay out 
+its widgets in a two dimensional table. It adds some flexibility to it. 
+<code>wx.GridSizer</code> cells are of the same size. All cells in 
+<code>wx.FlexGridSizer</code> have the same height in a row. All cells have 
+the same width in a column. But all rows and columns are not necessarily the 
+same height or width. 
+</p>
+
+<pre>
+wx.FlexGridSizer(int rows=1, int cols=0, int vgap=0, int hgap=0)
+</pre>
+
+<p>
+<code>rows</code> and <code>cols</code> specify the number of rows and columns in a sizer. 
+<code>vgap</code> and <code>hgap</code> add some space between widgets in both directions. 
+</p>
+
+<p>
+Many times developers have to develop dialogs for data input and modification. 
+I find <code>wx.FlexGridSizer</code> suitable for such a task. A developer can easily 
+set up a dialog window with this sizer. It is also possible to accomplish this 
+with <code>wx.GridSizer</code>, but it would not look nice, because of the constraint 
+that each cell must have the same size. 
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+# review.py
+
+import wx
+
+class Example(wx.Frame):
+  
+    def __init__(self, parent, title):
+        super(Example, self).__init__(parent, title=title, 
+            size=(300, 250))
+            
+        self.InitUI()
+        self.Centre()
+        self.Show()     
+        
+    def InitUI(self):
+    
+        panel = wx.Panel(self)
+
+        hbox = wx.BoxSizer(wx.HORIZONTAL)
+
+        fgs = wx.FlexGridSizer(3, 2, 9, 25)
+
+        title = wx.StaticText(panel, label="Title")
+        author = wx.StaticText(panel, label="Author")
+        review = wx.StaticText(panel, label="Review")
+
+        tc1 = wx.TextCtrl(panel)
+        tc2 = wx.TextCtrl(panel)
+        tc3 = wx.TextCtrl(panel, style=wx.TE_MULTILINE)
+
+        fgs.AddMany([(title), (tc1, 1, wx.EXPAND), (author), 
+            (tc2, 1, wx.EXPAND), (review, 1, wx.EXPAND), (tc3, 1, wx.EXPAND)])
+
+        fgs.AddGrowableRow(2, 1)
+        fgs.AddGrowableCol(1, 1)
+
+        hbox.Add(fgs, proportion=1, flag=wx.ALL|wx.EXPAND, border=15)
+        panel.SetSizer(hbox)
+
+
+if __name__ == '__main__':
+  
+    app = wx.App()
+    Example(None, title='Review')
+    app.MainLoop()
+</pre>
+
+<p>
+In the above code example, we create a Review window with a 
+<code>FlexGridSizer</code>.
+</p>
+
+<pre class="explanation">
+hbox = wx.BoxSizer(wx.HORIZONTAL)
+...
+hbox.Add(fgs, proportion=1, flag=wx.ALL|wx.EXPAND, border=15)
+</pre>
+
+<p>
+We create a horizontal box sizer in order to put some space (15px) 
+around the table of widgets.
+</p>
+
+<pre class="explanation">
+fgs.AddMany([(title), (tc1, 1, wx.EXPAND), (author), 
+    (tc2, 1, wx.EXPAND), (review, 1, wx.EXPAND), (tc3, 1, wx.EXPAND)])
+</pre>
+
+<p>
+We add widgets to the sizer with the <code>AddMany()</code> method. 
+Both <code>wx.FlexGridSizer</code> and <code>wx.GridSizer</code> share 
+this method.
+</p>
+
+<pre class="explanation">
+fgs.AddGrowableRow(2, 1)
+fgs.AddGrowableCol(1, 1)
+</pre>
+
+<p>
+We make the third row and second column growable. This way we let the 
+text controls grow, when the window is resized. The first two text 
+controls will grow in horizontal direction, the third one will 
+grow in both directions. We must not forget to make the widgets 
+expandable (<code>wx.EXPAND</code>) in order to make it really work. 
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/review.png" alt="Review">
+<figcaption>Figure: Review example</figcaption>
+</figure>
+
+
+<h2>wx.GridBagSizer</h2>
+
+
+<p>
+The most complicated sizer in wxPython. Many programmer find it difficult 
+to use. This kind of sizer is not typical only for wxPython. We can 
+find it in other toolkits as well. Even though it is more complicated, 
+it is certainly not rocket science.
+</p>
+
+<p> 
+This sizer enables explicit positioning of items. Items can also optionally 
+span more than one row or column. The <code>wx.GridBagSizer</code> 
+has a simple constructor.
+</p>
+
+<pre>
+wx.GridBagSizer(integer vgap, integer hgap)
+</pre>
+
+<p>
+The vertical and the horizontal gap defines the space in pixels used 
+among all children. We add items to the grid with the <code>Add()</code> method.
+</p>
+
+<pre>
+Add(self, item, tuple pos, tuple span=wx.DefaultSpan, integer flag=0, 
+    integer border=0, userData=None)
+</pre>
+
+<p>
+Item is a widget that you insert into the grid. The pos specifies the position 
+in the virtual grid. The topleft cell has pos of (0, 0). The span is an optional 
+spanning of the widget. e.g. span of (3, 2) spans a widget across 3 rows 
+and 2 columns. The flag and border were discussed earlier by <code>wx.BoxSizer</code>. 
+The items in the grid can change their size or keep the default size, 
+when the window is resized. If you want your items to grow and shrink, 
+you can use the following two methods:
+</p>
+
+<pre>
+AddGrowableRow(integer row)
+AddGrowableCol(integer col)
+</pre>
+
+
+<h2>Rename window</h2>
+
+
+<p>
+In our first example, we will create a Rename window.
+It will have one <code>wx.StaticText</code>, one <code>wx.TextCtrl</code> 
+and two <code>wx.Button</code>-s. 
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+# rename.py
+
+import wx
+
+class Example(wx.Frame):
+  
+    def __init__(self, parent, title):
+        super(Example, self).__init__(parent, title=title, 
+            size=(320, 130))
+            
+        self.InitUI()
+        self.Centre()
+        self.Show()     
+        
+    def InitUI(self):
+      
+        panel = wx.Panel(self)
+        sizer = wx.GridBagSizer(4, 4)
+
+        text = wx.StaticText(panel, label="Rename To")
+        sizer.Add(text, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=5)
+
+        tc = wx.TextCtrl(panel)
+        sizer.Add(tc, pos=(1, 0), span=(1, 5), 
+            flag=wx.EXPAND|wx.LEFT|wx.RIGHT, border=5)
+
+        buttonOk = wx.Button(panel, label="Ok", size=(90, 28))
+        buttonClose = wx.Button(panel, label="Close", size=(90, 28))
+        sizer.Add(buttonOk, pos=(3, 3))
+        sizer.Add(buttonClose, pos=(3, 4), flag=wx.RIGHT|wx.BOTTOM, border=5)
+
+        sizer.AddGrowableCol(1)
+        sizer.AddGrowableRow(2)
+        panel.SetSizerAndFit(sizer)
+    
+
+if __name__ == '__main__':
+  
+    app = wx.App()
+    Example(None, title='Rename')
+    app.MainLoop()
+</pre>
+
+<p>
+We must look at the window as a one big grid table.
+</p>
+
+<pre class="explanation">
+text = wx.StaticText(panel, label="Rename To")
+sizer.Add(text, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=5)
+</pre>
+
+<p>
+The text "Rename to" goes to the left upper corner. So we specify the 
+(0, 0) position. Plus we add some space to the bottom, left and bottom.
+</p>
+
+<pre class="explanation">
+tc = wx.TextCtrl(panel)
+sizer.Add(tc, pos=(1, 0), span=(1, 5), 
+    flag=wx.EXPAND|wx.LEFT|wx.RIGHT, border=5)
+</pre>
+
+<p>
+The <code>wx.TextCtrl</code> goes to the beginning of the second row (1, 0). Remember, 
+that we count from zero. It expands 1 row and 5 columns. (1, 5). And we put 
+5 pixels of space to the left and to the right of the widget. 
+</p>
+
+<pre class="explanation">
+sizer.Add(buttonOk, pos=(3, 3))
+sizer.Add(buttonClose, pos=(3, 4), flag=wx.RIGHT|wx.BOTTOM, border=5)
+</pre>
+
+<p>
+We put two buttons into the fourth row. The third row is left empty, so 
+that we have some space between the <code>wx.TextCtrl</code> and the buttons. We put the 
+OK button into the fourth column and the close button into the fifth one. 
+Notice that once we apply some space to one widget, it is applied to the 
+whole row. That's why we did not specify bottom space for the OK button.
+A careful reader might notice that we did not specify any space between 
+the two buttons. e.g. we did not put any space to the right of the OK button, 
+or to the right of the Close button. In the constructor of the <code>wx.GridBagSizer</code>, 
+we put some space between all widgets. So there is some space already.
+</p>
+
+<pre class="explanation">
+sizer.AddGrowableCol(1)
+sizer.AddGrowableRow(2)
+</pre>
+
+<p>
+The last thing we must do, is to make our dialog resizable. We make the 
+second column and the third row growable. Now we can expand or shrink 
+our window. Try to comment those two lines and see what happens. 
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/rename.png" alt="Rename">
+<figcaption>Figure: Rename window</figcaption>
+</figure>
+
+
+
+<h2>New class example</h2>
+
+<p>
+In the next example is we create a window, which can be found in JDeveloper. 
+It is a window for creating a new class in Java.
+</p>
+
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+# newclass.py
+
+import wx
+
+class Example(wx.Frame):
+
+    def __init__(self, parent, title):    
+        super(Example, self).__init__(parent, title=title, 
+            size=(450, 350))
+
+        self.InitUI()
+        self.Centre()
+        self.Show()     
+
+    def InitUI(self):
+      
+        panel = wx.Panel(self)
+        
+        sizer = wx.GridBagSizer(5, 5)
+
+        text1 = wx.StaticText(panel, label="Java Class")
+        sizer.Add(text1, pos=(0, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, 
+            border=15)
+
+        icon = wx.StaticBitmap(panel, bitmap=wx.Bitmap('exec.png'))
+        sizer.Add(icon, pos=(0, 4), flag=wx.TOP|wx.RIGHT|wx.ALIGN_RIGHT, 
+            border=5)
+
+        line = wx.StaticLine(panel)
+        sizer.Add(line, pos=(1, 0), span=(1, 5), 
+            flag=wx.EXPAND|wx.BOTTOM, border=10)
+
+        text2 = wx.StaticText(panel, label="Name")
+        sizer.Add(text2, pos=(2, 0), flag=wx.LEFT, border=10)
+
+        tc1 = wx.TextCtrl(panel)
+        sizer.Add(tc1, pos=(2, 1), span=(1, 3), flag=wx.TOP|wx.EXPAND)
+
+        text3 = wx.StaticText(panel, label="Package")
+        sizer.Add(text3, pos=(3, 0), flag=wx.LEFT|wx.TOP, border=10)
+
+        tc2 = wx.TextCtrl(panel)
+        sizer.Add(tc2, pos=(3, 1), span=(1, 3), flag=wx.TOP|wx.EXPAND, 
+            border=5)
+
+        button1 = wx.Button(panel, label="Browse...")
+        sizer.Add(button1, pos=(3, 4), flag=wx.TOP|wx.RIGHT, border=5)
+
+        text4 = wx.StaticText(panel, label="Extends")
+        sizer.Add(text4, pos=(4, 0), flag=wx.TOP|wx.LEFT, border=10)
+
+        combo = wx.ComboBox(panel)
+        sizer.Add(combo, pos=(4, 1), span=(1, 3), 
+            flag=wx.TOP|wx.EXPAND, border=5)
+
+        button2 = wx.Button(panel, label="Browse...")
+        sizer.Add(button2, pos=(4, 4), flag=wx.TOP|wx.RIGHT, border=5)
+
+        sb = wx.StaticBox(panel, label="Optional Attributes")
+
+        boxsizer = wx.StaticBoxSizer(sb, wx.VERTICAL)
+        boxsizer.Add(wx.CheckBox(panel, label="Public"), 
+            flag=wx.LEFT|wx.TOP, border=5)
+        boxsizer.Add(wx.CheckBox(panel, label="Generate Default Constructor"),
+            flag=wx.LEFT, border=5)
+        boxsizer.Add(wx.CheckBox(panel, label="Generate Main Method"), 
+            flag=wx.LEFT|wx.BOTTOM, border=5)
+        sizer.Add(boxsizer, pos=(5, 0), span=(1, 5), 
+            flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT , border=10)
+
+        button3 = wx.Button(panel, label='Help')
+        sizer.Add(button3, pos=(7, 0), flag=wx.LEFT, border=10)
+
+        button4 = wx.Button(panel, label="Ok")
+        sizer.Add(button4, pos=(7, 3))
+
+        button5 = wx.Button(panel, label="Cancel")
+        sizer.Add(button5, pos=(7, 4), span=(1, 1),  
+            flag=wx.BOTTOM|wx.RIGHT, border=5)
+
+        sizer.AddGrowableCol(2)
+        
+        panel.SetSizer(sizer)
+
+
+if __name__ == '__main__':
+  
+    app = wx.App()
+    Example(None, title="Create Java Class")
+    app.MainLoop()
+</pre>
+
+<p>
+This is a more complicated layout. We use both a <code>wx.GridBagSizer</code> and
+a <code>wx.StaticBoxsizer</code>.
+</p>
+
+<pre class="explanation">
+line = wx.StaticLine(panel)
+sizer.Add(line, pos=(1, 0), span=(1, 5), 
+    flag=wx.EXPAND|wx.BOTTOM, border=10)
+</pre>
+
+<p>
+This is a line that is used to separate groups of widgets in the layout.
+</p>
+
+<pre class="explanation">
+icon = wx.StaticBitmap(panel, bitmap=wx.Bitmap('exec.png'))
+sizer.Add(icon, pos=(0, 4), flag=wx.TOP|wx.RIGHT|wx.ALIGN_RIGHT, 
+    border=5)
+</pre>
+
+<p>
+We put an <code>wx.StaticBitmap</code> into the first row of the grid. 
+We place it on the right side of the row. 
+</p>
+
+<pre class="explanation">
+sb = wx.StaticBox(panel, label="Optional Attributes")
+boxsizer = wx.StaticBoxSizer(sb, wx.VERTICAL)
+</pre>
+
+<p>
+<code>wxStaticBoxSizer</code> is like a normal <code>wx.BoxSizer</code> but 
+it adds a static box around the sizer. We put check boxes into the static box sizer.
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/newclass.png" alt="New class window">
+<figcaption>Figure: New class window</figcaption>
+</figure>
+
+
+<p>
+This part of the wxPython tutorial was dedicated to layout management. 
+</p>
+
+
+<div class="hor">
+<script async src="../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- horizontal -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:468px;height:60px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="1734478269"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<footer>
+
+<nav class="center">
+<span class="botNavItem"><a href="http://zetcode.com/">Home</a></span> ‡ <span class="botNavItem"><a href="../index.html">Contents</a></span> ‡
+<span class="botNavItem"><a href="#">Top of Page</a></span>
+</nav>
+
+<div class="signature">
+<a href="http://zetcode.com/">ZetCode</a> last modified March 1, 2011  <span class="copyright">&copy; 2007 - 2015 Jan Bodnar</span>
+</div>
+
+</footer>
+
+</div> <!-- content -->
+
+</div> <!-- container -->
+
+</body>
+
+<!-- Mirrored from zetcode.com/wxpython/layout/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Aug 2015 19:21:39 GMT -->
+</html>
+

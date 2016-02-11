@@ -1,0 +1,60 @@
+<html>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch13s02.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:32 GMT -->
+<head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>13.2. Defining default values</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><meta name="keywords" content="python, biology, bioinformatics, programming, computational biology"><link rel="home" href="index-2.html" title="Introduction to Programming using Python"><link rel="up" href="ch13.html" title="Chapter 13. Functions II"><link rel="previous" href="ch13.html" title="Chapter 13. Functions II"><link rel="next" href="ch13s03.html" title="13.3. Variable number of parameters"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">13.2. Defining default values</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch13.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><th width="60%" align="center">Chapter 13. Functions II</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch13s03.html"><img src="images/next.png" alt="Next"></a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="sect_func_default_param"></a>13.2. Defining default values</h2></div></div><p>Default values of parameters can be defined in the
+	function definition.</p><div class="example"><p class="title"><b>Example 13.1. Default values of parameters</b></p>
+	Say that you have a function that checks whether a sequence is correct with respect to a given 
+	alphabet.
+	  <pre class="programlisting">
+def checkseq(seq, alphabet):
+    for c in seq:
+       if c not in alphabet:
+          return False
+    return True
+	  </pre><p>To use the DNA alphabet
+	as default value for the <tt>alphabet</tt> parameters, the
+	<tt>checkseq</tt> function can be redefined as follow:
+	  <pre class="programlisting">
+def checkseq(seq, alphabet="actg"):
+    for c in seq:
+       if c not in alphabet:
+          return False
+    return True
+	  </pre>
+	  </p><p>So, you can now call it this way:</p><p>
+	  <pre class="programlisting">
+&gt;&gt;&gt; result = checkseq("atgcgtgatgdtgragt")
+False
+&gt;&gt;&gt; myseq = "agcucgaua"
+&gt;&gt;&gt; result = checkseq(myseq, "acgu")
+True
+	  </pre>
+	</p></div><p>Default values are referenced when the function is defined.
+	<pre class="programlisting">
+alphabet = "actg"
+def checkseq(seq, alphabet=alphabet):
+    for c in seq:
+       if c not in alphabet:
+          return False
+    return True
+	</pre>
+	If you change the <span class="emphasis"><em>global</em></span> alphabet
+	variable later, this will not be taken into account, except if
+	the default value is a mutable type of course (e.g: list or dictionary). 
+
+	<pre class="programlisting">
+alphabet = "actg"
+def checkseq(seq, alphabet=alphabet):
+    for c in seq:
+       if c not in alphabet:
+          return False
+    return True
+
+alphabet = "acug"
+&gt;&gt;&gt; result = checkseq("atgcgtgatgdtgragt")
+True
+	</pre>
+      </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch13.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch13.html"><img src="images/up.png" alt="Up"></a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch13s03.html"><img src="images/next.png" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 13. Functions II&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index-2.html"><img src="images/home.png" alt="Home"></a></td><td width="40%" align="right" valign="top">&nbsp;13.3. Variable number of parameters</td></tr></table></div></body>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch13s02.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:32 GMT -->
+</html>

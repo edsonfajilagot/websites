@@ -1,0 +1,1138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from www.python-course.eu/graphs_python.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:14:26 GMT -->
+<head>
+
+<!-- Dieses Tag in den Head-Bereich oder direkt vor dem schlieÃŸenden Body-Tag einfÃ¼gen -->
+<script type="text/javascript" src="../apis.google.com/js/plusone.js"></script>
+
+
+
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "../connect.facebook.net/en_GB/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script><title>Python Advanced: Graph Theory and Graphs in Python</title>
+<meta http-equiv="content-type" content="text/html; charset="ISO-8859-1">
+<meta name="Description" content="Using Graphs in Python: Implementing Graphs and underlying theory." />
+<meta name="Keywords" content="Python, introduction, graph, graphs, graph theory, implementation, Hamilton, Hamiltonian, game, Königsberg, implementing" />
+
+<link href="favicon.ico" rel="shortcut icon">
+
+<link href="moderna.css" rel="stylesheet" type="text/css" />
+<link href="moderna_print.css" media="print" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+<div id="container">
+
+<div id="banner">
+<!-- <a href="impressum.php">Impressum</a> | <a href="mailto:">contact</a> | --><h1>Python Course</h1>
+
+</div>
+
+	<!-- Begin Top Menu -->
+<ul id="navlist">
+<li><a href="index-2.html" >Home</a></li><li><a href="course.html" >Python 2 Tutorial</a></li><li><a href="python3_course.html" >Python 3 Tutorial</a></li><li class="active"><a id="current" href="advanced_topics.html" >Advanced Topics</a></li><li><a href="python_books.html" >Python Books</a></li><li><a href="python_tkinter.html" >Tkinter Tutorial</a></li><li><a href="contact.html" rel="nofollow">Contact</a></li>                          
+</ul>
+	<!-- End Top Menu -->
+<div id="sidebar-a">
+<img class="border" src="images/hamiltonian_path_lava.png" alt="box" />    <h2>Advanced Topics</h2>
+
+<div class="menu">
+
+<ul>
+<li><a href="sys_module.html">Introduction into the sys module</a></li><li><a href="os_module_shell.html">Python and the Shell</a></li><li><a href="forking.html">Forks and Forking in Python</a></li><li><a href="threads.html">Introduction into Threads</a></li><li><a href="pipes.html">Pipe, Pipes and "99 Bottles of Beer"</a></li><li><a href="graphs_python.html">Graph Theory and Graphs in Python"</a></li><li><a href="pygraph.html">Graphs: PyGraph"</a></li><li><a href="networkx.html">Graphs: NetworkX"</a></li><li><a href="finite_state_machine.html">Finite State Machine in Python</a></li><li><a href="turing_machine.html">Turing Machine in Python</a></li><li><a href="numpy.html">NumPy Module</a></li><li><a href="matrix_arithmetic.html">Matrix Arithmetic</a></li><li><a href="linear_combinations.html">Linear Combinations</a></li><li><a href="text_classification_introduction.html">Introduction into Text Classification using Naive Bayes</a></li><li><a href="text_classification_python.html">Python Implementation of Text Classification</a></li><li><a href="towers_of_hanoi.html">Example for recursive Programming: Towers of Hanoi</a></li><li><a href="mastermind.html">Mastermind / Bulls and Cows</a></li><li><a href="dynamic_websites_wsgi.html">Creating dynamic websites with WSGI</a></li><li><a href="dynamic_websites.html">Dynamic websites with mod_python</a></li><li><a href="pylons.html">Dynamic websites with Pylons</a></li><li><a href="sql_python.html">Python, SQL, MySQL and SQLite</a></li><li><a href="python_scores.html">Python Scores</a></li></ul>
+
+</div>
+
+<p>
+<hr>
+<h3>History of Graph Theory</h3>
+
+Graph Theory started with the "Seven Bridges of KÃ¶nigsberg". The city of KÃ¶nigsberg (formerly part of Prussia now called Kaliningrad in Russia) spread on both sides of the Pregel River, and included two large islands which were connected to each other and the mainland by seven bridges. The problem - "bothering" the inhabitants - having a walk through the city, but every bridge could only be crossed once during this walk. The start and end are allowed to be different. The mathematician Euler was capable to prove that the problem has no solution. To do so, he laid the foundations of graph theory.
+<br>
+<hr>
+<br>
+This website is created by:<br><br>
+<a href="http://www.python-training-courses.com/"><img style="width: 150px;" alt="Python Training Courses"
+		     src="images/toronto_building.jpg"><br><br>Python Training Courses in Toronto, Canada</a>
+<br>
+On site trainings in Europe, Canada and the US.
+<br>
+
+
+<hr>
+</div><div id="sidebar-b"><img style="width: 150px;" alt="Python-Logo"
+		     src="images/python-logo.png"><!-- Dieses Tag dort einfügen, wo die +1-Schaltfläche dargestellt werden soll -->
+<g:plusone></g:plusone>
+<br><br>
+
+<div class="fb-like" data-href="www.python-course.eu" data-send="false" data-layout="button_count" 
+data-width="130" data-show-faces="true" data-action="recommend"></div>
+
+<br><br>
+This topic in German / Deutsche Übersetzung:
+    <a href="http://www.python-kurs.eu/graphen_python.php">Graphen in Python</a><h3>Classroom Training Courses</h3>
+<p>
+This website contains a free and extensive online tutorial by Bernd Klein, using
+material from his classroom <a href="python_classes.html">Python courses</a>.
+<br><br>
+If you are interested in an instructor-led classroom training, you may have a look at the 
+<a href="http://www.bodenseo.com/courses.php?topic=Python">Python courses
+<br><img style="width: 150px;" 
+alt="Bodenseo, Python and other courses and seminars"
+		     src="images/classroom_training_courses.jpg">
+</a>
+by Bernd Klein at Bodenseo.
+<font size="1">© kabliczech - Fotolia.com</font>
+ </p>
+
+
+
+<h3>Quote of the Day:</h3>
+<p>
+
+<i>"Some programming languages manage to absorb change, but withstand progress. "</i> (Alan Perlis)
+
+<br><hr>
+
+<h3>Advantages of Python</h3>
+<p>
+<ul>
+<li>Easy and fast to learn</li>
+<li>Simple to get support</li>
+<li>Python's syntax is clear and readable</li>
+<li>Fast to Code, i.e. it is easier and faster to code a problem in Python than in 
+C, C++ or Java, just to mention a few other languages</li>
+<li>Python is portable, i.e. it runs on multiple platforms and systems, like e.g. Linux 
+and Microsoft Windows</li>
+<li>Object oriented</li>
+<li>It's trendy, i.e more and more successful companies switch to Python, like Google did a long
+time ago.</li>
+</ul>
+</p>
+
+
+</p></div>
+<div id="content">
+
+<div id="contextlinks">Previous Chapter: <a href="pipes.html">Pipe, Pipes and "99 Bottles of Beer"</a><br>
+<LINK rel="prev" href="pipes.html">Next Chapter: <a href="pygraph.html">Graphs: PyGraph"</a><br>
+<LINK rel="next" href="pygraph.html"></div><h2>Graphs in Python</h2>
+
+<h3>Origins of Graph Theory</h3>
+
+<img class="imgright" src="images/koenigsberg_bridges.png" alt="7 bridges of Koenigsberg" />
+Before we start with the actual implementations of graphs in Python and before we start with the introduction of Python modules dealing with graphs, we want to devote ourselves to the origins of graph theory.
+<br>
+The origins take us back in time to the K&uuml;nigsberg of the 18th century. 
+K&ouml;nigsberg was a city in Prussia that time.  The river Pregel flowed through the town, creating two islands. The city and the islands were connected by seven bridges as shown. The inhabitants of the city were moved by the question, if it was possible to take a walk through the town by visiting each area of the town and crossing each bridge only once? Every bridge must have been crossed completely, i.e. it is not allowed to walk halfway onto a bridge and then turn around and later cross the other half from the other side. The walk need not start and end at the same spot.
+Leonhard Euler solved the problem in 1735 by proving that it is not possible.  
+He found out that the choice of a route inside each land area is irrelevant and that the only thing which mattered is the order (or the sequence) in which the bridges are crossed. He had formulated an abstraction of the problem, eliminating unnecessary facts and focussing on the land areas and the bridges connecting them. This way, he created the  foundations of graph theory. If we see a "land area" as a vertex and each bridge as an edge, we have "reduced" the problem to a graph.
+<br><br>
+<h3>Introduction into Graph Theory Using Python</h3>
+
+<img class="imgright" src="images/simple_graph_isolated.png" width="40%" alt="Simple Graph with an isolated node" />
+
+Before we start our treatize on possible Python representations of graphs, we want to present some general definitions of graphs and its components.
+<br>
+A "graph"<sup>1</sup>  in mathematics and computer science consists of "nodes", also known as "vertices".
+Nodes may or may not be connected with one another. In our illustration, - which is a pictorial representation of a graph, - the node "a" is connected with the node "c", but "a" is not connected with "b". The connecting line between two nodes is called an edge. If the edges between the nodes are undirected, the graph is called an undirected graph. If an edge is directed from one vertex (node) to another, a graph is called a directed graph. An directed edge is called an arc.
+<br>
+Though graphs may look very theoretical, many practical problems can be represented by graphs. They are often used to model problems or situations in physics, biology, psychology and above all in computer science. In computer science, graphs are used to represent networks of communication, data organization, computational devices, the flow of computation,
+<br>
+In the latter case, the are used to represent the data organisation, like the file system of an operating system, or communication networks. The link structure of websites can be seen as a graph as well, i.e. a directed graph, because a link is a directed edge or an arc.
+<br>
+Python has no built-in data type or class for graphs, but it is easy to implement them in Python. One data type is ideal for representing graphs in Python, i.e. dictionaries. The graph in our illustration can be implemented in the following way:
+
+<pre>
+graph = { "a" : ["c"],
+          "b" : ["c", "e"],
+          "c" : ["a", "b", "d", "e"],
+          "d" : ["c"],
+          "e" : ["c", "b"],
+          "f" : []
+        }
+</pre>
+
+The keys of the dictionary above are the nodes of our graph. The corresponding values are lists with the nodes, which are connecting by an edge. There is no simpler and more elegant way to represent a graph.
+<br><br>
+An edge can be seen as a 2-tuple with nodes as elements, i.e. ("a","b")
+<br><br>
+Function to generate the list of all edges:
+
+
+<pre>
+def generate_edges(graph):
+    edges = []
+    for node in graph:
+        for neighbour in graph[node]:
+            edges.append((node, neighbour))
+
+    return edges
+
+print(generate_edges(graph))
+</pre>
+
+This code generates the following output, if combined with the previously defined graph dictionary:
+
+<pre> 
+$ python3 graph_simple.py 
+[('a', 'c'), ('c', 'a'), ('c', 'b'), ('c', 'd'), ('c', 'e'), ('b', 'c'), ('b', 'e'), ('e', 'c'), ('e', 'b'), ('d', 'c')]
+</pre>
+
+As we can see, there is no edge containing the node "f". "f" is an isolated node of our graph.
+<br>
+The following Python function calculates the isolated nodes of a given graph:
+
+<pre>
+def find_isolated_nodes(graph):
+    """ returns a list of isolated nodes. """
+    isolated = []
+    for node in graph:
+        if not graph[node]:
+            isolated += node
+    return isolated
+</pre>
+
+If we call this function with our graph, a list containing "f" will be returned: <mono>["f"]</mono>
+
+<br><br>
+<h3>Graphs as a Python Class</h3>
+
+<img class="imgright" src="images/simple_graph_with_loop.png" width="40%" alt="Simple Graph with with a loop" />
+
+Before we go on with writing functions for graphs, we have a first go at a Python graph class implementation. 
+
+If you look at the following listing of our class, you can see in the __init__-method, that we use a dictionary "self.__graph_dict" for storing the vertices and their corresponding adjacent vertices. 
+
+<br><br>
+<pre>
+""" A Python Class
+A simple Python graph class, demonstrating the essential 
+facts and functionalities of graphs.
+"""
+
+
+class Graph(object):
+
+    def __init__(self, graph_dict={}):
+        """ initializes a graph object """
+        self.__graph_dict = graph_dict
+
+    def vertices(self):
+        """ returns the vertices of a graph """
+        return list(self.__graph_dict.keys())
+
+    def edges(self):
+        """ returns the edges of a graph """
+        return self.__generate_edges()
+
+    def add_vertex(self, vertex):
+        """ If the vertex "vertex" is not in 
+            self.__graph_dict, a key "vertex" with an empty
+            list as a value is added to the dictionary. 
+            Otherwise nothing has to be done. 
+        """
+        if vertex not in self.__graph_dict:
+            self.__graph_dict[vertex] = []
+
+    def add_edge(self, edge):
+        """ assumes that edge is of type set, tuple or list; 
+            between two vertices can be multiple edges! 
+        """
+        edge = set(edge)
+        (vertex1, vertex2) = tuple(edge)
+        if vertex1 in self.__graph_dict:
+            self.__graph_dict[vertex1].append(vertex2)
+        else:
+            self.__graph_dict[vertex1] = [vertex2]
+
+    def __generate_edges(self):
+        """ A static method generating the edges of the 
+            graph "graph". Edges are represented as sets 
+            with one (a loop back to the vertex) or two 
+            vertices 
+        """
+        edges = []
+        for vertex in self.__graph_dict:
+            for neighbour in self.__graph_dict[vertex]:
+                if {neighbour, vertex} not in edges:
+                    edges.append({vertex, neighbour})
+        return edges
+
+    def __str__(self):
+        res = "vertices: "
+        for k in self.__graph_dict:
+            res += str(k) + " "
+        res += "\nedges: "
+        for edge in self.__generate_edges():
+            res += str(edge) + " "
+        return res
+
+
+if __name__ == "__main__":
+
+    g = { "a" : ["d"],
+          "b" : ["c"],
+          "c" : ["b", "c", "d", "e"],
+          "d" : ["a", "c"],
+          "e" : ["c"],
+          "f" : []
+        }
+
+
+    graph = Graph(g)
+
+    print("Vertices of graph:")
+    print(graph.vertices())
+
+    print("Edges of graph:")
+    print(graph.edges())
+
+    print("Add vertex:")
+    graph.add_vertex("z")
+
+    print("Vertices of graph:")
+    print(graph.vertices())
+ 
+    print("Add an edge:")
+    graph.add_edge({"a","z"})
+    
+    print("Vertices of graph:")
+    print(graph.vertices())
+
+    print("Edges of graph:")
+    print(graph.edges())
+
+    print('Adding an edge {"x","y"} with new vertices:')
+    graph.add_edge({"x","y"})
+    print("Vertices of graph:")
+    print(graph.vertices())
+    print("Edges of graph:")
+    print(graph.edges())
+  
+</pre>
+
+If you start this module standalone, you will get the following result:
+
+<pre>
+$ python3 graph.py 
+Vertices of graph:
+['a', 'c', 'b', 'e', 'd', 'f']
+Edges of graph:
+[{'a', 'd'}, {'c', 'b'}, {'c'}, {'c', 'd'}, {'c', 'e'}]
+Add vertex:
+Vertices of graph:
+['a', 'c', 'b', 'e', 'd', 'f', 'z']
+Add an edge:
+Vertices of graph:
+['a', 'c', 'b', 'e', 'd', 'f', 'z']
+Edges of graph:
+[{'a', 'd'}, {'c', 'b'}, {'c'}, {'c', 'd'}, {'c', 'e'}, {'a', 'z'}]
+Adding an edge {"x","y"} with new vertices:
+Vertices of graph:
+['a', 'c', 'b', 'e', 'd', 'f', 'y', 'z']
+Edges of graph:
+[{'a', 'd'}, {'c', 'b'}, {'c'}, {'c', 'd'}, {'c', 'e'}, {'a', 'z'}, {'y', 'x'}]
+</pre>
+
+
+<br><br>
+<h3>Paths in Graphs</h3>
+
+We want to find now the shortest path from one node to another node. Before we come to the Python code for this problem, we will have to present some formal definitions.
+
+<br><br>
+<b>Adjacend vertices:</b>
+<br>
+Two vertices are adjacent when they are both incident to a common edge.
+<br><br>
+<b>Path in an undirected Graph:</b>
+<br>
+A path in an undirected graph is a sequence of vertices P = ( v<sub>1</sub>, v<sub>2</sub>,  ..., v<sub>n</sub> ) &isin; V x V x ... x V such that v<sub>i</sub> is adjacent to v<sub>{i+1}</sub> for 1 &le; i &lt; n. Such a path P is called a path of length n from v<sub>1</sub> to v<sub>n</sub>.
+<br>
+<b>Simple Path:</b>
+<br>
+A path with no repeated vertices is called a simple path.
+
+<br><br>
+Example:
+<br>
+<mono>(a, c, e)</mono> is a simple path in our graph, as well as <mono>(a,c,e,b)</mono>. <mono>(a,c,e,b,c,d)</mono> is a path but not a simple path, because the node c appears twice.
+
+<br><br>
+The following method finds a path from a start vertex to an end vertex:
+
+<pre>
+    def find_path(self, start_vertex, end_vertex, path=[]):
+        """ find a path from start_vertex to end_vertex 
+            in graph """
+        graph = self.__graph_dict
+        path = path + [start_vertex]
+        if start_vertex == end_vertex:
+            return path
+        if start_vertex not in graph:
+            return None
+        for vertex in graph[start_vertex]:
+            if vertex not in path:
+                extended_path = self.find_path(vertex, 
+                                               end_vertex, 
+                                               path)
+                if extended_path: 
+                    return extended_path
+        return None
+</pre>
+
+The method find_all_paths finds all the paths between a start vertex to an end vertex:
+
+<pre>
+    def find_all_paths(self, start_vertex, end_vertex, path=[]):
+        """ find all paths from start_vertex to 
+            end_vertex in graph """
+        graph = self.__graph_dict 
+        path = path + [start_vertex]
+        if start_vertex == end_vertex:
+            return [path]
+        if start_vertex not in graph:
+            return []
+        paths = []
+        for vertex in graph[start_vertex]:
+            if vertex not in path:
+                extended_paths = self.find_all_paths(vertex, 
+                                                     end_vertex, 
+                                                     path)
+                for p in extended_paths: 
+                    paths.append(p)
+        return paths
+</pre>
+
+<br><br>
+<h3>Degree</h3>
+
+<img class="imgright" src="images/simple_graph_with_loop.png" width="40%" alt="Simple Graph with with a loop" />
+
+The degree of a vertex v in a graph is the number of edges connecting it, with loops counted twice. The degree of a vertex v is denoted deg(v). The maximum degree of a graph G, denoted by &Delta;(G), and the minimum degree of a graph, denoted by &delta;(G), are the maximum and minimum degree of its vertices. 
+
+<br><br>
+In the graph on the right side, the maximum degree is 5 at vertex c and the minimum degree is 0, i.e the isolated vertex f. 
+<br><br>
+If all the degrees in a graph are the same, the graph is a regular graph.
+
+In a regular graph, all degrees are the same, and so we can speak of the degree of the graph.
+
+<br><br><br>
+The degree sum formula (Handshaking lemma):
+<br><br>
+&sum;<sub>v &in; V</sub>deg(v) = 2 |E|
+
+<br><br>
+This means, that the sum of degrees of all the vertices is equal to the number of edges multiplied by 2.
+We can conclude, that the number of vertices with odd degree has to be even. This
+statement is known as the handshaking lemma. The name "handshaking lemma" stems from a popular mathematical problem: In any group of people the number of people who have shaken hands with an odd number of other people from the group is even.
+<br><br>
+The following method calculates the degree of a vertex:
+
+<br>
+<pre>
+    def vertex_degree(self, vertex):
+        """ The degree of a vertex is the number of edges connecting
+            it, i.e. the number of adjacent vertices. Loops are counted 
+            double, i.e. every occurence of vertex in the list 
+            of adjacent vertices. """ 
+        adj_vertices =  self.__graph_dict[vertex]
+        degree = len(adj_vertices) + adj_vertices.count(vertex)
+        return degree
+</pre>
+
+The following method calculates a list containing the isolated vertices of a graph:
+
+<pre>
+    def find_isolated_vertices(self):
+        """ returns a list of isolated vertices. """
+        graph = self.__graph_dict
+        isolated = []
+        for vertex in graph:
+            print(isolated, vertex)
+            if not graph[vertex]:
+                isolated += [vertex]
+        return isolated
+</pre>
+
+The methods delta and Delta can be used to calculate the minimum and maximum degree of a vertex respectively:
+
+<pre>
+    def delta(self):
+        """ the minimum degree of the vertices """
+        min = 100000000
+        for vertex in self.__graph_dict:
+            vertex_degree = self.vertex_degree(vertex)
+            if vertex_degree < min:
+                min = vertex_degree
+        return min
+        
+    def Delta(self):
+        """ the maximum degree of the vertices """
+        max = 0
+        for vertex in self.__graph_dict:
+            vertex_degree = self.vertex_degree(vertex)
+            if vertex_degree > max:
+                max = vertex_degree
+        return max
+</pre>
+
+
+<br><br>
+<h3>Degree Sequence</h3>
+
+The degree sequence of an undirected graph is defined as the sequence of its vertex
+degrees in a non-increasing order.
+<br>
+The following method returns a tuple with the degree sequence of the instance graph:
+
+<pre>
+    def degree_sequence(self):
+        """ calculates the degree sequence """
+        seq = []
+        for vertex in self.__graph_dict:
+            seq.append(self.vertex_degree(vertex))
+        seq.sort(reverse=True)
+        return tuple(seq)
+</pre>
+
+<br>
+The degree sequence of our example graph is the following sequence of integers:  (5,2,1,1,1,0). 
+<br>
+Isomorphic graphs have the same degree sequence. However, two graphs with the same degree sequence are not necessarily isomorphic. 
+<br><br>
+There is the question whether a given degree sequence can be realized by a
+simple graph. The Erd&ouml;s-Gallai theorem states that a non-increasing sequence of n numbers d<sub>i</sub> (for
+i = 1, ..., n) is the degree sequence of a simple graph if and only
+if the sum of the sequence is even and the following condition is fulfilled:
+<br><br>
+
+<img src="images/erdoes_gallai.png" width="350" alt="Erd&ouml;s-Gallai theorem" />
+<br><br>
+<h3>Implementation of the Erd&ouml;s-Gallai theorem</h3>
+
+Our graph class - see further down for a complete listing - contains a method "erdoes_gallai" which decides, if a sequence fulfills the Erd&ouml;s-Gallai theorem. 
+First, we check, if the sum of the elements of the sequence is odd. If so the function returns False, because the Erd&ouml;s-Gallai theorem can't be fullfilled anymore. 
+After this we check with the static method is_degree_sequence whether the input sequence is 
+a degree sequence, i.e. that the elements of the sequence are non-increasing. 
+This is kind of superfluous, as the input is supposed to be a degree sequence, so you may drop this check 
+for efficiency. Now, we check in the body of the second if statement, if the inequation of the theorem is fullfilled:
+
+
+<pre>
+    @staticmethod
+    def erdoes_gallai(dsequence):
+        """ Checks if the condition of the Erdoes-Gallai inequality 
+            is fullfilled 
+        """
+        if sum(dsequence) % 2:
+            # sum of sequence is odd
+            return False
+        if Graph.is_degree_sequence(dsequence):
+            for k in range(1,len(dsequence) + 1):
+                left = sum(dsequence[:k])
+                right =  k * (k-1) + sum([min(x,k) for x in dsequence[k:]])
+                if left > right:
+                    return False
+        else:
+            # sequence is increasing
+            return False
+        return True
+</pre>
+
+<br><br>
+Version without the superfluous degree sequence test:
+
+<pre>
+    @staticmethod
+    def erdoes_gallai(dsequence):
+        """ Checks if the condition of the Erdoes-Gallai inequality 
+            is fullfilled 
+            dsequence has to be a valid degree sequence
+        """
+        if sum(dsequence) % 2:
+            # sum of sequence is odd
+            return False
+        for k in range(1,len(dsequence) + 1):
+            left = sum(dsequence[:k])
+            right =  k * (k-1) + sum([min(x,k) for x in dsequence[k:]])
+            if left > right:
+                return False
+        return True
+</pre>
+
+
+<h3>Graph Density</h3>
+
+The graph density is defined as the ratio of the number of edges of a given graph,  and 
+the total number of edges, the graph could have. In other words: It measures how close a 
+given graph is to a complete graph. 
+<br>
+The maximal density is 1, if a graph is complete. This is clear, because the maximum number 
+of edges in a graph depends on the vertices and can be calculated as:
+<br>
+max. number of edges = &frac12; * |V| * ( |V| - 1 ). 
+<br><br>
+On the other hand the minimal density is 0, if the graph has no edges, 
+i.e. it is an isolated graph. 
+<br>
+For undirected simple graphs, the graph density is defined as:
+<br><br>
+<img src="images/graph_density_formula.png" width="110" alt="Graph density formula" />
+
+<br><br>
+A dense graph is a graph in which the number of edges is close to the maximal number of edges. A graph with only a few edges, is called a sparse graph. The definition for those two terms is not very sharp, i.e. there is no least upper
+bound (supremum) for a sparse density and no greatest lower bound (infimum) for defining a dense graph.
+<br><br>
+The precisest mathematical notation uses the big O notation:
+<br><br>
+Sparse Graph: 
+<br<A sparse graph is a graph G = (V, E) in which |E| = O(|V|).
+<br>
+Dense Graph: 
+<br>A dense graph is a graph G = (V, E) in which |E| = O(<sup>2</sup>).
+
+
+<br><br>
+"density" is a method of our class to calculate the density of a graph:
+
+<pre>
+    def density(self):
+        """ method to calculate the density of a graph """
+        g = self.__graph_dict
+        V = len(g.keys())
+        E = len(self.edges())
+        return 2.0 * E / (V *(V - 1))
+</pre>
+
+We can test this method with the following script. 
+
+<pre>
+from graph2 import Graph
+
+g = { "a" : ["d","f"],
+       "b" : ["c","b"],
+       "c" : ["b", "c", "d", "e"],
+       "d" : ["a", "c"],
+       "e" : ["c"],
+       "f" : ["a"]
+}
+
+complete_graph = { 
+    "a" : ["b","c"],
+    "b" : ["a","c"],
+    "c" : ["a","b"]
+}
+
+isolated_graph = { 
+    "a" : [],
+    "b" : [],
+    "c" : []
+}
+
+
+graph = Graph(g)
+print(graph.density())
+
+graph = Graph(complete_graph)
+print(graph.density())
+
+graph = Graph(isolated_graph)
+print(graph.density())
+</pre>
+
+A complete graph has a density of 1 and
+isolated graph has a density of 0, as we can see from the results of the previous test script:
+
+<pre>
+$ python test_density.py 
+0.466666666667
+1.0
+0.0
+</pre>
+<br><br>
+
+<h3>Connected Graphs</h3>
+
+<img class="imgright" src="images/connected_graph.png" width="40%" alt="Connected Graph" />
+
+A graph is said to be connected if every pair of vertices in the graph is connected. The example graph on the right side is a connected graph.
+<br><br>
+It possible to determine with a simple algorithm whether a graph is connected:
+<ol>
+<li>Choose an arbitrary node x of the graph G as the starting point
+<li>Determine the set A of all the nodes which can be reached from x.
+<li>If A is equal to the set of nodes of G, the graph is connected; otherwise it is disconnected.
+</ol>
+<br>
+We implement a method is_connected to check if a graph is a connected graph. We don't put emphasis on efficiency but on readability. 
+
+<pre>
+    def is_connected(self, 
+                     vertices_encountered = set(), 
+                     start_vertex=None):
+        """ determines if the graph is connected """
+        gdict = self.__graph_dict        
+        vertices = gdict.keys() 
+        if not start_vertex:
+            # chosse a vertex from graph as a starting point
+            start_vertex = vertices[0]
+        vertices_encountered.add(start_vertex)
+        if len(vertices_encountered) != len(vertices):
+            for vertex in gdict[start_vertex]:
+                if vertex not in vertices_encountered:
+                    if self.is_connected(vertices_encountered, vertex):
+                        return True
+        else:
+            return True
+        return False
+</pre>
+<br><br>
+If you add this method to our graph class, we can test it with the following script. Assuming that you save the graph class as graph2.py:
+
+<pre>
+from graph2 import Graph
+
+g = { "a" : ["d"],
+      "b" : ["c"],
+      "c" : ["b", "c", "d", "e"],
+      "d" : ["a", "c"],
+      "e" : ["c"],
+      "f" : []
+}
+
+g2 = { "a" : ["d","f"],
+       "b" : ["c"],
+       "c" : ["b", "c", "d", "e"],
+       "d" : ["a", "c"],
+       "e" : ["c"],
+       "f" : ["a"]
+}
+
+g3 = { "a" : ["d","f"],
+       "b" : ["c","b"],
+       "c" : ["b", "c", "d", "e"],
+       "d" : ["a", "c"],
+       "e" : ["c"],
+       "f" : ["a"]
+}
+
+
+graph = Graph(g)
+print(graph)
+print(graph.is_connected())
+
+graph = Graph(g2)
+print(graph)
+print(graph.is_connected())
+
+graph = Graph(g3)
+print(graph)
+print(graph.is_connected())
+</pre>
+<br><br>
+A connected component is a maximal connected subgraph of G. Each vertex belongs to exactly one connected component, as does each edge.
+
+<br><br>
+<h3>Distance and Diameter of a Graph</h3>
+
+<img class="imgright" src="images/connected_graph_diameter.png" width="40%" alt="Connected Graph showing the diameter" />
+
+The distance "dist" between two vertices in a graph is the length of the shortest path between these vertices.  No backtracks, detours, or loops are allowed for the calculation of a distance. 
+<br><br>
+In our example graph on the right, the distance between the vertex a and the vertex f is 3, i.e. dist(a,f) = 3, because the shortest way is via the vertices c and e (or c and b alternatively).
+<br><br>
+The eccentricity of a vertex s of a graph g is the maximal distance to every other vertex of the graph:
+<br>
+e(s) = max( &#123; dist(s,v) | v  &isin; V &#125;)
+<br>
+(V is the set of all vertices of g)
+<br><br>
+The diameter d of a graph is defined as the maximum eccentricity of any vertex in the graph. This means, that the diameter is the length of the shortest path between the most distanced nodes. 
+To determine the diameter of a graph, first find the shortest path between each pair of vertices. The greatest length of any of these paths is the diameter of the graph.
+<br><br>
+We can directly see in our example graph, that the diameter is 3, because the minimal length between a and f is 3 and there is no other pair of vertices with a longer path.
+<br><br>
+The following method implements an algorithm to calculate the diameter. 
+
+<pre>
+    def diameter(self):
+        """ calculates the diameter of the graph """
+        
+        v = self.vertices() 
+        pairs = [ (v[i],v[j]) for i in range(len(v)) for j in range(i+1, len(v)-1)]
+        smallest_paths = []
+        for (s,e) in pairs:
+            paths = self.find_all_paths(s,e)
+            smallest = sorted(paths, key=len)[0]
+            smallest_paths.append(smallest)
+
+        smallest_paths.sort(key=len)
+
+        # longest path is at the end of list, 
+        # i.e. diameter corresponds to the length of this path
+        diameter = len(smallest_paths[-1])
+        return diameter
+</pre>
+
+We can calculate the diameter of our example graph with the following script, assuming again, that our complete graph class is saved as graph2.py:
+
+<pre>
+from graph2 import Graph
+
+g = { "a" : ["c"],
+      "b" : ["c","e","f"],
+      "c" : ["a","b","d","e"],
+      "d" : ["c"],
+      "e" : ["b","c","f"],
+      "f" : ["b","e"]
+}
+
+
+graph = Graph(g)
+
+diameter = graph.diameter()
+
+print(diameter)
+</pre>
+
+It will print out the value 3.
+<br><br>
+<h3>The Complete Python Graph Class</h3>
+
+In the following Python code, you find the complete Python Class Module with all the discussed methodes:
+
+<a href="examples/graph2.py"  rel="nofollow" title="Graph Class">graph2.py</a>
+<br><br>
+
+<h3>Tree / Forest</h3>
+
+A tree is an undirected graph which contains no cycles. This means that any two vertices of the graph are connected by exactly one simple path. 
+<br><br>
+A forest is a disjoint union of trees. Contrary to forests in nature, a forest in graph theory can consist of a single tree!
+<br><br>
+A graph with one vertex and no edge is a tree (and a forest).
+<br><br>
+An example of a tree:
+<br><br>
+<img src="images/tree_graph.png" width="40%" alt="Example of a Graph which is a tree" />
+<br><br>
+While the previous example depicts a graph which is a tree and forest, the following picture shows a graph which consists of two trees, i.e. the graph is a forest but not a tree:
+<br><br>
+<img src="images/forest_graph.png" width="40%" alt="Example of a Graph which is a forest but not a tree" />
+<br><br>
+<h4>Overview of forests:</h4>
+<br>
+With one vertex:
+<br><br><img src="images/forests_one_vertex.png" alt="Forests with one vertex" />
+<br><br>
+Forest graphs with two vertices: 
+
+<br><br><img src="images/forests_two_vertices.png" alt="Forests with two vertices" />
+<br><br>
+Forest graphs with three vertices: 
+<br><br><img src="images/forests_three_vertices.png" alt="Forests with three vertices" />
+
+<br><br>
+<h3>Spanning Tree</h3>
+
+A spanning tree T of a connected, undirected graph G is a subgraph G' of G, which is a tree,
+and G' contains all the vertices and a subset of the edges of G. G' contains all the edges of G, if G is a tree graph. Informally, a spanning tree of G is a selection of edges of G that form a tree spanning every vertex. That is, every vertex lies in the tree, but no cycles (or loops) are contained.
+<br><br>
+Example:
+<br>
+A fully connected graph:
+<br><br><img src="images/connected_graph_2.png" alt="Connected Graph" />
+<br><br>
+Two spanning trees from the previous fully connected graph: 
+<br><br><img src="images/spanning_trees.png" alt="Spanning trees" />
+
+<br><br>
+
+<br><br>
+<h3>Hamiltonian Game</h3>
+
+
+<img class="imgright" src="images/hamiltonian_path.png" width="30%" alt="Hamilton Path, The Icosian Game" /> 
+
+<br><br>
+An Hamiltonian path is a path in an undirected or directed graph that visits each vertex exactly once. A Hamiltonian cycle (or circuit) is a Hamiltonian path that is a cycle. 
+<br>
+Note for computer scientists: Generally, it is not not possible to determine, whether such paths or cycles exist in arbitrary graphs, because the Hamiltonian path problem has been proven to be NP-complete.
+<br><br>
+It is named after William Rowan Hamilton who invented the so-called "icosian game", or Hamilton's puzzle, which involves finding a Hamiltonian cycle in the edge graph of the dodecahedron. Hamilton solved this problem using the icosian calculus, an algebraic structure based on roots of unity with many similarities to the quaternions, which he also invented. 
+
+<br><br>
+
+
+<br><br>
+<h3>Complete Listing of the Graph Class</h3>
+
+<pre>
+""" A Python Class
+A simple Python graph class, demonstrating the essential 
+facts and functionalities of graphs.
+"""
+
+class Graph(object):
+
+    def __init__(self, graph_dict={}):
+        """ initializes a graph object """
+        self.__graph_dict = graph_dict
+
+    def vertices(self):
+        """ returns the vertices of a graph """
+        return list(self.__graph_dict.keys())
+
+    def edges(self):
+        """ returns the edges of a graph """
+        return self.__generate_edges()
+
+    def add_vertex(self, vertex):
+        """ If the vertex "vertex" is not in 
+            self.__graph_dict, a key "vertex" with an empty
+            list as a value is added to the dictionary. 
+            Otherwise nothing has to be done. 
+        """
+        if vertex not in self.__graph_dict:
+            self.__graph_dict[vertex] = []
+
+    def add_edge(self, edge):
+        """ assumes that edge is of type set, tuple or list; 
+            between two vertices can be multiple edges! 
+        """
+        edge = set(edge)
+        vertex1 = edge.pop()
+        if edge:
+            # not a loop
+            vertex2 = edge.pop()
+        else:
+            # a loop
+            vertex2 = vertex1
+        if vertex1 in self.__graph_dict:
+            self.__graph_dict[vertex1].append(vertex2)
+        else:
+            self.__graph_dict[vertex1] = [vertex2]
+
+    def __generate_edges(self):
+        """ A static method generating the edges of the 
+            graph "graph". Edges are represented as sets 
+            with one (a loop back to the vertex) or two 
+            vertices 
+        """
+        edges = []
+        for vertex in self.__graph_dict:
+            for neighbour in self.__graph_dict[vertex]:
+                if {neighbour, vertex} not in edges:
+                    edges.append({vertex, neighbour})
+        return edges
+
+    def __str__(self):
+        res = "vertices: "
+        for k in self.__graph_dict:
+            res += str(k) + " "
+        res += "\nedges: "
+        for edge in self.__generate_edges():
+            res += str(edge) + " "
+        return res
+
+    def find_isolated_vertices(self):
+        """ returns a list of isolated vertices. """
+        graph = self.__graph_dict
+        isolated = []
+        for vertex in graph:
+            print(isolated, vertex)
+            if not graph[vertex]:
+                isolated += [vertex]
+        return isolated
+
+    def find_path(self, start_vertex, end_vertex, path=[]):
+        """ find a path from start_vertex to end_vertex 
+            in graph """
+        graph = self.__graph_dict
+        path = path + [start_vertex]
+        if start_vertex == end_vertex:
+            return path
+        if start_vertex not in graph:
+            return None
+        for vertex in graph[start_vertex]:
+            if vertex not in path:
+                extended_path = self.find_path(vertex, 
+                                               end_vertex, 
+                                               path)
+                if extended_path: 
+                    return extended_path
+        return None
+    
+
+    def find_all_paths(self, start_vertex, end_vertex, path=[]):
+        """ find all paths from start_vertex to 
+            end_vertex in graph """
+        graph = self.__graph_dict 
+        path = path + [start_vertex]
+        if start_vertex == end_vertex:
+            return [path]
+        if start_vertex not in graph:
+            return []
+        paths = []
+        for vertex in graph[start_vertex]:
+            if vertex not in path:
+                extended_paths = self.find_all_paths(vertex, 
+                                                     end_vertex, 
+                                                     path)
+                for p in extended_paths: 
+                    paths.append(p)
+        return paths
+
+    def is_connected(self, 
+                     vertices_encountered = set(), 
+                     start_vertex=None):
+        """ determines if the graph is connected """
+        gdict = self.__graph_dict        
+        vertices = gdict.keys() 
+        if not start_vertex:
+            # chosse a vertex from graph as a starting point
+            start_vertex = vertices[0]
+        vertices_encountered.add(start_vertex)
+        if len(vertices_encountered) != len(vertices):
+            for vertex in gdict[start_vertex]:
+                if vertex not in vertices_encountered:
+                    if self.is_connected(vertices_encountered, vertex):
+                        return True
+        else:
+            return True
+        return False
+
+    def vertex_degree(self, vertex):
+        """ The degree of a vertex is the number of edges connecting
+            it, i.e. the number of adjacent vertices. Loops are counted 
+            double, i.e. every occurence of vertex in the list 
+            of adjacent vertices. """ 
+        adj_vertices =  self.__graph_dict[vertex]
+        degree = len(adj_vertices) + adj_vertices.count(vertex)
+        return degree
+
+    def degree_sequence(self):
+        """ calculates the degree sequence """
+        seq = []
+        for vertex in self.__graph_dict:
+            seq.append(self.vertex_degree(vertex))
+        seq.sort(reverse=True)
+        return tuple(seq)
+
+    @staticmethod
+    def is_degree_sequence(sequence):
+        """ Method returns True, if the sequence "sequence" is a 
+            degree sequence, i.e. a non-increasing sequence. 
+            Otherwise False is returned.
+        """
+        # check if the sequence sequence is non-increasing:
+        return all( x>=y for x, y in zip(sequence, sequence[1:]))
+  
+
+    def delta(self):
+        """ the minimum degree of the vertices """
+        min = 100000000
+        for vertex in self.__graph_dict:
+            vertex_degree = self.vertex_degree(vertex)
+            if vertex_degree < min:
+                min = vertex_degree
+        return min
+        
+    def Delta(self):
+        """ the maximum degree of the vertices """
+        max = 0
+        for vertex in self.__graph_dict:
+            vertex_degree = self.vertex_degree(vertex)
+            if vertex_degree > max:
+                max = vertex_degree
+        return max
+
+    def density(self):
+        """ method to calculate the density of a graph """
+        g = self.__graph_dict
+        V = len(g.keys())
+        E = len(self.edges())
+        return 2.0 * E / (V *(V - 1))
+
+    def diameter(self):
+        """ calculates the diameter of the graph """
+        
+        v = self.vertices() 
+        pairs = [ (v[i],v[j]) for i in range(len(v)) for j in range(i+1, len(v)-1)]
+        smallest_paths = []
+        for (s,e) in pairs:
+            paths = self.find_all_paths(s,e)
+            smallest = sorted(paths, key=len)[0]
+            smallest_paths.append(smallest)
+
+        smallest_paths.sort(key=len)
+
+        # longest path is at the end of list, 
+        # i.e. diameter corresponds to the length of this path
+        diameter = len(smallest_paths[-1])
+        return diameter
+
+    @staticmethod
+    def erdoes_gallai(dsequence):
+        """ Checks if the condition of the Erdoes-Gallai inequality 
+            is fullfilled 
+        """
+        if sum(dsequence) % 2:
+            # sum of sequence is odd
+            return False
+        if Graph.is_degree_sequence(dsequence):
+            for k in range(1,len(dsequence) + 1):
+                left = sum(dsequence[:k])
+                right =  k * (k-1) + sum([min(x,k) for x in dsequence[k:]])
+                if left > right:
+                    return False
+        else:
+            # sequence is increasing
+            return False
+        return True
+</pre>
+
+<br><br>
+<hr>
+Footnotes:
+<br>
+<sup>1</sup> The graphs studied in graph theory (and in this chapter of our Python turotial) should not be confused with the graphs of functions
+
+<br>
+<sup>2</sup> A singleton is a set that contains exactly one element.
+
+<br><br><br>
+Credits:
+<br>
+Narayana Chikkam, nchikkam(at)gmail(dot)com, pointed out an index error in the erdoes_gallai method. Thank you very much, Narayana!
+<br><br>
+
+</div>
+
+
+
+<div id="contextlinks">Previous Chapter: <a href="pipes.html">Pipe, Pipes and "99 Bottles of Beer"</a><br>
+<LINK rel="prev" href="pipes.html">Next Chapter: <a href="pygraph.html">Graphs: PyGraph"</a><br>
+<LINK rel="next" href="pygraph.html"></div><br><br><br>
+
+</div>
+<div id="footer">  &copy; 2011 - 2014 <a href="http://www.bklein.de/">Bernd Klein</a>,
+Bodenseo; 
+Design by Denise Mitchinson adapted for python-course.eu by Bernd Klein</div>
+</div>
+</body>
+
+<!-- Mirrored from www.python-course.eu/graphs_python.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:14:26 GMT -->
+</html>

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from zetcode.com/databases/mysqltutorial/views/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Jul 2015 02:47:03 GMT -->
+<head>
+<title>Views in MySQL</title>
+<link rel="stylesheet" href="../../../cfg/format2.css" type="text/css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="MySQL, SQL, tutorial, database, view">
+<meta name="description" content="In this part of the MySQL tutorial, we will
+cover views.">
+<meta name="author" content="Jan Bodnar">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div id="wide_ad" class="ltow">
+<script async src="../../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- 160x600, August 2011 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:600px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="2484182563"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+
+<div class="content">
+
+
+<header>
+
+<nav>
+<a href="http://zetcode.com/" title="Home">Home</a>&#160;
+<a href="../index.html">Contents</a>
+</nav>
+
+</header>
+
+
+<h1>Views in MySQL</h1>
+
+
+<p>
+In this part of the MySQL tutorial, we will mention views.
+</p>
+
+<div class="med_rec">
+<script async src="../../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- NewSquare -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:250px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="0364418177"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+
+<h2 id="definition">View definition</h2>
+
+
+<p>
+A <em>view</em> is a specific look on data from one or more tables. 
+It can arrange data in some specific order, highlight or hide some data. 
+A view consists of a stored query accessible as a virtual table composed 
+of the result set of a query. Unlike ordinary tables a view does not 
+form part of the physical schema. It is a dynamic, virtual table computed 
+or collated from data in the database.
+</p>
+
+<p>
+A view is a pseudo table. It is a stored query which looks
+like a table. And it can be referenced like a table.
+</p>
+
+<p>
+Views can restrict users to specific rows or columns and thus enhance security.
+They can be used to join columns from multiple tables, so that they look
+like a single table. They can be used to provide aggregate information.
+</p>
+
+
+<p>
+There are several restrictions that apply to views. 
+Here are some of them:
+</p>
+
+<ul>
+  <li>The SELECT statement cannot contain a subquery</li>
+  <li>The SELECT statement cannot refer to system or user variables</li>
+  <li>Any table or view referred to in the definition must exist</li>
+  <li>A temporary VIEW cannot be created</li>
+  <li>A VIEW cannot be associated with a trigger</li>
+</ul>
+
+
+<h2 id="cmdv">Creating, modifying and dropping a View</h2>
+
+<p>
+In the next example, we create a simple view. We use <code>CREATE VIEW</code>
+syntax to create a view. 
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM Cars;
++----+------------+--------+
+| Id | Name       | Cost   |
++----+------------+--------+
+|  1 | Audi       |  52642 |
+|  2 | Mercedes   |  57127 |
+|  3 | Skoda      |   9000 |
+|  4 | Volvo      |  29000 |
+|  5 | Bentley    | 350000 |
+|  6 | Citroen    |  21000 |
+|  7 | Hummer     |  41400 |
+|  8 | Volkswagen |  21600 |
++----+------------+--------+ 
+</pre>
+
+<p>
+This is our data, upon which we create the view. 
+</p>
+
+<pre class="code">
+mysql> CREATE VIEW CheapCars AS 
+    -> SELECT Name FROM Cars WHERE Cost&lt;25000;
+</pre>
+
+<p>
+We create a view <code>CheapCars</code>. These are cars which cost under 25000. 
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM CheapCars;
++------------+
+| Name       |
++------------+
+| Skoda      |
+| Citroen    |
+| Volkswagen |
++------------+
+</pre>
+
+<p>
+A view is a database object than can be queried. There are three cars which 
+are considered to be cheap. 
+</p>
+
+
+<pre class="code">
+mysql> ALTER VIEW CheapCars AS SELECT Name FROM Cars
+    -> WHERE Cost&lt;30000;
+
+mysql> SELECT * FROM CheapCars;
++------------+
+| Name       |
++------------+
+| Skoda      |
+| Volvo      |
+| Citroen    |
+| Volkswagen |
++------------+
+</pre>
+
+<p>
+We can redefine a view. Say we now consider a car to be cheap if 
+it costs under 30000. We use the <code>ALTER VIEW</code> statement 
+to modify our view. 
+</p>
+
+
+<p>
+What happens to a view if we delete a table, from which the data
+is selected?
+</p>
+
+<pre class="code">
+mysql> DROP TABLE Cars;
+
+mysql> SELECT * FROM CheapCars;
+ERROR 1356 (HY000): View 'mydb.CheapCars' references invalid table(s) 
+or column(s) or function(s) or definer/invoker of view lack rights to use them
+</pre>
+
+<p>
+Querying the view we receive the above error. 
+</p>
+
+<pre class="code">
+mysql> SOURCE cars.sql
+
+mysql> SELECT * FROM CheapCars;
++------------+
+| Name       |
++------------+
+| Skoda      |
+| Citroen    |
+| Volkswagen |
++------------+
+</pre>
+
+<p>
+When we recreate the table the view works again. 
+</p>
+
+
+<pre class="code">
+mysql> DROP VIEW CheapCars;
+</pre>
+
+<p>
+Finally, a view is deleted with the <code>DROP VIEW</code> syntax.
+</p>
+
+
+<h2 id="find">Finding views</h2>
+
+<p>
+We will mention several ways how to find views in MySQL database.
+</p>
+
+<pre class="code">
+mysql> SHOW FULL TABLES;
++----------------+------------+
+| Tables_in_mydb | Table_type |
++----------------+------------+
+| AA             | BASE TABLE |
+...
+| Chars          | BASE TABLE |
+| CheapCars      | VIEW       |
+| Customers      | BASE TABLE |
+| Dates          | BASE TABLE |
+| Decimals       | BASE TABLE |
+| FavoriteCars   | VIEW       |
+...
+</pre>
+
+<p>
+We can list all tables in a database with a <code>SHOW FULL TABLES</code>
+statement. In the Table_type column we can see, whether it is a table
+or a view. 
+</p>
+
+<pre class="code">
+mysql> SELECT TABLE_NAME, TABLE_TYPE FROM information_schema.TABLES;
++---------------------------------------+-------------+
+| TABLE_NAME                            | TABLE_TYPE  |
++---------------------------------------+-------------+
+| CHARACTER_SETS                        | SYSTEM VIEW |
+| COLLATIONS                            | SYSTEM VIEW |
+| COLLATION_CHARACTER_SET_APPLICABILITY | SYSTEM VIEW |
+| COLUMNS                               | SYSTEM VIEW |
+| COLUMN_PRIVILEGES                     | SYSTEM VIEW |
+| ENGINES                               | SYSTEM VIEW |
+...
+| Chars                                 | BASE TABLE  |
+| CheapCars                             | VIEW        |
+| Customers                             | BASE TABLE  |
+| Dates                                 | BASE TABLE  |
+| Decimals                              | BASE TABLE  |
+| FavoriteCars                          | VIEW        |
+...
+</pre>
+
+<p>
+In the information_schema database there is a <code>TABLES</code> table. 
+The <code>TABLE_NAME</code> and <code>TABLE_TYPE</code> columns give us 
+information about table names and their types. 
+</p>
+
+<pre class="code">
+mysql> SELECT TABLE_NAME FROM information_schema.VIEWS;
++--------------+
+| TABLE_NAME   |
++--------------+
+| CheapCars    |
+| FavoriteCars |
++--------------+
+</pre>
+
+<p>
+This is the most straightforward way to find views. We query the
+<code>VIEWS</code> table of the information_schema database. 
+</p>
+
+
+<h2 id="crun">Creating a view with a UNION</h2>
+
+<p>
+The <code>UNION</code> operator is used to combine result-sets 
+of two or more <code>SELECT</code> statements. Each select must
+have the same number of columns. 
+</p>
+
+<pre class="code">
+mysql> CREATE VIEW FavoriteCars AS
+    -> SELECT * FROM Cars WHERE Id=7
+    -> UNION SELECT * FROM Cars WHERE Id=4
+    -> UNION SELECT * FROM Cars WHERE Id=5;
+</pre>
+
+<p>
+We create a view called FavoriteCars. In this view, we have three
+rows which are considered to be favourite. There are three <code>SELECT</code>
+statements combined with a <code>UNION</code> operator. 
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM FavoriteCars;
++----+---------+--------+
+| Id | Name    | Cost   |
++----+---------+--------+
+|  7 | Hummer  |  41400 |
+|  4 | Volvo   |  29000 |
+|  5 | Bentley | 350000 |
++----+---------+--------+
+</pre>
+
+<p>
+This is a <code>SELECT</code> from the view. 
+</p>
+
+<p>
+In this part of the MySQL tutorial, we have worked with views. 
+</p>
+
+
+<footer>
+
+<nav class="center">
+<span class="botNavItem"><a href="http://zetcode.com/">Home</a></span> ‡ <span class="botNavItem"><a href="../index.html">Contents</a></span> ‡ 
+<span class="botNavItem"><a href="#">Top of Page</a></span>
+</nav>
+
+<div class="signature">
+<a href="http://zetcode.com/">ZetCode</a> last modified February 3, 2011  <span class="copyright">&copy; 2007 - 2015 Jan Bodnar</span>
+</div>
+
+</footer>
+
+</div> <!-- content -->
+
+</div> <!-- container -->
+
+</body>
+
+<!-- Mirrored from zetcode.com/databases/mysqltutorial/views/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Jul 2015 02:47:03 GMT -->
+</html>
+

@@ -1,0 +1,375 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+<!-- Mirrored from www.tangowithdjango.com/book17/chapters/test.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 10 Jan 2016 04:11:38 GMT -->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>20. Automated Testing &mdash; How to Tango with Django 1.7</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/twd.ico"/>
+    <link rel="top" title="How to Tango with Django 1.7" href="../index-2.html" />
+    <link rel="next" title="21. Deploying Your Project" href="deploy.html" />
+    <link rel="prev" title="19. AJAX in Django with JQuery" href="ajax.html" />
+ <style type="text/css">
+	img{
+	    width: 85%; /* you can use % */
+	    height: auto;
+	}
+	
+	table {
+		margin: auto;
+	}
+	
+	p.caption {
+		font-size: 10pt;
+		font-style: italic;
+	}
+ </style>
+ <script type="text/javascript">
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','../../../www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-44397330-1', 'tangowithdjango.com');
+  ga('send', 'pageview');
+     
+
+  </script>      
+
+  </head>
+  <body role="document">
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        
+        <li class="right" >
+          <a href="deploy.html" title="21. Deploying Your Project"
+             accesskey="N">next</a>
+          </li>
+		
+        <li class="right" >
+          <a href="ajax.html" title="19. AJAX in Django with JQuery"
+             accesskey="P">previous</a>
+          </li>
+		
+        <li><a href="../index-2.html">How to Tango with Django 1.7</a> &raquo;</li> 
+
+      </ul>
+
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index-2.html">
+              <img class="logo" src="../_static/twd200x200.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index-2.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">20. Automated Testing</a><ul>
+<li><a class="reference internal" href="#running-tests">20.1. Running Tests</a></li>
+<li><a class="reference internal" href="#testing-the-models-in-rango">20.2. Testing the models in Rango</a></li>
+<li><a class="reference internal" href="#testing-views">20.3. Testing Views</a></li>
+<li><a class="reference internal" href="#testing-the-rendered-page">20.4. Testing the Rendered Page</a></li>
+<li><a class="reference internal" href="#coverage-testing">20.5. Coverage Testing</a></li>
+<li><a class="reference internal" href="#exercises">20.6. Exercises</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ajax.html"
+                        title="previous chapter">19. AJAX in Django with JQuery</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="deploy.html"
+                        title="next chapter">21. Deploying Your Project</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/chapters/test.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="http://www.tangowithdjango.com/book17/search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="automated-testing">
+<span id="test-chapter"></span><h1>20. Automated Testing<a class="headerlink" href="#automated-testing" title="Permalink to this headline">¶</a></h1>
+<p>It is good practice to get into the habit of writing and developing tests. A lot of software engineering is about writing and developing tests and test suites in order to ensure the software is robust. Of course, most of the time, we are too busy trying to build things to bother about making sure that they work. Or too arrogant to believe it would fail.</p>
+<p>According to the <a class="reference external" href="https://docs.djangoproject.com/en/1.7/intro/tutorial05/">Django Tutorial</a>, there are numerous reasons why you should include tests:</p>
+<ul class="simple">
+<li>Test will save you time: a change in a complex system can cause failures in unpredictable places.</li>
+<li>Tests dont just identify problems, they prevent them: tests show where the code is not meeting expectations.</li>
+<li>Test make your code more attractive: &#8220;Code without tests is broken by design&#8221;, Jacob Kaplan-Moss, One of Django&#8217;s original developers.</li>
+<li>Tests help teams work together: they make sure your team doesn&#8217;t inadvertently break your code.</li>
+</ul>
+<p>According to the Python Guide <a class="reference external" href="http://docs.python-guide.org/en/latest/writing/tests/">http://docs.python-guide.org/en/latest/writing/tests/</a>, there are a number of general rules you should try to follow when writing tests. Below are some main rules:</p>
+<ul class="simple">
+<li>Tests should focus on one small bit of functionality</li>
+<li>Tests should have a clear purpose</li>
+<li>Tests should be independent.</li>
+<li>Run your tests, before you code, and before your commit and push your code.</li>
+<li>Even better create a hook that tests code on push.</li>
+<li>Use long and descriptive names for tests.</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Currently this chapter provides the very basics of testing and follows a similar format to the <a class="reference external" href="https://docs.djangoproject.com/en/1.7/intro/tutorial05/">Django Tutorial</a>, with some additional notes. We hope to expand this further in the future.</p>
+</div>
+<div class="section" id="running-tests">
+<h2>20.1. Running Tests<a class="headerlink" href="#running-tests" title="Permalink to this headline">¶</a></h2>
+<p>In built in Django is machinery to test the applications built. You can do this by issuing the following command:</p>
+<div class="highlight-guess"><div class="highlight"><pre><span class="err">$</span> <span class="n">python</span> <span class="n">manage</span><span class="p">.</span><span class="n">py</span> <span class="n">test</span> <span class="n">rango</span>
+
+<span class="n">Creating</span> <span class="n">test</span> <span class="n">database</span> <span class="k">for</span> <span class="n">alias</span> <span class="err">&#39;</span><span class="k">default</span><span class="err">&#39;</span><span class="p">...</span>
+
+<span class="o">----------------------------------------------------------------------</span>
+<span class="n">Ran</span> <span class="mi">0</span> <span class="n">tests</span> <span class="n">in</span> <span class="mf">0.000</span><span class="n">s</span>
+
+<span class="n">OK</span>
+<span class="n">Destroying</span> <span class="n">test</span> <span class="n">database</span> <span class="k">for</span> <span class="n">alias</span> <span class="err">&#39;</span><span class="k">default</span><span class="err">&#39;</span><span class="p">...</span>
+</pre></div>
+</div>
+<p>This will run through the tests associated with the rango application. At the moment, nothing much happens. That is because you may have noticed the file <code class="docutils literal"><span class="pre">rango/tests.py</span></code> only contains an import statement. Everytime you create an application, Django automatically creates such a file to encourage you to write tests.</p>
+<p>From this output, you might also notice that a database called <code class="docutils literal"><span class="pre">default</span></code> is referred to. When you run tests, a temporary database is constructed, which your tests can populate, and perform operations on. This way your testing is performed independently of your live database.</p>
+</div>
+<div class="section" id="testing-the-models-in-rango">
+<h2>20.2. Testing the models in Rango<a class="headerlink" href="#testing-the-models-in-rango" title="Permalink to this headline">¶</a></h2>
+<p>Ok, lets create a test. In the Category model, we want to ensure that views are either zero or positive, because the number of views, let&#8217;s say, can never be less than zero. To create a test for this we can put the following code into <code class="docutils literal"><span class="pre">rango/tests.py</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.test</span> <span class="kn">import</span> <span class="n">TestCase</span>
+
+<span class="kn">from</span> <span class="nn">rango.models</span> <span class="kn">import</span> <span class="n">Category</span>
+
+<span class="k">class</span> <span class="nc">CategoryMethodTests</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">test_ensure_views_are_positive</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                ensure_views_are_positive should results True for categories where views are zero or positive</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+                <span class="n">cat</span> <span class="o">=</span> <span class="n">Category</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;test&#39;</span><span class="p">,</span><span class="n">views</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">likes</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">cat</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">((</span><span class="n">cat</span><span class="o">.</span><span class="n">views</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">),</span> <span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The first thing you should notice, if you have not written tests before, is that we have to inherit from TestCase. The naming over the method in the class also follows a convention, all tests start with <code class="docutils literal"><span class="pre">test_</span></code> and they also contain some type of assertion, which is the test. Here we are check if the values are equal, with the <code class="docutils literal"><span class="pre">assertEqual</span></code> method, but other types of assertions are also possible. See the Python Documentation on unit tests, <a class="reference external" href="https://docs.python.org/2/library/unittest.html">https://docs.python.org/2/library/unittest.html</a> for other commands (i.e. <code class="docutils literal"><span class="pre">assertItemsEqual</span></code>, <code class="docutils literal"><span class="pre">assertListEqual</span></code>, <code class="docutils literal"><span class="pre">assertDictEqual</span></code>, etc). Django&#8217;s testing machinery is derived from Python&#8217;s but also provides an number of other asserts and specific test cases.</p>
+<p>Now lets run test:</p>
+<div class="highlight-guess"><div class="highlight"><pre><span class="err">$</span> <span class="n">python</span> <span class="n">manage</span><span class="p">.</span><span class="n">py</span> <span class="n">test</span> <span class="n">rango</span>
+
+
+<span class="n">Creating</span> <span class="n">test</span> <span class="n">database</span> <span class="k">for</span> <span class="n">alias</span> <span class="err">&#39;</span><span class="k">default</span><span class="err">&#39;</span><span class="p">...</span>
+<span class="n">F</span>
+<span class="o">======================================================================</span>
+<span class="nl">FAIL:</span> <span class="n">test_ensure_views_are_positive</span> <span class="p">(</span><span class="n">rango</span><span class="p">.</span><span class="n">tests</span><span class="p">.</span><span class="n">CategoryMethodTests</span><span class="p">)</span>
+<span class="o">----------------------------------------------------------------------</span>
+<span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">)</span><span class="o">:</span>
+  <span class="n">File</span> <span class="s">&quot;/Users/leif/Code/tango_with_django_project_17/rango/tests.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">12</span><span class="p">,</span> <span class="n">in</span> <span class="n">test_ensure_views_are_positive</span>
+    <span class="n">self</span><span class="p">.</span><span class="n">assertEqual</span><span class="p">((</span><span class="n">cat</span><span class="p">.</span><span class="n">views</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">),</span> <span class="n">True</span><span class="p">)</span>
+<span class="nl">AssertionError:</span> <span class="n">False</span> <span class="o">!=</span> <span class="n">True</span>
+
+<span class="o">----------------------------------------------------------------------</span>
+<span class="n">Ran</span> <span class="mi">1</span> <span class="n">test</span> <span class="n">in</span> <span class="mf">0.001</span><span class="n">s</span>
+
+<span class="n">FAILED</span> <span class="p">(</span><span class="n">failures</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>As we can see this test fails. This is because the model does not check whether the value is less than zero or not. Since we really want to ensure that the values are non-zero, we will need to update the model, to ensure that this requirement is fulfilled. Do this now by adding some code to the Category models, <code class="docutils literal"><span class="pre">save()</span></code> method, that checks the value of views, and updates it accordingly.</p>
+<p>Once you have updated your model, you can now re-run the test, and see if your code now passes it. If not, try again.</p>
+<p>Let&#8217;s try adding another test, that ensures an appropriate slug line is created i.e. one with dashes, and in lowercase. Add the following code to <code class="docutils literal"><span class="pre">rango/tests.py</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">test_slug_line_creation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+             <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">             slug_line_creation checks to make sure that when we add a category an appropriate slug line is created</span>
+<span class="sd">             i.e. &quot;Random Category String&quot; -&gt; &quot;random-category-string&quot;</span>
+<span class="sd">             &quot;&quot;&quot;</span>
+
+             <span class="n">cat</span> <span class="o">=</span> <span class="n">Category</span><span class="p">(</span><span class="s">&#39;Random Category String&#39;</span><span class="p">)</span>
+             <span class="n">cat</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+             <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">cat</span><span class="o">.</span><span class="n">slug</span><span class="p">,</span> <span class="s">&#39;random-category-string&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Does your code still work?</p>
+</div>
+<div class="section" id="testing-views">
+<h2>20.3. Testing Views<a class="headerlink" href="#testing-views" title="Permalink to this headline">¶</a></h2>
+<p>So far we have writtent tests that focus on ensuring the integrity of the data housed in the models. Django also provides testing mechanisms to test views. It does this with a mock client, that internally calls a django view via the url. In the test you have access to the response (including the html) and the context dictionary.</p>
+<p>Let&#8217;s create a test that checks that when the index page loads, it displays the message that <code class="docutils literal"><span class="pre">There</span> <span class="pre">are</span> <span class="pre">no</span> <span class="pre">categories</span> <span class="pre">present</span></code>, when the Category model is empty.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.core.urlresolvers</span> <span class="kn">import</span> <span class="n">reverse</span>
+
+
+<span class="k">class</span> <span class="nc">IndexViewTests</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">test_index_view_with_no_categories</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        If no questions exist, an appropriate message should be displayed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s">&#39;index&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertContains</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s">&quot;There are no categories present.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertQuerysetEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">context</span><span class="p">[</span><span class="s">&#39;categories&#39;</span><span class="p">],</span> <span class="p">[])</span>
+</pre></div>
+</div>
+<p>First of all, the django <code class="docutils literal"><span class="pre">TestCase</span></code> has access to a <code class="docutils literal"><span class="pre">client</span></code> object, which can make requests. Here, it uses the helper function <code class="docutils literal"><span class="pre">reverse</span></code> to look up the url of the <code class="docutils literal"><span class="pre">index</span></code> page. Then it tries to get that page, where the <code class="docutils literal"><span class="pre">response</span></code> is stored. The test then checks a number of things: did the page load ok? Does the response, i.e. the html contain the phrase &#8220;There are no categories present.&#8221;, and does the context dictionary contain an empty categories list. Recall that when you run tests, a new database is created, which by default is not populated.</p>
+<p>Let&#8217;s now check the resulting view when categories are present. First add a helper method.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">rango.models</span> <span class="kn">import</span> <span class="n">Category</span>
+
+<span class="k">def</span> <span class="nf">add_cat</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">views</span><span class="p">,</span> <span class="n">likes</span><span class="p">):</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">Category</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">c</span><span class="o">.</span><span class="n">views</span> <span class="o">=</span> <span class="n">views</span>
+<span class="n">c</span><span class="o">.</span><span class="n">likes</span> <span class="o">=</span> <span class="n">likes</span>
+<span class="n">c</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+<span class="k">return</span> <span class="n">c</span>
+</pre></div>
+</div>
+<p>Then add another method to the <code class="docutils literal"><span class="pre">class</span> <span class="pre">IndexViewTests(TestCase)</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">test_index_view_with_categories</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    If no questions exist, an appropriate message should be displayed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">add_cat</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">add_cat</span><span class="p">(</span><span class="s">&#39;temp&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">add_cat</span><span class="p">(</span><span class="s">&#39;tmp&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">add_cat</span><span class="p">(</span><span class="s">&#39;tmp test temp&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s">&#39;index&#39;</span><span class="p">))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertContains</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s">&quot;tmp test temp&quot;</span><span class="p">)</span>
+
+    <span class="n">num_cats</span> <span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">context</span><span class="p">[</span><span class="s">&#39;categories&#39;</span><span class="p">])</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">num_cats</span> <span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In this test, we populate the database with four categories, and then check if the page loads, if it contains the text <code class="docutils literal"><span class="pre">tmp</span> <span class="pre">test</span> <span class="pre">temp</span></code> and if the number of categories is equal to 4.</p>
+<p>#TODO(leifos): add in some tests showing how to test different forms i.e. login etc.</p>
+</div>
+<div class="section" id="testing-the-rendered-page">
+<h2>20.4. Testing the Rendered Page<a class="headerlink" href="#testing-the-rendered-page" title="Permalink to this headline">¶</a></h2>
+<p>#TODO(leifos): add an example using either Django&#8217;s test client and/or Selenium, which is are &#8220;in-browser&#8221; frameworks to test the way the HTML is rendered in a browser.</p>
+</div>
+<div class="section" id="coverage-testing">
+<h2>20.5. Coverage Testing<a class="headerlink" href="#coverage-testing" title="Permalink to this headline">¶</a></h2>
+<p>Code coverage measures how much of your code base has been tested, and how much of your code has been put through its paces via tests. You can install a package called <code class="docutils literal"><span class="pre">coverage</span></code> via with <code class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">coverage</span></code> which automatically analyses how much code coverage you have. Once you have <code class="docutils literal"><span class="pre">coverage</span></code> installed, run the following command:</p>
+<div class="highlight-guess"><div class="highlight"><pre><span class="err">$</span> <span class="n">coverage</span> <span class="n">run</span> <span class="o">--</span><span class="n">source</span><span class="o">=</span><span class="sc">&#39;.&#39;</span> <span class="n">manage</span><span class="p">.</span><span class="n">py</span> <span class="n">test</span> <span class="n">rango</span>
+</pre></div>
+</div>
+<p>This will run through all the tests and collect the coverage data for the rango application. To see the coverage report you need to then type:</p>
+<div class="highlight-guess"><div class="highlight"><pre><span class="err">$</span> <span class="n">coverage</span> <span class="n">report</span>
+
+<span class="n">Name</span>                                       <span class="n">Stmts</span>   <span class="n">Miss</span>  <span class="n">Cover</span>
+<span class="o">--------------------------------------------------------------</span>
+<span class="n">manage</span>                                         <span class="mi">6</span>      <span class="mi">0</span>   <span class="mi">100</span><span class="o">%</span>
+<span class="n">populate</span>                                      <span class="mi">33</span>     <span class="mi">33</span>     <span class="mi">0</span><span class="o">%</span>
+<span class="n">rango</span><span class="o">/</span><span class="n">__init__</span>                                 <span class="mi">0</span>      <span class="mi">0</span>   <span class="mi">100</span><span class="o">%</span>
+<span class="n">rango</span><span class="o">/</span><span class="n">admin</span>                                    <span class="mi">7</span>      <span class="mi">0</span>   <span class="mi">100</span><span class="o">%</span>
+<span class="n">rango</span><span class="o">/</span><span class="n">forms</span>                                   <span class="mi">35</span>     <span class="mi">35</span>     <span class="mi">0</span><span class="o">%</span>
+<span class="n">rango</span><span class="o">/</span><span class="n">migrations</span><span class="o">/</span><span class="mo">0001</span><span class="n">_initial</span>                  <span class="mi">5</span>      <span class="mi">0</span>   <span class="mi">100</span><span class="o">%</span>
+<span class="n">rango</span><span class="o">/</span><span class="n">migrations</span><span class="o">/</span><span class="mo">0002</span><span class="n">_auto_20141015_1024</span>       <span class="mi">5</span>      <span class="mi">0</span>   <span class="mi">100</span><span class="o">%</span>
+<span class="n">rango</span><span class="o">/</span><span class="n">migrations</span><span class="o">/</span><span class="mo">0003</span><span class="n">_category_slug</span>            <span class="mi">5</span>      <span class="mi">0</span>   <span class="mi">100</span><span class="o">%</span>
+<span class="n">rango</span><span class="o">/</span><span class="n">migrations</span><span class="o">/</span><span class="mo">0004</span><span class="n">_auto_20141015_1046</span>       <span class="mi">5</span>      <span class="mi">0</span>   <span class="mi">100</span><span class="o">%</span>
+<span class="n">rango</span><span class="o">/</span><span class="n">migrations</span><span class="o">/</span><span class="mo">0005</span><span class="n">_userprofile</span>              <span class="mi">6</span>      <span class="mi">0</span>   <span class="mi">100</span><span class="o">%</span>
+<span class="n">rango</span><span class="o">/</span><span class="n">migrations</span><span class="o">/</span><span class="n">__init__</span>                      <span class="mi">0</span>      <span class="mi">0</span>   <span class="mi">100</span><span class="o">%</span>
+<span class="n">rango</span><span class="o">/</span><span class="n">models</span>                                  <span class="mi">28</span>      <span class="mi">3</span>    <span class="mi">89</span><span class="o">%</span>
+<span class="n">rango</span><span class="o">/</span><span class="n">tests</span>                                   <span class="mi">12</span>      <span class="mi">0</span>   <span class="mi">100</span><span class="o">%</span>
+<span class="n">rango</span><span class="o">/</span><span class="n">urls</span>                                    <span class="mi">12</span>     <span class="mi">12</span>     <span class="mi">0</span><span class="o">%</span>
+<span class="n">rango</span><span class="o">/</span><span class="n">views</span>                                  <span class="mi">110</span>    <span class="mi">110</span>     <span class="mi">0</span><span class="o">%</span>
+<span class="n">tango_with_django_project</span><span class="o">/</span><span class="n">__init__</span>          <span class="mi">0</span>      <span class="mi">0</span>   <span class="mi">100</span><span class="o">%</span>
+<span class="n">tango_with_django_project</span><span class="o">/</span><span class="n">settings</span>         <span class="mi">28</span>      <span class="mi">0</span>   <span class="mi">100</span><span class="o">%</span>
+<span class="n">tango_with_django_project</span><span class="o">/</span><span class="n">urls</span>              <span class="mi">9</span>      <span class="mi">9</span>     <span class="mi">0</span><span class="o">%</span>
+<span class="n">tango_with_django_project</span><span class="o">/</span><span class="n">wsgi</span>              <span class="mi">4</span>      <span class="mi">4</span>     <span class="mi">0</span><span class="o">%</span>
+<span class="o">--------------------------------------------------------------</span>
+<span class="n">TOTAL</span>                                        <span class="mi">310</span>    <span class="mi">206</span>    <span class="mi">34</span><span class="o">%</span>
+</pre></div>
+</div>
+<p>We can see from the above report that critical parts of the code have not been tested, ie. <code class="docutils literal"><span class="pre">rango/views</span></code>. For more details about using the package <code class="docutils literal"><span class="pre">coverage</span></code> visit: <a class="reference external" href="http://nedbatchelder.com/code/coverage/">http://nedbatchelder.com/code/coverage/</a></p>
+</div>
+<div class="section" id="exercises">
+<h2>20.6. Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><dl class="first docutils">
+<dt>Lets say that we want to extend the <code class="docutils literal"><span class="pre">Page</span></code> to include two additional fields, <code class="docutils literal"><span class="pre">last_visit</span></code> and <code class="docutils literal"><span class="pre">first_visit</span></code> which will be of type <code class="docutils literal"><span class="pre">timedate</span></code>.</dt>
+<dd><ul class="first last simple">
+<li>Update the model to include these two fields</li>
+<li>Update the add page functionality, and the goto functionality.</li>
+<li>Add in a test to ensure the last visit or first visit is not in the future</li>
+<li>Add in a test to ensure that the last visit equal to or after the first visit.</li>
+<li>Run through  <a class="reference external" href="https://docs.djangoproject.com/en/1.7/intro/tutorial05/">Part Five of the official Django Tutorial</a> to help develop these tests.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">Check out the <a class="reference external" href="http://www.tdd-django-tutorial.com/">tutorial on test driven development by Harry Percival</a>.</p>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        
+        <li class="right" >
+          <a href="deploy.html" title="21. Deploying Your Project"
+             >next</a>
+          </li>
+		
+        <li class="right" >
+          <a href="ajax.html" title="19. AJAX in Django with JQuery"
+             >previous</a>
+          </li>
+		
+        <li><a href="../index-2.html">How to Tango with Django 1.7</a> &raquo;</li> 
+
+      </ul>
+
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2013, Leif Azzopardi and David Maxwell.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+
+<!-- Mirrored from www.tangowithdjango.com/book17/chapters/test.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 10 Jan 2016 04:11:39 GMT -->
+</html>

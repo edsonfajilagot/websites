@@ -1,0 +1,71 @@
+<html>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch11s06.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:31 GMT -->
+<head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>11.6. The map function</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><meta name="keywords" content="python, biology, bioinformatics, programming, computational biology"><link rel="home" href="index-2.html" title="Introduction to Programming using Python"><link rel="up" href="ch11.html" title="Chapter 11. Repetitions"><link rel="previous" href="ch11s05.html" title="11.5. Range and Xrange objects"><link rel="next" href="ch11s07.html" title="11.7. List comprehensions"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">11.6. The map function</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch11s05.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><th width="60%" align="center">Chapter 11. Repetitions</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch11s07.html"><img src="images/next.png" alt="Next"></a></td></tr></table><hr></div><div class="section"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="sect_loop_map"></a>11.6. The <tt>map</tt> function</h2></div></div><p>
+      The
+       <tt>map</tt> function allows to apply a
+      function to all arguments of an ordered collection. The result
+      is always a list even if the ordered collection is a string. If
+      the function takes more than one argument, as many collections
+      as arguments have to be specified as arguments. <tt>map</tt>
+      takes the first argument from the first collection, the second
+      one from the second collection and so on. 
+    </p><pre class="programlisting">
+&gt;&gt;&gt; map(isAminoAcid, "atgahryuox") 
+[True, True, True, True, True, True, True, False, False, True]
+
+&gt;&gt;&gt; def add10(n):
+...     return n+10
+... 
+&gt;&gt;&gt; map(add10, [0,1,2,3,4,5])
+[10, 11, 12, 13, 14, 15]
+&gt;&gt;&gt; def add(a,b):
+        return a+b
+&gt;&gt;&gt; map(add, [1,2,3], [1,2,3])
+[2, 4, 6]
+    </pre><p><b>Passing functions as arguments.&nbsp;</b>
+      This is the first example where we pass a function as
+      an argument. Even if this looks strange at the beginning,
+      <span class="emphasis"><em>function names</em></span> are references as
+      <span class="emphasis"><em>variable names</em></span> which are bound to
+      the sequences of statements defined in the body of the 
+      <span class="emphasis"><em>function definition</em></span>. The sequence of
+      statements can be viewed as an object which has the
+      particularity that it can be called with arguments. <a href="ch11s06.html#fig_pass_functions" title="Figure 11.4. Passing functions as arguments">Figure 11.4</a> shows what happens when passing a
+      function as argument. This illustrates that there is no
+      difference between variables and functions as arguments.
+      </p><div class="figure"><a name="fig_pass_functions"></a><p class="title"><b>Figure 11.4. Passing functions as arguments</b></p><div class="mediaobject"><img src="images/func_as_arg.png" width="434.7"></div></div><p>
+      Another example that handles function names as references is
+      renaming a function as follows:
+      <pre class="programlisting">
+&gt;&gt;&gt; isAA = isAminoAcid
+&gt;&gt;&gt; isAA('a')
+True
+      </pre>
+      
+      The only difference between function and variable names is that
+      function names are bound to objects that can be called using the
+      function call syntax.
+      
+      <pre class="programlisting">
+&gt;&gt;&gt; isAminoAcid
+&lt;function isAminoAcid at 0x111ad0&gt;
+&gt;&gt;&gt; isAminoAcid('a')
+True
+      </pre>
+      
+      Without the parenthesis the object bound to the name
+      <tt>isAminoAcid</tt> is shown by the
+      interpreter, whereas adding the parentheses will call
+      the function object bound to <tt>isAminoAcid</tt>.
+    </p><p><b>Rewriting <tt>map</tt> with
+      <tt>for</tt>.&nbsp;</b>
+      <tt>map</tt> with a function that takes only one
+	argument, can be rewritten as follows..
+    </p><div class="procedure"><p>Rewrite <span class="bold"><b>map</b></span>(<span class="emphasis"><em>func</em></span>,
+	<span class="emphasis"><em>collection</em></span>)</p><ol type="1"><li><span class="emphasis"><em>res</em></span> &lt; empty list</li><li><span class="bold"><b>for each</b></span><span class="emphasis"><em> element</em></span><span class="bold"><b> in</b></span><span class="emphasis"><em> collection</em></span>:
+	<ol type="a"><li>res &lt;- res appended with <span class="emphasis"><em>func</em></span>(<span class="emphasis"><em>element</em></span>)
+	  </li></ol></li><li><span class="bold"><b>return</b></span><span class="emphasis"><em> res</em></span></li></ol></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch11s05.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch11.html"><img src="images/up.png" alt="Up"></a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch11s07.html"><img src="images/next.png" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">11.5. Range and Xrange objects&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index-2.html"><img src="images/home.png" alt="Home"></a></td><td width="40%" align="right" valign="top">&nbsp;11.7. List comprehensions</td></tr></table></div></body>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch11s06.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:31 GMT -->
+</html>

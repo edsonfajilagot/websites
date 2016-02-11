@@ -1,0 +1,831 @@
+﻿<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from blog.miguelgrinberg.com/post/oauth-authentication-with-flask/page/3 by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:14:25 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    
+    <title>
+    
+        OAuth Authentication with Flask - miguelgrinberg.com
+    
+</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="description" content="miguelgrinberg.com">
+	<meta name="copyright" content="Copyright (c) 2012-2015 Miguel Grinberg">
+	<meta name="author" content="Miguel Grinberg">
+    
+    <meta name="keywords" content="flask, python, programming, oauth, authentication, authorization">
+    
+
+    
+    <!-- Bootstrap -->
+    <link href="../../../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../../../static/prettify.css" type="text/css" rel="stylesheet" />
+    <link href="../../../static/colorbox/colorbox.css" rel="stylesheet" type="text/css" />
+    <link href="../../../static/style.css" rel="stylesheet" type="text/css" />
+
+    <link rel="shortcut icon" href="../../../static/favicon.ico">
+	<link rel="alternate" type="application/rss+xml" href="../../../feed" title="miguelgrinberg.com RSS feed">
+
+  </head>
+  <body>
+    
+    <!-- facebook sdk -->
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "../../../../connect.facebook.net/en_US/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    <!-- google plus sdk -->
+    <script type="text/javascript" src="../../../../apis.google.com/js/plusone.js"></script>
+    <!-- twitter sdk -->
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="../../../../platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <!-- linkedin sdk -->
+    <script src="../../../../platform.linkedin.com/in.js" type="text/javascript"></script>
+
+    
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://blog.miguelgrinberg.com/index">miguelgrinberg.com</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="http://blog.miguelgrinberg.com/index">Home</a></li>
+                        <li><a href="../../about-me.html">About Me</a></li>
+                        <li><a href="../../about-this-blog.html">About This Blog</a></li>
+                        
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <p class="navbar-text" style="margin-top: 10px; margin-bottom: 0px;">
+                                <a type="application/rss+xml" href="../../../feed"><img src="../../../static/rss.png" alt="RSS Feed" title="RSS Feed" /></a>
+                                <a href="https://www.facebook.com/miguelgrinbergblog"><img src="../../../static/facebook.png" alt="Facebook" title="Facebook" /></a>
+                                <a href="https://plus.google.com/u/0/117786742456929977820"><img src="../../../static/googleplus.png" alt="Google+" title="Google+" /></a>
+                                <a href="http://www.linkedin.com/in/miguelgrinberg"><img src="../../../static/linkedin.png" alt="LinkedIn" title="LinkedIn" /></a>
+                                <a href="http://github.com/miguelgrinberg"><img src="../../../static/github.png" alt="GitHub" title="GitHub" /></a>
+                                <a href="https://twitter.com/#!/miguelgrinberg"><img src="../../../static/twitter.png" alt="Twitter" title="Twitter" /></a>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </nav>
+
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-push-9 sidebar-bg">
+                <div id="sidebar">
+                    
+
+                    
+                    <h1>An Introduction to Flask</h1>
+                    <p>If you are a beginner giving your first steps in web development, my Flask introductory video is for you:</p>
+                    <p><center><a href="http://bit.ly/flaskintro"><img style="border: 1px solid black;" src="../../../static/flask-intro-cover-tiny.png"></a></center></p>
+                    <p>Visit <a href="http://flaskbook.com/">http://flaskbook.com</a> for information about this and other Flask training products I have created!</p>
+                    
+
+                    <h1>About Miguel</h1>
+                    <img style="float: right; margin: 0px 8px 8px 0px; padding: 4px; border: 1px solid #ccc;" src="../../../static/miguel.jpg" />
+                    <p>Welcome to my blog!</p>
+                    <p>I'm a software engineer, photographer and filmmaker in Portland, Oregon, USA.</p>
+                    <p>You can also find me on <a href="https://www.facebook.com/miguelgrinbergblog">Facebook</a>, <a href="https://plus.google.com/u/0/117786742456929977820">Google+</a>, <a href="http://www.linkedin.com/in/miguelgrinberg">LinkedIn</a>, <a href="https://github.com/miguelgrinberg">Github</a> and <a href="https://twitter.com/#!/miguelgrinberg">Twitter</a>.</p>
+                    <p>Thank you for visiting!</p>
+
+                    
+
+                    
+                    <h1>Categories</h1>
+<ul>
+
+	<li>
+		<a href="../../../category/Arduino/feed">
+			<img src="../../../static/rss-small.png" title="Arduino RSS Feed" label="Arduino RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Arduino.html">Arduino</a></span> (7)
+	</li>
+
+	<li>
+		<a href="../../../category/Authentication/feed">
+			<img src="../../../static/rss-small.png" title="Authentication RSS Feed" label="Authentication RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Authentication.html">Authentication</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../../../category/Blog/feed">
+			<img src="../../../static/rss-small.png" title="Blog RSS Feed" label="Blog RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Blog.html">Blog</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/C%2b%2b/feed">
+			<img src="../../../static/rss-small.png" title="C++ RSS Feed" label="C++ RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/C%2b%2b.html">C++</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../../../category/Cloud/feed">
+			<img src="../../../static/rss-small.png" title="Cloud RSS Feed" label="Cloud RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Cloud.html">Cloud</a></span> (2)
+	</li>
+
+	<li>
+		<a href="../../../category/Filmmaking/feed">
+			<img src="../../../static/rss-small.png" title="Filmmaking RSS Feed" label="Filmmaking RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Filmmaking.html">Filmmaking</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/Flask/feed">
+			<img src="../../../static/rss-small.png" title="Flask RSS Feed" label="Flask RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Flask.html">Flask</a></span> (39)
+	</li>
+
+	<li>
+		<a href="../../../category/Games/feed">
+			<img src="../../../static/rss-small.png" title="Games RSS Feed" label="Games RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Games.html">Games</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Gear/feed">
+			<img src="../../../static/rss-small.png" title="Gear RSS Feed" label="Gear RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Gear.html">Gear</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/HTML5/feed">
+			<img src="../../../static/rss-small.png" title="HTML5 RSS Feed" label="HTML5 RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/HTML5.html">HTML5</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Heroku/feed">
+			<img src="../../../static/rss-small.png" title="Heroku RSS Feed" label="Heroku RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Heroku.html">Heroku</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Javascript/feed">
+			<img src="../../../static/rss-small.png" title="Javascript RSS Feed" label="Javascript RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Javascript.html">Javascript</a></span> (3)
+	</li>
+
+	<li>
+		<a href="../../../category/Movie%20Reviews/feed">
+			<img src="../../../static/rss-small.png" title="Movie Reviews RSS Feed" label="Movie Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Movie%20Reviews.html">Movie Reviews</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../../../category/Netflix/feed">
+			<img src="../../../static/rss-small.png" title="Netflix RSS Feed" label="Netflix RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Netflix.html">Netflix</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../../../category/Node.js/feed">
+			<img src="../../../static/rss-small.png" title="Node.js RSS Feed" label="Node.js RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Node.html">Node.js</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/OpenStack/feed">
+			<img src="../../../static/rss-small.png" title="OpenStack RSS Feed" label="OpenStack RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/OpenStack.html">OpenStack</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Personal/feed">
+			<img src="../../../static/rss-small.png" title="Personal RSS Feed" label="Personal RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Personal.html">Personal</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Photography/feed">
+			<img src="../../../static/rss-small.png" title="Photography RSS Feed" label="Photography RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Photography.html">Photography</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/Product%20Reviews/feed">
+			<img src="../../../static/rss-small.png" title="Product Reviews RSS Feed" label="Product Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Product%20Reviews.html">Product Reviews</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Programming/feed">
+			<img src="../../../static/rss-small.png" title="Programming RSS Feed" label="Programming RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Programming.html">Programming</a></span> (47)
+	</li>
+
+	<li>
+		<a href="../../../category/Project%20Management/feed">
+			<img src="../../../static/rss-small.png" title="Project Management RSS Feed" label="Project Management RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Project%20Management.html">Project Management</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Python/feed">
+			<img src="../../../static/rss-small.png" title="Python RSS Feed" label="Python RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Python.html">Python</a></span> (43)
+	</li>
+
+	<li>
+		<a href="../../../category/REST/feed">
+			<img src="../../../static/rss-small.png" title="REST RSS Feed" label="REST RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/REST.html">REST</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../../../category/Rackspace/feed">
+			<img src="../../../static/rss-small.png" title="Rackspace RSS Feed" label="Rackspace RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Rackspace.html">Rackspace</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Raspberry%20Pi/feed">
+			<img src="../../../static/rss-small.png" title="Raspberry Pi RSS Feed" label="Raspberry Pi RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Raspberry%20Pi.html">Raspberry Pi</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/RhinoSteady/feed">
+			<img src="../../../static/rss-small.png" title="RhinoSteady RSS Feed" label="RhinoSteady RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/RhinoSteady.html">RhinoSteady</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/Robotics/feed">
+			<img src="../../../static/rss-small.png" title="Robotics RSS Feed" label="Robotics RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Robotics.html">Robotics</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/Video/feed">
+			<img src="../../../static/rss-small.png" title="Video RSS Feed" label="Video RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Video.html">Video</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../../../category/Windows/feed">
+			<img src="../../../static/rss-small.png" title="Windows RSS Feed" label="Windows RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Windows.html">Windows</a></span> (1)
+	</li>
+
+</ul>
+                    
+                </div>
+            </div>
+            <div class="col-md-8 col-md-pull-4">
+                <div id="main">
+                    
+                    
+                    
+                    
+                    
+
+<div class="post">
+
+<p class="date"><span class="flask-moment" data-timestamp="2014-11-17T15:40:16Z" data-format="format('LL')" data-refresh="0">2014-11-17T15:40:16Z</span></p>
+<h1 class="post-title"><a href="../../oauth-authentication-with-flask.html">OAuth Authentication with Flask</a></h1>
+<div class="posted">Posted by <span class="label label-danger"><a href="http://blog.miguelgrinberg.com/author/Miguel Grinberg">Miguel Grinberg</a></span> under <span class="label label-primary"><a href="../../../category/Flask.html">Flask</a></span>, <span class="label label-primary"><a href="../../../category/Python.html">Python</a></span>, <span class="label label-primary"><a href="../../../category/Programming.html">Programming</a></span>, <span class="label label-primary"><a href="../../../category/Authentication.html">Authentication</a></span>. </div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/oauth-authentication-with-flask" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/oauth-authentication-with-flask" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="../../oauth-authentication-with-flask.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/oauth-authentication-with-flask" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+<div class="post_body"><p>Many web sites offer users the option to use a streamlined single-click registration and login built on third party authentication services, typically run by the big social networks. In my <a href="../../the-flask-mega-tutorial-part-v-user-logins.html">Flask Mega-Tutorial</a> I showed you how to use one of these protocols, called OpenID.</p>
+<p>In this article I want to give you an introduction to the <a href="http://oauth.net/">OAuth</a> protocol, which these days has replaced OpenID as the preferred third party authentication mechanism. I will also show you a complete Flask application that implements "Sign In with Facebook" and "Sign In with Twitter" functionality. With these two implementations as a guide you should find it easy to add any other OAuth providers you may need.</p>
+<h2>Brief Introduction to OAuth</h2>
+<p>The best way to explain OAuth is by going over the list of events that occur during the sign in process:</p>
+<ol>
+<li>The user navigates to the application's home page, say <em>http://www.example.com</em>, and clicks the "Sign in with Facebook" button, which links to an application route, for example <em>http://www.example.com/authorize/facebook</em>.</li>
+<li>The server receives the request and responds with a redirect to Facebook's OAuth authorization URL. All OAuth providers must document a URL to redirect the user to.</li>
+<li>The user is now prompted to login to Facebook (if not logged in already). Then a request to share information is presented, where the user needs to give Facebook permission to share the requested information with the originating application. This is all done at Facebook's website and is a private transaction between Facebook and the user, the application does not participate.</li>
+<li>Once the user accepts the request to share information, Facebook redirects back to the application at a pre-configured callback URL, for example <em>http://www.example.com/callback/facebook</em>. The query string of the redirect URL includes an authorization code that the application can use to access the Facebook API on behalf of the user.</li>
+<li>The application uses the Facebook API to obtain user information. Of particular interest is a unique identifier for the user, which can be used to register the user in the application's database, and once the user is registered to perform a login.</li>
+</ol>
+<p>You can see above that the exchange between the application and the third party service is not trivial, but for the user it is extremely simple, since all the user needs to do is log in to the third party site and give permission to share information with the application.</p>
+<p>There are two versions of the OAuth protocol currently in use, both following the overall process described above but with some implementation differences. OAuth 1.0a, used by Twitter, is the most complex of the two. OAuth 2, used by Facebook, is a backwards incompatible revision of the protocol that eliminates much of the complexity of version 1.0a by relying on secure HTTP for encryption.</p>
+<h2>Registration with OAuth Providers</h2>
+<p>Before an application can use a third party OAuth provider it needs to register with it. For Facebook and Twitter this is done on their respective developer sites with the creation of an "app" that represents the application for users of these sites.</p>
+<p>To create a Facebook app you can visit <a href="https://developer.facebook.com/">https://developer.facebook.com</a>. Select "Add a New App" from the Apps dropdown, and make the type "WWW/Website". Then enter a name and category for your app. Once the application is created, go to the "App Configuration" section and set the URL of the application, which in the case of you running it on your own computer will be <code>http://localhost:5000</code>.</p>
+<p>For Twitter the location is <a href="https://apps.twitter.com/">https://apps.twitter.com</a>. You will be asked to provide the app name, description, website and callback URL. For the last two you can enter placeholders, for example <em>http://example.com</em> and <em>http://example.com/callback/twitter</em>.</p>
+<p>Note: If you want to use other OAuth providers you will need to find the appropriate procedure to register an application in their developer documentation.</p>
+<p>The newly created app will be assigned two codes, usually called "id" and "secret". These identify the application that is making the authentication request, and are passed in the query string of the redirect URL to the provider site, in step 2 above.</p>
+<h2>OAuth Authentication Example</h2>
+<p>In the following sections I'm going to describe a relatively simple Flask application that implements Facebook and Twitter authentication.</p>
+<p>I'm only going to show you the important parts of the application in the article, but the complete application is available on this GitHub repository: <a href="https://github.com/miguelgrinberg/flask-oauth-example">https://github.com/miguelgrinberg/flask-oauth-example</a>. At the end of this article I show you the instructions on how to run it.</p>
+<h3>User Model</h3>
+<p>The users of the example application are stored in a SQLAlchemy database. The application uses the <a href="https://pythonhosted.org/Flask-SQLAlchemy/">Flask-SQLAlchemy</a> extension to work with the database, and the <a href="https://flask-login.readthedocs.org/en/latest/">Flask-Login</a> extension to keep track of logged in users.</p>
+<pre><code>from flask.ext.sqlalchemy import SQLAlchemy
+from flask.ext.login import LoginManager, UserMixin
+
+db = SQLAlchemy(app)
+lm = LoginManager(app)
+
+class User(UserMixin, db.Model):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    social_id = db.Column(db.String(64), nullable=False, unique=True)
+    nickname = db.Column(db.String(64), nullable=False)
+    email = db.Column(db.String(64), nullable=True)
+
+@lm.user_loader
+def load_user(id):
+    return User.query.get(int(id))
+</code></pre>
+<p>The database has a single table for the users. In addition to the <code>id</code> that is the primary key, the users table contains three columns:</p>
+<ul>
+<li><code>social_id</code>: a string that defines a unique identifier from the third party authentication service used to login.</li>
+<li><code>nickname</code>: a nickname for the user. Must be defined for all users, and does not need to be unique.</li>
+<li><code>email</code>: the email address of the user. This column is optional.</li>
+</ul>
+<p>The model also inherits from <code>UserMixin</code> from Flask-Login, as that gives it the methods required by that extension. The <code>user_loader</code> callback function, also required by Flask-Login, loads a user by its primary key.</p>
+<h3>OAuth Implementation</h3>
+<p>There are several OAuth client packages for Python. For this example I have decided to use <a href="https://rauth.readthedocs.org/en/latest/">Rauth</a>. But even when using an OAuth package, there are many aspects of the authentication against OAuth service providers that are left up to each provider to implement, which makes the task harder.</p>
+<p>First of all, there are the two versions of the OAuth protocol, both widely used. But even among different providers using the same OAuth version, there are many details that are not part of the specification and need to be done according to the provider's own documentation.</p>
+<p>For this reason I have decided to implement an abstraction layer on top of Rauth, so that the Flask application can be written generically. Below you can see a simple base class under which the provider specific implementations will be written:</p>
+<pre><code>class OAuthSignIn(object):
+    providers = None
+
+    def __init__(self, provider_name):
+        self.provider_name = provider_name
+        credentials = current_app.config['OAUTH_CREDENTIALS'][provider_name]
+        self.consumer_id = credentials['id']
+        self.consumer_secret = credentials['secret']
+
+    def authorize(self):
+        pass
+
+    def callback(self):
+        pass
+
+    def get_callback_url(self):
+        return url_for('oauth_callback', provider=self.provider_name,
+                       _external=True)
+
+    @classmethod
+    def get_provider(self, provider_name):
+        if self.providers is None:
+            self.providers = {}
+            for provider_class in self.__subclasses__():
+                provider = provider_class()
+                self.providers[provider.provider_name] = provider
+        return self.providers[provider_name]
+
+class FacebookSignIn(OAuthSignIn):
+    pass
+
+class TwitterSignIn(OAuthSignIn):
+    pass
+</code></pre>
+<p>The <code>OAuthSignIn</code> base class defines the structure that the subclasses that implement each provider must follow. The constructor initializes the provider's name, and the application id and secret assigned by it, which are obtained from the configuration. Below you can see how the example application is configured (of course you will need to replace these codes with your own when you try this application):</p>
+<pre><code>app.config['OAUTH_CREDENTIALS'] = {
+    'facebook': {
+        'id': '470154729788964',
+        'secret': '010cc08bd4f51e34f3f3e684fbdea8a7'
+    },
+    'twitter': {
+        'id': '3RzWQclolxWZIMq5LJqzRZPTl',
+        'secret': 'm9TEd58DSEtRrZHpz2EjrV9AhsBRxKMo8m3kuIZj3zLwzwIimt'
+    }
+}
+</code></pre>
+<p>At a high level there are two significant events supported by this class that are common to all OAuth providers:</p>
+<ol>
+<li>Initiation of the authentication process. For this the application needs to redirect to the provider's web site to let the user authenticate there. This is represented by the <code>authorize()</code> method.</li>
+<li>Once the authentication is completed the provider redirects back to the application. This is handled in the <code>callback()</code> method. Since the provider does not have direct access to the internal methods of the application, it will be redirecting to a URL that will call it. The URL that the provider needs to redirect to is returned by the <code>get_callback_url()</code> method and is built using the provider name, so that each provider gets its own dedicated route.</li>
+</ol>
+<p>The <code>get_provider()</code> class method is used to lookup the correct <code>OAuthSignIn</code> instance given a provider name. This method uses introspection to find all the <code>OAuthSignIn</code> subclasses, and then saves an instance of each in a dictionary.</p>
+<h3>OAuth Authentication with Rauth</h3>
+<p>Rauth represent OAuth providers with an object of class <code>OAuth1Service</code> or <code>OAuth2Service</code>, depending on the version of the protocol that it uses. I create an object of this class in each provider's <code>OAuthSignIn</code> subclass. The implementations for Facebook and Twitter are shown below:</p>
+<pre><code>class FacebookSignIn(OAuthSignIn):
+    def __init__(self):
+        super(FacebookSignIn, self).__init__('facebook')
+        self.service = OAuth2Service(
+            name='facebook',
+            client_id=self.consumer_id,
+            client_secret=self.consumer_secret,
+            authorize_url='https://graph.facebook.com/oauth/authorize',           
+            access_token_url='https://graph.facebook.com/oauth/access_token',
+            base_url='https://graph.facebook.com/'
+        )
+
+class TwitterSignIn(OAuthSignIn):
+    def __init__(self):
+        super(TwitterSignIn, self).__init__('twitter')
+        self.service = OAuth1Service(
+            name='twitter',
+            consumer_key=self.consumer_id,
+            consumer_secret=self.consumer_secret,
+            request_token_url='https://api.twitter.com/oauth/request_token',
+            authorize_url='https://api.twitter.com/oauth/authorize',
+            access_token_url='https://api.twitter.com/oauth/access_token',
+            base_url='https://api.twitter.com/1.1/'
+        )
+</code></pre>
+<p>For Facebook, a provider that implements OAuth 2, the <code>OAuth2Service</code> class is used. The service object is initialized with the name of the service and several OAuth specific arguments. The <code>client_id</code> and <code>client_secret</code> arguments are the ones assigned to the application in Facebook's developer site. The <code>authorize_url</code> and <code>access_token_url</code> are URLs defined by Facebook for applications to connect to during the authentication process. Finally, the <code>base_url</code> sets the prefix URL for any Facebook API calls once the authentication is complete.</p>
+<p>Twitter implements OAuth 1.0a, so class <code>OAuth1Service</code> is used instead. In OAuth 1.0a the id and secret codes are called <code>consumer_key</code> and <code>consumer_secret</code>, but are otherwise identical in functionality to the OAuth 2 counterparts. The OAuth 1 protocol requires providers to expose three URLs instead of two, there is an additional one called <code>request_token_url</code>. The <code>name</code> and <code>base_url</code> arguments are identical to the ones used in OAuth 2 services.</p>
+<p>Note that there is no standardization for the OAuth entry point URLs, OAuth providers define these as they like. To add a new OAuth provider you will need to obtain these URLs from the provider's documentation.</p>
+<h3>OAuth Authorization Phase</h3>
+<p>When the user clicks the "Login in with ..." link to initiate an OAuth authentication the following application route is invoked:</p>
+<pre><code>@app.route('/authorize/&lt;provider&gt;')
+def oauth_authorize(provider):
+    if not current_user.is_anonymous():
+        return redirect(url_for('index'))
+    oauth = OAuthSignIn.get_provider(provider)
+    return oauth.authorize()
+</code></pre>
+<p>This route first ensures that the user is not logged in, and then simply obtains the <code>OAuthSignIn</code> subclass appropriate for the given provider, and invokes its <code>authorize()</code> method to initiate the process. The <code>authorize()</code> implementation for Facebook and Twitter is shown below:</p>
+<pre><code>class FacebookSignIn(OAuthSignIn):
+    # ...
+    def authorize(self):
+        return redirect(self.service.get_authorize_url(
+            scope='email',
+            response_type='code',
+            redirect_uri=self.get_callback_url())
+        )
+
+class TwitterSignIn(OAuthSignIn):
+    # ...
+    def authorize(self):
+        request_token = self.service.get_request_token(
+            params={'oauth_callback': self.get_callback_url()}
+        )
+        session['request_token'] = request_token
+        return redirect(self.service.get_authorize_url(request_token[0]))
+</code></pre>
+<p>For OAuth 2 providers like Facebook the implementation simply issues a redirect to a URL generated by rauth's service object. The <code>scope</code> is provider specific, in this case I am asking that I want Facebook to provide the user's email. The <code>response_type=code</code> argument tells the OAuth provider that the application is a web application (there are other possible values for different authentication workflows). Finally, the <code>redirect_uri</code> argument is set to the application route that the provider needs to invoke after it completes the authentication.</p>
+<p>OAuth 1.0a providers use a slightly more complicated process that involves obtaining a request token from the provider, which is a list of two items, the first of which is then used as an argument in the redirect. The entire request token is saved to the user session because it will be needed again in the callback.</p>
+<h3>OAuth Callback Phase</h3>
+<p>The OAuth provider redirects back to the application after the user authenticates and gives permission to share information. The route that handles this callback is shown below:</p>
+<pre><code>@app.route('/callback/&lt;provider&gt;')
+def oauth_callback(provider):
+    if not current_user.is_anonymous():
+        return redirect(url_for('index'))
+    oauth = OAuthSignIn.get_provider(provider)
+    social_id, username, email = oauth.callback()
+    if social_id is None:
+        flash('Authentication failed.')
+        return redirect(url_for('index'))
+    user = User.query.filter_by(social_id=social_id).first()
+    if not user:
+        user = User(social_id=social_id, nickname=username, email=email)
+        db.session.add(user)
+        db.session.commit()
+    login_user(user, True)
+    return redirect(url_for('index'))
+</code></pre>
+<p>This route instantiates the <code>OAuthSignIn</code> provider class and invokes its <code>callback()</code> method. This method has the function to complete the authentication with the provider and obtain the user information. The return value is a tuple with three values, a unique id (called <code>social_id</code> to differentiate it from the <code>id</code> primary key), the user's nickname and the user's email. The id and the nickname are mandatory, but in this example application I made the email optional, since Twitter never shares that information with applications.</p>
+<p>The user is searched in the database by the <code>social_id</code> field, and if not found, a new user is added to the database with the information obtained from the provider, effectively registering new users automatically. The user is then logged with the <code>login_user()</code> function of Flask-Login, and finally redirected to the home page.</p>
+<p>The implementation of the <code>callback()</code> method for the Facebook and Twitter OAuth providers is shown below:</p>
+<pre><code>class FacebookSignIn(OAuthSignIn):
+    # ...
+    def callback(self):
+        if 'code' not in request.args:
+            return None, None, None
+        oauth_session = self.service.get_auth_session(
+            data={'code': request.args['code'],
+                  'grant_type': 'authorization_code',
+                  'redirect_uri': self.get_callback_url()}
+        )
+        me = oauth_session.get('me').json()
+        return (
+            'facebook$' + me['id'],
+            me.get('email').split('@')[0],  # Facebook does not provide
+                                            # username, so the email's user
+                                            # is used instead
+            me.get('email')
+        )
+
+class TwitterSignIn(OAuthSignIn):
+    # ...
+    def callback(self):
+        request_token = session.pop('request_token')
+        if 'oauth_verifier' not in request.args:
+            return None, None, None
+        oauth_session = self.service.get_auth_session(
+            request_token[0],
+            request_token[1],
+            data={'oauth_verifier': request.args['oauth_verifier']}
+        )
+        me = oauth_session.get('account/verify_credentials.json').json()
+        social_id = 'twitter$' + str(me.get('id'))
+        username = me.get('screen_name')
+        return social_id, username, None   # Twitter does not provide email
+</code></pre>
+<p>In the <code>callback()</code> method the provider passes a verification token that the application can use to contact the provider's APIs. In the case of OAuth 2 this comes as a <code>code</code> argument, while for OAuth 1.0a it is <code>oauth_verifier</code>, both given in the query string. This code is used to obtain an <code>oauth_session</code> with the provider from the service object from rauth.</p>
+<p>The <code>oauth_session</code> object can be used to make API requests to the provider. Here it is used to request user information, which has to be done in a provider specific way. Facebook exposes a user id and an email, but does not give out usernames, so the username for the application is created from the left portion of the email address. Twitter provides the id and the username, but does not share emails, so the email is returned as <code>None</code>. The data obtained from the provider is finally returned as a three element tuple to the view function.</p>
+<p>Note how in both cases the <code>id</code> value from the provider is prepended with <code>"facebook$"</code> or <code>"twitter$"</code> before it is returned, to make it unique across all providers. Since this is what the application will store as <code>social_id</code> in the database, it is necessary to do this to ensure that two providers that assign the same <code>id</code> to two different users do not collide in the application's database.</p>
+<h2>Conclusion</h2>
+<p>As I mentioned above, the example application allows any user to register and login with either a Facebook or a Twitter account. The application demonstrates how to register and login users without them having to enter any information, all they need to do is to login with the provider and authorize the sharing of information.</p>
+<p>If you want to try this example, you need to follow some preparatory steps:</p>
+<ul>
+<li>Clone or download the project's repository: <a href="https://github.com/miguelgrinberg/flask-oauth-example">https://github.com/miguelgrinberg/flask-oauth-example</a></li>
+<li>Create a virtual environment and install the packages in the <code>requirements.txt</code> file (you can use Python 2.7 or 3.4).</li>
+<li>Register "apps" with Facebook and Twitter, as described above.</li>
+<li>Edit <code>app.py</code> with the id and secret codes of your Facebook and Twitter apps.</li>
+</ul>
+<p>After you complete these instructions, you can run the application with <code>python app.py</code>, and then visit <code>http://localhost:5000</code> in your browser.</p>
+<p>I hope this article is useful in demystifying OAuth a little bit. If you have any questions feel free to write them below.</p>
+<p>Miguel</p></div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/oauth-authentication-with-flask" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/oauth-authentication-with-flask" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="../../oauth-authentication-with-flask.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/oauth-authentication-with-flask" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+
+
+<h4 style="text-align: right"><a name="comments"></a>53 comments</h4>
+
+
+<div class="comment">
+    <ul>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/0b79c240d50781ebedb2e05ab6304768ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#51</span> <span class="label label-primary">Eddie</span> said
+                    <span class="flask-moment" data-timestamp="2015-08-11T06:13:53Z" data-format="fromNow(0)" data-refresh="0">2015-08-11T06:13:53Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Thanks for the great article and code example Miguel. 
+
+Copying the code from the repo and I get a:
+flask-oauth-example/oauth.py&#34;, line 64, in callback
+Display the sourcecode for this frameOpen an interactive python shell in this frameme.get(&#39;email&#39;).split(&#39;@&#39;)[0],  # Facebook does not provide
+AttributeError: &#39;NoneType&#39; object has no attribute &#39;split&#39;
+
+Am I missing something obvious here? Did Facebook change something thats causing this to break? Anyone else run into this problem?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/0b79c240d50781ebedb2e05ab6304768ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#52</span> <span class="label label-primary">Eddie</span> said
+                    <span class="flask-moment" data-timestamp="2015-08-12T03:16:11Z" data-format="fromNow(0)" data-refresh="0">2015-08-12T03:16:11Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Nicholas @Miguel
+
+I was having the same problem as @Nicholas it was a change on facebook&#39;s end with the api. Here is the fix, just change:
+
+me = oauth_session.get(&#39;me&#39;).json() 
+
+to be: 
+
+me = oauth_session.get(&#39;me?fields=id,name,email&#39;).json()</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/89fbe3bf3a71de6c32c34adb65059e5ece2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#53</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2015-08-13T05:03:42Z" data-format="fromNow(0)" data-refresh="0">2015-08-13T05:03:42Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Thanks, Eddie!</p>
+                </div>
+            </div>
+        </li>
+        
+    </ul>
+</div>
+
+<div class="page">
+<ul class="pager">
+  <li class="previous">
+    <a href="1.html#comments">&laquo;&laquo;</a>
+  </li>
+  <li class="previous">
+    <a href="2.html#comments">&laquo;</a>
+  </li>
+  <li class="next disabled">
+    <a href="#">&raquo;&raquo;</a>
+  </li>
+  <li class="next disabled">
+    <a href="#">&raquo;</a>
+  </li>
+</ul>
+</div>
+
+<h3><a name="commentform"></a>Leave a Comment</h3>
+
+<form action="#commentform" method="post"
+  class="form" role="form">
+  <div style="display:none;"><input id="csrf_token" name="csrf_token" type="hidden" value="1439536597.7##c107d3b2efe22d29b14a7dfdb2e9c401ea116697"></div>
+  
+    
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="name">Name</label>
+        <input class="form-control" id="name" name="name" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="url">URL</label>
+        <input class="form-control" id="url" name="url" type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="email">Email</label>
+        <input class="form-control" id="email" name="email" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="comment">Comment</label>
+        <textarea class="form-control" id="comment" name="comment" required></textarea>
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="captcha">Captcha</label>
+        
+<script type="text/javascript">var RecaptchaOptions = {"custom_translations": {"audio_challenge": "Get an audio challenge", "cant_hear_this": "Download sound as MP3", "help_btn": "Help", "image_alt_text": "reCAPTCHA challenge image", "incorrect_try_again": "Incorrect. Try again.", "instructions_audio": "Type what you hear", "instructions_visual": "Type the text", "play_again": "Play sound again", "privacy_and_terms": "Privacy & Terms", "refresh_btn": "Get a new challenge", "visual_challenge": "Get a visual challenge"}, "theme": "white"};</script>
+<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S"></script>
+<noscript>
+  <iframe src="http://www.google.com/recaptcha/api/noscript?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S" height="300" width="500" frameborder="0"></iframe><br>
+  <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+  <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
+</noscript>
+
+  </div>
+
+
+    
+
+
+
+
+
+  
+
+
+    <input class="btn btn-default" id="submit" name="submit" type="submit" value="Submit">
+  
+
+
+
+
+
+</form>
+
+
+</div>
+
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <p class="elapsed">This page was generated in None seconds.</p>
+            <p>&copy; 2014 by Miguel Grinberg. All rights reserved. <a href="mailto:webmaster _at_ miguelgrinberg _dot_ com">Questions?</a></p>
+        </div>
+    </div>
+
+
+    
+    
+    <script src="../../../../cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="../../../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../../../cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.33/jquery.colorbox-min.js"></script>
+    <script type="text/javascript" src="../../../static/prettify.js"></script>
+    <script src="../../../../cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment-with-langs.min.js"></script>
+<script>
+function flask_moment_render(elem) {
+    $(elem).text(eval('moment("' + $(elem).data('timestamp') + '").' + $(elem).data('format') + ';'));
+    $(elem).removeClass('flask-moment');
+}
+function flask_moment_render_all() {
+    $('.flask-moment').each(function() {
+        flask_moment_render(this);
+        if ($(this).data('refresh')) {
+            (function(elem, interval) { setInterval(function() { flask_moment_render(elem) }, interval); })(this, $(this).data('refresh'));
+        }
+    })
+}
+$(document).ready(function() {
+    flask_moment_render_all();
+});
+</script>
+    
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4777284-15']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".gallery").colorbox({rel:".gallery",maxWidth:"95%",maxHeight:"95%",scalePhotos:true});
+            // add prettyprint class to all <pre><code></code></pre> blocks
+            var prettify = false;
+            $("pre code").parent().each(function() {
+                $(this).addClass('prettyprint');
+                prettify = true;
+            });
+            prettyPrint();
+        });
+    </script>
+
+
+  </body>
+
+<!-- Mirrored from blog.miguelgrinberg.com/post/oauth-authentication-with-flask/page/3 by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:14:25 GMT -->
+</html>

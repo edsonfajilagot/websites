@@ -1,0 +1,368 @@
+<html>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch19s03.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:40 GMT -->
+<head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>19.3. Abstract Data Types</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><meta name="keywords" content="python, biology, bioinformatics, programming, computational biology"><link rel="home" href="index-2.html" title="Introduction to Programming using Python"><link rel="up" href="ch19.html" title="Chapter 19. Object-oriented design"><link rel="previous" href="ch19s02.html" title="19.2. Components"><link rel="next" href="ch19s04.html" title="19.4. Inheritance: sharing code among classes"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">19.3. Abstract Data Types</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch19s02.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><th width="60%" align="center">Chapter 19. Object-oriented design</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch19s04.html"><img src="images/next.png" alt="Next"></a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="sect_class_adt"></a>19.3. Abstract Data Types</h2></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="sect_class_adt_del"></a>19.3.1. Definition</h3></div></div><p>
+	  What is an abstract data type? Well, a data type is what we have
+	  just presented in chapter <a href="ch18.html" title="Chapter 18. Object-oriented programming">Chapter 18</a>: in
+	  Python, as in many object-oriented language, it is a class. So,
+	  why <span class="emphasis"><em>abstract</em></span>?  One of the main objectives
+	  in component building, as we have seen in section <a href="ch19s02.html" title="19.2. Components">Section 19.2</a>, is to provide components that a
+	  programmer (you, your colleagues, or any programmer downloading
+	  your code) can be confident in. In order to get this programmer,
+	  who is a <span class="emphasis"><em>client</em></span> of your code, 
+	  confident into your class, you have to make it as stable as possible,
+	  and the best method to get a stable class is to define it at a
+	  level where <span class="emphasis"><em>no implementation decision is
+	    visible</em></span>. In other words, defining a class should
+	  consist in defining a data type providing some abstract
+	  <span class="emphasis"><em>services</em></span>, whose
+	  <span class="emphasis"><em>interface</em></span> are clearly defined in term of
+	  parameters and return value and potential side effects. The
+	  advantages of this approach are the following:
+
+	  </p><div class="itemizedlist"><ul type="disc"><li>
+	      The implementor of the class can change the
+	      implementation for maintenance, bug fixes or
+	      optimization reasons, without disturbing the client
+	      code.
+	    </li><li>
+	      The data type is defined as a set of high-level services
+	      with a <span class="emphasis"><em>semantic contract</em></span> defining
+	      both the output that is provided and the input that is
+	      required from the client.  This actually correspond to
+	      the general definition of a type in programming: a type
+	      is defined as a set of possible values and a
+	      <span class="emphasis"><em>set of operations</em></span> available on
+	      these values.
+	    </li></ul></div><p>
+	  
+	Among the methods defined in the interface of a data type,
+	there are methods that build or change the state of the
+	corresponding object, which are called
+	<span class="emphasis"><em>constructors</em></span> and <span class="emphasis"><em>modificators</em></span>, 
+        and there are methods to
+	access the object, which are called
+	<span class="emphasis"><em>accessors</em></span>.
+
+	</p><p>
+	</p><div class="example"><a name="exa_class_stack"></a><p class="title"><b>Example 19.1. A <tt>Stack</tt></b></p>
+
+         Our example is a stack. It is directly inspired from [Meyer97], chapter 6.
+         
+           <p>
+            Stacks serve to pile up objects of any kind, and take them out
+            according to the rule "last in, first out" (LIFO). Imagine a pile 
+            of plates at home, in your cupboard, the safest way to take a plate 
+            out is to take the last one put in (<a href="ch18s05.html#fig_types_class_obj" title="Figure 18.8. Types of classes and objects.">Figure 18.8</a>).
+            Such structures are omni-present in programing, they serve to 
+           move along graphs, to compile programs, etc...
+
+          </p><div class="figure"><a name="fig_stack"></a><p class="title"><b>Figure 19.2. A stack</b></p><div class="mediaobject"><img src="images/stack.png"></div></div><p>
+
+
+           </p></div><p>	  
+        </p><p>
+       Conceiving an abstract data type (ADT) for the stack consists
+        in describing         the functions 
+       needed making <span class="emphasis"><em>abstraction</em></span> of the implementation 
+       choice that will   be made at the end (and that may change).
+       For instance, you might use a
+        python <tt>List</tt> to implement a stack. But
+        will you add elements at the beginning or at the end of the
+        list? This <span class="emphasis"><em>concrete</em></span> decision is out of
+        concern for the user of your class, who should be taken away
+        from knowing about this.
+       Indeed in all cases, the basic services are the same, and can be given 
+       common names,    that do not "betray" how the list 
+        is used "inside" of the code. 
+       The set of services is listed in
+        <a href="ch19s03.html#tab_stack_api" title="Table 19.1. Stack class interface">Table 19.1</a>.  In this table, the
+        description of the services includes:
+	</p><div class="itemizedlist"><ul type="disc"><li>
+            which <span class="emphasis"><em>input</em></span> is required, 
+	  </li><li>
+	    what the service
+        will return as <span class="emphasis"><em>output</em></span>,
+	  </li><li>
+            which <span class="emphasis"><em>results</em></span> occur, including changes
+        within the internal state of the object. 
+	  </li><li>
+	    A short description
+        is provided, sometimes providing more details on the
+        context and conditions under which the service is executed.
+	  </li></ul></div><p>
+	  
+	  </p><div class="table"><a name="tab_stack_api"></a><p class="title"><b>Table 19.1. <tt>Stack</tt> class interface</b></p><table summary="Stack class interface" border="1"><colgroup><col width="12%" align="left"><col width="37%" align="left"><col width="12%" align="left"><col width="12%" align="left"><col width="25%" align="left"></colgroup><thead><tr><th align="left">Name</th><th align="left">Description</th><th align="left">Input</th><th align="left">Output</th><th align="left">Changes</th></tr></thead><tbody><tr><td align="left">put</td><td align="left">places the item on top of the stack</td><td align="left">a stack and an item</td><td align="left">&nbsp;</td><td align="left">the stack with the item added</td></tr><tr><td align="left">remove</td><td align="left">if the stack is not empty, removes the top item </td><td align="left">a stack</td><td align="left">&nbsp;</td><td align="left">the stack without the top item</td></tr><tr><td align="left">item</td><td align="left">if the stack is not empty, returns the item on top of the pile, without removing it</td><td align="left">a stack</td><td align="left">the top item</td><td align="left">&nbsp;</td></tr><tr><td align="left">empty</td><td align="left">tells whether the stack is empty</td><td align="left">a stack</td><td align="left">a Boolean </td><td align="left">&nbsp;</td></tr><tr><td align="left">make</td><td align="left">creates a new stack</td><td align="left">&nbsp;</td><td align="left">a stack</td><td align="left">a new stack is created</td></tr></tbody></table></div><p>
+       </p><p>
+      The description provided by <a href="ch19s03.html#tab_stack_api" title="Table 19.1. Stack class interface">Table 19.1</a>
+      should suffice for the client to use the class. What is more
+      important here, is that the client does not have to know
+      anything about the internal representation of the stack. 
+     </p><p>
+
+	In this ADT <span class="emphasis"><em>accessors</em></span> are:
+	<tt>item</tt> and <tt>empty</tt>,
+        <span class="emphasis"><em>constructor</em></span> is <tt>make</tt> , 
+        and <span class="emphasis"><em>modificators</em></span> are: <tt>put</tt> and 
+	<tt>remove</tt>.
+	  </p><p>
+        The next step,once this description of the ADT is made for the client, 
+        consists in <span class="emphasis"><em>specifying</em></span> the ADT, that is, describing
+        in formal or mathematical language what the functions are doing. 
+        This involves four steps:
+       
+        </p><div class="itemizedlist"><ul type="disc"><li>Types: this corresponds in Python to the classes that 
+          are used for the ADT.
+          In our example there is one class, Stack.
+          </li><li>Functions: That is their names and the input and output 
+         they have, together with the changes that might occur, as shown
+          in <a href="ch19s03.html#tab_stack_api" title="Table 19.1. Stack class interface">Table 19.1</a>, first four columns. 
+          </li><li>Axioms: The rules to which the functions obey, and that are 
+          sufficient to
+          describe them. For the stack, these axioms are, for any stack s and element e:
+                <div class="itemizedlist"><ul type="round"><li>item(put(s, e))=e
+                    </li><li>remove(put(s, e))=s
+                   </li><li>empty(make) is True
+                  </li><li>empty(put(s, e) is False
+                  </li></ul></div></li><li>Pre-conditions: The functions we need will not operate under 
+         all conditions.
+          For example, you cannot remove an element from an empty stack. 
+          These pre-conditions can  be enumerated as follows for the stack:
+          
+           <div class="itemizedlist"><ul type="round"><li>remove(s) requires : not empty (s)
+             </li><li>item(s) requires not empty(s)
+             </li></ul></div></li></ul></div><p>
+
+       Axioms and pre-conditions formulate more precisely what is said
+       in the fifth column of 
+       <a href="ch19s03.html#tab_stack_api" title="Table 19.1. Stack class interface">Table 19.1</a>
+       </p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="sect_class_encapsulation"></a>19.3.2. Information hiding</h3></div></div><p>
+	  It is a good design practice to protect an instance local
+	  data. Why is that? The first reason is that it makes the
+	  interface of the class more easy to grasp. The client just
+	  knows what needs to be known in order for the component to
+	  be used properly. A second reason is that class data should
+	  rather be handled by the class methods: there might be some
+	  coherence to be maintained among different attributes, that
+	  a method can check.
+	  Another important reason is to avoid the risk of collisions,
+	  that could happen between the class and the potential base
+	  classes, as we will explain in <a href="ch19s04.html" title="19.4. Inheritance: sharing code among classes">Section 19.4</a>, devoted to inheritance.
+	</p><p>
+	  The problem is that there is no real mechanism in Python to prevent
+	  a client code from accessing to an instance attributes, as there
+	  are in other languages (such as Java or C++), where you can
+	  declare <span class="emphasis"><em>private</em></span> and
+	  <span class="emphasis"><em>public</em></span> attributes. Python provides just the
+	  following: 
+	  if you name a variable with a '__' prefix and no '_'
+	  suffix, such as:
+	
+        <pre class="programlisting">
+          __list = []
+	</pre>
+
+	within a class named, e.g: <tt>Stack</tt>,
+	Python automatically changes it to:
+	<tt>_Stack__list</tt>. You can still access it, but you
+	are aware that you are probably doing something odd, and it
+	can help to avoid name collisions. 
+        </p><p>
+        Another way to distinguish <span class="emphasis"><em>public</em></span> 
+        and <span class="emphasis"><em>private</em></span> attributes and methods is to prefix 
+        the private ones with a single '_' 
+        character. This does not provoke any automatic addition by Python, but it is 
+        warning the reader that this part of the code is private. Another 
+         style matter is the naming
+        of classes, where it is a good idea to capitalize the first letter
+         of class names, to distinguish them from variable or function names. 
+        Be aware finally
+        that some methods in Python are framed by double '__' on both side, they are
+         called <span class="emphasis"><em>special methods </em></span> and described in the next p
+        aragraph.
+       </p><p>
+	  The lesson to be learnt is that attributes you want to be
+          accessible should be mentionned explicitely, and documented as such.
+         </p><p>
+         Now that the ADT is specified, that we know which attributes
+         and methods are public or private,
+         We can turn to the implementation part of our example. As
+         shown in <a href="ch19s03.html#exa_class_stack1" title="Example 19.2. Stack class">Example 19.2</a>, we
+         have decided to use a Python list, and to add new elements to
+         the end of this list (another option wold have been to insert
+         the new element at the beginning of the list).
+
+
+	  </p><div class="example"><a name="exa_class_stack1"></a><p class="title"><b>Example 19.2. <tt>Stack</tt> class</b></p><pre class="programlisting">
+		
+class Stack:
+    """
+    A class to handle stacks
+    """
+
+    def __init__(self):
+        self._list = []
+        
+    def put(self, item):
+        """
+        - places an item on top of the stack
+        - does not return anything
+        """
+        self._list.append(item)
+
+    def remove(self):
+        """
+        - if not empty, removes the top item, i.e the last item placed on the stack
+        else does not do anything
+        - does not return anything
+        """
+        if len(self._list) &gt; 0:
+            self._list.pop()
+
+    def item(self):
+        """
+        - if not empty, returns the item on top of the stack
+        without removing it
+        else does not do anything
+        """
+        if len(self._list) &gt; 0:
+            return self._list[-1]
+
+    def empty(self):
+        """
+        - tells if the stack is empty
+        - returns a Boolean
+        """
+        return len(self._list) == 0
+
+
+
+              </pre></div><p>
+
+     </p><div class="exercise"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/exercise.png"></td><td><a name="exo_point_adt"></a><p class="title"><b>Exercise 19.1. ADT for the <tt>Point</tt> class</b></p></td></tr><tr><td colspan="2" align="left" valign="top">
+      
+          <p>
+	    Describe the ADT for the class <tt>Point</tt>.
+          </p>
+        </td></tr></table></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="sect_class_op"></a>19.3.3. Using special methods within classes</h3></div></div><p>
+          </p><p>
+	  The usual Python operators, such as '+', the '[ ]'
+	  operator to access an item or a slice, the assignment  
+	  '=' operator, the equality '==' operator, but also <b>print</b>
+          etc..., are defined with <span class="emphasis"><em>special methods</em></span>
+           that have different definitions for different types. Indeed 
+          adding two integers is not the same as adding
+          two strings. It is very convenient to redefine these special methods 
+          inside the classes created with Python. The 
+          very basic <span class="emphasis"><em>special methods</em></span> encountered in most 
+          classes is the one allowing to
+	  use <b>print</b>. Indeed, what happens if you
+	  try to <b>print</b>
+	  your <tt>DNA</tt> object?
+          <pre class="programlisting">
+&gt;&gt;&gt; s1 = DNA('seq1', 'acaagatgccattgtc')
+&gt;&gt;&gt; print s1
+&lt;__main__.DNA instance at 0x6fd50&gt;
+          </pre>
+	  We would prefer a more informative output, providing the
+	  name of the sequence and the sequence itself (a sort of
+	  Fasta formatted output):
+          <pre class="programlisting">
+&gt;&gt;&gt; print s1
+&gt;seq1
+acaagatgccattgtc
+          </pre>
+	  How do we get this? As mentioned above, we just have to
+	  add a special method to our <tt>DNA</tt>
+	  class, called <tt>__str__</tt>, which
+	  must return a printable character string: 
+
+          <pre class="programlisting">
+    def __str__(self):
+	return "&gt;" + self.name + "\n" + self.seq + "\n"
+          </pre>
+          </p><p>
+          
+          </p><p>
+          Such <span class="emphasis"><em>special methods</em></span> have obligate names, 
+          and are framed by '__', such as <tt>__str__</tt> for <b>print</b>.
+          A set a very precious pages in the book 'Python. Essential reference' 
+          concerns all the tables (3.7 to 3.10)
+          listing these obligate names. Here below in <a href="ch19s03.html#tab_special_mtd" title="Table 19.2. Some of the special methods to redefine Python operators">Table 19.2</a>, we will list a small number of examples.
+          </p><p>
+
+	  </p><div class="table"><a name="tab_special_mtd"></a><p class="title"><b>Table 19.2. Some of the special methods to redefine Python operators</b></p><table summary="Some of the special methods to redefine Python operators" border="1"><colgroup><col width="16%" align="left"><col width="16%" align="left"><col width="16%" align="left"><col width="50%" align="left"></colgroup><thead><tr><th align="left">Operator</th><th align="left">Special method</th><th align="left">Parameters</th><th align="left">Description</th></tr></thead><tbody><tr><td align="left">[]</td><td align="left">__getitem__</td><td align="left">self, k</td><td align="left">access to item or slice specified
+		  by <tt>k</tt></td></tr><tr><td align="left">==</td><td align="left">__eq__</td><td align="left">self, other</td><td align="left">test for equality
+		  between 2 objects</td></tr><tr><td align="left">.</td><td align="left">__getattr__</td><td align="left">self, name</td><td align="left">access to a <span class="emphasis"><em>non existing</em></span>
+		  attribute named <tt>name</tt></td></tr><tr><td align="left">. and = </td><td align="left">__setattr__</td><td align="left">self, name, value</td><td align="left">modification of an attribute</td></tr><tr><td align="left">len()</td><td align="left">__len__</td><td align="left">self</td><td align="left">length computation</td></tr><tr><td align="left">print</td><td align="left">__str__</td><td align="left">self</td><td align="left">string form for instance value</td></tr><tr><td align="left">del</td><td align="left">__del__</td><td align="left">self</td><td align="left">deletion of an instance</td></tr></tbody></table></div><p>
+
+	  </p><div class="example"><a name="exa_class_stack2"></a><p class="title"><b>Example 19.3. Defining operators for the <tt>DNA</tt> class</b></p> 
+	    Remember what we said in <a href="ch18s05.html#sect_object_eq" title="18.5.3. Objects equality">Section 18.5.3</a>:
+	    different objects, even with the same state, i.e with the
+	    same attributes values, are considered as not equal by
+	    Python.  The
+	    following statements show that even with the same values
+	    for theur attributes, two objects will not considered as equal:
+	    <pre class="programlisting">
+&gt;&gt;&gt; s1 = DNA("seq1", "acaagatgccattgtc")
+&gt;&gt;&gt; s2 = DNA("seq1", "acaagatgccattgtc")
+&gt;&gt;&gt; s1 == s2
+False
+	    </pre>
+	    There is a way however to specify how the <tt>==</tt>
+	    operator should behave for your class. We need to <span class="emphasis"><em>define</em></span>
+	    ourselves what equality means for our class.
+The following code
+	    redefines the <tt>==</tt> operator as returning True whenever
+	    the <tt>name</tt> and <tt>seq</tt>
+	    attributes are equal.
+	    <pre class="programlisting">
+class DNA:
+
+    ...
+
+    def __eq__(self, other):
+        return self.name == other.name and self.seq == other.seq
+
+&gt;&gt;&gt; s1 = DNA(name='seq2', seq='acaagatgccattgtcccccggcctcctgctgctgctgctctccggggcca')
+&gt;&gt;&gt; s2 = DNA(name=s1.name, seq=s1.seq)
+&gt;&gt;&gt; s1 == s2
+True
+&gt;&gt;&gt; s1 is s2
+False
+   </pre>
+   Another important operator that could be useful for sequences is
+   the <tt>[]</tt> operator. For strings, this operator enables to access a
+   character at a specific position. What we would
+   like fo a <tt>DNA</tt> object is to access the <span class="emphasis"><em>ith</em></span>
+   character of the <tt>seq</tt> attribute:
+	    <pre class="programlisting">
+&gt;&gt;&gt; s1[3]
+'a'
+	    </pre>
+This operator can be defined by
+   the <tt>__getitem__</tt> special method:
+	  <pre class="programlisting">
+class DNA:
+
+    ...
+
+    def __getitem__(self, i):
+        return self.seq[i]
+
+&gt;&gt;&gt; print s1[3]
+'a'
+   </pre></div><p>
+
+   </p><div class="exercise"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/exercise.png"></td><td><a name="exo_dna_op"></a><p class="title"><b>Exercise 19.2. Operators for the <tt>DNA</tt> class</b></p></td></tr><tr><td colspan="2" align="left" valign="top">
+      
+          <p>
+	    Which additional operators could you define
+	    for <tt>DNA</tt> class? Implement 1 or 2 of them.
+          </p>
+        </td></tr></table></div><p>
+
+	</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch19s02.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch19.html"><img src="images/up.png" alt="Up"></a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch19s04.html"><img src="images/next.png" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">19.2. Components&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index-2.html"><img src="images/home.png" alt="Home"></a></td><td width="40%" align="right" valign="top">&nbsp;19.4. Inheritance: sharing code among classes</td></tr></table></div></body>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch19s03.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:40 GMT -->
+</html>

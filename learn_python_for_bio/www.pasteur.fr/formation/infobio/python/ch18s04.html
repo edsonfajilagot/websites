@@ -1,0 +1,159 @@
+<html>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch18s04.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:38 GMT -->
+<head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>18.4. Combining objects</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><meta name="keywords" content="python, biology, bioinformatics, programming, computational biology"><link rel="home" href="index-2.html" title="Introduction to Programming using Python"><link rel="up" href="ch18.html" title="Chapter 18. Object-oriented programming"><link rel="previous" href="ch18s03.html" title="18.3. Defining classes in Python"><link rel="next" href="ch18s05.html" title="18.5. Classes and objects in Python: technical aspects"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">18.4. Combining objects</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch18s03.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><th width="60%" align="center">Chapter 18. Object-oriented programming</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch18s05.html"><img src="images/next.png" alt="Next"></a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="sect_combine_objects"></a>18.4. Combining objects</h2></div></div><p>
+	  A program is generally not built on a single object, but
+	  rather on a combination of several objects that interact
+	  together. 
+
+      In the <tt>DNA</tt> example, we can have several other kinds of
+	  objects: protein sequences, motifs, ... 
+	  The protein object could be either created from an initial
+	  sequence of protein amino-acids, or computed by
+	  the <tt>DNA</tt> <tt>translate</tt>
+	  method. <tt>Protein</tt> objects could have specific methods for
+	  protein sequences, such as hydrophobicity or molecular
+	  weight. These objects will be instances of the class <tt>Protein</tt>. 
+      </p><p>	  
+	First of all, let us look at how we could represent a
+	simplified <tt>Protein</tt> object. Figure <a href="ch18s04.html#fig_repr_prot" title="Figure 18.3. A Protein object.">Figure 18.3</a> shows an object having one
+	method: <tt>mw</tt>, and 2 attributes:
+	<tt>name</tt> and <tt>seq</tt>.
+
+	  </p><div class="figure"><a name="fig_repr_prot"></a><p class="title"><b>Figure 18.3. A <tt>Protein</tt> object.</b></p><div class="mediaobject"><img src="images/object_repr_prot.png"></div></div><p>
+
+	  The definition of the <tt>Protein</tt> class
+	  follows:
+	  <pre class="programlisting">
+class Protein:
+
+    weight = {"A":71.08,"C":103.14 ,"D":115.09 ,"E":129.12 ,"F":147.18 ,"G":57.06 ,"H":137.15 ,"I":113.17 ,"K":128.18 ,"L":113.17 ,"M":131.21 ,"N":114.11 ,"P":97.12 ,"Q":128.41 ,"R":156.20 ,"S":87.08 ,"T":101.11,"V":99.14 ,"W":186.21 ,"Y":163.18 ,"X": 110}
+
+    default_prosite_file = 'prosite.dat'
+
+    def __init__(self, name=None, seq=None):
+        self.name = name
+        self.seq = upper(seq)
+
+    def mw(self):
+        molW = 0
+        for aa in self.seq:
+            molW += Protein.weight[aa]
+     
+        #add water at the end of protein
+        molW += 18.02
+        #convert in Kda
+        molW = molW / 1000
+        
+        return molW
+
+    def setname(self, name):
+        self.name = name
+	  </pre>
+	  You can notice that the class starts by the definition of
+	  <tt>weight</tt>
+	  and <tt>default_prosite_file</tt> variables. As we
+	  will see later, this <span class="emphasis"><em>class variable</em></span> is
+	  available to all instances of the class. 
+      </p><p>
+	  Now, the <tt>DNA</tt> objects knows how
+	  to be translated, right? So it would be more clever for
+	  the <tt>DNA</tt>
+	  class <tt>translate</tt> method to return
+	  a <tt>Protein</tt> object... 
+
+	The new definition of the <tt>translate</tt> method is:
+
+	<pre class="programlisting">
+     def translate(self, frame=0):
+        """
+        frame: 0, 1, 2, -1, -2, -3
+        """
+        if frame &lt; 0 :
+            seq = self.revcompl()
+            frame = abs(frame) - 1
+        else:
+            seq = self.seq
+
+        if frame &gt; 2:
+            return ''
+
+        protseq = ''
+        nb_codons = len(seq)/3
+
+        for i in range(frame,len(seq) - 2,3):
+            codon = seq[i:i+3]
+            protseq += Standard_Genetic_Code[codon]
+
+        new_protein = Protein(name=self.name + " translation", seq=protseq)
+
+	return new_protein
+         </pre>
+		  Look at the returned value: it is now
+		  a <tt>Protein</tt>
+		  object. The argument for the <tt>seq</tt>
+		  parameter of the <tt>Protein</tt>
+		  class's <tt>__init__</tt> method is the value of the newly
+		  computed <tt>protseq</tt>, and the
+		  argument for the <tt>name</tt> is
+		  constructed from the <tt>Protein</tt>
+		  object's name.
+       </p><p>
+	In the <tt>Protein</tt> object, we might also be
+	  interested in keeping the reference to the
+	  initial <tt>DNA</tt> object. This can help to
+	  analyze the protein sequence later. <a href="ch18s04.html#fig_repr_prot_dna" title="Figure 18.4. Protein&#xA;	    and DNA objects.">Figure 18.4</a> shows
+	  the <tt>DNA</tt>
+	  and <tt>Protein</tt> objects, and the link
+	  between them. Now, the <tt>Protein</tt> object
+	  has 3 attributes:
+	<tt>name</tt>, <tt>seq</tt> and <tt>dna</tt>.
+
+	  </p><div class="figure"><a name="fig_repr_prot_dna"></a><p class="title"><b>Figure 18.4. <tt>Protein</tt>
+	    and <tt>DNA</tt> objects.</b></p><div class="mediaobject"><img src="images/object_repr_prot_dna.png"></div></div><p>
+
+	 The <tt>__init__</tt> method of
+	 the <tt>Protein</tt> class is now:
+         <pre class="programlisting">
+    def __init__(self, name=None, seq=None, dna=None):
+        self.name = name
+        self.seq = upper(seq)
+        self.dna = dna
+         </pre>
+
+	  The final code for <tt>Protein</tt> object
+	  instantiation in the <tt>translate</tt> method
+	  is now:
+         <pre class="programlisting">
+        new_protein = Protein(name=self.name + " translation", 	seq=protseq, dna=self)
+        return new_protein
+         </pre>
+	 Look at the value provided for the <tt>dna</tt> parameter of
+	 the <tt>Protein</tt> <tt>__init__</tt>
+	 method. It is a reference to the <tt>DNA</tt>
+	 object, i.e: <tt>self</tt>.
+
+	 Notice that none of the parameters is mandatory
+	 (except <tt>self</tt> of course). In
+	 particular, the <tt>dna</tt> parameter does not
+	 have to be provided when the <tt>Protein</tt>
+	 is directly created from a file, as opposed to translated
+	 from a <tt>DNA</tt> object.
+      </p><div class="exercise"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/exercise.png"></td><td><a name="quest_class_point2"></a><p class="title"><b>Exercise 18.2. A <tt>Point</tt> class (continued)</b></p></td></tr><tr><td colspan="2" align="left" valign="top">
+	
+	  <p>
+	    Add a <tt>distance</tt> method to
+	    our <tt>Point</tt> class that computes the
+	    distance between 2 points:
+	    <pre class="programlisting">
+&gt;&gt;&gt; p1 = Point(2,3)
+&gt;&gt;&gt; p2 = Point(3,3)
+&gt;&gt;&gt; p1.distance(p2)
+1.0
+	    </pre>
+	    <a href="ch18s06.html#sol_class_point2" title="Solution 18.2. A Point class (continued)">Solution 18.2</a>
+	  </p>
+	</td></tr></table></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch18s03.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch18.html"><img src="images/up.png" alt="Up"></a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch18s05.html"><img src="images/next.png" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">18.3. Defining classes in Python&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index-2.html"><img src="images/home.png" alt="Home"></a></td><td width="40%" align="right" valign="top">&nbsp;18.5. Classes and objects in Python: technical aspects</td></tr></table></div></body>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch18s04.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:38 GMT -->
+</html>

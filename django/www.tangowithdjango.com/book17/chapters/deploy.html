@@ -1,0 +1,375 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+<!-- Mirrored from www.tangowithdjango.com/book17/chapters/deploy.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 10 Jan 2016 04:11:39 GMT -->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>21. Deploying Your Project &mdash; How to Tango with Django 1.7</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/twd.ico"/>
+    <link rel="top" title="How to Tango with Django 1.7" href="../index-2.html" />
+    <link rel="next" title="22. Summary" href="summary.html" />
+    <link rel="prev" title="20. Automated Testing" href="test.html" />
+ <style type="text/css">
+	img{
+	    width: 85%; /* you can use % */
+	    height: auto;
+	}
+	
+	table {
+		margin: auto;
+	}
+	
+	p.caption {
+		font-size: 10pt;
+		font-style: italic;
+	}
+ </style>
+ <script type="text/javascript">
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','../../../www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-44397330-1', 'tangowithdjango.com');
+  ga('send', 'pageview');
+     
+
+  </script>      
+
+  </head>
+  <body role="document">
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        
+        <li class="right" >
+          <a href="summary.html" title="22. Summary"
+             accesskey="N">next</a>
+          </li>
+		
+        <li class="right" >
+          <a href="test.html" title="20. Automated Testing"
+             accesskey="P">previous</a>
+          </li>
+		
+        <li><a href="../index-2.html">How to Tango with Django 1.7</a> &raquo;</li> 
+
+      </ul>
+
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index-2.html">
+              <img class="logo" src="../_static/twd200x200.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index-2.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">21. Deploying Your Project</a><ul>
+<li><a class="reference internal" href="#creating-a-pythonanywhere-account">21.1. Creating a PythonAnywhere Account</a></li>
+<li><a class="reference internal" href="#the-pythonanywhere-web-interface">21.2. The PythonAnywhere Web Interface</a></li>
+<li><a class="reference internal" href="#creating-a-virtual-environment">21.3. Creating a Virtual Environment</a><ul>
+<li><a class="reference internal" href="#virtual-environment-switching">21.3.1. Virtual Environment Switching</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cloning-your-git-repository">21.4. Cloning your Git Repository</a><ul>
+<li><a class="reference internal" href="#setting-up-the-database">21.4.1. Setting Up the Database</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#setting-up-your-web-application">21.5. Setting up your Web Application</a><ul>
+<li><a class="reference internal" href="#configuring-the-wsgi-script-and-its-virtual-environment">21.5.1. Configuring the WSGI Script and its virtual environment</a></li>
+<li><a class="reference internal" href="#assigning-static-paths">21.5.2. Assigning Static Paths</a></li>
+<li><a class="reference internal" href="#bing-api-key">21.5.3. Bing API Key</a></li>
+<li><a class="reference internal" href="#turning-off-debug-mode">21.5.4. Turning off <code class="docutils literal"><span class="pre">DEBUG</span></code> Mode</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#log-files">21.6. Log Files</a></li>
+<li><a class="reference internal" href="#exercises">21.7. Exercises</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="test.html"
+                        title="previous chapter">20. Automated Testing</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="summary.html"
+                        title="next chapter">22. Summary</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/chapters/deploy.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="http://www.tangowithdjango.com/book17/search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="deploying-your-project">
+<span id="deploy-label"></span><h1>21. Deploying Your Project<a class="headerlink" href="#deploying-your-project" title="Permalink to this headline">¶</a></h1>
+<p>This chapter provides a step-by-step guide on how to deploy your Django applications. We&#8217;ll be looking at deploying applications on <a class="reference external" href="https://www.pythonanywhere.com/">PythonAnywhere</a>, an online IDE and web hosting service. The service provides in-browser access to the server-based Python and Bash command line interfaces, meaning you can interact with PythonAnywhere&#8217;s servers just like you would with a regular terminal instance on your own computer. Currently, PythonAnywhere are offering a free account which sets you up with an adequate amount of storage space and CPU time to get a Django application up and running.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You can do this chapter independently (assuming you have some knowledge of git, if not refer to the chapter on using git).</p>
+</div>
+<div class="section" id="creating-a-pythonanywhere-account">
+<h2>21.1. Creating a PythonAnywhere Account<a class="headerlink" href="#creating-a-pythonanywhere-account" title="Permalink to this headline">¶</a></h2>
+<p>First <a class="reference external" href="https://www.pythonanywhere.com/pricing/">sign up for a Beginner PythonAnywhere account</a>.  If your application takes off and becomes popular, you can always upgrade your account at a later stage to gain more storage space and CPU time along with a number of other benefits (like hosting specific domains and ssh abilities).</p>
+<p>Once your account has been created, you will have your own little slice of the World Wide Web at <code class="docutils literal"><span class="pre">http://&lt;username&gt;.pythonanywhere.com</span></code>, where <code class="docutils literal"><span class="pre">&lt;username&gt;</span></code> is your PythonAnywhere username. It is from this URL that your hosted application will be available from.</p>
+</div>
+<div class="section" id="the-pythonanywhere-web-interface">
+<h2>21.2. The PythonAnywhere Web Interface<a class="headerlink" href="#the-pythonanywhere-web-interface" title="Permalink to this headline">¶</a></h2>
+<p>The PythonAnywhere web interface contains a <em>dashboard</em> which in turn provides a series of tabs allowing you to manage your application. The tabs as illustrated in Figure <a class="pageref" href="#fig-deploy-pythonanywhere">1</a> include:</p>
+<ul class="simple">
+<li>a <em>consoles</em> tab, allowing you to create and interact with Python and Bash console instances;</li>
+<li>a <em>files</em> tab, which allows you to upload to and organise files within your disk quota;</li>
+<li>a <em>web</em> tab, allowing you to configure settings for your hosted web application;</li>
+<li>a <em>schedule</em> tab, allowing you to setup tasks to be executed at particular times; and</li>
+<li>a <em>databases</em> tab, which allows you to configure a MySQL instance for your applications should you require it.</li>
+</ul>
+<p>Of the the five tabs provided, we&#8217;ll be working primarily with the <em>consoles</em> and <em>web</em> tabs. The <a class="reference external" href="https://help.pythonanywhere.com/">PythonAnywhere help pages</a> provide a series of detailed explanations on how to use the other tabs.</p>
+<div class="align-center figure" id="id1">
+<span id="fig-deploy-pythonanywhere"></span><img alt="../_images/deploy-pythonanywhere.png" src="../_images/deploy-pythonanywhere.png" />
+<p class="caption"><span class="caption-text">Figure 1: The PythonAnywhere dashboard, showing the <em>Consoles</em> tab.</span></p>
+</div>
+</div>
+<div class="section" id="creating-a-virtual-environment">
+<span id="virtual-environment"></span><h2>21.3. Creating a Virtual Environment<a class="headerlink" href="#creating-a-virtual-environment" title="Permalink to this headline">¶</a></h2>
+<p>As part of a its standard installation, PythonAnywhere comes with a number of packages pre-installed (i.e Python 2.7.4 and Django 1.3). However, since we are using a different setup, we need to setup a virtual environment and run our application inside that. Since our code base is compatible with Python 2.7.4 we can continue use that, but we will have to set up our virtual environment to use Django 1.7.</p>
+<p>First, open a Bash console from the PythonAnywhere <em>Consoles</em> tab by clicking the <em>Bash</em> link. When the terminal is ready for you to interact, enter the following command.</p>
+<div class="highlight-python"><div class="highlight"><pre>$ mkvirtualenv rango
+</pre></div>
+</div>
+<p>By default, PythonAnywhere includes a system called the virtual environment wrapper. The wrapper provides a series of extensions by <a class="reference external" href="http://doughellmann.com/">Doug Hellman</a> to the original <code class="docutils literal"><span class="pre">virtualenv</span></code> tool, making it easier for us to create, delete and use virtual environments. The command uses one of these to create a new virtual environment called <code class="docutils literal"><span class="pre">rango</span></code>. This process should take a short while to create, after which you will be presented with a slightly different prompt.</p>
+<div class="highlight-python"><div class="highlight"><pre>(rango)16:38 ~ $
+</pre></div>
+</div>
+<p>Note the inclusion of <code class="docutils literal"><span class="pre">(rango)</span></code> compared to your previous command prompt. This signifies that we have activated the <code class="docutils literal"><span class="pre">rango</span></code> virtual environment, so any package installations will be done within that environment, leaving the wider system setup alone. If you then issue the command <code class="docutils literal"><span class="pre">ls</span> <span class="pre">-la</span></code>, you will see that a directory called <code class="docutils literal"><span class="pre">.virtualenvs</span></code> has been created. This is the directory in which all of your virtual environments and associated packages will be stored. To confirm the setup, issue the command <code class="docutils literal"><span class="pre">which</span> <span class="pre">pip</span></code>. This will print the location in which the active <code class="docutils literal"><span class="pre">pip</span></code> binary is located - hopefully within <code class="docutils literal"><span class="pre">.virtualenvs</span></code> and <code class="docutils literal"><span class="pre">rango</span></code>, as shown in the example below.</p>
+<div class="highlight-python"><div class="highlight"><pre>/home/&lt;username&gt;/.virtualenvs/rango/bin/pip
+</pre></div>
+</div>
+<p>Now we can customise our virtual environment by installing the required packages for our Rango application. Installing may take a considerable amount of time to install as your CPU time is limited - so have some patience. Install all the required packages:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ pip install -U django==1.7
+$ pip install pillow
+$ pip install django-registration-redux
+$ pip install django-bootstrap-toolkit
+</pre></div>
+</div>
+<p>Aternatively, you could use <code class="docutils literal"><span class="pre">pip</span> <span class="pre">freeze</span> <span class="pre">&gt;</span> <span class="pre">requirements.txt</span></code> to save your current development environment, and then on PythonAnywhere, run <code class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">requirements.txt</span></code> to install all the packages in a job lot.</p>
+<p>Once installed, check if Django has been installed with the command <code class="docutils literal"><span class="pre">which</span> <span class="pre">django-admin.py</span></code>. You should receive output similar to the following example.</p>
+<div class="highlight-python"><div class="highlight"><pre>/home/&lt;username&gt;/.virtualenvs/rango/bin/django-admin.py
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">PythonAnywhere also provides instructions on how to setup virtual environments, see <a class="reference external" href="https://www.pythonanywhere.com/wiki/VirtualEnvForNewerDjango">https://www.pythonanywhere.com/wiki/VirtualEnvForNewerDjango</a>.</p>
+</div>
+<div class="section" id="virtual-environment-switching">
+<h3>21.3.1. Virtual Environment Switching<a class="headerlink" href="#virtual-environment-switching" title="Permalink to this headline">¶</a></h3>
+<p>Moving between virtual environments can be done pretty easily.  When you start a new bash shell, it will not be using a virtual environment, but you can launch into a pre-existing one with the <code class="docutils literal"><span class="pre">workon</span></code> command. To load up the rango environment, enter:</p>
+<div class="highlight-python"><div class="highlight"><pre>16:48 ~ $ workon rango
+</pre></div>
+</div>
+<p>where <code class="docutils literal"><span class="pre">rango</span></code> can be replaced with the name of the virtual environment you wish to use. Your prompt should then change to indicate you are working within a virtual environment.</p>
+<div class="highlight-python"><div class="highlight"><pre>(rango) 16:49 ~ $
+</pre></div>
+</div>
+<p>You can then leave the virtual environment using the <code class="docutils literal"><span class="pre">deactivate</span></code> command. Your prompt should then be missing the <code class="docutils literal"><span class="pre">(rango)</span></code> prefix, with an example shown below.</p>
+<div class="highlight-python"><div class="highlight"><pre>(rango) 16:49 ~ $ deactivate
+16:51 ~ $
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="cloning-your-git-repository">
+<h2>21.4. Cloning your Git Repository<a class="headerlink" href="#cloning-your-git-repository" title="Permalink to this headline">¶</a></h2>
+<p>Now that your virtual environment for Rango is all setup, you can now clone your Git repository to obtain a copy of your project&#8217;s files. Clone your repository by issuing the following command from your home directory:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ git clone https://&lt;USERNAME&gt;:&lt;PASSWORD&gt;@github.com/&lt;OWNER&gt;/&lt;REPO_NAME&gt;.git
+</pre></div>
+</div>
+<p>where you replace
+- <code class="docutils literal"><span class="pre">&lt;USERNAME&gt;</span></code> with your GitHub username;
+- <code class="docutils literal"><span class="pre">&lt;PASSWORD&gt;</span></code> with your GitHub password;
+- <code class="docutils literal"><span class="pre">&lt;OWNER&gt;</span></code> with the username of the person who owns the repository; and
+- <code class="docutils literal"><span class="pre">&lt;REPO_NAME&gt;</span></code> with the name of your project&#8217;s repository.</p>
+<p>If you haven&#8217;t put your code in a Git repository, you can clone the version we have made, by issuing the following command:</p>
+<div class="highlight-python"><div class="highlight"><pre>16:54 ~ $ git clone https://github.com/leifos/tango_with_django17.git
+</pre></div>
+</div>
+<p>#TODO(leifos): upload code to github</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It doesn&#8217;t matter if you clone your Git repository within your new virtual environment or not. You&#8217;re only creating files within your disk quota, which doesn&#8217;t require your special Python setup.</p>
+</div>
+<div class="section" id="setting-up-the-database">
+<h3>21.4.1. Setting Up the Database<a class="headerlink" href="#setting-up-the-database" title="Permalink to this headline">¶</a></h3>
+<p>With your files cloned, you must then prepare your database. We&#8217;ll be using the <code class="docutils literal"><span class="pre">populate_rango.py</span></code> module that we created earlier in the book. As we&#8217;ll be running the module, you must ensure that you are using the <code class="docutils literal"><span class="pre">rango</span></code> virtual environment (i.e. <code class="docutils literal"><span class="pre">workon</span> <span class="pre">rango</span></code>). From your home directory, move into the <code class="docutils literal"><span class="pre">tango_with_django</span></code> directory, and issue the following commands</p>
+<div class="highlight-python"><div class="highlight"><pre>(rango) 16:55 ~/tango_with_django $ python manage.py makemigrations rango
+(rango) 16:55 ~/tango_with_django $ python manage.py migrate
+(rango) 16:56 ~/tango_with_django $ python populate_rango.py
+(rango) 16:57 ~/tango_with_django $ python manage.py createsuperuser
+</pre></div>
+</div>
+<p>As discussed earlier in the book, the first command creates the migrations for the rango application, then the migrate command creates the SQLlite3 database. Once the database is created, the database can be populated and a superuser created.</p>
+</div>
+</div>
+<div class="section" id="setting-up-your-web-application">
+<h2>21.5. Setting up your Web Application<a class="headerlink" href="#setting-up-your-web-application" title="Permalink to this headline">¶</a></h2>
+<p>Now that the database is setup, we need to configure the PythonAnywhere NGINX webserver to serve up your application . Within PythonAnywhere&#8217;s web interface, navigate to your <em>dashboard</em> and click on the <em>Web</em> tab. On the left of the page that appears, click <em>Add a new web app.</em></p>
+<p>A popup box will then appear. Follow the instructions on-screen, and when the time comes, select the <em>manual configuration</em> option.  On the next page, select &#8220;Python 2.7&#8221;, and then complete the wizard.</p>
+<p>Then, navigate to the PythonAnywhere subdomain at <code class="docutils literal"><span class="pre">http://&lt;username&gt;.pythonanywhere.com</span></code> in a new browser tab. You should be presented with the default <code class="docutils literal"><span class="pre">Hello,</span> <span class="pre">World!</span></code> webpage. This is because the WSGI script is currently serving up this page and not your Django application.</p>
+<div class="section" id="configuring-the-wsgi-script-and-its-virtual-environment">
+<h3>21.5.1. Configuring the WSGI Script and its virtual environment<a class="headerlink" href="#configuring-the-wsgi-script-and-its-virtual-environment" title="Permalink to this headline">¶</a></h3>
+<p>The first step to get your web application working on PythonAnywhere is to specify which virtual environment it should use.  Right now you only have one, but you could have any number, so the system needs to be told which one to use.  To do this, navigate to the <em>Web</em> tab in PythonAnywhere&#8217;s dashboard and look for the &#8220;Virtualenv&#8221; section.  It will say something like &#8220;Enter a path to a virtualenv, if desired&#8221;.  Click there, and enter the full path to your virtual environment, eg. <cite>/home/&lt;username&gt;/.virtualenvs/rango/bin/activate_this.py</cite>.</p>
+<p>The next step is to configure the WSGI file.  The <a class="reference external" href="http://en.wikipedia.org/wiki/Web_Server_Gateway_Interface">Web Server Gateway Interface</a>, a.k.a. WSGI provides a simple and universal interface between web servers and web applications. PythonAnywhere uses WSGI to bridge the server-application link and map incoming requests to your subdomain to your web application.</p>
+<p>To configure the WSGI script, navigate to the <em>Web</em> tab in PythonAnywhere&#8217;s dashboard. From there, click the Web tab. Under the Code heading you can see a link to the WSGI configuration file: e.g. <code class="docutils literal"><span class="pre">/var/www/&lt;username&gt;_pythonanywhere_com_wsgi.py</span></code></p>
+<p>The good people at PythonAnywhere have set up a sample WSGI file for us with several possible configurations. For your web application, you&#8217;ll need to configure the Django section of the file. The example below demonstrates a possible configuration for you application.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="c"># ADD YOUR PROJECT TO THE PYTHONPATH FOR THE PYTHON INSTANCE</span>
+<span class="n">path</span> <span class="o">=</span> <span class="s">&#39;/home/&lt;username&gt;/tango_with_django_17/&#39;</span>
+<span class="k">if</span> <span class="n">path</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+<span class="c"># IMPORTANTLY GO TO THE PROJECT DIR</span>
+<span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+<span class="c"># TELL DJANGO WHERE YOUR SETTINGS MODULE IS LOCATED</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s">&#39;DJANGO_SETTINGS_MODULE&#39;</span><span class="p">,</span> <span class="s">&#39;tango_with_django_project_17.settings&#39;</span><span class="p">)</span>
+
+<span class="c"># IMPORT THE DJANGO SETUP - NEW TO 1.7</span>
+<span class="kn">import</span> <span class="nn">django</span>
+<span class="n">django</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
+
+<span class="c"># IMPORT THE DJANGO WSGI HANDLER TO TAKE CARE OF REQUESTS</span>
+<span class="kn">import</span> <span class="nn">django.core.handlers.wsgi</span>
+<span class="n">application</span> <span class="o">=</span> <span class="n">django</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">handlers</span><span class="o">.</span><span class="n">wsgi</span><span class="o">.</span><span class="n">WSGIHandler</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Ensure that you replace <code class="docutils literal"><span class="pre">&lt;username&gt;</span></code> with your username, and update any other path settings to suit your application. You should also remove all other code from the WSGI configuration script to ensure no conflicts take place.</p>
+<p>The code sample above begins by adding your project&#8217;s directory to the <code class="docutils literal"><span class="pre">PYTHONPATH</span></code> for the Python instance that runs your web application. This allows Python to access your project&#8217;s modules. If you have additional paths to add, you can easily insert them here. You can then specify the location of your project&#8217;s <code class="docutils literal"><span class="pre">settings.py</span></code> module. The final step is to include the Django WSGI handler and invoke it for your application.</p>
+<p>When you have completed the WSGI configuration, click the <em>Save</em> button at the top-right of the webpage. Navigate back to the <em>Web</em> tab within the PythonAnywhere dashboard, and click the <em>Reload</em> button at the top of the page. When the application is reloaded, visiting <code class="docutils literal"><span class="pre">http://&lt;username&gt;.pythonanywhere.com</span></code> should present you with your Django application, all ready to go!</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">During testing, we noted that you can sometimes receive <code class="docutils literal"><span class="pre">HTTP</span> <span class="pre">502</span> <span class="pre">-</span> <span class="pre">Bad</span> <span class="pre">Gateway</span></code> errors instead of your application. Try reloading your application again, and then waiting a longer. If the problem persists, try reloading again. If the problem still persists, check out your log files to see if any accesses/errors are occurring, before contacting the PythonAnywhere support.</p>
+</div>
+</div>
+<div class="section" id="assigning-static-paths">
+<h3>21.5.2. Assigning Static Paths<a class="headerlink" href="#assigning-static-paths" title="Permalink to this headline">¶</a></h3>
+<p>We&#8217;re almost there. One issue which we still have to address is to sort out paths for our application. Doing so will allow PythonAnywhere&#8217;s servers to serve your static content, for example From the PythonAnywhere dashboard, click the <em>Web</em> tab and choose the subdomain hosting your application from the list on the left.</p>
+<p>Underneath the <em>Static files</em> header, perform the following.</p>
+<ol class="arabic simple">
+<li>Click <code class="docutils literal"><span class="pre">Enter</span> <span class="pre">URL</span></code> and enter <code class="docutils literal"><span class="pre">/static/admin</span></code>, followed by return.</li>
+<li>Click the corresponding <code class="docutils literal"><span class="pre">Enter</span> <span class="pre">path</span></code> text. Set this to <code class="docutils literal"><span class="pre">/home/&lt;username&gt;/.virtualenvs/rango/lib/python2.7/site-packages/django/contrib/admin/static/admin</span></code>, where <code class="docutils literal"><span class="pre">&lt;username&gt;</span></code> should be replaced with your PythonAnywhere username. You may also need to change <code class="docutils literal"><span class="pre">rango</span></code> if this is not the name of your application&#8217;s virtual environment. Remember to hit return to confirm the path.</li>
+<li>Repeat the two steps above for the URL <code class="docutils literal"><span class="pre">/static/</span></code> and path <code class="docutils literal"><span class="pre">/home/&lt;username&gt;/tango_with_django/tango_with_django_project/static</span></code>, with the path setting pointing to the <code class="docutils literal"><span class="pre">static</span></code> directory of your web application.</li>
+</ol>
+<p>With these changes saved, reload your web application by clicking the <em>Reload</em> button at the top of the page. Don&#8217;t forget about potential <code class="docutils literal"><span class="pre">HTTP</span> <span class="pre">502</span> <span class="pre">-</span> <span class="pre">Bad</span> <span class="pre">Gateway</span></code> errors!</p>
+</div>
+<div class="section" id="bing-api-key">
+<h3>21.5.3. Bing API Key<a class="headerlink" href="#bing-api-key" title="Permalink to this headline">¶</a></h3>
+<p>Update <code class="docutils literal"><span class="pre">bing_search.py</span></code> or <code class="docutils literal"><span class="pre">keys.py</span></code> with your own BING API Key to use the search functionality in Rango. Again, you will have to hit the <em>Reload</em> button for the changes to take effect.</p>
+</div>
+<div class="section" id="turning-off-debug-mode">
+<h3>21.5.4. Turning off <code class="docutils literal"><span class="pre">DEBUG</span></code> Mode<a class="headerlink" href="#turning-off-debug-mode" title="Permalink to this headline">¶</a></h3>
+<p>When you application is ready to go, it&#8217;s a good idea to instruct Django that your application is now hosted on a production server. To do this, open your project&#8217;s <code class="docutils literal"><span class="pre">settings.py</span></code> file and change <code class="docutils literal"><span class="pre">DEBUG</span> <span class="pre">=</span> <span class="pre">True</span></code> to <code class="docutils literal"><span class="pre">DEBUG</span> <span class="pre">=</span> <span class="pre">False</span></code>. This disables <a class="reference external" href="https://docs.djangoproject.com/en/1.7/ref/settings/#debug">Django&#8217;s debug mode</a>, and removes explicit error messages.</p>
+<p>Changing the value of <code class="docutils literal"><span class="pre">DEBUG</span></code> also means you should set the <code class="docutils literal"><span class="pre">ALLOWED_HOSTS</span></code> property. Failing to perform this step will make Django return <code class="docutils literal"><span class="pre">HTTP</span> <span class="pre">400</span> <span class="pre">Bad</span> <span class="pre">Request</span></code> errors. Alter <code class="docutils literal"><span class="pre">ALLOWED_HOSTS</span></code> so that it includes your PythonAnywhere subdomain like in the example below.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ALLOWED_HOSTS</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;&lt;username&gt;.pythonanywhere.com&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Again, ensure <code class="docutils literal"><span class="pre">&lt;username&gt;</span></code> is changed to your PythonAnywhere username. Once complete, save the file and reload the application via the PythonAnywhere web interface.</p>
+</div>
+</div>
+<div class="section" id="log-files">
+<h2>21.6. Log Files<a class="headerlink" href="#log-files" title="Permalink to this headline">¶</a></h2>
+<p>Deploying your web application to an online environment introduces another layer of complexity. It is likely that you will encounter new and bizzare errors due to unsuspecting problems. When facing such errors, vital clues may be found in one of the three log files that the web server on PythonAnywhere creates.</p>
+<p>Log files can be viewed via the PythonAnywhere web interface by clicking on the <em>Web</em> tab, or by viewing the files in <code class="docutils literal"><span class="pre">/var/log/</span></code> within a Bash console instance. The files provided are:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">access.log</span></code>, which provides a log of requests made to your subdomain;</li>
+<li><code class="docutils literal"><span class="pre">error.log</span></code>, which logs any error messages produced by your web application; and</li>
+<li><code class="docutils literal"><span class="pre">server.log</span></code>, providing log details for the UNIX processes running your application.</li>
+</ul>
+<p>Note that the names for each log file are prepended with your subdomain. For example, <code class="docutils literal"><span class="pre">access.log</span></code> will have the name <code class="docutils literal"><span class="pre">&lt;username.pythonanywhere.com.access.log</span></code>.</p>
+<p>When debugging, you may find it useful to delete or move the log files so that you don&#8217;t have to scroll through a huge list of previous attempts. If the files are moved or deleted, they will be recreated automatically when a new request or error arises.</p>
+</div>
+<div class="section" id="exercises">
+<h2>21.7. Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline">¶</a></h2>
+<p>Congratulations, you&#8217;ve successfully deployed Rango!</p>
+<ul class="simple">
+<li>Tweet a link of your application to <a class="reference external" href="https://twitter.com/tangowithdjango">&#64;tangowithdjango</a>.</li>
+<li>Or email us to let us know, and tell us your thoughts on the book.</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        
+        <li class="right" >
+          <a href="summary.html" title="22. Summary"
+             >next</a>
+          </li>
+		
+        <li class="right" >
+          <a href="test.html" title="20. Automated Testing"
+             >previous</a>
+          </li>
+		
+        <li><a href="../index-2.html">How to Tango with Django 1.7</a> &raquo;</li> 
+
+      </ul>
+
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2013, Leif Azzopardi and David Maxwell.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+
+<!-- Mirrored from www.tangowithdjango.com/book17/chapters/deploy.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 10 Jan 2016 04:11:40 GMT -->
+</html>

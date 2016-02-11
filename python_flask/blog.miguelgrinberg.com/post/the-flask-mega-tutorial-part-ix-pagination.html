@@ -1,0 +1,1150 @@
+﻿<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-ix-pagination by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 05:40:56 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    
+    <title>
+    
+        The Flask Mega-Tutorial, Part IX: Pagination - miguelgrinberg.com
+    
+</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="description" content="miguelgrinberg.com">
+	<meta name="copyright" content="Copyright (c) 2012-2015 Miguel Grinberg">
+	<meta name="author" content="Miguel Grinberg">
+    
+    <meta name="keywords" content="python, programming, flask, web, tutorial, database, pagination">
+    
+
+    
+    <!-- Bootstrap -->
+    <link href="../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../static/prettify.css" type="text/css" rel="stylesheet" />
+    <link href="../static/colorbox/colorbox.css" rel="stylesheet" type="text/css" />
+    <link href="../static/style.css" rel="stylesheet" type="text/css" />
+
+    <link rel="shortcut icon" href="../static/favicon.ico">
+	<link rel="alternate" type="application/rss+xml" href="../feed" title="miguelgrinberg.com RSS feed">
+
+  </head>
+  <body>
+    
+    <!-- facebook sdk -->
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "../../connect.facebook.net/en_US/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    <!-- google plus sdk -->
+    <script type="text/javascript" src="../../apis.google.com/js/plusone.js"></script>
+    <!-- twitter sdk -->
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="../../platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <!-- linkedin sdk -->
+    <script src="../../platform.linkedin.com/in.js" type="text/javascript"></script>
+
+    
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://blog.miguelgrinberg.com/index">miguelgrinberg.com</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="http://blog.miguelgrinberg.com/index">Home</a></li>
+                        <li><a href="about-me.html">About Me</a></li>
+                        <li><a href="about-this-blog.html">About This Blog</a></li>
+                        
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <p class="navbar-text" style="margin-top: 10px; margin-bottom: 0px;">
+                                <a type="application/rss+xml" href="../feed"><img src="../static/rss.png" alt="RSS Feed" title="RSS Feed" /></a>
+                                <a href="https://www.facebook.com/miguelgrinbergblog"><img src="../static/facebook.png" alt="Facebook" title="Facebook" /></a>
+                                <a href="https://plus.google.com/u/0/117786742456929977820"><img src="../static/googleplus.png" alt="Google+" title="Google+" /></a>
+                                <a href="http://www.linkedin.com/in/miguelgrinberg"><img src="../static/linkedin.png" alt="LinkedIn" title="LinkedIn" /></a>
+                                <a href="http://github.com/miguelgrinberg"><img src="../static/github.png" alt="GitHub" title="GitHub" /></a>
+                                <a href="https://twitter.com/#!/miguelgrinberg"><img src="../static/twitter.png" alt="Twitter" title="Twitter" /></a>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </nav>
+
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-push-9 sidebar-bg">
+                <div id="sidebar">
+                    
+
+                    
+                    <h1>Flask Web Development</h1>
+                    <p>If you want to learn modern web development techniques with Python and Flask, you may find my O'Reilly book useful:</p>
+                    <p><center><a href="http://bit.ly/flaskbook"><img style="border: 1px solid black;" src="../static/flask-book-cover-tiny.png"></a></center></p>
+                    <p>Visit <a href="http://flaskbook.com/">http://flaskbook.com</a> for information about this and other Flask training products I have created!</p>
+                    
+
+                    <h1>About Miguel</h1>
+                    <img style="float: right; margin: 0px 8px 8px 0px; padding: 4px; border: 1px solid #ccc;" src="../static/miguel.jpg" />
+                    <p>Welcome to my blog!</p>
+                    <p>I'm a software engineer, photographer and filmmaker in Portland, Oregon, USA.</p>
+                    <p>You can also find me on <a href="https://www.facebook.com/miguelgrinbergblog">Facebook</a>, <a href="https://plus.google.com/u/0/117786742456929977820">Google+</a>, <a href="http://www.linkedin.com/in/miguelgrinberg">LinkedIn</a>, <a href="https://github.com/miguelgrinberg">Github</a> and <a href="https://twitter.com/#!/miguelgrinberg">Twitter</a>.</p>
+                    <p>Thank you for visiting!</p>
+
+                    
+
+                    
+                    <h1>Categories</h1>
+<ul>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Arduino/feed">
+			<img src="../static/rss-small.png" title="Arduino RSS Feed" label="Arduino RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Arduino">Arduino</a></span> (7)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Authentication/feed">
+			<img src="../static/rss-small.png" title="Authentication RSS Feed" label="Authentication RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Authentication">Authentication</a></span> (4)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Blog/feed">
+			<img src="../static/rss-small.png" title="Blog RSS Feed" label="Blog RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Blog">Blog</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/C++/feed">
+			<img src="../static/rss-small.png" title="C++ RSS Feed" label="C++ RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/C++">C++</a></span> (5)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Cloud/feed">
+			<img src="../static/rss-small.png" title="Cloud RSS Feed" label="Cloud RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Cloud">Cloud</a></span> (2)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Filmmaking/feed">
+			<img src="../static/rss-small.png" title="Filmmaking RSS Feed" label="Filmmaking RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Filmmaking">Filmmaking</a></span> (6)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Flask/feed">
+			<img src="../static/rss-small.png" title="Flask RSS Feed" label="Flask RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Flask">Flask</a></span> (39)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Games/feed">
+			<img src="../static/rss-small.png" title="Games RSS Feed" label="Games RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Games">Games</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Gear/feed">
+			<img src="../static/rss-small.png" title="Gear RSS Feed" label="Gear RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Gear">Gear</a></span> (6)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/HTML5/feed">
+			<img src="../static/rss-small.png" title="HTML5 RSS Feed" label="HTML5 RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/HTML5">HTML5</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Heroku/feed">
+			<img src="../static/rss-small.png" title="Heroku RSS Feed" label="Heroku RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Heroku">Heroku</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Javascript/feed">
+			<img src="../static/rss-small.png" title="Javascript RSS Feed" label="Javascript RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Javascript">Javascript</a></span> (3)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Movie Reviews/feed">
+			<img src="../static/rss-small.png" title="Movie Reviews RSS Feed" label="Movie Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Movie Reviews">Movie Reviews</a></span> (5)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Netflix/feed">
+			<img src="../static/rss-small.png" title="Netflix RSS Feed" label="Netflix RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Netflix">Netflix</a></span> (5)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Node.js/feed">
+			<img src="../static/rss-small.png" title="Node.js RSS Feed" label="Node.js RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Node.html">Node.js</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/OpenStack/feed">
+			<img src="../static/rss-small.png" title="OpenStack RSS Feed" label="OpenStack RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/OpenStack">OpenStack</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Personal/feed">
+			<img src="../static/rss-small.png" title="Personal RSS Feed" label="Personal RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Personal">Personal</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Photography/feed">
+			<img src="../static/rss-small.png" title="Photography RSS Feed" label="Photography RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Photography">Photography</a></span> (6)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Product Reviews/feed">
+			<img src="../static/rss-small.png" title="Product Reviews RSS Feed" label="Product Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Product Reviews">Product Reviews</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Programming/feed">
+			<img src="../static/rss-small.png" title="Programming RSS Feed" label="Programming RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Programming">Programming</a></span> (47)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Project Management/feed">
+			<img src="../static/rss-small.png" title="Project Management RSS Feed" label="Project Management RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Project Management">Project Management</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Python/feed">
+			<img src="../static/rss-small.png" title="Python RSS Feed" label="Python RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Python">Python</a></span> (43)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/REST/feed">
+			<img src="../static/rss-small.png" title="REST RSS Feed" label="REST RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/REST">REST</a></span> (5)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Rackspace/feed">
+			<img src="../static/rss-small.png" title="Rackspace RSS Feed" label="Rackspace RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Rackspace">Rackspace</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Raspberry Pi/feed">
+			<img src="../static/rss-small.png" title="Raspberry Pi RSS Feed" label="Raspberry Pi RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Raspberry Pi">Raspberry Pi</a></span> (6)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/RhinoSteady/feed">
+			<img src="../static/rss-small.png" title="RhinoSteady RSS Feed" label="RhinoSteady RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/RhinoSteady">RhinoSteady</a></span> (6)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Robotics/feed">
+			<img src="../static/rss-small.png" title="Robotics RSS Feed" label="Robotics RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Robotics">Robotics</a></span> (6)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Video/feed">
+			<img src="../static/rss-small.png" title="Video RSS Feed" label="Video RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Video">Video</a></span> (4)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Windows/feed">
+			<img src="../static/rss-small.png" title="Windows RSS Feed" label="Windows RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Windows">Windows</a></span> (1)
+	</li>
+
+</ul>
+                    
+                </div>
+            </div>
+            <div class="col-md-8 col-md-pull-4">
+                <div id="main">
+                    
+                    
+                    
+                    
+                    
+
+<div class="post">
+
+<p class="date"><span class="flask-moment" data-timestamp="2012-10-06T05:43:26Z" data-format="format('LL')" data-refresh="0">2012-10-06T05:43:26Z</span></p>
+<h1 class="post-title"><a href="the-flask-mega-tutorial-part-ix-pagination.html">The Flask Mega-Tutorial, Part IX: Pagination</a></h1>
+<div class="posted">Posted by <span class="label label-danger"><a href="http://blog.miguelgrinberg.com/author/Miguel Grinberg">Miguel Grinberg</a></span> under <span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Python">Python</a></span>, <span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Programming">Programming</a></span>, <span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Flask">Flask</a></span>. </div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-ix-pagination" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-ix-pagination" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="the-flask-mega-tutorial-part-ix-pagination.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-ix-pagination" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+<div class="post_body"><p>This is the ninth article in the series in which I document my experience writing web applications in <a href="http://python.org/">Python</a> using the <a href="http://flask.pocoo.org/">Flask</a> microframework.</p>
+<p>The goal of the tutorial series is to develop a decently featured microblogging application that demonstrating total lack of originality I have decided to call <code>microblog</code>.</p>
+<p><strong>NOTE</strong>: This article was revised in September 2014 to be in sync with current versions of Python and Flask.</p>
+<p>Here is an index of all the articles in the series that have been published to date:</p>
+<ul>
+<li><a href="the-flask-mega-tutorial-part-i-hello-world.html">Part I: Hello, World!</a></li>
+<li><a href="the-flask-mega-tutorial-part-ii-templates.html">Part II: Templates</a></li>
+<li><a href="the-flask-mega-tutorial-part-iii-web-forms.html">Part III: Web Forms</a></li>
+<li><a href="the-flask-mega-tutorial-part-iv-database.html">Part IV: Database</a></li>
+<li><a href="the-flask-mega-tutorial-part-v-user-logins.html">Part V: User Logins</a></li>
+<li><a href="the-flask-mega-tutorial-part-vi-profile-page-and-avatars.html">Part VI: Profile Page And Avatars</a></li>
+<li><a href="the-flask-mega-tutorial-part-vii-unit-testing.html">Part VII: Unit Testing</a></li>
+<li><a href="the-flask-mega-tutorial-part-viii-followers-contacts-and-friends.html">Part VIII: Followers, Contacts And Friends</a></li>
+<li><a href="the-flask-mega-tutorial-part-ix-pagination.html">Part IX: Pagination</a> (this article)</li>
+<li><a href="the-flask-mega-tutorial-part-x-full-text-search.html">Part X: Full Text Search</a></li>
+<li><a href="the-flask-mega-tutorial-part-xi-email-support.html">Part XI: Email Support</a></li>
+<li><a href="the-flask-mega-tutorial-part-xii-facelift.html">Part XII: Facelift</a></li>
+<li><a href="the-flask-mega-tutorial-part-xiii-dates-and-times.html">Part XIII: Dates and Times</a></li>
+<li><a href="the-flask-mega-tutorial-part-xiv-i18n-and-l10n.html">Part XIV: I18n and L10n</a></li>
+<li><a href="the-flask-mega-tutorial-part-xv-ajax.html">Part XV: Ajax</a></li>
+<li><a href="the-flask-mega-tutorial-part-xvi-debugging-testing-and-profiling.html">Part XVI: Debugging, Testing and Profiling</a></li>
+<li><a href="the-flask-mega-tutorial-part-xvii-deployment-on-linux-even-on-the-raspberry-pi.html">Part XVII: Deployment on Linux (even on the Raspberry Pi!)</a></li>
+<li><a href="the-flask-mega-tutorial-part-xviii-deployment-on-the-heroku-cloud.html">Part XVIII: Deployment on the Heroku Cloud</a></li>
+</ul>
+<h2>Recap</h2>
+<p>In the <a href="the-flask-mega-tutorial-part-viii-followers-contacts-and-friends.html">previous article</a> in the series we've made all the database changes necessary to support the 'follower' paradigm, where users choose other users to follow.</p>
+<p>Today we will build on what we did last time and enable our application to accept and deliver real content to its users. We are saying goodbye to the last of our fake objects today!</p>
+<h2>Submission of blog posts</h2>
+<p>Let's start with something simple. The home page should have a form for users to submit new posts.</p>
+<p>First we define a single field form object (file <code>app/forms.py</code>):</p>
+<pre><code>class PostForm(Form):
+    post = StringField('post', validators=[DataRequired()])
+</code></pre>
+<p>Next, we add the form to the template (file <code>app/templates/index.html</code>):</p>
+<pre><code>&lt;!-- extend base layout --&gt;
+{% extends "base.html" %}
+
+{% block content %}
+  &lt;h1&gt;Hi, {{ g.user.nickname }}!&lt;/h1&gt;
+  &lt;form action="" method="post" name="post"&gt;
+      {{ form.hidden_tag() }}
+      &lt;table&gt;
+          &lt;tr&gt;
+              &lt;td&gt;Say something:&lt;/td&gt;
+              &lt;td&gt;{{ form.post(size=30, maxlength=140) }}&lt;/td&gt;
+              &lt;td&gt;
+              {% for error in form.post.errors %}
+              &lt;span style="color: red;"&gt;[{{ error }}]&lt;/span&gt;&lt;br&gt;
+              {% endfor %}
+              &lt;/td&gt;
+          &lt;/tr&gt;
+          &lt;tr&gt;
+              &lt;td&gt;&lt;/td&gt;
+              &lt;td&gt;&lt;input type="submit" value="Post!"&gt;&lt;/td&gt;
+              &lt;td&gt;&lt;/td&gt;
+          &lt;/tr&gt;
+      &lt;/table&gt;
+  &lt;/form&gt;
+  {% for post in posts %}
+  &lt;p&gt;
+    {{ post.author.nickname }} says: &lt;b&gt;{{ post.body }}&lt;/b&gt;
+  &lt;/p&gt;
+  {% endfor %}
+{% endblock %}
+</code></pre>
+<p>Nothing earth shattering so far, as you can see. We are simply adding yet another form, like the ones we've done before.</p>
+<p>Last of all, the view function that ties everything together is expanded to handle the form (file <code>app/views.py</code>):</p>
+<pre><code>from forms import LoginForm, EditForm, PostForm
+from models import User, Post
+
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/index', methods=['GET', 'POST'])
+@login_required
+def index():
+    form = PostForm()
+    if form.validate_on_submit():
+        post = Post(body=form.post.data, timestamp=datetime.utcnow(), author=g.user)
+        db.session.add(post)
+        db.session.commit()
+        flash('Your post is now live!')
+        return redirect(url_for('index'))
+    posts = [
+        { 
+            'author': {'nickname': 'John'}, 
+            'body': 'Beautiful day in Portland!' 
+        },
+        { 
+            'author': {'nickname': 'Susan'}, 
+            'body': 'The Avengers movie was so cool!' 
+        }
+    ]
+    return render_template('index.html',
+                           title='Home',
+                           form=form,
+                           posts=posts)
+</code></pre>
+<p>Let's review the changes in this function one by one:</p>
+<ul>
+<li>We are now importing the <code>Post</code> and <code>PostForm</code> classes</li>
+<li>We accept POST requests in both routes associated with the <code>index</code> view function, since that is how we will receive submitted posts.</li>
+<li>When we arrive at this view function through a form submission we insert a new <code>Post</code> record into the database. When we arrive at it via a regular GET request we do as before.</li>
+<li>The template now receives an additional argument, the <code>form</code>, so that it can render the text field.</li>
+</ul>
+<p>One final comment before we continue. Notice how after we insert a new <code>Post</code> into the detabase we do this:</p>
+<pre><code>return redirect(url_for('index'))
+</code></pre>
+<p>We could have easily skipped the redirect and allowed the function to continue down into the template rendering part, and it would have been more efficient. Because really, all the redirect does is return to this same view function to do that, after an extra trip to the client web browser.</p>
+<p>So, why the redirect? Consider what happens after the user writes a blog post, submits it and then hits the browser's refresh key. What will the refresh command do? Browsers resend the last issued request as a result of a refresh command.</p>
+<p>Without the redirect, the last request is the POST request that submitted the form, so a refresh action will resubmit the form, causing a second <code>Post</code> record that is identical to the first to be written to the database. Not good.</p>
+<p>By having the redirect, we force the browser to issue another request after the form submission, the one that grabs the redirected page. This is a simple GET request, so a refresh action will now repeat the GET request instead of submitting the form again.</p>
+<p>This simple trick avoids inserting duplicate posts when a user inadvertently refreshes the page after submitting a blog post.</p>
+<h2>Displaying blog posts</h2>
+<p>And now we get to the fun part. We are going to grab blog posts from the database and display them.</p>
+<p>If you recall from a few articles ago, we created a couple of <em>fake</em> posts and we've been displaying those in our home page for a long time. The fake objects were created explicitly in the <code>index</code> view function as a simply Python list:</p>
+<pre><code>    posts = [
+        { 
+            'author': {'nickname': 'John'}, 
+            'body': 'Beautiful day in Portland!' 
+        },
+        { 
+            'author': {'nickname': 'Susan'}, 
+            'body': 'The Avengers movie was so cool!' 
+        }
+    ]
+</code></pre>
+<p>But in the last article we created the query that allows us to get all the posts from followed users, so now we can simply replace the above with this (file <code>app/views.py</code>):</p>
+<pre><code>    posts = g.user.followed_posts().all()
+</code></pre>
+<p>And when you run the application you will be seeing blog posts from the database!</p>
+<p>The <code>followed_posts</code> method of the <code>User</code> class returns a sqlalchemy query object that is configured to grab the posts we are interested in. Calling <code>all()</code> on this query just retrieves all the posts into a list, so we end up with a structure that is very much alike the fake one we've been using until now. It's so close that the template does not even notice.</p>
+<p>At this point feel free to play with the application. You can create a few users, make them follow others, and finally post some messages to see how each user sees its blog post stream.</p>
+<h2>Pagination</h2>
+<p>The application is looking better than ever, but we have a problem. We are showing all of the followed posts in the home page. What happens if a user has a thousand followed posts? Or a million? As you can imagine, grabbing and handling such a large list of objects will be extremely inefficient.</p>
+<p>Instead, we are going to show this potentially large number of posts in groups, or <em>pages</em>.</p>
+<p>Flask-SQLAlchemy comes with very good support for <em>pagination</em>. If for example, we wanted to get the first three followed posts of some user we can do this:</p>
+<pre><code>    posts = g.user.followed_posts().paginate(1, 3, False).items
+</code></pre>
+<p>The <code>paginate</code> method can be called on any query object. It takes three arguments:</p>
+<ul>
+<li>the page number, starting from 1,</li>
+<li>the number of items per page,</li>
+<li>an error flag. If True, when an out of range page is requested a 404 error will be automatically returned to the client web browser. If False, an empty list will be returned instead of an error.</li>
+</ul>
+<p>The return value from <code>paginate</code> is a <code>Pagination</code> object. The <code>items</code> member of this object contains the list of items in the requested page. There are other useful things in the <code>Pagination</code> object that we will see a bit later.</p>
+<p>Now let's think about how we can implement pagination in our <code>index</code> view function. We can start by adding a configuration item to our application that determines how many items per page we will display (file <code>config.py</code>):</p>
+<pre><code># pagination
+POSTS_PER_PAGE = 3
+</code></pre>
+<p>It is a good idea to have these global <code>knobs</code> that can change the behavior of our application in the configuration file all together, because then we can go to a single place to revise them all.</p>
+<p>In the final application we will of course use a much larger number than 3, but for testing it is useful to work with small numbers.</p>
+<p>Next, let's decide how the URLs that request different pages will look. We've seen before that Flask routes can take arguments, so we can add a suffix to the URL that indicates the desired page:</p>
+<pre><code>http://localhost:5000/         &lt;-- page #1 (default)
+http://localhost:5000/index    &lt;-- page #1 (default)
+http://localhost:5000/index/1  &lt;-- page #1
+http://localhost:5000/index/2  &lt;-- page #2
+</code></pre>
+<p>This format of URLs can be easily implemented with an additional <code>route</code> added to our view function (file <code>app/views.py</code>):</p>
+<pre><code>from config import POSTS_PER_PAGE
+
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/index', methods=['GET', 'POST'])
+@app.route('/index/&lt;int:page&gt;', methods=['GET', 'POST'])
+@login_required
+def index(page=1):
+    form = PostForm()
+    if form.validate_on_submit():
+        post = Post(body=form.post.data, timestamp=datetime.utcnow(), author=g.user)
+        db.session.add(post)
+        db.session.commit()
+        flash('Your post is now live!')
+        return redirect(url_for('index'))
+    posts = g.user.followed_posts().paginate(page, POSTS_PER_PAGE, False).items
+    return render_template('index.html',
+                           title='Home',
+                           form=form,
+                           posts=posts)
+</code></pre>
+<p>Our new route takes the page argument, and declares it as an integer. We also need to add the <code>page</code> argument to the <code>index</code> function, and we have to give it a default value because two of the three routes do not have this argument, so for those the default will always be used.</p>
+<p>And now that we have a page number available to us we can easily hook it up to our <code>followed_posts</code> query, along with the POSTS_PER_PAGE configuration constant we defined earlier.</p>
+<p>Note how easy these changes are, and how little code is affected each time we make a change. We are trying to write each part of the application without making any assumptions regarding how the other parts work, and this enables us to write modular and robust applications that are easier to test and are less likely to fail or have bugs.</p>
+<p>At this point you can try the pagination by entering URLs for the different pages by hand into your browser's address bar. Make sure you have more than three posts available so that you can see more than one page.</p>
+<h2>Page navigation</h2>
+<p>We now need to add links that allow users to navigate to the next and/or previous pages, and luckily this is extremely easy to do, Flask-SQLAlchemy does most of the work for us.</p>
+<p>We are going to start by making a small change in the view function. In our current version we use the paginate method as follows:</p>
+<pre><code>posts = g.user.followed_posts().paginate(page, POSTS_PER_PAGE, False).items
+</code></pre>
+<p>By doing this we are only keeping the <code>items</code> member of the <code>Pagination</code> object returned by <code>paginate</code>. But this object has a number of other very useful things in it, so we will instead keep the whole object (file <code>app/views.py</code>):</p>
+<pre><code>posts = g.user.followed_posts().paginate(page, POSTS_PER_PAGE, False)
+</code></pre>
+<p>To compensate for this change, we have to modify the template (file <code>app/templates/index.html</code>):</p>
+<pre><code>&lt;!-- posts is a Paginate object --&gt;
+{% for post in posts.items %}
+&lt;p&gt;
+  {{ post.author.nickname }} says: &lt;b&gt;{{ post.body }}&lt;/b&gt;
+&lt;/p&gt;
+{% endfor %}
+</code></pre>
+<p>What this change does is make the full Paginate object available to our template. The members of this object that we will use are:</p>
+<ul>
+<li><code>has_next</code>: True if there is at least one more page after the current one</li>
+<li><code>has_prev</code>: True if there is at least one more page before the current one</li>
+<li><code>next_num</code>: page number for the next page</li>
+<li><code>prev_num</code>: page number for the previous page</li>
+</ul>
+<p>With these for elements we can produce the following (file <code>app/templates/index.html</code>):</p>
+<pre><code>&lt;!-- posts is a Paginate object --&gt;
+{% for post in posts.items %}
+&lt;p&gt;
+  {{ post.author.nickname }} says: &lt;b&gt;{{ post.body }}&lt;/b&gt;
+&lt;/p&gt;
+{% endfor %}
+{% if posts.has_prev %}&lt;a href="{{ url_for('index', page=posts.prev_num) }}"&gt;&amp;lt;&amp;lt; Newer posts&lt;/a&gt;{% else %}&amp;lt;&amp;lt; Newer posts{% endif %} | 
+{% if posts.has_next %}&lt;a href="{{ url_for('index', page=posts.next_num) }}"&gt;Older posts &amp;gt;&amp;gt;&lt;/a&gt;{% else %}Older posts &amp;gt;&amp;gt;{% endif %}
+</code></pre>
+<p>So we have two links. First we have one labeled "Newer posts" that sends us to the previous page (keep in mind we show posts sorted by newest first, so the first page is the one with the newest stuff). Conversely, the "Older posts" points to the next page.</p>
+<p>When we are looking at the first page we do not want to show a link to go to the previous page, since there isn't one. This is easy to detect because <code>posts.has_prev</code> will be <code>False</code>. We handle that case simply by showing the same text of the link but without the link itself. The link to the next page is handled in the same way.</p>
+<h2>Implementing the Post sub-template</h2>
+<p>Back in the article where we added <a href="the-flask-mega-tutorial-part-vi-profile-page-and-avatars.html">avatar pictures</a> we defined a sub-template with the HTML rendering of a single post. The reason we created this sub-template was so that we can render posts with a consistent look in multiple pages, without having to duplicate the HTML code.</p>
+<p>It is now time to implement this sub-template in our index page. And, as most of the things we are doing today, it is surprisingly simple (file <code>app/templates/index.html</code>):</p>
+<pre><code>&lt;!-- posts is a Paginate object --&gt;
+{% for post in posts.items %}
+    {% include 'post.html' %}
+{% endfor %}
+</code></pre>
+<p>Amazing, huh? We just discarded our old rendering code and replaced it with an <code>include</code> of the sub-template. Just with this, we get the nicer version of the post that includes the user's avatar.</p>
+<p>Here is a screenshot of the index page of our application in its current state:</p>
+<p><center><img alt="microblog profile page" src="../static/images/flask-mega-tutorial-part-ix.png" /></center></p>
+<h2>The user profile page</h2>
+<p>We are done with the index page for now. However, we have also included posts in the user profile page, not posts from everyone but just from the owner of the profile. To be consistent the user profile page should be changed to match the index page.</p>
+<p>The changes are similar to those we made on the index page. Here is a summary of what we need to do:</p>
+<ul>
+<li>add an additional route that takes the page number</li>
+<li>add a <code>page</code> argument to the view function, with a default of 1</li>
+<li>replace the list of fake posts with the proper database query and pagination</li>
+<li>update the template to use the pagination object</li>
+</ul>
+<p>Here is the updated view function (file <code>app/views.py</code>):</p>
+<pre><code>@app.route('/user/&lt;nickname&gt;')
+@app.route('/user/&lt;nickname&gt;/&lt;int:page&gt;')
+@login_required
+def user(nickname, page=1):
+    user = User.query.filter_by(nickname=nickname).first()
+    if user is None:
+        flash('User %s not found.' % nickname)
+        return redirect(url_for('index'))
+    posts = user.posts.paginate(page, POSTS_PER_PAGE, False)
+    return render_template('user.html',
+                           user=user,
+                           posts=posts)
+</code></pre>
+<p>Note that this function already had an argument (the nickname of the user), so we add the page number as a second argument.</p>
+<p>The changes to the template are also pretty simple (file <code>app/templates/user.html</code>):</p>
+<pre><code>&lt;!-- posts is a Paginate object --&gt;
+{% for post in posts.items %}
+    {% include 'post.html' %}
+{% endfor %}
+{% if posts.has_prev %}&lt;a href="{{ url_for('user', nickname=user.nickname, page=posts.prev_num) }}"&gt;&amp;lt;&amp;lt; Newer posts&lt;/a&gt;{% else %}&amp;lt;&amp;lt; Newer posts{% endif %} | 
+{% if posts.has_next %}&lt;a href="{{ url_for('user', nickname=user.nickname, page=posts.next_num) }}"&gt;Older posts &amp;gt;&amp;gt;&lt;/a&gt;{% else %}Older posts &amp;gt;&amp;gt;{% endif %}
+</code></pre>
+<h2>Final words</h2>
+<p>Below I'm making available the updated version of the <code>microblog</code> application with all the pagination changes introduced in this article.</p>
+<p>Download <a href="https://codeload.github.com/miguelgrinberg/microblog/zip/version-0.9">microblog-0.9.zip</a>.</p>
+<p>As always, a database isn't provided so you have to create your own. If you are following this series of articles you know how to do it. If not, then go back to the database article to find out.</p>
+<p>As always, I thank you for following my tutorial. I hope to see you again in the next one!</p>
+<p>Miguel</p></div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-ix-pagination" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-ix-pagination" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="the-flask-mega-tutorial-part-ix-pagination.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-ix-pagination" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+
+
+<h4 style="text-align: right"><a name="comments"></a>84 comments</h4>
+
+
+<div class="comment">
+    <ul>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/110b30a978c33ff4802bc119b47a1122ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#1</span> <span class="label label-primary">Siros</span> said
+                    <span class="flask-moment" data-timestamp="2012-10-08T11:23:46Z" data-format="fromNow(0)" data-refresh="0">2012-10-08T11:23:46Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Thank you so much again , this is very helpful.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/500b5c9e49563b18fc194cbd0285fe31ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#2</span> <span class="label label-primary">Sean</span> said
+                    <span class="flask-moment" data-timestamp="2012-10-13T03:35:17Z" data-format="fromNow(0)" data-refresh="0">2012-10-13T03:35:17Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Great series! This is the most helpful Python/Flask tutorial I have read. Thank you very much!!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/53d8002b748b83ec10a0b63038b4af46ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#3</span> <span class="label label-primary">Bobby</span> said
+                    <span class="flask-moment" data-timestamp="2012-11-25T00:50:47Z" data-format="fromNow(0)" data-refresh="0">2012-11-25T00:50:47Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">This tutorial is amazing....really great!!  Thanks for sharing your skills with us.  Two small points:  your index function example above is missing &#34;user = g.user&#34;;  it might be helpful to explain to people what the &#34;form.hidden_tag()&#34; does.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/53d8002b748b83ec10a0b63038b4af46ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#4</span> <span class="label label-primary">Bobby</span> said
+                    <span class="flask-moment" data-timestamp="2012-11-25T01:04:25Z" data-format="fromNow(0)" data-refresh="0">2012-11-25T01:04:25Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">can you tell me why my route decorators need the trailing slash to work?  @app.route(&#39;/login/&#39;)  I&#39;m sure I&#39;m doing something silly??</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#5</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2012-11-25T06:30:03Z" data-format="fromNow(0)" data-refresh="0">2012-11-25T06:30:03Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Bobby: hidden tags were covered in part 3 of the series. Can you expand on the &#34;user = g.user&#34; comment? What would that achieve?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/53d8002b748b83ec10a0b63038b4af46ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#6</span> <span class="label label-primary">Bobby</span> said
+                    <span class="flask-moment" data-timestamp="2012-11-25T17:30:16Z" data-format="fromNow(0)" data-refresh="0">2012-11-25T17:30:16Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">in an earlier part of the tutorial, we were passing the user into the index template to say &#34;Hello Bobby&#34;...I guess that got dropped somewhere and I missed it.  Can you tell me why my routes need the trailing &#34;/&#34;?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#7</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2012-11-26T02:58:12Z" data-format="fromNow(0)" data-refresh="0">2012-11-26T02:58:12Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Bobby: I&#39;m not sure why you need trailing slashes. Are you using the development web server when you run the application? The only idea I can offer is that a different web server might be redirecting requests without a trailing slash. Check in the debugging console of your browser to see what&#39;s happening. Then please let me know as I would like to know!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/bafafefac4abe76b1218317d841e167bce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#8</span> <span class="label label-primary">Dogukan Tufekci</span> said
+                    <span class="flask-moment" data-timestamp="2013-02-08T16:45:17Z" data-format="fromNow(0)" data-refresh="0">2013-02-08T16:45:17Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Miguel thanks for another great tutorial. You are making my life so easy in this journey to understand Flask.
+
+I noticed that posts on a user&#39;s profile are not sorted by date. So I tweaked the code this way. Not sure if there&#39;s a better way to do this:
+
+class User(db.Model):
+#....
+def sorted_posts(self):
+		return Post.query.filter(Post.user_id == self.id).order_by(Post.timestamp.desc())</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#9</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-02-09T08:22:31Z" data-format="fromNow(0)" data-refresh="0">2013-02-09T08:22:31Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Dogukan: you are right, I missed the sorting! You could simplify your solution a bit, the sorted_posts() method can be implemented as &#34;return self.posts.order_by(Post.timestamp.desc())&#34;. I will update the article to include this. Thanks.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/bafafefac4abe76b1218317d841e167bce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#10</span> <span class="label label-primary">Dogukan Tufekci</span> said
+                    <span class="flask-moment" data-timestamp="2013-02-11T18:21:36Z" data-format="fromNow(0)" data-refresh="0">2013-02-11T18:21:36Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Miguel That&#39;s much simpler indeed! Thanks!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/2c02c167f88ee80d03aa6d3b489ca935ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#11</span> <span class="label label-primary">George Mabley</span> said
+                    <span class="flask-moment" data-timestamp="2013-02-12T03:34:07Z" data-format="fromNow(0)" data-refresh="0">2013-02-12T03:34:07Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hello, I&#39;m not sure if this is the best article to ask this on, but it at least uses the concept.  Is there a function similar to redirect which either redirects you to the current page, or refreshes the page you are on?  Say I have a view that I can call on both the index and user page.  If an arbitrary condition is met, I would like a flash message to occur on the page, and for the page to basically start fresh.  However, I have to return something, so I must choose to redirect to url_for(&#39;index&#39;) or url_for(&#39;user&#39;).  If what I am asking is not clear, I will gladly provide some code as an example.  Thank you!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#12</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-02-12T03:44:08Z" data-format="fromNow(0)" data-refresh="0">2013-02-12T03:44:08Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@George: I&#39;m not completely sure I understand, but I think a good example of what you are asking is the login view. Let&#39;s say the user wants to visit some password protected page, so he gets redirected to the login page. Once he enters his credentials you have two options, if the credentials are valid you have to go to the page the user wanted to visit originally, if the credentials are invalid you have to redirect back to the login page. This is implemented with an additional argument sent to the view that needs to decide where to redirect. In the login example if the user needs to access the index page the server will redirect to http://server/login?next=index. If instead the user went to the profile page the redirect will be http://server/login?next=profile. The login page then has the &#34;next&#34; argument in the request to know where to redirect. I hope this helps.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/2c02c167f88ee80d03aa6d3b489ca935ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#13</span> <span class="label label-primary">George Mabley</span> said
+                    <span class="flask-moment" data-timestamp="2013-02-12T04:06:15Z" data-format="fromNow(0)" data-refresh="0">2013-02-12T04:06:15Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Wow, thanks for the quick reply.  I think that could work, but I am still hoping there is a simpler solution,  Let me try to explain with code here: http://i.imgur.com/OGYJyo2.png.  Is there not a way for flask to, if those conditions are met, redirect you to the user page if you are on the user page, and the index page if you are on the index?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#14</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-02-12T05:13:52Z" data-format="fromNow(0)" data-refresh="0">2013-02-12T05:13:52Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Ah, I think I understand it better now. I can think of two ways to handle the problem. One is similar to what I said before, you have to insert something in the request that tells the view function what is the originating page. For example, you could use a more complex route, like &#34;/repost/&lt;source&gt;/&lt;id&gt;&#34; so then the repost view function gets an additional argument that can be &#34;index&#34; or &#34;user&#34;. The problem is that you have to build different URLs depending on what view you are in. A more sophisticated solution would be to let the client handle this via an ajax call, which does not trigger a page reload. Then it is up to the Javascript client code to stay on the same page or trigger a reload, based on instructions provided by the Ajax handler on the server. (hint: next article in the series covers ajax). Good luck,</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/3a32a4600ef525e3a0fb534f9fa765b2ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#15</span> <span class="label label-primary">abenrob</span> said
+                    <span class="flask-moment" data-timestamp="2013-02-24T03:15:32Z" data-format="fromNow(0)" data-refresh="0">2013-02-24T03:15:32Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Dogukan, Miguel - how are you modifying the User view for the sorted object?
+we ahve &#34;posts = user.posts.paginate(page, POSTS_PER_PAGE, False)&#34;
+I tried &#34;user.sorted_posts.paginate(page, POSTS_PER_PAGE, False)&#34; after implenting sorted_view() into the User model, but that isn&#39;t working...</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#16</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-02-24T08:21:25Z" data-format="fromNow(0)" data-refresh="0">2013-02-24T08:21:25Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@abenrob: sorted_posts is a method, you have to add the parenthesis at the end: &#34;user.sorted_posts().paginate(page, POSTS_PER_PAGE, False)&#34;.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/3a32a4600ef525e3a0fb534f9fa765b2ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#17</span> <span class="label label-primary">abenrob</span> said
+                    <span class="flask-moment" data-timestamp="2013-02-24T22:41:24Z" data-format="fromNow(0)" data-refresh="0">2013-02-24T22:41:24Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Of course. Thanks again!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/a465578ca655e19ffd574027784b2dbbce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#18</span> <span class="label label-primary">uldis</span> said
+                    <span class="flask-moment" data-timestamp="2013-03-04T14:42:08Z" data-format="fromNow(0)" data-refresh="0">2013-03-04T14:42:08Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">How to solve the problem when the user double click the &#34;post!&#34; button?  The post with the same content is inserted twice.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#19</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-03-05T03:03:27Z" data-format="fromNow(0)" data-refresh="0">2013-03-05T03:03:27Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@uldis: the standard solution for the double click to a form submit button is to use Javascript to disable the button when it is clicked the first time. You can achieve that simply by adding onclick=&#34;this.disabled=true;this.form.submit();&#34; inside the submit button&#39;s input element.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/3dd0b569a1d88989eff25a82d78d7432ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#20</span> <span class="label label-primary">Napoleon Ahiable</span> said
+                    <span class="flask-moment" data-timestamp="2013-03-21T23:26:47Z" data-format="fromNow(0)" data-refresh="0">2013-03-21T23:26:47Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Thank you so much for these amazing tutorials. YOU my friend, are my new favourite dude and I&#39;ll be hanging out with you a lot. God bless you for your kind giving heart.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/4c5c6ea94d1081a84b3179a4483357f0ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#21</span> <span class="label label-primary">Saber Rastikerdar</span> said
+                    <span class="flask-moment" data-timestamp="2013-05-01T01:34:14Z" data-format="fromNow(0)" data-refresh="0">2013-05-01T01:34:14Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Thank you for this great tutorial series.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/8bae5bcf1e33a6de3c4832aa32a19402ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#22</span> <span class="label label-primary">Tri</span> said
+                    <span class="flask-moment" data-timestamp="2013-05-21T06:22:12Z" data-format="fromNow(0)" data-refresh="0">2013-05-21T06:22:12Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Miguel, Great tutorial once again!
+
+Could you please walk me through how to create other users and have them follow other users to test out the functionalities we just made? Kind of like in your screenshot.
+
+Thank you!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#23</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-05-21T06:36:12Z" data-format="fromNow(0)" data-refresh="0">2013-05-21T06:36:12Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Tri: the easiest way is for you to play different users. For example, login to the server with two different browsers, using a different OpenID on each. Then each of these users can follow the other.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/8bae5bcf1e33a6de3c4832aa32a19402ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#24</span> <span class="label label-primary">Tri</span> said
+                    <span class="flask-moment" data-timestamp="2013-05-23T03:02:48Z" data-format="fromNow(0)" data-refresh="0">2013-05-23T03:02:48Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I tried that but I keep on getting errors saying, &#34;Invalid login. Please try again&#34;, even though it says, &#34;Hi, Tri&#34; underneath. And even when I logged in with another OpenID, the page always says, &#34;Hi, Tri&#34;. Then when I click on &#39;your profile&#39;, there&#39;s an error that says, &#34;TypeError: must be string or buffer, not None&#34;.
+
+I tried with many different OpenIDs and different browsers...logging out after each one, but I always get that same exact error where &#34;Tri&#34; is always the one that comes up.
+
+However, when I log in through Google with my email, there&#39;s no error. That&#39;s the only account that has no error, which is why I can&#39;t do multiple logins. I don&#39;t know where the problem comes from.
+
+Hopefully, you know what&#39;s going on. Thanks again.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#25</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-05-23T04:52:07Z" data-format="fromNow(0)" data-refresh="0">2013-05-23T04:52:07Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Tri: you may have found a bug, but the information that you are giving me isn&#39;t enough for me to figure out where or why. Could you show me stack traces of the errors that you get?</p>
+                </div>
+            </div>
+        </li>
+        
+    </ul>
+</div>
+
+<div class="page">
+<ul class="pager">
+  <li class="previous disabled">
+    <a href="#">&laquo;&laquo;</a>
+  </li>
+  <li class="previous disabled">
+    <a href="#">&laquo;</a>
+  </li>
+  <li class="next">
+    <a href="the-flask-mega-tutorial-part-ix-pagination/page/0.html#comments">&raquo;&raquo;</a>
+  </li>
+  <li class="next">
+    <a href="the-flask-mega-tutorial-part-ix-pagination/page/2.html#comments">&raquo;</a>
+  </li>
+</ul>
+</div>
+
+<h3><a name="commentform"></a>Leave a Comment</h3>
+
+<form action="#commentform" method="post"
+  class="form" role="form">
+  <div style="display:none;"><input id="csrf_token" name="csrf_token" type="hidden" value="1439534471.25##623abd96b2f2644e040ee814e9dbe52fb833e1be"></div>
+  
+    
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="name">Name</label>
+        <input class="form-control" id="name" name="name" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="url">URL</label>
+        <input class="form-control" id="url" name="url" type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="email">Email</label>
+        <input class="form-control" id="email" name="email" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="comment">Comment</label>
+        <textarea class="form-control" id="comment" name="comment" required></textarea>
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="captcha">Captcha</label>
+        
+<script type="text/javascript">var RecaptchaOptions = {"custom_translations": {"audio_challenge": "Get an audio challenge", "cant_hear_this": "Download sound as MP3", "help_btn": "Help", "image_alt_text": "reCAPTCHA challenge image", "incorrect_try_again": "Incorrect. Try again.", "instructions_audio": "Type what you hear", "instructions_visual": "Type the text", "play_again": "Play sound again", "privacy_and_terms": "Privacy & Terms", "refresh_btn": "Get a new challenge", "visual_challenge": "Get a visual challenge"}, "theme": "white"};</script>
+<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S"></script>
+<noscript>
+  <iframe src="http://www.google.com/recaptcha/api/noscript?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S" height="300" width="500" frameborder="0"></iframe><br>
+  <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+  <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
+</noscript>
+
+  </div>
+
+
+    
+
+
+
+
+
+  
+
+
+    <input class="btn btn-default" id="submit" name="submit" type="submit" value="Submit">
+  
+
+
+
+
+
+</form>
+
+
+</div>
+
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <p class="elapsed">This page was generated in None seconds.</p>
+            <p>&copy; 2014 by Miguel Grinberg. All rights reserved. <a href="mailto:webmaster _at_ miguelgrinberg _dot_ com">Questions?</a></p>
+        </div>
+    </div>
+
+
+    
+    
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.33/jquery.colorbox-min.js"></script>
+    <script type="text/javascript" src="../static/prettify.js"></script>
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment-with-langs.min.js"></script>
+<script>
+function flask_moment_render(elem) {
+    $(elem).text(eval('moment("' + $(elem).data('timestamp') + '").' + $(elem).data('format') + ';'));
+    $(elem).removeClass('flask-moment');
+}
+function flask_moment_render_all() {
+    $('.flask-moment').each(function() {
+        flask_moment_render(this);
+        if ($(this).data('refresh')) {
+            (function(elem, interval) { setInterval(function() { flask_moment_render(elem) }, interval); })(this, $(this).data('refresh'));
+        }
+    })
+}
+$(document).ready(function() {
+    flask_moment_render_all();
+});
+</script>
+    
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4777284-15']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".gallery").colorbox({rel:".gallery",maxWidth:"95%",maxHeight:"95%",scalePhotos:true});
+            // add prettyprint class to all <pre><code></code></pre> blocks
+            var prettify = false;
+            $("pre code").parent().each(function() {
+                $(this).addClass('prettyprint');
+                prettify = true;
+            });
+            prettyPrint();
+        });
+    </script>
+
+
+  </body>
+
+<!-- Mirrored from blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-ix-pagination by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 05:41:05 GMT -->
+</html>

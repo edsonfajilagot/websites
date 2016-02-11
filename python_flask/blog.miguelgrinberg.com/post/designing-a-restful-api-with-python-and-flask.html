@@ -1,0 +1,1380 @@
+﻿<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from blog.miguelgrinberg.com/post/designing-a-restful-api-with-python-and-flask by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:46:29 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    
+    <title>
+    
+        Designing a RESTful API with Python and Flask - miguelgrinberg.com
+    
+</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="description" content="miguelgrinberg.com">
+	<meta name="copyright" content="Copyright (c) 2012-2015 Miguel Grinberg">
+	<meta name="author" content="Miguel Grinberg">
+    
+    <meta name="keywords" content="python, programming, REST, RESTful, API, web, service, saas">
+    
+
+    
+    <!-- Bootstrap -->
+    <link href="../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../static/prettify.css" type="text/css" rel="stylesheet" />
+    <link href="../static/colorbox/colorbox.css" rel="stylesheet" type="text/css" />
+    <link href="../static/style.css" rel="stylesheet" type="text/css" />
+
+    <link rel="shortcut icon" href="../static/favicon.ico">
+	<link rel="alternate" type="application/rss+xml" href="../feed" title="miguelgrinberg.com RSS feed">
+
+  </head>
+  <body>
+    
+    <!-- facebook sdk -->
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "../../connect.facebook.net/en_US/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    <!-- google plus sdk -->
+    <script type="text/javascript" src="../../apis.google.com/js/plusone.js"></script>
+    <!-- twitter sdk -->
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="../../platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <!-- linkedin sdk -->
+    <script src="../../platform.linkedin.com/in.js" type="text/javascript"></script>
+
+    
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://blog.miguelgrinberg.com/index">miguelgrinberg.com</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="http://blog.miguelgrinberg.com/index">Home</a></li>
+                        <li><a href="about-me.html">About Me</a></li>
+                        <li><a href="about-this-blog.html">About This Blog</a></li>
+                        
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <p class="navbar-text" style="margin-top: 10px; margin-bottom: 0px;">
+                                <a type="application/rss+xml" href="../feed"><img src="../static/rss.png" alt="RSS Feed" title="RSS Feed" /></a>
+                                <a href="https://www.facebook.com/miguelgrinbergblog"><img src="../static/facebook.png" alt="Facebook" title="Facebook" /></a>
+                                <a href="https://plus.google.com/u/0/117786742456929977820"><img src="../static/googleplus.png" alt="Google+" title="Google+" /></a>
+                                <a href="http://www.linkedin.com/in/miguelgrinberg"><img src="../static/linkedin.png" alt="LinkedIn" title="LinkedIn" /></a>
+                                <a href="http://github.com/miguelgrinberg"><img src="../static/github.png" alt="GitHub" title="GitHub" /></a>
+                                <a href="https://twitter.com/#!/miguelgrinberg"><img src="../static/twitter.png" alt="Twitter" title="Twitter" /></a>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </nav>
+
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-push-9 sidebar-bg">
+                <div id="sidebar">
+                    
+
+                    
+                    <h1>An Introduction to Flask</h1>
+                    <p>If you are a beginner giving your first steps in web development, my Flask introductory video is for you:</p>
+                    <p><center><a href="http://bit.ly/flaskintro"><img style="border: 1px solid black;" src="../static/flask-intro-cover-tiny.png"></a></center></p>
+                    <p>Visit <a href="http://flaskbook.com/">http://flaskbook.com</a> for information about this and other Flask training products I have created!</p>
+                    
+
+                    <h1>About Miguel</h1>
+                    <img style="float: right; margin: 0px 8px 8px 0px; padding: 4px; border: 1px solid #ccc;" src="../static/miguel.jpg" />
+                    <p>Welcome to my blog!</p>
+                    <p>I'm a software engineer, photographer and filmmaker in Portland, Oregon, USA.</p>
+                    <p>You can also find me on <a href="https://www.facebook.com/miguelgrinbergblog">Facebook</a>, <a href="https://plus.google.com/u/0/117786742456929977820">Google+</a>, <a href="http://www.linkedin.com/in/miguelgrinberg">LinkedIn</a>, <a href="https://github.com/miguelgrinberg">Github</a> and <a href="https://twitter.com/#!/miguelgrinberg">Twitter</a>.</p>
+                    <p>Thank you for visiting!</p>
+
+                    
+
+                    
+                    <h1>Categories</h1>
+<ul>
+
+	<li>
+		<a href="../category/Arduino/feed">
+			<img src="../static/rss-small.png" title="Arduino RSS Feed" label="Arduino RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Arduino.html">Arduino</a></span> (7)
+	</li>
+
+	<li>
+		<a href="../category/Authentication/feed">
+			<img src="../static/rss-small.png" title="Authentication RSS Feed" label="Authentication RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Authentication.html">Authentication</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../category/Blog/feed">
+			<img src="../static/rss-small.png" title="Blog RSS Feed" label="Blog RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Blog.html">Blog</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/C%2b%2b/feed">
+			<img src="../static/rss-small.png" title="C++ RSS Feed" label="C++ RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/C%2b%2b.html">C++</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Cloud/feed">
+			<img src="../static/rss-small.png" title="Cloud RSS Feed" label="Cloud RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Cloud.html">Cloud</a></span> (2)
+	</li>
+
+	<li>
+		<a href="../category/Filmmaking/feed">
+			<img src="../static/rss-small.png" title="Filmmaking RSS Feed" label="Filmmaking RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Filmmaking.html">Filmmaking</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Flask/feed">
+			<img src="../static/rss-small.png" title="Flask RSS Feed" label="Flask RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Flask.html">Flask</a></span> (39)
+	</li>
+
+	<li>
+		<a href="../category/Games/feed">
+			<img src="../static/rss-small.png" title="Games RSS Feed" label="Games RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Games.html">Games</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Gear/feed">
+			<img src="../static/rss-small.png" title="Gear RSS Feed" label="Gear RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Gear.html">Gear</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/HTML5/feed">
+			<img src="../static/rss-small.png" title="HTML5 RSS Feed" label="HTML5 RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/HTML5.html">HTML5</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Heroku/feed">
+			<img src="../static/rss-small.png" title="Heroku RSS Feed" label="Heroku RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Heroku.html">Heroku</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Javascript/feed">
+			<img src="../static/rss-small.png" title="Javascript RSS Feed" label="Javascript RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Javascript.html">Javascript</a></span> (3)
+	</li>
+
+	<li>
+		<a href="../category/Movie%20Reviews/feed">
+			<img src="../static/rss-small.png" title="Movie Reviews RSS Feed" label="Movie Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Movie%20Reviews.html">Movie Reviews</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Netflix/feed">
+			<img src="../static/rss-small.png" title="Netflix RSS Feed" label="Netflix RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Netflix.html">Netflix</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Node.js/feed">
+			<img src="../static/rss-small.png" title="Node.js RSS Feed" label="Node.js RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Node.html">Node.js</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/OpenStack/feed">
+			<img src="../static/rss-small.png" title="OpenStack RSS Feed" label="OpenStack RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/OpenStack.html">OpenStack</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Personal/feed">
+			<img src="../static/rss-small.png" title="Personal RSS Feed" label="Personal RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Personal.html">Personal</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Photography/feed">
+			<img src="../static/rss-small.png" title="Photography RSS Feed" label="Photography RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Photography.html">Photography</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Product%20Reviews/feed">
+			<img src="../static/rss-small.png" title="Product Reviews RSS Feed" label="Product Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Product%20Reviews.html">Product Reviews</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Programming/feed">
+			<img src="../static/rss-small.png" title="Programming RSS Feed" label="Programming RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Programming.html">Programming</a></span> (47)
+	</li>
+
+	<li>
+		<a href="../category/Project%20Management/feed">
+			<img src="../static/rss-small.png" title="Project Management RSS Feed" label="Project Management RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Project%20Management.html">Project Management</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Python/feed">
+			<img src="../static/rss-small.png" title="Python RSS Feed" label="Python RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Python.html">Python</a></span> (43)
+	</li>
+
+	<li>
+		<a href="../category/REST/feed">
+			<img src="../static/rss-small.png" title="REST RSS Feed" label="REST RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/REST.html">REST</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Rackspace/feed">
+			<img src="../static/rss-small.png" title="Rackspace RSS Feed" label="Rackspace RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Rackspace.html">Rackspace</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Raspberry%20Pi/feed">
+			<img src="../static/rss-small.png" title="Raspberry Pi RSS Feed" label="Raspberry Pi RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Raspberry%20Pi.html">Raspberry Pi</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/RhinoSteady/feed">
+			<img src="../static/rss-small.png" title="RhinoSteady RSS Feed" label="RhinoSteady RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/RhinoSteady.html">RhinoSteady</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Robotics/feed">
+			<img src="../static/rss-small.png" title="Robotics RSS Feed" label="Robotics RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Robotics.html">Robotics</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Video/feed">
+			<img src="../static/rss-small.png" title="Video RSS Feed" label="Video RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Video.html">Video</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../category/Windows/feed">
+			<img src="../static/rss-small.png" title="Windows RSS Feed" label="Windows RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Windows.html">Windows</a></span> (1)
+	</li>
+
+</ul>
+                    
+                </div>
+            </div>
+            <div class="col-md-8 col-md-pull-4">
+                <div id="main">
+                    
+                    
+                    
+                    
+                    
+
+<div class="post">
+
+<p class="date"><span class="flask-moment" data-timestamp="2013-05-20T07:12:40Z" data-format="format('LL')" data-refresh="0">2013-05-20T07:12:40Z</span></p>
+<h1 class="post-title"><a href="designing-a-restful-api-with-python-and-flask.html">Designing a RESTful API with Python and Flask</a></h1>
+<div class="posted">Posted by <span class="label label-danger"><a href="http://blog.miguelgrinberg.com/author/Miguel Grinberg">Miguel Grinberg</a></span> under <span class="label label-primary"><a href="../category/Python.html">Python</a></span>, <span class="label label-primary"><a href="../category/Programming.html">Programming</a></span>, <span class="label label-primary"><a href="../category/REST.html">REST</a></span>, <span class="label label-primary"><a href="../category/Flask.html">Flask</a></span>. </div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/designing-a-restful-api-with-python-and-flask" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/designing-a-restful-api-with-python-and-flask" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="designing-a-restful-api-with-python-and-flask.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/designing-a-restful-api-with-python-and-flask" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+<div class="post_body"><p>In recent years <a href="https://en.wikipedia.org/wiki/Representational_state_transfer">REST</a> (REpresentational State Transfer) has emerged as the standard architectural design for web services and web APIs.</p>
+<p>In this article I'm going to show you how easy it is to create a RESTful web service using <a href="http://www.python.org/">Python</a> and the <a href="http://flask.pocoo.org/">Flask</a> microframework.</p>
+<h2>What is REST?</h2>
+<p>The characteristics of a REST system are defined by six design rules:</p>
+<ul>
+<li><strong>Client-Server</strong>: There should be a separation between the server that offers a service, and the client that consumes it.</li>
+<li><strong>Stateless</strong>: Each request from a client must contain all the information required by the server to carry out the request. In other words, the server cannot store information provided by the client in one request and use it in another request.</li>
+<li><strong>Cacheable</strong>: The server must indicate to the client if requests can be cached or not.</li>
+<li><strong>Layered System</strong>: Communication between a client and a server should be standardized in such a way that allows intermediaries to respond to requests instead of the end server, without the client having to do anything different.</li>
+<li><strong>Uniform Interface</strong>: The method of communication between a client and a server must be uniform.</li>
+<li><strong>Code on demand</strong>: Servers can provide executable code or scripts for clients to execute in their context. This constraint is the only one that is optional.</li>
+</ul>
+<h2>What is a RESTful web service?</h2>
+<p>The REST architecture was originally designed to fit the <a href="http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP protocol</a> that the world wide web uses.</p>
+<p>Central to the concept of RESTful web services is the notion of resources. Resources are represented by <a href="https://en.wikipedia.org/wiki/Uniform_Resource_Identifier">URIs</a>. The clients send requests to these URIs using the methods defined by the HTTP protocol, and possibly as a result of that the state of the affected resource changes.</p>
+<p>The HTTP request methods are typically designed to affect a given resource in standard ways:</p>
+<table class="data">
+<tr><th>HTTP Method</th><th>Action</th><th>Examples</th></tr>
+<tr><td>GET</td><td>Obtain information about a resource</td><td>http://example.com/api/orders<br />(retrieve order list)</td></tr>
+<tr><td>GET</td><td>Obtain information about a resource</td><td>http://example.com/api/orders/123<br />(retrieve order #123)</td></tr>
+<tr><td>POST</td><td>Create a new resource</td><td>http://example.com/api/orders<br />(create a new order, from data provided with the request)</td></tr>
+<tr><td>PUT</td><td>Update a resource</td><td>http://example.com/api/orders/123<br />(update order #123, from data provided with the request)</td></tr>
+<tr><td>DELETE</td><td>Delete a resource</td><td>http://example.com/api/orders/123<br />(delete order #123)</td></tr>
+</table>
+
+<p>The REST design does not require a specific format for the data provided with the requests. In general data is provided in the request body as a <a href="http://en.wikipedia.org/wiki/JSON">JSON</a> blob, or sometimes as arguments in the <a href="http://en.wikipedia.org/wiki/Query_string">query string</a> portion of the URL.</p>
+<h2>Designing a simple web service</h2>
+<p>The task of designing a web service or API that adheres to the REST guidelines then becomes an exercise in identifying the resources that will be exposed and how they will be affected by the different request methods.</p>
+<p>Let's say we want to write a To Do List application and we want to design a web service for it. The first thing to do is to decide what is the root URL to access this service. For example, we could expose this service as:</p>
+<pre><code>http://[hostname]/todo/api/v1.0/
+</code></pre>
+<p>Here I have decided to include the name of the application and the version of the API in the URL. Including the application name in the URL is useful to provide a namespace that separates this service from others that can be running on the same system. Including the version in the URL can help with making updates in the future, since new and potentially incompatible functions can be added under a new version, without affecting applications that rely on the older functions.</p>
+<p>The next step is to select the resources that will be exposed by this service. This is an extremely simple application, we only have tasks, so our only resource will be the tasks in our to do list.</p>
+<p>Our tasks resource will use HTTP methods as follows:</p>
+<table class="data">
+<tr><th>HTTP Method</th><th>URI</th><th>Action</th></tr>
+<tr><td>GET</td><td>http://[hostname]/todo/api/v1.0/tasks</td><td>Retrieve list of tasks</td></tr>
+<tr><td>GET</td><td>http://[hostname]/todo/api/v1.0/tasks/[task_id]</td><td>Retrieve a task</td></tr>
+<tr><td>POST</td><td>http://[hostname]/todo/api/v1.0/tasks</td><td>Create a new task</td></tr>
+<tr><td>PUT</td><td>http://[hostname]/todo/api/v1.0/tasks/[task_id]</td><td>Update an existing task</td></tr>
+<tr><td>DELETE</td><td>http://[hostname]/todo/api/v1.0/tasks/[task_id]</td><td>Delete a task</td></tr>
+</table>
+
+<p>We can define a task as having the following fields:</p>
+<ul>
+<li><strong>id</strong>: unique identifier for tasks. Numeric type.</li>
+<li><strong>title</strong>: short task description. String type.</li>
+<li><strong>description</strong>: long task description. Text type.</li>
+<li><strong>done</strong>: task completion state. Boolean type.</li>
+</ul>
+<p>And with this we are basically done with the design part of our web service. All that is left is to implement it!</p>
+<h2>A brief introduction to the Flask microframework</h2>
+<p>If you read my <a href="the-flask-mega-tutorial-part-i-hello-world.html">Flask Mega-Tutorial series</a> you know that Flask is a simple, yet very powerful Python web framework.</p>
+<p>Before we delve into the specifics of web services let's review how a regular Flask web application is structured.</p>
+<p>I will assume you know the basics of working with Python in your platform. The example command lines I will show below are for a Unix-like operating system. In short, that means that they will work on Linux, Mac OS X and also on Windows if you use <a href="http://www.cygwin.com/">Cygwin</a>. The commands are slightly different if you use the Windows native version of Python.</p>
+<p>Let's begin by installing Flask in a virtual environment. If you don't have <code>virtualenv</code> installed in your system, you can download it from <a href="https://pypi.python.org/pypi/virtualenv">https://pypi.python.org/pypi/virtualenv</a>.</p>
+<pre><code>$ mkdir todo-api
+$ cd todo-api
+$ virtualenv flask
+New python executable in flask/bin/python
+Installing setuptools............................done.
+Installing pip...................done.
+$ flask/bin/pip install flask
+</code></pre>
+<p>Now that we have Flask installed let's create a simple web application, which we will put in a file called <code>app.py</code>:</p>
+<pre><code>#!flask/bin/python
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route('/')
+def index():
+    return "Hello, World!"
+
+if __name__ == '__main__':
+    app.run(debug=True)
+</code></pre>
+<p>To run this application we have to execute <code>app.py</code>:</p>
+<pre><code>$ chmod a+x app.py
+$ ./app.py
+ * Running on http://127.0.0.1:5000/
+ * Restarting with reloader
+</code></pre>
+<p>And now you can launch your web browser and type <code>http://localhost:5000</code> to see this tiny application in action.</p>
+<p>Simple, right? Now we will convert this app into our RESTful service!</p>
+<h2>Implementing RESTful services in Python and Flask</h2>
+<p>Building web services with Flask is surprisingly simple, much simpler than building complete server side applications like the one I built in the <a href="the-flask-mega-tutorial-part-i-hello-world.html">Mega-Tutorial</a>.</p>
+<p>There are a couple of Flask extensions that help with building RESTful services with Flask, but the task is so simple that in my opinion there is no need to use an extension.</p>
+<p>The clients of our web service will be asking the service to add, remove and modify tasks, so clearly we need to have a way to store tasks. The obvious way to do that is to build a small database, but because databases are not the topic of this article we are going to take a much simpler approach. To learn about proper use of databases with Flask once again I recommend that you read my <a href="the-flask-mega-tutorial-part-i-hello-world.html">Mega-Tutorial</a>.</p>
+<p>In place of a database we will store our task list in a memory structure. This will only work when the web server that runs our application is single process and single threaded. This is okay for Flask's own development web server. It is not okay to use this technique on a production web server, for that a proper database setup must be used.</p>
+<p>Using the base Flask application we are now ready to implement the first entry point of our web service:</p>
+<pre><code>#!flask/bin/python
+from flask import Flask, jsonify
+
+app = Flask(__name__)
+
+tasks = [
+    {
+        'id': 1,
+        'title': u'Buy groceries',
+        'description': u'Milk, Cheese, Pizza, Fruit, Tylenol', 
+        'done': False
+    },
+    {
+        'id': 2,
+        'title': u'Learn Python',
+        'description': u'Need to find a good Python tutorial on the web', 
+        'done': False
+    }
+]
+
+@app.route('/todo/api/v1.0/tasks', methods=['GET'])
+def get_tasks():
+    return jsonify({'tasks': tasks})
+
+if __name__ == '__main__':
+    app.run(debug=True)
+</code></pre>
+<p>As you can see, not much has changed. We created a memory database of tasks, which is nothing more than a plain and simple array of dictionaries. Each entry in the array has the fields that we defined above for our tasks.</p>
+<p>Instead of the <code>index</code> entry point we now have a <code>get_tasks</code> function that is associated with the <code>/todo/api/v1.0/tasks</code> URI, and only for the <code>GET</code> HTTP method.</p>
+<p>The response of this function is not text, we are now replying with JSON data, which Flask's <code>jsonify</code> function generates for us from our data structure.</p>
+<p>Using a web browser to test a web service isn't the best idea since web browsers cannot easily generate all types of HTTP requests. Instead, we will use <a href="http://curl.haxx.se/">curl</a>. If you don't have <code>curl</code> installed, go ahead and install it now.</p>
+<p>Start the web service in the same way we started the sample application, by running <code>app.py</code>. Then open a new console window and run the following command:</p>
+<pre><code>$ curl -i http://localhost:5000/todo/api/v1.0/tasks
+HTTP/1.0 200 OK
+Content-Type: application/json
+Content-Length: 294
+Server: Werkzeug/0.8.3 Python/2.7.3
+Date: Mon, 20 May 2013 04:53:53 GMT
+
+{
+  "tasks": [
+    {
+      "description": "Milk, Cheese, Pizza, Fruit, Tylenol",
+      "done": false,
+      "id": 1,
+      "title": "Buy groceries"
+    },
+    {
+      "description": "Need to find a good Python tutorial on the web",
+      "done": false,
+      "id": 2,
+      "title": "Learn Python"
+    }
+  ]
+}
+</code></pre>
+<p>We just have invoked a function in our RESTful service!</p>
+<p>Now let's write the second version of the GET method for our tasks resource. If you look at the table above this will be the one that is used to return the data of a single task:</p>
+<pre><code>from flask import abort
+
+@app.route('/todo/api/v1.0/tasks/&lt;int:task_id&gt;', methods=['GET'])
+def get_task(task_id):
+    task = [task for task in tasks if task['id'] == task_id]
+    if len(task) == 0:
+        abort(404)
+    return jsonify({'task': task[0]})
+</code></pre>
+<p>This second function is a little bit more interesting. Here we get the id of the task in the URL, and Flask translates it into the <code>task_id</code> argument that we receive in the function.</p>
+<p>With this argument we search our <code>tasks</code> array. If the id that we were given does not exist in our database then we return the familiar error code 404, which according to the HTTP specification means "Resource Not Found", which is exactly our case.</p>
+<p>If we find the task then we just package it as JSON with <code>jsonify</code> and send it as a response, just like we did before for the entire collection.</p>
+<p>Here is how this function looks when invoked from <code>curl</code>:</p>
+<pre><code>$ curl -i http://localhost:5000/todo/api/v1.0/tasks/2
+HTTP/1.0 200 OK
+Content-Type: application/json
+Content-Length: 151
+Server: Werkzeug/0.8.3 Python/2.7.3
+Date: Mon, 20 May 2013 05:21:50 GMT
+
+{
+  "task": {
+    "description": "Need to find a good Python tutorial on the web",
+    "done": false,
+    "id": 2,
+    "title": "Learn Python"
+  }
+}
+$ curl -i http://localhost:5000/todo/api/v1.0/tasks/3
+HTTP/1.0 404 NOT FOUND
+Content-Type: text/html
+Content-Length: 238
+Server: Werkzeug/0.8.3 Python/2.7.3
+Date: Mon, 20 May 2013 05:21:52 GMT
+
+&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN"&gt;
+&lt;title&gt;404 Not Found&lt;/title&gt;
+&lt;h1&gt;Not Found&lt;/h1&gt;
+&lt;p&gt;The requested URL was not found on the server.&lt;/p&gt;&lt;p&gt;If you     entered the URL manually please check your spelling and try again.&lt;/p&gt;
+</code></pre>
+<p>When we ask for resource id #2 we get it, but when we ask for #3 we get back the 404 error. The odd thing about the error is that it came back with an HTML message instead of JSON, because that is how Flask generates the 404 response by default. Since this is a web service client applications will expect that we always respond with JSON, so we need to improve our 404 error handler:</p>
+<pre><code>from flask import make_response
+
+@app.errorhandler(404)
+def not_found(error):
+    return make_response(jsonify({'error': 'Not found'}), 404)
+</code></pre>
+<p>And we get a much more API friendly error response:</p>
+<pre><code>$ curl -i http://localhost:5000/todo/api/v1.0/tasks/3
+HTTP/1.0 404 NOT FOUND
+Content-Type: application/json
+Content-Length: 26
+Server: Werkzeug/0.8.3 Python/2.7.3
+Date: Mon, 20 May 2013 05:36:54 GMT
+
+{
+  "error": "Not found"
+}
+</code></pre>
+<p>Next in our list is the <code>POST</code> method, which we will use to insert a new item in our task database:</p>
+<pre><code>from flask import request
+
+@app.route('/todo/api/v1.0/tasks', methods=['POST'])
+def create_task():
+    if not request.json or not 'title' in request.json:
+        abort(400)
+    task = {
+        'id': tasks[-1]['id'] + 1,
+        'title': request.json['title'],
+        'description': request.json.get('description', ""),
+        'done': False
+    }
+    tasks.append(task)
+    return jsonify({'task': task}), 201
+</code></pre>
+<p>Adding a new task is also pretty easy. The <code>request.json</code> will have the request data, but only if it came marked as JSON. If the data isn't there, or if it is there, but we are missing a <code>title</code> item then we return an error code 400, which is the code for the bad request.</p>
+<p>We then create a new task dictionary, using the id of the last task plus one (a cheap way to guarantee unique ids in our simple database). We tolerate a missing <code>description</code> field, and we assume the <code>done</code> field will always start set to <code>False</code>.</p>
+<p>We append the new task to our <code>tasks</code> array, and then respond to the client with the added task and send back a status code 201, which HTTP defines as the code for "Created".</p>
+<p>To test this new function we can use the following <code>curl</code> command:</p>
+<pre><code>$ curl -i -H "Content-Type: application/json" -X POST -d '{"title":"Read a book"}' http://localhost:5000/todo/api/v1.0/tasks
+HTTP/1.0 201 Created
+Content-Type: application/json
+Content-Length: 104
+Server: Werkzeug/0.8.3 Python/2.7.3
+Date: Mon, 20 May 2013 05:56:21 GMT
+
+{
+  "task": {
+    "description": "",
+    "done": false,
+    "id": 3,
+    "title": "Read a book"
+  }
+}
+</code></pre>
+<p>Note: if you are on Windows and use the Cygwin version of <code>curl</code> from <code>bash</code> then the above command will work just fine. However, if you are using the native version of <code>curl</code> from the regular command prompt there is a little dance that needs to be done to send double quotes inside the body of a request:</p>
+<pre><code>curl -i -H "Content-Type: application/json" -X POST -d "{"""title""":"""Read a book"""}" http://localhost:5000/todo/api/v1.0/tasks
+</code></pre>
+<p>Essentially on Windows you have to use double quotes to enclose the body of the request, and then inside it you escape a double quote by writing three of them in sequence.</p>
+<p>Of course after this request completed we can obtain the updated list of tasks:</p>
+<pre><code>$ curl -i http://localhost:5000/todo/api/v1.0/tasks
+HTTP/1.0 200 OK
+Content-Type: application/json
+Content-Length: 423
+Server: Werkzeug/0.8.3 Python/2.7.3
+Date: Mon, 20 May 2013 05:57:44 GMT
+
+{
+  "tasks": [
+    {
+      "description": "Milk, Cheese, Pizza, Fruit, Tylenol",
+      "done": false,
+      "id": 1,
+      "title": "Buy groceries"
+    },
+    {
+      "description": "Need to find a good Python tutorial on the web",
+      "done": false,
+      "id": 2,
+      "title": "Learn Python"
+    },
+    {
+      "description": "",
+      "done": false,
+      "id": 3,
+      "title": "Read a book"
+    }
+  ]
+}
+</code></pre>
+<p>The remaining two functions of our web service are shown below:</p>
+<pre><code>@app.route('/todo/api/v1.0/tasks/&lt;int:task_id&gt;', methods=['PUT'])
+def update_task(task_id):
+    task = [task for task in tasks if task['id'] == task_id]
+    if len(task) == 0:
+        abort(404)
+    if not request.json:
+        abort(400)
+    if 'title' in request.json and type(request.json['title']) != unicode:
+        abort(400)
+    if 'description' in request.json and type(request.json['description']) is not unicode:
+        abort(400)
+    if 'done' in request.json and type(request.json['done']) is not bool:
+        abort(400)
+    task[0]['title'] = request.json.get('title', task[0]['title'])
+    task[0]['description'] = request.json.get('description', task[0]['description'])
+    task[0]['done'] = request.json.get('done', task[0]['done'])
+    return jsonify({'task': task[0]})
+
+@app.route('/todo/api/v1.0/tasks/&lt;int:task_id&gt;', methods=['DELETE'])
+def delete_task(task_id):
+    task = [task for task in tasks if task['id'] == task_id]
+    if len(task) == 0:
+        abort(404)
+    tasks.remove(task[0])
+    return jsonify({'result': True})
+</code></pre>
+<p>The <code>delete_task</code> function should have no surprises. For the <code>update_task</code> function we are trying to prevent bugs by doing exhaustive checking of the input arguments. We need to make sure that anything that the client provided us is in the expected format before we incorporate it into our database.</p>
+<p>A function call that updates task #2 as being done would be done as follows:</p>
+<pre><code>$ curl -i -H "Content-Type: application/json" -X PUT -d '{"done":true}' http://localhost:5000/todo/api/v1.0/tasks/2
+HTTP/1.0 200 OK
+Content-Type: application/json
+Content-Length: 170
+Server: Werkzeug/0.8.3 Python/2.7.3
+Date: Mon, 20 May 2013 07:10:16 GMT
+
+{
+  "task": [
+    {
+      "description": "Need to find a good Python tutorial on the web",
+      "done": true,
+      "id": 2,
+      "title": "Learn Python"
+    }
+  ]
+}
+</code></pre>
+<h2>Improving the web service interface</h2>
+<p>The problem with the current design of the API is that clients are forced to construct URIs from the task identifiers that are returned. This is pretty easy in itself, but it indirectly forces clients to know how these URIs need to be built, and this will prevent us from making changes to URIs in the future.</p>
+<p>Instead of returning task ids we can return the full URI that controls the task, so that clients get the URIs ready to be used. For this we can write a small helper function that generates a "public" version of a task to send to the client:</p>
+<pre><code>from flask import url_for
+
+def make_public_task(task):
+    new_task = {}
+    for field in task:
+        if field == 'id':
+            new_task['uri'] = url_for('get_task', task_id=task['id'], _external=True)
+        else:
+            new_task[field] = task[field]
+    return new_task
+</code></pre>
+<p>All we are doing here is taking a task from our database and creating a new task that has all the fields except <code>id</code>, which gets replaced with another field called <code>uri</code>, generated with Flask's <code>url_for</code>.</p>
+<p>When we return the list of tasks we pass them through this function before sending them to the client:</p>
+<pre><code>@app.route('/todo/api/v1.0/tasks', methods=['GET'])
+def get_tasks():
+    return jsonify({'tasks': [make_public_task(task) for task in tasks]})
+</code></pre>
+<p>So now this is what the client gets when it retrieves the list of tasks:</p>
+<pre><code>$ curl -i http://localhost:5000/todo/api/v1.0/tasks
+HTTP/1.0 200 OK
+Content-Type: application/json
+Content-Length: 406
+Server: Werkzeug/0.8.3 Python/2.7.3
+Date: Mon, 20 May 2013 18:16:28 GMT
+
+{
+  "tasks": [
+    {
+      "title": "Buy groceries",
+      "done": false,
+      "description": "Milk, Cheese, Pizza, Fruit, Tylenol",
+      "uri": "http://localhost:5000/todo/api/v1.0/tasks/1"
+    },
+    {
+      "title": "Learn Python",
+      "done": false,
+      "description": "Need to find a good Python tutorial on the web",
+      "uri": "http://localhost:5000/todo/api/v1.0/tasks/2"
+    }
+  ]
+}
+</code></pre>
+<p>We apply this technique to all the other functions and with this we ensure that the client always sees URIs instead of ids.</p>
+<h2>Securing a RESTful web service</h2>
+<p>Can you believe we are done? Well, we are done with the functionality of our service, but we still have a problem. Our service is open to anybody, and that is a bad thing.</p>
+<p>We have a complete web service that can manage our to do list, but the service in its current state is open to any clients. If a stranger figures out how our API works he or she can write a new client that can access our service and mess with our data.</p>
+<p>Most entry level tutorials ignore security and stop here. In my opinion this is a serious problem that should always be addressed.</p>
+<p>The easiest way to secure our web service is to require clients to provide a username and a password. In a regular web application you would have a login form that posts the credentials, and at that point the server would create a session for the logged in user to continue working, with the session id stored in a cookie in the client browser. Unfortunately doing that here would violate the stateless requirement of REST, so instead we have to ask clients to send their authentication information with every request they send to us.</p>
+<p>With REST we always try to adhere to the HTTP protocol as much as we can. Now that we need to implement authentication we should do so in the context of HTTP, which provides two forms of authentication called <a href="http://en.wikipedia.org/wiki/Basic_access_authentication">Basic</a> and <a href="http://en.wikipedia.org/wiki/Digest_access_authentication">Digest</a>.</p>
+<p>There is a small Flask extension that can help with this, written by no other than yours truly. So let's go ahead and install <a href="https://github.com/miguelgrinberg/flask-httpauth">Flask-HTTPAuth</a>:</p>
+<pre><code>$ flask/bin/pip install flask-httpauth
+</code></pre>
+<p>Let's say we want our web service to only be accessible to username <code>miguel</code> and password <code>python</code>. We can setup a Basic HTTP authentication as follows:</p>
+<pre><code>from flask.ext.httpauth import HTTPBasicAuth
+auth = HTTPBasicAuth()
+
+@auth.get_password
+def get_password(username):
+    if username == 'miguel':
+        return 'python'
+    return None
+
+@auth.error_handler
+def unauthorized():
+    return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+</code></pre>
+<p>The <code>get_password</code> function is a callback function that the extension will use to obtain the password for a given user. In a more complex system this function could check a user database, but in this case we just have a single user so there is no need for that.</p>
+<p>The <code>error_handler</code> callback will be used by the extension when it needs to send the unauthorized error code back to the client. Like we did with other error codes, here we customize the response so that is contains JSON instead of HTML.</p>
+<p>With the authentication system setup, all that is left is to indicate which functions need to be protected, by adding the <code>@auth.login_required</code> decorator. For example:</p>
+<pre><code>@app.route('/todo/api/v1.0/tasks', methods=['GET'])
+@auth.login_required
+def get_tasks():
+    return jsonify({'tasks': tasks})
+</code></pre>
+<p>If we now try to invoke this function with <code>curl</code> this is what we get:</p>
+<pre><code>$ curl -i http://localhost:5000/todo/api/v1.0/tasks
+HTTP/1.0 401 UNAUTHORIZED
+Content-Type: application/json
+Content-Length: 36
+WWW-Authenticate: Basic realm="Authentication Required"
+Server: Werkzeug/0.8.3 Python/2.7.3
+Date: Mon, 20 May 2013 06:41:14 GMT
+
+{
+  "error": "Unauthorized access"
+}
+</code></pre>
+<p>To be able to invoke this function we have to send our credentials:</p>
+<pre><code>$ curl -u miguel:python -i http://localhost:5000/todo/api/v1.0/tasks
+HTTP/1.0 200 OK
+Content-Type: application/json
+Content-Length: 316
+Server: Werkzeug/0.8.3 Python/2.7.3
+Date: Mon, 20 May 2013 06:46:45 GMT
+
+{
+  "tasks": [
+    {
+      "title": "Buy groceries",
+      "done": false,
+      "description": "Milk, Cheese, Pizza, Fruit, Tylenol",
+      "uri": "http://localhost:5000/todo/api/v1.0/tasks/1"
+    },
+    {
+      "title": "Learn Python",
+      "done": false,
+      "description": "Need to find a good Python tutorial on the web",
+      "uri": "http://localhost:5000/todo/api/v1.0/tasks/2"
+    }
+  ]
+}
+</code></pre>
+<p>The authentication extension gives us the freedom to choose which functions in the service are open and which are protected.</p>
+<p>To ensure the login information is secure the web service should be exposed in a HTTP Secure server (i.e. https://...) as this encrypts all the communications between client and server and prevents a third party from seeing the authentication credentials in transit.</p>
+<p>Unfortunately web browsers have the nasty habit of showing an ugly login dialog box when a request comes back with a 401 error code. This happens even for background requests, so if we were to implement a web browser client with our current web server we would need to jump through hoops to prevent browsers from showing their authentication dialogs and let our client application handle the login.</p>
+<p>A simple trick to distract web browsers is to return an error code other than 401. An alternative error code favored by many is 403, which is the "Forbidden" error. While this is a close enough error, it sort of violates the HTTP standard, so it is not the proper thing to do if full compliance is necessary. In particular this would be a bad idea if the client application is not a web browser. But for cases where server and client are developed together it saves a lot of trouble. The simple change that we can make to implement this trick is to replace the 401 with a 403:</p>
+<pre><code>@auth.error_handler
+def unauthorized():
+    return make_response(jsonify({'error': 'Unauthorized access'}), 403)
+</code></pre>
+<p>Of course if we do this we will need the client application to look for 403 errors as well.</p>
+<h2>Possible improvements</h2>
+<p>There are a number of ways in which this little web service we have built today can be improved.</p>
+<p>For starters, a real web service should be backed by a real database. The memory data structure that we are using is very limited in functionality and should not be used for a real application.</p>
+<p>Another area in which an improvement could be made is in handling multiple users. If the system supports multiple users the authentication credentials sent by the client could be used to obtain user specific to do lists. In such a system we would have a second resource, which would be the users. A <code>POST</code> request on the users resource would represent a new user registering for the service. A <code>GET</code> request would return user information back to the client. A <code>PUT</code> request would update the user information, maybe updating an email address. A <code>DELETE</code> request would delete the user account.</p>
+<p>The <code>GET</code> request that retrieves the task list could be expanded in a couple of ways. First, this request could take optional pagination arguments, so that a client can request a portion of the list. Another way to make this function more useful would be to allow filtering by certain criteria. For example, a client might want to see only completed tasks, or only tasks with a title that begins with the letter A. All these elements can be added to the URL as arguments.</p>
+<h2>Conclusion</h2>
+<p>The complete code for the To Do List web service is here: <a href="https://gist.github.com/miguelgrinberg/5614326">https://gist.github.com/miguelgrinberg/5614326</a>.</p>
+<p>I hope this was a simple and friendly introduction to RESTful APIs. If there is enough interest I could write a second part to this article in which we can develop a simple web client that uses this service for a complete To Do List application. Let me know what you think below in the comments!</p>
+<p><strong>UPDATE</strong>: A follow up to this tutorial is now online: <a href="writing-a-javascript-rest-client.html">Writing a Javascript REST client</a>.</p>
+<p><strong>UPDATE #2</strong>: I have written yet another follow-up: <a href="designing-a-restful-api-using-flask-restful.html">Designing a RESTful API using Flask-RESTful</a>.</p>
+<p>Miguel</p></div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/designing-a-restful-api-with-python-and-flask" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/designing-a-restful-api-with-python-and-flask" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="designing-a-restful-api-with-python-and-flask.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/designing-a-restful-api-with-python-and-flask" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+
+
+<h4 style="text-align: right"><a name="comments"></a>100 comments</h4>
+
+
+<div class="comment">
+    <ul>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/d7611e9c5d1b0d11756e1745df041a90ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#1</span> <span class="label label-primary">Jason</span> said
+                    <span class="flask-moment" data-timestamp="2013-05-20T12:37:41Z" data-format="fromNow(0)" data-refresh="0">2013-05-20T12:37:41Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Thanks for taking the time to share this. I&#39;m going to go back and read the Mega tutorials before I give this a try. I&#39;m new to Python and not familiar at all with Flask. I&#39;m looking to build off of what I&#39;m learning and this a a great way to do so. Thank again, this is awesome.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/4b9e888299f2bbb84b996583df056a8cce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#2</span> <span class="label label-primary">Michael Tiller</span> said
+                    <span class="flask-moment" data-timestamp="2013-05-20T16:38:11Z" data-format="fromNow(0)" data-refresh="0">2013-05-20T16:38:11Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Overall, I think you&#39;ve done a nice job putting together this material.  My one beef is that it perpetuates an unfortunately common pattern.  You constantly refer to an &#39;id&#39; when it would be much better to simply use a URI.  The issue is that any client working with your API will have to know how to construct URLs for requests they want to make.  This is completely unnecessary and brittle.  I&#39;m referring to the so-called &#34;HATEOAS&#34; approach here.  Using that discipline, your ids would be replaced by URIs and your POST methods would return status code 201 (CREATED) and provide the URI of the resource created in the &#34;Location&#34; header.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#3</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-05-20T18:09:36Z" data-format="fromNow(0)" data-refresh="0">2013-05-20T18:09:36Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Michael: I don&#39;t fully agree with the self-discovery ideas of HATEOAS. The proposers of this make it sound like a client should be allowed to explore your web service and treat it like a user clicking through links in an HTML would. For an API that is not a good idea, in my opinion. APIs serve a specific purpose and should be documented accordingly. That said, your suggestions are valid ones, preventing the client from having to construct URIs is a good goal, so I&#39;m updating the article to show how you would do that. Thanks!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/7c82333fd2780751ea696899e486c0e1ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#4</span> <span class="label label-primary"><a href="http://blog.miguelgrinberg.com/index">vannen</a></span> said
+                    <span class="flask-moment" data-timestamp="2013-05-24T05:50:42Z" data-format="fromNow(0)" data-refresh="0">2013-05-24T05:50:42Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Nice tutorial miguel! I use MethodView class from Flask to build my API, in my opinion it is more structured. 
+
+http://flask.pocoo.org/docs/views/#method-based-dispatching</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/0065392a3891a2cb43aa894b951f2242ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#5</span> <span class="label label-primary">Evan</span> said
+                    <span class="flask-moment" data-timestamp="2013-05-28T19:17:57Z" data-format="fromNow(0)" data-refresh="0">2013-05-28T19:17:57Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Thanks for another great tutorial. The mega-tutorial got me up and running with flask, and this one is nice as well.  I appreciate the time you put into sharing knowledge. </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/62b7782b25ffaba0459bdba28f4ec3aece2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#6</span> <span class="label label-primary"><a href="about.me/leandro.html">Leandro Guerra</a></span> said
+                    <span class="flask-moment" data-timestamp="2013-05-29T02:36:55Z" data-format="fromNow(0)" data-refresh="0">2013-05-29T02:36:55Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Nice tutorial miguel! Could you help me please? Im trying to use the POST method, which we will use to insert a new item in our task database, but I got bach this error: Bad Request The browser(or proxy) sent a request that this server could not understand. I dont know how to fix it.
+
+Thank you a lot.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#7</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-05-29T04:05:41Z" data-format="fromNow(0)" data-refresh="0">2013-05-29T04:05:41Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Leandro: You need to look at your server code and figure out why this POST route returns bad request. It&#39;s probably validating your request and finding it is invalid in some way.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/62b7782b25ffaba0459bdba28f4ec3aece2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#8</span> <span class="label label-primary"><a href="about.me/leandro.html">Leandro Guerra</a></span> said
+                    <span class="flask-moment" data-timestamp="2013-05-29T23:16:16Z" data-format="fromNow(0)" data-refresh="0">2013-05-29T23:16:16Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Nice Miguel, tks again.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/fc2d76a688c76b480261f218b673dd28ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#9</span> <span class="label label-primary">Brent</span> said
+                    <span class="flask-moment" data-timestamp="2013-05-30T15:23:53Z" data-format="fromNow(0)" data-refresh="0">2013-05-30T15:23:53Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Excellent article! Thanks Miguel</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/f376678465a74e6344b50e4f3242d3acce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#10</span> <span class="label label-primary">JayKim</span> said
+                    <span class="flask-moment" data-timestamp="2013-05-30T15:38:21Z" data-format="fromNow(0)" data-refresh="0">2013-05-30T15:38:21Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I am developing REST api that require authorization. I am going to use flask-HTTPAuth with HTTPS. Do I request api call with ID and password for authorization? If I have to save ID and password, it is so dangerous. how can I do? </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#11</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-05-30T16:17:44Z" data-format="fromNow(0)" data-refresh="0">2013-05-30T16:17:44Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@JayKim: No, REST APIs do not have a &#34;login&#34; endpoint and REST servers do not save login credentials anywhere other than in the database. What you need to do is request clients of your API to send login credentials with every request, and on the server side those credentials need to be validated every time. If you don&#39;t want to send username and password every time, then add a &#34;get_access_token&#34; end point to your API that takes the login and responds with a cryptographic hash that has some expiration associated with it. Subsequent requests then send the username and the access token for authorization with every request.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/64a18f816a7ed542c9133db941737b1dce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#12</span> <span class="label label-primary">Anders</span> said
+                    <span class="flask-moment" data-timestamp="2013-06-01T17:22:35Z" data-format="fromNow(0)" data-refresh="0">2013-06-01T17:22:35Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel. Another excellent article! I&#39;ve found a minor error in your code in method update_task. In the task[0][&#39;done&#39;] assignment the dict key needs to be &#39;done&#39; and not &#39;title&#39;. Also the problem in post #6 could be caused by running the code on windows. I had the same problem myself and when I shifted to Linux it worked. I could not figure out how to modify the json string in the curl command to get it to work on windows so I&#39;m waiting for your excellent reply :) Please also do an api client blog post, at least I would be grateful for that and I don&#39;t think I&#39;m the only one...</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#13</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-06-01T18:03:24Z" data-format="fromNow(0)" data-refresh="0">2013-06-01T18:03:24Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Anders: Thanks, I corrected the code error. No matter how careful I try to be something always slips!
+What version of curl are you using on Windows? I use the cygwin build and I run it from Cygwin&#39;s bash, so for me, even on Windows everything is very Unix-like. The bad request problem could be just a problem with escaping quotes and/or brackets on the Windows command prompt. Here is an example for the statement that sets a task to done, using the Windows command prompt (quotes inside quotes are escaped with three consecutive quotes):
+
+curl -u miguel:python -i -H &#34;Content-Type: application/json&#34; -X PUT -d &#34;{&#34;&#34;&#34;done&#34;&#34;&#34;:false}&#34; http://localhost:5000/todo/api/v1.0/tasks/2</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/64a18f816a7ed542c9133db941737b1dce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#14</span> <span class="label label-primary">Anders</span> said
+                    <span class="flask-moment" data-timestamp="2013-06-01T21:07:22Z" data-format="fromNow(0)" data-refresh="0">2013-06-01T21:07:22Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I&#39;m using curl 7.30.0 in a standard dos window and yes the tripple quotes solved the issue.
+
+I&#39;ve started to write some client code using Kenneth Reitz&#39;s requests library and it&#39;s really simple to use (hint hint).</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/9cf9c691ab583156d4aa24c01150d816ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#15</span> <span class="label label-primary">Anu</span> said
+                    <span class="flask-moment" data-timestamp="2013-06-04T16:58:54Z" data-format="fromNow(0)" data-refresh="0">2013-06-04T16:58:54Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Dear Miguel,
+
+Your tutorials are always a great way to learn with. First, I wrote a microblog and a simple web api. I definitely look forward to any tutorial that you might post here. Great tutorials.!
+
+Thanks so much,
+Anu</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/cecd3c8108e81ec0fb6add8c479e07e2ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#16</span> <span class="label label-primary">Marek Zelinka</span> said
+                    <span class="flask-moment" data-timestamp="2013-07-04T14:49:05Z" data-format="fromNow(0)" data-refresh="0">2013-07-04T14:49:05Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel. Another excellent article!
+Just a tip: take a look at HTTPie, a CLI, cURL-like tool for humans. httpie.org </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/7a068408cd6957c319df70396e61428cce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#17</span> <span class="label label-primary">Sree</span> said
+                    <span class="flask-moment" data-timestamp="2013-08-13T01:22:46Z" data-format="fromNow(0)" data-refresh="0">2013-08-13T01:22:46Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Miguel,
+Thank you for the nice article. I was wondering  if there was something specific that had to be done to enable the multi threads in the Rest service. The Flask-restful that I installed via pip doesnt seem to do that.
+thoughts? 
+Thank you
+Sree</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#18</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-08-13T01:37:32Z" data-format="fromNow(0)" data-refresh="0">2013-08-13T01:37:32Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Sree: Running multiple threads or processes is something that the web server is configured for. You just configure your apache, nginx, etc. to run as many as you need.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/8559f8f7ffd279712062de784ab0d648ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#19</span> <span class="label label-primary"><a href="http://naradesign.net/wiki/사용자:MattNation">Nitro XL</a></span> said
+                    <span class="flask-moment" data-timestamp="2013-09-02T05:23:36Z" data-format="fromNow(0)" data-refresh="0">2013-09-02T05:23:36Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Thank you for sharing your thoughts. I really appreciate your efforts and I am waiting for 
+your further write ups thanks once again.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/a28c2f4b28340337d8c2f478ab6150e0ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#20</span> <span class="label label-primary">Paul</span> said
+                    <span class="flask-moment" data-timestamp="2013-09-09T21:11:56Z" data-format="fromNow(0)" data-refresh="0">2013-09-09T21:11:56Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Thank you very much.  The most well-written article I have ever read.  Pitched perfectly.  Nice job.
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/e6839cec54aa5bd956e07977e8e557c8ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#21</span> <span class="label label-primary"><a href="http://blog.miguelgrinberg.com/index">Juan Pablo Rabino</a></span> said
+                    <span class="flask-moment" data-timestamp="2013-09-10T15:21:14Z" data-format="fromNow(0)" data-refresh="0">2013-09-10T15:21:14Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Great Job! It is the best tutorial I found so far on this subject, really helpful. Thanks.
+I found that when I try to install the git repository, the command on your post is:
+$ flask/bin/pip install git+git://github.com/miguelgrinberg/flask-httpauth.git
+
+But it returns that the Repository was not found.
+I had to change it to:
+flask/bin/pip install https://github.com/miguelgrinberg/Flask-HTTPAuth.git
+
+And It worked! </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#22</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-09-10T17:23:11Z" data-format="fromNow(0)" data-refresh="0">2013-09-10T17:23:11Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Juan: Thanks. I actually forgot to update the article, Flask-HTTPAuth is now on PyPI, so you can install it simply with &#34;pip install flask-httpauth&#34;.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/e6839cec54aa5bd956e07977e8e557c8ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#23</span> <span class="label label-primary"><a href="http://blog.miguelgrinberg.com/index">Juan Pablo Rabino</a></span> said
+                    <span class="flask-moment" data-timestamp="2013-09-11T20:08:26Z" data-format="fromNow(0)" data-refresh="0">2013-09-11T20:08:26Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Miguel, I was trying to mix this RestFul api with your deployment tutorial  (http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xvii-deployment-on-linux-even-on-the-raspberry-pi). 
+Instead of CentOS I wanted to use Ubuntu, but the Apache and FastCGI it&#39;s pretty much the same.
+I have everything working, except that for some reason I can&#39;t get the ScriptAlias to do what it is supposed to do. 
+This is the httpd.conf:
+AddHandler fcgid-script .fcgi
+&lt;VirtualHost *:80&gt;
+#       DocumentRoot /home/apps/tasks/app/static
+#       Alias /static /home/apps/tasks/app/static
+        ScriptAlias / /home/apps/tasks/restfulapp.fcgi/
+&lt;/VirtualHost&gt;
+
+But as soon as I try to connect it gives me a 404 error, and the apache error log shows:
+[Wed Sep 11 16:45:58 2013] [error] [client 192.168.0.17] File does not exist: /home/apps/tasks/restfulapp.fcgi/
+
+I also tried to remove the final &#39;/&#39; ScriptAlias part. But it didn&#39;t work either, I received the content of restfulapp.fcgi as a response.
+BTW, here it is:
+#!/flask/bin/python
+from flup.server.fcgi import WSGIServer
+from app import app
+
+if __name__==&#39;__main__&#39;:
+    WSGIServer(app).run()
+
+I really don&#39;t know what is going on, all the relevant modules in apache are running but still cannot get this to work. If you have any pointers I would really appreciate it. 
+Thanks again for the hard and great job putting this tutorial together.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#24</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-09-12T04:13:52Z" data-format="fromNow(0)" data-refresh="0">2013-09-12T04:13:52Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Juan Pablo: apache seems to think the .fcgi file isn&#39;t there. Are you positive you have it in that location? Are the permissions set correctly? Try running the .fcgi file in your console, maybe you will get a more descriptive error.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/52d25ac4873dce2033caf6c30010ec08ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#25</span> <span class="label label-primary"><a href="http://blog.miguelgrinberg.com/index">shanks</a></span> said
+                    <span class="flask-moment" data-timestamp="2013-09-23T08:04:28Z" data-format="fromNow(0)" data-refresh="0">2013-09-23T08:04:28Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Good article for new beginners like me! Thanks a lot</p>
+                </div>
+            </div>
+        </li>
+        
+    </ul>
+</div>
+
+<div class="page">
+<ul class="pager">
+  <li class="previous disabled">
+    <a href="#">&laquo;&laquo;</a>
+  </li>
+  <li class="previous disabled">
+    <a href="#">&laquo;</a>
+  </li>
+  <li class="next">
+    <a href="designing-a-restful-api-with-python-and-flask/page/0.html#comments">&raquo;&raquo;</a>
+  </li>
+  <li class="next">
+    <a href="designing-a-restful-api-with-python-and-flask/page/2.html#comments">&raquo;</a>
+  </li>
+</ul>
+</div>
+
+<h3><a name="commentform"></a>Leave a Comment</h3>
+
+<form action="#commentform" method="post"
+  class="form" role="form">
+  <div style="display:none;"><input id="csrf_token" name="csrf_token" type="hidden" value="1439536766.09##858c0b73c8bad3d4c7dd2016e18f03be2982a110"></div>
+  
+    
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="name">Name</label>
+        <input class="form-control" id="name" name="name" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="url">URL</label>
+        <input class="form-control" id="url" name="url" type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="email">Email</label>
+        <input class="form-control" id="email" name="email" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="comment">Comment</label>
+        <textarea class="form-control" id="comment" name="comment" required></textarea>
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="captcha">Captcha</label>
+        
+<script type="text/javascript">var RecaptchaOptions = {"custom_translations": {"audio_challenge": "Get an audio challenge", "cant_hear_this": "Download sound as MP3", "help_btn": "Help", "image_alt_text": "reCAPTCHA challenge image", "incorrect_try_again": "Incorrect. Try again.", "instructions_audio": "Type what you hear", "instructions_visual": "Type the text", "play_again": "Play sound again", "privacy_and_terms": "Privacy & Terms", "refresh_btn": "Get a new challenge", "visual_challenge": "Get a visual challenge"}, "theme": "white"};</script>
+<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S"></script>
+<noscript>
+  <iframe src="http://www.google.com/recaptcha/api/noscript?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S" height="300" width="500" frameborder="0"></iframe><br>
+  <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+  <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
+</noscript>
+
+  </div>
+
+
+    
+
+
+
+
+
+  
+
+
+    <input class="btn btn-default" id="submit" name="submit" type="submit" value="Submit">
+  
+
+
+
+
+
+</form>
+
+
+</div>
+
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <p class="elapsed">This page was generated in None seconds.</p>
+            <p>&copy; 2014 by Miguel Grinberg. All rights reserved. <a href="mailto:webmaster _at_ miguelgrinberg _dot_ com">Questions?</a></p>
+        </div>
+    </div>
+
+
+    
+    
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.33/jquery.colorbox-min.js"></script>
+    <script type="text/javascript" src="../static/prettify.js"></script>
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment-with-langs.min.js"></script>
+<script>
+function flask_moment_render(elem) {
+    $(elem).text(eval('moment("' + $(elem).data('timestamp') + '").' + $(elem).data('format') + ';'));
+    $(elem).removeClass('flask-moment');
+}
+function flask_moment_render_all() {
+    $('.flask-moment').each(function() {
+        flask_moment_render(this);
+        if ($(this).data('refresh')) {
+            (function(elem, interval) { setInterval(function() { flask_moment_render(elem) }, interval); })(this, $(this).data('refresh'));
+        }
+    })
+}
+$(document).ready(function() {
+    flask_moment_render_all();
+});
+</script>
+    
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4777284-15']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".gallery").colorbox({rel:".gallery",maxWidth:"95%",maxHeight:"95%",scalePhotos:true});
+            // add prettyprint class to all <pre><code></code></pre> blocks
+            var prettify = false;
+            $("pre code").parent().each(function() {
+                $(this).addClass('prettyprint');
+                prettify = true;
+            });
+            prettyPrint();
+        });
+    </script>
+
+
+  </body>
+
+<!-- Mirrored from blog.miguelgrinberg.com/post/designing-a-restful-api-with-python-and-flask by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:46:48 GMT -->
+</html>

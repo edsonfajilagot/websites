@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from zetcode.com/databases/mysqltutorial/installation/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Jul 2015 02:47:03 GMT -->
+<head>
+<title>MySQL installation</title>
+<link rel="stylesheet" href="../../../cfg/format2.css" type="text/css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="Installation, MySQL, databases, SQL">
+<meta name="description" content="In this part of the MySQL tutorial,
+we show how to install MySQL.">
+<meta name="author" content="Jan Bodnar">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div id="wide_ad" class="ltow">
+<script async src="../../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- 160x600, August 2011 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:600px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="2484182563"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<div class="content">
+
+
+<header>
+
+<nav>
+<a href="http://zetcode.com/" title="Home">Home</a>&#160;
+<a href="../index.html">Contents</a>
+</nav>
+
+</header>
+
+
+<h1>MySQL installation</h1>
+
+
+
+<p>
+In this part of the MySQL tutorial, we are going to cover the
+installation of the MySQL database management system. In this chapter, 
+we will install MySQL on Linux. 
+</p>
+
+<div class="med_rec">
+<script async src="../../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- NewSquare -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:250px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="0364418177"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+
+<p>
+There are several ways how we can install MySQL on our system. We can install
+MySQL from packages, from binaries or from the sources. 
+</p>
+
+
+<pre class="code">
+$ sudo apt-get install mysql-server
+</pre>
+
+<p>
+On Ubuntu and other Debian based distributions, we can easily install MySQL 
+from packages by using the <code>apt-get</code> tool. This command installs the MySQL 
+server and various other packages. While installing the packages, we are 
+prompted to enter a password for the MySQL root account.
+</p>
+
+
+<h2 id="sources">Installing from sources</h2>
+
+<p>
+Installing MySQL from sources gives us the most options to build
+MySQL according to our preferences. We can customise installation locations,
+various build parameters or compiler optimisations.
+</p>
+
+<p>
+We enter the mysql.com website. Under Downloads tab, we select generally
+available MySQL Community Edition. From the Select platform combo box, we 
+choose Source Code. 
+</p>
+
+<pre class="code">
+$ ls -sh mysql-5.5.9.tar.gz 
+23M mysql-5.5.9.tar.gz
+</pre>
+
+<p>
+We have downloaded a compressed archive of MySQL 5.5.9 sources. 
+</p>
+
+<pre class="code">
+$ tar xzvf mysql-5.5.9.tar.gz
+$ cd mysql-5.5.9/
+</pre>
+
+<p>
+We have unpacked the sources to the <code>mysql-5.5.9</code> directory. 
+</p>
+
+<pre class="code">
+$ sudo apt-get install cmake
+$ which cmake bison perl
+/usr/bin/cmake
+/usr/bin/bison
+/usr/bin/perl
+</pre>
+
+<p>
+To build MySQL, we need to have three tools installed on our system: cmake, 
+bison, and Perl. In our case, we had to install the <code>cmake</code> tool. 
+The <code>cmake</code> tool has replaced the configure tool, because it is 
+more portable. 
+</p>
+
+<pre class="code">
+$ cmake -L
+-- MySQL 5.5.9
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/vronskij/Downloads/mysql-5.5.9
+-- Cache values
+CMAKE_BUILD_TYPE:STRING=RelWithDebInfo
+CMAKE_INSTALL_PREFIX:PATH=/usr/local/mysql
+COMMUNITY_BUILD:BOOL=ON
+ENABLED_PROFILING:BOOL=ON
+ENABLE_DEBUG_SYNC:BOOL=ON
+INSTALL_LAYOUT:STRING=STANDALONE
+MYSQL_DATADIR:PATH=/usr/local/mysql/data
+MYSQL_MAINTAINER_MODE:BOOL=OFF
+WITH_ARCHIVE_STORAGE_ENGINE:BOOL=OFF
+WITH_BLACKHOLE_STORAGE_ENGINE:BOOL=OFF
+WITH_DEBUG:BOOL=OFF
+WITH_EMBEDDED_SERVER:BOOL=OFF
+WITH_EXTRA_CHARSETS:STRING=all
+WITH_FEDERATED_STORAGE_ENGINE:BOOL=OFF
+WITH_INNOBASE_STORAGE_ENGINE:BOOL=ON
+WITH_LIBEDIT:BOOL=ON
+WITH_LIBWRAP:BOOL=OFF
+WITH_PARTITION_STORAGE_ENGINE:BOOL=ON
+WITH_PERFSCHEMA_STORAGE_ENGINE:BOOL=ON
+WITH_PIC:BOOL=OFF
+WITH_READLINE:BOOL=OFF
+WITH_SSL:STRING=no
+WITH_UNIT_TESTS:BOOL=ON
+WITH_VALGRIND:BOOL=OFF
+WITH_ZLIB:STRING=system
+</pre>
+
+<p>
+The <code>-L</code> option shows some of the default configure options. 
+The system is going to be installed to <code>/usr/loca/mysql directory</code>. 
+For us it is important to have InnoDB storage engine configured to be included. 
+</p>
+
+<pre class="code">
+$ cmake .
+</pre>
+
+<p>
+We configure the build. We leave all the default settings. In case we 
+wanted to have also the MySQL embedded system, we would provide 
+the <code>-DWITH_EMBEDDED_SERVER=1</code> option.
+</p>
+
+<pre class="code">
+$ make
+$ sudo make install
+</pre>
+
+<p>
+We make the system and install it.
+</p>
+
+
+<pre class="code">
+$ sudo addgroup --system mysql
+$ sudo adduser --system mysql --no-create-home -ingroup mysql
+</pre>
+
+<p>
+We create a mysql system group and a mysql system user on our computer. 
+Each process in Linux is owned by a specific user. The MySQL daemon will 
+be owned by user mysql. Note that mysql is not a normal user account. It is
+a system user. 
+</p>
+
+<pre class="code">
+$ pwd
+/usr/local/mysql
+$ sudo chown -R mysql .
+$ sudo chgrp -R mysql .
+</pre>
+
+<p>
+We are located in the <code>/usr/local/mysql</code> directory. We change the 
+group and owner of all files located in the mentioned directory. The 
+<code>-R</code> option means recursive operation. This means that the two 
+commands operate on all files and directories and the contents of the directories. 
+</p>
+
+<pre class="code">
+$ sudo ./scripts/mysql_install_db --user=mysql
+</pre>
+
+<p>
+Here we install MySQL system tables. These tables are necessary for MySQL to be
+functional. 
+</p>
+
+<pre class="code">
+$ sudo chown -R root .
+$ sudo chown -R mysql data
+</pre>
+
+<p>
+We change the owner for all files back to the user root, except for the
+data directory. The MySQL server, which is owned by the mysql user, must
+have access to the data directory. The database files are stored in this
+directory.
+</p>
+
+
+<h2 id="root">Changing the root password</h2>
+
+<p>
+By default, the MySQL superuser root has an empty password. We need to set
+a password for the root account. 
+</p>
+
+<pre class="code">
+$ su
+Password: 
+# /usr/local/mysql/bin/mysqld_safe &amp;
+# exit
+exit
+$ 
+</pre>
+
+<p>
+We start the MySQL server. We change to the Linux root account and 
+launch the <code>mysqld_safe script</code>. It is a MySQL server 
+startup script.
+</p>
+
+<pre class="code">
+$ sudo passwd root
+Enter new UNIX password: 
+Retype new UNIX password: 
+passwd: password updated successfully
+$ su root
+Password: 
+root@spartan:/usr/local/mysql# 
+</pre>
+
+<p>
+On Ubuntu, the (Linux) root account is not enabled by default. Here we show, 
+how to enable it. Then we can use the su (switch user) command to switch 
+to root to start the MySQL daemon.
+</p>
+
+<pre class="code">
+$ bin/mysqladmin -u root password '345jas7'
+</pre>
+
+<p>
+Using the mysqladmin we change the password for the root account. Note that
+command is launched without the sudo. 
+</p>
+
+
+<h2 id="other">Other settings</h2>
+
+<p>
+After we have installed the MySQL on our system and changed a password 
+for the root account, there are still some modifications left to do. 
+</p>
+
+<p>
+MySQL has a configuration file called <code>my.cnf</code>. This is located 
+in the <code>/etc</code> directory. By editing the options in this file, 
+we can configure the server to our needs. 
+</p>
+
+<pre class="code">
+$ cp support-files/my-medium.cnf /etc/my.cnf
+$ cp support-files/my-medium.cnf ~/.my.cnf
+</pre>
+
+<p>
+In the support-files directory there are prepared configuration files. We can 
+choose one of them, which best suits us. In the first command, we create MySQL 
+global configuration file. In the second example, we create a personal file in 
+the home directory of the user. This part is optional. 
+</p>
+
+<pre class="code">
+$ export PATH=$PATH:/usr/local/mysql/bin/
+$ export MANPATH=$MANPATH:/usr/local/mysql/man/
+</pre>
+
+<p>
+Another useful thing to do is to add bin direcory to your <code>PATH</code> variable. 
+This way we can launch MySQL commands and scripts without specifying the full path. 
+In addition, we add the path to the manual pages of the MySQL tools and commands to 
+the <code>MANPATH</code> variable. Now we can view MySQL man pages with the man 
+command. Place both commands to your shell configuration file. In case of the bash 
+it is <code>.bashrc</code>. 
+</p>
+
+<p>
+In this part of the MySQL tutorial, we have covered the installation of 
+the MySQL database system.
+</p>
+
+<footer>
+
+<nav class="center">
+<span class="botNavItem"><a href="http://zetcode.com/">Home</a></span> ‡ <span class="botNavItem"><a href="../index.html">Contents</a></span> ‡ 
+<span class="botNavItem"><a href="#">Top of Page</a></span>
+</nav>
+
+<div class="signature">
+<a href="http://zetcode.com/">ZetCode</a> last modified February 10, 2011  <span class="copyright">&copy; 2007 - 2015 Jan Bodnar</span>
+</div>
+
+</footer>
+
+</div> <!-- content -->
+
+</div> <!-- container -->
+
+</body>
+
+<!-- Mirrored from zetcode.com/databases/mysqltutorial/installation/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Jul 2015 02:47:03 GMT -->
+</html>
+
+

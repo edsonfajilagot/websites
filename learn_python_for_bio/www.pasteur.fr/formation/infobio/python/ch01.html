@@ -1,0 +1,501 @@
+<html>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch01.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:37:53 GMT -->
+<head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Chapter 1. Introduction</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><meta name="keywords" content="python, biology, bioinformatics, programming, computational biology"><link rel="home" href="index-2.html" title="Introduction to Programming using Python"><link rel="up" href="index-2.html" title="Introduction to Programming using Python"><link rel="previous" href="index-2.html" title="Introduction to Programming using Python"><link rel="next" href="ch01s02.html" title="1.2. Why Python"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 1. Introduction</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="index-2.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch01s02.html"><img src="images/next.png" alt="Next"></a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><h2 class="title"><a name="chap_intro"></a>Chapter 1. Introduction</h2></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt>1.1. <a href="ch01.html#sect_first_session">First session</a></dt><dd><dl><dt>1.1.1. <a href="ch01.html#d0e98">Let's run the python interpreter</a></dt><dt>1.1.2. <a href="ch01.html#d0e103">Variables</a></dt><dt>1.1.3. <a href="ch01.html#d0e109">Strings</a></dt><dt>1.1.4. <a href="ch01.html#d0e115">Functions</a></dt><dt>1.1.5. <a href="ch01.html#d0e124">Lists</a></dt></dl></dd><dt>1.1. <a href="ch01.html#d0e130">A first program</a></dt><dt>1.2. <a href="ch01s02.html">Why Python</a></dt><dt>1.3. <a href="ch01s03.html">Programming Languages</a></dt></dl></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="sect_first_session"></a>1.1. First session</h2></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="d0e98"></a>1.1.1. Let's run the python interpreter</h3></div></div><pre class="programlisting">
+Python 2.4.2 (#1, Dec 20 2005, 16:25:40) 
+[GCC 4.0.0 (Apple Computer, Inc. build 5026)] on darwin
+Type "help", "copyright", "credits" or "license" for more information.
+&gt;&gt;&gt; 1 + 5
+6
+&gt;&gt;&gt; 2 * 5
+10
+&gt;&gt;&gt; 1 / 2
+0
+
+Is it the right answer?
+
+&gt;&gt;&gt; float(1 / 2)
+0.0
+&gt;&gt;&gt; 1 / 2.0
+0.5
+&gt;&gt;&gt; float(1)/2
+0.5
+
+
+&gt;&gt;&gt; 'aaa'
+'aaa'
+&gt;&gt;&gt; len('aaa')
+3
+
+What happened?
+
+&gt;&gt;&gt; len('aaa') + len('ttt')
+6
+&gt;&gt;&gt; len('aaa') + len('ttt') + 1
+7
+&gt;&gt;&gt; 'aaa' + 'ttt'
+'aaattt'
+&gt;&gt;&gt; 'aaa' + 5
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in ?
+TypeError: cannot concatenate 'str' and 'int' objects
+
+What does the error message mean?
+'str' objects are character strings ('aaa' is a string of characters). 'int' objects are integer.
+
+You can check what the values you manipulate are, or, in programming
+languages parlance, what their type is:
+
+&gt;&gt;&gt; type(1)
+&lt;type 'int'&gt;
+&gt;&gt;&gt; type('1')
+&lt;type 'str'&gt;
+&gt;&gt;&gt; type(1.0)
+&lt;type 'float'&gt;
+    </pre></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="d0e103"></a>1.1.2. Variables</h3></div></div>
+
+So far, we have manipulated values (integers, floats and
+strings). Instead of manipulating values directly, litterally, you can
+associate a name to a value and access to the value through the
+associated name:
+
+      <pre class="programlisting">
+
+
+&gt;&gt;&gt; a = 3 
+&gt;&gt;&gt; a
+3
+
+This name is called a 'variable', because its value can change.
+
+Above, the interpreter displays the value (3) of the variable (a).
+
+&gt;&gt;&gt; myVar = 'one sentence'
+&gt;&gt;&gt; myVar
+'one sentence'
+
+Variable names follow specific rules. See what happens below:
+
+&gt;&gt;&gt; 1string = 'one string'
+  File "&lt;stdin&gt;", line 1
+      1string = 'one string'
+            ^
+SyntaxError: invalid syntax
+
+
+&gt;&gt;&gt; myvar
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in ?
+NameError: name 'myvar' is not defined
+
+What happened?
+
+&gt;&gt;&gt; a = 2
+&gt;&gt;&gt; a
+2
+&gt;&gt;&gt; a * 5
+10
+&gt;&gt;&gt; b = a * 5
+&gt;&gt;&gt; b
+10
+&gt;&gt;&gt; a = 1
+&gt;&gt;&gt; b
+10
+
+Why hasn't b changed?
+
+&gt;&gt;&gt; a = 1    in this case a is a number
+&gt;&gt;&gt; a + 2
+3
+&gt;&gt;&gt; a = '1'   in this case a is a string
+&gt;&gt;&gt; a + 1
+ Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in ?
+TypeError: cannot concatenate 'str' and 'int' objects 
+
+What do you conclude?
+      </pre></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="d0e109"></a>1.1.3. Strings</h3></div></div>
+
+Some magical stuff, that will be explained later:
+
+      <pre class="programlisting">
+&gt;&gt;&gt; from string import * 
+
+We can also perform calculus on character strings:
+
+&gt;&gt;&gt; codon='atg'
+&gt;&gt;&gt; codon * 3
+'atgatgatg'
+&gt;&gt;&gt; seq1 = 'agcgccttgaattcggcaccaggcaaatctcaaggagaagttccggggagaaggtgaaga'
+&gt;&gt;&gt; seq2 = 'cggggagtggggagttgagtcgcaagatgagcgagcggatgtccactatgagcgataata'
+
+
+How do you concatenate seq1 and seq2 in a single string?
+
+
+&gt;&gt;&gt; seq = seq1 + seq2
+
+What is the length of the string seq?
+
+&gt;&gt;&gt; len(seq)
+120
+
+Does the string seq contain the ambiguous 'n' base?
+&gt;&gt;&gt;  'n' in seq
+False
+
+Does it contain an adenine base?
+&gt;&gt;&gt; 'a' in seq
+True
+
+&gt;&gt;&gt; seq[1]
+'g'   
+
+Why? 
+Because in computer science, strings are numbered from 0 to string length - 1
+so the first character is:
+&gt;&gt;&gt; seq[0]
+'a'  
+
+Display the 12th base.
+
+&gt;&gt;&gt; seq[11]
+'t'
+
+Find the index of the last character.
+
+&gt;&gt;&gt; len(seq)
+120
+
+So, because we know the sequence length,  we can display the last character
+by:
+&gt;&gt;&gt; seq[119]
+'a'
+
+But this is not true for all the sequences we will work on.
+Find a more generic way to do it.
+
+&gt;&gt;&gt; seq[len(seq) - 1] 
+'a'
+
+Python provides a special form to get the characters from the end of a string:
+
+&gt;&gt;&gt; seq[-1]
+'a'
+&gt;&gt;&gt; seq[-2]
+'t'
+
+Find a way to get the first codon from the sequence
+&gt;&gt;&gt; seq[0] + seq[1] + seq[2]
+'agc'
+
+Python provides a form to get 'slices' from strings:
+&gt;&gt;&gt; seq[0:3]
+'agc'
+
+You can omit the first indice of the range if it's 0:
+&gt;&gt;&gt; seq[:3]
+'agc'
+
+&gt;&gt;&gt; seq[3:6]
+'gcc'
+
+
+
+How would you access the slice of the 3 last characters?
+Hints: you want the positions -3 -2 and -1. 
+Do not forget that the last indice of the slice should be le last position + 1.
+
+&gt;&gt;&gt; seq[-3:len(seq)]
+'ata'
+
+You can omit the second indice of the range if it's len(seq):
+&gt;&gt;&gt; seq[-3:]
+'ata'
+
+How many of each base does this sequence contains?
+
+&gt;&gt;&gt; count(seq, 'a')
+35
+&gt;&gt;&gt; count(seq, 'c')
+21
+&gt;&gt;&gt; count(seq, 'g')
+44
+&gt;&gt;&gt; count(seq, 't')
+12
+
+Count the percentage of each base on the sequence.
+Example for the adenine representation
+
+&gt;&gt;&gt; long = len(seq)
+&gt;&gt;&gt; nb_a = count(seq, 'a')
+&gt;&gt;&gt; (nb_a / long) * 100
+0
+
+What happened? How 35 bases from 120 could be 0 percent?
+This is due to the way the numbers are represented inside the computer.
+
+&gt;&gt;&gt; float(nb_a) / long * 100    
+29.166666666666668
+
+Now, let us say that you want to find specific pattern on a DNA sequence:
+
+&gt;&gt;&gt; dna = """tgaattctatgaatggactgtccccaaagaagtaggacccactaatgcagatcctgga
+tccctagctaagatgtattattctgctgtgaattcgatcccactaaagat"""
+&gt;&gt;&gt; EcoRI = 'GAATTC'
+&gt;&gt;&gt; BamHI = 'GGATCC' 
+
+Looking at the sequence you will see that EcoRI is present twice and
+BamHI just once:
+
+tgaattctatgaatggactgtccccaaagaagtaggacccactaatgcagatcctgga
+ ~~~~~~                                                ~~~ 
+tccctagctaagatgtattattctgctgtgaattcgatcccactaaaga
+~~~                          ~~~~~~
+
+&gt;&gt;&gt; count(dna, EcoRI)
+0
+
+Why ??
+
+&gt;&gt;&gt; 'atgc' == 'atgc'
+True
+&gt;&gt;&gt; 'atgc' == 'gcta'
+False
+&gt;&gt;&gt; 'atgc' == 'ATGC'
+False
+
+why are 'atgc' and 'ATGC' different?
+
+We can convert the case of a string:
+
+&gt;&gt;&gt; EcoRI = lower(EcoRI)
+&gt;&gt;&gt; EcoRI
+'gaattc'
+&gt;&gt;&gt; count(dna, EcoRI)
+2
+&gt;&gt;&gt; find(dna, EcoRI)
+1
+&gt;&gt;&gt; find(dna, EcoRI, 2)
+88
+&gt;&gt;&gt; BamHI = lower(BamHI)
+&gt;&gt;&gt; count(dna, BamHI)
+0
+
+Why ?
+
+Tip: display the sequence:
+
+&gt;&gt;&gt; dna
+'tgaattctatgaatggactgtccccaaagaagtaggacccactaatgcagatcctgga\ntccctagctaagatgtattattctgctgtgaattcgatcccactaaagat'
+
+What is this '\n' character?
+
+How to remove it?
+
+&gt;&gt;&gt; dna = replace(dna, '\n', '')
+&gt;&gt;&gt; dna
+'tgaattctatgaatggactgtccccaaagaagtaggacccactaatgcagatcctggatccctagctaagatgtattattctgctgtgaattcgatcccactaaagat'
+&gt;&gt;&gt;find(dna, BamHI)
+54  
+
+Using the mechanisms we have learnt so far, produce the complement of
+the dna sequence.	    
+
+      </pre></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="d0e115"></a>1.1.4. Functions</h3></div></div>
+
+So far, we have used functions that perform a specific computation:
+          len(), count(), lower(), find(), replace(), ... 
+
+We can can define our own functions:
+
+      <pre class="programlisting">
+&gt;&gt;&gt; def welcome():
+...   print "Welcome to Paris"
+...   print "I hope you will enjoy it"
+...
+&gt;&gt;&gt;
+
+Notice the indented block of statements below
+the <b>def</b>. This block corresponds to the statements
+that will be executed when the function will be called.
+
+Once the function is defined, you can use it:
+&gt;&gt;&gt; welcome()
+Welcome to Paris
+I hope you will enjoy it
+&gt;&gt;&gt;
+
+Now, let's say that we want to welcome a specific person:
+Welcome to Paris, Isabelle!
+
+We could rewrite the function:
+&gt;&gt;&gt; def welcome():
+...   print "Welcome to Paris, Isabelle!"
+...   print "I hope you will enjoy it"
+...
+&gt;&gt;&gt;
+
+But what if we want to welcome Pascal? We are not going to write
+another function, right? We can specify that our function will take a
+parameter:
+
+&gt;&gt;&gt; def welcome(person):
+...   print "Welcome to Paris, ", person, "!"
+...   print "I hope you will enjoy it"
+...
+&gt;&gt;&gt; welcome("Isabelle")
+Welcome to Paris, Isabelle!
+I hope you will enjoy it
+
+&gt;&gt;&gt; welcome("Pascal")
+Welcome to Paris, Pascal!
+I hope you will enjoy it
+
+      </pre></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="d0e124"></a>1.1.5. Lists</h3></div></div>
+      You can assemble values of any type into a list:
+
+      <pre class="programlisting">
+
+&gt;&gt;&gt; l = ['a', 'b', 1, 'a cat']
+
+and access it with indices, exactly as you did with character strings:
+&gt;&gt;&gt; l[1]
+'b'
+
+Guess what the '+' operator does with lists?
+
+&gt;&gt;&gt; ['a', 1] + [2, 'toto']
+['a', 1, 2, 'toto']
+
+... it produces a new list!
+	          
+Now, let's produce a list of numbers:
+
+&gt;&gt;&gt; range(10)
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+You can associate this list to a variable named l:
+
+&gt;&gt;&gt; l = range(10)
+&gt;&gt;&gt;
+
+... How would you produce the list of numbers from 10 to 20?
+
+To get help on the range() function, try:
+
+&gt;&gt;&gt; help(range)
+
+Now, how do you get the list of even numbers from 0 to 100?
+
+[0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 
+42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68, 70, 72, 74, 76, 78, 80, 
+82, 84, 86, 88, 90, 92, 94, 96, 98, 100]
+
+And how would you produce the following list:
+[9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+
+?
+
+    </pre></div></div><div class="section"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="d0e130"></a>1.1. A first program</h2></div></div>
+
+Let us conclude this first presentation of python with our first
+    little program. This program will ask the user for a DNA sequence,
+    computes  its GC%, and print it on the screen. This introductive example
+    highlights some key notions (the ones in <span class="emphasis"><em>italics</em></span>) that will be explained and developed
+    in further chapters.
+
+      <pre class="programlisting">
+from string import *
+
+def gc_counter(seq):
+   nbre_c    = count(seq, 'c')
+   nbre_g    = count(seq, 'g')
+   long_seq  = len(seq) 
+   gc_percent = 100 * float(nbre_c + nbre_g) / long_seq
+   return gc_percent
+
+gc =  gc_counter("atgcggctgtgatgtagtcctttc")
+print gc
+seq = raw_input("enter a dna sequence: ")
+print gc_counter(seq)
+      </pre><p>
+This program contains several components. The first one:
+      <pre class="programlisting">
+from string import *
+      </pre>
+will be explained later in this course. Let's say it enables our
+      program to use functions for computing common things
+      on <span class="emphasis"><em>character strings</em></span>: length, counting of
+      elements, etc... 
+</p><p>
+The second element provides the <span class="emphasis"><em>definition</em></span> of
+      a <span class="emphasis"><em>function</em></span>:
+      <pre class="programlisting">
+def gc_counter(seq):
+   nbre_c    = count(seq, 'c')
+   nbre_g    = count(seq, 'g')
+   long_seq  = len(seq) 
+   gc_percent = 100 * float(nbre_c + nbre_g) / long_seq
+   return gc_percent
+      </pre>
+The function name
+      is: <tt>gc_counter</tt>. This is just a definition: in
+      order to <span class="emphasis"><em>invoke</em></span> this function, a call must
+      be issued, as we will have later in the program. 
+</p><p>
+Obviously, this function performs the steps to compute a GC%. It
+counts the number of 'g' and 'c', adds them, and finally divide the
+sum by the length of the sequence. 
+</p><p>
+A special
+statement: <b>return</b>, specifies  <span class="emphasis"><em>which value is returned</em></span>
+to the statement that invoked the function, i.e the value specified in
+the <b>return</b>, here <tt>gc_percent</tt>. So,
+in the following statement:
+      <pre class="programlisting">
+gc =  gc_counter("atgcggctgtgatgtagtcctttc")
+      </pre>
+the evaluation of the <tt>gc_counter()</tt> call will
+      eventually lead to the
+      returned value.
+</p><p>
+
+The next elements are 4 <span class="emphasis"><em>statements</em></span>:
+      <pre class="programlisting">
+gc =  gc_counter("atgcggctgtgatgtagtcctttc")
+print gc
+seq = raw_input("enter a dna sequence: ")
+print gc_counter(seq)
+      </pre>
+The 1st statement computes the GC% of a character string:
+      "atgcggctgtgatgtagtcctttc" and <span class="emphasis"><em>stores the result in a
+	variable</em></span> named <tt>gc</tt>. For this purpose, it calls the <tt>gc_counter</tt> function and provides this function with the character string as an <span class="emphasis"><em>argument</em></span>.
+The next statement <span class="emphasis"><em>prints</em></span> the resulting GC%.
+</p><p>
+A 3rd statement prints a message on the screen and input a string entered by the user to the program.
+The last statement print the result of calling
+the <tt>gc_counter</tt> function applied to the string just
+entered by the user. 
+</p><p>
+You can put this program into a file and try it. For this purpose, run
+your text editor and copy the python code above into the editor. Save
+this as a file called: <b>my_gc.py</b>. It is common and
+convenient to call a python file by a name having ".py" as an
+extension.  
+
+</p><p>
+Once saved, you can <span class="emphasis"><em>run</em></span> your program by issuing the following command:
+<pre class="programlisting">
+python my_gc.py
+</pre>
+from the command line prompt of your terminal.
+</p><p>
+This program, eventhough it's quite simple and short, is typical of
+programs that are used in scientific computing (except for graphical
+and interactive programs): you provide data as input, a computation is
+performed and the program outputs the results.
+</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="index-2.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="index-2.html"><img src="images/up.png" alt="Up"></a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch01s02.html"><img src="images/next.png" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">Introduction to Programming using Python&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index-2.html"><img src="images/home.png" alt="Home"></a></td><td width="40%" align="right" valign="top">&nbsp;1.2. Why Python</td></tr></table></div></body>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch01.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:37:54 GMT -->
+</html>

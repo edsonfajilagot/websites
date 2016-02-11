@@ -1,0 +1,1191 @@
+﻿<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-iv-database/page/12 by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:15:14 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    
+    <title>
+    
+        The Flask Mega-Tutorial, Part IV: Database - miguelgrinberg.com
+    
+</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="description" content="miguelgrinberg.com">
+	<meta name="copyright" content="Copyright (c) 2012-2015 Miguel Grinberg">
+	<meta name="author" content="Miguel Grinberg">
+    
+    <meta name="keywords" content="python, programming, flask, web, tutorial, database, sqlalchemy">
+    
+
+    
+    <!-- Bootstrap -->
+    <link href="../../../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../../../static/prettify.css" type="text/css" rel="stylesheet" />
+    <link href="../../../static/colorbox/colorbox.css" rel="stylesheet" type="text/css" />
+    <link href="../../../static/style.css" rel="stylesheet" type="text/css" />
+
+    <link rel="shortcut icon" href="../../../static/favicon.ico">
+	<link rel="alternate" type="application/rss+xml" href="../../../feed" title="miguelgrinberg.com RSS feed">
+
+  </head>
+  <body>
+    
+    <!-- facebook sdk -->
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "../../../../connect.facebook.net/en_US/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    <!-- google plus sdk -->
+    <script type="text/javascript" src="../../../../apis.google.com/js/plusone.js"></script>
+    <!-- twitter sdk -->
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="../../../../platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <!-- linkedin sdk -->
+    <script src="../../../../platform.linkedin.com/in.js" type="text/javascript"></script>
+
+    
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://blog.miguelgrinberg.com/index">miguelgrinberg.com</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="http://blog.miguelgrinberg.com/index">Home</a></li>
+                        <li><a href="../../about-me.html">About Me</a></li>
+                        <li><a href="../../about-this-blog.html">About This Blog</a></li>
+                        
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <p class="navbar-text" style="margin-top: 10px; margin-bottom: 0px;">
+                                <a type="application/rss+xml" href="../../../feed"><img src="../../../static/rss.png" alt="RSS Feed" title="RSS Feed" /></a>
+                                <a href="https://www.facebook.com/miguelgrinbergblog"><img src="../../../static/facebook.png" alt="Facebook" title="Facebook" /></a>
+                                <a href="https://plus.google.com/u/0/117786742456929977820"><img src="../../../static/googleplus.png" alt="Google+" title="Google+" /></a>
+                                <a href="http://www.linkedin.com/in/miguelgrinberg"><img src="../../../static/linkedin.png" alt="LinkedIn" title="LinkedIn" /></a>
+                                <a href="http://github.com/miguelgrinberg"><img src="../../../static/github.png" alt="GitHub" title="GitHub" /></a>
+                                <a href="https://twitter.com/#!/miguelgrinberg"><img src="../../../static/twitter.png" alt="Twitter" title="Twitter" /></a>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </nav>
+
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-push-9 sidebar-bg">
+                <div id="sidebar">
+                    
+
+                    
+                    <h1>Flask Web Development</h1>
+                    <p>If you want to learn modern web development techniques with Python and Flask, you may find my O'Reilly book useful:</p>
+                    <p><center><a href="http://bit.ly/flaskbook"><img style="border: 1px solid black;" src="../../../static/flask-book-cover-tiny.png"></a></center></p>
+                    <p>Visit <a href="http://flaskbook.com/">http://flaskbook.com</a> for information about this and other Flask training products I have created!</p>
+                    
+
+                    <h1>About Miguel</h1>
+                    <img style="float: right; margin: 0px 8px 8px 0px; padding: 4px; border: 1px solid #ccc;" src="../../../static/miguel.jpg" />
+                    <p>Welcome to my blog!</p>
+                    <p>I'm a software engineer, photographer and filmmaker in Portland, Oregon, USA.</p>
+                    <p>You can also find me on <a href="https://www.facebook.com/miguelgrinbergblog">Facebook</a>, <a href="https://plus.google.com/u/0/117786742456929977820">Google+</a>, <a href="http://www.linkedin.com/in/miguelgrinberg">LinkedIn</a>, <a href="https://github.com/miguelgrinberg">Github</a> and <a href="https://twitter.com/#!/miguelgrinberg">Twitter</a>.</p>
+                    <p>Thank you for visiting!</p>
+
+                    
+
+                    
+                    <h1>Categories</h1>
+<ul>
+
+	<li>
+		<a href="../../../category/Arduino/feed">
+			<img src="../../../static/rss-small.png" title="Arduino RSS Feed" label="Arduino RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Arduino.html">Arduino</a></span> (7)
+	</li>
+
+	<li>
+		<a href="../../../category/Authentication/feed">
+			<img src="../../../static/rss-small.png" title="Authentication RSS Feed" label="Authentication RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Authentication.html">Authentication</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../../../category/Blog/feed">
+			<img src="../../../static/rss-small.png" title="Blog RSS Feed" label="Blog RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Blog.html">Blog</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/C%2b%2b/feed">
+			<img src="../../../static/rss-small.png" title="C++ RSS Feed" label="C++ RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/C%2b%2b.html">C++</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../../../category/Cloud/feed">
+			<img src="../../../static/rss-small.png" title="Cloud RSS Feed" label="Cloud RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Cloud.html">Cloud</a></span> (2)
+	</li>
+
+	<li>
+		<a href="../../../category/Filmmaking/feed">
+			<img src="../../../static/rss-small.png" title="Filmmaking RSS Feed" label="Filmmaking RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Filmmaking.html">Filmmaking</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/Flask/feed">
+			<img src="../../../static/rss-small.png" title="Flask RSS Feed" label="Flask RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Flask.html">Flask</a></span> (39)
+	</li>
+
+	<li>
+		<a href="../../../category/Games/feed">
+			<img src="../../../static/rss-small.png" title="Games RSS Feed" label="Games RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Games.html">Games</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Gear/feed">
+			<img src="../../../static/rss-small.png" title="Gear RSS Feed" label="Gear RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Gear.html">Gear</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/HTML5/feed">
+			<img src="../../../static/rss-small.png" title="HTML5 RSS Feed" label="HTML5 RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/HTML5.html">HTML5</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Heroku/feed">
+			<img src="../../../static/rss-small.png" title="Heroku RSS Feed" label="Heroku RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Heroku.html">Heroku</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Javascript/feed">
+			<img src="../../../static/rss-small.png" title="Javascript RSS Feed" label="Javascript RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Javascript.html">Javascript</a></span> (3)
+	</li>
+
+	<li>
+		<a href="../../../category/Movie%20Reviews/feed">
+			<img src="../../../static/rss-small.png" title="Movie Reviews RSS Feed" label="Movie Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Movie%20Reviews.html">Movie Reviews</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../../../category/Netflix/feed">
+			<img src="../../../static/rss-small.png" title="Netflix RSS Feed" label="Netflix RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Netflix.html">Netflix</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../../../category/Node.js/feed">
+			<img src="../../../static/rss-small.png" title="Node.js RSS Feed" label="Node.js RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Node.html">Node.js</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/OpenStack/feed">
+			<img src="../../../static/rss-small.png" title="OpenStack RSS Feed" label="OpenStack RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/OpenStack.html">OpenStack</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Personal/feed">
+			<img src="../../../static/rss-small.png" title="Personal RSS Feed" label="Personal RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Personal.html">Personal</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Photography/feed">
+			<img src="../../../static/rss-small.png" title="Photography RSS Feed" label="Photography RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Photography.html">Photography</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/Product%20Reviews/feed">
+			<img src="../../../static/rss-small.png" title="Product Reviews RSS Feed" label="Product Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Product%20Reviews.html">Product Reviews</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Programming/feed">
+			<img src="../../../static/rss-small.png" title="Programming RSS Feed" label="Programming RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Programming.html">Programming</a></span> (47)
+	</li>
+
+	<li>
+		<a href="../../../category/Project%20Management/feed">
+			<img src="../../../static/rss-small.png" title="Project Management RSS Feed" label="Project Management RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Project%20Management.html">Project Management</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Python/feed">
+			<img src="../../../static/rss-small.png" title="Python RSS Feed" label="Python RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Python.html">Python</a></span> (43)
+	</li>
+
+	<li>
+		<a href="../../../category/REST/feed">
+			<img src="../../../static/rss-small.png" title="REST RSS Feed" label="REST RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/REST.html">REST</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../../../category/Rackspace/feed">
+			<img src="../../../static/rss-small.png" title="Rackspace RSS Feed" label="Rackspace RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Rackspace.html">Rackspace</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../../../category/Raspberry%20Pi/feed">
+			<img src="../../../static/rss-small.png" title="Raspberry Pi RSS Feed" label="Raspberry Pi RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Raspberry%20Pi.html">Raspberry Pi</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/RhinoSteady/feed">
+			<img src="../../../static/rss-small.png" title="RhinoSteady RSS Feed" label="RhinoSteady RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/RhinoSteady.html">RhinoSteady</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/Robotics/feed">
+			<img src="../../../static/rss-small.png" title="Robotics RSS Feed" label="Robotics RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Robotics.html">Robotics</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../../../category/Video/feed">
+			<img src="../../../static/rss-small.png" title="Video RSS Feed" label="Video RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Video.html">Video</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../../../category/Windows/feed">
+			<img src="../../../static/rss-small.png" title="Windows RSS Feed" label="Windows RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Windows.html">Windows</a></span> (1)
+	</li>
+
+</ul>
+                    
+                </div>
+            </div>
+            <div class="col-md-8 col-md-pull-4">
+                <div id="main">
+                    
+                    
+                    
+                    
+                    
+
+<div class="post">
+
+<p class="date"><span class="flask-moment" data-timestamp="2012-05-20T07:30:21Z" data-format="format('LL')" data-refresh="0">2012-05-20T07:30:21Z</span></p>
+<h1 class="post-title"><a href="../../the-flask-mega-tutorial-part-iv-database.html">The Flask Mega-Tutorial, Part IV: Database</a></h1>
+<div class="posted">Posted by <span class="label label-danger"><a href="http://blog.miguelgrinberg.com/author/Miguel Grinberg">Miguel Grinberg</a></span> under <span class="label label-primary"><a href="../../../category/Python.html">Python</a></span>, <span class="label label-primary"><a href="../../../category/Programming.html">Programming</a></span>, <span class="label label-primary"><a href="../../../category/Flask.html">Flask</a></span>. </div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-iv-database" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-iv-database" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="../../the-flask-mega-tutorial-part-iv-database.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-iv-database" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+<div class="post_body"><p>This is the fourth article in the series in which I document my experience writing web applications in <a href="http://python.org/">Python</a> using the <a href="http://flask.pocoo.org/">Flask</a> microframework.</p>
+<p>The goal of the tutorial series is to develop a decently featured microblogging application that demonstrating total lack of originality I have decided to call <code>microblog</code>.</p>
+<p><strong>NOTE</strong>: This article was revised in September 2014 to be in sync with current versions of Python and Flask.</p>
+<p>Here is an index of all the articles in the series that have been published to date:</p>
+<ul>
+<li><a href="../../the-flask-mega-tutorial-part-i-hello-world.html">Part I: Hello, World!</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-ii-templates.html">Part II: Templates</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-iii-web-forms.html">Part III: Web Forms</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-iv-database.html">Part IV: Database</a> (this article)</li>
+<li><a href="../../the-flask-mega-tutorial-part-v-user-logins.html">Part V: User Logins</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-vi-profile-page-and-avatars.html">Part VI: Profile Page And Avatars</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-vii-unit-testing.html">Part VII: Unit Testing</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-viii-followers-contacts-and-friends.html">Part VIII: Followers, Contacts And Friends</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-ix-pagination.html">Part IX: Pagination</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-x-full-text-search.html">Part X: Full Text Search</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xi-email-support.html">Part XI: Email Support</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xii-facelift.html">Part XII: Facelift</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xiii-dates-and-times.html">Part XIII: Dates and Times</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xiv-i18n-and-l10n.html">Part XIV: I18n and L10n</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xv-ajax.html">Part XV: Ajax</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xvi-debugging-testing-and-profiling.html">Part XVI: Debugging, Testing and Profiling</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xvii-deployment-on-linux-even-on-the-raspberry-pi.html">Part XVII: Deployment on Linux (even on the Raspberry Pi!)</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xviii-deployment-on-the-heroku-cloud.html">Part XVIII: Deployment on the Heroku Cloud</a></li>
+</ul>
+<h2>Recap</h2>
+<p>In the previous chapter of the series we created our login form, complete with submission and validation.</p>
+<p>In this article we are going to create our database and set it up so that we can record our users in it.</p>
+<p>To follow this chapter along you need to have the <code>microblog</code> app as we left it at the end of the previous chapter. Please make sure the app is installed and running.</p>
+<h2>Running Python scripts from the command line</h2>
+<p>In this chapter we are going to write a few scripts that simplify the management of our database. Before we get into that let's review how a Python script is executed on the command line.</p>
+<p>If you are on Linux or OS X, then scripts have to be given executable permission, like this:</p>
+<pre><code>$ chmod a+x script.py
+</code></pre>
+<p>The script has a <a href="http://en.wikipedia.org/wiki/Shebang_(Unix)">shebang</a> line, which points to the interpreter that should be used. A script that has been given executable permission and has a shebang line can be executed simply like this:</p>
+<pre><code>./script.py &lt;arguments&gt;
+</code></pre>
+<p>On Windows, however, this does not work, and instead you have to provide the script as an argument to the chosen Python interpreter:</p>
+<pre><code>$ flask\Scripts\python script.py &lt;arguments&gt;
+</code></pre>
+<p>To avoid having to type the path to the Python interpreter you can add your <code>microblog/flask/Scripts</code> directory to the system path, making sure it appears before your regular Python interpreter. This can be temporarily achieved by activating the virtual environment with the following command:</p>
+<pre><code>$ flask\Scripts\activate
+</code></pre>
+<p>From now on, in this tutorial the Linux/OS X syntax will be used for brevity. If you are on Windows remember to convert the syntax appropriately.</p>
+<h2>Databases in Flask</h2>
+<p>We will use the <a href="http://packages.python.org/Flask-SQLAlchemy">Flask-SQLAlchemy</a> extension to manage our application. This extension provides a wrapper for the <a href="http://www.sqlalchemy.org/">SQLAlchemy</a> project, which is an <a href="http://en.wikipedia.org/wiki/Object-relational_mapping">Object Relational Mapper</a> or ORM.</p>
+<p>ORMs allow database applications to work with objects instead of tables and SQL. The operations performed on the objects are translated into database commands transparently by the ORM. Knowing SQL can be very helpful when working with ORMs, but we will not be learning SQL in this tutorial, we will let Flask-SQLAlchemy speak SQL for us.</p>
+<h2>Migrations</h2>
+<p>Most database tutorials I've seen cover creation and use of a database, but do not adequately address the problem of updating a database as the application grows. Typically you end up having to delete the old database and create a new one each time you need to make updates, losing all the data. And if the data cannot be recreated easily you may be forced to write export and import scripts yourself.</p>
+<p>Luckily, we have a much better option.</p>
+<p>We are going to use <a href="http://code.google.com/p/sqlalchemy-migrate">SQLAlchemy-migrate</a> to keep track of database updates for us. It adds a bit of work to get a database started, but that is a small price to pay for never having to worry about manual database migrations.</p>
+<p>Enough theory, let's get started!</p>
+<h2>Configuration</h2>
+<p>For our little application we will use a sqlite database. The sqlite databases are the most convenient choice for small applications, as each database is stored in a single file and there is no need to start a database server.</p>
+<p>We have a couple of new configuration items to add to our config file (file <code>config.py</code>):</p>
+<pre><code>import os
+basedir = os.path.abspath(os.path.dirname(__file__))
+
+SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'app.db')
+SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repository')
+</code></pre>
+<p>The SQLALCHEMY_DATABASE_URI is required by the Flask-SQLAlchemy extension. This is the path of our database file.</p>
+<p>The SQLALCHEMY_MIGRATE_REPO is the folder where we will store the SQLAlchemy-migrate data files.</p>
+<p>Finally, when we initialize our app we also need to initialize our database. Here is our updated package init file (file <code>app/__init__.py</code>):</p>
+<pre><code>from flask import Flask
+from flask.ext.sqlalchemy import SQLAlchemy
+
+app = Flask(__name__)
+app.config.from_object('config')
+db = SQLAlchemy(app)
+
+from app import views, models
+</code></pre>
+<p>Note the two changes we have made to our init script. We are now creating a <code>db</code> object that will be our database, and we are also importing a new module called <code>models</code>. We will write this module next.</p>
+<h2>The database model</h2>
+<p>The data that we will store in our database will be represented by a collection of classes that are referred to as the database models. The ORM layer will do the translations required to map objects created from these classes into rows in the proper database table.</p>
+<p>Let's start by creating a model that will represent our users. Using the <a href="http://ondras.zarovi.cz/sql/demo">WWW SQL Designer</a> tool, I have made the following diagram to represent our users table:</p>
+<p><img alt="users table" src="../../../static/images/flask-mega-tutorial-part-iv-1.png" /></p>
+<p>The <code>id</code> field is usually in all models, and is used as the <em>primary key</em>. Each user in the database will be assigned a unique id value, stored in this field. Luckily this is done automatically for us, we just need to provide the <code>id</code> field.</p>
+<p>The <code>nickname</code> and <code>email</code> fields are defined as strings (or VARCHAR in database jargon), and their maximum lengths are specified so that the database can optimize space usage.</p>
+<p>Now that we have decided what we want our users table to look like, the job of translating that into code is pretty easy (file <code>app/models.py</code>):</p>
+<pre><code>from app import db
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nickname = db.Column(db.String(64), index=True, unique=True)
+    email = db.Column(db.String(120), index=True, unique=True)
+
+    def __repr__(self):
+        return '&lt;User %r&gt;' % (self.nickname)
+</code></pre>
+<p>The <code>User</code> class that we just created contains several fields, defined as class variables. Fields are created as instances of the <code>db.Column</code> class, which takes the field type as an argument, plus other optional arguments that allow us, for example, to indicate which fields are unique and indexed.</p>
+<p>The <code>__repr__</code> method tells Python how to print objects of this class. We will use this for debugging.</p>
+<h2>Creating the database</h2>
+<p>With the configuration and model in place we are now ready to create our database file. The SQLAlchemy-migrate package comes with command line tools and APIs to create databases in a way that allows easy updates in the future, so that is what we will use. I find the command line tools a bit awkward to use, so instead I have written my own set of little Python scripts that invoke the migration APIs.</p>
+<p>Here is a script that creates the database (file <code>db_create.py</code>):</p>
+<pre><code>#!flask/bin/python
+from migrate.versioning import api
+from config import SQLALCHEMY_DATABASE_URI
+from config import SQLALCHEMY_MIGRATE_REPO
+from app import db
+import os.path
+db.create_all()
+if not os.path.exists(SQLALCHEMY_MIGRATE_REPO):
+    api.create(SQLALCHEMY_MIGRATE_REPO, 'database repository')
+    api.version_control(SQLALCHEMY_DATABASE_URI, SQLALCHEMY_MIGRATE_REPO)
+else:
+    api.version_control(SQLALCHEMY_DATABASE_URI, SQLALCHEMY_MIGRATE_REPO, api.version(SQLALCHEMY_MIGRATE_REPO))
+</code></pre>
+<p>Note how this script is completely generic. All the application specific pathnames are imported from the config file. When you start your own project you can just copy the script to the new app's directory and it will work right away.</p>
+<p>To create the database you just need to execute this script (remember that if you are on Windows the command is slightly different):</p>
+<pre><code>./db_create.py
+</code></pre>
+<p>After you run the command you will have a new <code>app.db</code> file. This is an empty sqlite database, created from the start to support migrations. You will also have a <code>db_repository</code> directory with some files inside. This is the place where SQLAlchemy-migrate stores its data files. Note that we do not regenerate the repository if it already exists. This will allow us to recreate the database while leaving the existing repository if we need to.</p>
+<h2>Our first migration</h2>
+<p>Now that we have defined our model, we can incorporate it into our database. We will consider any changes to the structure of the app database a <em>migration</em>, so this is our first, which will take us from an empty database to a database that can store users.</p>
+<p>To generate a migration I use another little Python helper script (file <code>db_migrate.py</code>):</p>
+<pre><code>#!flask/bin/python
+import imp
+from migrate.versioning import api
+from app import db
+from config import SQLALCHEMY_DATABASE_URI
+from config import SQLALCHEMY_MIGRATE_REPO
+v = api.db_version(SQLALCHEMY_DATABASE_URI, SQLALCHEMY_MIGRATE_REPO)
+migration = SQLALCHEMY_MIGRATE_REPO + ('/versions/%03d_migration.py' % (v+1))
+tmp_module = imp.new_module('old_model')
+old_model = api.create_model(SQLALCHEMY_DATABASE_URI, SQLALCHEMY_MIGRATE_REPO)
+exec(old_model, tmp_module.__dict__)
+script = api.make_update_script_for_model(SQLALCHEMY_DATABASE_URI, SQLALCHEMY_MIGRATE_REPO, tmp_module.meta, db.metadata)
+open(migration, "wt").write(script)
+api.upgrade(SQLALCHEMY_DATABASE_URI, SQLALCHEMY_MIGRATE_REPO)
+v = api.db_version(SQLALCHEMY_DATABASE_URI, SQLALCHEMY_MIGRATE_REPO)
+print('New migration saved as ' + migration)
+print('Current database version: ' + str(v))
+</code></pre>
+<p>The script looks complicated, but it doesn't really do much. The way SQLAlchemy-migrate creates a migration is by comparing the structure of the database (obtained in our case from file <code>app.db</code>) against the structure of our models (obtained from file <code>app/models.py</code>). The differences between the two are recorded as a migration script inside the migration repository. The migration script knows how to apply a migration or undo it, so it is always possible to upgrade or downgrade a database format.</p>
+<p>While I have never had problems generating migrations automatically with the above script, I could see that sometimes it would be hard to determine what changes were made just by comparing the old and the new format. To make it easy for SQLAlchemy-migrate to determine the changes I never rename existing fields, I limit my changes to adding or removing models or fields, or changing types of existing fields. And I always review the generated migration script to make sure it is right.</p>
+<p>It goes without saying that you should never attempt to migrate your database without having a backup, in case something goes wrong. Also never run a migration for the first time on a production database, always make sure the migration works correctly on a development database.</p>
+<p>So let's go ahead and record our migration:</p>
+<pre><code>$ ./db_migrate.py
+</code></pre>
+<p>And the output from the script will be:</p>
+<pre><code>New migration saved as db_repository/versions/001_migration.py
+Current database version: 1
+</code></pre>
+<p>The script shows where the migration script was stored, and also prints the current database version. The empty database version was version 0, after we migrated to include users we are at version 1.</p>
+<h2>Database upgrades and downgrades</h2>
+<p>By now you may be wondering why is it that important to go through the extra hassle of recording database migrations.</p>
+<p>Imagine that you have your application in your development machine, and also have a copy deployed to a production server that is online and in use.</p>
+<p>Let's say that for the next release of your app you have to introduce a change to your models, for example a new table needs to be added. Without migrations you would need to figure out how to change the format of your database, both in your development machine and then again in your server, and this could be a lot of work.</p>
+<p>If you have database migration support, then when you are ready to release the new version of the app to your production server you just need to record a new migration, copy the migration scripts to your production server and run a simple script that applies the changes for you. The database upgrade can be done with this little Python script (file <code>db_upgrade.py</code>):</p>
+<pre><code>#!flask/bin/python
+from migrate.versioning import api
+from config import SQLALCHEMY_DATABASE_URI
+from config import SQLALCHEMY_MIGRATE_REPO
+api.upgrade(SQLALCHEMY_DATABASE_URI, SQLALCHEMY_MIGRATE_REPO)
+v = api.db_version(SQLALCHEMY_DATABASE_URI, SQLALCHEMY_MIGRATE_REPO)
+print('Current database version: ' + str(v))
+</code></pre>
+<p>When you run the above script, the database will be upgraded to the latest revision, by applying the migration scripts stored in the database repository.</p>
+<p>It is not a common need to have to downgrade a database to an old format, but just in case, SQLAlchemy-migrate supports this as well (file <code>db_downgrade.py</code>):</p>
+<pre><code>#!flask/bin/python
+from migrate.versioning import api
+from config import SQLALCHEMY_DATABASE_URI
+from config import SQLALCHEMY_MIGRATE_REPO
+v = api.db_version(SQLALCHEMY_DATABASE_URI, SQLALCHEMY_MIGRATE_REPO)
+api.downgrade(SQLALCHEMY_DATABASE_URI, SQLALCHEMY_MIGRATE_REPO, v - 1)
+v = api.db_version(SQLALCHEMY_DATABASE_URI, SQLALCHEMY_MIGRATE_REPO)
+print('Current database version: ' + str(v))
+</code></pre>
+<p>This script will downgrade the database one revision. You can run it multiple times to downgrade several revisions.</p>
+<h2>Database relationships</h2>
+<p>Relational databases are good at storing relations between data items. Consider the case of a user writing a blog post. The user will have a record in the <code>users</code> table, and the post will have a record in the <code>posts</code> table. The most efficient way to record who wrote a given post is to link the two related records.</p>
+<p>Once a link between a user and a post is established there are two types of queries that we may need to use. The most trivial one is when you have a blog post and need to know what user wrote it. A more complex query is the reverse of this one. If you have a user, you may want to know all the posts that the user wrote. Flask-SQLAlchemy will help us with both types of queries.</p>
+<p>Let's expand our database to store posts, so that we can see relationships in action. For this we go back to our database design tool and create a <code>posts</code> table:</p>
+<p><img alt="users table" src="../../../static/images/flask-mega-tutorial-part-iv-2.png" /></p>
+<p>Our <code>posts</code> table will have the required <code>id</code>, the <code>body</code> of the post and a <code>timestamp</code>. Not much new there. But the <code>user_id</code> field deserves an explanation.</p>
+<p>We said we wanted to link users to the posts that they write. The way to do that is by adding a field to the post that contains the <code>id</code> of the user that wrote it. This <code>id</code> is called a <em>foreign key</em>. Our database design tool shows foreign keys as a link between the foreign key and the <code>id</code> field of the table it refers to. This kind of link is called a one-to-many relationship, <em>one</em> user writes <em>many</em> posts.</p>
+<p>Let's modify our models to reflect these changes (<code>app/models.py</code>):</p>
+<pre><code>from app import db
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nickname = db.Column(db.String(64), index=True, unique=True)
+    email = db.Column(db.String(120), index=True, unique=True)
+    posts = db.relationship('Post', backref='author', lazy='dynamic')
+
+    def __repr__(self):
+        return '&lt;User %r&gt;' % (self.nickname)
+
+class Post(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    body = db.Column(db.String(140))
+    timestamp = db.Column(db.DateTime)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    def __repr__(self):
+        return '&lt;Post %r&gt;' % (self.body)
+</code></pre>
+<p>We have added the <code>Post</code> class, which will represent blog posts written by users. The <code>user_id</code> field in the <code>Post</code> class was initialized as a <em>foreign key</em>, so that Flask-SQLAlchemy knows that this field will link to a user.</p>
+<p>Note that we have also added a new field to the <code>User</code> class called <code>posts</code>, that is constructed as a <code>db.relationship</code> field. This is not an actual database field, so it isn't in our database diagram. For a one-to-many relationship a <code>db.relationship</code> field is normally defined on the "one" side. With this relationship we get a <code>user.posts</code> member that gets us the list of posts from the user. The first argument to <code>db.relationship</code> indicates the "many" class of this relationship. The <code>backref</code> argument defines a field that will be added to the objects of the "many" class that points back at the "one" object. In our case this means that we can use <code>post.author</code> to get the User instance that created a post. Don't worry if these details don't make much sense just yet, we'll see examples of this at the end of this article.</p>
+<p>Let's record another migration with this change. Simply run:</p>
+<pre><code>$ ./db_migrate.py
+</code></pre>
+<p>And the script will respond:</p>
+<pre><code>New migration saved as db_repository/versions/002_migration.py
+Current database version: 2
+</code></pre>
+<p>It isn't really necessary to record each little change to the database model as a separate migration, a migration is normally only recorded at significant points in the history of the project. We are doing more migrations than necessary here only to show how the migration system works.</p>
+<h2>Play time</h2>
+<p>We have spent a lot of time defining our database, but we haven't seen how it works yet. Since our app does not have database code yet let's make use of our brand new database in the Python interpreter.</p>
+<p>So go ahead and fire up Python. On Linux or OS X:</p>
+<pre><code>flask/bin/python
+</code></pre>
+<p>Or on Windows:</p>
+<pre><code>flask\Scripts\python
+</code></pre>
+<p>Once in the Python prompt enter the following:</p>
+<pre><code>&gt;&gt;&gt; from app import db, models
+&gt;&gt;&gt;
+</code></pre>
+<p>This brings our database and models into memory. </p>
+<p>Let's create a new user:</p>
+<pre><code>&gt;&gt;&gt; u = models.User(nickname='john', email='john@email.com')
+&gt;&gt;&gt; db.session.add(u)
+&gt;&gt;&gt; db.session.commit()
+&gt;&gt;&gt;
+</code></pre>
+<p>Changes to a database are done in the context of a session. Multiple changes can be accumulated in a session and once all the changes have been registered you can issue a single <code>db.session.commit()</code>, which writes the changes atomically. If at any time while working on a session there is an error, a call to <code>db.session.rollback()</code> will revert the database to its state before the session was started. If neither <code>commit</code> nor <code>rollback</code> are issued then the system by default will roll back the session. Sessions guarantee that the database will never be left in an inconsistent state.</p>
+<p>Let's add another user:</p>
+<pre><code>&gt;&gt;&gt; u = models.User(nickname='susan', email='susan@email.com')
+&gt;&gt;&gt; db.session.add(u)
+&gt;&gt;&gt; db.session.commit()
+&gt;&gt;&gt;
+</code></pre>
+<p>Now we can query what our users are:</p>
+<pre><code>&gt;&gt;&gt; users = models.User.query.all()
+&gt;&gt;&gt; users
+[&lt;User u'john'&gt;, &lt;User u'susan'&gt;]
+&gt;&gt;&gt; for u in users:
+...     print(u.id,u.nickname)
+...
+1 john
+2 susan
+&gt;&gt;&gt;
+</code></pre>
+<p>For this we have used the <code>query</code> member, which is available in all model classes. Note how the <code>id</code> member was automatically set for us.</p>
+<p>Here is another way to do queries. If we know the <code>id</code> of a user we can find the data for that user as follows:</p>
+<pre><code>&gt;&gt;&gt; u = models.User.query.get(1)
+&gt;&gt;&gt; u
+&lt;User u'john'&gt;
+&gt;&gt;&gt;
+</code></pre>
+<p>Now let's add a blog post:</p>
+<pre><code>&gt;&gt;&gt; import datetime
+&gt;&gt;&gt; u = models.User.query.get(1)
+&gt;&gt;&gt; p = models.Post(body='my first post!', timestamp=datetime.datetime.utcnow(), author=u)
+&gt;&gt;&gt; db.session.add(p)
+&gt;&gt;&gt; db.session.commit()
+</code></pre>
+<p>Here we set our <code>timestamp</code> in UTC time zone. All timestamps stored in our database will be in UTC. We can have users from all over the world writing posts and we need to use uniform time units. In a future tutorial we will see how to show these times to users in their local timezone.</p>
+<p>You may have noticed that we have not set the <code>user_id</code> field of the Post class. Instead, we are storing a User object inside the <code>author</code> field. The <code>author</code> field is a virtual field that was added by Flask-SQLAlchemy to help with relationships, we have defined the name of this field in the <code>backref</code> argument to <code>db.relationship</code> in our model. With this information the ORM layer will know how to complete the <code>user_id</code> for us.</p>
+<p>To complete this session, let's look at a few more database queries that we can do:</p>
+<pre><code># get all posts from a user
+&gt;&gt;&gt; u = models.User.query.get(1)
+&gt;&gt;&gt; u
+&lt;User u'john'&gt;
+&gt;&gt;&gt; posts = u.posts.all()
+&gt;&gt;&gt; posts
+[&lt;Post u'my first post!'&gt;]
+
+# obtain author of each post
+&gt;&gt;&gt; for p in posts:
+...     print(p.id,p.author.nickname,p.body)
+...
+1 john my first post!
+
+# a user that has no posts
+&gt;&gt;&gt; u = models.User.query.get(2)
+&gt;&gt;&gt; u
+&lt;User u'susan'&gt;
+&gt;&gt;&gt; u.posts.all()
+[]
+
+# get all users in reverse alphabetical order
+&gt;&gt;&gt; models.User.query.order_by('nickname desc').all()
+[&lt;User u'susan'&gt;, &lt;User u'john'&gt;]
+&gt;&gt;&gt;
+</code></pre>
+<p>The <a href="http://packages.python.org/Flask-SQLAlchemy/index.html">Flask-SQLAlchemy</a> documentation is the best place to learn about the many options that are available to query the database.</p>
+<p>Before we close, let's erase the test users and posts we have created, so that we can start from a clean database in the next chapter:</p>
+<pre><code>&gt;&gt;&gt; users = models.User.query.all()
+&gt;&gt;&gt; for u in users:
+...     db.session.delete(u)
+...
+&gt;&gt;&gt; posts = models.Post.query.all()
+&gt;&gt;&gt; for p in posts:
+...     db.session.delete(p)
+...
+&gt;&gt;&gt; db.session.commit()
+&gt;&gt;&gt;
+</code></pre>
+<h2>Final words</h2>
+<p>This was a long tutorial. We have learned the basics of working with a database, but we haven't incorporated the database into our application yet. In the next chapter we will put all we have learned about databases into practice when we look at our user login system.</p>
+<p>In the meantime, if you haven't been writing the application along, you may want to download it in its current state:</p>
+<p>Download <a href="https://codeload.github.com/miguelgrinberg/microblog/zip/version-0.4">microblog-0.4.zip</a>.</p>
+<p>Note that I have not included a database in the zip file above, but the repository with the migrations is there. To create a new database just use the <code>db_create.py</code> script, then use <code>db_upgrade.py</code> to upgrade the database to the latest revision.</p>
+<p>I hope to see you next time!</p>
+<p>Miguel</p></div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-iv-database" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-iv-database" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="../../the-flask-mega-tutorial-part-iv-database.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-iv-database" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+
+
+<h4 style="text-align: right"><a name="comments"></a>406 comments</h4>
+
+
+<div class="comment">
+    <ul>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/eb88b2e518c523e76fdccf958b0ddc44ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#276</span> <span class="label label-primary">Alex</span> said
+                    <span class="flask-moment" data-timestamp="2014-09-01T09:50:18Z" data-format="fromNow(0)" data-refresh="0">2014-09-01T09:50:18Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hello! it`s wery popular tutorial, and many peoples use ut to start writing on python flask. But how said in #253, now information isn&#39;t completely actual, please tell how fix it. how modify code and how use WTForms-Alchemy to create database?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/772236c26f6371bb293d109fc7cd1f55ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#277</span> <span class="label label-primary"><a href="www.mZoo.html">Mike iLL</a></span> said
+                    <span class="flask-moment" data-timestamp="2014-09-18T20:15:34Z" data-format="fromNow(0)" data-refresh="0">2014-09-18T20:15:34Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">timestamp = db.Column(db.DateTime) needs to be timestamp = db.Column(db.DATETIME)
+
+.. and thank you!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/271f964198c3c4f8a25a9a9ba4814a7ace2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#278</span> <span class="label label-primary">Morgan</span> said
+                    <span class="flask-moment" data-timestamp="2014-09-28T04:54:15Z" data-format="fromNow(0)" data-refresh="0">2014-09-28T04:54:15Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Error: for db_migrate.py, line 8 returns syntax error, missing &#39;(&#39; 
+
+migration = SQLALCHEMY_MIGRATE_REPO + (&#39;/versions/%03d_migration.py&#39; % v+1))
+
+should be:
+
+migration = SQLALCHEMY_MIGRATE_REPO + (&#39;/versions/%03d_migration.py&#39; % (v+1))</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#279</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-09-28T06:08:56Z" data-format="fromNow(0)" data-refresh="0">2014-09-28T06:08:56Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Morgan: correction made. Thanks!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/8a8cf8aec1a78aa4d4efd8eaf60c31a3ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#280</span> <span class="label label-primary">Lahan</span> said
+                    <span class="flask-moment" data-timestamp="2014-09-28T15:35:35Z" data-format="fromNow(0)" data-refresh="0">2014-09-28T15:35:35Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel.
+Thanks for the tutorial.
+When running db_migrate.py I get the following error:
+
+ File &#34;./db_migrate.py&#34;, line 18
+    exec old_model in tmp_module.__dict__
+                 ^
+SyntaxError: Missing parentheses in call to &#39;exec&#39;
+
+I&#39;m using PyCharm and Python 3.4.1 and I also get this: 
+&#34;The imp module is deprecated in favour of importlib;&#34;
+
+Thanks again.
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/8a8cf8aec1a78aa4d4efd8eaf60c31a3ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#281</span> <span class="label label-primary">Lahan</span> said
+                    <span class="flask-moment" data-timestamp="2014-09-28T16:24:52Z" data-format="fromNow(0)" data-refresh="0">2014-09-28T16:24:52Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi again.
+
+Regarding the previous issue in db_migrate.py I forgot to explain how I corrected:
+
+exec old_model in tmp_module.__dict__
+
+with:
+
+exec(old_model, tmp_module.__dict__)
+
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#282</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-09-29T01:57:24Z" data-format="fromNow(0)" data-refresh="0">2014-09-29T01:57:24Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Lahan: oops, you are correct. This is now corrected, in the article and in the repository. Thanks!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/e343174c8c9c2ee107d97c34c2754f25ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#283</span> <span class="label label-primary">George</span> said
+                    <span class="flask-moment" data-timestamp="2014-09-30T19:47:49Z" data-format="fromNow(0)" data-refresh="0">2014-09-30T19:47:49Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi there, really helpfull tutorial. 
+I am currently facing a problem, when i am running ./flask/Scripts/db_create.py i get the error: from app import db ImportError: No module named app ... ! Already there is the __init__.py in the app folder, i don&#39;t understand what&#39;s going on. Any insights?
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#284</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-10-01T06:28:42Z" data-format="fromNow(0)" data-refresh="0">2014-10-01T06:28:42Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@George: put the db_create.py script in the &#34;microblog&#34; folder, not in flask\Scripts.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/adf9a4b1a337563efb11671a29e3162ece2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#285</span> <span class="label label-primary">Zhiqiang</span> said
+                    <span class="flask-moment" data-timestamp="2014-10-05T09:24:25Z" data-format="fromNow(0)" data-refresh="0">2014-10-05T09:24:25Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi, Thank you for your great tutorials. When i run db_create.py, I get these errors: 
+Traceback (most recent call last):
+  File &#34;D:\Python27\micorblog\db_create.py&#34;, line 2, in &lt;module&gt;
+    from migrate.versioning import api
+  File &#34;D:\Python27\lib\site-packages\migrate\__init__.py&#34;, line 14, in &lt;module&gt;
+
+    pkg_resources.Requirement.parse(&#39;sqlalchemy-migrate&#39;)).version
+  File &#34;D:\Python27\lib\site-packages\setuptools-0.6c11-py2.7.egg\pkg_resources.
+py&#34;, line 197, in get_provider
+  File &#34;D:\Python27\lib\site-packages\setuptools-0.6c11-py2.7.egg\pkg_resources.
+py&#34;, line 666, in require
+  File &#34;D:\Python27\lib\site-packages\setuptools-0.6c11-py2.7.egg\pkg_resources.
+py&#34;, line 565, in resolve
+pkg_resources.DistributionNotFound: sqlalchemy-migrate
+
+What am I doing wrong?  Thank you.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#286</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-10-06T00:56:27Z" data-format="fromNow(0)" data-refresh="0">2014-10-06T00:56:27Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Zhiqiang: something is wrong in your virtual environment. I recommend that you make a new one and install all the dependencies again.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/1c95ab7c0b1cefa6a2de38989dbdc316ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#287</span> <span class="label label-primary">S</span> said
+                    <span class="flask-moment" data-timestamp="2014-10-19T01:20:43Z" data-format="fromNow(0)" data-refresh="0">2014-10-19T01:20:43Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hey Miguel, I&#39;ve been getting a lot of warnings like then when running db_migrate.py and other scripts: SADeprecationWarning: Passing arguments to type object constructor &lt;class &#39;sqlalchemy.types.Integer&#39;&gt; is deprecated
+  id = db.Column(db.Integer(64), primary_key=True)
+
+Not sure if this is normal or not (seems to be working otherwise.  Spits out the current database version after several warnings)</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/e7b7f90cbfdc7247da86e1567ae69464ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#288</span> <span class="label label-primary">Brian F</span> said
+                    <span class="flask-moment" data-timestamp="2014-10-19T01:48:09Z" data-format="fromNow(0)" data-refresh="0">2014-10-19T01:48:09Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Just fantastic. Thank you for writing this. I&#39;m up to the database chapter and all the examples work perfectly so far! That&#39;s rare!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#289</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-10-19T23:25:49Z" data-format="fromNow(0)" data-refresh="0">2014-10-19T23:25:49Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@S: The warning complains about the 64 that you pass to the Integer column type. If you need a specific type of integer you may need to use the database specific types.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/39a8e50426d3048f1117057c678dad6dce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#290</span> <span class="label label-primary">Minh Tuan</span> said
+                    <span class="flask-moment" data-timestamp="2014-10-20T15:35:33Z" data-format="fromNow(0)" data-refresh="0">2014-10-20T15:35:33Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">This part is perfect! Many thanks.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/21e08b5ff0801febc7bc4813f155dcc5ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#291</span> <span class="label label-primary">UrduD</span> said
+                    <span class="flask-moment" data-timestamp="2014-10-26T06:51:22Z" data-format="fromNow(0)" data-refresh="0">2014-10-26T06:51:22Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel, Thanks for this. Nicely written &amp; very helpful.
+I&#39;m running into an issue while adding data to one-to-many Flask-SQLAlchemy. The problem is that I&#39;m able to add data to the MANY side even when I&#39;ve nothing in the ONE side. I&#39;ve done it similar to what&#39;s described in this part above. I&#39;m puzzled why foreign key is not being enforced to reject this. Thanks again.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#292</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-10-26T07:11:12Z" data-format="fromNow(0)" data-refresh="0">2014-10-26T07:11:12Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@UrduD: The model definition in this article does not set a constrain to reject empty foreign keys. If you want to enforce non-zero keys you have to add &#34;nullable=False&#34; to the column definition.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/de8f9b4d232b11cfebe1d66bc837ac1bce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#293</span> <span class="label label-primary">naren</span> said
+                    <span class="flask-moment" data-timestamp="2014-10-26T12:52:24Z" data-format="fromNow(0)" data-refresh="0">2014-10-26T12:52:24Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">First, thanks for this awesome tutorial. i got an error message while executing db_create.py as follows, please help me with that.
+
+Traceback (most recent call last):
+  File &#34;./db_create.py&#34;, line 9, in &lt;module&gt;
+    db.create_all()
+  File &#34;/usr/local/lib/python2.7/dist-packages/Flask_SQLAlchemy-2.0-py2.7.egg/flask_sqlalchemy/__init__.py&#34;, line 895, in create_all
+    self._execute_for_all_tables(app, bind, &#39;create_all&#39;)
+  File &#34;/usr/local/lib/python2.7/dist-packages/Flask_SQLAlchemy-2.0-py2.7.egg/flask_sqlalchemy/__init__.py&#34;, line 887, in _execute_for_all_tables
+    op(bind=self.get_engine(app, bind), **extra)
+  File &#34;/usr/local/lib/python2.7/dist-packages/Flask_SQLAlchemy-2.0-py2.7.egg/flask_sqlalchemy/__init__.py&#34;, line 833, in get_engine
+    return connector.get_engine()
+  File &#34;/usr/local/lib/python2.7/dist-packages/Flask_SQLAlchemy-2.0-py2.7.egg/flask_sqlalchemy/__init__.py&#34;, line 499, in get_engine
+    self._engine = rv = sqlalchemy.create_engine(info, **options)
+  File &#34;/usr/local/lib/python2.7/dist-packages/SQLAlchemy-0.9.8-py2.7-linux-x86_64.egg/sqlalchemy/engine/__init__.py&#34;, line 362, in create_engine
+    return strategy.create(*args, **kwargs)
+  File &#34;/usr/local/lib/python2.7/dist-packages/SQLAlchemy-0.9.8-py2.7-linux-x86_64.egg/sqlalchemy/engine/strategies.py&#34;, line 51, in create
+    dialect_cls = u.get_dialect()
+  File &#34;/usr/local/lib/python2.7/dist-packages/SQLAlchemy-0.9.8-py2.7-linux-x86_64.egg/sqlalchemy/engine/url.py&#34;, line 129, in get_dialect
+    cls = registry.load(name)
+  File &#34;/usr/local/lib/python2.7/dist-packages/SQLAlchemy-0.9.8-py2.7-linux-x86_64.egg/sqlalchemy/util/langhelpers.py&#34;, line 194, in load
+    (self.group, name))
+sqlalchemy.exc.NoSuchModuleError: Can&#39;t load plugin: sqlalchemy.dialects:sqllite
+
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#294</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-10-26T18:23:52Z" data-format="fromNow(0)" data-refresh="0">2014-10-26T18:23:52Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@naren: it seems you are not using a virtual environment. Can you setup one as shown in part 1 of this tutorial and try again?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/39a8e50426d3048f1117057c678dad6dce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#295</span> <span class="label label-primary">Minh Tuan</span> said
+                    <span class="flask-moment" data-timestamp="2014-11-11T09:01:27Z" data-format="fromNow(0)" data-refresh="0">2014-11-11T09:01:27Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I think:
+
+p = models.Post(body=&#39;my first post!&#39;, timestamp=datetime.datetime.utcnow(), author=u)
+
+should be:
+
+p = models.Post(body=&#39;my first post!&#39;, timestamp=datetime.datetime.utcnow(), author=u.id)
+
+Is it correct?
+
+Thanks.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#296</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-11-12T07:20:59Z" data-format="fromNow(0)" data-refresh="0">2014-11-12T07:20:59Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Minh: No, that is incorrect. The &#34;author&#34; field is a smart field that is created by the ORM as part of the relationship setup. It is not the actual id column stored in the database. SQLAlchemy will store the id in the proper column automatically.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/39a8e50426d3048f1117057c678dad6dce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#297</span> <span class="label label-primary">Minh Tuan</span> said
+                    <span class="flask-moment" data-timestamp="2014-11-14T21:14:18Z" data-format="fromNow(0)" data-refresh="0">2014-11-14T21:14:18Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Thanks Miguel, i understood that the &#34;author&#34; field is an &#34;virtual&#34; field.
+But &#34;u&#34; without &#34;.id&#34;,  i got the error:
+IntegrityError: &lt;unprintable IntegrityError object&gt;
+
+I&#39;m using MySql. Thanks.
+
+ </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/39a8e50426d3048f1117057c678dad6dce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#298</span> <span class="label label-primary">Minh Tuan</span> said
+                    <span class="flask-moment" data-timestamp="2014-11-16T11:36:36Z" data-format="fromNow(0)" data-refresh="0">2014-11-16T11:36:36Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Sorry miguel,
+My models was not init properly. Thank you.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/c0255d9f5772ba04155eb4ab286b6fb7ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#299</span> <span class="label label-primary">Tema</span> said
+                    <span class="flask-moment" data-timestamp="2014-11-20T11:48:38Z" data-format="fromNow(0)" data-refresh="0">2014-11-20T11:48:38Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi! I already read about &#39;author&#39; propery as invisible, but i have an console error with code:
+
+p = models.Post(body=&#39;my first post!&#39;, timestamp=datetime.datetime.utcnow(), author=u)
+
+and error message is 
+/microblog/flask/lib/python2.7/site-packages/sqlalchemy/ext/declarative/base.pyc in _declarative_constructor(self, **kwargs)
+    523             raise TypeError(
+    524                 &#34;%r is an invalid keyword argument for %s&#34; %
+--&gt; 525                 (k, cls_.__name__))
+    526         setattr(self, k, kwargs[k])
+    527 _declarative_constructor.__name__ = &#39;__init__&#39;
+
+TypeError: &#39;author&#39; is an invalid keyword argument for Post
+
+Can you help me?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#300</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-11-21T06:34:54Z" data-format="fromNow(0)" data-refresh="0">2014-11-21T06:34:54Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Tema: compare your models.py with mine on Github. It is possible that you forgot to define the relationship between authors and posts.</p>
+                </div>
+            </div>
+        </li>
+        
+    </ul>
+</div>
+
+<div class="page">
+<ul class="pager">
+  <li class="previous">
+    <a href="1.html#comments">&laquo;&laquo;</a>
+  </li>
+  <li class="previous">
+    <a href="11.html#comments">&laquo;</a>
+  </li>
+  <li class="next">
+    <a href="0.html#comments">&raquo;&raquo;</a>
+  </li>
+  <li class="next">
+    <a href="13.html#comments">&raquo;</a>
+  </li>
+</ul>
+</div>
+
+
+</div>
+
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <p class="elapsed">This page was generated in None seconds.</p>
+            <p>&copy; 2014 by Miguel Grinberg. All rights reserved. <a href="mailto:webmaster _at_ miguelgrinberg _dot_ com">Questions?</a></p>
+        </div>
+    </div>
+
+
+    
+    
+    <script src="../../../../cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="../../../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../../../cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.33/jquery.colorbox-min.js"></script>
+    <script type="text/javascript" src="../../../static/prettify.js"></script>
+    <script src="../../../../cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment-with-langs.min.js"></script>
+<script>
+function flask_moment_render(elem) {
+    $(elem).text(eval('moment("' + $(elem).data('timestamp') + '").' + $(elem).data('format') + ';'));
+    $(elem).removeClass('flask-moment');
+}
+function flask_moment_render_all() {
+    $('.flask-moment').each(function() {
+        flask_moment_render(this);
+        if ($(this).data('refresh')) {
+            (function(elem, interval) { setInterval(function() { flask_moment_render(elem) }, interval); })(this, $(this).data('refresh'));
+        }
+    })
+}
+$(document).ready(function() {
+    flask_moment_render_all();
+});
+</script>
+    
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4777284-15']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".gallery").colorbox({rel:".gallery",maxWidth:"95%",maxHeight:"95%",scalePhotos:true});
+            // add prettyprint class to all <pre><code></code></pre> blocks
+            var prettify = false;
+            $("pre code").parent().each(function() {
+                $(this).addClass('prettyprint');
+                prettify = true;
+            });
+            prettyPrint();
+        });
+    </script>
+
+
+  </body>
+
+<!-- Mirrored from blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-iv-database/page/12 by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:15:14 GMT -->
+</html>

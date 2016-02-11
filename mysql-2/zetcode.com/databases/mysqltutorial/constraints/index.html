@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from zetcode.com/databases/mysqltutorial/constraints/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Jul 2015 02:47:03 GMT -->
+<head>
+<title>MySQL constraints</title>
+<link rel="stylesheet" href="../../../cfg/format2.css" type="text/css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="MySQL, SQL, database, constraints, NOT NULL, PRIMARY KEY, FOREIGN KEY, UNIQUE, SET, ENUM">
+<meta name="description" content="In this part of the MySQL tutorial, we work
+with database constraints.">
+<meta name="author" content="Jan Bodnar">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div id="wide_ad" class="ltow">
+<script async src="../../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- 160x600, August 2011 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:600px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="2484182563"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+
+<div class="content">
+
+
+<header>
+
+<nav>
+<a href="http://zetcode.com/" title="Home">Home</a>&#160;
+<a href="../index.html">Contents</a>
+</nav>
+
+</header>
+
+
+<h1>MySQL constraints</h1>
+
+
+<p>
+In this part of the MySQL tutorial, we will work with constraints.
+</p>
+
+<div class="med_rec">
+<script async src="../../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- NewSquare -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:250px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="0364418177"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<p>
+<em>Constraints</em> are placed on columns or tables. They limit the data 
+that can be inserted into tables. 
+</p>
+
+<p>
+We have the following constraints:
+</p>
+
+<ul>
+  <li>NOT NULL</li>
+  <li>UNIQUE</li>
+  <li>PRIMARY KEY</li>
+  <li>FOREIGN KEY</li>
+  <li>ENUM</li>
+  <li>SET</li>
+</ul>
+
+<p>
+Other databases also have the CHECK constraint, which places a condition 
+on a valid data. MySQL parses this constraint, but it is not enforced. 
+</p>
+
+
+<h3>NOT NULL constraint</h3>
+
+<p>
+A column with a <code>NOT NULL</code> constraint, cannot have NULL values. 
+</p>
+
+
+<pre class="code">
+mysql> CREATE TABLE People(Id INTEGER, LastName TEXT NOT NULL,
+    ->                     FirstName TEXT NOT NULL, City VARCHAR(55));
+Query OK, 0 rows affected (0.07 sec)
+</pre>
+
+<p>
+We create two columns with <code>NOT NULL</code> constraints.  
+</p>
+
+<pre class="code">
+mysql> INSERT INTO People VALUES(1, 'Hanks', 'Robert', 'New York');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO People VALUES(1, NULL, 'Marianne', 'Chicago');
+ERROR 1048 (23000): Column 'LastName' cannot be null
+</pre>
+
+<p>
+The first <code>SELECT</code> statement is executed OK, the second 
+one fails. The SQL error says, the <code>LastName</code> column may not be null. 
+</p>
+
+
+<h3>UNIQUE constraint</h3>
+
+<p>
+The <code>UNIQUE</code> constraint ensures that all data are unique in
+a column. 
+</p>
+
+<pre class="code">
+mysql> CREATE TABLE Brands(Id INTEGER, BrandName VARCHAR(30) UNIQUE);
+Query OK, 0 rows affected (0.08 sec)
+</pre>
+
+<p>
+Here we create a table <code>Brands</code>. The <code>BrandName</code> column is 
+set to be <code>UNIQUE</code>. There cannot be two brands with the same name. 
+</p>
+
+<pre class="code">
+mysql> INSERT INTO Brands VALUES(1, 'Coca Cola');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> INSERT INTO Brands VALUES(2, 'Pepsi');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO Brands VALUES(3, 'Pepsi');
+ERROR 1062 (23000): Duplicate entry 'Pepsi' for key 'BrandName'
+</pre>
+
+<p>
+We get an SQL error Duplicate entry 'Pepsi' for key 'BrandName'. There can only be one
+Pepsi brand.
+</p>
+
+<p>
+Note that a <code>PRIMARY KEY</code> constraint automatically 
+has a <code>UNIQUE</code> constraint defined on it.
+</p>
+
+
+<h3>Primary key</h3>
+
+<p>
+The <code>PRIMARY KEY</code> constraint uniquely identifies each record 
+in a database table. It is a special case of unique keys. Primary keys cannot 
+be <code>NULL</code>, unique keys can be. There can be more <code>UNIQUE</code> 
+columns, but only one primary key in a table. Primary keys are important
+when designing the database tables. Primary keys are unique ids. We use them 
+to refer to table rows. Primary keys become foreign keys in other tables, 
+when creating relations among tables. 
+</p>
+
+<pre class="code">
+mysql> DROP TABLE Brands;
+mysql> CREATE TABLE Brands(Id INTEGER PRIMARY KEY, BrandName VARCHAR(30) UNIQUE);
+</pre>
+
+<p>
+The Id column of the <code>Brands</code> table becomes a primary key. 
+</p>
+
+
+<pre class="code">
+mysql> DESCRIBE Brands;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| Id        | int(11)     | NO   | PRI | NULL    |       |
+| BrandName | varchar(30) | YES  | UNI | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+</pre>
+
+<p>
+The <code>DESCRIBE</code> statement shows information about the
+columns in a table. We can see that the Id column has a <code>PRIMARY KEY</code>
+defined and the <code>BrandName</code> has <code>UNIQUE</code> constraint 
+set. The primary key is used to uniquely identify the row in a table, when dealing
+with a specific table. The unique key enforces that all data
+in a column are not duplicate. 
+</p>
+
+
+<h3>Foreign key</h3>
+
+<p>
+A <code>FOREIGN KEY</code> in one table points to a <code>PRIMARY KEY</code> in another table. 
+It is a referential constraint between two tables. The foreign key identifies a 
+column or a set of columns in one (referencing) table that refers to a column or set 
+of columns in another (referenced) table.
+</p>
+
+<p>
+We will be demonstrating this constraint on two tables: <code>Authors</code> and <code>Books</code>.
+</p>
+
+<pre class="code">
+mysql> CREATE TABLE Authors(AuthorId INTEGER PRIMARY KEY, Name VARCHAR(70))
+    -> type=InnoDB;
+</pre>
+
+<p>
+Here we create the Authors table. In MySQL, the referencing and the referenced
+tables must be of InnoDB or BDB storage engines. In the MyISAM storage
+engines the foreign keys are parsed, but they are not enforced.
+</p>
+
+
+<pre class="code">
+mysql> CREATE TABLE Books(BookId INTEGER PRIMARY KEY, Title VARCHAR(50),
+    -> AuthorId INTEGER, FOREIGN KEY(AuthorId) REFERENCES Authors(AuthorId))
+    -> type=InnoDB;
+</pre>
+
+<p>
+We create the <code>Books</code> table. Here we have an <code>AuthorId</code> 
+column name, which acts as a foreign key. It references to the primary 
+key of the <code>Authors</code> table. 
+</p>
+
+<p>
+What would foreign key enforcement mean in our example? We could not 
+insert a row into the <code>Books</code> table with an <code>AuthorId</code>, 
+which is not present in <code>Authors</code> book.
+</p>
+
+
+<h3>ENUM constraint</h3>
+
+<p>
+An <code>ENUM</code> is a string object with a value chosen from a list of 
+permitted values. They are enumerated explicitly in the column specification 
+at table creation time.
+</p>
+
+<pre class="code">
+mysql> CREATE TABLE Shops(Id INTEGER, Name VARCHAR(55), 
+    -> Quality ENUM('High', 'Average', 'Low'));
+</pre>
+
+<p>
+We have a <code>Shops</code> table. The table has an <code>Id</code>, 
+<code>Name</code>, and <code>Quality</code> columns defined. The 
+<code>Quality</code> column is an <code>ENUM</code>. It
+permits to have one of three specified values: <code>High</code>, 
+<code>Average</code>, or <code>Low</code>.
+</p>
+
+<pre class="code">
+mysql> INSERT INTO Shops VALUES(1, 'Boneys', 'High');
+mysql> INSERT INTO Shops VALUES(2, 'AC River', 'Average');
+mysql> INSERT INTO Shops VALUES(3, 'AT 34', '**');
+mysql> SELECT * FROM Shops;
++------+----------+---------+
+| Id   | Name     | Quality |
++------+----------+---------+
+|    1 | Boneys   | High    |
+|    2 | AC River | Average |
+|    3 | AT 34    |         |
++------+----------+---------+
+</pre>
+
+<p>
+In the first two statements, we have inserted two rows. In the
+third case, the value is not available in the <code>ENUM</code>.
+In this case an empty string is inserted. 
+</p>
+
+
+<h3>SET constraint</h3>
+
+<p>
+A <code>SET</code> can have zero or more values.
+Each of the values must be chosen from a list of permitted values.
+</p>
+
+<pre class="code">
+mysql> CREATE TABLE Students(Id INTEGER, Name VARCHAR(55), 
+    -> Certificates SET('A1', 'A2', 'B1', 'C1')); 
+</pre>
+
+<p>
+We have a <code>Students</code> table. In this table, we have a Certificates
+column. Each student can have 0, 1 or more of these certificates.
+This is different from the <code>ENUM</code> constraint, where
+you can have only one distinct value from the list of permitted
+values.
+</p>
+
+<pre class="code">
+mysql> INSERT INTO Students VALUES(1, 'Paul', 'A1,B1');
+mysql> INSERT INTO Students VALUES(2, 'Jane', 'A1,B1,A2');
+mysql> INSERT INTO Students VALUES(3, 'Mark', 'A1,A2,D1,D2');
+mysql> SELECT * FROM Students;
++------+------+--------------+
+| Id   | Name | Certificates |
++------+------+--------------+
+|    1 | Paul | A1,B1        |
+|    2 | Jane | A1,A2,B1     |
+|    3 | Mark | A1,A2        |
++------+------+--------------+
+</pre>
+
+<p>
+Paul has two certificates. Jane has three. Mark has four, but
+only two of them are recognised, so only the first two were
+written to the table. The certificates are separated by commas.
+No spaces are allowed. 
+</p>
+
+<p>
+In this part of the MySQL tutorial, we have covered constraints supported
+by MySQL. 
+</p>
+
+
+<footer>
+
+<nav class="center">
+<span class="botNavItem"><a href="http://zetcode.com/">Home</a></span> ‡ <span class="botNavItem"><a href="../index.html">Contents</a></span> ‡
+<span class="botNavItem"><a href="#">Top of Page</a></span>
+</nav>
+
+<div class="signature">
+<a href="http://zetcode.com/">ZetCode</a> last modified Janurary 15, 2011  <span class="copyright">&copy; 2007 - 2015 Jan Bodnar</span>
+</div>
+
+</footer>
+
+</div> <!-- content -->
+
+</div> <!-- container -->
+
+</body>
+
+<!-- Mirrored from zetcode.com/databases/mysqltutorial/constraints/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Jul 2015 02:47:03 GMT -->
+</html>
+

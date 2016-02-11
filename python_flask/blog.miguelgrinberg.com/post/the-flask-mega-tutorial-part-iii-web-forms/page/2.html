@@ -1,0 +1,1089 @@
+﻿<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-iii-web-forms/page/2 by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 05:45:00 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    
+    <title>
+    
+        The Flask Mega-Tutorial, Part III: Web Forms - miguelgrinberg.com
+    
+</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="description" content="miguelgrinberg.com">
+	<meta name="copyright" content="Copyright (c) 2012-2015 Miguel Grinberg">
+	<meta name="author" content="Miguel Grinberg">
+    
+    <meta name="keywords" content="programming, python, flask, web, tutorial, forms">
+    
+
+    
+    <!-- Bootstrap -->
+    <link href="../../../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../../../static/prettify.css" type="text/css" rel="stylesheet" />
+    <link href="../../../static/colorbox/colorbox.css" rel="stylesheet" type="text/css" />
+    <link href="../../../static/style.css" rel="stylesheet" type="text/css" />
+
+    <link rel="shortcut icon" href="../../../static/favicon.ico">
+	<link rel="alternate" type="application/rss+xml" href="../../../feed" title="miguelgrinberg.com RSS feed">
+
+  </head>
+  <body>
+    
+    <!-- facebook sdk -->
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "../../../../connect.facebook.net/en_US/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    <!-- google plus sdk -->
+    <script type="text/javascript" src="../../../../apis.google.com/js/plusone.js"></script>
+    <!-- twitter sdk -->
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="../../../../platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <!-- linkedin sdk -->
+    <script src="../../../../platform.linkedin.com/in.js" type="text/javascript"></script>
+
+    
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://blog.miguelgrinberg.com/index">miguelgrinberg.com</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="http://blog.miguelgrinberg.com/index">Home</a></li>
+                        <li><a href="../../about-me.html">About Me</a></li>
+                        <li><a href="../../about-this-blog.html">About This Blog</a></li>
+                        
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <p class="navbar-text" style="margin-top: 10px; margin-bottom: 0px;">
+                                <a type="application/rss+xml" href="../../../feed"><img src="../../../static/rss.png" alt="RSS Feed" title="RSS Feed" /></a>
+                                <a href="https://www.facebook.com/miguelgrinbergblog"><img src="../../../static/facebook.png" alt="Facebook" title="Facebook" /></a>
+                                <a href="https://plus.google.com/u/0/117786742456929977820"><img src="../../../static/googleplus.png" alt="Google+" title="Google+" /></a>
+                                <a href="http://www.linkedin.com/in/miguelgrinberg"><img src="../../../static/linkedin.png" alt="LinkedIn" title="LinkedIn" /></a>
+                                <a href="http://github.com/miguelgrinberg"><img src="../../../static/github.png" alt="GitHub" title="GitHub" /></a>
+                                <a href="https://twitter.com/#!/miguelgrinberg"><img src="../../../static/twitter.png" alt="Twitter" title="Twitter" /></a>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </nav>
+
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-push-9 sidebar-bg">
+                <div id="sidebar">
+                    
+
+                    
+                    <h1>An Introduction to Flask</h1>
+                    <p>If you are a beginner giving your first steps in web development, my Flask introductory video is for you:</p>
+                    <p><center><a href="http://bit.ly/flaskintro"><img style="border: 1px solid black;" src="../../../static/flask-intro-cover-tiny.png"></a></center></p>
+                    <p>Visit <a href="http://flaskbook.com/">http://flaskbook.com</a> for information about this and other Flask training products I have created!</p>
+                    
+
+                    <h1>About Miguel</h1>
+                    <img style="float: right; margin: 0px 8px 8px 0px; padding: 4px; border: 1px solid #ccc;" src="../../../static/miguel.jpg" />
+                    <p>Welcome to my blog!</p>
+                    <p>I'm a software engineer, photographer and filmmaker in Portland, Oregon, USA.</p>
+                    <p>You can also find me on <a href="https://www.facebook.com/miguelgrinbergblog">Facebook</a>, <a href="https://plus.google.com/u/0/117786742456929977820">Google+</a>, <a href="http://www.linkedin.com/in/miguelgrinberg">LinkedIn</a>, <a href="https://github.com/miguelgrinberg">Github</a> and <a href="https://twitter.com/#!/miguelgrinberg">Twitter</a>.</p>
+                    <p>Thank you for visiting!</p>
+
+                    
+
+                    
+                    <h1>Categories</h1>
+<ul>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Arduino/feed">
+			<img src="../../../static/rss-small.png" title="Arduino RSS Feed" label="Arduino RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Arduino">Arduino</a></span> (7)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Authentication/feed">
+			<img src="../../../static/rss-small.png" title="Authentication RSS Feed" label="Authentication RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Authentication">Authentication</a></span> (4)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Blog/feed">
+			<img src="../../../static/rss-small.png" title="Blog RSS Feed" label="Blog RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Blog">Blog</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/C++/feed">
+			<img src="../../../static/rss-small.png" title="C++ RSS Feed" label="C++ RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/C++">C++</a></span> (5)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Cloud/feed">
+			<img src="../../../static/rss-small.png" title="Cloud RSS Feed" label="Cloud RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Cloud">Cloud</a></span> (2)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Filmmaking/feed">
+			<img src="../../../static/rss-small.png" title="Filmmaking RSS Feed" label="Filmmaking RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Filmmaking">Filmmaking</a></span> (6)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Flask/feed">
+			<img src="../../../static/rss-small.png" title="Flask RSS Feed" label="Flask RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Flask">Flask</a></span> (39)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Games/feed">
+			<img src="../../../static/rss-small.png" title="Games RSS Feed" label="Games RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Games">Games</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Gear/feed">
+			<img src="../../../static/rss-small.png" title="Gear RSS Feed" label="Gear RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Gear">Gear</a></span> (6)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/HTML5/feed">
+			<img src="../../../static/rss-small.png" title="HTML5 RSS Feed" label="HTML5 RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/HTML5">HTML5</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Heroku/feed">
+			<img src="../../../static/rss-small.png" title="Heroku RSS Feed" label="Heroku RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Heroku">Heroku</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Javascript/feed">
+			<img src="../../../static/rss-small.png" title="Javascript RSS Feed" label="Javascript RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Javascript">Javascript</a></span> (3)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Movie Reviews/feed">
+			<img src="../../../static/rss-small.png" title="Movie Reviews RSS Feed" label="Movie Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Movie Reviews">Movie Reviews</a></span> (5)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Netflix/feed">
+			<img src="../../../static/rss-small.png" title="Netflix RSS Feed" label="Netflix RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Netflix">Netflix</a></span> (5)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Node.js/feed">
+			<img src="../../../static/rss-small.png" title="Node.js RSS Feed" label="Node.js RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Node.html">Node.js</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/OpenStack/feed">
+			<img src="../../../static/rss-small.png" title="OpenStack RSS Feed" label="OpenStack RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/OpenStack">OpenStack</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Personal/feed">
+			<img src="../../../static/rss-small.png" title="Personal RSS Feed" label="Personal RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Personal">Personal</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Photography/feed">
+			<img src="../../../static/rss-small.png" title="Photography RSS Feed" label="Photography RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Photography">Photography</a></span> (6)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Product Reviews/feed">
+			<img src="../../../static/rss-small.png" title="Product Reviews RSS Feed" label="Product Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Product Reviews">Product Reviews</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Programming/feed">
+			<img src="../../../static/rss-small.png" title="Programming RSS Feed" label="Programming RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Programming">Programming</a></span> (47)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Project Management/feed">
+			<img src="../../../static/rss-small.png" title="Project Management RSS Feed" label="Project Management RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Project Management">Project Management</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Python/feed">
+			<img src="../../../static/rss-small.png" title="Python RSS Feed" label="Python RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Python">Python</a></span> (43)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/REST/feed">
+			<img src="../../../static/rss-small.png" title="REST RSS Feed" label="REST RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/REST">REST</a></span> (5)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Rackspace/feed">
+			<img src="../../../static/rss-small.png" title="Rackspace RSS Feed" label="Rackspace RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Rackspace">Rackspace</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Raspberry Pi/feed">
+			<img src="../../../static/rss-small.png" title="Raspberry Pi RSS Feed" label="Raspberry Pi RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Raspberry Pi">Raspberry Pi</a></span> (6)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/RhinoSteady/feed">
+			<img src="../../../static/rss-small.png" title="RhinoSteady RSS Feed" label="RhinoSteady RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/RhinoSteady">RhinoSteady</a></span> (6)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Robotics/feed">
+			<img src="../../../static/rss-small.png" title="Robotics RSS Feed" label="Robotics RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Robotics">Robotics</a></span> (6)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Video/feed">
+			<img src="../../../static/rss-small.png" title="Video RSS Feed" label="Video RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Video">Video</a></span> (4)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Windows/feed">
+			<img src="../../../static/rss-small.png" title="Windows RSS Feed" label="Windows RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Windows">Windows</a></span> (1)
+	</li>
+
+</ul>
+                    
+                </div>
+            </div>
+            <div class="col-md-8 col-md-pull-4">
+                <div id="main">
+                    
+                    
+                    
+                    
+                    
+
+<div class="post">
+
+<p class="date"><span class="flask-moment" data-timestamp="2012-05-13T06:26:42Z" data-format="format('LL')" data-refresh="0">2012-05-13T06:26:42Z</span></p>
+<h1 class="post-title"><a href="../../the-flask-mega-tutorial-part-iii-web-forms.html">The Flask Mega-Tutorial, Part III: Web Forms</a></h1>
+<div class="posted">Posted by <span class="label label-danger"><a href="http://blog.miguelgrinberg.com/author/Miguel Grinberg">Miguel Grinberg</a></span> under <span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Python">Python</a></span>, <span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Programming">Programming</a></span>, <span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Flask">Flask</a></span>. </div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-iii-web-forms" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-iii-web-forms" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="../../the-flask-mega-tutorial-part-iii-web-forms.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-iii-web-forms" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+<div class="post_body"><p>This is the third article in the series in which I document my experience writing web applications in <a href="http://python.org/">Python</a> using the <a href="http://flask.pocoo.org/">Flask</a> microframework.</p>
+<p>The goal of the tutorial series is to develop a decently featured microblogging application that demonstrating total lack of originality I have decided to call <code>microblog</code>.</p>
+<p><strong>NOTE</strong>: This article was revised in September 2014 to be in sync with current versions of Python and Flask.</p>
+<p>Here is an index of all the articles in the series that have been published to date:</p>
+<ul>
+<li><a href="../../the-flask-mega-tutorial-part-i-hello-world.html">Part I: Hello, World!</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-ii-templates.html">Part II: Templates</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-iii-web-forms.html">Part III: Web Forms</a> (this article)</li>
+<li><a href="../../the-flask-mega-tutorial-part-iv-database.html">Part IV: Database</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-v-user-logins.html">Part V: User Logins</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-vi-profile-page-and-avatars.html">Part VI: Profile Page And Avatars</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-vii-unit-testing.html">Part VII: Unit Testing</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-viii-followers-contacts-and-friends.html">Part VIII: Followers, Contacts And Friends</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-ix-pagination.html">Part IX: Pagination</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-x-full-text-search.html">Part X: Full Text Search</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xi-email-support.html">Part XI: Email Support</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xii-facelift.html">Part XII: Facelift</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xiii-dates-and-times.html">Part XIII: Dates and Times</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xiv-i18n-and-l10n.html">Part XIV: I18n and L10n</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xv-ajax.html">Part XV: Ajax</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xvi-debugging-testing-and-profiling.html">Part XVI: Debugging, Testing and Profiling</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xvii-deployment-on-linux-even-on-the-raspberry-pi.html">Part XVII: Deployment on Linux (even on the Raspberry Pi!)</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xviii-deployment-on-the-heroku-cloud.html">Part XVIII: Deployment on the Heroku Cloud</a></li>
+</ul>
+<h2>Recap</h2>
+<p>In the previous chapter of the series we defined a simple template for the home page and used fake objects as placeholders for things we don't have yet, like users or blog posts.</p>
+<p>In this article we are going to fill one of those many holes we still have in our app, we will be looking at how to work with web forms.</p>
+<p>Web forms are one of the most basic building blocks in any web application. We will be using forms to allow users to write blog posts, and also for logging in to the application.</p>
+<p>To follow this chapter along you need to have the <code>microblog</code> app as we left it at the end of the previous chapter. Please make sure the app is installed and running.</p>
+<h2>Configuration</h2>
+<p>To handle our web forms we are going to use the <a href="http://packages.python.org/Flask-WTF">Flask-WTF</a> extension, which in turn wraps the <a href="http://wtforms.simplecodes.com/docs/dev">WTForms</a> project in a way that integrates nicely with Flask apps.</p>
+<p>Many Flask extensions require some amount of configuration, so we are going to setup a configuration file inside our root <code>microblog</code> folder so that it is easily accessible if it needs to be edited. Here is what we will start with (file <code>config.py</code>):</p>
+<pre><code>WTF_CSRF_ENABLED = True
+SECRET_KEY = 'you-will-never-guess'
+</code></pre>
+<p>Pretty simple, it's just two settings that our Flask-WTF extension needs. The <code>WTF_CSRF_ENABLED</code> setting activates the <a href="http://en.wikipedia.org/wiki/Cross-site_request_forgery">cross-site request forgery</a> prevention (note that this setting is enabled by default in current versions of Flask-WTF). In most cases you want to have this option enabled as it makes your app more secure.</p>
+<p>The <code>SECRET_KEY</code> setting is only needed when CSRF is enabled, and is used to create a cryptographic token that is used to validate a form. When you write your own apps make sure to set the secret key to something that is difficult to guess.</p>
+<p>Now that we have our config file we need to tell Flask to read it and use it. We can do this right after the Flask app object is created, as follows (file <code>app/__init__.py</code>):</p>
+<pre><code>from flask import Flask
+
+app = Flask(__name__)
+app.config.from_object('config')
+
+from app import views
+</code></pre>
+<h2>The user login form</h2>
+<p>Web forms are represented in Flask-WTF as classes, subclassed from base class <code>Form</code>. A form subclass simply defines the fields of the form as class variables.</p>
+<p>Now we will create a login form that users will use to identify with the system. The login mechanism that we will support in our app is not the standard username/password type, we will have our users login using their <a href="http://openid.net/">OpenID</a>. OpenIDs have the benefit that the authentication is done by the provider of the OpenID, so we don't have to validate passwords, which makes our site more secure to our users.</p>
+<p>The OpenID login only requires one string, the so called OpenID. We will also throw a 'remember me' checkbox in the form, so that users can choose to have a cookie installed in their browsers that remembers their login when they come back.</p>
+<p>Let's write our first form (file <code>app/forms.py</code>):</p>
+<pre><code>from flask.ext.wtf import Form
+from wtforms import StringField, BooleanField
+from wtforms.validators import DataRequired
+
+class LoginForm(Form):
+    openid = StringField('openid', validators=[DataRequired()])
+    remember_me = BooleanField('remember_me', default=False)
+</code></pre>
+<p>I believe the class is pretty much self-explanatory. We imported the <code>Form</code> class, and the two form field classes that we need, <code>StringField</code> and <code>BooleanField</code>. </p>
+<p>The <code>DataRequired</code> import is a validator, a function that can be attached to a field to perform validation on the data submitted by the user. The <code>DataRequired</code> validator simply checks that the field is not submitted empty. There are many more validators included with Flask-WTF, we will use some more in the future.</p>
+<h2>Form templates</h2>
+<p>We will also need a template that contains the HTML that produces the form. The good news is that the <code>LoginForm</code> class that we just created knows how to render form fields as HTML, so we just need to concentrate on the layout. Here is our login template (file <code>app/templates/login.html</code>):</p>
+<pre><code>&lt;!-- extend from base layout --&gt;
+{% extends "base.html" %}
+
+{% block content %}
+  &lt;h1&gt;Sign In&lt;/h1&gt;
+  &lt;form action="" method="post" name="login"&gt;
+      {{ form.hidden_tag() }}
+      &lt;p&gt;
+          Please enter your OpenID:&lt;br&gt;
+          {{ form.openid(size=80) }}&lt;br&gt;
+      &lt;/p&gt;
+      &lt;p&gt;{{ form.remember_me }} Remember Me&lt;/p&gt;
+      &lt;p&gt;&lt;input type="submit" value="Sign In"&gt;&lt;/p&gt;
+  &lt;/form&gt;
+{% endblock %}
+</code></pre>
+<p>Note that in this template we are reusing the <code>base.html</code> template through the <code>extends</code> template inheritance statement. We will actually do this with all our templates, to ensure a consistent layout across all pages.</p>
+<p>There are a few interesting differences between a regular HTML form and our template.  This template expects a form object instantiated from the form class we just defined stored in a template argument named <code>form</code>. We will take care of sending this template argument to the template next, when we write the view function that renders this template.</p>
+<p>The <code>form.hidden_tag()</code> template argument will get replaced with a hidden field that implements the CSRF prevention that we enabled in the configuration. This field needs to be in all your forms if you have CSRF enabled. The good news is that Flask-WTF handles it for us, we just need to make sure it is included in the form.</p>
+<p>The actual fields of our form are rendered by the field objects, we just need to refer to a <code>{{form.field_name}}</code> template argument in the place where each field should be inserted. Some fields can take arguments. In our case, we are asking the text field to generate our <code>openid</code> field with a width of 80 characters.</p>
+<p>Since we have not defined the submit button in the form class we have to define it as a regular field. The submit field does not carry any data so it doesn't need to be defined in the form class.</p>
+<h2>Form views</h2>
+<p>The final step before we can see our form is to code a view function that renders the template.</p>
+<p>This is actually quite simple since we just need to pass a form object to the template. Here is our new view function (file <code>app/views.py</code>):</p>
+<pre><code>from flask import render_template, flash, redirect
+from app import app
+from .forms import LoginForm
+
+# index view function suppressed for brevity
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    return render_template('login.html', 
+                           title='Sign In',
+                           form=form)
+</code></pre>
+<p>So basically, we have imported our <code>LoginForm</code> class, instantiated an object from it, and sent it down to the template. This is all that is required to get form fields rendered.</p>
+<p>Let's ignore for now the <code>flash</code> and <code>redirect</code> imports. We'll use them a bit later.</p>
+<p>The only other thing that is new here is the <code>methods</code> argument in the route decorator. This tells Flask that this view function accepts GET and POST requests. Without this the view will only accept GET requests. We will want to receive the POST requests, these are the ones that will bring in the form data entered by the user.</p>
+<p>At this point you can try the app and see the form in your web browser. After you start the application you will want to open <code>http://localhost:5000/login</code> in your web browser, as this is the route we have associated with the login view function.</p>
+<p>We have not coded the part that accepts data yet, so pressing the submit button will not have any effect at this time.</p>
+<h2>Receiving form data</h2>
+<p>Another area where Flask-WTF makes our job really easy is in the handling of the submitted form data. Here is an updated version of our login view function that validates and stores the form data (file <code>app/views.py</code>):</p>
+<pre><code>@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        flash('Login requested for OpenID="%s", remember_me=%s' %
+              (form.openid.data, str(form.remember_me.data)))
+        return redirect('/index')
+    return render_template('login.html', 
+                           title='Sign In',
+                           form=form)
+</code></pre>
+<p>The <code>validate_on_submit</code> method does all the form processing work. If you call it when the form is being presented to the user (i.e. before the user got a chance to enter data on it) then it will return <code>False</code>, so in that case you know that you have to render the template. </p>
+<p>When <code>validate_on_submit</code> is called as part of a form submission request, it will gather all the data, run all the validators attached to fields, and if everything is all right it will return <code>True</code>, indicating that the data is valid and can be processed. This is your indication that this data is safe to incorporate into the application.</p>
+<p>If at least one field fails validation then the function will return <code>False</code> and that will cause the form to be rendered back to the user, and this will give the user a chance to correct any mistakes. We will see later how to show an error message when validation fails.</p>
+<p>When <code>validate_on_submit</code> returns True our login view function calls two new functions, imported from Flask. The <code>flash</code> function is a quick way to show a message on the next page presented to the user. In this case we will use it for debugging, since we don't have all the infrastructure necessary to log in users yet, we will instead just display a message that shows the submitted data. The <code>flash</code> function is also extremely useful on production servers to provide feedback to the user regarding an action. </p>
+<p>The flashed messages will not appear automatically in our page, our templates need to display the messages in a way that works for the site layout. We will add these messages to the base template, so that all our templates inherit this functionality. This is the updated base template (file <code>app/templates/base.html</code>):</p>
+<pre><code>&lt;html&gt;
+  &lt;head&gt;
+    {% if title %}
+    &lt;title&gt;{{ title }} - microblog&lt;/title&gt;
+    {% else %}
+    &lt;title&gt;microblog&lt;/title&gt;
+    {% endif %}
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div&gt;Microblog: &lt;a href="/index"&gt;Home&lt;/a&gt;&lt;/div&gt;
+    &lt;hr&gt;
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        &lt;ul&gt;
+        {% for message in messages %}
+            &lt;li&gt;{{ message }} &lt;/li&gt;
+        {% endfor %}
+        &lt;/ul&gt;
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>The technique to display the flashed message is hopefully self-explanatory. One interesting property of flash messages is that once they are requested through the <code>get_flashed_messages</code> function they are removed from the message list, so these messages appear in the first page requested by the user after the <code>flash</code> function is called, and then they disappear.</p>
+<p>The other new function we used in our login view is <code>redirect</code>. This function tells the client web browser to navigate to a different page instead of the one requested. In our view function we use it to redirect to the index page we developed in previous chapters. Note that flashed messages will display even if a view function ends in a redirect.</p>
+<p>This is a great time to start the app and test how the form works. Make sure you try submitting the form with the openid field empty, to see how the <code>DataRequired</code> validator halts the submission process.</p>
+<h2>Improving field validation</h2>
+<p>With the app in its current state, forms that are submitted with invalid data will not be accepted. Instead, the form will be presented back to the user to correct. This is exactly what we want.</p>
+<p>What we are missing is an indication to the user of what is wrong with the form. Luckily, Flask-WTF also makes this an easy task.</p>
+<p>When a field fails validation Flask-WTF adds a descriptive error message to the form object. These messages are available to the template, so we just need to add a bit of logic that renders them.</p>
+<p>Here is our login template with field validation messages (file <code>app/templates/login.html</code>):</p>
+<pre><code>&lt;!-- extend base layout --&gt;
+{% extends "base.html" %}
+
+{% block content %}
+  &lt;h1&gt;Sign In&lt;/h1&gt;
+  &lt;form action="" method="post" name="login"&gt;
+      {{ form.hidden_tag() }}
+      &lt;p&gt;
+          Please enter your OpenID:&lt;br&gt;
+          {{ form.openid(size=80) }}&lt;br&gt;
+          {% for error in form.openid.errors %}
+            &lt;span style="color: red;"&gt;[{{ error }}]&lt;/span&gt;
+          {% endfor %}&lt;br&gt;
+      &lt;/p&gt;
+      &lt;p&gt;{{ form.remember_me }} Remember Me&lt;/p&gt;
+      &lt;p&gt;&lt;input type="submit" value="Sign In"&gt;&lt;/p&gt;
+  &lt;/form&gt;
+{% endblock %}
+</code></pre>
+<p>The only change we've made is to add a for loop that renders any messages added by the validators below the <code>openid</code> field. As a general rule, any fields that have validators attached will have errors added under <code>form.field_name.errors</code>. In our case we use <code>form.openid.errors</code>. We display these messages in a red style to call the user's attention.</p>
+<h2>Dealing with OpenIDs</h2>
+<p>In practice, we will find that a lot of people don't even know that they already have a few OpenIDs. It isn't that well known that a number of major service providers on the Internet support OpenID authentication for their members. For example, if you have an account with Google, you have an OpenID with them. Likewise with Yahoo, AOL, Flickr and many other providers. (Update: Google is shutting down their OpenID service on April 15 2015).</p>
+<p>To make it easier for users to login to our site with one of these commonly available OpenIDs, we will add links to a short list of them, so that the user does not have to type the OpenID by hand.</p>
+<p>We will start by defining the list of OpenID providers that we want to present. We can do this in our config file (file <code>config.py</code>):</p>
+<pre><code>WTF_CSRF_ENABLED = True
+SECRET_KEY = 'you-will-never-guess'
+
+OPENID_PROVIDERS = [
+    {'name': 'Google', 'url': 'https://www.google.com/accounts/o8/id'},
+    {'name': 'Yahoo', 'url': 'https://me.yahoo.com'},
+    {'name': 'AOL', 'url': 'http://openid.aol.com/&lt;username&gt;'},
+    {'name': 'Flickr', 'url': 'http://www.flickr.com/&lt;username&gt;'},
+    {'name': 'MyOpenID', 'url': 'https://www.myopenid.com'}]
+</code></pre>
+<p>Now let's see how we use this array in our login view function:</p>
+<pre><code>@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        flash('Login requested for OpenID="%s", remember_me=%s' %
+              (form.openid.data, str(form.remember_me.data)))
+        return redirect('/index')
+    return render_template('login.html', 
+                           title='Sign In',
+                           form=form,
+                           providers=app.config['OPENID_PROVIDERS'])
+</code></pre>
+<p>Here we grab the configuration by looking it up in <code>app.config</code> with its key. The array is then added to the <code>render_template</code> call as a template argument.</p>
+<p>As I'm sure you guessed, we have one more step to be done with this. We now need to specify how we would like to render these provider links in our login template (file <code>app/templates/login.html</code>):</p>
+<pre><code>&lt;!-- extend base layout --&gt;
+{% extends "base.html" %}
+
+{% block content %}
+&lt;script type="text/javascript"&gt;
+function set_openid(openid, pr)
+{
+    u = openid.search('&lt;username&gt;')
+    if (u != -1) {
+        // openid requires username
+        user = prompt('Enter your ' + pr + ' username:')
+        openid = openid.substr(0, u) + user
+    }
+    form = document.forms['login'];
+    form.elements['openid'].value = openid
+}
+&lt;/script&gt;
+&lt;h1&gt;Sign In&lt;/h1&gt;
+&lt;form action="" method="post" name="login"&gt;
+    {{ form.hidden_tag() }}
+    &lt;p&gt;
+        Please enter your OpenID, or select one of the providers below:&lt;br&gt;
+        {{ form.openid(size=80) }}
+        {% for error in form.openid.errors %}
+          &lt;span style="color: red;"&gt;[{{error}}]&lt;/span&gt;
+        {% endfor %}&lt;br&gt;
+        |{% for pr in providers %}
+          &lt;a href="javascript:set_openid('{{ pr.url }}', '{{ pr.name }}');"&gt;{{ pr.name }}&lt;/a&gt; |
+        {% endfor %}
+    &lt;/p&gt;
+    &lt;p&gt;{{ form.remember_me }} Remember Me&lt;/p&gt;
+    &lt;p&gt;&lt;input type="submit" value="Sign In"&gt;&lt;/p&gt;
+&lt;/form&gt;
+{% endblock %}
+</code></pre>
+<p>The template got somewhat long with this change. Some OpenIDs include the user's username, so for those we have to have a bit of javascript magic that prompts the user for the username and then composes the OpenID with it. When the user clicks on an OpenID provider link and (optionally) enters the username, the OpenID for that provider is inserted in the text field.</p>
+<p>Below is a screenshot of our login screen after clicking the Google OpenID link:</p>
+<p><img alt="Sign In screenshot" src="../../../static/images/flask-mega-tutorial-part-ii.jpg" /></p>
+<h2>Final Words</h2>
+<p>While we have made a lot of progress with our login form, we haven't actually done anything to login users into our system, all we've done so far had to do with the GUI aspects of the login process. This is because before we can do real logins we need to have a database where we can record our users.</p>
+<p>In the next chapter we will get our database up and running, and shortly after we will complete our login system, so stay tuned for the follow up articles.</p>
+<p>The <code>microblog</code> application in its current state is available for download here:</p>
+<p>Download <a href="https://codeload.github.com/miguelgrinberg/microblog/zip/version-0.3">microblog-0.3.zip</a>.</p>
+<p>Remember that the Flask virtual environment is not included in the zip file. For instructions on how to set it up see the first chapter of the series.</p>
+<p>Feel free to leave comments or questions below. I hope to see you in the next chapter.</p>
+<p>Miguel</p></div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-iii-web-forms" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-iii-web-forms" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="../../the-flask-mega-tutorial-part-iii-web-forms.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-iii-web-forms" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+
+
+<h4 style="text-align: right"><a name="comments"></a>246 comments</h4>
+
+
+<div class="comment">
+    <ul>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/bb251816600ca8146f2b49f53f60b302ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#26</span> <span class="label label-primary">Don</span> said
+                    <span class="flask-moment" data-timestamp="2012-12-12T01:44:47Z" data-format="fromNow(0)" data-refresh="0">2012-12-12T01:44:47Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">HI Miguel.  Thanks very much for this tutorial.  
+
+I&#39;m getting a &#34;TypeError: html_params() keywords must be strings&#34; when trying to implement the first form in the tutorial.  Any ideas?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#27</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2012-12-12T01:53:41Z" data-format="fromNow(0)" data-refresh="0">2012-12-12T01:53:41Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Don: See this page: https://github.com/mrjoes/flask-admin/issues/51. It appears this is an issue when using an old version of Python. Is this your case? You may want to upgrade to the latest Python 2.7.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/bb251816600ca8146f2b49f53f60b302ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#28</span> <span class="label label-primary">Don</span> said
+                    <span class="flask-moment" data-timestamp="2012-12-12T20:39:41Z" data-format="fromNow(0)" data-refresh="0">2012-12-12T20:39:41Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel,
+
+Thanks, upgraded to 2.7 and reinstalled all the extension.  Still the same issue.   Searched WTF page and no answers.  Oh well, I will work around the forms and hope for the best, but if anyone has any answers please forward.  Thanks!!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/9cdf2a8cda025c947496d58378b184bdce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#29</span> <span class="label label-primary">Hector</span> said
+                    <span class="flask-moment" data-timestamp="2012-12-14T21:46:31Z" data-format="fromNow(0)" data-refresh="0">2012-12-14T21:46:31Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Sorry Miguel I have same results as Catherine.
+
+I do not get same screenshot as posted by you.
+This is how I proceed to follow your instructions:
+hector@hector-LT:~/Desktop/FLASK/microblog$ flask/bin/pip install flask-wtf
+Downloading/unpacking flask-wtf
+  Downloading Flask-WTF-0.8.tar.gz (238kB): 238kB downloaded
+  Running setup.py egg_info for package flask-wtf
+    warning: no previously-included files matching &#39;*.pyc&#39; found under directory &#39;docs&#39;
+   
+Requirement already satisfied (use --upgrade to upgrade): Flask in ./flask/lib/python2.7/site-packages (from flask-wtf)
+Downloading/unpacking WTForms&gt;=1.0 (from flask-wtf)
+  Downloading WTForms-1.0.2.zip (489kB): 489kB downloaded
+  Running setup.py egg_info for package WTForms
+  
+Requirement already satisfied (use --upgrade to upgrade): Werkzeug&gt;=0.7 in ./flask/lib/python2.7/site-packages (from Flask-&gt;flask-wtf)
+Requirement already satisfied (use --upgrade to upgrade): Jinja2&gt;=2.4 in ./flask/lib/python2.7/site-packages (from Flask-&gt;flask-wtf)
+Installing collected packages: flask-wtf, WTForms
+  Running setup.py install for flask-wtf
+    
+    warning: no previously-included files matching &#39;*.pyc&#39; found under directory &#39;tests&#39;
+ 
+  Running setup.py install for WTForms
+
+I do not copy several warnings regarding pyc, pyo,etc.
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/3c96ccbe292c9e32fba896f7816978a0ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#30</span> <span class="label label-primary"><a href="www.fireboxtraining.com/blog.html">Shawn Johnson</a></span> said
+                    <span class="flask-moment" data-timestamp="2012-12-20T19:10:25Z" data-format="fromNow(0)" data-refresh="0">2012-12-20T19:10:25Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hey, Miguel,
+Would you ever consider being a Guest Blogger on our training site?  www.fireboxtraining.com/blog
+
+Let me know,
+
+Shawn </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#31</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2012-12-23T00:05:51Z" data-format="fromNow(0)" data-refresh="0">2012-12-23T00:05:51Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Hector: what do you see in your browser when you go to http://localhost:5000/login?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/077b0d448b8d357932944311631162bdce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#32</span> <span class="label label-primary">Alessandro</span> said
+                    <span class="flask-moment" data-timestamp="2012-12-27T22:54:56Z" data-format="fromNow(0)" data-refresh="0">2012-12-27T22:54:56Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hello Miguel, very good article. Why do not you like the BluePrint. How do I implement the idea ttps :/ / github.com / Mitsuhiko / flask / wiki / Large-app-how-to without them? You create multiple folders for each module?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#33</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2012-12-28T09:09:34Z" data-format="fromNow(0)" data-refresh="0">2012-12-28T09:09:34Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Alessandro: I know this is debatable and some will hate me for saying it, but in my opinion blueprints are a solution without a problem. With the file structure that I&#39;m using you still have the freedom to break your views and forms into multiple .py files like you would with any regular Python script. You could also create a sub-folders hierarchy with multiple packages, but I personally would just write multiple files at the same level (i.e. login_views.py, post_views.py, etc.).</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/077b0d448b8d357932944311631162bdce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#34</span> <span class="label label-primary">Alessandro</span> said
+                    <span class="flask-moment" data-timestamp="2013-01-09T23:15:53Z" data-format="fromNow(0)" data-refresh="0">2013-01-09T23:15:53Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Miguel Thank you for the response. I also like this approach more.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/8a47722ec9cfd9702f7abefaefa22482ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#35</span> <span class="label label-primary"><a href="http://pinard.progiciels-bpi.ca/">François Pinard</a></span> said
+                    <span class="flask-moment" data-timestamp="2013-01-11T15:20:11Z" data-format="fromNow(0)" data-refresh="0">2013-01-11T15:20:11Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">First of all, thanks a lot for the Mega-Tutorial on Flask!
+
+Just wanted to mention two tiny typos on this section III.  &#34;secrete&#34; should be written &#34;secret&#34; (in &#34;make sure to set the secrete key&#34;), and &#34;functon&#34; should be written &#34;function&#34; (in &#34;The flash functon is also extremely useful&#34;).</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#36</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-01-11T19:02:47Z" data-format="fromNow(0)" data-refresh="0">2013-01-11T19:02:47Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@François: thanks, corrections made!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/73707813822fee52c8540b50c0aed478ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#37</span> <span class="label label-primary"><a href="yifanwu.html">Yifan Wu</a></span> said
+                    <span class="flask-moment" data-timestamp="2013-01-27T21:02:19Z" data-format="fromNow(0)" data-refresh="0">2013-01-27T21:02:19Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi again, thanks for the explanations! I was trying to figure out how to have multiple forms per html page and wasn&#39;t too sure how the Form objects are distinguished from each other if there were more than one, since they are all accessed via form. Thanks so much! I Googled around but didn&#39;t find anything useful.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#38</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-01-28T17:00:45Z" data-format="fromNow(0)" data-refresh="0">2013-01-28T17:00:45Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Yifan: a long a each form has a different post url there is no collision, you know Erich of the multiple forms was submitted by the user depending on what route was hit.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/8bf0352aabbe1ad237c21aa4a47e3fb1ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#39</span> <span class="label label-primary">Paulo</span> said
+                    <span class="flask-moment" data-timestamp="2013-01-30T12:04:45Z" data-format="fromNow(0)" data-refresh="0">2013-01-30T12:04:45Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I am getting the following error: KeyError: &#39;OPENID_PROVIDERS&#39;
+Already compared your code against mine and it&#39;s equal. From the python wiki :-&#34;Python raises a KeyError whenever a dict() object is requested (using the format a = adict[key]) and the key is not in the dictionary.&#34;.
+My config file as the same code as yours, so i don&#39;t know what i am missing here.
+
+If this is a somewhat a noob mistake, bear with me please because i am doing the first steps in python.
+Thanks for the tutorial.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/418bdc495d66fc6bbd8b5237da29c0abce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#40</span> <span class="label label-primary">Wei Huang</span> said
+                    <span class="flask-moment" data-timestamp="2013-02-21T08:23:38Z" data-format="fromNow(0)" data-refresh="0">2013-02-21T08:23:38Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I try login the tutorial via a new MyOpenID account, but fails.  Because &#39;email&#39; attribute is NOT in the MyOpenID account&#39;s OpenID array .</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#41</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-02-21T17:34:22Z" data-format="fromNow(0)" data-refresh="0">2013-02-21T17:34:22Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Wei: I was not aware that there are OpenID providers that do not provide an email. The code needs to be updated to gracefully reject OpenID accounts that don&#39;t provide an email, for a login system having a valid email for the user is (in my opinion) required. I will make those updates.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/86f4e93ebfcad67972fdd746f60021fbce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#42</span> <span class="label label-primary">jkdresser</span> said
+                    <span class="flask-moment" data-timestamp="2013-02-25T05:01:14Z" data-format="fromNow(0)" data-refresh="0">2013-02-25T05:01:14Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I&#39;m impressed with your clear, concise, non-trivial tutorial.  Thanks!
+
+In testing the user OpenID prompt, I discovered that a &#39;;&#39; is needed at the end of the &#34;user = prompt(...&#34; line. 
+
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#43</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-02-25T05:15:39Z" data-format="fromNow(0)" data-refresh="0">2013-02-25T05:15:39Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@jkdresser: wow, looks like I missed a couple of semi-colons in the javascript function. Chrome doesn&#39;t seem to care, that&#39;s why I missed them. Thanks!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/c3e3f17732dee26726587c527d56132ace2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#44</span> <span class="label label-primary">Jaakko</span> said
+                    <span class="flask-moment" data-timestamp="2013-04-03T10:07:17Z" data-format="fromNow(0)" data-refresh="0">2013-04-03T10:07:17Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">For Windows users: the shebang line #!... in the beginning of the file run.py doesn&#39;t work on Windows. To run the script with correct virtualenv, either use &#34;flask\Scripts\python run.py&#34; or activate the virtualenv and type &#34;python run.py&#34;.
+
+Note that simply writing &#34;run.py&#34; won&#39;t use the python from your virtualenv on Windows!
+
+Thanks for brilliant tutorial!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/8a4effa132557cb969c22b706f96b01ace2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#45</span> <span class="label label-primary"><a href="http://www.22decembre.eu/">22decembre</a></span> said
+                    <span class="flask-moment" data-timestamp="2013-04-23T18:42:55Z" data-format="fromNow(0)" data-refresh="0">2013-04-23T18:42:55Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I reply to com #41...
+Yes, few OpenID providers do not provide an email for few of them.
+
+I think of mine (maybe) which is my own blog engine : wordpress as an openID extension that makes it your own OpenID ! And it doesn&#39;t provide email if you don&#39;t want to !</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/ee6d4f5320484f0456d00a397f6bfb3dce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#46</span> <span class="label label-primary">Yotam</span> said
+                    <span class="flask-moment" data-timestamp="2013-04-27T08:17:03Z" data-format="fromNow(0)" data-refresh="0">2013-04-27T08:17:03Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi,
+I&#39;ve run through a similar problem to Catherine&#39;s and went through your suggestions. 
+
+The actual error that I get is:
+from forms import LoginForm
+ImportError: No module named forms
+
+Any ideas on what I did wrong?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#47</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-04-28T02:21:34Z" data-format="fromNow(0)" data-refresh="0">2013-04-28T02:21:34Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Did you add forms.py inside the app directory?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/8dc29f5967e6b5c176fc364ac32cdcd3ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#48</span> <span class="label label-primary">Jade</span> said
+                    <span class="flask-moment" data-timestamp="2013-05-02T00:15:29Z" data-format="fromNow(0)" data-refresh="0">2013-05-02T00:15:29Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi,
+
+where can I find the flask Form class api? I am trying to add radio button and other stuff. How do I know the class name for them? thanks!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#49</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-05-02T01:52:22Z" data-format="fromNow(0)" data-refresh="0">2013-05-02T01:52:22Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Jade: You can find the widget classes in the documentation for Flask-WTF and WTForms projects.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/8dc29f5967e6b5c176fc364ac32cdcd3ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#50</span> <span class="label label-primary">Jade</span> said
+                    <span class="flask-moment" data-timestamp="2013-05-02T05:21:16Z" data-format="fromNow(0)" data-refresh="0">2013-05-02T05:21:16Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi,
+I am having trouble making radiobutton working. please help!
+</p>
+                </div>
+            </div>
+        </li>
+        
+    </ul>
+</div>
+
+<div class="page">
+<ul class="pager">
+  <li class="previous">
+    <a href="1.html#comments">&laquo;&laquo;</a>
+  </li>
+  <li class="previous">
+    <a href="1.html#comments">&laquo;</a>
+  </li>
+  <li class="next">
+    <a href="0.html#comments">&raquo;&raquo;</a>
+  </li>
+  <li class="next">
+    <a href="3.html#comments">&raquo;</a>
+  </li>
+</ul>
+</div>
+
+
+</div>
+
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <p class="elapsed">This page was generated in None seconds.</p>
+            <p>&copy; 2014 by Miguel Grinberg. All rights reserved. <a href="mailto:webmaster _at_ miguelgrinberg _dot_ com">Questions?</a></p>
+        </div>
+    </div>
+
+
+    
+    
+    <script src="../../../../cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="../../../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../../../cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.33/jquery.colorbox-min.js"></script>
+    <script type="text/javascript" src="../../../static/prettify.js"></script>
+    <script src="../../../../cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment-with-langs.min.js"></script>
+<script>
+function flask_moment_render(elem) {
+    $(elem).text(eval('moment("' + $(elem).data('timestamp') + '").' + $(elem).data('format') + ';'));
+    $(elem).removeClass('flask-moment');
+}
+function flask_moment_render_all() {
+    $('.flask-moment').each(function() {
+        flask_moment_render(this);
+        if ($(this).data('refresh')) {
+            (function(elem, interval) { setInterval(function() { flask_moment_render(elem) }, interval); })(this, $(this).data('refresh'));
+        }
+    })
+}
+$(document).ready(function() {
+    flask_moment_render_all();
+});
+</script>
+    
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4777284-15']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".gallery").colorbox({rel:".gallery",maxWidth:"95%",maxHeight:"95%",scalePhotos:true});
+            // add prettyprint class to all <pre><code></code></pre> blocks
+            var prettify = false;
+            $("pre code").parent().each(function() {
+                $(this).addClass('prettyprint');
+                prettify = true;
+            });
+            prettyPrint();
+        });
+    </script>
+
+
+  </body>
+
+<!-- Mirrored from blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-iii-web-forms/page/2 by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 05:45:34 GMT -->
+</html>

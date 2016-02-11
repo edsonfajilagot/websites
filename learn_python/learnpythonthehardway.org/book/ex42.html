@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+    
+<!-- Mirrored from learnpythonthehardway.org/book/ex42.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 03 Sep 2014 17:52:40 GMT -->
+<head>
+        <link href='stylesheets/fonts.css' rel='stylesheet' type='text/css'>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="twitter:creator" content="@lzsthw">
+        <title>Learn Python</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href='stylesheets/pure.css' rel='stylesheet'>
+        <link href='stylesheets/pygments.css' rel='stylesheet'>
+        <link href='stylesheets/main.css' rel='stylesheet'>
+        <link href='stylesheets/nav.css' rel='stylesheet'>
+        <style>
+        </style>
+ 
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.11: http://docutils.sourceforge.net/" />
+<title>Exercise 42: Is-A, Has-A, Objects, and Classes</title>
+    </head>
+    <body id='wrapper'>
+        <div class='master-logo-wrapper clearfix'>
+            <a href='index-2.html'>
+                <div class='python-logo-sprite'></div>
+            </a>
+                <span class='edition-3'><img src='images/3rd-edition-cloud.png' /></span>
+        </div><!-- /.master-logo-wrapper -->
+
+        <div style='clear: both;'>
+
+        <div id="main">
+            <div class='chapters-wrapper'>
+                  <nav id='chapters'>
+                      <div class='masthead-title'></div>
+                      <ul class='masthead'>
+                          <li>
+                              <a href='index.html'>
+                                  <div class='nav-tcontents'>
+                                      <img src='images/nav-contents.png' /></br>
+                                  main
+                                  </div>
+                              </a>
+                          </li>
+                          <li>
+                              <a href='#video'>
+                                  <div class='nav-play-video' id="#video_toggle_icon">
+                                      <img src='images/nav-play.png' /><br/>
+                                      play video
+                                      <div class='line-2'>(this chapter)</div>
+                                  </div>
+                              </a>
+                          </li>
+                          <li>
+                              <a href='#' id='prev_link'>
+                                  <div class='nav-previous'>
+                                      <img src='images/nav-previous.png' /></br>
+                                      previous
+                                  </div>
+                              </a>
+                          </li>
+                          <li>
+                              <a href='#' id='next_link'>
+                                  <div class='nav-next'>
+                                      <img src='images/nav-next.png' /></br>
+                                      next
+                                  </div>
+                              </a>
+                          </li>
+                          <li><!-- AMBULANCE ICON -->
+                              <a href='help.html' id=''>
+                                  <div class='ambulance'>
+                                      <img src='images/help-ambulance.png' /></br>
+                                      help
+                                  </div>
+                              </a>
+                          </li>
+                          <li id="follow">
+                                <a href="https://twitter.com/lzsthw" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false" data-dnt="true">Follow @lzsthw</a>
+                                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                           </li>
+
+                      </ul><!-- /.masthead -->
+                      <!--<img src='images/fa-bullhorn.png' />-->
+                  </nav><!-- /.chapters -->
+            </div><!-- /.chapters-wrapper -->
+
+        <!--- RST STARTS -->
+            <h1 class="title">Exercise 42: Is-A, Has-A, Objects, and Classes</h1>
+            <p>An important concept that you have to understand is the difference between a class and an object.  The problem is, there is no real &quot;difference&quot; between a class and an object.  They are actually the same thing at different points in time.  I will demonstrate by a Zen koan:</p>
+<pre class="literal-block">
+What is the difference between a Fish and a Salmon?
+</pre>
+<p>Did that question sort of confuse you? Really sit down and think about it for a minute.  I mean, a Fish and a Salmon are different but, wait, they are the same thing, right?  A Salmon is a <em>kind</em> of Fish, so I mean it's not different.  But at the same time, because a Salmon is a particular <em>type</em> of Fish so it's actually different from all other Fish.  That's what makes it a Salmon and not a Halibut.  So a Salmon and a Fish are the same but different.  Weird.</p>
+<p>This question is confusing because most people do not think about real things this way, but they intuitively understand them.  You do not need to think about the difference between a Fish and a Salmon because you <em>know</em> how they are related.  You know a Salmon is a <em>kind</em> of Fish and that there are other kinds of Fish without having to understand that.</p>
+<p>Let's take it one step further. Let's say you have a bucket full of three Salmon and because you are a nice person, you have decided to name them Frank, Joe, and Mary.  Now, think about this question:</p>
+<pre class="literal-block">
+What is the difference between Mary and a Salmon?
+</pre>
+<p>Again this is a weird question, but it's a bit easier than the Fish versus  Salmon question.  You know that Mary is a Salmon, so she's not really different.  She's just a specific &quot;instance&quot; of a Salmon.  Joe and Frank are also instances of Salmon. What do I mean when I say instance?  I mean they were created from some other Salmon and now represent a real thing that has Salmon-like attributes.</p>
+<p>Now for the mind-bending idea:  Fish is a class, and Salmon is a class, and Mary is an object.  Think about that for a second.  Let's break it down slowly and see if you get it.</p>
+<p>A Fish is a class, meaning it's not a <em>real</em> thing, but rather a word we attach to instances of things with similar attributes.  Got fins? Got gills? Lives in water?  Alright it's probably a Fish.</p>
+<p>Someone with a Ph.D. then comes along and says, &quot;No, my young friend, <em>this</em> Fish is actually <em>Salmo salar</em>, affectionately known as a Salmon.&quot;  This professor has just clarified the Fish further; and made a new class called &quot;Salmon&quot; that has more specific attributes.  Longer nose, reddish flesh, big, lives in the ocean or fresh water, tasty?  Probably a Salmon.</p>
+<p>Finally, a cook comes along and tells the Ph.D., &quot;No, you see this Salmon right here, I'll call her Mary and I'm going to make a tasty fillet out of her with a nice sauce.&quot;  Now you have this <em>instance</em> of a Salmon (which also is an instance of a Fish) named Mary turned into something real that is filling your belly.  It has become an object.</p>
+<p>There you have it: Mary is a kind of Salmon that is a kind of Fish.  object is a class is a class.</p>
+<div class="section" id="how-this-looks-in-code">
+<h1>How This Looks in Code</h1>
+<p>This is a weird concept, but to be very honest you only have to worry about it when you make new classes, and when you use a class.  I will show you two tricks to help you figure out whether something is a class or object.</p>
+<p>First, you need to learn two catch phrases &quot;is-a&quot; and &quot;has-a.&quot;  You use the phrase is-a when you talk about objects and classes being related to each other by a class relationship.  You use has-a when you talk about objects and classes that are related only because they <em>reference</em> each other.</p>
+<p>Now, go through this piece of code and replace each <tt class="docutils literal"><span class="pre">##??</span></tt> comment with a comment that says whether the next line represents an is-a or a has-a relationship and what that relationship is.  In the beginning of the code, I've laid out a few examples, so you just have to write the remaining ones.</p>
+<p>Remember, is-a is the relationship between Fish and Salmon, while has-a is the relationship between Salmon and Gills.</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76</pre></div></td><td class="code"><div class="highlight"><pre><a name="python--ex42.py-idio.html-1"></a><span class="c">## Animal is-a object (yes, sort of confusing) look at the extra credit</span>
+<a name="python--ex42.py-idio.html-2"></a><span class="k">class</span> <span class="nc">Animal</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<a name="python--ex42.py-idio.html-3"></a>    <span class="k">pass</span>
+<a name="python--ex42.py-idio.html-4"></a>
+<a name="python--ex42.py-idio.html-5"></a><span class="c">## ??</span>
+<a name="python--ex42.py-idio.html-6"></a><span class="k">class</span> <span class="nc">Dog</span><span class="p">(</span><span class="n">Animal</span><span class="p">):</span>
+<a name="python--ex42.py-idio.html-7"></a>
+<a name="python--ex42.py-idio.html-8"></a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<a name="python--ex42.py-idio.html-9"></a>        <span class="c">## ??</span>
+<a name="python--ex42.py-idio.html-10"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+<a name="python--ex42.py-idio.html-11"></a>
+<a name="python--ex42.py-idio.html-12"></a><span class="c">## ??</span>
+<a name="python--ex42.py-idio.html-13"></a><span class="k">class</span> <span class="nc">Cat</span><span class="p">(</span><span class="n">Animal</span><span class="p">):</span>
+<a name="python--ex42.py-idio.html-14"></a>
+<a name="python--ex42.py-idio.html-15"></a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<a name="python--ex42.py-idio.html-16"></a>        <span class="c">## ??</span>
+<a name="python--ex42.py-idio.html-17"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+<a name="python--ex42.py-idio.html-18"></a>
+<a name="python--ex42.py-idio.html-19"></a><span class="c">## ??</span>
+<a name="python--ex42.py-idio.html-20"></a><span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<a name="python--ex42.py-idio.html-21"></a>
+<a name="python--ex42.py-idio.html-22"></a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<a name="python--ex42.py-idio.html-23"></a>        <span class="c">## ??</span>
+<a name="python--ex42.py-idio.html-24"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+<a name="python--ex42.py-idio.html-25"></a>
+<a name="python--ex42.py-idio.html-26"></a>        <span class="c">## Person has-a pet of some kind</span>
+<a name="python--ex42.py-idio.html-27"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">pet</span> <span class="o">=</span> <span class="bp">None</span>
+<a name="python--ex42.py-idio.html-28"></a>
+<a name="python--ex42.py-idio.html-29"></a><span class="c">## ??</span>
+<a name="python--ex42.py-idio.html-30"></a><span class="k">class</span> <span class="nc">Employee</span><span class="p">(</span><span class="n">Person</span><span class="p">):</span>
+<a name="python--ex42.py-idio.html-31"></a>
+<a name="python--ex42.py-idio.html-32"></a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">salary</span><span class="p">):</span>
+<a name="python--ex42.py-idio.html-33"></a>        <span class="c">## ?? hmm what is this strange magic?</span>
+<a name="python--ex42.py-idio.html-34"></a>        <span class="nb">super</span><span class="p">(</span><span class="n">Employee</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<a name="python--ex42.py-idio.html-35"></a>        <span class="c">## ??</span>
+<a name="python--ex42.py-idio.html-36"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">salary</span> <span class="o">=</span> <span class="n">salary</span>
+<a name="python--ex42.py-idio.html-37"></a>
+<a name="python--ex42.py-idio.html-38"></a><span class="c">## ??</span>
+<a name="python--ex42.py-idio.html-39"></a><span class="k">class</span> <span class="nc">Fish</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<a name="python--ex42.py-idio.html-40"></a>    <span class="k">pass</span>
+<a name="python--ex42.py-idio.html-41"></a>
+<a name="python--ex42.py-idio.html-42"></a><span class="c">## ??</span>
+<a name="python--ex42.py-idio.html-43"></a><span class="k">class</span> <span class="nc">Salmon</span><span class="p">(</span><span class="n">Fish</span><span class="p">):</span>
+<a name="python--ex42.py-idio.html-44"></a>    <span class="k">pass</span>
+<a name="python--ex42.py-idio.html-45"></a>
+<a name="python--ex42.py-idio.html-46"></a><span class="c">## ??</span>
+<a name="python--ex42.py-idio.html-47"></a><span class="k">class</span> <span class="nc">Halibut</span><span class="p">(</span><span class="n">Fish</span><span class="p">):</span>
+<a name="python--ex42.py-idio.html-48"></a>    <span class="k">pass</span>
+<a name="python--ex42.py-idio.html-49"></a>
+<a name="python--ex42.py-idio.html-50"></a>
+<a name="python--ex42.py-idio.html-51"></a><span class="c">## rover is-a Dog</span>
+<a name="python--ex42.py-idio.html-52"></a><span class="n">rover</span> <span class="o">=</span> <span class="n">Dog</span><span class="p">(</span><span class="s">&quot;Rover&quot;</span><span class="p">)</span>
+<a name="python--ex42.py-idio.html-53"></a>
+<a name="python--ex42.py-idio.html-54"></a><span class="c">## ??</span>
+<a name="python--ex42.py-idio.html-55"></a><span class="n">satan</span> <span class="o">=</span> <span class="n">Cat</span><span class="p">(</span><span class="s">&quot;Satan&quot;</span><span class="p">)</span>
+<a name="python--ex42.py-idio.html-56"></a>
+<a name="python--ex42.py-idio.html-57"></a><span class="c">## ??</span>
+<a name="python--ex42.py-idio.html-58"></a><span class="n">mary</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="s">&quot;Mary&quot;</span><span class="p">)</span>
+<a name="python--ex42.py-idio.html-59"></a>
+<a name="python--ex42.py-idio.html-60"></a><span class="c">## ??</span>
+<a name="python--ex42.py-idio.html-61"></a><span class="n">mary</span><span class="o">.</span><span class="n">pet</span> <span class="o">=</span> <span class="n">satan</span>
+<a name="python--ex42.py-idio.html-62"></a>
+<a name="python--ex42.py-idio.html-63"></a><span class="c">## ??</span>
+<a name="python--ex42.py-idio.html-64"></a><span class="n">frank</span> <span class="o">=</span> <span class="n">Employee</span><span class="p">(</span><span class="s">&quot;Frank&quot;</span><span class="p">,</span> <span class="mi">120000</span><span class="p">)</span>
+<a name="python--ex42.py-idio.html-65"></a>
+<a name="python--ex42.py-idio.html-66"></a><span class="c">## ??</span>
+<a name="python--ex42.py-idio.html-67"></a><span class="n">frank</span><span class="o">.</span><span class="n">pet</span> <span class="o">=</span> <span class="n">rover</span>
+<a name="python--ex42.py-idio.html-68"></a>
+<a name="python--ex42.py-idio.html-69"></a><span class="c">## ??</span>
+<a name="python--ex42.py-idio.html-70"></a><span class="n">flipper</span> <span class="o">=</span> <span class="n">Fish</span><span class="p">()</span>
+<a name="python--ex42.py-idio.html-71"></a>
+<a name="python--ex42.py-idio.html-72"></a><span class="c">## ??</span>
+<a name="python--ex42.py-idio.html-73"></a><span class="n">crouse</span> <span class="o">=</span> <span class="n">Salmon</span><span class="p">()</span>
+<a name="python--ex42.py-idio.html-74"></a>
+<a name="python--ex42.py-idio.html-75"></a><span class="c">## ??</span>
+<a name="python--ex42.py-idio.html-76"></a><span class="n">harry</span> <span class="o">=</span> <span class="n">Halibut</span><span class="p">()</span>
+</pre></div>
+</td></tr></table></div>
+<div class="section" id="about-class-name-object">
+<h1>About class Name(object)</h1>
+<p>Remember how I was yelling at you to always use <tt class="docutils literal">class Name(object)</tt> and I couldn't tell you why?  Now I can tell you, because you just learned about the difference between a class and an object.  I couldn't tell you until now because you would have just been confused and couldn't learn to use the technology.</p>
+<p>What happened is Python's original rendition of class was broken in many serious ways.  By the time they admitted the fault it was too late, and they had to support it.  In order to fix the problem, they needed some &quot;new class&quot; style so that the &quot;old classes&quot; would keep working but you could use the new more correct version.</p>
+<p>This is where &quot;<tt class="docutils literal">class <span class="pre">is-a</span> object</tt>&quot; comes in.  They decided that they would use the word &quot;object,&quot; lowercased, to be the &quot;class&quot; that you inherit from to make a class.  Confusing, right?  A class inherits from the class named object to make a class but it's not an object really it's a class, but do not forget to inherit from object.</p>
+<p>Exactly. The choice of one single word meant that I couldn't teach you about this until now.  Now you can try to understand the concept of a class that is an object if you like.</p>
+<p>However, I would suggest you do not.  Just completely ignore the idea of old style versus new style classes and assume that Python always requires (object) when you make a class.  Save your brain power for something important.</p>
+</div>
+<div class="section" id="study-drills">
+<h1>Study Drills</h1>
+<ol class="arabic simple">
+<li>Research why Python added this strange object class, and what that means.</li>
+<li>Is it possible to use a class like it's an object?</li>
+<li>Fill out the animals, fish, and people in this exercise with functions that make them do things.  See what happens when functions are in a &quot;base class&quot; like <tt class="docutils literal">Animal</tt> versus in say <tt class="docutils literal">Dog</tt>.</li>
+<li>Find other people's code and work out all the is-a and has-a relationships.</li>
+<li>Make some new relationships that are lists and dictionaries so you can also have &quot;has-many&quot; relationships.</li>
+<li>Do you think there's such thing as an &quot;is-many&quot; relationship?  Read about &quot;multiple inheritance,&quot; then avoid it if you can.</li>
+</ol>
+</div>
+<div class="section" id="common-student-questions">
+<h1>Common Student Questions</h1>
+<dl class="docutils">
+<dt>What are these <tt class="docutils literal">## <span class="pre">??</span></tt> comments for?</dt>
+<dd>Those are &quot;fill-in-the-blank&quot; comments that you are supposed to fill in with the right &quot;is-a,&quot; &quot;has-a&quot; concepts.  Read this exercise again and look at the other comments to see what I mean.</dd>
+<dt>What is the point of <tt class="docutils literal">self.pet = None</tt>?</dt>
+<dd>That makes sure that the <tt class="docutils literal">self.pet</tt> attribute of that class is set to a default of <tt class="docutils literal">None</tt>.</dd>
+<dt>What does <tt class="docutils literal">super(Employee, <span class="pre">self).__init__(name)</span></tt> do?</dt>
+<dd>That's how you can run the <tt class="docutils literal">__init__</tt> method of a parent class reliably.  Search for &quot;python super&quot; and read the various advice on it being evil and good for you.</dd>
+</dl>
+</div>
+        <!-- RST ENDS -->
+
+            <!-- /.help-icon -->
+        <div id="video_holder">
+            <h1>Video</h1>
+            <div id="video" class="row inner">
+                <div class="small-12 small-centered columns">
+                    <div data-paydiv_product="2" id='paydiv'>
+                        &nbsp;
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        </div><!-- /#main -->
+
+        <div class='ad-deck gold' id="footer">
+            <ul class='retailers clearfix'>
+                <li>
+                    <a href='https://paydiv.io/access/buy/2/'>
+                        <div class='retailer-name'>Zed Shaw</div>
+                        <div class='book-type'>PDF + Videos + Updates</div>
+                        <div class='book-price'>$29.95</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.amazon.com/gp/product/0321884914/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0321884914&amp;linkCode=as2&amp;tag=lepythhawa-20'>
+                        <div class='retailer-name'>Amazon</div>
+                        <div class='book-type'>Paper + DVD</div>
+                        <div class='book-price'>$29.95</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.amazon.com/gp/product/B00FGUS948/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=B00FGUS948&amp;linkCode=as2&amp;tag=lepythhawa-20'>
+                        <div class='retailer-name'>Amazon</div>
+                        <div class='book-type'>Kindle (No Videos)</div>
+                        <div class='book-price'>$17.27</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.barnesandnoble.com/w/learn-python-the-hard-way-zed-shaw/1112055406?ean=9780321884916'>
+                        <div class='retailer-name'>B&amp;N</div>
+                        <div class='book-type'>Paper + DVD</div>
+                        <div class='book-price'>$17.27</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.barnesandnoble.com/w/learn-python-the-hard-way-zed-shaw/1112055406?ean=9780133124347&amp;itm=1&amp;usri=learn+python+the+hard+way'>
+                        <div class='retailer-name'>B&amp;N</div>
+                        <div class='book-type'>Nook (No Video)</div>
+                        <div class='book-price'>$17.27</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.informit.com/store/learn-python-the-hard-way-a-very-simple-introduction-9780321884916'>
+                        <div class='retailer-name'>InformIT</div>
+                        <div class='book-type'>eBook + Paper</div>
+                        <div class='book-price'>$43.19</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://ruby.learncodethehardway.org/book/'>
+                        <div class='retailer-name'>Interested In Ruby?</div>
+                        <div class='book-type'>Ruby is also a great language.</div>
+                        <div class='book-price'>Learn Ruby The Hard Way</div>
+                    </a>
+                </li>
+
+            </ul><!-- /.places -->
+        </div><!-- /#ad-deck -->
+
+        <script src="javascripts/jquery.js"></script>
+        <script src="index.js"></script>
+        <script src="../../paydiv.io/static/jzed.js"></script>
+        <script src="../../paydiv.io/static/js/videojs/video.js"></script>
+        <link rel="stylesheet" href="../../paydiv.io/static/js/videojs/video-js.css">
+        <script src="../../paydiv.io/static/api/v1/paydiv.js"></script>
+        <script src="javascripts/app.js"></script>
+        <script src="javascripts/littools.js"></script>
+        <script type="text/javascript">
+        
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-24168052-1']);
+        _gaq.push(['_trackPageview']);
+        
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+        
+        </script>
+
+
+        <script src="javascripts/littools.js"></script>
+
+        </body>
+
+<!-- Mirrored from learnpythonthehardway.org/book/ex42.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 03 Sep 2014 17:52:40 GMT -->
+</html>
+

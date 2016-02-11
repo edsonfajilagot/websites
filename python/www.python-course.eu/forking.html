@@ -1,0 +1,373 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from www.python-course.eu/forking.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:05:51 GMT -->
+<head>
+
+<!-- Dieses Tag in den Head-Bereich oder direkt vor dem schlieÃŸenden Body-Tag einfÃ¼gen -->
+<script type="text/javascript" src="../apis.google.com/js/plusone.js"></script>
+
+
+
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "../connect.facebook.net/en_GB/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script><title>Python Advanced: Fork and Processes</title>
+<meta http-equiv="content-type" content="text/html; charset="ISO-8859-1">
+<meta name="Description" content="Introduction into Fork process and the forking of Processes in Python." />
+<meta name="Keywords" content="Python, course, fork, forking, process, processes" />
+
+<link href="favicon.ico" rel="shortcut icon">
+
+<link href="moderna.css" rel="stylesheet" type="text/css" />
+<link href="moderna_print.css" media="print" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+<div id="container">
+
+<div id="banner">
+<!-- <a href="impressum.php">Impressum</a> | <a href="mailto:">contact</a> | --><h1>Python Course</h1>
+
+</div>
+
+	<!-- Begin Top Menu -->
+<ul id="navlist">
+<li><a href="index-2.html" >Home</a></li><li><a href="course.html" >Python 2 Tutorial</a></li><li><a href="python3_course.html" >Python 3 Tutorial</a></li><li class="active"><a id="current" href="advanced_topics.html" >Advanced Topics</a></li><li><a href="python_books.html" >Python Books</a></li><li><a href="python_tkinter.html" >Tkinter Tutorial</a></li><li><a href="contact.html" rel="nofollow">Contact</a></li>                          
+</ul>
+	<!-- End Top Menu -->
+<div id="sidebar-a">
+<img class="border" src="images/baum100.jpg" alt="box" />    <h2>Advanced Topics</h2>
+
+<div class="menu">
+
+<ul>
+<li><a href="sys_module.html">Introduction into the sys module</a></li><li><a href="os_module_shell.html">Python and the Shell</a></li><li><a href="forking.html">Forks and Forking in Python</a></li><li><a href="threads.html">Introduction into Threads</a></li><li><a href="pipes.html">Pipe, Pipes and "99 Bottles of Beer"</a></li><li><a href="graphs_python.html">Graph Theory and Graphs in Python"</a></li><li><a href="pygraph.html">Graphs: PyGraph"</a></li><li><a href="networkx.html">Graphs: NetworkX"</a></li><li><a href="finite_state_machine.html">Finite State Machine in Python</a></li><li><a href="turing_machine.html">Turing Machine in Python</a></li><li><a href="numpy.html">NumPy Module</a></li><li><a href="matrix_arithmetic.html">Matrix Arithmetic</a></li><li><a href="linear_combinations.html">Linear Combinations</a></li><li><a href="text_classification_introduction.html">Introduction into Text Classification using Naive Bayes</a></li><li><a href="text_classification_python.html">Python Implementation of Text Classification</a></li><li><a href="towers_of_hanoi.html">Example for recursive Programming: Towers of Hanoi</a></li><li><a href="mastermind.html">Mastermind / Bulls and Cows</a></li><li><a href="dynamic_websites_wsgi.html">Creating dynamic websites with WSGI</a></li><li><a href="dynamic_websites.html">Dynamic websites with mod_python</a></li><li><a href="pylons.html">Dynamic websites with Pylons</a></li><li><a href="sql_python.html">Python, SQL, MySQL and SQLite</a></li><li><a href="python_scores.html">Python Scores</a></li></ul>
+
+</div>
+
+<p>
+<h3>Fork in History</h3>
+Forks were not commonly used in Western Europe until the 10th century. This is amazing, as forks are 
+already mentioned in the Old Testament: "Now it was the practice of the priests that, whenever any 
+of the people offered a sacrifice, the priest's servant would come with a three-pronged fork in his 
+hand while the meat was being boiled 14 and would plunge the fork into the pan or kettle or caldron 
+or pot. Whatever the fork brought up the priest would take for himself." (Samuel 2:13-17)
+<br><hr>
+The generally understood defintion of a fork is a piece of cutlery or kitchenware, usually made of metal.
+A fork is a tool consisting of a handle with several narrow tines on one end. The fork, as an eating 
+utensil, has been used primarily in the West, whereas in East Asia chopsticks have been more prevalent. 
+A fork is used to lift food to the mouth or to hold food in place while cooking or cutting it. 
+Forks are often curved slightly. The American style of etiquette stipulates that a fork is held with 
+tines curving up; while in Europe the fork is held with the tines curving down. 
+<hr>
+<img src="images/devils_fork.gif" border="0" alt="The Devil's Fork">
+The devil's fork is an optical illusion. It provides the impression of an impossible object.
+It appears to have three cylindrical prongs at one end, which seem to transform 
+into two rectangular prongs at the other end.
+The devil's fork is also known as a blivet, poiuyt or widget. 
+<br><br>
+ <hr>
+<br>
+This website is supported by:<br>
+<a href="http://www.bodenseo.ca/courses.php?topic=Python"><img style="width: 150px;" alt="Python Training Courses in Canada, Toronto"
+		     src="images/bodenseo_python_training.gif"><br>Python Training Courses in Toronto, Canada</a>
+<hr>
+<br>
+And of course there is this unforgettable sketch about a fork of Monty Python:
+<br>
+<i>Man:</i> 	Oh, er by the way - got a bit of a dirty fork, could you ... er.. get me another one?
+<br><i>Waiter:</i> 	I beg your pardon.
+<br><i>Man:</i> 	Oh it's nothing ... er, I've got a fork a little bit dirty. Could you get me another one? Thank you.
+<br><i>Waiter:</i> 	Oh ... sir, I do apologize.
+<br><i>Man:</i> 	Oh, no need to apologize, it doesn't worry me.
+<br><i>Waiter:</i> 	Oh no, no, no, I do apologize. I will fetch the head waiter immediatement.
+<br><i>Man:</i> 	Oh, there's no need to do that!
+<br><i>Waiter:</i> 	Oh, no no... I'm sure the head waiter, he will want to apologize to you himself. I will fetch him at once.
+<br>Lady: 	Well, you certainly get good service here.
+<br><i>Man:</i> 	They really look after you... yes.
+<br><i>Head Waiter:</i> 	Excuse me monsieur and madame. (examines the fork) It's filthy, Gaston ... find out who washed this up, and give them their cards immediately.
+<br><i>Man:</i> 	Oh, no, no.
+<br><i>Head Waiter:</i> 	Better still, we can't afford to take any chances, sack the entire washing-up staff.
+<br><i>Man:</i> 	No, look I don't want to make any trouble.
+<br><i>Head Waiter:</i> 	Oh, no please, no trouble. It's quite right that you should point these kind of things out. Gaston, tell the manager what has happened immediately! (The Waiter runs off)
+<br><i>Man:</i> 	Oh, no I don't want to cause any fuss.
+<br><i>Head Waiter:</i> 	Please, it's no fuss. I quite simply wish to ensure that nothing interferes with your complete enjoyment of the meal.
+<br><i>Man:</i> 	Oh I'm sure it won't, it was only a dirty fork.
+<br><i>Head Waiter:</i> 	I know. And I'm sorry, bitterly sorry, but I know that... no apologies I can make can alter the fact that in our restaurant you have been given a dirty, filthy, smelly piece of cutlery...
+<br><i>Man:</i> 	It wasn't smelly.
+
+<br><br>
+</div><div id="sidebar-b"><img style="width: 150px;" alt="Python-Logo"
+		     src="images/python-logo.png"><!-- Dieses Tag dort einfügen, wo die +1-Schaltfläche dargestellt werden soll -->
+<g:plusone></g:plusone>
+<br><br>
+
+<div class="fb-like" data-href="www.python-course.eu" data-send="false" data-layout="button_count" 
+data-width="130" data-show-faces="true" data-action="recommend"></div>
+
+<br><br>
+This topic in German / Deutsche Übersetzung:
+    <a href="http://www.python-kurs.eu/forking.php">Fork und Prozesse</a><h3>Classroom Training Courses</h3>
+<p>
+This website contains a free and extensive online tutorial by Bernd Klein with 
+material from his live <a href="python_classes.html">Python courses</a>.
+<br><br>
+If you are interested in an instructor-led classroom training course, you may have a look at the 
+<a href="http://ca.bodenseo.com/courses.php?topic=Python">Python courses
+<br><img style="width: 150px;" 
+alt="Bodenseo, Python courses and seminars"
+		     src="images/classroom_training_courses.jpg">
+</a>
+by Bernd Klein at Bodenseo.
+<br>
+<font size="1">© kabliczech - Fotolia.com</font>
+
+
+<br><br>
+<h3>Python Tricks</h3>
+<i>
+"Python tricks" is a tough one, cuz the language is so clean. E.g., C makes an art of confusing 
+pointers with arrays and strings, which leads to lotsa neat pointer tricks; APL mistakes 
+everything for an array, leading to neat one-liners; and Perl confuses everything period, 
+making each line a joyous adventure <wink>.
+</i>
+(Tim Peters, Pythoneer who formulated the "Zen of Python")
+<h3>Python compared to Lisp</h3>
+Greenspun's "Tenth Rule of Programming" states:
+<br>
+<i>
+Any sufficiently complicated C or Fortran program contains an ad hoc, informally-specified, 
+bug-ridden, slow implementation of half of Common Lisp.
+</i>
+Sounds complicated? Lisp is complicated. Guido van Rossum compared it - or to be precise 
+Common Lisp and Scheme - to Python with the following words:
+<i>
+"These languages are close to Python in their dynamic semantics, but so different in their approach 
+to syntax that a comparison becomes almost a religious argument: is Lisp's lack of syntax an 
+advantage or a disadvantage? It should be noted that Python has introspective capabilities 
+similar to those of Lisp, and Python programs can construct and execute program fragments on 
+the fly. Usually, real-world properties are decisive: Common Lisp is big (in every sense), 
+and the Scheme world is fragmented between many incompatible versions, where Python has a 
+single, free, compact implementation."
+</i>
+<br>(excerpt from "Comparing Python to Other Languages" by Guido van Rossum)
+
+<h3>Wizards and Magic</h3>
+<i>
+"Things in Python are very clear, but are harder to find than the secrets of wizards. 
+Things in Perl are easy to find, but look like arcane spells to invoke magic."
+</i>
+
+ </p>
+
+</p></div>
+<div id="content">
+
+<div id="contextlinks">Previous Chapter: <a href="os_module_shell.html">Python and the Shell</a><br>
+<LINK rel="prev" href="os_module_shell.html">Next Chapter: <a href="threads.html">Introduction into Threads</a><br>
+<LINK rel="next" href="threads.html"></div>
+<h2>Fork und Prozesse</h2>
+<h3>Fork</h3>
+<p>
+<br>
+<img class="imgright" src="images/tree.jpg" alt="A tree as an example for forking" />
+Long before biologists started their research of cloning, computer scientists had a successful 
+history of cloning. They cloned processes, though they didn't call it cloning but forking. 
+<br>
+Forking is one of the most important aspects of Unix and Linux. When a process forks, 
+it creates a copy of itself. 
+More generally, a fork in a multithreading environment means that a thread of execution is duplicated, 
+creating a child thread from the parent thread. they are identical but can be told apart.
+<br><br>
+The fork operation creates a separate address space for the child. 
+The child process has an exact copy of all the memory of the parent process. The execution
+of the parent and child process is independent of each other.
+<br><br>
+In computer science the term fork stands for at least two different aspects:
+<ul>
+<li>The cloning of a process, as roughly described above.</li>
+<li>In software engineering, a project fork happens when developers take a legal copy of source 
+code from one software package and start independent development on it. This way starting a 
+distinct piece of software.</li>
+</ul>
+<br>
+<h3>Fork in Python</h3>
+The system function call fork() creates a copy of the process, which has called it. This copy runs 
+as a child process of the calling process. The child process gets the data and the code of the parent 
+process. The child process receives a process number (PID, Process IDentifier) of its own 
+from the operating system. The child process runs as an independant instance, i.e. independent of
+the parent process. With the return value of fork() we can decide in which process we are: 0 means that we
+are in the child process while a positive return value means, that we are in the parent process. A negative
+return value means that an error occurred while trying to fork.
+
+<br><br>
+To be able to fork processes we need to import the os module in Python.
+<br><br>
+The following example shows a parent process, which forks every time the user types in a "q", when prompted.
+Both the child process and the parent process continue after the if statement. The value of newpid is greater than 0
+in the parent process and 0 in the child process. The exit statement <code>os.exit(0)</code> 
+of the child function is necessary, because otherwiese the child process would return into the parentprocess, 
+i.e. to the raw_input statement.
+<br><br>
+<pre>
+import os
+
+def child():
+   print 'A new child ',  os.getpid( )
+   os._exit(0)  
+
+def parent():
+   while True:
+      newpid = os.fork()
+      if newpid == 0:
+         child()
+      else:
+         pids = (os.getpid(), newpid)
+         print "parent: %d, child: %d" % pids
+      if raw_input( ) == 'q': break
+
+parent()
+</pre>
+<br>
+<h3>Starting independent Processes via fork()</h3>
+So far we have called functions in our examples which are defined in the same script file.
+<br><br>
+Forks are often used to start independent programs. To do this we need the exec*() funktions.
+<br><br>
+They execute a new program by replacing the current process by this program. 
+They do not return to the program which has called them.
+They even receive the same process ID as the calling program.
+<br><br>
+<h3>The exec*()-Functions</h3>
+
+The exec*()-Funktionen are available in various formats:
+<ul>
+<li>os.execl(path, arg0, arg1, ...)</li>
+<li>os.execle(path, arg0, arg1, ..., env)</li>
+<li>os.execlp(file, arg0, arg1, ...)</li>
+<li>os.execlpe(file, arg0, arg1, ..., env)</li>
+<li>os.execv(path, args)</li>
+<li>os.execve(path, args, env)</li>
+<li>os.execvp(file, args)</li>
+<li>os.execvpe(file, args, env)</li>
+</ul>
+
+We will explain these functions with examples, because they are hardly explained in literature.
+<br><br>
+We will use a bash shell script, which we save under test.sh in the directory /home/monty/bin2
+To understand the follwing examples it's only necessary, that the script test.sh is not included in 
+a directory which is included in the PATH (the environment variable $PATH of bash).
+test.sh has to be executable:<br>
+<code>chmod 755 test.sh</code><br>
+<pre>
+#!/bin/bash
+
+script_name=$0
+arg1=$1
+current=`pwd`
+echo $script_name, $arg1
+echo "XYZ: "$XYZ
+echo "PATH: "$PATH
+echo "current directory: $current"
+</pre>
+The Python script execvp.py, which calls our script test.sh, is saved in a different directory, 
+e.g. /home/monty/python:
+<pre>
+#!/usr/bin/python
+import os
+args = ("test","abc")
+os.execvp("test.sh", args)
+</pre>
+As test.sh can't be found in any of the $PATH  locations, we get an error message, if we call execvp in a command
+line:
+<pre>
+$ ./execvp.py
+Traceback (most recent call last):
+  File "./execvp.py", line 6, in &lt;module&gt;
+    os.execvp("test.sh", args)
+  File "/usr/lib/python2.6/os.py", line 344, in execvp
+    _execvpe(file, args)
+  File "/usr/lib/python2.6/os.py", line 380, in _execvpe
+    func(fullname, *argrest)
+OSError: [Errno 2] No such file or directory
+</pre>
+To prevent this error message, and to achieve that our shell script is called, we extend the PATH environment 
+variable with the directory which contains test.sh steht, in our case /home/monty/bin2:
+<br>
+<pre>
+$ PATH=$PATH:/home/monty/bin2
+$ ./execvp.py
+/home/monty/bin2/test.sh, abc
+XYZ: 
+PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/bin:/home/monty/bin:/home/monty/bin2
+current directory: /home/monty/python
+</pre>
+Another elegant possibiliy to extend the search path PATH offers the execvpe()-function.
+This function has a third parameter which is a dictionary with environment variables. If 
+environment variables already exist, they will be replaced by the corresponding values of
+this dictionary. If an environment variable doesn't exist, e.g. "XYZ" in the next example,
+it will be created.
+<br>
+<pre>
+import os
+env =  {"PATH":"/home/monty/bin2", "XYZ":"BlaBla"}
+args = ("test","abc")
+os.execvpe("test.sh", args, env)
+</pre>
+<br>
+If we save this script under the file name execvpe.py, we receive the following output, if
+we call it:
+<pre>
+$ ./execvpe.py
+/home/monty/bin2/test.sh, abc
+XYZ: BlaBla
+PATH: /home/monty/bin2/
+current directory: /home/monty/python/
+$
+</pre>
+<br>
+The value of the shell environment variable $PATH is replaced by the new value
+of our dictionary. If you want to avoid this, i.e. if you want to new directory to be
+appended to the existing path "PATH", you have to change the code like this:
+<br>
+<pre>
+import os
+
+path = os.environ["PATH"] + ":/home/monty/bin2/" 
+env =  {"PATH":path, "XYZ":"BlaBla"}
+os.execlpe("test.sh", "test","abc", env)
+</pre>
+<br>
+It's possible to use execlpe() instead of execvpe(), but the code of our Python script
+has to be changed in the following way:
+<pre>
+import os
+env =  {"PATH":"/home/monty/bin2/", "XYZ":"BlaBla"}
+os.execlpe("test.sh", "test","abc", env)
+</pre>
+<br><br>
+<h3>Overview of the exec Functions</h3>
+<br>
+<img class="imgleft" src="images/exec_functions.png" alt="Systematics of the exec Functions" />
+</p>
+
+<div id="contextlinks">Previous Chapter: <a href="os_module_shell.html">Python and the Shell</a><br>
+<LINK rel="prev" href="os_module_shell.html">Next Chapter: <a href="threads.html">Introduction into Threads</a><br>
+<LINK rel="next" href="threads.html"></div><br><br><br>
+
+</div>
+<div id="footer">  &copy; 2011 - 2014 <a href="http://www.bklein.de/">Bernd Klein</a>,
+Bodenseo; 
+Design by Denise Mitchinson adapted for python-course.eu by Bernd Klein</div>
+</div>
+</body>
+
+<!-- Mirrored from www.python-course.eu/forking.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:06:01 GMT -->
+</html>

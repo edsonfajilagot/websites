@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+    
+<!-- Mirrored from learnpythonthehardway.org/book/ex39.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 03 Sep 2014 17:52:40 GMT -->
+<head>
+        <link href='stylesheets/fonts.css' rel='stylesheet' type='text/css'>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="twitter:creator" content="@lzsthw">
+        <title>Learn Python</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href='stylesheets/pure.css' rel='stylesheet'>
+        <link href='stylesheets/pygments.css' rel='stylesheet'>
+        <link href='stylesheets/main.css' rel='stylesheet'>
+        <link href='stylesheets/nav.css' rel='stylesheet'>
+        <style>
+        </style>
+ 
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.11: http://docutils.sourceforge.net/" />
+<title>Exercise 39: Dictionaries, Oh Lovely Dictionaries</title>
+    </head>
+    <body id='wrapper'>
+        <div class='master-logo-wrapper clearfix'>
+            <a href='index-2.html'>
+                <div class='python-logo-sprite'></div>
+            </a>
+                <span class='edition-3'><img src='images/3rd-edition-cloud.png' /></span>
+        </div><!-- /.master-logo-wrapper -->
+
+        <div style='clear: both;'>
+
+        <div id="main">
+            <div class='chapters-wrapper'>
+                  <nav id='chapters'>
+                      <div class='masthead-title'></div>
+                      <ul class='masthead'>
+                          <li>
+                              <a href='index.html'>
+                                  <div class='nav-tcontents'>
+                                      <img src='images/nav-contents.png' /></br>
+                                  main
+                                  </div>
+                              </a>
+                          </li>
+                          <li>
+                              <a href='#video'>
+                                  <div class='nav-play-video' id="#video_toggle_icon">
+                                      <img src='images/nav-play.png' /><br/>
+                                      play video
+                                      <div class='line-2'>(this chapter)</div>
+                                  </div>
+                              </a>
+                          </li>
+                          <li>
+                              <a href='#' id='prev_link'>
+                                  <div class='nav-previous'>
+                                      <img src='images/nav-previous.png' /></br>
+                                      previous
+                                  </div>
+                              </a>
+                          </li>
+                          <li>
+                              <a href='#' id='next_link'>
+                                  <div class='nav-next'>
+                                      <img src='images/nav-next.png' /></br>
+                                      next
+                                  </div>
+                              </a>
+                          </li>
+                          <li><!-- AMBULANCE ICON -->
+                              <a href='help.html' id=''>
+                                  <div class='ambulance'>
+                                      <img src='images/help-ambulance.png' /></br>
+                                      help
+                                  </div>
+                              </a>
+                          </li>
+                          <li id="follow">
+                                <a href="https://twitter.com/lzsthw" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false" data-dnt="true">Follow @lzsthw</a>
+                                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                           </li>
+
+                      </ul><!-- /.masthead -->
+                      <!--<img src='images/fa-bullhorn.png' />-->
+                  </nav><!-- /.chapters -->
+            </div><!-- /.chapters-wrapper -->
+
+        <!--- RST STARTS -->
+            <h1 class="title">Exercise 39: Dictionaries, Oh Lovely Dictionaries</h1>
+            <p>Now I have to hurt you with another container you can use, because once you learn this container a massive world of ultra-cool will be yours.  It is the most useful container ever:  the dictionary.</p>
+<p>Python calls them &quot;dicts.&quot; Other languages call them &quot;hashes.&quot;  I tend to use both names, but it doesn't matter.  What does matter is what they do when compared to lists.  You see, an list lets you do this:</p>
+<div class="highlight"><pre><a name="python--ex39_pycon.py-idio-pycon-pyg.html-1"></a><span class="gp">&gt;&gt;&gt; </span><span class="n">things</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="s">&#39;c&#39;</span><span class="p">,</span> <span class="s">&#39;d&#39;</span><span class="p">]</span>
+<a name="python--ex39_pycon.py-idio-pycon-pyg.html-2"></a><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">things</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<a name="python--ex39_pycon.py-idio-pycon-pyg.html-3"></a><span class="go">b</span>
+<a name="python--ex39_pycon.py-idio-pycon-pyg.html-4"></a><span class="gp">&gt;&gt;&gt; </span><span class="n">things</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;z&#39;</span>
+<a name="python--ex39_pycon.py-idio-pycon-pyg.html-5"></a><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">things</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<a name="python--ex39_pycon.py-idio-pycon-pyg.html-6"></a><span class="go">z</span>
+<a name="python--ex39_pycon.py-idio-pycon-pyg.html-7"></a><span class="gp">&gt;&gt;&gt; </span><span class="n">things</span>
+<a name="python--ex39_pycon.py-idio-pycon-pyg.html-8"></a><span class="go">[&#39;a&#39;, &#39;z&#39;, &#39;c&#39;, &#39;d&#39;]</span>
+</pre></div><p>You can use numbers to &quot;index&quot; into a list, meaning you can use numbers to find out what's in lists.  You should know this about lists by now, but make sure you understand that you can <em>only</em> use numbers to get items out of a list.</p>
+<p>What a <tt class="docutils literal">dict</tt> does is let you use <em>anything</em>, not just numbers.  Yes, a dict associates one thing to another, no matter what it is.  Take a look:</p>
+<div class="highlight"><pre><a name="python--ex39_pycon.py-idio-pycon-pyg.html-1"></a><span class="gp">&gt;&gt;&gt; </span><span class="n">stuff</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Zed&#39;</span><span class="p">,</span> <span class="s">&#39;age&#39;</span><span class="p">:</span> <span class="mi">39</span><span class="p">,</span> <span class="s">&#39;height&#39;</span><span class="p">:</span> <span class="mi">6</span> <span class="o">*</span> <span class="mi">12</span> <span class="o">+</span> <span class="mi">2</span><span class="p">}</span>
+<a name="python--ex39_pycon.py-idio-pycon-pyg.html-2"></a><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">stuff</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
+<a name="python--ex39_pycon.py-idio-pycon-pyg.html-3"></a><span class="go">Zed</span>
+<a name="python--ex39_pycon.py-idio-pycon-pyg.html-4"></a><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">stuff</span><span class="p">[</span><span class="s">&#39;age&#39;</span><span class="p">]</span>
+<a name="python--ex39_pycon.py-idio-pycon-pyg.html-5"></a><span class="go">39</span>
+<a name="python--ex39_pycon.py-idio-pycon-pyg.html-6"></a><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">stuff</span><span class="p">[</span><span class="s">&#39;height&#39;</span><span class="p">]</span>
+<a name="python--ex39_pycon.py-idio-pycon-pyg.html-7"></a><span class="go">74</span>
+<a name="python--ex39_pycon.py-idio-pycon-pyg.html-8"></a><span class="gp">&gt;&gt;&gt; </span><span class="n">stuff</span><span class="p">[</span><span class="s">&#39;city&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;San Francisco&quot;</span>
+<a name="python--ex39_pycon.py-idio-pycon-pyg.html-9"></a><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">stuff</span><span class="p">[</span><span class="s">&#39;city&#39;</span><span class="p">]</span>
+<a name="python--ex39_pycon.py-idio-pycon-pyg.html-10"></a><span class="go">San Francisco</span>
+</pre></div><p>You will see that instead of just numbers we're using strings to say what we want from the <tt class="docutils literal">stuff</tt> dictionary.  We can also put new things into the dictionary with strings.  It doesn't have to be strings though. We can also do this:</p>
+<div class="highlight"><pre><a name="python--ex39_pycon.py-idio-pycon-pyg.html-1"></a><span class="gp">&gt;&gt;&gt; </span><span class="n">stuff</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;Wow&quot;</span>
+<a name="python--ex39_pycon.py-idio-pycon-pyg.html-2"></a><span class="gp">&gt;&gt;&gt; </span><span class="n">stuff</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;Neato&quot;</span>
+<a name="python--ex39_pycon.py-idio-pycon-pyg.html-3"></a><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">stuff</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<a name="python--ex39_pycon.py-idio-pycon-pyg.html-4"></a><span class="go">Wow</span>
+<a name="python--ex39_pycon.py-idio-pycon-pyg.html-5"></a><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">stuff</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<a name="python--ex39_pycon.py-idio-pycon-pyg.html-6"></a><span class="go">Neato</span>
+<a name="python--ex39_pycon.py-idio-pycon-pyg.html-7"></a><span class="gp">&gt;&gt;&gt; </span><span class="n">stuff</span>
+<a name="python--ex39_pycon.py-idio-pycon-pyg.html-8"></a><span class="go">{&#39;city&#39;: &#39;San Francisco&#39;, 2: &#39;Neato&#39;, &#39;name&#39;: &#39;Zed&#39;, 1: &#39;Wow&#39;, &#39;age&#39;: 39, &#39;height&#39;: 74}</span>
+</pre></div><p>In this code I used numbers, and then you can see there are numbers and strings as keys in the dict when I print it.  I could use anything.  Well, almost but just pretend you can use anything for now.</p>
+<p>Of course, a dictionary that you can only put things in is pretty stupid, so here's how you delete things, with the <tt class="docutils literal">del</tt> keyword:</p>
+<div class="highlight"><pre><a name="python--ex39_pycon.py-idio-pycon-pyg.html-1"></a><span class="gp">&gt;&gt;&gt; </span><span class="k">del</span> <span class="n">stuff</span><span class="p">[</span><span class="s">&#39;city&#39;</span><span class="p">]</span>
+<a name="python--ex39_pycon.py-idio-pycon-pyg.html-2"></a><span class="gp">&gt;&gt;&gt; </span><span class="k">del</span> <span class="n">stuff</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<a name="python--ex39_pycon.py-idio-pycon-pyg.html-3"></a><span class="gp">&gt;&gt;&gt; </span><span class="k">del</span> <span class="n">stuff</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<a name="python--ex39_pycon.py-idio-pycon-pyg.html-4"></a><span class="gp">&gt;&gt;&gt; </span><span class="n">stuff</span>
+<a name="python--ex39_pycon.py-idio-pycon-pyg.html-5"></a><span class="go">{&#39;name&#39;: &#39;Zed&#39;, &#39;age&#39;: 39, &#39;height&#39;: 74}</span>
+</pre></div><div class="section" id="a-dictionary-example">
+<h1>A Dictionary Example</h1>
+<p>We'll now do an exercise that you <em>must</em> study very carefully.  I want you to type this code in and try to understand what's going on.  Take note of when you put things in e dict, get from a hash, and all the operations you use.  Notice how this example is mapping states to their abbreviations, and then the abbreviations to cities in the states.  Remember, &quot;mapping&quot; or &quot;associating&quot; is the key concept in a dictionary.</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61</pre></div></td><td class="code"><div class="highlight"><pre><a name="python--ex39.py-idio.html-1"></a><span class="c"># create a mapping of state to abbreviation</span>
+<a name="python--ex39.py-idio.html-2"></a><span class="n">states</span> <span class="o">=</span> <span class="p">{</span>
+<a name="python--ex39.py-idio.html-3"></a>    <span class="s">&#39;Oregon&#39;</span><span class="p">:</span> <span class="s">&#39;OR&#39;</span><span class="p">,</span>
+<a name="python--ex39.py-idio.html-4"></a>    <span class="s">&#39;Florida&#39;</span><span class="p">:</span> <span class="s">&#39;FL&#39;</span><span class="p">,</span>
+<a name="python--ex39.py-idio.html-5"></a>    <span class="s">&#39;California&#39;</span><span class="p">:</span> <span class="s">&#39;CA&#39;</span><span class="p">,</span>
+<a name="python--ex39.py-idio.html-6"></a>    <span class="s">&#39;New York&#39;</span><span class="p">:</span> <span class="s">&#39;NY&#39;</span><span class="p">,</span>
+<a name="python--ex39.py-idio.html-7"></a>    <span class="s">&#39;Michigan&#39;</span><span class="p">:</span> <span class="s">&#39;MI&#39;</span>
+<a name="python--ex39.py-idio.html-8"></a><span class="p">}</span>
+<a name="python--ex39.py-idio.html-9"></a>
+<a name="python--ex39.py-idio.html-10"></a><span class="c"># create a basic set of states and some cities in them</span>
+<a name="python--ex39.py-idio.html-11"></a><span class="n">cities</span> <span class="o">=</span> <span class="p">{</span>
+<a name="python--ex39.py-idio.html-12"></a>    <span class="s">&#39;CA&#39;</span><span class="p">:</span> <span class="s">&#39;San Francisco&#39;</span><span class="p">,</span>
+<a name="python--ex39.py-idio.html-13"></a>    <span class="s">&#39;MI&#39;</span><span class="p">:</span> <span class="s">&#39;Detroit&#39;</span><span class="p">,</span>
+<a name="python--ex39.py-idio.html-14"></a>    <span class="s">&#39;FL&#39;</span><span class="p">:</span> <span class="s">&#39;Jacksonville&#39;</span>
+<a name="python--ex39.py-idio.html-15"></a><span class="p">}</span>
+<a name="python--ex39.py-idio.html-16"></a>
+<a name="python--ex39.py-idio.html-17"></a><span class="c"># add some more cities</span>
+<a name="python--ex39.py-idio.html-18"></a><span class="n">cities</span><span class="p">[</span><span class="s">&#39;NY&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;New York&#39;</span>
+<a name="python--ex39.py-idio.html-19"></a><span class="n">cities</span><span class="p">[</span><span class="s">&#39;OR&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;Portland&#39;</span>
+<a name="python--ex39.py-idio.html-20"></a>
+<a name="python--ex39.py-idio.html-21"></a><span class="c"># print out some cities</span>
+<a name="python--ex39.py-idio.html-22"></a><span class="k">print</span> <span class="s">&#39;-&#39;</span> <span class="o">*</span> <span class="mi">10</span>
+<a name="python--ex39.py-idio.html-23"></a><span class="k">print</span> <span class="s">&quot;NY State has: &quot;</span><span class="p">,</span> <span class="n">cities</span><span class="p">[</span><span class="s">&#39;NY&#39;</span><span class="p">]</span>
+<a name="python--ex39.py-idio.html-24"></a><span class="k">print</span> <span class="s">&quot;OR State has: &quot;</span><span class="p">,</span> <span class="n">cities</span><span class="p">[</span><span class="s">&#39;OR&#39;</span><span class="p">]</span>
+<a name="python--ex39.py-idio.html-25"></a>
+<a name="python--ex39.py-idio.html-26"></a><span class="c"># print some states</span>
+<a name="python--ex39.py-idio.html-27"></a><span class="k">print</span> <span class="s">&#39;-&#39;</span> <span class="o">*</span> <span class="mi">10</span>
+<a name="python--ex39.py-idio.html-28"></a><span class="k">print</span> <span class="s">&quot;Michigan&#39;s abbreviation is: &quot;</span><span class="p">,</span> <span class="n">states</span><span class="p">[</span><span class="s">&#39;Michigan&#39;</span><span class="p">]</span>
+<a name="python--ex39.py-idio.html-29"></a><span class="k">print</span> <span class="s">&quot;Florida&#39;s abbreviation is: &quot;</span><span class="p">,</span> <span class="n">states</span><span class="p">[</span><span class="s">&#39;Florida&#39;</span><span class="p">]</span>
+<a name="python--ex39.py-idio.html-30"></a>
+<a name="python--ex39.py-idio.html-31"></a><span class="c"># do it by using the state then cities dict</span>
+<a name="python--ex39.py-idio.html-32"></a><span class="k">print</span> <span class="s">&#39;-&#39;</span> <span class="o">*</span> <span class="mi">10</span>
+<a name="python--ex39.py-idio.html-33"></a><span class="k">print</span> <span class="s">&quot;Michigan has: &quot;</span><span class="p">,</span> <span class="n">cities</span><span class="p">[</span><span class="n">states</span><span class="p">[</span><span class="s">&#39;Michigan&#39;</span><span class="p">]]</span>
+<a name="python--ex39.py-idio.html-34"></a><span class="k">print</span> <span class="s">&quot;Florida has: &quot;</span><span class="p">,</span> <span class="n">cities</span><span class="p">[</span><span class="n">states</span><span class="p">[</span><span class="s">&#39;Florida&#39;</span><span class="p">]]</span>
+<a name="python--ex39.py-idio.html-35"></a>
+<a name="python--ex39.py-idio.html-36"></a><span class="c"># print every state abbreviation</span>
+<a name="python--ex39.py-idio.html-37"></a><span class="k">print</span> <span class="s">&#39;-&#39;</span> <span class="o">*</span> <span class="mi">10</span>
+<a name="python--ex39.py-idio.html-38"></a><span class="k">for</span> <span class="n">state</span><span class="p">,</span> <span class="n">abbrev</span> <span class="ow">in</span> <span class="n">states</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<a name="python--ex39.py-idio.html-39"></a>    <span class="k">print</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s"> is abbreviated </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">abbrev</span><span class="p">)</span>
+<a name="python--ex39.py-idio.html-40"></a>
+<a name="python--ex39.py-idio.html-41"></a><span class="c"># print every city in state</span>
+<a name="python--ex39.py-idio.html-42"></a><span class="k">print</span> <span class="s">&#39;-&#39;</span> <span class="o">*</span> <span class="mi">10</span>
+<a name="python--ex39.py-idio.html-43"></a><span class="k">for</span> <span class="n">abbrev</span><span class="p">,</span> <span class="n">city</span> <span class="ow">in</span> <span class="n">cities</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<a name="python--ex39.py-idio.html-44"></a>    <span class="k">print</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s"> has the city </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">abbrev</span><span class="p">,</span> <span class="n">city</span><span class="p">)</span>
+<a name="python--ex39.py-idio.html-45"></a>
+<a name="python--ex39.py-idio.html-46"></a><span class="c"># now do both at the same time</span>
+<a name="python--ex39.py-idio.html-47"></a><span class="k">print</span> <span class="s">&#39;-&#39;</span> <span class="o">*</span> <span class="mi">10</span>
+<a name="python--ex39.py-idio.html-48"></a><span class="k">for</span> <span class="n">state</span><span class="p">,</span> <span class="n">abbrev</span> <span class="ow">in</span> <span class="n">states</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<a name="python--ex39.py-idio.html-49"></a>    <span class="k">print</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s"> state is abbreviated </span><span class="si">%s</span><span class="s"> and has city </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+<a name="python--ex39.py-idio.html-50"></a>        <span class="n">state</span><span class="p">,</span> <span class="n">abbrev</span><span class="p">,</span> <span class="n">cities</span><span class="p">[</span><span class="n">abbrev</span><span class="p">])</span>
+<a name="python--ex39.py-idio.html-51"></a>
+<a name="python--ex39.py-idio.html-52"></a><span class="k">print</span> <span class="s">&#39;-&#39;</span> <span class="o">*</span> <span class="mi">10</span>
+<a name="python--ex39.py-idio.html-53"></a><span class="c"># safely get a abbreviation by state that might not be there</span>
+<a name="python--ex39.py-idio.html-54"></a><span class="n">state</span> <span class="o">=</span> <span class="n">states</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;Texas&#39;</span><span class="p">)</span>
+<a name="python--ex39.py-idio.html-55"></a>
+<a name="python--ex39.py-idio.html-56"></a><span class="k">if</span> <span class="ow">not</span> <span class="n">state</span><span class="p">:</span>
+<a name="python--ex39.py-idio.html-57"></a>    <span class="k">print</span> <span class="s">&quot;Sorry, no Texas.&quot;</span>
+<a name="python--ex39.py-idio.html-58"></a>
+<a name="python--ex39.py-idio.html-59"></a><span class="c"># get a city with a default value</span>
+<a name="python--ex39.py-idio.html-60"></a><span class="n">city</span> <span class="o">=</span> <span class="n">cities</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;TX&#39;</span><span class="p">,</span> <span class="s">&#39;Does Not Exist&#39;</span><span class="p">)</span>
+<a name="python--ex39.py-idio.html-61"></a><span class="k">print</span> <span class="s">&quot;The city for the state &#39;TX&#39; is: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">city</span>
+</pre></div>
+</td></tr></table></div>
+<div class="section" id="what-you-should-see">
+<h1>What You Should See</h1>
+<div class="highlight"><pre><a name="python--ex39.sh-idio-shint-pyg.html-1"></a><span class="gp">$</span> python ex39.py
+<a name="python--ex39.sh-idio-shint-pyg.html-2"></a><span class="go">----------</span>
+<a name="python--ex39.sh-idio-shint-pyg.html-3"></a><span class="go">NY State has:  New York</span>
+<a name="python--ex39.sh-idio-shint-pyg.html-4"></a><span class="go">OR State has:  Portland</span>
+<a name="python--ex39.sh-idio-shint-pyg.html-5"></a><span class="go">----------</span>
+<a name="python--ex39.sh-idio-shint-pyg.html-6"></a><span class="go">Michigan&#39;s abbreviation is:  MI</span>
+<a name="python--ex39.sh-idio-shint-pyg.html-7"></a><span class="go">Florida&#39;s abbreviation is:  FL</span>
+<a name="python--ex39.sh-idio-shint-pyg.html-8"></a><span class="go">----------</span>
+<a name="python--ex39.sh-idio-shint-pyg.html-9"></a><span class="go">Michigan has:  Detroit</span>
+<a name="python--ex39.sh-idio-shint-pyg.html-10"></a><span class="go">Florida has:  Jacksonville</span>
+<a name="python--ex39.sh-idio-shint-pyg.html-11"></a><span class="go">----------</span>
+<a name="python--ex39.sh-idio-shint-pyg.html-12"></a><span class="go">California is abbreviated CA</span>
+<a name="python--ex39.sh-idio-shint-pyg.html-13"></a><span class="go">Michigan is abbreviated MI</span>
+<a name="python--ex39.sh-idio-shint-pyg.html-14"></a><span class="go">New York is abbreviated NY</span>
+<a name="python--ex39.sh-idio-shint-pyg.html-15"></a><span class="go">Florida is abbreviated FL</span>
+<a name="python--ex39.sh-idio-shint-pyg.html-16"></a><span class="go">Oregon is abbreviated OR</span>
+<a name="python--ex39.sh-idio-shint-pyg.html-17"></a><span class="go">----------</span>
+<a name="python--ex39.sh-idio-shint-pyg.html-18"></a><span class="go">FL has the city Jacksonville</span>
+<a name="python--ex39.sh-idio-shint-pyg.html-19"></a><span class="go">CA has the city San Francisco</span>
+<a name="python--ex39.sh-idio-shint-pyg.html-20"></a><span class="go">MI has the city Detroit</span>
+<a name="python--ex39.sh-idio-shint-pyg.html-21"></a><span class="go">OR has the city Portland</span>
+<a name="python--ex39.sh-idio-shint-pyg.html-22"></a><span class="go">NY has the city New York</span>
+<a name="python--ex39.sh-idio-shint-pyg.html-23"></a><span class="go">----------</span>
+<a name="python--ex39.sh-idio-shint-pyg.html-24"></a><span class="go">California state is abbreviated CA and has city San Francisco</span>
+<a name="python--ex39.sh-idio-shint-pyg.html-25"></a><span class="go">Michigan state is abbreviated MI and has city Detroit</span>
+<a name="python--ex39.sh-idio-shint-pyg.html-26"></a><span class="go">New York state is abbreviated NY and has city New York</span>
+<a name="python--ex39.sh-idio-shint-pyg.html-27"></a><span class="go">Florida state is abbreviated FL and has city Jacksonville</span>
+<a name="python--ex39.sh-idio-shint-pyg.html-28"></a><span class="go">Oregon state is abbreviated OR and has city Portland</span>
+<a name="python--ex39.sh-idio-shint-pyg.html-29"></a><span class="go">----------</span>
+<a name="python--ex39.sh-idio-shint-pyg.html-30"></a><span class="go">Sorry, no Texas.</span>
+<a name="python--ex39.sh-idio-shint-pyg.html-31"></a><span class="go">The city for the state &#39;TX&#39; is: Does Not Exist</span>
+</pre></div></div>
+<div class="section" id="what-dictionaries-can-do">
+<h1>What Dictionaries Can Do</h1>
+<p>Dictionaries are another example of a data structure, and like lists they are one of the most commonly used data structures in programming.  A dictionary is used to <em>map</em> or <em>associate</em> things you want to store to keys you need to get them.  Again, programmers don't use a term like &quot;dictionary&quot; for something that doesn't work like an actual dictionary full of words, so let's use that as our real world example.</p>
+<p>Let's say you want to find out what the word &quot;Honorificabilitudinitatibus&quot; means.  Today you would simply copy-paste that word into a search engine and then find out the answer, and we could say a search engine is like a really huge super complex version of the <em>Oxford English Dictionary</em> (OED).  Before search engines what you would do is this:</p>
+<ol class="arabic simple">
+<li>Go to your library and get &quot;the dictionary&quot;. Let's say it's the OED.</li>
+<li>You know &quot;honorificabilitudinitatibus&quot; starts with the letter 'H' so you look on the side of the book for the little tab that has 'H' on it.</li>
+<li>Then you'd skim the pages until you are close to where &quot;hon&quot; started.</li>
+<li>Then you'd skim a few more pages until you found &quot;honorificabilitudinitatibus&quot; or hit the beginning of the &quot;hp&quot; words and realize this word isn't in the OED.</li>
+<li>Once you found the entry, you'd read the definition to figure out what it means.</li>
+</ol>
+<p>This process is nearly exactly the way a dict works, and you are basically &quot;mapping&quot; the word &quot;honorificabilitudinitatibus&quot; to its definition.  A dict in Python is just like a dictionary in the real world like the OED.</p>
+<p>In fact, we can implement one like this using just lists.</p>
+</div>
+<div class="section" id="making-your-own-dictionary-module">
+<h1>Making Your Own Dictionary Module</h1>
+<p>The final piece of code in this exercise will show you how to make a dict data structure using nothing but the lists you already know how to use.  This code may be a little difficult to understand, so don't worry if it takes you a while to full grasp what it's doing.  There are no new concepts in this code. It is slightly more complex and has a few more things you will need to look up.</p>
+<p>To keep things from stepping on Python's <tt class="docutils literal">dict</tt> I'm going to call my data structure a <tt class="docutils literal">hashmap</tt>, which is another name for a dictionary data structure since it maps one thing to another.  You should type this code into a file named <tt class="docutils literal">hashmap.py</tt> so we can run it in another file named <tt class="docutils literal">ex39_test.py</tt> next.</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64</pre></div></td><td class="code"><div class="highlight"><pre><a name="python--hashmap.py-idio.html-1"></a><span class="k">def</span> <span class="nf">new</span><span class="p">(</span><span class="n">num_buckets</span><span class="o">=</span><span class="mi">256</span><span class="p">):</span>
+<a name="python--hashmap.py-idio.html-2"></a>    <span class="sd">&quot;&quot;&quot;Initializes a Map with the given number of buckets.&quot;&quot;&quot;</span>
+<a name="python--hashmap.py-idio.html-3"></a>    <span class="n">aMap</span> <span class="o">=</span> <span class="p">[]</span>
+<a name="python--hashmap.py-idio.html-4"></a>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_buckets</span><span class="p">):</span>
+<a name="python--hashmap.py-idio.html-5"></a>        <span class="n">aMap</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+<a name="python--hashmap.py-idio.html-6"></a>    <span class="k">return</span> <span class="n">aMap</span>
+<a name="python--hashmap.py-idio.html-7"></a>
+<a name="python--hashmap.py-idio.html-8"></a><span class="k">def</span> <span class="nf">hash_key</span><span class="p">(</span><span class="n">aMap</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+<a name="python--hashmap.py-idio.html-9"></a>    <span class="sd">&quot;&quot;&quot;Given a key this will create a number and then convert it to</span>
+<a name="python--hashmap.py-idio.html-10"></a><span class="sd">    an index for the aMap&#39;s buckets.&quot;&quot;&quot;</span>
+<a name="python--hashmap.py-idio.html-11"></a>    <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">aMap</span><span class="p">)</span>
+<a name="python--hashmap.py-idio.html-12"></a>
+<a name="python--hashmap.py-idio.html-13"></a><span class="k">def</span> <span class="nf">get_bucket</span><span class="p">(</span><span class="n">aMap</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+<a name="python--hashmap.py-idio.html-14"></a>    <span class="sd">&quot;&quot;&quot;Given a key, find the bucket where it would go.&quot;&quot;&quot;</span>
+<a name="python--hashmap.py-idio.html-15"></a>    <span class="n">bucket_id</span> <span class="o">=</span> <span class="n">hash_key</span><span class="p">(</span><span class="n">aMap</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+<a name="python--hashmap.py-idio.html-16"></a>    <span class="k">return</span> <span class="n">aMap</span><span class="p">[</span><span class="n">bucket_id</span><span class="p">]</span>
+<a name="python--hashmap.py-idio.html-17"></a>
+<a name="python--hashmap.py-idio.html-18"></a><span class="k">def</span> <span class="nf">get_slot</span><span class="p">(</span><span class="n">aMap</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<a name="python--hashmap.py-idio.html-19"></a>    <span class="sd">&quot;&quot;&quot;</span>
+<a name="python--hashmap.py-idio.html-20"></a><span class="sd">    Returns the index, key, and value of a slot found in a bucket.</span>
+<a name="python--hashmap.py-idio.html-21"></a><span class="sd">    Returns -1, key, and default (None if not set) when not found.</span>
+<a name="python--hashmap.py-idio.html-22"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a name="python--hashmap.py-idio.html-23"></a>    <span class="n">bucket</span> <span class="o">=</span> <span class="n">get_bucket</span><span class="p">(</span><span class="n">aMap</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+<a name="python--hashmap.py-idio.html-24"></a>
+<a name="python--hashmap.py-idio.html-25"></a>    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">kv</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">bucket</span><span class="p">):</span>
+<a name="python--hashmap.py-idio.html-26"></a>        <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">kv</span>
+<a name="python--hashmap.py-idio.html-27"></a>        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="n">k</span><span class="p">:</span>
+<a name="python--hashmap.py-idio.html-28"></a>            <span class="k">return</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span>
+<a name="python--hashmap.py-idio.html-29"></a>
+<a name="python--hashmap.py-idio.html-30"></a>    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">default</span>
+<a name="python--hashmap.py-idio.html-31"></a>
+<a name="python--hashmap.py-idio.html-32"></a><span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">aMap</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<a name="python--hashmap.py-idio.html-33"></a>    <span class="sd">&quot;&quot;&quot;Gets the value in a bucket for the given key, or the default.&quot;&quot;&quot;</span>
+<a name="python--hashmap.py-idio.html-34"></a>    <span class="n">i</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">get_slot</span><span class="p">(</span><span class="n">aMap</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">default</span><span class="p">)</span>
+<a name="python--hashmap.py-idio.html-35"></a>    <span class="k">return</span> <span class="n">v</span>
+<a name="python--hashmap.py-idio.html-36"></a>
+<a name="python--hashmap.py-idio.html-37"></a><span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="n">aMap</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<a name="python--hashmap.py-idio.html-38"></a>    <span class="sd">&quot;&quot;&quot;Sets the key to the value, replacing any existing value.&quot;&quot;&quot;</span>
+<a name="python--hashmap.py-idio.html-39"></a>    <span class="n">bucket</span> <span class="o">=</span> <span class="n">get_bucket</span><span class="p">(</span><span class="n">aMap</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+<a name="python--hashmap.py-idio.html-40"></a>    <span class="n">i</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">get_slot</span><span class="p">(</span><span class="n">aMap</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+<a name="python--hashmap.py-idio.html-41"></a>
+<a name="python--hashmap.py-idio.html-42"></a>    <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+<a name="python--hashmap.py-idio.html-43"></a>        <span class="c"># the key exists, replace it</span>
+<a name="python--hashmap.py-idio.html-44"></a>        <span class="n">bucket</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+<a name="python--hashmap.py-idio.html-45"></a>    <span class="k">else</span><span class="p">:</span>
+<a name="python--hashmap.py-idio.html-46"></a>        <span class="c"># the key does not, append to create it</span>
+<a name="python--hashmap.py-idio.html-47"></a>        <span class="n">bucket</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+<a name="python--hashmap.py-idio.html-48"></a>
+<a name="python--hashmap.py-idio.html-49"></a><span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="n">aMap</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+<a name="python--hashmap.py-idio.html-50"></a>    <span class="sd">&quot;&quot;&quot;Deletes the given key from the Map.&quot;&quot;&quot;</span>
+<a name="python--hashmap.py-idio.html-51"></a>    <span class="n">bucket</span> <span class="o">=</span> <span class="n">get_bucket</span><span class="p">(</span><span class="n">aMap</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+<a name="python--hashmap.py-idio.html-52"></a>
+<a name="python--hashmap.py-idio.html-53"></a>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">bucket</span><span class="p">)):</span>
+<a name="python--hashmap.py-idio.html-54"></a>        <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">bucket</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<a name="python--hashmap.py-idio.html-55"></a>        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="n">k</span><span class="p">:</span>
+<a name="python--hashmap.py-idio.html-56"></a>            <span class="k">del</span> <span class="n">bucket</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<a name="python--hashmap.py-idio.html-57"></a>            <span class="k">break</span>
+<a name="python--hashmap.py-idio.html-58"></a>
+<a name="python--hashmap.py-idio.html-59"></a><span class="k">def</span> <span class="nf">list</span><span class="p">(</span><span class="n">aMap</span><span class="p">):</span>
+<a name="python--hashmap.py-idio.html-60"></a>    <span class="sd">&quot;&quot;&quot;Prints out what&#39;s in the Map.&quot;&quot;&quot;</span>
+<a name="python--hashmap.py-idio.html-61"></a>    <span class="k">for</span> <span class="n">bucket</span> <span class="ow">in</span> <span class="n">aMap</span><span class="p">:</span>
+<a name="python--hashmap.py-idio.html-62"></a>        <span class="k">if</span> <span class="n">bucket</span><span class="p">:</span>
+<a name="python--hashmap.py-idio.html-63"></a>            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">bucket</span><span class="p">:</span>
+<a name="python--hashmap.py-idio.html-64"></a>                <span class="k">print</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span>
+</pre></div>
+</td></tr></table><p>This will create a module named <tt class="docutils literal">hashmap</tt> which you should be able to import and work with using this <tt class="docutils literal">ex39_test.py</tt> file:</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55</pre></div></td><td class="code"><div class="highlight"><pre><a name="python--ex39_test.py-idio.html-1"></a><span class="kn">import</span> <span class="nn">hashmap</span>
+<a name="python--ex39_test.py-idio.html-2"></a>
+<a name="python--ex39_test.py-idio.html-3"></a><span class="c"># create a mapping of state to abbreviation</span>
+<a name="python--ex39_test.py-idio.html-4"></a><span class="n">states</span> <span class="o">=</span> <span class="n">hashmap</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
+<a name="python--ex39_test.py-idio.html-5"></a><span class="n">hashmap</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="s">&#39;Oregon&#39;</span><span class="p">,</span> <span class="s">&#39;OR&#39;</span><span class="p">)</span>
+<a name="python--ex39_test.py-idio.html-6"></a><span class="n">hashmap</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="s">&#39;Florida&#39;</span><span class="p">,</span> <span class="s">&#39;FL&#39;</span><span class="p">)</span>
+<a name="python--ex39_test.py-idio.html-7"></a><span class="n">hashmap</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="s">&#39;California&#39;</span><span class="p">,</span> <span class="s">&#39;CA&#39;</span><span class="p">)</span>
+<a name="python--ex39_test.py-idio.html-8"></a><span class="n">hashmap</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="s">&#39;New York&#39;</span><span class="p">,</span> <span class="s">&#39;NY&#39;</span><span class="p">)</span>
+<a name="python--ex39_test.py-idio.html-9"></a><span class="n">hashmap</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="s">&#39;Michigan&#39;</span><span class="p">,</span> <span class="s">&#39;MI&#39;</span><span class="p">)</span>
+<a name="python--ex39_test.py-idio.html-10"></a>
+<a name="python--ex39_test.py-idio.html-11"></a><span class="c"># create a basic set of states and some cities in them</span>
+<a name="python--ex39_test.py-idio.html-12"></a><span class="n">cities</span> <span class="o">=</span> <span class="n">hashmap</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
+<a name="python--ex39_test.py-idio.html-13"></a><span class="n">hashmap</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">cities</span><span class="p">,</span> <span class="s">&#39;CA&#39;</span><span class="p">,</span> <span class="s">&#39;San Francisco&#39;</span><span class="p">)</span>
+<a name="python--ex39_test.py-idio.html-14"></a><span class="n">hashmap</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">cities</span><span class="p">,</span> <span class="s">&#39;MI&#39;</span><span class="p">,</span> <span class="s">&#39;Detroit&#39;</span><span class="p">)</span>
+<a name="python--ex39_test.py-idio.html-15"></a><span class="n">hashmap</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">cities</span><span class="p">,</span> <span class="s">&#39;FL&#39;</span><span class="p">,</span> <span class="s">&#39;Jacksonville&#39;</span><span class="p">)</span>
+<a name="python--ex39_test.py-idio.html-16"></a>
+<a name="python--ex39_test.py-idio.html-17"></a><span class="c"># add some more cities</span>
+<a name="python--ex39_test.py-idio.html-18"></a><span class="n">hashmap</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">cities</span><span class="p">,</span> <span class="s">&#39;NY&#39;</span><span class="p">,</span> <span class="s">&#39;New York&#39;</span><span class="p">)</span>
+<a name="python--ex39_test.py-idio.html-19"></a><span class="n">hashmap</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">cities</span><span class="p">,</span> <span class="s">&#39;OR&#39;</span><span class="p">,</span> <span class="s">&#39;Portland&#39;</span><span class="p">)</span>
+<a name="python--ex39_test.py-idio.html-20"></a>
+<a name="python--ex39_test.py-idio.html-21"></a>
+<a name="python--ex39_test.py-idio.html-22"></a><span class="c"># print out some cities</span>
+<a name="python--ex39_test.py-idio.html-23"></a><span class="k">print</span> <span class="s">&#39;-&#39;</span> <span class="o">*</span> <span class="mi">10</span>
+<a name="python--ex39_test.py-idio.html-24"></a><span class="k">print</span> <span class="s">&quot;NY State has: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">hashmap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cities</span><span class="p">,</span> <span class="s">&#39;NY&#39;</span><span class="p">)</span>
+<a name="python--ex39_test.py-idio.html-25"></a><span class="k">print</span> <span class="s">&quot;OR State has: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">hashmap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cities</span><span class="p">,</span> <span class="s">&#39;OR&#39;</span><span class="p">)</span>
+<a name="python--ex39_test.py-idio.html-26"></a>
+<a name="python--ex39_test.py-idio.html-27"></a><span class="c"># print some states</span>
+<a name="python--ex39_test.py-idio.html-28"></a><span class="k">print</span> <span class="s">&#39;-&#39;</span> <span class="o">*</span> <span class="mi">10</span>
+<a name="python--ex39_test.py-idio.html-29"></a><span class="k">print</span> <span class="s">&quot;Michigan&#39;s abbreviation is: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">hashmap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="s">&#39;Michigan&#39;</span><span class="p">)</span>
+<a name="python--ex39_test.py-idio.html-30"></a><span class="k">print</span> <span class="s">&quot;Florida&#39;s abbreviation is: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">hashmap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="s">&#39;Florida&#39;</span><span class="p">)</span>
+<a name="python--ex39_test.py-idio.html-31"></a>
+<a name="python--ex39_test.py-idio.html-32"></a><span class="c"># do it by using the state then cities dict</span>
+<a name="python--ex39_test.py-idio.html-33"></a><span class="k">print</span> <span class="s">&#39;-&#39;</span> <span class="o">*</span> <span class="mi">10</span>
+<a name="python--ex39_test.py-idio.html-34"></a><span class="k">print</span> <span class="s">&quot;Michigan has: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">hashmap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cities</span><span class="p">,</span> <span class="n">hashmap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="s">&#39;Michigan&#39;</span><span class="p">))</span>
+<a name="python--ex39_test.py-idio.html-35"></a><span class="k">print</span> <span class="s">&quot;Florida has: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">hashmap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cities</span><span class="p">,</span> <span class="n">hashmap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="s">&#39;Florida&#39;</span><span class="p">))</span>
+<a name="python--ex39_test.py-idio.html-36"></a>
+<a name="python--ex39_test.py-idio.html-37"></a><span class="c"># print every state abbreviation</span>
+<a name="python--ex39_test.py-idio.html-38"></a><span class="k">print</span> <span class="s">&#39;-&#39;</span> <span class="o">*</span> <span class="mi">10</span>
+<a name="python--ex39_test.py-idio.html-39"></a><span class="n">hashmap</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">states</span><span class="p">)</span>
+<a name="python--ex39_test.py-idio.html-40"></a>
+<a name="python--ex39_test.py-idio.html-41"></a><span class="c"># print every city in state</span>
+<a name="python--ex39_test.py-idio.html-42"></a><span class="k">print</span> <span class="s">&#39;-&#39;</span> <span class="o">*</span> <span class="mi">10</span>
+<a name="python--ex39_test.py-idio.html-43"></a><span class="n">hashmap</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">cities</span><span class="p">)</span>
+<a name="python--ex39_test.py-idio.html-44"></a>
+<a name="python--ex39_test.py-idio.html-45"></a><span class="k">print</span> <span class="s">&#39;-&#39;</span> <span class="o">*</span> <span class="mi">10</span>
+<a name="python--ex39_test.py-idio.html-46"></a><span class="c"># by default ruby says &quot;nil&quot; when something isn&#39;t in there</span>
+<a name="python--ex39_test.py-idio.html-47"></a><span class="n">state</span> <span class="o">=</span> <span class="n">hashmap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="s">&#39;Texas&#39;</span><span class="p">)</span>
+<a name="python--ex39_test.py-idio.html-48"></a>
+<a name="python--ex39_test.py-idio.html-49"></a><span class="k">if</span> <span class="ow">not</span> <span class="n">state</span><span class="p">:</span>
+<a name="python--ex39_test.py-idio.html-50"></a>  <span class="k">print</span> <span class="s">&quot;Sorry, no Texas.&quot;</span>
+<a name="python--ex39_test.py-idio.html-51"></a>
+<a name="python--ex39_test.py-idio.html-52"></a><span class="c"># default values using ||= with the nil result</span>
+<a name="python--ex39_test.py-idio.html-53"></a><span class="c"># can you do this on one line?</span>
+<a name="python--ex39_test.py-idio.html-54"></a><span class="n">city</span> <span class="o">=</span> <span class="n">hashmap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cities</span><span class="p">,</span> <span class="s">&#39;TX&#39;</span><span class="p">,</span> <span class="s">&#39;Does Not Exist&#39;</span><span class="p">)</span>
+<a name="python--ex39_test.py-idio.html-55"></a><span class="k">print</span> <span class="s">&quot;The city for the state &#39;TX&#39; is: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">city</span>
+</pre></div>
+</td></tr></table><p>You should recognize that this is nearly the same code as we created at the top, except that it's using your new implementation of <tt class="docutils literal">hashmap</tt> instead.  Go through and confirm you understand how each line is the same operation as the same line in <tt class="docutils literal">ex39.py</tt>.</p>
+</div>
+<div class="section" id="the-code-description">
+<h1>The Code Description</h1>
+<p>This <tt class="docutils literal">hashmap</tt> is nothing more than &quot;a list of buckets, which are a list of slots, which have key/value pairs in them.&quot;  Take a minute to break that down to see what I mean:</p>
+<dl class="docutils">
+<dt>&quot;a list of buckets...&quot;</dt>
+<dd>In the <tt class="docutils literal">hashmap</tt> function I create the <tt class="docutils literal">aMap</tt> variable which is a list, and then I fill it with other lists...</dd>
+<dt>&quot;which are a list of slots...&quot;</dt>
+<dd>These bucket lists are empty at first, but as we add key/value pairs to the data structure they will fill with &quot;slots&quot; or...</dd>
+<dt>&quot;which have key/value pairs in them.&quot;</dt>
+<dd>Meaning each slot inside a bucket contains a <tt class="docutils literal">(key, value)</tt> tuple or &quot;pair&quot;.</dd>
+</dl>
+<p>If this structure still doesn't make sense, take the time to draw it out on paper until you're sure you get it.  In fact, doing algorithms manually on paper is a good way to make sure you understand them.</p>
+<p>Now that you know how the data is structured, you just need to know the <em>algorithm</em> for each operation.  An algorithm is the steps you take to do something to or with a data structure.  It's the code that makes the data structure work.  We'll go through each of these operations using the code, but a general pattern in the <tt class="docutils literal">hashmap</tt> algorithms is this:</p>
+<ol class="arabic simple">
+<li>Convert a key to an integer using a hashing function: <tt class="docutils literal">hash_key</tt>.</li>
+<li>Convert this hash to a bucket number using a <tt class="docutils literal">%</tt> (modulus) operator.</li>
+<li>Get this bucket from the <tt class="docutils literal">aMap</tt> list of buckets, and then traverse it to find the slot that contains the key we want.</li>
+</ol>
+<p>In the case of <tt class="docutils literal">set</tt> we do this, to replace duplicate keys, or we append to add new ones.</p>
+<p>I will now walk through the code for the hashmap so you can understand what's going on, following function by function.  Follow along and make sure you understand every line.  Write an English comment above each line to make sure you understand what it's doing.  This is so deceptively simple that I recommend you take the time to play with any lines of code mentioned in the following description either in the Python shell, or on paper until you get it.</p>
+<dl class="docutils">
+<dt>new</dt>
+<dd>First I start by creating a function that makes a hashmap for you, also known as an initializer.  What I've done is created an <tt class="docutils literal">aMap</tt> variable that has a list, and then I put <tt class="docutils literal">num_buckets</tt> lists inside it.  These buckets will be used to hold the contents of the hashmap as I set them.  Later I use <tt class="docutils literal">len(aMap)</tt> in other functions to find out how many buckets there are. Be sure you understand that!</dd>
+<dt>hash_key</dt>
+<dd>This deceptively simple function is the core of how a <tt class="docutils literal">dict</tt> works.  What it does is uses the built-in Python <tt class="docutils literal">hash</tt> function to convert a string to a number.  Python uses this function for its own <tt class="docutils literal">dict</tt> data structure, and I'm just reusing it.  You should fire up a Python console to see how it works.  Once I have a number for the key, I then use the <tt class="docutils literal">%</tt> (modulus) operator and the <tt class="docutils literal">len(aMap)</tt> to get a bucket where this key can go.  As you should know, the <tt class="docutils literal">%</tt> (modulus) operator will divide any number and give me the remainder.  I can also use this as a way of limiting giant numbers to a fixed smaller set of other numbers.  If you don't get this then use Python to explore it.</dd>
+<dt>get_bucket</dt>
+<dd>This function then uses <tt class="docutils literal">hash_key</tt> to find the bucket that a key <em>could</em> be in.  Since I did <tt class="docutils literal">% len(aMap)</tt> in the <tt class="docutils literal">hash_key</tt> function, I know whatever <tt class="docutils literal">bucket_id</tt> I get will fit into the <tt class="docutils literal">aMap</tt> list.  Using the <tt class="docutils literal">bucket_id</tt> I can then get the bucket where the key <em>could</em> be.</dd>
+<dt>get_slot</dt>
+<dd>This function uses <tt class="docutils literal">get_bucket</tt> to get the bucket a key could be in, and then it simply rolls through every element of that bucket until it finds a matching key.  Once it does it returns the tuple of <tt class="docutils literal">(i, k, v)</tt> which is the index the key was found in, the key itself, and the value set for that key.  You now know enough to see how this data structure works.  It takes keys, hashes and modulus them to find a bucket, then searches that bucket to find the item.  This effectively cuts the amount of searching necessary to a fraction of what it would be normally.</dd>
+<dt>get</dt>
+<dd>This is a &quot;convenience function&quot; which does what most people want a <tt class="docutils literal">hashmap</tt> to do.  It uses <tt class="docutils literal">get_slot</tt> to get the <tt class="docutils literal">(i, k, v)</tt> and then just returns the <tt class="docutils literal">v</tt> (value) only.  Make sure you understand how the <tt class="docutils literal">default</tt> variable works, and how the <tt class="docutils literal">(i, k, v)</tt> in <tt class="docutils literal">get_slot</tt> is assigned to the <tt class="docutils literal">i, k, v</tt> variables in <tt class="docutils literal">get</tt>.</dd>
+<dt>set</dt>
+<dd>To set a key/value pair all I need to do is get the bucket, and append the new <tt class="docutils literal">(key, value)</tt> to it so it can be found later.  However, I want my <tt class="docutils literal">hashmap</tt> to allow one key at a time.  To do that, first I have to find the bucket then check if this key already exists.  If it does then I replace it in the bucket with the new one, and if it doesn't then I append.  This is actually slower than simply appending, but more likely what a user of <tt class="docutils literal">hashmap</tt> wants.  If you wanted to allow multiple values for a key you could simply have <tt class="docutils literal">get</tt> go through every slot in the bucket and return a list of everything it found.  This is a good example of tradeoffs in design.  The current version is faster on <tt class="docutils literal">get</tt>, but slower on <tt class="docutils literal">set</tt>.</dd>
+<dt>delete</dt>
+<dd>To delete a key, I simply get the bucket and search for the key in it, and delete it from the list.  However, because I chose to make <tt class="docutils literal">set</tt> only store one key/value pair I can stop when I have found one.  If I had decided to allow multiple values for each key by simply appending I would have also made <tt class="docutils literal">delete</tt> slower because I would have needed to go through <em>every</em> slot on delete just in case it had a key/value pair that matched.</dd>
+<dt>list</dt>
+<dd>The last function is simply a little debug function that prints out what's in the <tt class="docutils literal">hashmap</tt> and should be trivial for you to understand.  It just gets each bucket, then goes through each slot in the bucket.</dd>
+</dl>
+<p>After all of these functions I just have a little bit of testing code that makes sure they work.</p>
+</div>
+<div class="section" id="three-levels-of-lists">
+<h1>Three Levels of Lists</h1>
+<p>As I mentioned in the discussion, by deciding that <tt class="docutils literal">set</tt> will overwrite (replace) keys with new values, I have made <tt class="docutils literal">set</tt> slower but this assumption makes all of the other functions faster.  What if I wanted a <tt class="docutils literal">hashmap</tt> that allowed multiple values for each key but still keep everything fast?</p>
+<p>What I need to do then is establish that every slot in a bucket is a list of values. This means that I add a third level of buckets, then slots, then values.  This also matches the description of this kind of <tt class="docutils literal">hashmap</tt> because I am saying, &quot;For every key there can be <em>multiple</em> values.&quot;  Another way to say that is &quot;Every key has a list of values.&quot;  Since keys go in slots, then slots have lists of values and I'm done.</p>
+<p>If you want to take this code further, then change it to support multiple values for each key.</p>
+</div>
+<div class="section" id="what-you-should-see-again">
+<h1>What You Should See (Again)</h1>
+<div class="highlight"><pre><a name="python--ex39_dict.sh-idio-shint-pyg.html-1"></a><span class="gp">$</span> python ex39_test.py
+<a name="python--ex39_dict.sh-idio-shint-pyg.html-2"></a><span class="go">Traceback (most recent call last):</span>
+<a name="python--ex39_dict.sh-idio-shint-pyg.html-3"></a><span class="go">  File &quot;ex39_test.py&quot;, line 1, in &lt;module&gt;</span>
+<a name="python--ex39_dict.sh-idio-shint-pyg.html-4"></a><span class="go">    import hashmap</span>
+<a name="python--ex39_dict.sh-idio-shint-pyg.html-5"></a><span class="go">ImportError: No module named hashmap</span>
+</pre></div></div>
+<div class="section" id="when-to-use-dictionaries-or-lists">
+<h1>When to Use Dictionaries or Lists</h1>
+<p>As I mentioned in Exercise 38, lists have specific properties that help you contain and organize things that need to be in a list structure.  Dictionaries are the same, but the properties of a <tt class="docutils literal">dict</tt> are different than lists because they work with mapping keys to values.  That means you use a dictionary when:</p>
+<ol class="arabic simple">
+<li>You have to retrieve things based on some identifier, like names, addresses, or anything that can be a key.</li>
+<li>You don't need things to be in order. Dictionaries do not normally have any notion of order, so you have to use a list for that.</li>
+<li>You are going to be adding and removing elements and their keys.</li>
+</ol>
+<p>This means that if you have to use a non-numeric key, use a <tt class="docutils literal">dict</tt>.  If you need things in order, use a list.</p>
+</div>
+<div class="section" id="study-drills">
+<h1>Study Drills</h1>
+<ol class="arabic simple">
+<li>Do this same kind of mapping with cities and states/regions in your country or some other country.</li>
+<li>Find the Python documentation for dictionaries and try to do even more things to them.</li>
+<li>Find out what you <em>can't</em> do with dictionaries.  A big one is that they do not have order, so try playing with that.</li>
+<li>Read about Python's <em>assert</em> feature and then take the <em>hashmap</em> code and add assertions for each of the tests I've done instead of <em>print</em>.  For example, you can assert that the first get operation returns <em>&quot;Flamenco Sketches&quot;</em> instead of just printing that out.</li>
+<li>Did you notice that the <tt class="docutils literal">list</tt> function listed the items I added in a <em>different</em> order than they were added?  This is an example of how dictionaries don't maintain order, and if you analyze the code you'll understand why.</li>
+<li>Create a <tt class="docutils literal">dump</tt> function that is like <tt class="docutils literal">list</tt> but which dumps the full contents of every bucket so you can debug it.</li>
+<li>Make sure you know what the <tt class="docutils literal">hash</tt> function does in that code.  It's a special function that converts strings to a consistent integer.  Find the documentation for it online.  Read about what a &quot;hash function&quot; is in programming.</li>
+</ol>
+</div>
+<div class="section" id="common-student-questions">
+<h1>Common Student Questions</h1>
+<dl class="docutils">
+<dt>What is the difference between a list and a dictionary?</dt>
+<dd>A list is for an ordered list of items.  A dictionary (or <tt class="docutils literal">dict</tt>) is for matching some items (called &quot;keys&quot;) to other items (called &quot;values&quot;).</dd>
+<dt>What would I use a dictionary for?</dt>
+<dd>When you have to take one value and &quot;look up&quot; another value.  In fact you could call dictionaries &quot;look up tables.&quot;</dd>
+<dt>What would I use a list for?</dt>
+<dd>Use a list for any sequence of things that need to be in order, and you only need to look them up by a numeric index.</dd>
+<dt>What if I need a dictionary, but I need it to be in order?</dt>
+<dd>Take a look at the <tt class="docutils literal">collections.OrderedDict</tt> data structure in Python.  Search for it online to find the documentation.</dd>
+</dl>
+</div>
+        <!-- RST ENDS -->
+
+            <!-- /.help-icon -->
+        <div id="video_holder">
+            <h1>Video</h1>
+            <div id="video" class="row inner">
+                <div class="small-12 small-centered columns">
+                    <div data-paydiv_product="2" id='paydiv'>
+                        &nbsp;
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        </div><!-- /#main -->
+
+        <div class='ad-deck gold' id="footer">
+            <ul class='retailers clearfix'>
+                <li>
+                    <a href='https://paydiv.io/access/buy/2/'>
+                        <div class='retailer-name'>Zed Shaw</div>
+                        <div class='book-type'>PDF + Videos + Updates</div>
+                        <div class='book-price'>$29.95</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.amazon.com/gp/product/0321884914/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0321884914&amp;linkCode=as2&amp;tag=lepythhawa-20'>
+                        <div class='retailer-name'>Amazon</div>
+                        <div class='book-type'>Paper + DVD</div>
+                        <div class='book-price'>$29.95</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.amazon.com/gp/product/B00FGUS948/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=B00FGUS948&amp;linkCode=as2&amp;tag=lepythhawa-20'>
+                        <div class='retailer-name'>Amazon</div>
+                        <div class='book-type'>Kindle (No Videos)</div>
+                        <div class='book-price'>$17.27</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.barnesandnoble.com/w/learn-python-the-hard-way-zed-shaw/1112055406?ean=9780321884916'>
+                        <div class='retailer-name'>B&amp;N</div>
+                        <div class='book-type'>Paper + DVD</div>
+                        <div class='book-price'>$17.27</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.barnesandnoble.com/w/learn-python-the-hard-way-zed-shaw/1112055406?ean=9780133124347&amp;itm=1&amp;usri=learn+python+the+hard+way'>
+                        <div class='retailer-name'>B&amp;N</div>
+                        <div class='book-type'>Nook (No Video)</div>
+                        <div class='book-price'>$17.27</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.informit.com/store/learn-python-the-hard-way-a-very-simple-introduction-9780321884916'>
+                        <div class='retailer-name'>InformIT</div>
+                        <div class='book-type'>eBook + Paper</div>
+                        <div class='book-price'>$43.19</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://ruby.learncodethehardway.org/book/'>
+                        <div class='retailer-name'>Interested In Ruby?</div>
+                        <div class='book-type'>Ruby is also a great language.</div>
+                        <div class='book-price'>Learn Ruby The Hard Way</div>
+                    </a>
+                </li>
+
+            </ul><!-- /.places -->
+        </div><!-- /#ad-deck -->
+
+        <script src="javascripts/jquery.js"></script>
+        <script src="index.js"></script>
+        <script src="../../paydiv.io/static/jzed.js"></script>
+        <script src="../../paydiv.io/static/js/videojs/video.js"></script>
+        <link rel="stylesheet" href="../../paydiv.io/static/js/videojs/video-js.css">
+        <script src="../../paydiv.io/static/api/v1/paydiv.js"></script>
+        <script src="javascripts/app.js"></script>
+        <script src="javascripts/littools.js"></script>
+        <script type="text/javascript">
+        
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-24168052-1']);
+        _gaq.push(['_trackPageview']);
+        
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+        
+        </script>
+
+
+        <script src="javascripts/littools.js"></script>
+
+        </body>
+
+<!-- Mirrored from learnpythonthehardway.org/book/ex39.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 03 Sep 2014 17:52:40 GMT -->
+</html>
+

@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="ie ie8"> <![endif]-->
+<!--[if IE 9]><html class="ie ie9"> <![endif]-->
+<!--[if gt IE 9]><!-->	<html> <!--<![endif]-->
+
+<!-- Mirrored from www.tutorialspoint.com/hadoop/hadoop_streaming.htm by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 20 Apr 2015 05:13:58 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<!-- Basic -->
+<meta charset="utf-8">
+<title>Hadoop - Streaming</title>
+<meta name="description" content="Hadoop Streaming - Learn Hadoop in simple and easy steps starting from its Overview, Big Data Overview, Big Bata Solutions, Introduction to Hadoop, Enviornment Setup, Hdfs Overview, Hdfs Operations, Command Reference, Mapreduce, Streaming, Multi Node Cluster." />
+<meta name="keywords" content="Hadoop, Tutorial, Beginners, Overview, Big Data Overview, Big Bata Solutions, Introduction to Hadoop, Enviornment Setup, Hdfs Overview, Hdfs Operations, Command Reference, Mapreduce, Streaming, Multi Node Cluster."/>
+<base  />
+<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
+<meta name="author" content="tutorialspoint.com">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=yes">
+<meta property="fb:app_id" content="471319149685276" />
+<!-- Web Fonts  -->
+<link href="../../fonts.googleapis.com/cssf1e9.css?family=Open+Sans:300,400,600,700,800|Shadows+Into+Light" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="../../cdn.tutorialspoint.com/theme/css/fonts/font-awesome/css/font-awesome.css">
+<link rel="stylesheet" href="../../cdn.tutorialspoint.com/theme/css/custom-mini.css"/>
+<script type="text/javascript" src="../../cdn.tutorialspoint.com/theme/js/jquery.js"></script>
+<script type="text/javascript" src="../../cdn.tutorialspoint.com/theme/prettify.js"></script>
+<!-- Head Libs -->
+<script src="../../cdn.tutorialspoint.com/theme/vendor/modernizr.js"></script>
+<!--[if IE]>
+<link rel="stylesheet" href="http://cdn.tutorialspoint.com/theme/css/ie.css">
+<![endif]-->
+<!--[if lte IE 8]>
+<script src="http://cdn.tutorialspoint.com/theme/vendor/respond.js"></script>
+<![endif]-->
+<!--[if IE]>
+<link rel="stylesheet" href="http://cdn.tutorialspoint.com/theme/css/ie.css">
+<![endif]-->
+<!--[if lte IE 8]>
+<script src="http://cdn.tutorialspoint.com/theme/vendor/respond.js"></script>
+<![endif]-->
+<!--[if IE 8]>
+<link rel="stylesheet" type="text/css" href="http://cdn.tutorialspoint.com/theme/css/ie8.css">
+<![endif]-->
+<!--[if IE 9]>
+<link rel="stylesheet" type="text/css" href="http://cdn.tutorialspoint.com/theme/css/ie9.css">
+<![endif]-->
+<!-- Front Page related changes -->
+<style>
+div.feature-box div.feature-box-icon, .col-md-3 .course-box, li.heading, footer div.footer-ribon, div.footer-copyright { background: #39b9fa url(../images/pattern.png) repeat center center !important; }
+header nav ul.nav-main li a:hover, header nav ul.nav-main li.dropdown:hover a.dropdown-toggle { background: #39b9fa;} 
+header nav ul.nav-main li.dropdown:hover > ul{ border:2px solid #39b9fa}
+header nav ul.nav-main ul.dropdown-menu > li > a:hover, #mainMenu > li:hover, header nav.mega-menu ul.nav-main .mega-menu-content ul.sub-menu li:hover{ background: #39b9fa !important;}
+img.mobile-apps { border: 1px solid #39b9fa !important; }
+footer i.icon, footer ul.list.icons li i { color: #39b9fa !important; }
+</style>
+</head>
+<body onload="prettyPrint()">
+<div class="wrapLoader">
+   <div class="imgLoader">
+      <img  src="../../cdn.tutorialspoint.com/images/loading-cg.gif" alt="" width="70" height="70" />
+   </div>
+</div>
+<div id="divGoogle"></div>
+<div class="body">
+<header>
+   <div class="container">			
+      <h1 class="logo">
+      <a href="http://www.tutorialspoint.com/index.htm" title="tutorialspoint">
+      <img alt="tutorialspoint" src="images/logo.png">
+      </a>
+      </h1>			
+      <div class="search" id="searchBar">
+         <form method="get" id="searchform" name="searchform" action="http://www.google.com/search" target="_blank">
+            <input type="hidden" name="sitesearch" value="www.tutorialspoint.com">
+            <div class="input-group">
+               <input type="text" class="form-control search" name="q" id="q" placeholder="Search your tutorials..." onfocus="if (this.value == 'Search your tutorials...') {this.value = '';}" onblur="if (this.value == '') {this.value = 'Search your tutorials...';}">
+               <input value="FORID:11" name="cof" type="hidden">
+               <input type="hidden" name="ie" value="ISO-8859-1">
+               <span class="input-group-btn"> <button class="btn btn-default" type="submit"><i class="icon icon-search"></i></button> </span>
+            </div>
+         </form>
+      </div>
+      <nav>
+         <ul class="nav nav-pills nav-top">
+            <li><a href="http://www.tutorialspoint.com/absoluteclasses.htm"><img src="../images/free-training.png" style="width:100px; position:absolute;left:-158px; top:-7px; z-index:99;" title="Free Online Training"></a></li>
+            <li> <a href="http://www.tutorialspoint.com/shared-tutorials.php"><i class="icon icon-user"></i> &nbsp;Shared</a> </li>
+            <li> <a href="http://www.tutorialspoint.com/shorttutorials"><i class="icon icon-file-text-o"></i> &nbsp;Articles</a> </li>
+            <div class="social-icons">
+               <ul class="social-icons">
+               <li class="facebook"><a href="http://www.facebook.com/tutorialspointindia" target="_blank" title="Facebook">Facebook</a></li>
+               <li class="twitter"><a href="http://www.twitter.com/tutorialspoint" target="_blank" title="Twitter">Twitter</a></li>
+               <li class="googleplus"><a href="https://plus.google.com/u/0/116678774017490391259/posts" target="_blank" data-placement="bottom" title="tutorialspoint @ Google+">Google+</a></li>
+               <li class="linkedin"><a href="http://www.linkedin.com/company/tutorialspoint" target="_blank" title="tutorialspoint @ Linkedin">Linkedin</a></li>
+               </ul>
+            </div>
+            </li>
+         </ul>
+      </nav>
+         <!-- search code here  --> 
+      <button class="btn btn-responsive-nav btn-inverse" data-toggle="collapse" data-target=".nav-main-collapse" id="pull"> <i class="icon icon-bars"></i> </button>
+   </div>
+   <div class="navbar-collapse nav-main-collapse collapse">
+      <div class="container">
+         <nav class="nav-main mega-menu">
+            <ul class="nav nav-pills nav-main" id="mainMenu">
+               <li class="dropdown"> <a class="dropdown" href="http://www.tutorialspoint.com/index.htm"><i class="icon icon-home"></i> Home</a> </li>   
+               <li class="dropdown"><a class="dropdown-toggle tut-lib" href="http://www.tutorialspoint.com/tutorialslibrary.htm"> Tutorials Library <i class="fa-angle-down"></i> </a>
+      <ul class="dropdown-menu" id="submenu">
+         <li>
+            <div class="mega-menu-content">
+              <div class="row">
+                 <div class="col-md-6">
+                    <ul class="sub-menu">
+                     <li><a href="http://www.tutorialspoint.com/academic_tutorials.htm">Academic</a></li>
+                     <li><a href="http://www.tutorialspoint.com/big_data_tutorials.htm">Big Data</a></li>
+                     <li><a href="http://www.tutorialspoint.com/database_tutorials.htm">Databases</a></li>
+                     <li><a href="http://www.tutorialspoint.com/java_technology_tutorials.htm">Java Technologies</a></li>
+                     <li><a href="http://www.tutorialspoint.com/mainframe_tutorials.htm">Mainframe</a></li>
+                     <li><a href="http://www.tutorialspoint.com/management_tutorials.htm">Management</a></li>
+                     <li><a href="http://www.tutorialspoint.com/microsoft_technologies_tutorials.htm">Microsoft Technologies</a></li>
+                     <li><a href="http://www.tutorialspoint.com/misc_tutorials.htm">Miscellaneous</a></li>
+                   </ul>
+                 </div>
+                 <div class="col-md-6">
+                  <ul class="sub-menu">
+                     <li><a href="http://www.tutorialspoint.com/mobile_development_tutorials.htm">Mobile Development</a></li>
+                     <li><a href="http://www.tutorialspoint.com/computer_programming_tutorials.htm">Programming</a></li>
+                     <li><a href="http://www.tutorialspoint.com/scripting_lnaguage_tutorials.htm">Scripts</a></li>
+                     <li><a href="http://www.tutorialspoint.com/software_quality_tutorials.htm">Software Quality</a></li>
+                     <li><a href="http://www.tutorialspoint.com/telecom_tutorials.htm">Telecom</a></li>
+                     <li><a href="http://www.tutorialspoint.com/web_development_tutorials.htm">Web Development</a></li>
+                     <li><a href="http://www.tutorialspoint.com/xml_technologies_tutorials.htm">XML Technologies</a></li>
+                     <li><a href="http://www.tutorialspoint.com/multi_language_tutorials.htm">Multi Language Tutorials</a></li>
+                  </ul>
+                 </div>
+              </div>
+            </div>
+         </li>
+       </ul>
+               </li>
+               <li class="dropdown"><a class="dropdown" href="http://www.tutorialspoint.com/codingground.htm"><i class="fa-code"></i> Coding Ground</a> </li>
+                  <li class="dropdown"> 							
+                     <a class="dropdown-toggle tut-plus" href="http://www.tutorialspoint.com/absoluteclasses.htm">Absolute Classes <i class="fa-angle-down"></i></a>                     <ul class="dropdown-menu" id="submenu1">
+                                                <li class="current-menu-ancestor current-menu-parent active dropdown-submenu" style="border-bottom:none;">
+                        <li style="border-bottom:none;"><a href="http://www.tutorialspoint.com/absoluteclasses/userlogin.htm"><i class="fa-sign-in"></i>&nbsp;Login</a></li>
+                        <li style="border-bottom:1px dashed #ccc; height:1px; padding:0px; margin:0px 10px 0px 10px" class="stickyhide">&nbsp;</li>
+                        <li><a href="http://www.tutorialspoint.com/absoluteclasses/usersignup.htm"><i class="fa-pencil-square-o"></i>&nbsp;Sign Up&nbsp;</a></li>
+                        <li style="border-bottom:none;"><a href="http://www.tutorialspoint.com/absoluteclasses/upcomingclasses.htm" style="border-bottom:none;"><i class="fa-book book-head"></i> Upcoming Classes </a></li>
+                        <li style="border-bottom:1px dashed #ccc; height:1px; padding:0px; margin:0px 10px 0px 10px">&nbsp;</li>
+                        <li style="border-bottom:1px dashed #ccc; height:1px; padding:0px; margin:0px 10px 0px 10px">&nbsp;</li>
+                        <li style="border-bottom:1px dashed #ccc;;"><a href="http://www.tutorialspoint.com/absoluteclasses/allcourses.htm" style="border-bottom:none;"><i class="fa-book book-head"></i> All Courses </a></li>
+                        <li style="border-bottom:1px dashed #ccc;;"><a href="http://www.tutorialspoint.com/absoluteclasses/help.htm" style="border-bottom:none;"><i class="fa-question book-head"></i> Help/FAQ</a></li>
+                        <li style="border-bottom:none;"><a href="http://www.tutorialspoint.com/absoluteclasses/contact_abc.htm" style="border-bottom:none;"><i class="fa fa-envelope-o"></i> Contact</a></li>
+                                             
+                     </ul>
+                  </li>
+            </ul>
+         </nav>
+      </div>
+   </div>	
+</header>
+<div style="clear:both;"></div>
+<div role="main" class="main">
+<div class="container">
+<div class="row">
+<div class="col-md-2">
+<aside class="sidebar">
+<div class="mini-logo">
+<img src="images/hadoop-mini-logo.jpg" alt="Hadoop Tutorial" />
+</div>
+<ul class="nav nav-list primary left-menu">
+<li class="heading">Hadoop Tutorial</li>
+<li><a href="index.html">Hadoop - Home</a></li>
+<li><a href="hadoop_big_data_overview.html">Hadoop - Big Data Overview</a></li>
+<li><a href="hadoop_big_data_solutions.html">Hadoop - Big Data Solutions</a></li>
+<li><a href="hadoop_introduction.html">Hadoop - Introduction</a></li>
+<li><a href="hadoop_enviornment_setup.html">Hadoop - Enviornment Setup</a></li>
+<li><a href="hadoop_hdfs_overview.html">Hadoop - HDFS Overview</a></li>
+<li><a href="hadoop_hdfs_operations.html">Hadoop - HDFS Operations</a></li>
+<li><a href="hadoop_command_reference.html">Hadoop - Command Reference</a></li>
+<li><a href="hadoop_mapreduce.html">Hadoop - MapReduce</a></li>
+<li><a href="hadoop_streaming.html">Hadoop - Streaming</a></li>
+<li><a href="hadoop_multi_node_cluster.html">Hadoop - Multi Node Cluster</a></li>
+</ul>
+<ul class="nav nav-list primary left-menu special">
+<li class="heading">Hadoop Useful Resources</li>
+<li><a  href="hadoop_quick_guide.html">Hadoop - Quick Guide</a></li>
+<li><a  href="hadoop_useful_resources.html">Hadoop - Useful Resources</a></li>
+<li><a  href="hadoop_discussion.html">Hadoop - Discussion</a></li>
+</ul>
+<ul class="nav nav-list primary push-bottom left-menu special">
+<li class="sreading">Selected Reading</li>
+<li><a target="_top" href="http://www.tutorialspoint.com/developers_best_practices/index.htm">Developer's Best Practices</a></li>
+<li><a target="_top" href="http://www.tutorialspoint.com/effective_resume_writing.htm">Effective Resume Writing</a></li>
+<li><a target="_top" href="http://www.tutorialspoint.com/computer_glossary.htm">Computer Glossary</a></li>
+<li><a target="_top" href="http://www.tutorialspoint.com/computer_whoiswho.htm">Who is Who</a></li>
+</ul>
+</aside>
+</div>
+<!-- PRINTING STARTS HERE -->
+<div class="row">
+<div class="content">
+<div class="col-md-7 middle-col">
+<h1>Hadoop - Streaming</h1>
+<div class="topgooglead">
+<hr />
+<div style="padding-bottom:5px;padding-left:10px;">Advertisements</div>
+<script type="text/javascript"><!--
+google_ad_client = "pub-7133395778201029";
+google_ad_width = 468;
+google_ad_height = 60;
+google_ad_format = "468x60_as";
+google_ad_type = "image";
+google_ad_channel = "";
+//--></script>
+<script type="text/javascript" src="../../pagead2.googlesyndication.com/pagead/f.txt">
+</script>
+</div>
+<hr />
+<div class="pre-btn">
+<a href="hadoop_mapreduce.html"><i class="icon icon-arrow-circle-o-left big-font"></i> Previous Page</a>
+</div>
+<div class="nxt-btn">
+<a href="hadoop_multi_node_cluster.html">Next Page <i class="icon icon-arrow-circle-o-right big-font"></i>&nbsp;</a>
+</div>
+<div class="clearer"></div>
+<hr />
+<p>Hadoop streaming is a utility that comes with the Hadoop distribution. This utility allows you to create and run Map/Reduce jobs with any executable or script as the mapper and/or the reducer.</p>
+<h2>Example Using Python</h2>
+<p>For Hadoop streaming, we are considering the word-count problem. Any job in Hadoop must have two phases: mapper and reducer. We have written codes for the mapper and the reducer in python script to run it under Hadoop. One can also write the same in Perl and Ruby.</p>
+<h3>Mapper Phase Code</h3>
+<pre class="prettyprint notranslate">
+!/usr/bin/python
+import sys
+# Input takes from standard input for myline in sys.stdin: 
+# Remove whitespace either side myline = myline.strip() 
+# Break the line into words words = myline.split() 
+# Iterate the words list for myword in words: 
+# Write the results to standard output print '%s\t%s' % (myword, 1)
+</pre>
+<p>Make sure this file has execution permission (chmod +x /home/ expert/hadoop-1.2.1/mapper.py).</p>
+<h3>Reducer Phase Code</h3>
+<pre class="prettyprint notranslate">
+#!/usr/bin/python
+from operator import itemgetter 
+import sys 
+current_word = ""
+current_count = 0 
+word = "" 
+# Input takes from standard input for myline in sys.stdin: 
+# Remove whitespace either side myline = myline.strip() 
+# Split the input we got from mapper.py word, count = myline.split('\t', 1) 
+# Convert count variable to integer 
+   try: 
+      count = int(count) 
+except ValueError: 
+   # Count was not a number, so silently ignore this line continue
+if current_word == word: 
+   current_count += count 
+else: 
+   if current_word: 
+      # Write result to standard output print '%s\t%s' % (current_word, current_count) 
+   current_count = count
+   current_word = word
+# Do not forget to output the last word if needed! 
+if current_word == word: 
+   print '%s\t%s' % (current_word, current_count)
+</pre>
+<p>Save the mapper and reducer codes in mapper.py and reducer.py in Hadoop home directory. Make sure these files have execution permission (chmod +x mapper.py and chmod +x reducer.py). As python is indentation sensitive so the same code can be download from the below link.</p>
+<h2>Execution of WordCount Program</h2>
+<pre class="prettyprint notranslate">
+$ $HADOOP_HOME/bin/hadoop jar contrib/streaming/hadoop-streaming-1.
+2.1.jar \
+   -input input_dirs \ 
+   -output output_dir \ 
+   -mapper &lt;path/mapper.py \ 
+   -reducer &lt;path/reducer.py
+</pre>
+<p>Where "\" is used for line continuation for clear readability.</p>
+<h3>For Example,</h3>
+<pre class="prettyprint notranslate">
+./bin/hadoop jar contrib/streaming/hadoop-streaming-1.2.1.jar -input myinput -output myoutput -mapper /home/expert/hadoop-1.2.1/mapper.py -reducer /home/expert/hadoop-1.2.1/reducer.py
+</pre>
+<h2>How Streaming Works</h2>
+<p>In the above example, both the mapper and the reducer are python scripts that read the input from standard input and emit the output to standard output. The utility will create a Map/Reduce job, submit the job to an appropriate cluster, and monitor the progress of the job until it completes.</p>
+<p>When a script is specified for mappers, each mapper task will launch the script as a separate process when the mapper is initialized. As the mapper task runs, it converts its inputs into lines and feed the lines to the standard input (STDIN) of the process. In the meantime, the mapper collects the line-oriented outputs from the standard output (STDOUT) of the process and converts each line into a key/value pair, which is collected as the output of the mapper. By default, the prefix of a line up to the first tab character is the key and the rest of the line (excluding the tab character) will be the value. If there is no tab character in the line, then the entire line is considered as the key and the value is null. However, this can be customized, as per one need.</p>
+<p>When a script is specified for reducers, each reducer task will launch the script as a separate process, then the reducer is initialized. As the reducer task runs, it converts its input key/values pairs into lines and feeds the lines to the standard input (STDIN) of the process. In the meantime, the reducer collects the line-oriented outputs from the standard output (STDOUT) of the process, converts each line into a key/value pair, which is collected as the output of the reducer. By default, the prefix of a line up to the first tab character is the key and the rest of the line (excluding the tab character) is the value. However, this can be customized as per specific requirements.</p>
+<h2>Important Commands</h2>
+<table class="table table-bordered">
+<tr>
+<th style="width:40%">Parameters</th>
+<th>Description</th>
+</tr>
+<tr>
+<td>-input directory/file-name</td>
+
+<td>Input location for mapper. (Required)</td>
+</tr>
+<tr>
+<td>-output directory-name</td>
+<td>Output location for reducer. (Required)</td>
+</tr>
+<tr>
+<td>-mapper executable or script or JavaClassName</td>
+<td>Mapper executable. (Required)</td>
+</tr>
+<tr>
+<td>-reducer executable or script or JavaClassName</td>
+<td>Reducer executable. (Required)</td>
+</tr>
+<tr>
+<td>-file file-name</td>
+<td>Makes the mapper, reducer, or combiner executable available locally on the compute nodes.</td>
+</tr>
+<tr>
+<td>-inputformat JavaClassName</td>
+<td>Class you supply should return key/value pairs of Text class. If not specified, TextInputFormat is used as the default.</td>
+</tr>
+<tr>
+<td>-outputformat JavaClassName</td>
+<td>Class you supply should take key/value pairs of Text class. If not specified, TextOutputformat is used as the default.</td>
+</tr>
+<tr>
+<td>-partitioner JavaClassName</td>
+<td>Class that determines which reduce a key is sent to.</td>
+</tr>
+<tr>
+<td>-combiner streamingCommand or JavaClassName</td>
+<td>Combiner executable for map output.</td>
+</tr>
+<tr>
+<td>-cmdenv name=value</td>
+<td>Passes the environment variable to streaming commands.</td>
+</tr>
+<tr>
+<td>-inputreader</td>
+<td>For backwards-compatibility: specifies a record reader class (instead of an input format class).</td>
+</tr>
+<tr>
+<td>-verbose</td>
+<td>Verbose output.</td>
+</tr>
+<tr>
+<td>-lazyOutput</td>
+<td>Creates output lazily. For example, if the output format is based on FileOutputFormat, the output file is created only on the first call to output.collect (or Context.write).</td>
+</tr>
+<tr>
+<td>-numReduceTasks</td>
+
+<td>Specifies the number of reducers.</td>
+</tr>
+<tr>
+<td>-mapdebug</td>
+<td>Script to call when map task fails.</td>
+</tr>
+<tr>
+<td>-reducedebug</td>
+<td>Script to call when reduce task fails.</td>
+</tr>
+</table>
+<hr />
+<div class="pre-btn">
+<a href="hadoop_mapreduce.html"><i class="icon icon-arrow-circle-o-left big-font"></i> Previous Page</a>
+</div>
+<div class="print-btn center">
+<a href="http://www.tutorialspoint.com/cgi-bin/printpage.cgi" target="_blank"><i class="icon icon-print big-font"></i> Print</a>
+</div>
+<div class="nxt-btn">
+<a href="hadoop_multi_node_cluster.html">Next Page <i class="icon icon-arrow-circle-o-right big-font"></i>&nbsp;</a>
+</div>
+<hr />
+<!-- PRINTING ENDS HERE -->
+<div class="bottomgooglead">
+<div class="bottomadtag">Advertisements</div>
+<script type="text/javascript"><!--
+google_ad_client = "pub-7133395778201029";
+google_ad_width = 580;
+google_ad_height = 400;
+google_ad_format = "580x400_as";
+google_ad_type = "image";
+google_ad_channel ="";
+//--></script>
+<script type="text/javascript"
+src="../../pagead2.googlesyndication.com/pagead/f.txt">
+</script>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-3" id="rightbar">
+<!-- AddThis Button BEGIN -->
+<div class="simple-ad">
+<div class="addthis_sharing_toolbox"></div>
+<script type="text/javascript" src="../../s7.addthis.com/js/300/addthis_widget.js#pubid=ra-4f661ec623a400f0"></script>
+</div>
+<!-- AddThis Button END -->
+<div class="google-ad" style="position:relative; left:20px;">Advertisements</div>
+<div class="rightgooglead">
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-2537027957187252";
+/* Right Side Ad */
+google_ad_slot = "right_side_ad";
+google_ad_width = 300;
+google_ad_height = 250;
+//-->
+</script>
+<script type="text/javascript"
+src="../../pagead2.googlesyndication.com/pagead/f.txt">
+</script>
+</div>
+<div class="rightgooglead">
+<script type="text/javascript"><!--
+google_ad_client = "pub-7133395778201029";
+google_ad_width = 300;
+google_ad_height = 600;
+google_ad_format = "300x600_as";
+google_ad_type = "image";
+google_ad_channel ="";
+//--></script>
+<script type="text/javascript"
+src="../../pagead2.googlesyndication.com/pagead/f.txt">
+</script>
+</div>
+<div class="rightgooglead">
+<script type="text/javascript"><!--
+google_ad_client = "pub-7133395778201029";
+google_ad_width = 300;
+google_ad_height = 250;
+google_ad_format = "300x250_as";
+google_ad_type = "image";
+google_ad_channel ="";
+//--></script>
+<script type="text/javascript"
+src="../../pagead2.googlesyndication.com/pagead/f.txt"> 
+</script>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<footer class="inner">
+<div class="container">
+<div class="row">
+<div class="footer-ribon">
+<span>Extras</span>
+</div>
+<div class="col-md-2">
+<h4>Mobile First</h4>
+<ul class="list icons list-unstyled">
+<li><a id="iphone" href="https://itunes.apple.com/om/app/tutorials-point/id914891263?mt=8" target="_blank" rel="nofollow"><img alt="tutorialspoint iPhone App" src="../../cdn.tutorialspoint.com/images/apple_store.png" class="mobile-apps"/></a></li>
+<li><a id="android" href="https://play.google.com/store/apps/details?id=com.tutorialspoint.onlineviewer" target="_blank" rel="nofollow"><img alt="tutorialspoint Android app" src="../../cdn.tutorialspoint.com/images/google_play.png" class="mobile-apps"/></a></li>
+<li><a id="microsoft" href="http://www.windowsphone.com/s?appid=91249671-7184-4ad6-8a5f-d11847946b09" target="_blank" rel="nofollow"><img alt="tutorialspoint Windows app" src="../../cdn.tutorialspoint.com/images/windows_store.png" class="mobile-apps"/></a></li>
+</ul>
+</div>
+<div class="col-md-2">
+<h4>About us</h4>
+<ul class="list icons list-unstyled">
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/about/index.htm">Company</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/about/about_team.htm">Team</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/about/about_careers.htm">Careers</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/about/about_privacy.htm">Privacy Policy</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/about/about_terms_of_use.htm">Terms of use</a></li>
+</ul>
+</div>
+<div class="col-md-2">
+<h4>Extra Links</h4>
+<ul class="list icons list-unstyled">
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/forums/index.php">Forums</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/shorttutorials/">Articles</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/shared-tutorials.php">Shared</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/seo_tools.htm">Seo Tools</a></li>
+<li><i class="icon icon-caret-right"></i> <a href="http://www.tutorialspoint.com/about/contact_us.htm">Contact</a></li>
+</ul>
+</div>
+<div class="col-md-3">
+<div class="contact-details">
+<h4>Contact Us</h4>
+<ul class="contact">
+<li><p><i class="icon icon-map-marker"></i> <strong>Address:</strong> 388-A , Road no 22, Jubilee Hills, Hyderabad Telangana, INDIA-500033</p></li>
+<li><p><i class="icon icon-envelope"></i> <strong>Email:</strong> <a href="http://www.tutorialspoint.com/about/contact_us.htm">Click Here</a></p></li>
+<li><p><i class="icon icon-dribbble"></i> <strong>Website:</strong> <a href="http://www.tutorialspoint.com/">www.tutorialspoint.com</a></p></li>
+</ul>
+</div>
+<div class="social-icons">
+<ul class="social-icons">
+<li class="facebook"><a href="https://www.facebook.com/tutorialspointindia" target="_blank" data-placement="bottom" title="tutorialspoint @ Facebook">Facebook</a></li>
+<li class="googleplus"><a href="https://plus.google.com/u/0/116678774017490391259/posts" target="_blank" data-placement="bottom" title="tutorialspoint @ Google+">Google+</a></li>
+<li class="twitter"><a href="http://www.twitter.com/tutorialspoint" target="_blank" data-placement="bottom"  title="tutorialspoint @ Twitter">Twitter</a></li>
+<li class="linkedin"><a href="http://www.linkedin.com/company/tutorialspoint" target="_blank" data-placement="bottom"  title="tutorialspoint @ Linkedin">Linkedin</a></li>
+<li class="rss"><a href="http://feeds.feedburner.com/SharedTutorials" target="_blank" data-placement="bottom" title="tutorialspoint RSS">RSS</a></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="footer-copyright">
+<div class="container">
+<div class="row">
+<div class="col-md-1">
+<a href="http://www.tutorialspoint.com/index.htm" class="logo">
+<img alt="Tutorials Point" class="img-responsive" src="../../cdn.tutorialspoint.com/scripts/img/logo-footer.png">
+</a>
+</div>
+<div class="col-md-6">
+<p>&copy; Copyright 2015. All Rights Reserved.</p>
+</div>
+<div class="col-md-4">
+<nav id="sub-menu">
+<ul>
+<li><a href="http://www.tutorialspoint.com/about/tutorials_writing.htm">Write for us</a></li>
+<li><a href="http://www.tutorialspoint.com/about/faq.htm">FAQ's</a></li>
+<li><a href="http://www.tutorialspoint.com/about/about_helping.htm">Helping</a></li>
+<li><a href="http://www.tutorialspoint.com/about/contact_us.htm">Contact</a></li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<!-- Libs -->
+<script type="text/javascript" src="../../cdn.tutorialspoint.com/theme/js/custom-mini.js"></script>
+<script src="../../www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-232293-6";
+urchinTracker();
+$('.pg-icon').click(function(){
+   $('.wrapLoader').show();
+});
+</script>
+<script type="text/javascript" src="../../cdn.tutorialspoint.com/theme/js/jquery.colorbox-min.js"></script>
+<script type="text/javascript">
+   var tryit = new $.TryIt('try_hadoop.html');
+   tryit.compile();
+</script>
+</div>
+</body>
+
+<!-- Mirrored from www.tutorialspoint.com/hadoop/hadoop_streaming.htm by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 20 Apr 2015 05:13:58 GMT -->
+</html>

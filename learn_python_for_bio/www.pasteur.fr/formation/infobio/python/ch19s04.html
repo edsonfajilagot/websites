@@ -1,0 +1,546 @@
+<html>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch19s04.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:40 GMT -->
+<head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>19.4. Inheritance: sharing code among classes</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><meta name="keywords" content="python, biology, bioinformatics, programming, computational biology"><link rel="home" href="index-2.html" title="Introduction to Programming using Python"><link rel="up" href="ch19.html" title="Chapter 19. Object-oriented design"><link rel="previous" href="ch19s03.html" title="19.3. Abstract Data Types"><link rel="next" href="ch19s05.html" title="19.5. Flexibility"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">19.4. Inheritance: sharing code among classes</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch19s03.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><th width="60%" align="center">Chapter 19. Object-oriented design</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch19s05.html"><img src="images/next.png" alt="Next"></a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="sect_class_inherit"></a>19.4. Inheritance: sharing code among classes</h2></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="sect_class_inherit_intro"></a>19.4.1. Introduction</h3></div></div><p>
+      What we have seen so far, <span class="emphasis"><em>object-based</em></span>
+      programming, consists in designing programs with 
+      objects, that are built with classes. In most object-oriented
+      programming languages, you also have a mechanism that enables
+      classes to share code. The idea
+      is very simple: whenever there are some commonalities between
+      classes, why having them repeat the same code, thus leading to
+      maintenance complexity and potential inconsistency? So the
+      principle of this mechanism is to define some classes as being
+      the same as other ones, with some differences.
+	</p><p>
+
+	</p><div class="example"><a name="exa_class_inh"></a><p class="title"><b>Example 19.4. Inheritance example (1): sequences</b></p><p>
+	    So far, we have design two different classes for different
+	    types of sequences: indeed, having all the methods defined
+	    only for protein sequences also available for DNA
+	    sequences can be considered a problem. At the same time,
+	    some functionalities are common to both types of sequences:
+	    cleaning the sequence, producing a Fasta format to name a
+	    few. So we keep our two classes to deal with DNA and
+	    protein sequences, and we add a new class: <tt>Sequence</tt>,
+	    which will be a common class to deal  with general sequence functions.
+	    In order to specify   that 
+	    a <tt>DNA</tt> (or a
+	    <tt>Protein</tt>) <span class="emphasis"><em> is
+       a</em></span> <tt>Sequence</tt> in Python is:
+	    <pre class="programlisting">
+class DNA(Sequence): 
+	    </pre>
+       The <tt>DNA</tt> class is called a
+       <span class="emphasis"><em>subclass</em></span>, and the
+       <tt>Sequence</tt> is called a
+       <span class="emphasis"><em>superclass</em></span> or a <span class="emphasis"><em>base
+       class</em></span>. 
+       Following the <tt>class</tt> statement, there are
+       <span class="emphasis"><em>only</em></span> the definitions specific to the
+       <tt>DNA</tt> or <tt>Protein</tt>
+       classes: you do not need to re-specify the other ones. The
+       following code shows how to specify
+       the <tt>Sequence</tt> superclass. 
+
+	    <pre class="programlisting">
+class Sequence:
+
+    def __init__(self, name=None, seq=None):
+        self.name = name
+        self.seq = seq
+        self.clean()
+
+    def clean(self):
+        seq = ""
+        for c in self.seq:
+           if c in self.alphabet:
+              seq += c
+        self.seq = seq
+
+    def __str__(self):
+        return "&gt;"+self.name+"\n"+self.seq
+
+    def __getitem__(self, i):
+        return self.seq[i]
+
+    def getname(self):
+        return self.seq
+
+    def getseq(self):
+        return self.seq
+
+
+  
+class DNA(Sequence): 
+
+      alphabet = "atcg"
+
+      def gc(self):
+          """GC percent"""
+          ...
+
+      def revcompl(self):
+          """reverse complement"""
+          ...
+
+      def translate(self):
+          """translation into a protein"""
+          ...
+
+
+
+class Protein(Sequence):
+
+    weight = {"A":71.08,"C":103.14 ,"D":115.09 ,"E":129.12 ,"F":147.18 ,"G":57.06 ,"H":137.15 ,"I":113.17 ,"K":128.18 ,"L":113.17 ,"M":131.21 ,"N":114.11 ,"P":97.12 ,"Q":128.41 ,"R":156.20 ,"S":87.08 ,"T":101.11,"V":99.14 ,"W":186.21 ,"Y":163.18 ,"X": 110}
+
+    alphabet = weight.keys()
+
+    def mw(self):
+        molW = 0
+        for aa in self.seq:
+            molW += self.weight[aa]
+     
+        molW += 18.02
+        molW = molW / 1000
+        
+        return molW
+	    </pre>
+	Look at how we use these definitions:
+    <pre class="programlisting">
+&gt;&gt;&gt; s = DNA("s1", "attgccctt")
+&gt;&gt;&gt; s.gc()
+66.66
+&gt;&gt;&gt; print s
+&gt;s1
+attgccctt
+    </pre>
+
+     The <tt>__str__</tt> method that is called when
+	 issuing a <b>print</b> statement is not defined
+	 for the <tt>DNA</tt> class. So python looks up
+	 one level further, finds a definition at
+	 the <tt>Sequence</tt> class definition level
+	 and calls it. Provided with the <tt>self</tt>
+	 reference to the object, exactly the same way as
+	 for <tt>DNA</tt> class methods, it can access
+	 to the attributes in order to produce a printable string of
+	 the object.
+	  </p><p>
+	    The <tt>clean</tt> method is a common method,
+	    except that it uses a specific alphabet for each type of
+	    sequence. This is why each subclass must define
+	    an <tt>alphabet</tt> class attribute. When
+	    referring to <tt>self.alphabet</tt>, python
+	    looks up in the object's namespace first, then one level
+	    up in the class namespace and finds it.
+	  </p><p>
+	 Now look carefuly at the <tt>__init__</tt>
+		 method: it is now defined in the superclass. 
+		 There are indeed common things to do for
+		 both <tt>DNA</tt>
+		 and <tt>Protein</tt> classes:
+		 attributes initialization, sequence cleaning, ... So
+		 it is enough to define the <tt>__init__</tt>
+		 method at the superclass level: whenever the <tt>__init__</tt>
+		 method, or any method is not defined at the subclass
+		 level, it is the method at the superclass level which
+		 is called (see below <a href="ch19s04.html#sect_class_inherit_dyn" title="19.4.1.2. How does it work? Dynamic binding.">Section 19.4.1.2</a>).
+
+	 But, remember,
+		 the  DNA sequence is supposed to be in lowercase,
+		 whereas the protein sequence is in uppercase. How can
+		 we do that? The idea is to define
+		 an <tt>__init__</tt>  
+		 method at the subclass level that calls
+		 the <tt>__init__</tt> 
+		 method of the superclass, and then proceed to actions
+		 specific to the <tt>DNA</tt> or
+		 the <tt>Protein</tt> sequences.
+
+
+	    <pre class="programlisting">
+class Sequence:
+
+    def __init__(self, name=None, seq=None):
+        self.name = name
+        self.seq = seq
+        self.clean()
+
+...
+
+class DNA(Sequence): 
+
+      def __init__(self, name=None, seq=None):
+        Sequence.__init__(self, name, lower(seq))
+
+...
+
+class Protein(Sequence):
+
+    def __init__(self, name=None, seq=None, dna=None):
+        Sequence.__init__(self, name, upper(seq))
+        self.dna = dna  # when called by DNA.translate()
+...
+	    </pre>
+
+	  </p></div><p>
+
+      </p><div class="sect3"><div class="titlepage"><div><h4 class="title"><a name="sect_class_inherit_over"></a>19.4.1.1. Overloading</h4></div></div><p>
+	 Let us decide that a generic  <tt>mw</tt> method can be
+	 generalized and put at
+	 the <tt>Sequence</tt> class level. This way, a
+	 potential <tt>RNA</tt> subclas
+	 of <tt>Sequence</tt> will have a
+	 pre-defined <tt>mw</tt> method, common to all the
+	 molecular sequences.
+	 We do not need any <tt>mw</tt> method at
+	 the <tt>Protein</tt> level anymore. But, since the
+	 computation of the molecular weight differs slightly for DNA
+	 sequences, we define a specific <tt>mw</tt> method in
+	 the <tt>DNA</tt> class.
+	    <pre class="programlisting">
+class Sequence:
+
+    def mw(self):
+        molW = 0
+        for c in self.seq:
+            molW += self.weight[c]
+     
+        return molW
+
+...
+
+class DNA(Sequence): 
+
+    def mw(self):
+        """
+        Computes the molecular weight of the 2 strands of a DNA sequence.
+        """
+        molW = 0
+        for c in self.seq:
+            molW += self.weight[c]
+
+        for c in self.revcompl():
+            molW += self.weight[c]
+     
+        return molW
+
+...
+	    </pre>
+
+             When a method is redefined (or
+	    <span class="emphasis"><em>overriden</em></span>) in the subclass, which is
+	    the 
+	    case of the <tt>mw</tt> method,
+	    it is said that the method is
+	    <span class="emphasis"><em>overloaded</em></span>. This means that,
+	    according to the actual class of a sequence instance, which
+	    can be either <tt>DNA</tt> or
+	    <tt>Protein</tt>, the method actually
+	    called can vary. 
+
+	  </p><div class="definition"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/definition.png"></td><td><p class="title"><b><tt>Overloading</tt></b></p></td></tr><tr><td colspan="2" align="left" valign="top">
+	    
+	    <p>
+	    Overloading a method is to redefine at a subclass level a
+	    method that exists in upper classes of a class hierarchy.
+	    </p>
+	  </td></tr></table></div><p>   
+
+	  Another term that is used in object-oriented programming is
+	  the term: "polymorphism". "Polymorphism" litteraly means:
+	  several forms. In other words, the name
+	    <tt>mw</tt> has several meanings,
+	    depending on the context of the call.
+
+	  </p><div class="definition"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/definition.png"></td><td><p class="title"><b><tt>Polymorphism</tt></b></p></td></tr><tr><td colspan="2" align="left" valign="top">
+	    
+	    <p>
+	    A method is said to be polymorphic if it has several
+	    definitions at different levels of a class hierarchy.
+	    </p>
+	  </td></tr></table></div><p>   
+
+	  The term "polymorphism" is also used about operators. The '+'
+	  operator, for instance, is polymorphic in the sense that it
+	  refers to different operations when used with strings and
+	  integers. 
+
+       </p><div class="exercise"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/exercise.png"></td><td><a name="exo_point_overload"></a><p class="title"><b>Exercise 19.3. A <tt>ConstantPoint</tt> class</b></p></td></tr><tr><td colspan="2" align="left" valign="top">
+      
+          <p>
+	    Define a <tt>ConstantPoint</tt> subclass of
+	    you <tt>Point</tt> class, such as points
+	    created as  <tt>ConstantPoint</tt> cannot be moved.
+          </p>
+        </td></tr></table></div></div><div class="sect3"><div class="titlepage"><div><h4 class="title"><a name="sect_class_inherit_dyn"></a>19.4.1.2. How does it work? Dynamic binding.</h4></div></div><p>
+      As we said above, by declaring
+      <tt>DNA</tt> as a subclass of
+      <tt>Sequence</tt>, you do not need to re-specify in
+      <tt>DNA</tt> all the methods that are
+      already defined in <tt>Sequence</tt>. The way it
+      works is that Python looks up methods starting from the actual
+      class of the object, for instance <tt>DNa</tt>
+      and, if not found, 
+      by looking up further in <tt>Sequence</tt>
+      super class for the needed
+      method or attribute. So, when calling:
+      <pre class="programlisting">
+&gt;&gt;&gt; my_dna.gc()
+      </pre>
+   python looks up for the
+      <tt>gc</tt> method (<a href="ch19s04.html#fig_dyn_bind1" title="Figure 19.3. Dynamic binding (1)">Figure 19.3</a>). Python finds it in the
+      current class. When looking up for other methods, such as the
+      <tt>__str__</tt> method, which is not defined in
+      the <tt>DNA</tt> class, Python follows
+      the graph of base classes (<a href="ch19s04.html#fig_dyn_bind2" title="Figure 19.4. Dynamic binding (2)">Figure 19.4</a>). Here, we only have one:
+      <tt>Sequence</tt>, where
+      <tt>__str__</tt> is defined.
+
+	  </p><div class="figure"><a name="fig_dyn_bind1"></a><p class="title"><b>Figure 19.3. Dynamic binding (1)</b></p><div class="mediaobject"><img src="images/dyn_bind1.png"></div></div><p>
+
+	  </p><div class="figure"><a name="fig_dyn_bind2"></a><p class="title"><b>Figure 19.4. Dynamic binding (2)</b></p><div class="mediaobject"><img src="images/dyn_bind2.png"></div></div><p>
+
+	</p></div><p><b>Forms of inheritance.&nbsp;</b>
+      There are two forms of inheritance: <span class="emphasis"><em>extension</em></span>
+      and <span class="emphasis"><em>specialisation</em></span>. In other words,
+      inheritance can be used to extend a base class adding
+      functionalities, or to specialise	 
+      a base class. In the case of the
+      <tt>DNA</tt> class, it is rather an
+      extension.
+
+	Sometimes, the term <span class="emphasis"><em>subclass</em></span> is criticized
+       because, in the case of extension, you actually provide
+       <span class="emphasis"><em>more</em></span> 
+       services, rather than a <span class="emphasis"><em>subset</em></span>. The term
+       subclass fits better to the case of 
+       specialization, where the subclass addresses a specific subset of
+       the base class potential objects (for instance, dogs are a subset of
+       mammals). 
+
+	</p><p><b>UML diagrams.&nbsp;</b>
+	Classes relationships (as well as instances relationships, not
+	represented here) can be represented by so-called UML
+	diagrams, as illustrated in <a href="ch19s04.html#fig_uml_inh" title="Figure 19.5. UML diagram for inheritance">Figure 19.5</a>.
+
+	  <div class="figure"><a name="fig_uml_inh"></a><p class="title"><b>Figure 19.5. UML diagram for inheritance</b></p><div class="mediaobject"><img src="images/uml_inh.png"></div></div>
+	</p><div class="sect3"><div class="titlepage"><div><h4 class="title"><a name="d0e9783"></a>19.4.1.3. Multiple inheritance</h4></div></div><p>
+	In Python, as in several programming language, you can have a
+	class inherit from several base classes. Normally, this
+	happens when you need to mix very different
+	functionalities. For instance, you want to wrap your class
+	with a class that provides tools for testing (<a href="ch19s04.html#fig_mult_inh" title="Figure 19.6. Multiple Inheritance">Figure 19.6</a>), or services for
+	persistence. Inheriting from classes that come from the same
+	hierarchy can be tricky, in particular if methods are defined
+	everywhere: you will have to know how the interpretor choose a
+	path in the classes graph. But this case is more like a
+	theoretical limit case, that should not happen in a well
+	designed program.
+
+	  </p><div class="figure"><a name="fig_mult_inh"></a><p class="title"><b>Figure 19.6. Multiple Inheritance</b></p><div class="mediaobject"><img src="images/mult_inh.png"></div></div><p>
+	</p></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="sect_class_inherit_comment"></a>19.4.2. Discussion</h3></div></div><p><b>Benefits of inheritance.&nbsp;</b>
+	  <div class="itemizedlist"><ul type="disc"><li>
+	Regarding <span class="emphasis"><em>flexibility</em></span>, the inheritance
+	mechanism provides 
+	a convenient way to define variants at the method
+	level: with inheritance indeed, the  <span class="emphasis"><em>methods become
+	parameters</em></span>, since you can redefine any of them. So you get
+	more than just the possibility of changing a parameter
+	value. 
+	    </li><li>
+	Regarding <span class="emphasis"><em>reusability</em></span>, inheritance
+	is very efficient, since the objective is to reuse a code
+	which is already defined. Components designed with the idea of
+	reuse in mind very often have a clean inheritance hierarchy in
+	order to provide a way for programmers to adapt the component
+	to their own need.
+	    </li><li>
+	Inheritance also provides an elegant
+	<span class="emphasis"><em>extensibility</em></span> mechanism, by
+	definition. It lets you extend a class without changing the
+	code of this class, or the code of the module containing the
+	class. 
+	    </li></ul></div>
+
+	</p><p><b>Combining class or combining objects?&nbsp;</b>
+	Using inheritance is not mandatory. The main risk of using it
+	too much is to get a complex set of classes having a lot of
+	dependencies and that are difficult to understand. There are
+	generally two possibilities to get things done in
+	object-oriented programming: 
+
+	  <div class="itemizedlist"><ul type="disc"><li><span class="emphasis"><em>Inheritance:</em></span> you combine classes in
+	    order to get a "rich" class providing a set of services
+	    coming from each combined class.
+	    </li><li><span class="emphasis"><em>Composition:</em></span> you combine objects from
+	    different classes.
+	    </li></ul></div>
+
+	    The use of composition instead of inheritance is also
+	    illustrated by the design patterns from [Gamma95], that
+	    are introduced in <a href="ch19s06.html" title="19.6. Object-oriented design patterns">Section 19.6</a>.
+
+	 </p><p><b>Problem with inheritance for extension.&nbsp;</b>
+	 When using inheritance to extend a base class, you might want
+	 to have a method in the subclass not just overloading the method
+	 in the base class, but as a complement. In this case, one
+	 usually first calls the base class, and then performs the
+	 complementary stuff. In Python, you have to know explicitely
+	 the name of the superclass to perform this call (see for
+	 instance method <tt>__init__</tt>).
+	 Be aware, that this can become rather tricky sometimes, for
+	 you have to design a real protocol describing the sequence of
+	 calls that have to be done among classes, when not only one
+	 method is involved.
+	 </p><p><b>When using inheritance or composition: summary.&nbsp;</b>
+	 The question of choosing between inheritance and composition
+	 to combine objects A and B
+	 results in deciding whether A <span class="emphasis"><em>is-a</em></span> B or
+	 whether A <span class="emphasis"><em>has-a</em></span> B. Unfortunately, it is
+	 not always possible to decide about this, only on the basis
+	 of the nature of A and B. There a few guidelines, though (see
+	 [Harrison97], chapter 2).
+	 <div class="itemizedlist"><ul type="disc"><li>
+	  The main advantage of inheritance over composition is that method
+	  binding, e.g lookup and actual method call, is done
+	  automatically: you do not have to perform 
+	  the method lookup and call, whereas, when combining objects,
+	  you have to know which one has the appropriate method. 
+	  For instance, a <tt>Protein</tt> instance may
+	  <span class="emphasis"><em>have a</em></span> <tt>dna</tt> if
+	  created by <tt>translate</tt>. 
+	  </li><li>
+	  Use composition when you catch yourself making
+	  exceptions to the <span class="emphasis"><em>is-a</em></span> rule and
+	  redefining several inherited methods or willing to protect
+	  access to the base class attributes and/or methods. In such
+	  a case, the advantage described in the previous item of having
+	  automatic attribute and method access becomes a
+	  problem. 
+	  </li><li><p>
+	  Use composition when the relationships between objects are
+	  dynamic. For instance, a different way to design sequence tools, such
+	  as <tt>clean</tt>, <tt>__str__</tt>,
+	  etc... could be to design a <tt>SeqTools</tt>
+	  class:
+	  <pre class="programlisting">
+class SeqTools:
+
+     def __init__(self, seqobject):
+         self.seqobject = seqobject
+
+     del clean(self):
+         seq = ""
+         for c in self.seqobject.seq:
+              if c in self.seqobject.alphabet:
+                 seq = seq + c
+         self.seqobject.seq = seq
+
+    def __getitem__(self, i):
+        return self.seqobject.seq[i]
+
+    def __str__(self):
+        return "&gt;"+self.seqobject.name+"\n"+self.seqobject.seq
+
+...
+	  </pre>
+          The <tt>DNA</tt>
+          or <tt>Protein</tt> instances can then have
+          a reference to a <tt>SeqTools</tt> instance,
+          created at instantiation:
+
+	  <pre class="programlisting">
+class DNA:
+
+      def __init__(self, name=None, seq=None):
+        self.toolbox = SeqTools(self)
+        self.name = name
+        self.seq = seq
+        self.toolbox.clean()
+
+    def __str__(self):
+        return self.toolbox.__str__()
+
+    def __getitem__(self, i):
+        return self.toolbox.__getitem__(i)
+
+	  </pre>
+	  When a program then calls the usual DNA methods, such as:
+	  <pre class="programlisting">
+&gt;&gt;&gt; s = DNA("s1", "attgccctt")
+&gt;&gt;&gt; print s
+&gt;s1
+attgccctt
+&gt;&gt;&gt; s[0]
+'a'
+	    </pre>
+	  it first invokes the <tt>DNA</tt> methods,
+	  which just behaves as wrappers for
+	  the <tt>SeqTools</tt> methods.
+	  </p><p>
+         The main advantage is flexibility: you could more easily
+         redefine which sequence toolbox to use, provided the public
+         interface is the same, than with inheritance. For this
+         purpose, you could provide a toolbox constructor, where the
+         class to be used for the tools could be easily changed at runtime:
+	  <pre class="programlisting">
+class DNA:
+
+      def __init__(self, name=None, seq=None):
+        self.toolbox = build_seqtools(self)
+        self.name = name
+        self.seq = seq
+        self.toolbox.clean()
+
+def build_toolbox(seqobject, toolbox=SeqTools):
+     return toolbox(seqobject)
+	  </pre>
+
+
+Indeed,
+         inheritance relationships are fixed at definition time:
+	  <pre class="programlisting">
+class DNA(Sequence): 
+...
+	  </pre>
+	  </p></li><li>
+	  Use composition when a single object must have more than one
+	  part of a given type.
+	  </li><li>
+	  Use composition to avoid deep inheritance hierarchies.
+	  </li><li>
+	  If you can't decide between inheritance and composition,
+	  take composition.
+	  </li><li>
+	  Do not use inheritance when you get too many combined method
+	  calls between base class and sub-classes, which can happen
+	  when using inheritance for extension.
+	  </li><li><p>
+	  Use inheritance when you want to build an abstract
+	  framework, which purpose is to be specialized for various
+	  uses (see <a href="ch19s04.html#exo_abstract_fmk_enz" title="Exercise 19.4. Example of an abstract framework:&#xA;			Enzyme parser">Exercise 19.4</a>). A good
+	  example is the parsing framework in Biopython, 
+	  that lets you create as many new parsers as
+	  needed. Inheritance also provides a good mechanism to design
+	  several layers of abstraction, that define interfaces that
+	  programmers must follow when developping their
+	  components. Bioperl modules, although not developped in a
+	  true object-oriented language, are a good example of this.
+
+		      </p><div class="exercise"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/exercise.png"></td><td><a name="exo_abstract_fmk_enz"></a><p class="title"><b>Exercise 19.4. Example of an abstract framework:
+			Enzyme parser</b></p></td></tr><tr><td colspan="2" align="left" valign="top">
+			 
+			<p>
+			Design a parser for the Enzyme database, using
+		    Biopython parsing framework.  
+		    See ??? for more details.
+			</p>
+			</td></tr></table></div><p>
+
+	  </p></li></ul></div>
+	 </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch19s03.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch19.html"><img src="images/up.png" alt="Up"></a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch19s05.html"><img src="images/next.png" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">19.3. Abstract Data Types&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index-2.html"><img src="images/home.png" alt="Home"></a></td><td width="40%" align="right" valign="top">&nbsp;19.5. Flexibility</td></tr></table></div></body>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch19s04.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:41 GMT -->
+</html>

@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from zetcode.com/wxpython/skeletons/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Aug 2015 19:21:58 GMT -->
+<head>
+<title>Application skeletons in wxPython</title>
+<link rel="stylesheet" href="../../cfg/format2.css" type="text/css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="wxPython, application skeletons, spreadsheet, file manager, browser">
+<meta name="description" content="In this part of the wxPython tutorial, we create application skeletons.">
+<meta name="author" content="Jan Bodnar">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div id="wide_ad" class="ltow">
+<script async src="../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- 160x600, August 2011 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:600px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="2484182563"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<div class="content">
+
+<header>
+
+<nav>
+<a href="http://zetcode.com/" title="Home">Home</a>&#160;
+<a href="../index.html">Contents</a>
+</nav>
+
+</header>
+
+
+
+<h1>Application skeletons in wxPython</h1>
+
+
+<p>
+In this section, we will create some application skeletons. Our scripts will 
+work out the interface but will not implement the functionality. The goal is 
+to show, how several well known GUI interfaces could be done in wxPython.
+</p>
+
+<div class="med_rec">
+<script async src="../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- NewSquare -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:250px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="0364418177"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div> 
+
+
+<h2>File Manager</h2>
+
+<p>
+File Hunter is a skeleton of a file manager. It copies the lookout of the 
+Krusader, a file manager available on Unix systems. If we double 
+click on the splitter widget, it will divide the File Hunter into two parts 
+with the same width. The same happens if we resize the main window.
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/filehunter.png" alt="File manager">
+<figcaption>Figure: File manager</figcaption>
+</figure>
+
+<pre class="code">
+#!/usr/bin/python
+
+import wx
+import os
+import time
+
+
+ID_BUTTON=100
+ID_EXIT=200
+ID_SPLITTER=300
+
+class MyListCtrl(wx.ListCtrl):
+    def __init__(self, parent, id):
+        wx.ListCtrl.__init__(self, parent, id, style=wx.LC_REPORT)
+
+        files = os.listdir('.')
+        images = ['images/empty.png', 'images/folder.png', 'images/source_py.png', 
+		'images/image.png', 'images/pdf.png', 'images/up16.png']
+
+        self.InsertColumn(0, 'Name')
+        self.InsertColumn(1, 'Ext')
+        self.InsertColumn(2, 'Size', wx.LIST_FORMAT_RIGHT)
+        self.InsertColumn(3, 'Modified')
+
+        self.SetColumnWidth(0, 220)
+        self.SetColumnWidth(1, 70)
+        self.SetColumnWidth(2, 100)
+        self.SetColumnWidth(3, 420)
+
+        self.il = wx.ImageList(16, 16)
+        for i in images:
+            self.il.Add(wx.Bitmap(i))
+        self.SetImageList(self.il, wx.IMAGE_LIST_SMALL)
+
+        j = 1
+        self.InsertStringItem(0, '..')
+        self.SetItemImage(0, 5)
+
+        for i in files:
+            (name, ext) = os.path.splitext(i)
+            ex = ext[1:]
+            size = os.path.getsize(i)
+            sec = os.path.getmtime(i)
+            self.InsertStringItem(j, name)
+            self.SetStringItem(j, 1, ex)
+            self.SetStringItem(j, 2, str(size) + ' B')
+            self.SetStringItem(j, 3, time.strftime('%Y-%m-%d %H:%M', 
+		time.localtime(sec)))
+
+            if os.path.isdir(i):
+                self.SetItemImage(j, 1)
+            elif ex == 'py':
+                self.SetItemImage(j, 2)
+            elif ex == 'jpg':
+                self.SetItemImage(j, 3)
+            elif ex == 'pdf':
+                self.SetItemImage(j, 4)
+            else:
+                self.SetItemImage(j, 0)
+
+            if (j % 2) == 0:
+                self.SetItemBackgroundColour(j, '#e6f1f5')
+            j = j + 1
+
+
+class FileHunter(wx.Frame):
+    def __init__(self, parent, id, title):
+        wx.Frame.__init__(self, parent, -1, title)
+
+        self.splitter = wx.SplitterWindow(self, ID_SPLITTER, style=wx.SP_BORDER)
+        self.splitter.SetMinimumPaneSize(50)
+
+        p1 = MyListCtrl(self.splitter, -1)
+        p2 = MyListCtrl(self.splitter, -1)
+        self.splitter.SplitVertically(p1, p2)
+
+        self.Bind(wx.EVT_SIZE, self.OnSize)
+        self.Bind(wx.EVT_SPLITTER_DCLICK, self.OnDoubleClick, id=ID_SPLITTER)
+
+        filemenu= wx.Menu()
+        filemenu.Append(ID_EXIT,"E&amp;xit"," Terminate the program")
+        editmenu = wx.Menu()
+        netmenu = wx.Menu()
+        showmenu = wx.Menu()
+        configmenu = wx.Menu()
+        helpmenu = wx.Menu()
+
+        menuBar = wx.MenuBar()
+        menuBar.Append(filemenu,"&amp;File")
+        menuBar.Append(editmenu, "&amp;Edit")
+        menuBar.Append(netmenu, "&amp;Net")
+        menuBar.Append(showmenu, "&amp;Show")
+        menuBar.Append(configmenu, "&amp;Config")
+        menuBar.Append(helpmenu, "&amp;Help")
+        self.SetMenuBar(menuBar)
+        self.Bind(wx.EVT_MENU, self.OnExit, id=ID_EXIT)
+
+        tb = self.CreateToolBar( wx.TB_HORIZONTAL | wx.NO_BORDER | 
+		wx.TB_FLAT | wx.TB_TEXT)
+        tb.AddSimpleTool(10, wx.Bitmap('images/previous.png'), 'Previous')
+        tb.AddSimpleTool(20, wx.Bitmap('images/up.png'), 'Up one directory')
+        tb.AddSimpleTool(30, wx.Bitmap('images/home.png'), 'Home')
+        tb.AddSimpleTool(40, wx.Bitmap('images/refresh.png'), 'Refresh')
+        tb.AddSeparator()
+        tb.AddSimpleTool(50, wx.Bitmap('images/write.png'), 'Editor')
+        tb.AddSimpleTool(60, wx.Bitmap('images/terminal.png'), 'Terminal')
+        tb.AddSeparator()
+        tb.AddSimpleTool(70, wx.Bitmap('images/help.png'), 'Help')
+        tb.Realize()
+
+        self.sizer2 = wx.BoxSizer(wx.HORIZONTAL)
+
+        button1 = wx.Button(self, ID_BUTTON + 1, "F3 View")
+        button2 = wx.Button(self, ID_BUTTON + 2, "F4 Edit")
+        button3 = wx.Button(self, ID_BUTTON + 3, "F5 Copy")
+        button4 = wx.Button(self, ID_BUTTON + 4, "F6 Move")
+        button5 = wx.Button(self, ID_BUTTON + 5, "F7 Mkdir")
+        button6 = wx.Button(self, ID_BUTTON + 6, "F8 Delete")
+        button7 = wx.Button(self, ID_BUTTON + 7, "F9 Rename")
+        button8 = wx.Button(self, ID_EXIT, "F10 Quit")
+
+        self.sizer2.Add(button1, 1, wx.EXPAND)
+        self.sizer2.Add(button2, 1, wx.EXPAND)
+        self.sizer2.Add(button3, 1, wx.EXPAND)
+        self.sizer2.Add(button4, 1, wx.EXPAND)
+        self.sizer2.Add(button5, 1, wx.EXPAND)
+        self.sizer2.Add(button6, 1, wx.EXPAND)
+        self.sizer2.Add(button7, 1, wx.EXPAND)
+        self.sizer2.Add(button8, 1, wx.EXPAND)
+
+        self.Bind(wx.EVT_BUTTON, self.OnExit, id=ID_EXIT)
+
+        self.sizer = wx.BoxSizer(wx.VERTICAL)
+        self.sizer.Add(self.splitter,1,wx.EXPAND)
+        self.sizer.Add(self.sizer2,0,wx.EXPAND)
+        self.SetSizer(self.sizer)
+
+        size = wx.DisplaySize()
+        self.SetSize(size)
+
+        self.sb = self.CreateStatusBar()
+        self.sb.SetStatusText(os.getcwd())
+        self.Center()
+        self.Show(True)
+
+
+    def OnExit(self,e):
+        self.Close(True)
+
+    def OnSize(self, event):
+        size = self.GetSize()
+        self.splitter.SetSashPosition(size.x / 2)
+        self.sb.SetStatusText(os.getcwd())
+        event.Skip()
+
+
+    def OnDoubleClick(self, event):
+        size =  self.GetSize()
+        self.splitter.SetSashPosition(size.x / 2)
+
+app = wx.App(0)
+FileHunter(None, -1, 'File Hunter')
+app.MainLoop()
+</pre>
+
+
+<h2>SpreadSheet</h2>
+
+<p>
+Gnumeric, KSpread, and OpenOffice Calc are famous spreadsheet applications 
+available on Unix. The following example shows a skeleton of a spreadsheet 
+application in wxPython.
+</p>
+
+<p>
+Applications have their own life. This is also true for educational scripts. 
+After upgrading to wx.Python 2.8.1.1 I realized that the spreadsheet example 
+does not work. The following line was the problem.
+</p>
+
+<pre class="code">
+toolbar2.AddControl(wx.StaticText(toolbar2, -1, '  ')) 
+</pre>
+
+<p>
+Of course, we cannot add a widget to itself. But the previous version of the toolkit 
+was happy with it. Under the current version it did not work, signalising a problem. 
+It might or might not work on the Mac and Windows. Originally, I wanted to add some space
+between the combo boxes. Under the new version of the toolkit it stopped to work either 
+so I dropped the line.
+</p>
+
+<p>
+Besides fixing this bug, I also cleaned the code a bit and replaced the depreciated methods 
+(<code>AddSimpleTool()</code>) of the toolbar with the new ones (<code>AddLabelTool()</code>).
+</p>
+
+<figure>
+<img style="margin-top:25px;" src="../../img/gui/wxpython/spreadsheet.png" alt="Spreadsheet">
+<figcaption>Figure: Spreadsheet</figcaption>
+</figure>
+
+<pre class="code">
+#!/usr/bin/python
+
+# spreadsheet.py
+
+from wx.lib import sheet
+import wx
+
+
+class MySheet(sheet.CSheet):
+    def __init__(self, parent):
+        sheet.CSheet.__init__(self, parent)
+        self.row = self.col = 0
+        self.SetNumberRows(55)
+        self.SetNumberCols(25)
+
+        for i in range(55):
+            self.SetRowSize(i, 20)
+
+    def OnGridSelectCell(self, event):
+        self.row, self.col = event.GetRow(), event.GetCol()
+        control = self.GetParent().GetParent().position
+        value =  self.GetColLabelValue(self.col) + self.GetRowLabelValue(self.row)
+        control.SetValue(value)
+        event.Skip()
+
+class Newt(wx.Frame):
+    def __init__(self, parent, id, title):
+        wx.Frame.__init__(self, parent, -1, title, size = (550, 500))
+
+        fonts = ['Times New Roman', 'Times', 'Courier', 'Courier New', 'Helvetica',
+                'Sans', 'verdana', 'utkal', 'aakar', 'Arial']
+        font_sizes = ['10', '11', '12', '14', '16']
+
+        box = wx.BoxSizer(wx.VERTICAL)
+        menuBar = wx.MenuBar()
+
+        menu1 = wx.Menu()
+        menuBar.Append(menu1, '&amp;File')
+        menu2 = wx.Menu()
+        menuBar.Append(menu2, '&amp;Edit')
+        menu3 = wx.Menu()
+        menuBar.Append(menu3, '&amp;Edit')
+        menu4 = wx.Menu()
+        menuBar.Append(menu4, '&amp;Insert')
+        menu5 = wx.Menu()
+        menuBar.Append(menu5, 'F&amp;ormat')
+        menu6 = wx.Menu()
+        menuBar.Append(menu6, '&amp;Tools')
+        menu7 = wx.Menu()
+        menuBar.Append(menu7, '&amp;Data')
+        menu8 = wx.Menu()
+        menuBar.Append(menu8, '&amp;Help')
+
+        self.SetMenuBar(menuBar)
+
+        toolbar1 = wx.ToolBar(self, -1, style= wx.TB_HORIZONTAL)
+        toolbar1.AddLabelTool(-1, '', wx.Bitmap('icons/stock_new.png'))
+        toolbar1.AddLabelTool(-1, '', wx.Bitmap('icons/stock_open.png'))
+        toolbar1.AddLabelTool(-1, '', wx.Bitmap('icons/stock_save.png'))
+        toolbar1.AddSeparator()
+        toolbar1.AddLabelTool(-1, '', wx.Bitmap('icons/stock_cut.png'))
+        toolbar1.AddLabelTool(-1, '', wx.Bitmap('icons/stock_copy.png'))
+        toolbar1.AddLabelTool(-1, '', wx.Bitmap('icons/stock_paste.png'))
+        toolbar1.AddLabelTool(-1, '',  wx.Bitmap('icons/stock_delete.png'))
+        toolbar1.AddSeparator()
+        toolbar1.AddLabelTool(-1, '', wx.Bitmap('icons/stock_undo.png'))
+        toolbar1.AddLabelTool(-1, '', wx.Bitmap('icons/stock_redo.png'))
+        toolbar1.AddSeparator()
+        toolbar1.AddLabelTool(-1, '', wx.Bitmap('icons/incr22.png'))
+        toolbar1.AddLabelTool(-1, '', wx.Bitmap('icons/decr22.png'))
+        toolbar1.AddSeparator()
+        toolbar1.AddLabelTool(-1, '', wx.Bitmap('icons/chart.xpm'))
+        toolbar1.AddSeparator()
+        toolbar1.AddLabelTool(-1, '',  wx.Bitmap('icons/stock_exit.png'))
+
+        toolbar1.Realize()
+
+        toolbar2 = wx.ToolBar(self, wx.TB_HORIZONTAL | wx.TB_TEXT)
+
+        self.position = wx.TextCtrl(toolbar2)
+        font = wx.ComboBox(toolbar2, -1, value = 'Times', choices=fonts, size=(100, -1),
+                style=wx.CB_DROPDOWN)
+        font_height = wx.ComboBox(toolbar2, -1, value = '10',  choices=font_sizes,
+                size=(50, -1), style=wx.CB_DROPDOWN)
+
+        toolbar2.AddControl(self.position)
+        toolbar2.AddControl(font)
+        toolbar2.AddControl(font_height)
+        toolbar2.AddSeparator()
+        bold = wx.Bitmap('icons/stock_text_bold.png')
+        toolbar2.AddCheckTool(-1, bold)
+        italic = wx.Bitmap('icons/stock_text_italic.png')
+        toolbar2.AddCheckTool(-1, italic)
+        under = wx.Bitmap('icons/stock_text_underline.png')
+        toolbar2.AddCheckTool(-1, under)
+        toolbar2.AddSeparator()
+        toolbar2.AddLabelTool(-1, '', wx.Bitmap('icons/text_align_left.png'))
+        toolbar2.AddLabelTool(-1, '', wx.Bitmap('icons/text_align_center.png'))
+        toolbar2.AddLabelTool(-1, '', wx.Bitmap('icons/text_align_right.png'))
+
+        box.Add(toolbar1, border=5)
+        box.Add((5,5) , 0)
+        box.Add(toolbar2)
+        box.Add((5,10) , 0)
+
+        toolbar2.Realize()
+        self.SetSizer(box)
+        notebook = wx.Notebook(self, -1, style=wx.RIGHT)
+
+        sheet1 = MySheet(notebook)
+        sheet2 = MySheet(notebook)
+        sheet3 = MySheet(notebook)
+        sheet1.SetFocus()
+
+        notebook.AddPage(sheet1, 'Sheet1')
+        notebook.AddPage(sheet2, 'Sheet2')
+        notebook.AddPage(sheet3, 'Sheet3')
+
+        box.Add(notebook, 1, wx.EXPAND)
+
+        self.CreateStatusBar()
+        self.Centre()
+        self.Show(True)
+
+app = wx.App()
+Newt(None, -1, 'SpreadSheet')
+app.MainLoop()
+</pre>
+
+<p>
+Much of the code builds the menus and toolbars. Besides, it is quite a simple example. 
+</p>
+
+<pre class="explanation">
+class MySheet(sheet.CSheet):
+    def __init__(self, parent):
+        sheet.CSheet.__init__(self, parent)
+        self.row = self.col = 0
+        self.SetNumberRows(55)
+        self.SetNumberCols(25)
+
+        for i in range(55):
+            self.SetRowSize(i, 20)
+</pre>
+
+<p>
+The MySheet class inherits from the <code>CSheet</code> class, which is located in thel 
+<code>wx.lib</code> module. It is basically a <code>wx.Grid</code> widget with some 
+additional functionality. We set the row size to 20px. This is purely for aesthetical purpose.
+</p>
+
+<pre class="explanation">
+control = self.GetParent().GetParent().position
+</pre>
+
+<p>
+The position text control shows the selected cell of the grid widget. It is 
+the first widget of the second toolbar. Being inside a <code>MySheet</code> class, 
+we need to get a reference to the text control, which is defined in the 
+<code>Newt</code> class. <code>MySheet</code> is a child of the notebook. 
+And notebook is a child of <code>Newt</code>. So we manage to get to 
+the position text control by calling the <code>GetParent()</code> method twice. 
+</p>
+
+<pre class="explanation">
+notebook = wx.Notebook(self, -1, style=wx.RIGHT)
+</pre>
+
+<p>
+This is a bug. Under current version of wxPython (on GTK+), right is 
+bottom and bottom is right. 
+</p>
+
+
+<h2>Player</h2>
+
+<p>
+The following example is a skeleton of a typical video player.
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+import wx
+
+
+class Example(wx.Frame):
+           
+    def __init__(self, *args, **kw):
+        super(Example, self).__init__(*args, **kw) 
+        
+        self.InitUI()
+        
+    def InitUI(self):   
+
+        self.CreateMenuBar()
+    
+        panel = wx.Panel(self)
+
+        pnl1 = wx.Panel(self)
+        pnl1.SetBackgroundColour(wx.BLACK)
+        pnl2 = wx.Panel(self)        
+
+        slider1 = wx.Slider(pnl2, value=18, minValue=0, maxValue=1000)
+        pause = wx.BitmapButton(pnl2, bitmap=wx.Bitmap('pause.png'))
+        play  = wx.BitmapButton(pnl2, bitmap=wx.Bitmap('play.png'))
+        forw  = wx.BitmapButton(pnl2, bitmap=wx.Bitmap('forw.png'))
+        back  = wx.BitmapButton(pnl2, bitmap=wx.Bitmap('back.png'))
+        vol = wx.BitmapButton(pnl2, bitmap=wx.Bitmap('volume.png'))
+        slider2 = wx.Slider(pnl2, value=1, minValue=0, maxValue=100, 
+            size=(120, -1))
+
+        vbox = wx.BoxSizer(wx.VERTICAL)
+        hbox1 = wx.BoxSizer(wx.HORIZONTAL)
+        hbox2 = wx.BoxSizer(wx.HORIZONTAL)
+
+        hbox1.Add(slider1, proportion=1)
+        hbox2.Add(pause)
+        hbox2.Add(play, flag=wx.RIGHT, border=5)
+        hbox2.Add(forw, flag=wx.LEFT, border=5)
+        hbox2.Add(back)
+        hbox2.Add((-1, -1), proportion=1)
+        hbox2.Add(vol)
+        hbox2.Add(slider2, flag=wx.TOP|wx.LEFT, border=5)
+
+        vbox.Add(hbox1, flag=wx.EXPAND|wx.BOTTOM, border=10)
+        vbox.Add(hbox2, proportion=1, flag=wx.EXPAND)
+        pnl2.SetSizer(vbox)
+
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(pnl1, proportion=1, flag=wx.EXPAND)
+        sizer.Add(pnl2, flag=wx.EXPAND|wx.BOTTOM|wx.TOP, border=10)
+
+        self.SetMinSize((350, 300))
+        self.CreateStatusBar()
+        self.SetSizer(sizer)
+
+        self.SetSize((350, 200))
+        self.SetTitle('Player')
+        self.Centre()
+        self.Show(True)          
+        
+    def CreateMenuBar(self):
+        
+        menubar = wx.MenuBar()
+        filem = wx.Menu()
+        play = wx.Menu()
+        view = wx.Menu()
+        tools = wx.Menu()
+        favorites = wx.Menu()
+        help = wx.Menu()
+        
+        filem.Append(wx.ID_ANY, '&amp;quit', 'Quit application')
+
+        menubar.Append(filem, '&amp;File')
+        menubar.Append(play, '&amp;Play')
+        menubar.Append(view, '&amp;View')
+        menubar.Append(tools, '&amp;Tools')
+        menubar.Append(favorites, 'F&amp;avorites')
+        menubar.Append(help, '&amp;Help')
+
+        self.SetMenuBar(menubar)        
+                      
+def main():
+    
+    ex = wx.App()
+    Example(None)
+    ex.MainLoop()    
+
+if __name__ == '__main__':
+    main()          
+</pre>
+
+<p>
+To build the interface, we have used bitmap buttons, sliders, panels, 
+and a menubar. 
+</p>
+
+<pre class="explanation">
+pnl1 = wx.Panel(self)
+pnl1.SetBackgroundColour(wx.BLACK)
+</pre>
+
+<p>
+The main area of the application is occupied by a panel with a black background. 
+</p>
+
+<pre class="explanation">
+slider1 = wx.Slider(pnl2, value=18, minValue=0, maxValue=1000)
+</pre>
+
+<p>
+The <code>wx.Slider</code> is used to show the progress of the film. 
+</p>
+
+<pre class="explanation">
+pause = wx.BitmapButton(pnl2, bitmap=wx.Bitmap('pause.png'))
+play  = wx.BitmapButton(pnl2, bitmap=wx.Bitmap('play.png'))
+</pre>
+
+<p>
+Bitmap buttons are used for control buttons. 
+</p>
+
+<pre class="explanation">
+self.SetMinSize((350, 300))
+</pre>
+
+<p>
+Here we set the minimum size of the player. It does not
+make much sense to shrink the window below some value.
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/player.png" alt="Player">
+<figcaption>Figure: Player</figcaption>
+</figure>
+
+
+<h2>Browser</h2>
+
+<p>
+These days internet browsers are one of the most important applications 
+in the IT world. We mimic the look of a Firefox in our script.
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/browser.png" alt="Browser">
+<figcaption>Figure: Browser</figcaption>
+</figure>
+
+
+<pre class="code">
+#!/usr/bin/python
+
+import wx
+from wx.lib.buttons import GenBitmapTextButton
+
+class Browser(wx.Frame):
+    def __init__(self, parent, id, title):
+        wx.Frame.__init__(self, parent, id, title, size=(450, 400))
+        panel = wx.Panel(self, -1)
+        panel.SetBackgroundColour('WHITE')
+
+        menubar = wx.MenuBar()
+        file = wx.Menu()
+        file.Append(1, '&amp;Quit', '')
+        edit = wx.Menu()
+        view = wx.Menu()
+        go = wx.Menu()
+        bookmarks = wx.Menu()
+        tools = wx.Menu()
+        help = wx.Menu()
+
+        menubar.Append(file, '&amp;File')
+        menubar.Append(edit, '&amp;Edit')
+        menubar.Append(view, '&amp;View')
+        menubar.Append(go, '&amp;Go')
+        menubar.Append(bookmarks, '&amp;Bookmarks')
+        menubar.Append(tools, '&amp;Tools')
+        menubar.Append(help, '&amp;Help')
+
+        self.SetMenuBar(menubar)
+
+        vbox = wx.BoxSizer(wx.VERTICAL)
+        hbox1 = wx.BoxSizer(wx.HORIZONTAL)
+        hbox2 = wx.BoxSizer(wx.HORIZONTAL)
+        toolbar1 = wx.Panel(panel, -1, size=(-1, 40))
+        back = wx.BitmapButton(toolbar1, -1, wx.Bitmap('icons/back.png'), 
+                style=wx.NO_BORDER)
+        forward = wx.BitmapButton(toolbar1, -1, wx.Bitmap('icons/forward.png'), 
+                style=wx.NO_BORDER)
+        refresh = wx.BitmapButton(toolbar1, -1, wx.Bitmap('icons/refresh.png'), 
+                style=wx.NO_BORDER)
+        stop = wx.BitmapButton(toolbar1, -1, wx.Bitmap('icons/stop.png'), 
+                style=wx.NO_BORDER)
+        home = wx.BitmapButton(toolbar1, -1, wx.Bitmap('icons/home.png'), 
+                style=wx.NO_BORDER)
+        address = wx.ComboBox(toolbar1, -1, size=(50, -1))
+        go = wx.BitmapButton(toolbar1, -1, wx.Bitmap('icons/go.png'), 
+                style=wx.NO_BORDER)
+        text = wx.TextCtrl(toolbar1, -1, size=(150, -1))
+
+        hbox1.Add(back)
+        hbox1.Add(forward)
+        hbox1.Add(refresh)
+        hbox1.Add(stop)
+        hbox1.Add(home)
+        hbox1.Add(address, 1, wx.TOP, 4)
+        hbox1.Add(go, 0, wx.TOP | wx.LEFT, 4)
+        hbox1.Add(text, 0, wx.TOP | wx.RIGHT, 4)
+
+        vbox.Add(toolbar1, 0, wx.EXPAND)
+        line = wx.StaticLine(panel)
+        vbox.Add(line, 0, wx.EXPAND)
+
+        toolbar2 = wx.Panel(panel, -1, size=(-1, 30))
+        bookmark1 = wx.BitmapButton(toolbar2, -1, wx.Bitmap('icons/love.png'), 
+                style=wx.NO_BORDER)
+        bookmark2 = wx.BitmapButton(toolbar2, -1, wx.Bitmap('icons/books.png'), 
+                style=wx.NO_BORDER)
+        bookmark3 = wx.BitmapButton(toolbar2, -1, wx.Bitmap('icons/sound.png'), 
+                style=wx.NO_BORDER)
+        hbox2.Add(bookmark1, flag=wx.RIGHT, border=5)
+        hbox2.Add(bookmark2, flag=wx.RIGHT, border=5)
+        hbox2.Add(bookmark3)
+        toolbar2.SetSizer(hbox2)
+        vbox.Add(toolbar2, 0, wx.EXPAND)
+        line = wx.StaticLine(panel)
+        vbox.Add(line, 0, wx.EXPAND)
+
+        panel.SetSizer(vbox)
+
+        self.CreateStatusBar()
+        self.Centre()
+        self.Show(True)
+
+app = wx.App(0)
+Browser(None, -1, 'Browser')
+app.MainLoop()
+</pre>
+
+<p>
+The question was, how to create a sizeable combo box that is used in both Firefox 
+and Opera? We cannot use a  <code>wx.Toolbar</code>. It is not possible to create such a 
+functionality with <code>wx.Toolbar</code>. So we must do a workaround.
+</p>
+
+<pre class="explanation">
+toolbar1 = wx.Panel(panel, -1, size=(-1, 40))
+</pre>
+
+<p>
+The trick is simple. We create a plain <code>wx.Panel</code>.
+</p>
+
+<pre class="explanation">
+hbox1 = wx.BoxSizer(wx.HORIZONTAL)
+...
+hbox1.Add(back)
+hbox1.Add(forward)
+hbox1.Add(refresh)
+</pre>
+
+<p>
+We create a horizontal sizer and add all necessary buttons.
+</p>
+
+<pre class="explanation">
+hbox1.Add(address, 1, wx.TOP, 4)
+</pre>
+
+<p>
+Then we add the combo box to the sizer. This kind of combo box is usually 
+called an address bar. Notice that it is the only
+widget that has the proportion set to 1. This was necessary to make it 
+resizable. 
+</p>
+
+<p>
+The second toolbar was created in a similar way. The toolbars are separated by a line. 
+First I thought, it was some kind of a panel border. I tested all possible borders, 
+but it wasn't quite what I expected. 
+</p>
+
+<pre class="explanation">
+line = wx.StaticLine(panel)
+</pre>
+
+<p>
+Then I suddently got it. It is a simple static line! 
+</p>
+
+<p>
+Sometimes, we must create a solution, for which we do not have a suitable widget. 
+By using simple common sense, we can easily find a way.
+</p>
+
+<p>
+In this part of the wxPython tutorial we have created some application skeletons.
+</p>
+
+<div class="hor">
+<script async src="../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- horizontal -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:468px;height:60px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="1734478269"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div> 
+
+
+<footer>
+
+<nav class="center">
+<span class="botNavItem"><a href="http://zetcode.com/">Home</a></span> ‡ <span class="botNavItem"><a href="../index.html">Contents</a></span> ‡ 
+<span class="botNavItem"><a href="#">Top of Page</a></span>
+</nav>
+
+<div class="signature">
+<a href="http://zetcode.com/">ZetCode</a> last modified April 1, 2012  <span class="copyright">&copy; 2007 - 2015 Jan Bodnar</span>
+</div>
+
+</footer>
+
+</div> <!-- content -->
+
+</div> <!-- container -->
+
+</body>
+
+<!-- Mirrored from zetcode.com/wxpython/skeletons/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Aug 2015 19:22:01 GMT -->
+</html>
+

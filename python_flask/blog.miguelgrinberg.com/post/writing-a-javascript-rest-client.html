@@ -1,0 +1,1448 @@
+﻿<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from blog.miguelgrinberg.com/post/writing-a-javascript-rest-client by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:46:01 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    
+    <title>
+    
+        Writing a Javascript REST client - miguelgrinberg.com
+    
+</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="description" content="miguelgrinberg.com">
+	<meta name="copyright" content="Copyright (c) 2012-2015 Miguel Grinberg">
+	<meta name="author" content="Miguel Grinberg">
+    
+    <meta name="keywords" content="javascript, jquery, knockout, rest, ajax, api, client, web">
+    
+
+    
+    <!-- Bootstrap -->
+    <link href="../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../static/prettify.css" type="text/css" rel="stylesheet" />
+    <link href="../static/colorbox/colorbox.css" rel="stylesheet" type="text/css" />
+    <link href="../static/style.css" rel="stylesheet" type="text/css" />
+
+    <link rel="shortcut icon" href="../static/favicon.ico">
+	<link rel="alternate" type="application/rss+xml" href="../feed" title="miguelgrinberg.com RSS feed">
+
+  </head>
+  <body>
+    
+    <!-- facebook sdk -->
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "../../connect.facebook.net/en_US/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    <!-- google plus sdk -->
+    <script type="text/javascript" src="../../apis.google.com/js/plusone.js"></script>
+    <!-- twitter sdk -->
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="../../platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <!-- linkedin sdk -->
+    <script src="../../platform.linkedin.com/in.js" type="text/javascript"></script>
+
+    
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://blog.miguelgrinberg.com/index">miguelgrinberg.com</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="http://blog.miguelgrinberg.com/index">Home</a></li>
+                        <li><a href="about-me.html">About Me</a></li>
+                        <li><a href="about-this-blog.html">About This Blog</a></li>
+                        
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <p class="navbar-text" style="margin-top: 10px; margin-bottom: 0px;">
+                                <a type="application/rss+xml" href="../feed"><img src="../static/rss.png" alt="RSS Feed" title="RSS Feed" /></a>
+                                <a href="https://www.facebook.com/miguelgrinbergblog"><img src="../static/facebook.png" alt="Facebook" title="Facebook" /></a>
+                                <a href="https://plus.google.com/u/0/117786742456929977820"><img src="../static/googleplus.png" alt="Google+" title="Google+" /></a>
+                                <a href="http://www.linkedin.com/in/miguelgrinberg"><img src="../static/linkedin.png" alt="LinkedIn" title="LinkedIn" /></a>
+                                <a href="http://github.com/miguelgrinberg"><img src="../static/github.png" alt="GitHub" title="GitHub" /></a>
+                                <a href="https://twitter.com/#!/miguelgrinberg"><img src="../static/twitter.png" alt="Twitter" title="Twitter" /></a>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </nav>
+
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-push-9 sidebar-bg">
+                <div id="sidebar">
+                    
+
+                    
+                    <h1>Flask Web Development</h1>
+                    <p>If you want to learn modern web development techniques with Python and Flask, you may find my O'Reilly book useful:</p>
+                    <p><center><a href="http://bit.ly/flaskbook"><img style="border: 1px solid black;" src="../static/flask-book-cover-tiny.png"></a></center></p>
+                    <p>Visit <a href="http://flaskbook.com/">http://flaskbook.com</a> for information about this and other Flask training products I have created!</p>
+                    
+
+                    <h1>About Miguel</h1>
+                    <img style="float: right; margin: 0px 8px 8px 0px; padding: 4px; border: 1px solid #ccc;" src="../static/miguel.jpg" />
+                    <p>Welcome to my blog!</p>
+                    <p>I'm a software engineer, photographer and filmmaker in Portland, Oregon, USA.</p>
+                    <p>You can also find me on <a href="https://www.facebook.com/miguelgrinbergblog">Facebook</a>, <a href="https://plus.google.com/u/0/117786742456929977820">Google+</a>, <a href="http://www.linkedin.com/in/miguelgrinberg">LinkedIn</a>, <a href="https://github.com/miguelgrinberg">Github</a> and <a href="https://twitter.com/#!/miguelgrinberg">Twitter</a>.</p>
+                    <p>Thank you for visiting!</p>
+
+                    
+
+                    
+                    <h1>Categories</h1>
+<ul>
+
+	<li>
+		<a href="../category/Arduino/feed">
+			<img src="../static/rss-small.png" title="Arduino RSS Feed" label="Arduino RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Arduino.html">Arduino</a></span> (7)
+	</li>
+
+	<li>
+		<a href="../category/Authentication/feed">
+			<img src="../static/rss-small.png" title="Authentication RSS Feed" label="Authentication RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Authentication.html">Authentication</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../category/Blog/feed">
+			<img src="../static/rss-small.png" title="Blog RSS Feed" label="Blog RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Blog.html">Blog</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/C%2b%2b/feed">
+			<img src="../static/rss-small.png" title="C++ RSS Feed" label="C++ RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/C%2b%2b.html">C++</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Cloud/feed">
+			<img src="../static/rss-small.png" title="Cloud RSS Feed" label="Cloud RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Cloud.html">Cloud</a></span> (2)
+	</li>
+
+	<li>
+		<a href="../category/Filmmaking/feed">
+			<img src="../static/rss-small.png" title="Filmmaking RSS Feed" label="Filmmaking RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Filmmaking.html">Filmmaking</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Flask/feed">
+			<img src="../static/rss-small.png" title="Flask RSS Feed" label="Flask RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Flask.html">Flask</a></span> (39)
+	</li>
+
+	<li>
+		<a href="../category/Games/feed">
+			<img src="../static/rss-small.png" title="Games RSS Feed" label="Games RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Games.html">Games</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Gear/feed">
+			<img src="../static/rss-small.png" title="Gear RSS Feed" label="Gear RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Gear.html">Gear</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/HTML5/feed">
+			<img src="../static/rss-small.png" title="HTML5 RSS Feed" label="HTML5 RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/HTML5.html">HTML5</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Heroku/feed">
+			<img src="../static/rss-small.png" title="Heroku RSS Feed" label="Heroku RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Heroku.html">Heroku</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Javascript/feed">
+			<img src="../static/rss-small.png" title="Javascript RSS Feed" label="Javascript RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Javascript.html">Javascript</a></span> (3)
+	</li>
+
+	<li>
+		<a href="../category/Movie%20Reviews/feed">
+			<img src="../static/rss-small.png" title="Movie Reviews RSS Feed" label="Movie Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Movie%20Reviews.html">Movie Reviews</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Netflix/feed">
+			<img src="../static/rss-small.png" title="Netflix RSS Feed" label="Netflix RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Netflix.html">Netflix</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Node.js/feed">
+			<img src="../static/rss-small.png" title="Node.js RSS Feed" label="Node.js RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Node.html">Node.js</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/OpenStack/feed">
+			<img src="../static/rss-small.png" title="OpenStack RSS Feed" label="OpenStack RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/OpenStack.html">OpenStack</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Personal/feed">
+			<img src="../static/rss-small.png" title="Personal RSS Feed" label="Personal RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Personal.html">Personal</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Photography/feed">
+			<img src="../static/rss-small.png" title="Photography RSS Feed" label="Photography RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Photography.html">Photography</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Product%20Reviews/feed">
+			<img src="../static/rss-small.png" title="Product Reviews RSS Feed" label="Product Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Product%20Reviews.html">Product Reviews</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Programming/feed">
+			<img src="../static/rss-small.png" title="Programming RSS Feed" label="Programming RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Programming.html">Programming</a></span> (47)
+	</li>
+
+	<li>
+		<a href="../category/Project%20Management/feed">
+			<img src="../static/rss-small.png" title="Project Management RSS Feed" label="Project Management RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Project%20Management.html">Project Management</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Python/feed">
+			<img src="../static/rss-small.png" title="Python RSS Feed" label="Python RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Python.html">Python</a></span> (43)
+	</li>
+
+	<li>
+		<a href="../category/REST/feed">
+			<img src="../static/rss-small.png" title="REST RSS Feed" label="REST RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/REST.html">REST</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Rackspace/feed">
+			<img src="../static/rss-small.png" title="Rackspace RSS Feed" label="Rackspace RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Rackspace.html">Rackspace</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Raspberry%20Pi/feed">
+			<img src="../static/rss-small.png" title="Raspberry Pi RSS Feed" label="Raspberry Pi RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Raspberry%20Pi.html">Raspberry Pi</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/RhinoSteady/feed">
+			<img src="../static/rss-small.png" title="RhinoSteady RSS Feed" label="RhinoSteady RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/RhinoSteady.html">RhinoSteady</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Robotics/feed">
+			<img src="../static/rss-small.png" title="Robotics RSS Feed" label="Robotics RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Robotics.html">Robotics</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Video/feed">
+			<img src="../static/rss-small.png" title="Video RSS Feed" label="Video RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Video.html">Video</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../category/Windows/feed">
+			<img src="../static/rss-small.png" title="Windows RSS Feed" label="Windows RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Windows.html">Windows</a></span> (1)
+	</li>
+
+</ul>
+                    
+                </div>
+            </div>
+            <div class="col-md-8 col-md-pull-4">
+                <div id="main">
+                    
+                    
+                    
+                    
+                    
+
+<div class="post">
+
+<p class="date"><span class="flask-moment" data-timestamp="2013-06-15T20:12:57Z" data-format="format('LL')" data-refresh="0">2013-06-15T20:12:57Z</span></p>
+<h1 class="post-title"><a href="writing-a-javascript-rest-client.html">Writing a Javascript REST client</a></h1>
+<div class="posted">Posted by <span class="label label-danger"><a href="http://blog.miguelgrinberg.com/author/Miguel Grinberg">Miguel Grinberg</a></span> under <span class="label label-primary"><a href="../category/Programming.html">Programming</a></span>, <span class="label label-primary"><a href="../category/Javascript.html">Javascript</a></span>, <span class="label label-primary"><a href="../category/REST.html">REST</a></span>. </div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/writing-a-javascript-rest-client" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/writing-a-javascript-rest-client" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="writing-a-javascript-rest-client.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/writing-a-javascript-rest-client" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+<div class="post_body"><p>Last month I published an article on <a href="designing-a-restful-api-with-python-and-flask.html">writing RESTful web services in Python</a>, in which I developed a small web service.</p>
+<p>Today I'm putting my "front-end" hat to show you how to write a Javascript client application that uses the Python service.</p>
+<h2>Source code for this tutorial</h2>
+<p>The source code for this tutorial is available on my <a href="https://github.com/miguelgrinberg/REST-tutorial">REST-tutorial</a> project on github. The incremental versions are tagged and linked in the appropriate sections of the article to save you from having to type or copy/paste the code yourself.</p>
+<p>Download the initial version: <a href="https://codeload.github.com/miguelgrinberg/REST-tutorial/zip/v0.1"><strong>zip</strong></a>  | <a href="https://github.com/miguelgrinberg/REST-tutorial/tree/v0.1"><strong>github</strong></a></p>
+<p>This version includes just the REST server. To execute it under Python's development web server you have to run the following command:</p>
+<ul>
+<li>For Linux, OS X and Cygwin: <code>./rest-server.py</code></li>
+<li>For Windows: <code>python rest-server.py</code></li>
+</ul>
+<p>The development server will be listening for requests on port 5000 of the local host, so you'll access it as <code>http://localhost:5000</code>.</p>
+<h2>The REST web service</h2>
+<p>In the <a href="designing-a-restful-api-with-python-and-flask.html">aforementioned article</a> I developed a simple web service that maintains a to-do list. The REST API endpoints for this service are:</p>
+<table class="data">
+<tr><th>HTTP Method</th><th>URI</th><th>Action</th></tr>
+<tr><td>GET</td><td>http://[hostname]/todo/api/v1.0/tasks</td><td>Retrieve list of tasks</td></tr>
+<tr><td>GET</td><td>http://[hostname]/todo/api/v1.0/tasks/[task_id]</td><td>Retrieve a task</td></tr>
+<tr><td>POST</td><td>http://[hostname]/todo/api/v1.0/tasks</td><td>Create a new task</td></tr>
+<tr><td>PUT</td><td>http://[hostname]/todo/api/v1.0/tasks/[task_id]</td><td>Update an existing task</td></tr>
+<tr><td>DELETE</td><td>http://[hostname]/todo/api/v1.0/tasks/[task_id]</td><td>Delete a task</td></tr>
+</table>
+
+<p>All the endpoints in this service are secured by <a href="http://en.wikipedia.org/wiki/Basic_access_authentication">HTTP basic authentication</a>.</p>
+<p>The only resource exposed by this service is a "task", which is composed of the following data fields:</p>
+<ul>
+<li><strong>uri</strong>: unique URI for the task. String type.</li>
+<li><strong>title</strong>: short task description. String type.</li>
+<li><strong>description</strong>: long task description. Text type.</li>
+<li><strong>done</strong>: task completion state. Boolean type.</li>
+</ul>
+<p>The REST server article shows how to place calls into this server using a command line utility called <code>curl</code>. Please see that article for details on this if you are interested in learning about the server side.</p>
+<p>We will not discuss any more server related matters today. Are you ready to cross to the client-side? Let's go!</p>
+<h2>Choosing the stack</h2>
+<p>We will develop a client application that will run on web browsers, so we need to decide what tools and/or frameworks we will use.</p>
+<p>For the base stack we don't really have much of a choice: The layout will be done in HTML, styling will be done in CSS and scripting in Javascript. No surprises here. While there are other choices, these guarantee that most modern browsers will run our application.</p>
+<p>But these technologies alone would make for a rough development experience. For example, while Javascript and CSS work in all browsers, implementations differ, many times in subtle or obscure ways. There are three areas in which we would benefit from higher level cross-browser frameworks:</p>
+<ul>
+<li>Presentation and styling</li>
+<li>REST request management</li>
+<li>Templates and event handling</li>
+</ul>
+<p>Let's review each and evaluate what options there are.</p>
+<h3>Presentation and styling</h3>
+<p>We don't really have the patience nor the interest to test several browsers to make sure our HTML, CSS and Javascript works. There are a few frameworks that provide already tested CSS styles and Javascript functions to build websites with a modern look and user interface.</p>
+<p>We will use <a href="http://twitter.github.io/bootstrap/">Twitter Bootstrap</a>, the most popular CSS/Javascript layout framework.</p>
+<h3>REST request management</h3>
+<p>Our client application running inside the web browser will need to issue requests to the REST web server. The browser's Javascript interpreter provides an API for this called <a href="http://en.wikipedia.org/wiki/XMLHttpRequest">XMLHttpRequest</a>, but the actual implementation varies from browser to browser, so we would need to write browser specific code if we wanted to code against this API directly.</p>
+<p>Lucky for us there are several cross-browser Javascript frameworks that hide these little differences and provide a uniform API. Once again we will pick the leading framework in this category, <a href="http://jquery.com/">jQuery</a>, which not only provides a uniform Ajax API but a large number of cross-browser helper functions.</p>
+<h3>Templates and event handling</h3>
+<p>Finally, our client application will need to generate dynamic content that will be inserted into an existing HTML document, and also update this content as a response to the actions issued by the user. We could use jQuery for all this, but jQuery's support in this area is pretty basic.</p>
+<p>Many application frameworks adopt a pattern called <a href="http://en.wikipedia.org/wiki/Model–view–controller">Model View Controller</a> to write maintainable applications that separate data from behavior. In MVC frameworks models store the data, views render the data and controllers update views and models according to user actions. The separation between data, presentation and behavior is very clear. There are some variations of MVC, like MVP (Model View Presenter) or MVVM (Model View ViewModel) that are popular as well. All these patterns are usually referred together as MV* frameworks.</p>
+<p>MV* frameworks in the client side is a very hot topic these days, there are several projects that compete in this area without a clear winner. Here are the ones that I have evaluated:</p>
+<ul>
+<li><a href="http://angularjs.org/">AngularJS</a></li>
+<li><a href="http://emberjs.com/">Ember.js</a></li>
+<li><a href="http://backbonejs.org/">Backbone.js</a></li>
+<li><a href="http://knockoutjs.com/">Knockout</a></li>
+</ul>
+<p>AngularJS and Ember.js are the ones with the most features, in particular both have two-way data binding, which allows you to associate Javascript variables to elements in the HTML page so that when one changes the other updates automatically. They both look pretty good, but the learning curve is steep, and their documentation is pretty bad.</p>
+<p>Backbone is the oldest framework of the four. It has no automatic data binding, instead you have to set up event handlers and write the code to perform the updates inside them.</p>
+<p>Knockout was a surprise. This is a framework that is smaller than the other three, its main feature is two-way data binding. The documentation is excellent, very detailed and complete. There is a fun interactive tutorial followed by reference documentation and several examples, all integrated into an easy to navigate site.</p>
+<p>Based on the above analysis, I've decided to give <a href="http://knockoutjs.com/">Knockout</a> a chance.</p>
+<h2>Basic page layout</h2>
+<p>Let's begin by creating the main page skeleton:</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;ToDo API Client Demo&lt;/title&gt;
+&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+&lt;link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet"&gt;
+&lt;script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.js"&gt;&lt;/script&gt;
+&lt;script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"&gt;&lt;/script&gt;
+&lt;script src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-2.2.1.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="navbar"&gt;
+        &lt;div class="navbar-inner"&gt;
+            &lt;a class="brand" href="#"&gt;ToDo API Client Demo&lt;/a&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div id="main" class="container"&gt;
+
+        Main content here!
+
+    &lt;/div&gt;
+    &lt;script type="text/javascript"&gt;
+
+        // application code here!
+
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>This is a pretty standard HTML5 document. </p>
+<p>The <code>meta name="viewport"</code> comes from Bootstrap. It makes the page scale according to the browser dimensions, be it a browser on a desktop PC or one in a smartphone. What follows is the Bootstrap CSS file, which we import from a CDN (content delivery network) so that we don't have to host it ourselves. Next come the Javascript files for jQuery, Bootstrap and Knockout, also imported from CDNs.</p>
+<p>In the body of the page we first have a top bar with the application title, created using Bootstrap's CSS styles. Then we have the main content area, where we will insert the application data. And finally, we will have our application code at the bottom, keeping in mind that for larger projects the application code should likely go into one or more independent Javascript source files.</p>
+<p>Download the project at this stage: <a href="https://codeload.github.com/miguelgrinberg/REST-tutorial/zip/v0.2"><strong>zip</strong></a> | <a href="https://github.com/miguelgrinberg/REST-tutorial/tree/v0.2"><strong>github</strong></a></p>
+<p>To see how the page looks start the Python server and then navigate to <code>http://localhost:5000/index.html</code> in your browser.</p>
+<h2>Content area layout</h2>
+<p>Using Bootstrap styles we can create a mock up of the content area of our application:</p>
+<div style="border: 1px solid black; width: 80%; padding: 8px; margin: 8px;">
+<table class="table table-striped">
+    <tr><td style="width: 1px;"></td><td><b>Task</b></td><td><b>Options</b></td></tr>
+    <tr>
+        <td>
+            <span class="label label-success">Done</span>
+        </td>
+        <td><p><b>Task title</b></p><p>Task description</p></td>
+        <td>
+            <button class="btn">Edit</button>
+            <button class="btn">Delete</button>
+            <span><button class="btn">Mark In Progress</button></span>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <span class="label label-important">In Progress</span>
+        </td>
+        <td><p><b>Task title</b></p><p>Task description</p></td>
+        <td>
+            <button class="btn">Edit</button>
+            <button class="btn">Delete</button>
+            <span><button class="btn">Mark Done</button></span>
+        </td>
+    </tr>
+</table>
+<button class="btn">Add Task</button>
+</div>
+
+<p>The HTML code that achieves the above look is:</p>
+<pre><code>&lt;table class="table table-striped"&gt;
+    &lt;tr&gt;&lt;td style="width: 1px;"&gt;&lt;/td&gt;&lt;td&gt;&lt;b&gt;Task&lt;/b&gt;&lt;/td&gt;&lt;td&gt;&lt;b&gt;Options&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;
+            &lt;span class="label label-success"&gt;Done&lt;/span&gt;
+        &lt;/td&gt;
+        &lt;td&gt;&lt;p&gt;&lt;b&gt;Task title&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Task description&lt;/p&gt;&lt;/td&gt;
+        &lt;td&gt;
+            &lt;button class="btn"&gt;Edit&lt;/button&gt;
+            &lt;button class="btn"&gt;Delete&lt;/button&gt;
+            &lt;span&gt;&lt;button class="btn"&gt;Mark In Progress&lt;/button&gt;&lt;/span&gt;
+        &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;
+            &lt;span class="label label-important"&gt;In Progress&lt;/span&gt;
+        &lt;/td&gt;
+        &lt;td&gt;&lt;p&gt;&lt;b&gt;Task title&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Task description&lt;/p&gt;&lt;/td&gt;
+        &lt;td&gt;
+            &lt;button class="btn"&gt;Edit&lt;/button&gt;
+            &lt;button class="btn"&gt;Delete&lt;/button&gt;
+            &lt;span&gt;&lt;button class="btn"&gt;Mark Done&lt;/button&gt;&lt;/span&gt;
+        &lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;
+&lt;button class="btn"&gt;Add Task&lt;/button&gt;
+</code></pre>
+<p>Download the project at this stage: <a href="https://codeload.github.com/miguelgrinberg/REST-tutorial/zip/v0.3"><strong>zip</strong></a> | <a href="https://github.com/miguelgrinberg/REST-tutorial/tree/v0.3"><strong>github</strong></a></p>
+<p>Once again, at this point you can start the Python server and then navigate to <code>http://localhost:5000/index.html</code> in your browser to see the page.</p>
+<h2>Two-way data binding from the HTML side</h2>
+<p>The above HTML code looks great, but it is static, so it is of no use other than to prototype the look of our application. We now need to convert it into a Knockout view that can show actual data and respond to user clicks. For this we will use some constructs provided by Knockout:</p>
+<pre><code>&lt;table class="table table-striped"&gt;
+    &lt;tr&gt;&lt;td style="width: 1px;"&gt;&lt;/td&gt;&lt;td&gt;&lt;b&gt;Task&lt;/b&gt;&lt;/td&gt;&lt;td&gt;&lt;b&gt;Options&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;
+    &lt;!-- ko foreach: tasks --&gt;
+    &lt;tr&gt;
+        &lt;td&gt;
+            &lt;span data-bind="visible: done" class="label label-success"&gt;Done&lt;/span&gt;
+            &lt;span data-bind="visible: !done()" class="label label-important"&gt;In Progress&lt;/span&gt;
+        &lt;/td&gt;
+        &lt;td&gt;&lt;p&gt;&lt;b data-bind="text: title"&gt;&lt;/b&gt;&lt;/p&gt;&lt;p data-bind="text: description"&gt;&lt;/p&gt;&lt;/td&gt;
+        &lt;td&gt;
+            &lt;button data-bind="click: $parent.beginEdit" class="btn"&gt;Edit&lt;/button&gt;
+            &lt;button data-bind="click: $parent.remove" class="btn"&gt;Delete&lt;/button&gt;
+            &lt;span data-bind="visible: done"&gt;
+                &lt;button data-bind="click: $parent.markInProgress" class="btn"&gt;Mark In Progress&lt;/button&gt;
+            &lt;/span&gt;
+            &lt;span data-bind="visible: !done()"&gt;
+                &lt;button data-bind="click: $parent.markDone" class="btn"&gt;Mark Done&lt;/button&gt;
+            &lt;/span&gt;
+        &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;!-- /ko --&gt;
+&lt;/table&gt;
+&lt;button data-bind="click: beginAdd" class="btn"&gt;Add Task&lt;/button&gt;
+</code></pre>
+<p>The <code>ko foreach: tasks</code> directive is inside an HTML comment to avoid making the HTML document illegal. Even as a comment, Knockout will recognize it and interpret it, causing all the HTML elements that appear after it and until the closing <code>/ko</code> comment to repeat once per item in the <code>tasks</code> collection (that we haven't defined yet).</p>
+<p>Note that the HTML element that will display the task title got a <code>data-bind="text: title"</code> attribute added. This directive tells Knockout to <em>bind</em> the <code>title</code> variable to the text of the element. The <code>title</code> variable is obtained from the current context. Since we are inside a <code>foreach</code> loop the context is the current task in the <code>tasks</code> collection.</p>
+<p>Knockout provides binding constructs that can connect to attributes of an element instead of its text. For example, the <code>In progress</code> and <code>Done</code> labels get their <code>visible</code> attribute bound to the <code>done</code> field of the task, so that only the label that reflects the current state of each task is visible while the other one is hidden. The same binding method is used for the buttons that change the task's done state.</p>
+<p>To respond to user input Knockout provides the <code>click</code> binding, which takes a method name. For example, at the very bottom we have the <code>Add Task</code> button, which has a <code>click</code> binding to method <code>beginAdd</code>. Like variables, methods are searched in the current context. The button is outside the <code>foreach</code> loop, so it is in the global context, which as we will see soon is the ViewModel instance that controls the element.</p>
+<p>The buttons that are inside the <code>foreach</code> are more tricky, because the context at the level is each task in the <code>tasks</code> collection. We could add methods to the task objects, but that is a complication since task objects will be returned by the REST server. Instead, we use the <code>$parent</code> prefix to indicate that the parent context should be used.</p>
+<p>With the above changes our page is depending on a few things that don't exist yet:</p>
+<ul>
+<li>a <code>tasks</code> collection that has all the tasks to display, each with fields called <code>title</code>, <code>description</code>, and <code>done</code>.</li>
+<li>a method called <code>beginEdit</code> that opens a dialog box to edit the selected task.</li>
+<li>a method called <code>remove</code> that deletes the selected task.</li>
+<li>a method called <code>markDone</code> that changes that done state of the selected task to <code>true</code>.</li>
+<li>a method called <code>markInProgress</code> that changes that done state of the selected task to <code>false</code>.</li>
+<li>a method called <code>beginAdd</code> that opens a dialog box to enter a new task.</li>
+</ul>
+<h2>Two-way data binding from the Javascript side</h2>
+<p>Knockout uses the MVVM pattern. So far we have worked on the V part, which is the View. The M (Model) will come as JSON data delivered by the REST server. The last component of the triangle is the VM, or ViewModel. This is a Javascript object that will hold the bindings between the models and the views, and will also include the event handlers for user generated actions.</p>
+<p>Let's write a mock ViewModel that can interact with our view. This code will be inserted at the bottom of the page, in the <code>&lt;script&gt;</code> area:</p>
+<pre><code>    function TasksViewModel() {
+        var self = this;
+        self.tasks = ko.observableArray();
+
+        self.tasks([
+            {
+                title: ko.observable('title #1'),
+                description: ko.observable('description #1'),
+                done: ko.observable(false)
+            },
+            {
+                title: ko.observable('title #2'),
+                description: ko.observable('description #2'),
+                done: ko.observable(true)
+            }
+        ]);
+
+        self.beginAdd = function() {
+            alert("Add");
+        }
+        self.beginEdit = function(task) {
+            alert("Edit: " + task.title());
+        }
+        self.remove = function(task) {
+            alert("Remove: " + task.title());
+        }
+        self.markInProgress = function(task) {
+            task.done(false);
+        }
+        self.markDone = function(task) {
+            task.done(true);
+        }
+    }
+    ko.applyBindings(new TasksViewModel(), $('#main')[0]);
+</code></pre>
+<p>The <code>var self = this;</code> idiom the begins this function is common in Javascript functions that have callback functions, as it saves the original value of <code>this</code> so that the callbacks, which may have a different <code>this</code>, can use it.</p>
+<p>The <code>ko.observableArray()</code> and <code>ko.observable()</code> are the magic that makes Knockout incredibly easy to use. Observables are special Javascript objects that connect a value from a Model to one or more <code>data-bind</code> attributes that refer to it in the View. Once the connection is established any changes to the value will automatically update the view, and any changes to the view will automatically update the value.</p>
+<p>Knockout provides the <code>ko.observable()</code> object for single values and the <code>ko.observableArray()</code> for a collection of values. The array version is particularly interesting, because adding or removing array elements will also automatically update what appears in a <code>ko.foreach</code> section.</p>
+<p>Something to keep in mind when working with observables is that they look like regular variables, but they are objects. One can be tempted to write this type of code to update an observable:</p>
+<pre><code>var myValue = ko.observable(5);
+alert(myValue); // this does not work
+myValue = 6; // this does not work
+</code></pre>
+<p>At first sight this appears to create an observable with the value 5, display the value in an alert window and then update it to 6. In reality, the alert will print an obscure string that represents the observable object itself, and the assignment will just replace the observable object with a regular value of 6. The correct way to access and modify and observable is to invoke it as a function:</p>
+<pre><code>var myValue = ko.observable(5);
+alert(myValue()); // display value
+myValue(6); // update value to 6
+</code></pre>
+<p>This is even more error prone on observable arrays, where the function call parenthesis sometimes have to be inserted before the square brackets:</p>
+<pre><code>var myArray = ko.observableArray([1, 2, 3]);
+alert(myArray()[1]); // show second element
+</code></pre>
+<p>For our <code>TasksViewModel</code> object we have defined an observable array called <code>tasks</code> that will get connected to the <code>ko.foreach: tasks</code> that we have in our view.</p>
+<p>We initialize our tasks collection with a mock Model that includes two task objects, each having observables for its properties, so that there are also automatic updates for the <code>data-bind</code> attributes that point to the fields of each task.</p>
+<p>We then define the event handlers that will respond to click events. For now the <code>beginAdd</code>, <code>beginEdit</code> and <code>remove</code> just show an alert dialog. Note that Knockout sends the task object for the events that were generated from inside the <code>ko.foreach</code>.</p>
+<p>The last two events are interesting, because instead of just alerting we are actually modifying our model. Since the <code>task.done</code> field is an observable the simple act of changing the value will trigger updates to the appropriate parts of the web page.</p>
+<p>The last statement in the example calls <code>ko.applyBindings</code> to activate the ViewModel. The first argument is the created ViewModel object and the second argument is the root element in the HTML document to associate with it.</p>
+<p>Download the project at this stage: <a href="https://codeload.github.com/miguelgrinberg/REST-tutorial/zip/v0.4"><strong>zip</strong></a> | <a href="https://github.com/miguelgrinberg/REST-tutorial/tree/v0.4"><strong>github</strong></a></p>
+<p>This is, again, a good time to check how the application is progressing. Go ahead and start the Python server and then open <code>http://localhost:5000/index.html</code> in your browser to see Knockout in action. You will see that the two example tasks in our Model were automagically rendered to the page, and that all the buttons are active. In particular try the "Mark Done" and "Mark In Progress" buttons, to see how simple it is to update the page when data changes.</p>
+<h2>Connecting to the REST server</h2>
+<p>Now that we have the client rendering a mock model we are ready to switch to the real thing.</p>
+<p>To make an HTTP request to our server we will use jQuery's <code>$.ajax()</code> function. Here is a second version of our <code>TasksViewModel</code>, modified to send a request to the server for the list of tasks:</p>
+<pre><code>    function TasksViewModel() {
+        var self = this;
+        self.tasksURI = 'http://localhost:5000/todo/api/v1.0/tasks';
+        self.username = "miguel";
+        self.password = "python";
+        self.tasks = ko.observableArray();
+
+        self.ajax = function(uri, method, data) {
+            var request = {
+                url: uri,
+                type: method,
+                contentType: "application/json",
+                accepts: "application/json",
+                cache: false,
+                dataType: 'json',
+                data: JSON.stringify(data),
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Authorization", 
+                        "Basic " + btoa(self.username + ":" + self.password));
+                },
+                error: function(jqXHR) {
+                    console.log("ajax error " + jqXHR.status);
+                }
+            };
+            return $.ajax(request);
+        }
+
+        self.beginAdd = function() {
+            alert("Add");
+        }
+        self.beginEdit = function(task) {
+            alert("Edit: " + task.title());
+        }
+        self.remove = function(task) {
+            alert("Remove: " + task.title());
+        }
+        self.markInProgress = function(task) {
+            task.done(false);
+        }
+        self.markDone = function(task) {
+            task.done(true);
+        }
+
+        self.ajax(self.tasksURI, 'GET').done(function(data) {
+            for (var i = 0; i &lt; data.tasks.length; i++) {
+                self.tasks.push({
+                    uri: ko.observable(data.tasks[i].uri),
+                    title: ko.observable(data.tasks[i].title),
+                    description: ko.observable(data.tasks[i].description),
+                    done: ko.observable(data.tasks[i].done)
+                });
+            }
+        });
+    }
+    ko.applyBindings(new TasksViewModel(), $('#main')[0]);
+</code></pre>
+<p>Let's go over the changes from top to bottom.</p>
+<p>At the top of the <code>TasksViewModel</code> class we define a few new member variables. We will use <code>tasksURI</code> as our root URI to access the REST server. If you recall, this is the URI that when queried with the <code>GET</code> HTTP method returns the list of tasks. We also have two variables that record the login information, which for now we are setting to values that are known to work (we will improve on this later).</p>
+<p>The <code>tasks</code> observable array is still there, but we do not initialize it with mock data anymore.</p>
+<p>Then we have a new method, simply called <code>ajax</code>. This is a helper function that wraps jQuery's <code>$.ajax()</code> call and makes it more convenient. The function takes three arguments, the URI to connect to, the HTTP method to use and optionally the data to send in the body of the request. </p>
+<p>Our <code>ajax</code> function doesn't really do much, it just creates a request object and sends it over to <code>$.ajax()</code>. In addition to the data given in the function arguments, the request object include the mime type for the request and the response, it disables caching and sets a couple of mysterious callback functions.</p>
+<p>The first callback function is called <code>beforeSend</code>, and jQuery will invoke it after it has created the <code>jqXHR</code> object that will carry over the request. We need to use this callback to insert the HTTP Basic authentication credentials, because without that the server will not accept our request. For now we just encode the hardcoded username and password. We use the <code>btoa</code> function to encode the credentials in base64 format, as required by the HTTP protocol.</p>
+<p>The second callback function will be invoked by jQuery if the request comes back with an error code. This can happen if the username and/or password are incorrect, for example. In this case we just log the error.</p>
+<p>Our <code>ajax</code> wrapper function returns the return value from <code>$.ajax</code>, which is a <a href="http://en.wikipedia.org/wiki/Promise_(programming)">promise</a> object. A promise acts as a proxy for a result of an asynchronous function. When <code>$.ajax()</code> is invoked a request is sent to the server, but the function returns immediately without waiting for the response. The promise object represents that unknown response.</p>
+<p>The last change is at the bottom of the class definition, where the actual request to the REST server is made. Here is that snippet of code copied again:</p>
+<pre><code>        self.ajax(self.tasksURI, 'GET').done(function(data) {
+            for (var i = 0; i &lt; data.tasks.length; i++) {
+                self.tasks.push({
+                    uri: ko.observable(data.tasks[i].uri),
+                    title: ko.observable(data.tasks[i].title),
+                    description: ko.observable(data.tasks[i].description),
+                    done: ko.observable(data.tasks[i].done)
+                });
+            }
+        });
+</code></pre>
+<p>We call the <code>ajax()</code> wrapper function with the arguments to send a <code>GET</code> request to the server on the main URI. Then on the return promise we call <code>done()</code>. All jQuery promises provide a <code>done</code> method that takes a callback. The callback will be invoked once the asynchronous function associated with the promise ends, with the result of the function passed as an argument.</p>
+<p>Our done callback will receive the response data, which is a JSON object that contains the array of tasks returned by the server. We then take this array and for each element create a similar object to add to our <code>tasks</code> observable array. Note that we can't add the task returned by the server directly because we need some of the fields in the tasks to be observables, so that they update the page automatically when they change.</p>
+<p>Download the project at this stage: <a href="https://codeload.github.com/miguelgrinberg/REST-tutorial/zip/v0.5"><strong>zip</strong></a> | <a href="https://github.com/miguelgrinberg/REST-tutorial/tree/v0.5"><strong>github</strong></a></p>
+<p>If you try the application with these changes you will see the task list from the server rendered in the page.</p>
+<h2>Adding a new task</h2>
+<p>Adding a new task is fun because it requires us to create a dialog box where the user can enter the details.</p>
+<p>The Boostrap documentation provides all the information required to create modal dialog boxes. Below is the code that creates a dialog box with a form inside to enter task information:</p>
+<pre><code>&lt;div id="add" class="modal hide fade" tabindex="=1" role="dialog" aria-labelledby="addDialogLabel" aria-hidden="true"&gt;
+    &lt;div class="modal-header"&gt;
+        &lt;button type="button" class="close" data-dismiss="modal" aria-hidden="true"&gt;×&lt;/button&gt;
+        &lt;h3 id="addDialogLabel"&gt;Add Task&lt;/h3&gt;
+    &lt;/div&gt;
+    &lt;div class="modal-body"&gt;
+        &lt;form class="form-horizontal"&gt;
+            &lt;div class="control-group"&gt;
+                &lt;label class="control-label" for="inputTask"&gt;Task&lt;/label&gt;
+                &lt;div class="controls"&gt;
+                    &lt;input data-bind="value: title" type="text" id="inputTask" placeholder="Task title" style="width: 150px;"&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class="control-group"&gt;
+                &lt;label class="control-label" for="inputDescription"&gt;Description&lt;/label&gt;
+                &lt;div class="controls"&gt;
+                    &lt;input data-bind="value: description" type="text" id="inputDescription" placeholder="Description" style="width: 300px;"&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/form&gt;
+    &lt;/div&gt;
+    &lt;div class="modal-footer"&gt;
+        &lt;button data-bind="click: addTask" class="btn btn-primary"&gt;Add Task&lt;/button&gt;
+        &lt;button class="btn" data-dismiss="modal" aria-hidden="true"&gt;Cancel&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<p>This dialog box will be hidden initially. The code can be inserted anywhere in the page, for example a good place is right after the <code>main</code> div.</p>
+<p>If you look carefully you will see that the <code>&lt;input&gt;</code> elements have <code>data-bind</code> attributes in them that connect to their values. This is so that we can bind variables to them. Likewise, the Add Task button at the bottom is bound to its click event, so that we can act when the user accepts the dialog box.</p>
+<p>According to the Bootstrap documentation to display the dialog box we have to do this:</p>
+<pre><code>$('add').modal('show');
+</code></pre>
+<p>Since we want to display this dialog box when the user clicks the Add Task button we can now replace our alert with the real thing:</p>
+<pre><code>        self.beginAdd = function()
+        {
+            $('#add').modal('show');
+        }
+</code></pre>
+<p>This dialog box is effectively our second View, it is a different entity than our task list. Since this is a different View, we also need a different Model and ViewModel:</p>
+<pre><code>    function TasksViewModel() {
+
+        // ... same contents and before
+
+        self.add = function(task)
+        {
+            self.ajax(self.tasksURI, 'POST', task).done(function(data) {
+                self.tasks.push({
+                    uri: ko.observable(data.task.uri),
+                    title: ko.observable(data.task.title),
+                    description: ko.observable(data.task.description),
+                    done: ko.observable(data.task.done)
+                });
+            });
+        }
+    }
+    function AddTaskViewModel() {
+        var self = this;
+        self.title = ko.observable();
+        self.description = ko.observable();
+
+        self.addTask = function() {
+            $('#add').modal('hide');
+            tasksViewModel.add({
+                title: self.title(),
+                description: self.description()
+            });
+            self.title("");
+            self.description("");
+        }
+    }
+
+    var tasksViewModel = new TasksViewModel();
+    var addTaskViewModel = new AddTaskViewModel();
+    ko.applyBindings(tasksViewModel, $('#main')[0]);
+    ko.applyBindings(addTaskViewModel, $('#add')[0]);
+</code></pre>
+<p>The new <code>AddTaskViewModel</code> is extremely simple. It has two observables, which connect to the two <code>&lt;input&gt;</code> tags in the dialog box. It also has one event handler that connects to the Add Task button.</p>
+<p>When the button is clicked the event handler simply calls the <code>add()</code> method of the <code>tasksViewModel</code>, passing the title and description values for the new task. The function finally resets the values of the two fields, so that the next time the user wants to add a task the fields appear empty again.</p>
+<p>The <code>add()</code> method of <code>tasksViewModel</code> invokes the <code>ajax()</code> function again, but this time it issues a <code>POST</code> request, which according to the REST standard practices corresponds to a request to add a new resource. The response from the request will be the added task, so when our <code>done()</code> callback is invoked we just push a new task into our <code>tasks</code> array. Due to the data binding that exists between the array and the <code>ko.foreach</code> in the HTML portion of the document as soon as we add an element to the array that element is rendered to the page.</p>
+<p>The changes to edit an existing tasks are a bit more complex, but are largely similar.</p>
+<p>A new dialog box is added to the document (we cannot use the same as the Add Task dialog because for editing we have the "done" checkbox that we don't have when adding a task).</p>
+<p>We also have to add a new ViewModel:</p>
+<pre><code>    function EditTaskViewModel() {
+        var self = this;
+        self.title = ko.observable();
+        self.description = ko.observable();
+        self.done = ko.observable();
+
+        self.setTask = function(task) {
+            self.task = task;
+            self.title(task.title());
+            self.description(task.description());
+            self.done(task.done());
+            $('edit').modal('show');
+        }
+        self.editTask = function() {
+            $('#edit').modal('hide');
+            tasksViewModel.edit(self.task, {
+                title: self.title(),
+                description: self.description() ,
+                done: self.done()
+            });
+        }
+    }
+</code></pre>
+<p>And here are the new and updated methods in the <code>TasksViewModel</code> class to support task editing:</p>
+<pre><code>        self.beginEdit = function(task) {
+            editTaskViewModel.setTask(task);
+            $('#edit').modal('show');
+        }
+        self.edit = function(task, data) {
+            self.ajax(task.uri(), 'PUT', data).done(function(res) {
+                self.updateTask(task, res.task);
+            });
+        }
+        self.updateTask = function(task, newTask) {
+            var i = self.tasks.indexOf(task);
+            self.tasks()[i].uri(newTask.uri);
+            self.tasks()[i].title(newTask.title);
+            self.tasks()[i].description(newTask.description);
+            self.tasks()[i].done(newTask.done);
+        }
+</code></pre>
+<p>The additional complication with the edit dialog box is that prior to showing it we have to fill out the form fields with the current data for the selected task. This is done in the <code>setTask()</code> method of the <code>EditTaskViewModel</code> class.</p>
+<p>Once the dialog box is accepted the handler in the <code>EditTaskViewModel</code> class calls the <code>edit()</code> method of the <code>TasksViewModel</code>, which sends a <code>PUT</code> request into the server to update the task. Note how the URI for this request comes from the task itself, since each task has a unique URI. Finally, the callback for the ajax request calls a new helper functon <code>updateTask()</code> to refresh the observables associated with the task that was edited.</p>
+<p>Another method that we can complete is the one that deletes a task. This one is easy, as it does not require any HTML changes to the document:</p>
+<pre><code>        self.remove = function(task) {
+            self.ajax(task.uri(), 'DELETE').done(function() {
+                self.tasks.remove(task);
+            });
+        }
+</code></pre>
+<p>And even though the "Mark Done" and "Mark In Progress" buttons appear to work, they aren't really working, all they are doing right now is change the model, but they do not communicate these changes to the server. Here are the updated versions that talk to the server:</p>
+<pre><code>        self.markInProgress = function(task) {
+            self.ajax(task.uri(), 'PUT', { done: false }).done(function(res) {
+                self.updateTask(task, res.task);
+            });
+        }
+        self.markDone = function(task) {
+            self.ajax(task.uri(), 'PUT', { done: true }).done(function(res) {
+                self.updateTask(task, res.task);
+            });
+        }
+</code></pre>
+<p>Download the project at this stage: <a href="https://codeload.github.com/miguelgrinberg/REST-tutorial/zip/v0.6"><strong>zip</strong></a> | <a href="https://github.com/miguelgrinberg/REST-tutorial/tree/v0.6"><strong>github</strong></a></p>
+<p>The client application is nearing completion now. You can take a break and spend some time playing with the different options, since all of them are working now.</p>
+<h2>Authentication</h2>
+<p>And we now arrive to our final battle. Up to now the authentication credentials that we were sending to the REST server are hardcoded into the client application. We happen to know that these work, but in a real life situation we have to prompt the user to provide his own credentials.</p>
+<p>Let's start by removing the hardcoded credentials:</p>
+<pre><code>        self.username = "";
+        self.password = "";
+</code></pre>
+<p>We will also have to add a login dialog box, which I'm not going to show here since it is similar to the previous dialog boxes we created.</p>
+<p>We need a ViewModel for our dialog box:</p>
+<pre><code>    function LoginViewModel() {
+        var self = this;
+        self.username = ko.observable();
+        self.password = ko.observable();
+
+        self.login = function() {
+            $('#login').modal('hide');
+            tasksViewModel.login(self.username(), self.password());
+        }
+    }
+</code></pre>
+<p>And finally we need to add a few support methods to our <code>TasksViewModel</code> class:</p>
+<pre><code>    function TasksViewModel() {
+
+        // ...  no changes here
+
+        self.beginLogin = function() {
+            $('#login').modal('show');
+        }
+        self.login = function(username, password) {
+            self.username = username;
+            self.password = password;
+            self.ajax(self.tasksURI, 'GET').done(function(data) {
+                for (var i = 0; i &lt; data.tasks.length; i++) {
+                    self.tasks.push({
+                        uri: ko.observable(data.tasks[i].uri),
+                        title: ko.observable(data.tasks[i].title),
+                        description: ko.observable(data.tasks[i].description),
+                        done: ko.observable(data.tasks[i].done)
+                    });
+                }
+            }).fail(function(jqXHR) {
+                if (jqXHR.status == 403)
+                    setTimeout(self.beginLogin, 500);
+            });
+        }
+
+        self.beginLogin();
+    }
+</code></pre>
+<p>Let's see how this works. At the bottom of <code>TasksViewModel</code> we had the code that issued the request to get the task list. We now replaced that with a call to <code>beginLogin()</code> which starts the login process by displaying the login dialog box.</p>
+<p>When the user accepts the dialog box method <code>login()</code> will be called, with the entered credentials. Only now we are ready to talk to the server, so we issue the request for the task list after we update our login variables. If the request succeeds then we populate our <code>tasks</code> array as we did before. </p>
+<p>If the request fails we now have a second callback attached to the ajax request promise. The <code>fail</code> callback in a promise executes if the asynchronous function returns an error. What we do in this case is check the error code from the ajax request object and if found to be 403 we just call <code>beginLogin()</code> again to ask for new credentials. Note we don't show the dialog immediately, instead we wait 0.5 sec with a timeout. This is just because the dialog box has animated events to appear and disappear, so we need to make sure the "show" animation does not collide with the "hide" animation for the previous dialog instance.</p>
+<p>I just said that login errors return a 403 code. Those that are familiar with HTTP error codes will jump to correct me. Error 403 is the error code for the "Forbidden" error. The correct HTTP code for the "Not Authorized" error is 401. The problem with error code 401 is that browsers display their own login dialog box when they receive this error, even if the error came from an ajax request. We don't want the browser to show its login dialog since we have our own, so we trick the browser by having the server send error 403 instead of 401.</p>
+<p>Download the completed project: <a href="https://codeload.github.com/miguelgrinberg/REST-tutorial/zip/v0.7"><strong>zip</strong></a> | <a href="https://github.com/miguelgrinberg/REST-tutorial/tree/v0.7"><strong>github</strong></a></p>
+<h2>Security</h2>
+<p>If we were to deploy this application on a real web server for real users we have to take some security measures.</p>
+<p>The REST server takes user credentials according to the HTTP Basic Authentication protocol, which sends usernames and passwords in clear text. Of course this is not acceptable, we should not risk leaking confidential information from our users to third parties.</p>
+<p>The proper way to address this problem is by putting the server on secure HTTP, which ensures that communication between client and server is encrypted.</p>
+<p>The recommended way to implement secure HTTP is with a proxy server. Our server remains the same, when it starts it listens, for example, on <code>http://localhost:5000</code>, which is only reachable to other processes in the same machine. Then another web server is installed and configured to listen on the secure HTTP port and do all the proper encryption procedures. This server is then configured to act as a proxy for our server, so to us nothing changes, we just receive requests from the proxy server, which in turn receives requests from the user over an encrypted channel.</p>
+<p>There are other measures to take if we were to deploy this application on a real server, at the very least the Flask development web server should be replaced with a more robust server. I recommend that you see the <a href="the-flask-mega-tutorial-part-xvii-deployment-on-linux-even-on-the-raspberry-pi.html">deployment chapters of my Flask Mega-Tutorial</a> to learn about this topic.</p>
+<h2>Final words</h2>
+<p>Phew! Can you believe we are done?</p>
+<p>The application is now fully functional and exercises all the functions of our REST server. A nice enhancement that I will leave as an exercise for those interested would be to save the login credentials in a browser cookie, so that the user does not need to enter them every time. You get bonus points if you add a "Remember Me" checkbox to the login dialog.</p>
+<p>Writing rich client side applications in Javascript can be fun. Javascript is an interesting language that at first may seem odd to those of us used to more traditional languages, but once you familiarize with it you find it can do many cool things.</p>
+<p>I hope this article and example code along with the previous one serve as a good introduction to the use of REST APIs. If you have any questions or suggestions you are welcome to write below in the comments area.</p>
+<p>Miguel</p></div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/writing-a-javascript-rest-client" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/writing-a-javascript-rest-client" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="writing-a-javascript-rest-client.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/writing-a-javascript-rest-client" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+
+
+<h4 style="text-align: right"><a name="comments"></a>79 comments</h4>
+
+
+<div class="comment">
+    <ul>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/bafafefac4abe76b1218317d841e167bce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#1</span> <span class="label label-primary">Dogukan Tufekci</span> said
+                    <span class="flask-moment" data-timestamp="2013-06-16T11:34:14Z" data-format="fromNow(0)" data-refresh="0">2013-06-16T11:34:14Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Miguel you keep amazing me! Thanks for this timely tutorial upon the mega tutorial.
+I tried to run the server by downloading the zips. However I have an import error:
+ImportError: No module named flask.ext.httpauth
+
+How can I fix this? Thanks again!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#2</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-06-16T16:29:51Z" data-format="fromNow(0)" data-refresh="0">2013-06-16T16:29:51Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Dogukan: You need to install the Flask-HTTPAuth module (which I wrote). You can do so by running &#34;pip install -r requirements.txt&#34;. If that does not work then maybe pip reported an error and couldn&#39;t install the module, check the logs and let me know what the error is in that case.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/bafafefac4abe76b1218317d841e167bce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#3</span> <span class="label label-primary">Dogukan Tufekci</span> said
+                    <span class="flask-moment" data-timestamp="2013-06-17T02:42:31Z" data-format="fromNow(0)" data-refresh="0">2013-06-17T02:42:31Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Miguel here is the solution:
+
+flask/bin/python rest-server.py
+
+I&#39;ve been trying to run it with python rest-server.py as it was instructed by README on github. Thanks for the tutorial, again! </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#4</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-06-17T05:56:55Z" data-format="fromNow(0)" data-refresh="0">2013-06-17T05:56:55Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">My bad. I have updated the instructions on github.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/7c6735ffad8f8f0247caffe8c0a254fbce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#5</span> <span class="label label-primary">Roman</span> said
+                    <span class="flask-moment" data-timestamp="2013-06-18T00:10:36Z" data-format="fromNow(0)" data-refresh="0">2013-06-18T00:10:36Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">also thx for you work </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/df677451754ef3076460392ad33b2a12ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#6</span> <span class="label label-primary">Daniel Gabriele</span> said
+                    <span class="flask-moment" data-timestamp="2013-06-18T03:53:41Z" data-format="fromNow(0)" data-refresh="0">2013-06-18T03:53:41Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">As someone writing a REST API client/server, it&#39;s great to see another&#39;s perspective on design. I thought your approach made a lot of sense and was easy to follow. One thing you might add to the API server tutorial is a mention of batch operations. Gratias tibi.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/ebf51a24a355b8b6d640992e746d5e00ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#7</span> <span class="label label-primary"><a href="http://ro.linkedin.com/in/ciprianamariei">Ciprian Amariei</a></span> said
+                    <span class="flask-moment" data-timestamp="2013-06-18T20:29:11Z" data-format="fromNow(0)" data-refresh="0">2013-06-18T20:29:11Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I would recommend angularjs with it&#39;s services for a REST client in javascript.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#8</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-06-19T02:56:28Z" data-format="fromNow(0)" data-refresh="0">2013-06-19T02:56:28Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Ciprian: Sure, Angular is a valid option. I personally found Knockout + jQuery for the REST calls simpler and equally featured. I plan to re-evaluate Angular when I need to build a big client app.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/e11319caf1b4754f802d6f7127382c6fce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#9</span> <span class="label label-primary">Jesper Puge</span> said
+                    <span class="flask-moment" data-timestamp="2013-06-27T21:22:17Z" data-format="fromNow(0)" data-refresh="0">2013-06-27T21:22:17Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Very well written, I laernes a lot.
+I see how the HTML was your view and you had some models, but how abolut the controller? </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#10</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-06-28T04:08:40Z" data-format="fromNow(0)" data-refresh="0">2013-06-28T04:08:40Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Jesper: The model that Knockout uses is called MVVM, or Model-View-ViewModel. In my example above the Model is represented by the data elements, the View is the HTML template, and the ViewModel is the class that has the data and the callbacks.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/31405a4123a5b5dd4014001c83dce35cce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#11</span> <span class="label label-primary">Maxim Koltsov</span> said
+                    <span class="flask-moment" data-timestamp="2013-07-02T08:45:55Z" data-format="fromNow(0)" data-refresh="0">2013-07-02T08:45:55Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Oh wow, thanks for your wonderful tutorials!
+Do you plan to make tutorial about token-based auth, like OAuth2? I&#39;d like to see, how JS client application deals with getting token from server, refresh tokens, etc...
+Thanks!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#12</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-07-03T04:45:11Z" data-format="fromNow(0)" data-refresh="0">2013-07-03T04:45:11Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Maxim: There isn&#39;t any significant difference in the way the API is coded if you use OAuth. You can run your own oauth provider or you can use a 3rd party one like Facebook, Twitter etc. The login part cannot be done in the REST API because logins with OAuth are interactive, you&#39;ll have to build a small server-side web application that perfoms the login. Once the authentication process succeeded the server can pass a username (or email address) and an access token to the JS client app that identify this user. The token can be the OAuth access token if you want, but it does not really need to be since this token controls access to your own API, not the OAuth provider. In my opinion a randomly generated token (os.urandom() based) is more secure. The token will have an expiration, and will be stored in the user database. Once the client app has the username/email and token it can send requests as explained above, sending the credentials with every request as the HTTP Basic Auth. I hope this helps.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/95a81069ca1dfda61e5021d3d7579d8bce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#13</span> <span class="label label-primary">Michael Fluch</span> said
+                    <span class="flask-moment" data-timestamp="2013-07-03T17:55:59Z" data-format="fromNow(0)" data-refresh="0">2013-07-03T17:55:59Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">excellent tutorial, well preparete and elaborated... learned a lot... thx
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/74ade059ef9d2ed09b777d26c75d8c04ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#14</span> <span class="label label-primary"><a href="http://planetary.net/">Kris Magnusson</a></span> said
+                    <span class="flask-moment" data-timestamp="2013-08-18T20:56:15Z" data-format="fromNow(0)" data-refresh="0">2013-08-18T20:56:15Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel, I like your tutorial. It explained a lot about RESTful programming using Knockout + jQuery that I didn&#39;t know coming from a pure Java world. However, I seem to find myself at philosophical odds with the notion of MVVM instead of MVC. It just seems like a much cleaner division of function to use a model to hold the data, the view to represent the UI elements, and the controller to contain all the logic necessary to do the work. Maybe I&#39;m prejudiced by my Java training, which I learned in 1996, and the Gang of Four Design Patterns book, but this Model-View-ViewModel seems like a hack. Why shouldn&#39;t we strive for a pure MVC architecture instead of the model that Knockout uses? Thanks, Kris</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#15</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-08-19T22:50:06Z" data-format="fromNow(0)" data-refresh="0">2013-08-19T22:50:06Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Kris: Ages ago I used to write Smalltalk, using pure MVC. I do not honestly see much of a difference between MVC, MVP and MVVM, they all share the goal of separating data, presentation and logic. The MVVM model is particularly suited for frameworks that offer two-way data binding, but to me that is just a technicality, call it whatever you want, but the goal is always to have clear separation of concerns, and all the MV* model achieve that.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/46b641602eceab18119be7a6034916c5ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#16</span> <span class="label label-primary">rayan </span> said
+                    <span class="flask-moment" data-timestamp="2013-10-21T16:49:46Z" data-format="fromNow(0)" data-refresh="0">2013-10-21T16:49:46Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I was able to follow the instructions until the conection to server. My server seems to work well. i can use curl with out any issue. but through js, i am not receiving the tasks. no error message or anything. when i send the request my server is showing return code 200
+any thoughts
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#17</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-10-22T01:26:44Z" data-format="fromNow(0)" data-refresh="0">2013-10-22T01:26:44Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@rayan: you need to determine if this is a client or server side problem. Did you check the js console for errors? That may give you some clues.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/dd0703cd50889ed8f48c5efb175061a4ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#18</span> <span class="label label-primary">Al</span> said
+                    <span class="flask-moment" data-timestamp="2013-10-25T17:05:13Z" data-format="fromNow(0)" data-refresh="0">2013-10-25T17:05:13Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">This is very good. Coming from a J2EE environment it helped me understand the AJAX point of you. 
+
+Do you have any recommendations on books that explain the layout of the AJAX items. Like  beforeSend, error, done etc.
+I&#39;d prefer a good book as opposed to just the tutorials and code examples.
+
+Thanks</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#19</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-10-26T04:06:37Z" data-format="fromNow(0)" data-refresh="0">2013-10-26T04:06:37Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Al: I can&#39;t really recommend a &#34;good&#34; book. There are a lot of them, but the technology is still very immature in my opinion. You could look at AngularJS books, since this is one of the leading frameworks. The book by Brad Green is decent. If you want something more lower level then look for Backbone or even lower, jQuery.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/1aeb884f92bd741f7435cb914bc544cbce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#20</span> <span class="label label-primary">Scott Miao</span> said
+                    <span class="flask-moment" data-timestamp="2013-11-02T09:47:38Z" data-format="fromNow(0)" data-refresh="0">2013-11-02T09:47:38Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">http://127.0.0.1:5000 is not allowed by Access-Control-Allow-Origin</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#21</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-11-03T01:25:28Z" data-format="fromNow(0)" data-refresh="0">2013-11-03T01:25:28Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Scott: you need to open the html page through http://localhost:5000, so that both the page and the REST server are on the same host and port.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/db143d271bdc6855ea2e9d84586c16b6ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#22</span> <span class="label label-primary">Roi Kliper</span> said
+                    <span class="flask-moment" data-timestamp="2013-11-04T17:05:38Z" data-format="fromNow(0)" data-refresh="0">2013-11-04T17:05:38Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel, I followed your tutorial which was brilliant.
+I have how ever encountered a bug which I think touched a fundamental point in understanding the flask framework. You seem to store the current_user inside g it seem that sometimes the g persists across different users and so one user can end up logged in and generate content as a different user. I&#39;d be happy to discuss and replicate the issue.
+
+Cheers,
+Roi 
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#23</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-11-05T05:15:34Z" data-format="fromNow(0)" data-refresh="0">2013-11-05T05:15:34Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Roi: can you give me an example? The &#34;g&#34; object is not a global variable, each thread gets its own version. So unless you&#39;ve found a bug what you describe is not possible.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/4557df8d340fa6d395eba453b4083051ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#24</span> <span class="label label-primary"><a href="http://netz-mafia.de/">Zulu</a></span> said
+                    <span class="flask-moment" data-timestamp="2013-11-05T09:45:36Z" data-format="fromNow(0)" data-refresh="0">2013-11-05T09:45:36Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Scott Miao: You have to change &#34;localhost&#34; to &#34;127.0.0.1&#34; in index.html:125</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/ec25dfd824df1b44cd4115801bc541e0ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#25</span> <span class="label label-primary">ousmane SENE</span> said
+                    <span class="flask-moment" data-timestamp="2013-11-28T11:15:54Z" data-format="fromNow(0)" data-refresh="0">2013-11-28T11:15:54Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Thanks for this tutorial.</p>
+                </div>
+            </div>
+        </li>
+        
+    </ul>
+</div>
+
+<div class="page">
+<ul class="pager">
+  <li class="previous disabled">
+    <a href="#">&laquo;&laquo;</a>
+  </li>
+  <li class="previous disabled">
+    <a href="#">&laquo;</a>
+  </li>
+  <li class="next">
+    <a href="writing-a-javascript-rest-client/page/0.html#comments">&raquo;&raquo;</a>
+  </li>
+  <li class="next">
+    <a href="writing-a-javascript-rest-client/page/2.html#comments">&raquo;</a>
+  </li>
+</ul>
+</div>
+
+<h3><a name="commentform"></a>Leave a Comment</h3>
+
+<form action="#commentform" method="post"
+  class="form" role="form">
+  <div style="display:none;"><input id="csrf_token" name="csrf_token" type="hidden" value="1439536764.12##82b920715b7f0d8d05c3e4b9cb29f20518593ccf"></div>
+  
+    
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="name">Name</label>
+        <input class="form-control" id="name" name="name" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="url">URL</label>
+        <input class="form-control" id="url" name="url" type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="email">Email</label>
+        <input class="form-control" id="email" name="email" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="comment">Comment</label>
+        <textarea class="form-control" id="comment" name="comment" required></textarea>
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="captcha">Captcha</label>
+        
+<script type="text/javascript">var RecaptchaOptions = {"custom_translations": {"audio_challenge": "Get an audio challenge", "cant_hear_this": "Download sound as MP3", "help_btn": "Help", "image_alt_text": "reCAPTCHA challenge image", "incorrect_try_again": "Incorrect. Try again.", "instructions_audio": "Type what you hear", "instructions_visual": "Type the text", "play_again": "Play sound again", "privacy_and_terms": "Privacy & Terms", "refresh_btn": "Get a new challenge", "visual_challenge": "Get a visual challenge"}, "theme": "white"};</script>
+<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S"></script>
+<noscript>
+  <iframe src="http://www.google.com/recaptcha/api/noscript?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S" height="300" width="500" frameborder="0"></iframe><br>
+  <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+  <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
+</noscript>
+
+  </div>
+
+
+    
+
+
+
+
+
+  
+
+
+    <input class="btn btn-default" id="submit" name="submit" type="submit" value="Submit">
+  
+
+
+
+
+
+</form>
+
+
+</div>
+
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <p class="elapsed">This page was generated in None seconds.</p>
+            <p>&copy; 2014 by Miguel Grinberg. All rights reserved. <a href="mailto:webmaster _at_ miguelgrinberg _dot_ com">Questions?</a></p>
+        </div>
+    </div>
+
+
+    
+    
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.33/jquery.colorbox-min.js"></script>
+    <script type="text/javascript" src="../static/prettify.js"></script>
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment-with-langs.min.js"></script>
+<script>
+function flask_moment_render(elem) {
+    $(elem).text(eval('moment("' + $(elem).data('timestamp') + '").' + $(elem).data('format') + ';'));
+    $(elem).removeClass('flask-moment');
+}
+function flask_moment_render_all() {
+    $('.flask-moment').each(function() {
+        flask_moment_render(this);
+        if ($(this).data('refresh')) {
+            (function(elem, interval) { setInterval(function() { flask_moment_render(elem) }, interval); })(this, $(this).data('refresh'));
+        }
+    })
+}
+$(document).ready(function() {
+    flask_moment_render_all();
+});
+</script>
+    
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4777284-15']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".gallery").colorbox({rel:".gallery",maxWidth:"95%",maxHeight:"95%",scalePhotos:true});
+            // add prettyprint class to all <pre><code></code></pre> blocks
+            var prettify = false;
+            $("pre code").parent().each(function() {
+                $(this).addClass('prettyprint');
+                prettify = true;
+            });
+            prettyPrint();
+        });
+    </script>
+
+
+  </body>
+
+<!-- Mirrored from blog.miguelgrinberg.com/post/writing-a-javascript-rest-client by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:46:29 GMT -->
+</html>

@@ -1,0 +1,1089 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from www.python-course.eu/python3_multiple_inheritance.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:09:57 GMT -->
+<head>
+
+<!-- Dieses Tag in den Head-Bereich oder direkt vor dem schlieÃŸenden Body-Tag einfÃ¼gen -->
+<script type="text/javascript" src="../apis.google.com/js/plusone.js"></script>
+
+
+
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "../connect.facebook.net/en_GB/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script><title>Python3 Tutorial: Multiple Inheritance</title>
+<meta http-equiv="content-type" content="text/html; charset="ISO-8859-1">
+<meta name="Description" content="Object-Oriented Programming in Python: Covering Multiple inheritance, the 
+diamond problem, MRO and polymorphism in Python''" />
+<meta name="Keywords" content="Python, Python3, course, inheritance, 
+multiple inheritance, Diamond Problem, polymorphism, mro, method resolution order" />
+
+<link href="favicon.ico" rel="shortcut icon">
+
+<link href="moderna.css" rel="stylesheet" type="text/css" />
+<link href="moderna_print.css" media="print" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+<div id="container">
+
+<div id="banner">
+<!-- <a href="impressum.php">Impressum</a> | <a href="mailto:">contact</a> | --><h1>Python Course</h1>
+
+</div>
+
+	<!-- Begin Top Menu -->
+<ul id="navlist">
+<li><a href="index-2.html" >Home</a></li><li><a href="course.html" >Python 2 Tutorial</a></li><li class="active"><a id="current" href="python3_course.html" >Python 3 Tutorial</a></li><li><a href="advanced_topics.html" >Advanced Topics</a></li><li><a href="python_books.html" >Python Books</a></li><li><a href="python_tkinter.html" >Tkinter Tutorial</a></li><li><a href="contact.html" rel="nofollow">Contact</a></li>                          
+</ul>
+	<!-- End Top Menu -->
+<div id="sidebar-a">
+<img class="border" src="images/logo100.png" alt="box" />    <h2>Python 3 Tutorial</h2>
+
+<div class="menu">
+
+<ul>
+<li><a href="python3_history_and_philosophy.html">The Origins of Python</a></li><li><a href="python3_interactive.html">Starting with Python: The Interactive Shell</a></li><li><a href="python3_execute_script.html">Executing a Script</a></li><li><a href="python3_blocks.html">Indentation</a></li><li><a href="python3_variables.html">Data Types and Variables</a></li><li><a href="python3_operators.html">Operators</a></li><li><a href="python3_sequential_data_types.html">Sequential Data Types: Lists and Strings</a></li><li><a href="python3_deep_copy.html">Shallow and Deep Copy</a></li><li><a href="python3_dictionaries.html">Dictionaries</a></li><li><a href="python3_sets_frozensets.html">Sets and Frozen Sets</a></li><li><a href="python3_input.html">input via the keyboard</a></li><li><a href="python3_conditional_statements.html">Conditional Statements</a></li><li><a href="python3_loops.html">Loops, while Loop</a></li><li><a href="python3_for_loop.html">For Loops</a></li><li><a href="python3_print.html">Output with Print</a></li><li><a href="python3_formatted_output.html">Formatted output with string modulo and the format method</a></li><li><a href="python3_functions.html">Functions</a></li><li><a href="python3_recursive_functions.html">Recursion and Recursive Functions</a></li><li><a href="python3_tests.html">Tests, DocTests, UnitTests</a></li><li><a href="python3_memoization.html">Memoization and Decorators</a></li><li><a href="python3_passing_arguments.html">Parameter Passing in Functions</a></li><li><a href="python3_namespaces.html">Namespaces</a></li><li><a href="python3_global_vs_local_variables.html">Global and Local Variables</a></li><li><a href="python3_file_management.html">Read and Write Files</a></li><li><a href="python3_modules_and_modular_programming.html">Modular Programming and Modules</a></li><li><a href="python3_re.html">Regular Expressions</a></li><li><a href="python3_re_advanced.html">Regular Expressions, Advanced</a></li><li><a href="python3_lambda.html">Lambda Operator, Filter, Reduce and Map</a></li><li><a href="python3_list_comprehension.html">List Comprehension</a></li><li><a href="python3_generators.html">Iterators and Generators</a></li><li><a href="python3_exception_handling.html">Exception Handling</a></li><li><a href="python3_object_oriented_programming.html">Object Oriented Programming</a></li><li><a href="python3_class_and_instance_attributes.html">Class and Instance Attributes</a></li><li><a href="python3_properties.html">Properties vs. getters and setters</a></li><li><a href="python3_inheritance.html">Inheritance</a></li><li><a href="python3_multiple_inheritance.html">Multiple Inheritance</a></li><li><a href="python3_magic_methods.html">Magic Methods and Operator Overloading</a></li><li><a href="python3_inheritance_example.html">OOP, Inheritance Example</a></li></ul>
+
+</div>
+
+<p>
+<hr>
+
+
+<h3>Object-oriented Programming</h3>
+"Certainly not every good program is object-oriented, and not every object-oriented program is good."
+<br>
+(Bjarne Stroustrup, Danish computer scientist, best known for the creation and the development 
+of the widely used C++ programming language.)
+<br><br>
+"Object-oriented programming is an exceptionally bad idea which could only have originated in California."
+<br>
+(Edsger Dijkstra, (Dutch computer Scientist, 1930-2002)
+<br><br>
+Dijkstra also said: 
+<br>
+<i>"... what society over&shy;whel&shy;mingly asks for is snake oil. Of course, 
+the snake oil has the most impressive names - otherwise you would be selling nothing - like 
+"Structured Analysis and Design", "Software Engineering", "Maturity Models", "Management 
+Information Systems", "Integrated Project Support Environments" "Object Orientation" and "Business
+ Process Re-engineering"
+</i>
+<br><br>
+
+<h3>Japanese Food and OOP</h3>
+<i>
+"And in conclusion: I really like Japanese food and object-oriented programming -- 
+but if these were all there were to fine food and proper programming, I'd give it all 
+up and go flip burgers. ", Sean M. Burke
+</i>
+
+
+<hr>
+<br>
+This website is supported by:<br>
+<a href="http://www.bodenseo.com/courses.php"><img style="width: 150px;" alt="Bodenseo,
+Linux, courses and seminars"
+		     src="images/bodenseo_python_training.gif"><br>Linux and Python Courses and Seminars</a>
+<br>
+<hr>
+</div><div id="sidebar-b"><img style="width: 150px;" alt="Python-Logo"
+		     src="images/python-logo.png"><!-- Dieses Tag dort einfügen, wo die +1-Schaltfläche dargestellt werden soll -->
+<g:plusone></g:plusone>
+<br><br>
+
+<div class="fb-like" data-href="www.python-course.eu" data-send="false" data-layout="button_count" 
+data-width="130" data-show-faces="true" data-action="recommend"></div>
+
+<br><br>
+This topic in German / Deutsche Übersetzung:
+    <a href="http://www.python-kurs.eu/python3_mehrfachvererbung.php">Mehrfachvererbung</a><p>
+<h3>Classroom Training Courses</h3>
+The goal of this website is to provide educational material, 
+allowing you to learn Python on your own.
+Nevertheless, it is faster and more efficient to attend a "real" 
+Python course in a classroom, with
+an experienced trainer. So why not attend one of the live 
+<a href="python_classes.html">Python courses</a> in Paris, London, Berlin, Munich
+or Lake Constance by Bernd Klein, the author of this tutorial?
+<br><br>
+You can also check the   
+<a href="http://www.bodenseo.com/courses.php?topic=Python">Python Training courses
+<img style="width: 150px;" alt="Bodenseo Kurse in Python"
+		     src="images/bodenseo_stairs_to_python.png"></a>
+		     delivered by Bodenseo and Bernd Klein.
+<br><br>
+You can book on-site classes at your company or organization, e.g. in England, Switzerland, Austria, Germany,
+France, Belgium, the Netherlands, Luxembourg, Poland, UK, Italy and other locations in Europe.
+<br><br>
+
+ </p>
+
+
+
+
+    
+</p></div>
+<div id="content">
+
+<div id="contextlinks">Previous Chapter: <a href="python3_inheritance.html">Inheritance</a><br>
+<LINK rel="prev" href="python3_inheritance.html">Next Chapter: <a href="python3_magic_methods.html">Magic Methods and Operator Overloading</a><br>
+<LINK rel="next" href="python3_magic_methods.html"></div>
+<br>
+<h2>Multiple Inheritance</h2>
+
+<h3>Introduction</h3>
+
+<img  class="imgright" width=200 src="images/diamond.png" alt="Diamond Problem" />
+
+In the previous chapter of our tutorial, we have covered inheritance, or more specific
+"single inheritance". As we have seen, a class inherits in this case from one class.
+Multiple inheritance on the other hand is a feature in which a class can inherit 
+attributes and methods from more than one parent parent class. 
+The critics point out that multiple inheritance comes along with a high level of 
+complexity and ambiguity in situations such as the diamond problem. We will address
+this problem later in this chapter.
+<br><br>
+The widespread prejudice that multiple inheritance is something "dangerous" or "bad" is
+mostly nourished by programming languages with poorly implemented multiple inheritance
+mechanisms and above all by improper usage of it. Java doesn't even 
+support multiple inheritance, while C++ supports it. Python has a sophisticated and 
+well-designed approach to multiple inheritance. 
+
+
+
+<br><br>
+A class definition, where a child class SubClassName inherits from the parent classes
+BaseClass1, BaseClass2, BaseClass3, and so on, looks like this:
+<br><br>
+<pre>
+class SubclassName(BaseClass1, BaseClass2, BaseClass3, ...):
+    pass
+
+</pre>
+<br><br>
+
+It's clear that all the superclasses BaseClass1, BaseClass2, BaseClass3, ... can inherit
+from other superclasses as well. What we get is an inheritance tree.
+
+
+<br><br>
+<img width=500 src="images/multiple_inheritance.png" alt="Multiple Inheritance Tree" />
+
+<br><br>
+
+<h3>Example: CalendarClock</h3>
+
+We want to introduce the principles of multiple inheritance with an example.
+For this purpose, we will implement to independent classes: a "Clock" and a
+"Calendar" class. After this, we will introduce a class "CalendarClock", which is,
+as the name implies, a combination of "Clock" and "Calendar". CalendarClock 
+inherits both from "Clock" and "Calendar".
+
+<br><br>
+<img width=500 src="images/clock_calendar.png" alt="CalendarClock" />
+<br><br>
+
+The class Clock simulates the tick-tack of a clock. An instance of this class
+contains the time, which is stored in the attributes self.hours, self.minutes 
+and self.seconds. Principally, we could have written the __init__ method and 
+the set method like this:
+<br><br>
+<pre>
+    def __init__(self,hours=0, minutes=0, seconds=0):
+        self._hours = hours
+        self.__minutes = minutes
+        self.__seconds = seconds
+
+    def set(self,hours, minutes, seconds=0):
+        self._hours = hours
+        self.__minutes = minutes
+        self.__seconds = seconds
+</pre>
+<br>
+
+We decided against this implementation, because we added additional code for checking 
+the plausibility of the time data into the set method. We call the set method from the 
+__init__ method as well, because we want to circumvent redundant code.
+
+<br>
+The complete Clock class:
+<br><br>
+<pre>
+""" 
+The class Clock is used to simulate a clock.
+"""
+
+class Clock(object):
+
+    def __init__(self, hours, minutes, seconds):
+        """
+        The paramaters hours, minutes and seconds have to be 
+        integers and must satisfy the following equations:
+        0 <= h < 24
+        0 <= m < 60
+        0 <= s < 60
+        """
+
+        self.set_Clock(hours, minutes, seconds)
+
+    def set_Clock(self, hours, minutes, seconds):
+        """
+        The paramaters hours, minutes and seconds have to be 
+        integers and must satisfy the following equations:
+        0 <= h < 24
+        0 <= m < 60
+        0 <= s < 60
+        """
+
+        if type(hours) == int and 0 <= hours and hours < 24:
+            self._hours = hours
+        else:
+            raise TypeError("Hours have to be integers between 0 and 23!")
+        if type(minutes) == int and 0 <= minutes and minutes < 60:
+            self.__minutes = minutes 
+        else:
+            raise TypeError("Minutes have to be integers between 0 and 59!")
+        if type(seconds) == int and 0 <= seconds and seconds < 60:
+            self.__seconds = seconds
+        else:
+            raise TypeError("Seconds have to be integers between 0 and 59!")
+
+    def __str__(self):
+        return "{0:02d}:{1:02d}:{2:02d}".format(self._hours,
+                                                self.__minutes,
+                                                self.__seconds)
+
+    def tick(self):
+        """
+        This method lets the clock "tick", this means that the 
+        internal time will be advanced by one second.
+
+        Examples:
+        >>> x = Clock(12,59,59)
+        >>> print(x)
+        12:59:59
+        >>> x.tick()
+        >>> print(x)
+        13:00:00
+        >>> x.tick()
+        >>> print(x)
+        13:00:01
+        """
+
+        if self.__seconds == 59:
+            self.__seconds = 0
+            if self.__minutes == 59:
+                self.__minutes = 0
+                if self._hours == 23:
+                    self._hours = 0
+                else:
+                    self._hours += 1
+            else:
+                self.__minutes += 1
+        else:
+            self.__seconds += 1
+
+
+if __name__ == "__main__":
+    x = Clock(23,59,59)
+    print(x)
+    x.tick()
+    print(x)
+    y = str(x)
+    print(type(y))
+</pre>
+
+
+<br><br>
+If you call this module standalone, you get the following output:
+<br><br>
+<pre>
+$ python3 clock.py 
+23:59:59
+00:00:00
+&lt;class 'str'&gt;
+</pre>
+<br>
+Let's check our exception handling by inputting floats and strings as input. We also check, 
+what happens, if we exceed the limits of the expected values: 
+<br><br>
+<pre>
+>>> from clock import Clock
+>>> x = Clock(7.7,45,17)
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+  File "clock.py", line 16, in __init__
+    self.set_Clock(hours, minutes, seconds)
+  File "clock.py", line 30, in set_Clock
+    raise TypeError("Hours have to be integers between 0 and 23!")
+TypeError: Hours have to be integers between 0 and 23!
+>>> x = Clock(24,45,17)
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+  File "clock.py", line 16, in __init__
+    self.set_Clock(hours, minutes, seconds)
+  File "clock.py", line 30, in set_Clock
+    raise TypeError("Hours have to be integers between 0 and 23!")
+TypeError: Hours have to be integers between 0 and 23!
+>>> x = Clock(23,60,17)
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+  File "clock.py", line 16, in __init__
+    self.set_Clock(hours, minutes, seconds)
+  File "clock.py", line 34, in set_Clock
+    raise TypeError("Minutes have to be integers between 0 and 59!")
+TypeError: Minutes have to be integers between 0 and 59!
+>>> x = Clock("23","60","17")
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+  File "clock.py", line 16, in __init__
+    self.set_Clock(hours, minutes, seconds)
+  File "clock.py", line 30, in set_Clock
+    raise TypeError("Hours have to be integers between 0 and 23!")
+TypeError: Hours have to be integers between 0 and 23!
+>>> 
+>>> x = Clock(23,17)
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+TypeError: __init__() takes exactly 4 arguments (3 given)
+>>> 
+</pre>
+<br><br>
+
+We will now create a class "Calendar", which has lots of similarities to the previously defined
+Clock class. Instead of "tick" we have an "advance" method, which advances the date by one day,
+whenever it is called. Adding a day to a date is quite tricky. We have to check, if the date is
+the last day in a month and the number of days in the months vary. As if this isn't bad enough,
+we have February and the leap year problem.
+<br><br>
+The rules for calculating a leap year are the following:
+
+<ul>
+<li>If a year is divisible by 400, it is a leap year. </li>
+<li>If a year is not divisible by 400 but by 100, it is not a leap year.</li>
+<li>A year number which is divisible by 4 but not by 100, it is a leap year.</li>
+<li>All other year numbers are common years, i.e. no leap years.</li>
+</ul>
+
+<br>
+As a little useful gimmick, we added a possibility to output a date either in British or in
+American (Canadian) style.
+<br><br>
+
+<pre>
+""" 
+The class Calendar implements a calendar.   
+"""
+
+class Calendar(object):
+
+    months = (31,28,31,30,31,30,31,31,30,31,30,31)
+    date_style = "British"
+
+    @staticmethod
+    def leapyear(year):
+        """ 
+        The method leapyear returns True if the parameter year
+        is a leap year, False otherwise
+        """
+
+        if year % 4 == 0:
+            if year % 100 == 0:
+                # divisible by 4 and by 100
+                if year % 400 == 0:
+                    leapyear = True
+                else:
+                    leapyear = False
+            else:
+                # divisible by 4 but not by 100
+                leapyear = True
+        else:
+            # not divisible by 4
+            leapyear = False
+
+        return leapyear
+
+
+    def __init__(self, d, m, y):
+        """
+        d, m, y have to be integer values and year has to be 
+        a four digit year number
+        """
+
+        self.set_Calendar(d,m,y)
+
+
+    def set_Calendar(self, d, m, y):
+        """
+        d, m, y have to be integer values and year has to be 
+        a four digit year number
+        """
+
+        if type(d) == int and type(m) == int and type(y) == int:
+            self.__days = d
+            self.__months = m
+            self.__years = y
+        else:
+            raise TypeError("d, m, y have to be integers!")
+
+
+    def __str__(self):
+        if Calendar.date_style == "British":
+            return "{0:02d}/{1:02d}/{2:4d}".format(self.__days,
+                                                   self.__months,
+                                                   self.__years)
+        else: 
+            # assuming American style
+            return "{0:02d}/{1:02d}/{2:4d}".format(self.__months,
+                                                   self.__days,
+                                                   self.__years)
+
+
+
+    def advance(self):
+        """
+        This method advances to the next date.
+        """
+
+        max_days = Calendar.months[self.__months-1]
+        if self.__months == 2 and Calendar.leapyear(self.__years):
+            max_days += 1
+        if self.__days == max_days:
+            self.__days= 1
+            if self.__months == 12:
+                self.__months = 1
+                self.__years += 1
+            else:
+                self.__months += 1
+        else:
+            self.__days += 1
+
+
+if __name__ == "__main__":
+    x = Calendar(31,12,2012)
+    print(x, end=" ")
+    x.advance()
+    print("after applying advance: ", x)
+    print("2012 was a leapyear:")
+    x = Calendar(28,2,2012)
+    print(x, end=" ")
+    x.advance()
+    print("after applying advance: ", x)
+    x = Calendar(28,2,2013)
+    print(x, end=" ")
+    x.advance()
+    print("after applying advance: ", x)
+    print("1900 no leapyear: number divisible by 100 but not by 400: ")
+    x = Calendar(28,2,1900)
+    print(x, end=" ")
+    x.advance()
+    print("after applying advance: ", x)
+    print("2000 was a leapyear, because number divisibe by 400: ")
+    x = Calendar(28,2,2000)
+    print(x, end=" ")
+    x.advance()
+    print("after applying advance: ", x)
+    print("Switching to American date style: ")
+    Calendar.date_style = "American"
+    print("after applying advance: ", x)  
+</pre>
+<br><br>
+Starting this script provides us with the following results:
+<br><br>
+<pre>
+$ python3 calendar.py
+31.12.2012 after applying advance:  01.01.2013
+2012 was a leapyear:
+28.02.2012 after applying advance:  29.02.2012
+28.02.2013 after applying advance:  01.03.2013
+1900 no leapyear: number divisible by 100 but not by 400: 
+28.02.1900 after applying advance:  01.03.1900
+2000 was a leapyear, because number divisibe by 400: 
+28.02.2000 after applying advance:  29.02.2000
+Switching to American date style: 
+after applying advance:  02/29/2000
+</pre>
+<br><br>
+At last, we will come to our multiple inheritance example. We are now capable of implementing 
+the originally intended class CalendarClock, which will inherit from both Clock and Calendar. 
+The method "tick" of Clock will have to be overloaded. However, the new tick method of CalendarClock 
+has to call the tick method of Clock: Clock.tick(self)
+
+<br><br>
+<pre>
+""" 
+Modul, which implements the class CalendarClock.
+"""
+
+from clock import Clock
+from calendar import Calendar
+
+
+class CalendarClock(Clock, Calendar):
+    """ 
+        The class CalendarClock implements a clock with integrated 
+        calendar. It's a case of multiple inheritance, as it inherits 
+        both from Clock and Calendar      
+    """
+
+    def __init__(self,day, month, year, hour, minute, second):
+        Clock.__init__(self,hour, minute, second)
+        Calendar.__init__(self,day, month, year)
+
+
+    def tick(self):
+        """
+        advance the clock by one second
+        """
+        previous_hour = self._hours
+        Clock.tick(self)
+        if (self._hours < previous_hour): 
+            self.advance()
+
+    def __str__(self):
+        return Calendar.__str__(self) + ", " + Clock.__str__(self)
+
+
+if __name__ == "__main__":
+    x = CalendarClock(31,12,2013,23,59,59)
+    print("One tick from ",x, end=" ")
+    x.tick()
+    print("to ", x)
+
+    x = CalendarClock(28,2,1900,23,59,59)
+    print("One tick from ",x, end=" ")
+    x.tick()
+    print("to ", x)
+
+    x = CalendarClock(28,2,2000,23,59,59)
+    print("One tick from ",x, end=" ")
+    x.tick()
+    print("to ", x)
+
+    x = CalendarClock(7,2,2013,13,55,40)
+    print("One tick from ",x, end=" ")
+    x.tick()
+    print("to ", x)
+</pre>
+<br>
+The output of the program hopefully further clarifies what's going on in this
+class:
+<br><br>
+<pre>
+$ python3 calendar_clock.py 
+One tick from  31/12/2013, 23:59:59 to  01/01/2014, 00:00:00
+One tick from  28/02/1900, 23:59:59 to  01/03/1900, 00:00:00
+One tick from  28/02/2000, 23:59:59 to  29/02/2000, 00:00:00
+One tick from  07/02/2013, 13:55:40 to  07/02/2013, 13:55:41
+</pre>
+
+<br><br>
+<h3>The Diamand Problem or the ,,deadly diamond of death''</h3>
+
+<img class="imgright" width=300 src="images/multiple_inheritance_diamond.png" alt="Diamond Problem" />
+
+
+The "diamond problem" (sometimes referred to as the "deadly diamond of death") 
+is the generally used term for an ambiguity that arises when two classes B and C 
+inherit from a superclass A, and another class D inherits from both B and C. 
+If there is a method "m" in A that B or C (or even both of them) )has overridden,
+and furthermore, if does not override this method, then the question is which version
+of the method does D inherit? It could be the one from A, B or C
+
+
+<br><br>
+Let's look at Python. The first Diamond Problem configuration is like this: 
+Both B and C override the method m of A: 
+
+<br><br>
+<pre>
+class A:
+    def m(self):
+        print("m of A called")
+
+class B(A):
+    def m(self):
+        print("m of B called")
+    
+class C(A):
+    def m(self):
+        print("m of C called")
+
+class D(B,C):
+    pass
+</pre>
+<br>
+
+If you call the method m on an instance x of D, i.e. x.m(), we will get the output
+"m of B called". If we transpose the order of the classes in the classheader of D
+in "class D(C,B):", we will get the output "m of C called".
+<br><br>
+The case in which m will be overridden only in one of the classes B or C, e.g. in C:
+
+<br><br>
+<pre>
+class A:
+    def m(self):
+        print("m of A called")
+
+class B(A):
+    pass
+    
+class C(A):
+    def m(self):
+        print("m of C called")
+
+class D(B,C):
+    pass
+
+x = D()
+x.m()
+</pre>
+<br>
+
+Principially, two possibilities are imaginable: "m of C" or "m of A" could be used 
+
+<br><br>
+We call this script with Python2.7 (python) and with Python3 (python3) to see what's 
+happening:
+<br><br>
+<pre>
+$ python diamond1.py 
+m of A called
+$ python3 diamond1.py 
+m of C called
+</pre>
+<br>
+
+Only for those who are interested in Python version2:
+<br>
+To have the same inheritance behaviour in Python2 as in Python3, every class has to inherit from
+the class "object".  Our class A doesn't inherit from object, so we get a so-called old-style
+class, if we call the script with python2. Multiple inheritance with old-style classes is governed 
+by two rules: depth-first and then left-to-right. If you change the header line of A into 
+"class A(object):", we will have the same behaviour in both Python versions.
+
+<br><br>
+
+
+<h3>super and MRO</h3>
+
+
+We have seen in our previous implementation of the diamond problem, how Python "solves" the
+problem, i.e. in which order the base classes are browsed through.  The order is defined by
+the so-called "Method Resolution Order" or in short MRO.<sup>1</sup>\
+<br><br>
+
+We will extend our previous example, so that every class defines its own method m:
+
+<br>
+<pre>
+class A:
+    def m(self):
+        print("m of A called")
+
+class B(A):
+    def m(self):
+        print("m of B called")
+    
+class C(A):
+    def m(self):
+        print("m of C called")
+
+class D(B,C):
+    def m(self):
+        print("m of D called")
+</pre>
+<br><br>
+
+Let's apply the method m on an instance of D. We can see, that only the code of
+the method m of D will be executed. We can also explicitly call the methods m of the
+other classes via the class name, as we demonstrate in the following interactive 
+Python session:
+
+<br><br>
+<pre>
+>>> from super1 import A,B,C,D
+>>> x = D()
+>>> B.m(x)
+m of B called
+>>> C.m(x)
+m of C called
+>>> A.m(x)
+m of A called
+</pre>
+<br>
+
+Now let's assume, that the method m of D should execute the code of m of B, C and A as well,
+when it is called. We could implement it like this:
+
+<br><br>
+<pre>
+class D(B,C):
+    def m(self):
+        print("m of D called")
+        B.m(self)
+        C.m(self)
+        A.m(self)
+</pre>
+<br>
+The output is what we have been looking for:
+<br><br>
+<pre>
+>>> from mro import D
+>>> x = D()
+>>> x.m()
+m of D called
+m of B called
+m of C called
+m of A called
+</pre>
+<br>
+
+But it turns out once more, that things are more complicated than it seems. 
+HOw can we cope with the situation, if both m of B and m of C will have to
+call m of A as well. In this case, we have to take away the call A.m(self) from
+m in D. The code might look like this, but there is still a bug lurking in it:
+ 
+<br><br>
+<pre>
+class A:
+    def m(self):
+        print("m of A called")
+
+class B(A):
+    def m(self):
+        print("m of B called")
+        A.m(self)
+    
+class C(A):
+    def m(self):
+        print("m of C called")
+        A.m(self)
+
+class D(B,C):
+    def m(self):
+        print("m of D called")
+        B.m(self)
+        C.m(self)
+</pre>
+<br>
+The bug is, that the method m of A will be called twice:
+<br><br>
+<pre>
+>>> from super3 import D
+>>> x = D()
+>>> x.m()
+m of D called
+m of B called
+m of A called
+m of C called
+m of A called
+</pre>
+<br>
+
+One way to solve this problem - admittedly not a Pythonic one - consists in
+splitting the methods m of B and C in two methods. The first method, called _m
+consists of the specific code for B and C and the other method is still called
+m, but consists now of a call "self._m()" and a call "A.m(self)".
+The code of the method m of D consists now of the specific code of D 'print("m of D called")',
+and the calls B._m(self), C._m(self) and A.m(self):
+
+<br><br>
+<pre>
+class A:
+    def m(self):
+        print("m of A called")
+
+class B(A):
+    def _m(self):
+        print("m of B called")
+    def m(self):
+        self._m()
+        A.m(self)
+    
+class C(A):
+    def _m(self):
+        print("m of C called")
+    def m(self):
+        self._m()
+        A.m(self)
+
+class D(B,C):
+    def m(self):
+        print("m of D called")
+        B._m(self)
+        C._m(self)
+        A.m(self)
+</pre>
+<br>
+Our problem is solved, but - as we have already mentioned - not in a pythonic way:
+<br><br>
+<pre>
+>>> from super4 import D
+>>> x = D()
+>>> x.m()
+m of D called
+m of B called
+m of C called
+m of A called
+</pre>
+<br><br>
+The optimal way to solve the problem, which is the "super" pythonic way, consists in calling 
+the super function:
+<br><br>
+<pre>
+class A:
+    def m(self):
+        print("m of A called")
+
+class B(A):
+    def m(self):
+        print("m of B called")
+        super().m()
+    
+class C(A):
+    def m(self):
+        print("m of C called")
+        super().m()
+
+class D(B,C):
+    def m(self):
+        print("m of D called")
+        super().m()
+</pre>
+<br>
+It also solves our problem, but in a beautiful design as well:
+<br><br>
+<pre>
+>>> from super5 import D
+>>> x = D()
+>>> x.m()
+m of D called
+m of B called
+m of C called
+m of A called
+</pre>
+
+
+
+<br>
+
+The super function is often used when instances are initialized with the 
+__init__ method: 
+
+
+<br><br>
+<pre>
+class A:
+    def __init__(self):
+        print("A.__init__")
+
+class B(A):
+    def __init__(self):
+        print("B.__init__")
+        super().__init__()
+    
+class C(A):
+    def __init__(self):
+        print("C.__init__")
+        super().__init__()
+
+
+class D(B,C):
+    def __init__(self):
+        print("D.__init__")
+        super().__init__()
+</pre>
+<br>
+We demonstrate the way of working in the following interactive session:
+<br><br>
+<pre>
+>>> from super_init import A,B,C,D
+>>> d = D()
+D.__init__
+B.__init__
+C.__init__
+A.__init__
+>>> c = C()
+C.__init__
+A.__init__
+>>> b = B()
+B.__init__
+A.__init__
+>>> a = A()
+A.__init__
+</pre>
+<br>
+
+The question arises how the super functions makes its decision. How does it decide
+which class has to be used? As we have already mentioned, it uses the so-called
+method resolution order(MRO). It is based on the "C3 superclass linearisation" algorithm. 
+This is called a linearisation, because the tree structure is broken down into a linear order.
+The mro method can be used to create this list:
+<br><br>
+<pre>
+>>> from super_init import A,B,C,D
+>>> D.mro()
+[&lt;class 'super_init.D'&gt;, &lt;class 'super_init.B'&gt;, &lt;class 'super_init.C'&gt;, &lt;class 'super_init.A'&gt;, &lt;class 'object'&gt;]
+>>> B.mro()
+[&lt;class 'super_init.B'&gt;, &lt;class 'super_init.A'&gt;, &lt;class 'object'&gt;]
+>>> A.mro()
+[&lt;class 'super_init.A'&gt;, &lt;class 'object'&gt;]
+</pre>
+
+
+<br><br>
+
+<h3>Polymorphism</h3>
+
+<img  class="imgright" width=300 src="images/Morpheus_and_Iris.jpg" alt="Morpheus and Iris" />
+<br>
+Polymorphism is construed from two Greek words. "Poly" stands for "much" or "many" and 
+"morph" means shape or form. Polymorphism is the state or condition of being polymorphous,
+or if we use the translations of the components "the ability to be in many shapes or
+forms. Polymorphism is a term used in many scientific areas. In Crystallography it 
+defines the state, if something crystallizes into two or more chemically identical but 
+crystallographically distinct forms. Biologists know polymorphism as the existence of an
+organism in several form or colour varieties. The Romans even had a god, called Morpheus,
+who is able to take any human form: Morheus appears in Ovid's metamorphoses and is the son
+of Somnus, the god of sleep. You can admire Morpheus and Iris in the picture on the right side.
+<br><br>
+So, before we fall to sleep, we get back to Python and to what polymorphism means in the 
+programming language context. Polymorphism in Computer Science is the ability to present 
+the same interface for differing underlying forms. We can have in some programming languages
+polymorphic functions or methods for example. Polymorphic functions or methods can be applied 
+to arguments of different types, and they can behave differently depending on the type of 
+the arguments to which they are applied. We can also define the same function name with a varying 
+number of parameter. 
+
+
+
+
+
+<br><br>
+
+
+
+
+<br><br>
+Let's have a look at the following Python function:
+<br><br>
+
+
+
+<pre>
+def f(x, y):
+    print("values: ", x, y)
+
+f(42,43)
+f(42, 43.7) 
+f(42.3,43)
+f(42.0, 43.9)
+</pre>
+<br><br>
+We can call this function with various types, as demonstrated in the example. In typed programming
+languages like Java or C++, we would have to overload f for the various type combinations.
+<br><br>
+
+Our example could be implemented like this in C++:
+
+
+
+<br><br>
+<pre>
+#include &lt;iostream&gt;
+using namespace std;
+
+void f(int x, int y ) {
+    cout &lt;&lt; "values: " &lt;&lt; x &lt;&lt; ", " &lt;&lt; x &lt;&lt; endl;
+}
+
+void f(int x, double y ) {
+    cout &lt;&lt; "values: " &lt;&lt; x &lt;&lt; ", " &lt;&lt; x &lt;&lt; endl;
+}
+
+void f(double x, int y ) {
+    cout &lt;&lt; "values: " &lt;&lt; x &lt;&lt; ", " &lt;&lt; x &lt;&lt; endl;
+}
+
+void f(double x, double y ) {
+    cout &lt;&lt; "values: " &lt;&lt; x &lt;&lt; ", " &lt;&lt; x &lt;&lt; endl;
+}
+
+
+int main()
+{
+    f(42, 43); 
+    f(42, 43.7); 
+    f(42.3,43);
+    f(42.0, 43.9); 
+}
+</pre>
+<br>
+
+
+Python is implicitly polymorphic. We can apply our previously defined function f even to lists, 
+strings or other types, which can be printed:
+
+<br><br>
+
+<pre>
+>>> def f(x,y):
+...     print("values: ", x, y)
+... 
+>>> f([3,5,6],(3,5))
+values:  [3, 5, 6] (3, 5)
+>>> f("A String", ("A tuple", "with Strings"))
+values:  A String ('A tuple', 'with Strings')
+>>> f({2,3,9}, {"a":3.4,"b":7.8, "c":9.04})
+values:  {9, 2, 3} {'a': 3.4, 'c': 9.04, 'b': 7.8}
+>>> 
+</pre>
+
+
+
+<br><br>
+
+<h3>Footnotes</h3>
+<sup>1</sup>
+<br>Python has used since 2.3 the ,,C3 superclass linearisation''-algorithm to determine the MRO.
+
+-->
+
+
+
+
+
+
+
+
+
+
+<br><br><br>
+
+<br>
+<div id="contextlinks">Previous Chapter: <a href="python3_inheritance.html">Inheritance</a><br>
+<LINK rel="prev" href="python3_inheritance.html">Next Chapter: <a href="python3_magic_methods.html">Magic Methods and Operator Overloading</a><br>
+<LINK rel="next" href="python3_magic_methods.html"></div><br><br><br>
+
+</div>
+<div id="footer">  &copy; 2011 - 2014 <a href="http://www.bklein.de/">Bernd Klein</a>,
+Bodenseo; 
+Design by Denise Mitchinson adapted for python-course.eu by Bernd Klein</div>
+</div>
+</body>
+
+<!-- Mirrored from www.python-course.eu/python3_multiple_inheritance.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:10:34 GMT -->
+</html>
+
+
+

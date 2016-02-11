@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+    
+<!-- Mirrored from learnpythonthehardway.org/book/ex44.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 03 Sep 2014 17:52:40 GMT -->
+<head>
+        <link href='stylesheets/fonts.css' rel='stylesheet' type='text/css'>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="twitter:creator" content="@lzsthw">
+        <title>Learn Python</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href='stylesheets/pure.css' rel='stylesheet'>
+        <link href='stylesheets/pygments.css' rel='stylesheet'>
+        <link href='stylesheets/main.css' rel='stylesheet'>
+        <link href='stylesheets/nav.css' rel='stylesheet'>
+        <style>
+        </style>
+ 
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.11: http://docutils.sourceforge.net/" />
+<title>Exercise 44: Inheritance Versus Composition</title>
+    </head>
+    <body id='wrapper'>
+        <div class='master-logo-wrapper clearfix'>
+            <a href='index-2.html'>
+                <div class='python-logo-sprite'></div>
+            </a>
+                <span class='edition-3'><img src='images/3rd-edition-cloud.png' /></span>
+        </div><!-- /.master-logo-wrapper -->
+
+        <div style='clear: both;'>
+
+        <div id="main">
+            <div class='chapters-wrapper'>
+                  <nav id='chapters'>
+                      <div class='masthead-title'></div>
+                      <ul class='masthead'>
+                          <li>
+                              <a href='index.html'>
+                                  <div class='nav-tcontents'>
+                                      <img src='images/nav-contents.png' /></br>
+                                  main
+                                  </div>
+                              </a>
+                          </li>
+                          <li>
+                              <a href='#video'>
+                                  <div class='nav-play-video' id="#video_toggle_icon">
+                                      <img src='images/nav-play.png' /><br/>
+                                      play video
+                                      <div class='line-2'>(this chapter)</div>
+                                  </div>
+                              </a>
+                          </li>
+                          <li>
+                              <a href='#' id='prev_link'>
+                                  <div class='nav-previous'>
+                                      <img src='images/nav-previous.png' /></br>
+                                      previous
+                                  </div>
+                              </a>
+                          </li>
+                          <li>
+                              <a href='#' id='next_link'>
+                                  <div class='nav-next'>
+                                      <img src='images/nav-next.png' /></br>
+                                      next
+                                  </div>
+                              </a>
+                          </li>
+                          <li><!-- AMBULANCE ICON -->
+                              <a href='help.html' id=''>
+                                  <div class='ambulance'>
+                                      <img src='images/help-ambulance.png' /></br>
+                                      help
+                                  </div>
+                              </a>
+                          </li>
+                          <li id="follow">
+                                <a href="https://twitter.com/lzsthw" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false" data-dnt="true">Follow @lzsthw</a>
+                                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                           </li>
+
+                      </ul><!-- /.masthead -->
+                      <!--<img src='images/fa-bullhorn.png' />-->
+                  </nav><!-- /.chapters -->
+            </div><!-- /.chapters-wrapper -->
+
+        <!--- RST STARTS -->
+            <h1 class="title">Exercise 44: Inheritance Versus Composition</h1>
+            <p>In the fairy tales about heroes defeating evil villains there's always a dark forest of some kind.  It could be a cave, a forest, another planet, just some place that everyone knows the hero shouldn't go.  Of course, shortly after the villain is introduced you find out, yes, the hero has to go to that stupid forest to kill the bad guy.  It seems the hero just keeps getting into situations that require him to risk his life in this evil forest.</p>
+<p>You rarely read fairy tales about the heroes who are smart enough to just avoid the whole situation entirely.  You never hear a hero say, &quot;Wait a minute, if I leave to make my fortunes on the high seas leaving Buttercup behind I could die and then she'd have to marry some ugly prince named Humperdink.  Humperdink!  I think I'll stay here and start a Farm Boy for Rent business.&quot;  If he did that there'd be no fire swamp, dying, reanimation, sword fights, giants, or any kind of story really.  Because of this, the forest in these stories seems to exist like a black hole that drags the hero in no matter what they do.</p>
+<p>In object-oriented programming, Inheritance is the evil forest.  Experienced programmers know to avoid this evil because they know that deep inside the Dark Forest Inheritance is the Evil Queen Multiple Inheritance. She likes to eat software and programmers with her massive complexity teeth, chewing on the flesh of the fallen. But the forest is so powerful and so tempting that nearly every programmer has to go into it, and try to make it out alive with the Evil Queen's head before they can call themselves real programmers.  You just can't resist the Inheritance Forest's pull, so you go in.  After the adventure you learn to just stay out of that stupid forest and bring an army if you are ever forced to go in again.</p>
+<p>This is basically a funny way to say that I'm going to teach you something you should use carefully called Inheritance.  Programmers who are currently in the forest battling the Queen will probably tell you that you have to go in.  They say this because they need your help since what they've created is probably too much for them to handle.  But you should always remember this:</p>
+<p>Most of the uses of inheritance can be simplified or replaced with composition, and multiple inheritance should be avoided at all costs.</p>
+<div class="section" id="what-is-inheritance">
+<h1>What is Inheritance?</h1>
+<p>Inheritance is used to indicate that one class will get most or all of its features from a parent class.  This happens implicitly whenever you write <tt class="docutils literal">class Foo(Bar)</tt>, which says &quot;Make a class Foo that inherits from Bar.&quot; When you do this, the language makes any action that you do on instances of <tt class="docutils literal">Foo</tt> also work as if they were done to an instance of <tt class="docutils literal">Bar</tt>.  Doing this lets you put common functionality in the <tt class="docutils literal">Bar</tt> class, then specialize that functionality in the <tt class="docutils literal">Foo</tt> class as needed.</p>
+<p>When you are doing this kind of specialization, there are three ways that the parent and child classes can interact:</p>
+<ol class="arabic simple">
+<li>Actions on the child imply an action on the parent.</li>
+<li>Actions on the child override the action on the parent.</li>
+<li>Actions on the child alter the action on the parent.</li>
+</ol>
+<p>I will now demonstrate each of these in order and show you code for them.</p>
+<div class="section" id="implicit-inheritance">
+<h2>Implicit Inheritance</h2>
+<p>First I will show you the implicit actions that happen when you define a function in the parent, but <em>not</em> in the child.</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13</pre></div></td><td class="code"><div class="highlight"><pre><a name="python--ex44a.py-idio.html-1"></a><span class="k">class</span> <span class="nc">Parent</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<a name="python--ex44a.py-idio.html-2"></a>
+<a name="python--ex44a.py-idio.html-3"></a>    <span class="k">def</span> <span class="nf">implicit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a name="python--ex44a.py-idio.html-4"></a>        <span class="k">print</span> <span class="s">&quot;PARENT implicit()&quot;</span>
+<a name="python--ex44a.py-idio.html-5"></a>
+<a name="python--ex44a.py-idio.html-6"></a><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Parent</span><span class="p">):</span>
+<a name="python--ex44a.py-idio.html-7"></a>    <span class="k">pass</span>
+<a name="python--ex44a.py-idio.html-8"></a>
+<a name="python--ex44a.py-idio.html-9"></a><span class="n">dad</span> <span class="o">=</span> <span class="n">Parent</span><span class="p">()</span>
+<a name="python--ex44a.py-idio.html-10"></a><span class="n">son</span> <span class="o">=</span> <span class="n">Child</span><span class="p">()</span>
+<a name="python--ex44a.py-idio.html-11"></a>
+<a name="python--ex44a.py-idio.html-12"></a><span class="n">dad</span><span class="o">.</span><span class="n">implicit</span><span class="p">()</span>
+<a name="python--ex44a.py-idio.html-13"></a><span class="n">son</span><span class="o">.</span><span class="n">implicit</span><span class="p">()</span>
+</pre></div>
+</td></tr></table><p>The use of <tt class="docutils literal">pass</tt> under the <tt class="docutils literal">class Child:</tt> is how you tell Python that you want an empty block.  This creates a class named <tt class="docutils literal">Child</tt> but says that there's nothing new to define in it.  Instead it will inherit all of its behavior from <tt class="docutils literal">Parent</tt>.  When you run this code you get the following:</p>
+<div class="highlight"><pre><a name="python--ex44a.sh-idio-shint-pyg.html-1"></a><span class="gp">$</span> python ex44a.py
+<a name="python--ex44a.sh-idio-shint-pyg.html-2"></a><span class="go">PARENT implicit()</span>
+<a name="python--ex44a.sh-idio-shint-pyg.html-3"></a><span class="go">PARENT implicit()</span>
+</pre></div><p>Notice how even though I'm calling <tt class="docutils literal">son.implicit()</tt> on line 16, and even though <tt class="docutils literal">Child</tt> does <em>not</em> have a <tt class="docutils literal">implicit</tt> function defined, it still works and it calls the one defined in <tt class="docutils literal">Parent</tt>.  This shows you that, if you put functions in a base class (i.e., <tt class="docutils literal">Parent</tt>) then all subclasses (i.e., <tt class="docutils literal">Child</tt>) will automatically get those features.  Very handy for repetitive code you need in many classes.</p>
+</div>
+<div class="section" id="override-explicitly">
+<h2>Override Explicitly</h2>
+<p>The problem with having functions called implicitly is sometimes you want the child to behave differently.  In this case you want to override the function in the child, effectively replacing the functionality.  To do this just define a function with the same name in <tt class="docutils literal">Child</tt>.  Here's an example:</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15</pre></div></td><td class="code"><div class="highlight"><pre><a name="python--ex44b.py-idio.html-1"></a><span class="k">class</span> <span class="nc">Parent</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<a name="python--ex44b.py-idio.html-2"></a>
+<a name="python--ex44b.py-idio.html-3"></a>    <span class="k">def</span> <span class="nf">override</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a name="python--ex44b.py-idio.html-4"></a>        <span class="k">print</span> <span class="s">&quot;PARENT override()&quot;</span>
+<a name="python--ex44b.py-idio.html-5"></a>
+<a name="python--ex44b.py-idio.html-6"></a><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Parent</span><span class="p">):</span>
+<a name="python--ex44b.py-idio.html-7"></a>
+<a name="python--ex44b.py-idio.html-8"></a>    <span class="k">def</span> <span class="nf">override</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a name="python--ex44b.py-idio.html-9"></a>        <span class="k">print</span> <span class="s">&quot;CHILD override()&quot;</span>
+<a name="python--ex44b.py-idio.html-10"></a>
+<a name="python--ex44b.py-idio.html-11"></a><span class="n">dad</span> <span class="o">=</span> <span class="n">Parent</span><span class="p">()</span>
+<a name="python--ex44b.py-idio.html-12"></a><span class="n">son</span> <span class="o">=</span> <span class="n">Child</span><span class="p">()</span>
+<a name="python--ex44b.py-idio.html-13"></a>
+<a name="python--ex44b.py-idio.html-14"></a><span class="n">dad</span><span class="o">.</span><span class="n">override</span><span class="p">()</span>
+<a name="python--ex44b.py-idio.html-15"></a><span class="n">son</span><span class="o">.</span><span class="n">override</span><span class="p">()</span>
+</pre></div>
+</td></tr></table><p>In this example I have a function named <tt class="docutils literal">override</tt> in both classes, so let's see what happens when you run it.</p>
+<div class="highlight"><pre><a name="python--ex44b.sh-idio-shint-pyg.html-1"></a><span class="gp">$</span> python ex44b.py
+<a name="python--ex44b.sh-idio-shint-pyg.html-2"></a><span class="go">PARENT override()</span>
+<a name="python--ex44b.sh-idio-shint-pyg.html-3"></a><span class="go">CHILD override()</span>
+</pre></div><p>As you can see, when line 14 runs, it runs the <tt class="docutils literal">Parent.override</tt> function because that variable (<tt class="docutils literal">dad</tt>) is a <tt class="docutils literal">Parent</tt>.  But when line 15 runs it prints out the <tt class="docutils literal">Child.override</tt> messages because <tt class="docutils literal">son</tt> is an instance of <tt class="docutils literal">Child</tt> and <tt class="docutils literal">Child</tt> overrides that function by defining its own version.</p>
+<p>Take a break right now and try playing with these two concepts before continuing.</p>
+</div>
+<div class="section" id="alter-before-or-after">
+<h2>Alter Before or After</h2>
+<p>The third way to use inheritance is a special case of overriding where you want to alter the behavior before or after the <tt class="docutils literal">Parent</tt> class's version runs.  You first override the function just like in the last example, but then you use a Python built-in function named <tt class="docutils literal">super</tt> to get the <tt class="docutils literal">Parent</tt> version to call.  Here's the example of doing that so you can make sense of this description:</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17</pre></div></td><td class="code"><div class="highlight"><pre><a name="python--ex44c.py-idio.html-1"></a><span class="k">class</span> <span class="nc">Parent</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<a name="python--ex44c.py-idio.html-2"></a>
+<a name="python--ex44c.py-idio.html-3"></a>    <span class="k">def</span> <span class="nf">altered</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a name="python--ex44c.py-idio.html-4"></a>        <span class="k">print</span> <span class="s">&quot;PARENT altered()&quot;</span>
+<a name="python--ex44c.py-idio.html-5"></a>
+<a name="python--ex44c.py-idio.html-6"></a><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Parent</span><span class="p">):</span>
+<a name="python--ex44c.py-idio.html-7"></a>
+<a name="python--ex44c.py-idio.html-8"></a>    <span class="k">def</span> <span class="nf">altered</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a name="python--ex44c.py-idio.html-9"></a>        <span class="k">print</span> <span class="s">&quot;CHILD, BEFORE PARENT altered()&quot;</span>
+<a name="python--ex44c.py-idio.html-10"></a>        <span class="nb">super</span><span class="p">(</span><span class="n">Child</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">altered</span><span class="p">()</span>
+<a name="python--ex44c.py-idio.html-11"></a>        <span class="k">print</span> <span class="s">&quot;CHILD, AFTER PARENT altered()&quot;</span>
+<a name="python--ex44c.py-idio.html-12"></a>
+<a name="python--ex44c.py-idio.html-13"></a><span class="n">dad</span> <span class="o">=</span> <span class="n">Parent</span><span class="p">()</span>
+<a name="python--ex44c.py-idio.html-14"></a><span class="n">son</span> <span class="o">=</span> <span class="n">Child</span><span class="p">()</span>
+<a name="python--ex44c.py-idio.html-15"></a>
+<a name="python--ex44c.py-idio.html-16"></a><span class="n">dad</span><span class="o">.</span><span class="n">altered</span><span class="p">()</span>
+<a name="python--ex44c.py-idio.html-17"></a><span class="n">son</span><span class="o">.</span><span class="n">altered</span><span class="p">()</span>
+</pre></div>
+</td></tr></table><p>The important lines here are 9-11, where in the <tt class="docutils literal">Child</tt> I do the following when <tt class="docutils literal">son.altered()</tt> is called:</p>
+<ol class="arabic simple">
+<li>Because I've overridden <tt class="docutils literal">Parent.altered</tt> the <tt class="docutils literal">Child.altered</tt> version runs, and line 9 executes like you'd expect.</li>
+<li>In this case I want to do a before and after so after line 9, I want to use <tt class="docutils literal">super</tt> to get the <tt class="docutils literal">Parent.altered</tt> version.</li>
+<li>On line 10 I call <tt class="docutils literal">super(Child, <span class="pre">self).altered()</span></tt>, which is aware of inheritance and will get the <tt class="docutils literal">Parent</tt> class for you.  You should be able to read this as &quot;call <tt class="docutils literal">super</tt> with arguments <tt class="docutils literal">Child</tt> and <tt class="docutils literal">self</tt>, then call the function <tt class="docutils literal">altered</tt> on whatever it returns.&quot;</li>
+<li>At this point, the <tt class="docutils literal">Parent.altered</tt> version of the function runs, and that prints out the <tt class="docutils literal">Parent</tt> message.</li>
+<li>Finally, this returns from the <tt class="docutils literal">Parent.altered</tt> and the <tt class="docutils literal">Child.altered</tt> function continues to print out the after message.</li>
+</ol>
+<p>If you run this, you should see this:</p>
+<div class="highlight"><pre><a name="python--ex44c.sh-idio-shint-pyg.html-1"></a><span class="gp">$</span> python ex44c.py
+<a name="python--ex44c.sh-idio-shint-pyg.html-2"></a><span class="go">PARENT altered()</span>
+<a name="python--ex44c.sh-idio-shint-pyg.html-3"></a><span class="go">CHILD, BEFORE PARENT altered()</span>
+<a name="python--ex44c.sh-idio-shint-pyg.html-4"></a><span class="go">PARENT altered()</span>
+<a name="python--ex44c.sh-idio-shint-pyg.html-5"></a><span class="go">CHILD, AFTER PARENT altered()</span>
+</pre></div></div>
+<div class="section" id="all-three-combined">
+<h2>All Three Combined</h2>
+<p>To demonstrate all of these, I have a final version that shows each kind of interaction from inheritance in one file:</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32</pre></div></td><td class="code"><div class="highlight"><pre><a name="python--ex44d.py-idio.html-1"></a><span class="k">class</span> <span class="nc">Parent</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<a name="python--ex44d.py-idio.html-2"></a>
+<a name="python--ex44d.py-idio.html-3"></a>    <span class="k">def</span> <span class="nf">override</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a name="python--ex44d.py-idio.html-4"></a>        <span class="k">print</span> <span class="s">&quot;PARENT override()&quot;</span>
+<a name="python--ex44d.py-idio.html-5"></a>
+<a name="python--ex44d.py-idio.html-6"></a>    <span class="k">def</span> <span class="nf">implicit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a name="python--ex44d.py-idio.html-7"></a>        <span class="k">print</span> <span class="s">&quot;PARENT implicit()&quot;</span>
+<a name="python--ex44d.py-idio.html-8"></a>
+<a name="python--ex44d.py-idio.html-9"></a>    <span class="k">def</span> <span class="nf">altered</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a name="python--ex44d.py-idio.html-10"></a>        <span class="k">print</span> <span class="s">&quot;PARENT altered()&quot;</span>
+<a name="python--ex44d.py-idio.html-11"></a>
+<a name="python--ex44d.py-idio.html-12"></a><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Parent</span><span class="p">):</span>
+<a name="python--ex44d.py-idio.html-13"></a>
+<a name="python--ex44d.py-idio.html-14"></a>    <span class="k">def</span> <span class="nf">override</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a name="python--ex44d.py-idio.html-15"></a>        <span class="k">print</span> <span class="s">&quot;CHILD override()&quot;</span>
+<a name="python--ex44d.py-idio.html-16"></a>
+<a name="python--ex44d.py-idio.html-17"></a>    <span class="k">def</span> <span class="nf">altered</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a name="python--ex44d.py-idio.html-18"></a>        <span class="k">print</span> <span class="s">&quot;CHILD, BEFORE PARENT altered()&quot;</span>
+<a name="python--ex44d.py-idio.html-19"></a>        <span class="nb">super</span><span class="p">(</span><span class="n">Child</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">altered</span><span class="p">()</span>
+<a name="python--ex44d.py-idio.html-20"></a>        <span class="k">print</span> <span class="s">&quot;CHILD, AFTER PARENT altered()&quot;</span>
+<a name="python--ex44d.py-idio.html-21"></a>
+<a name="python--ex44d.py-idio.html-22"></a><span class="n">dad</span> <span class="o">=</span> <span class="n">Parent</span><span class="p">()</span>
+<a name="python--ex44d.py-idio.html-23"></a><span class="n">son</span> <span class="o">=</span> <span class="n">Child</span><span class="p">()</span>
+<a name="python--ex44d.py-idio.html-24"></a>
+<a name="python--ex44d.py-idio.html-25"></a><span class="n">dad</span><span class="o">.</span><span class="n">implicit</span><span class="p">()</span>
+<a name="python--ex44d.py-idio.html-26"></a><span class="n">son</span><span class="o">.</span><span class="n">implicit</span><span class="p">()</span>
+<a name="python--ex44d.py-idio.html-27"></a>
+<a name="python--ex44d.py-idio.html-28"></a><span class="n">dad</span><span class="o">.</span><span class="n">override</span><span class="p">()</span>
+<a name="python--ex44d.py-idio.html-29"></a><span class="n">son</span><span class="o">.</span><span class="n">override</span><span class="p">()</span>
+<a name="python--ex44d.py-idio.html-30"></a>
+<a name="python--ex44d.py-idio.html-31"></a><span class="n">dad</span><span class="o">.</span><span class="n">altered</span><span class="p">()</span>
+<a name="python--ex44d.py-idio.html-32"></a><span class="n">son</span><span class="o">.</span><span class="n">altered</span><span class="p">()</span>
+</pre></div>
+</td></tr></table><p>Go through each line of this code, and write a comment explaining what that line does and whether it's an override or not.  Then run it and confirm you get what you expected:</p>
+<div class="highlight"><pre><a name="python--ex44d.sh-idio-shint-pyg.html-1"></a><span class="gp">$</span> python ex44d.py
+<a name="python--ex44d.sh-idio-shint-pyg.html-2"></a><span class="go">PARENT implicit()</span>
+<a name="python--ex44d.sh-idio-shint-pyg.html-3"></a><span class="go">PARENT implicit()</span>
+<a name="python--ex44d.sh-idio-shint-pyg.html-4"></a><span class="go">PARENT override()</span>
+<a name="python--ex44d.sh-idio-shint-pyg.html-5"></a><span class="go">CHILD override()</span>
+<a name="python--ex44d.sh-idio-shint-pyg.html-6"></a><span class="go">PARENT altered()</span>
+<a name="python--ex44d.sh-idio-shint-pyg.html-7"></a><span class="go">CHILD, BEFORE PARENT altered()</span>
+<a name="python--ex44d.sh-idio-shint-pyg.html-8"></a><span class="go">PARENT altered()</span>
+<a name="python--ex44d.sh-idio-shint-pyg.html-9"></a><span class="go">CHILD, AFTER PARENT altered()</span>
+</pre></div></div>
+</div>
+<div class="section" id="the-reason-for-super">
+<h1>The Reason for <tt class="docutils literal">super()</tt></h1>
+<p>This should seem like common sense, but then we get into trouble with a thing called multiple inheritance.  Multiple inheritance is when you define a class that inherits from one or <em>more</em> classes, like this:</p>
+<pre class="code python literal-block">
+<span class="keyword">class</span> <span class="name class">SuperFun</span><span class="punctuation">(</span><span class="name">Child</span><span class="punctuation">,</span> <span class="name">BadStuff</span><span class="punctuation">):</span>
+    <span class="keyword">pass</span>
+</pre>
+<p>This is like saying, &quot;Make a class named <tt class="docutils literal">SuperFun</tt> that inherits from the classes <tt class="docutils literal">Child</tt> and <tt class="docutils literal">BadStuff</tt> at the same time.&quot;</p>
+<p>In this case, whenever you have implicit actions on any <tt class="docutils literal">SuperFun</tt> instance, Python has to look-up the possible function in the class hierarchy for both <tt class="docutils literal">Child</tt> and <tt class="docutils literal">BadStuff</tt>, but it needs to do this in a consistent order.  To do this Python uses &quot;method resolution order&quot; (MRO) and an algorithm called C3 to get it straight.</p>
+<p>Because the MRO is complex and a well-defined algorithm is used, Python can't leave it to you to get the MRO right. Instead, Python gives you the <tt class="docutils literal">super()</tt> function, which handles all of this for you in the places that you need the altering type of actions as I did in <tt class="docutils literal">Child.altered</tt>.  With <tt class="docutils literal">super()</tt> you don't have to worry about getting this right, and Python will find the right function for you.</p>
+<div class="section" id="using-super-with-init">
+<h2>Using <tt class="docutils literal">super()</tt> with <tt class="docutils literal">__init__</tt></h2>
+<p>The most common use of <tt class="docutils literal">super()</tt> is actually in <tt class="docutils literal">__init__</tt> functions in base classes.  This is usually the only place where you need to do some things in a child, then complete the initialization in the parent.  Here's a quick example of doing that in the <tt class="docutils literal">Child</tt>:</p>
+<pre class="code python literal-block">
+<span class="keyword">class</span> <span class="name class">Child</span><span class="punctuation">(</span><span class="name">Parent</span><span class="punctuation">):</span>
+
+    <span class="keyword">def</span> <span class="name function">__init__</span><span class="punctuation">(</span><span class="name builtin pseudo">self</span><span class="punctuation">,</span> <span class="name">stuff</span><span class="punctuation">):</span>
+        <span class="name builtin pseudo">self</span><span class="operator">.</span><span class="name">stuff</span> <span class="operator">=</span> <span class="name">stuff</span>
+        <span class="name builtin">super</span><span class="punctuation">(</span><span class="name">Child</span><span class="punctuation">,</span> <span class="name builtin pseudo">self</span><span class="punctuation">)</span><span class="operator">.</span><span class="name">__init__</span><span class="punctuation">()</span>
+</pre>
+<p>This is pretty much the same as the <tt class="docutils literal">Child.altered</tt> example above, except I'm setting some variables in the <tt class="docutils literal">__init__</tt> before having the <tt class="docutils literal">Parent</tt> initialize with its <tt class="docutils literal">Parent.__init__</tt>.</p>
+</div>
+</div>
+<div class="section" id="composition">
+<h1>Composition</h1>
+<p>Inheritance is useful, but another way to do the exact same thing is just to <em>use</em> other classes and modules, rather than rely on implicit inheritance.  If you look at the three ways to exploit inheritance, two of the three involve writing new code to replace or alter functionality.  This can easily be replicated by just calling functions in a module.  Here's an example of doing this:</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32</pre></div></td><td class="code"><div class="highlight"><pre><a name="python--ex44e.py-idio.html-1"></a><span class="k">class</span> <span class="nc">Other</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<a name="python--ex44e.py-idio.html-2"></a>
+<a name="python--ex44e.py-idio.html-3"></a>    <span class="k">def</span> <span class="nf">override</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a name="python--ex44e.py-idio.html-4"></a>        <span class="k">print</span> <span class="s">&quot;OTHER override()&quot;</span>
+<a name="python--ex44e.py-idio.html-5"></a>
+<a name="python--ex44e.py-idio.html-6"></a>    <span class="k">def</span> <span class="nf">implicit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a name="python--ex44e.py-idio.html-7"></a>        <span class="k">print</span> <span class="s">&quot;OTHER implicit()&quot;</span>
+<a name="python--ex44e.py-idio.html-8"></a>
+<a name="python--ex44e.py-idio.html-9"></a>    <span class="k">def</span> <span class="nf">altered</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a name="python--ex44e.py-idio.html-10"></a>        <span class="k">print</span> <span class="s">&quot;OTHER altered()&quot;</span>
+<a name="python--ex44e.py-idio.html-11"></a>
+<a name="python--ex44e.py-idio.html-12"></a><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<a name="python--ex44e.py-idio.html-13"></a>
+<a name="python--ex44e.py-idio.html-14"></a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a name="python--ex44e.py-idio.html-15"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">other</span> <span class="o">=</span> <span class="n">Other</span><span class="p">()</span>
+<a name="python--ex44e.py-idio.html-16"></a>
+<a name="python--ex44e.py-idio.html-17"></a>    <span class="k">def</span> <span class="nf">implicit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a name="python--ex44e.py-idio.html-18"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">other</span><span class="o">.</span><span class="n">implicit</span><span class="p">()</span>
+<a name="python--ex44e.py-idio.html-19"></a>
+<a name="python--ex44e.py-idio.html-20"></a>    <span class="k">def</span> <span class="nf">override</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a name="python--ex44e.py-idio.html-21"></a>        <span class="k">print</span> <span class="s">&quot;CHILD override()&quot;</span>
+<a name="python--ex44e.py-idio.html-22"></a>
+<a name="python--ex44e.py-idio.html-23"></a>    <span class="k">def</span> <span class="nf">altered</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a name="python--ex44e.py-idio.html-24"></a>        <span class="k">print</span> <span class="s">&quot;CHILD, BEFORE OTHER altered()&quot;</span>
+<a name="python--ex44e.py-idio.html-25"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">other</span><span class="o">.</span><span class="n">altered</span><span class="p">()</span>
+<a name="python--ex44e.py-idio.html-26"></a>        <span class="k">print</span> <span class="s">&quot;CHILD, AFTER OTHER altered()&quot;</span>
+<a name="python--ex44e.py-idio.html-27"></a>
+<a name="python--ex44e.py-idio.html-28"></a><span class="n">son</span> <span class="o">=</span> <span class="n">Child</span><span class="p">()</span>
+<a name="python--ex44e.py-idio.html-29"></a>
+<a name="python--ex44e.py-idio.html-30"></a><span class="n">son</span><span class="o">.</span><span class="n">implicit</span><span class="p">()</span>
+<a name="python--ex44e.py-idio.html-31"></a><span class="n">son</span><span class="o">.</span><span class="n">override</span><span class="p">()</span>
+<a name="python--ex44e.py-idio.html-32"></a><span class="n">son</span><span class="o">.</span><span class="n">altered</span><span class="p">()</span>
+</pre></div>
+</td></tr></table><p>In this code I'm not using the name <tt class="docutils literal">Parent</tt>, since there is <em>not</em> a parent-child <tt class="docutils literal"><span class="pre">is-a</span></tt> relationship.  This is a <tt class="docutils literal"><span class="pre">has-a</span></tt> relationship, where <tt class="docutils literal">Child</tt> <tt class="docutils literal"><span class="pre">has-a</span></tt> <tt class="docutils literal">Other</tt> that it uses to get its work done. When I run this I get the following output:</p>
+<div class="highlight"><pre><a name="python--ex44e.sh-idio-shint-pyg.html-1"></a><span class="gp">$</span> python ex44e.py
+<a name="python--ex44e.sh-idio-shint-pyg.html-2"></a><span class="go">OTHER implicit()</span>
+<a name="python--ex44e.sh-idio-shint-pyg.html-3"></a><span class="go">CHILD override()</span>
+<a name="python--ex44e.sh-idio-shint-pyg.html-4"></a><span class="go">CHILD, BEFORE OTHER altered()</span>
+<a name="python--ex44e.sh-idio-shint-pyg.html-5"></a><span class="go">OTHER altered()</span>
+<a name="python--ex44e.sh-idio-shint-pyg.html-6"></a><span class="go">CHILD, AFTER OTHER altered()</span>
+</pre></div><p>You can see that most of the code in <tt class="docutils literal">Child</tt> and <tt class="docutils literal">Other</tt> is the same to accomplish the same thing.  The only difference is that I had to define a <tt class="docutils literal">Child.implicit</tt> function to do that one action.  I could then ask myself if I need this <tt class="docutils literal">Other</tt> to be a class, and could I just make it into a module named <tt class="docutils literal">other.py</tt>?</p>
+</div>
+<div class="section" id="when-to-use-inheritance-or-composition">
+<h1>When to Use Inheritance or Composition</h1>
+<p>The question of &quot;inheritance versus composition&quot; comes down to an attempt to solve the problem of reusable code.  You don't want to have duplicated code all over your software, since that's not clean and efficient.  Inheritance solves this problem by creating a mechanism for you to have implied features in base classes.  Composition solves this by giving you modules and the ability to call functions in other classes.</p>
+<p>If both solutions solve the problem of reuse, then which one is appropriate in which situations?  The answer is incredibly subjective, but I'll give you my three guidelines for when to do which:</p>
+<ol class="arabic simple">
+<li>Avoid multiple inheritance at all costs, as it's too complex to be reliable.  If you're stuck with it, then be prepared to know the class hierarchy and spend time finding where everything is coming from.</li>
+<li>Use composition to package code into modules that are used in many different unrelated places and situations.</li>
+<li>Use inheritance only when there are clearly related reusable pieces of code that fit under a single common concept or if you have to because of something you're using.</li>
+</ol>
+<p>Do not be a slave to these rules.  The thing to remember about object-oriented programming is that it is entirely a social convention programmers have created to package and share code.  Because it's a social convention, but one that's codified in Python, you may be forced to avoid these rules because of the people you work with.  In that case, find out how they use things and then just adapt to the situation.</p>
+</div>
+<div class="section" id="study-drills">
+<h1>Study Drills</h1>
+<p>There is only one Study Drill for this exercise because it is a big exercise.  Go and read <a class="reference external" href="http://www.python.org/dev/peps/pep-0008/">http://www.python.org/dev/peps/pep-0008/</a> and start trying to use it in your code.  You'll notice that some of it is different from what you've been learning in this book, but now you should be able to understand their recommendations and use them in your own code.  The rest of the code in this book may or may not follow these guidelines depending on if it makes the code more confusing.  I suggest you also do this, as comprehension is more important than impressing everyone with you knowledge of esoteric style rules.</p>
+</div>
+<div class="section" id="common-student-questions">
+<h1>Common Student Questions</h1>
+<dl class="docutils">
+<dt>How do I get better at solving problems that I haven't seen before?</dt>
+<dd>The only way to get better at solving problems is to solve as many problems as you can <em>by yourself</em>.  Typically people hit a difficult problem and then rush out to find an answer.  This is fine when you have to get things done, but if you have the time to solve it yourself, then take that time.  Stop and bang your head against the problem for as long as possible, trying every possible thing, until you solve it or give up.  After that the answers you find will be more satisfying and you'll eventually get better at solving problems.</dd>
+<dt>Aren't objects just copies of classes?</dt>
+<dd>In some languages (like JavaScript) that is true. These are called prototype languages and there are not many differences between objects and classes other than usage.  In Python, however, classes act as templates that &quot;mint&quot; new objects, similar to how coins were minted using a die (template).</dd>
+</dl>
+</div>
+        <!-- RST ENDS -->
+
+            <!-- /.help-icon -->
+        <div id="video_holder">
+            <h1>Video</h1>
+            <div id="video" class="row inner">
+                <div class="small-12 small-centered columns">
+                    <div data-paydiv_product="2" id='paydiv'>
+                        &nbsp;
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        </div><!-- /#main -->
+
+        <div class='ad-deck gold' id="footer">
+            <ul class='retailers clearfix'>
+                <li>
+                    <a href='https://paydiv.io/access/buy/2/'>
+                        <div class='retailer-name'>Zed Shaw</div>
+                        <div class='book-type'>PDF + Videos + Updates</div>
+                        <div class='book-price'>$29.95</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.amazon.com/gp/product/0321884914/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0321884914&amp;linkCode=as2&amp;tag=lepythhawa-20'>
+                        <div class='retailer-name'>Amazon</div>
+                        <div class='book-type'>Paper + DVD</div>
+                        <div class='book-price'>$29.95</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.amazon.com/gp/product/B00FGUS948/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=B00FGUS948&amp;linkCode=as2&amp;tag=lepythhawa-20'>
+                        <div class='retailer-name'>Amazon</div>
+                        <div class='book-type'>Kindle (No Videos)</div>
+                        <div class='book-price'>$17.27</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.barnesandnoble.com/w/learn-python-the-hard-way-zed-shaw/1112055406?ean=9780321884916'>
+                        <div class='retailer-name'>B&amp;N</div>
+                        <div class='book-type'>Paper + DVD</div>
+                        <div class='book-price'>$17.27</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.barnesandnoble.com/w/learn-python-the-hard-way-zed-shaw/1112055406?ean=9780133124347&amp;itm=1&amp;usri=learn+python+the+hard+way'>
+                        <div class='retailer-name'>B&amp;N</div>
+                        <div class='book-type'>Nook (No Video)</div>
+                        <div class='book-price'>$17.27</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.informit.com/store/learn-python-the-hard-way-a-very-simple-introduction-9780321884916'>
+                        <div class='retailer-name'>InformIT</div>
+                        <div class='book-type'>eBook + Paper</div>
+                        <div class='book-price'>$43.19</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://ruby.learncodethehardway.org/book/'>
+                        <div class='retailer-name'>Interested In Ruby?</div>
+                        <div class='book-type'>Ruby is also a great language.</div>
+                        <div class='book-price'>Learn Ruby The Hard Way</div>
+                    </a>
+                </li>
+
+            </ul><!-- /.places -->
+        </div><!-- /#ad-deck -->
+
+        <script src="javascripts/jquery.js"></script>
+        <script src="index.js"></script>
+        <script src="../../paydiv.io/static/jzed.js"></script>
+        <script src="../../paydiv.io/static/js/videojs/video.js"></script>
+        <link rel="stylesheet" href="../../paydiv.io/static/js/videojs/video-js.css">
+        <script src="../../paydiv.io/static/api/v1/paydiv.js"></script>
+        <script src="javascripts/app.js"></script>
+        <script src="javascripts/littools.js"></script>
+        <script type="text/javascript">
+        
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-24168052-1']);
+        _gaq.push(['_trackPageview']);
+        
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+        
+        </script>
+
+
+        <script src="javascripts/littools.js"></script>
+
+        </body>
+
+<!-- Mirrored from learnpythonthehardway.org/book/ex44.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 03 Sep 2014 17:52:40 GMT -->
+</html>
+

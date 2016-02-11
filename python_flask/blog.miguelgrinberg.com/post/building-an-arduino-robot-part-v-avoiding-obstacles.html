@@ -1,0 +1,1464 @@
+﻿<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from blog.miguelgrinberg.com/post/building-an-arduino-robot-part-v-avoiding-obstacles by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:40:21 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    
+    <title>
+    
+        Building an Arduino Robot, Part V: Avoiding Obstacles - miguelgrinberg.com
+    
+</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="description" content="miguelgrinberg.com">
+	<meta name="copyright" content="Copyright (c) 2012-2015 Miguel Grinberg">
+	<meta name="author" content="Miguel Grinberg">
+    
+    <meta name="keywords" content="robotics, arduino, robot, hardware, android, bluetooth, hc-sr04, ultrasonic sensor, dc motor, motor">
+    
+
+    
+    <!-- Bootstrap -->
+    <link href="../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../static/prettify.css" type="text/css" rel="stylesheet" />
+    <link href="../static/colorbox/colorbox.css" rel="stylesheet" type="text/css" />
+    <link href="../static/style.css" rel="stylesheet" type="text/css" />
+
+    <link rel="shortcut icon" href="../static/favicon.ico">
+	<link rel="alternate" type="application/rss+xml" href="../feed" title="miguelgrinberg.com RSS feed">
+
+  </head>
+  <body>
+    
+    <!-- facebook sdk -->
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "../../connect.facebook.net/en_US/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    <!-- google plus sdk -->
+    <script type="text/javascript" src="../../apis.google.com/js/plusone.js"></script>
+    <!-- twitter sdk -->
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="../../platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <!-- linkedin sdk -->
+    <script src="../../platform.linkedin.com/in.js" type="text/javascript"></script>
+
+    
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://blog.miguelgrinberg.com/index">miguelgrinberg.com</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="http://blog.miguelgrinberg.com/index">Home</a></li>
+                        <li><a href="about-me.html">About Me</a></li>
+                        <li><a href="about-this-blog.html">About This Blog</a></li>
+                        
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <p class="navbar-text" style="margin-top: 10px; margin-bottom: 0px;">
+                                <a type="application/rss+xml" href="../feed"><img src="../static/rss.png" alt="RSS Feed" title="RSS Feed" /></a>
+                                <a href="https://www.facebook.com/miguelgrinbergblog"><img src="../static/facebook.png" alt="Facebook" title="Facebook" /></a>
+                                <a href="https://plus.google.com/u/0/117786742456929977820"><img src="../static/googleplus.png" alt="Google+" title="Google+" /></a>
+                                <a href="http://www.linkedin.com/in/miguelgrinberg"><img src="../static/linkedin.png" alt="LinkedIn" title="LinkedIn" /></a>
+                                <a href="http://github.com/miguelgrinberg"><img src="../static/github.png" alt="GitHub" title="GitHub" /></a>
+                                <a href="https://twitter.com/#!/miguelgrinberg"><img src="../static/twitter.png" alt="Twitter" title="Twitter" /></a>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </nav>
+
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-push-9 sidebar-bg">
+                <div id="sidebar">
+                    
+
+                    
+                    <h1>Flask Web Development</h1>
+                    <p>If you want to learn modern web development techniques with Python and Flask, you may find my O'Reilly book useful:</p>
+                    <p><center><a href="http://bit.ly/flaskbook"><img style="border: 1px solid black;" src="../static/flask-book-cover-tiny.png"></a></center></p>
+                    <p>Visit <a href="http://flaskbook.com/">http://flaskbook.com</a> for information about this and other Flask training products I have created!</p>
+                    
+
+                    <h1>About Miguel</h1>
+                    <img style="float: right; margin: 0px 8px 8px 0px; padding: 4px; border: 1px solid #ccc;" src="../static/miguel.jpg" />
+                    <p>Welcome to my blog!</p>
+                    <p>I'm a software engineer, photographer and filmmaker in Portland, Oregon, USA.</p>
+                    <p>You can also find me on <a href="https://www.facebook.com/miguelgrinbergblog">Facebook</a>, <a href="https://plus.google.com/u/0/117786742456929977820">Google+</a>, <a href="http://www.linkedin.com/in/miguelgrinberg">LinkedIn</a>, <a href="https://github.com/miguelgrinberg">Github</a> and <a href="https://twitter.com/#!/miguelgrinberg">Twitter</a>.</p>
+                    <p>Thank you for visiting!</p>
+
+                    
+
+                    
+                    <h1>Categories</h1>
+<ul>
+
+	<li>
+		<a href="../category/Arduino/feed">
+			<img src="../static/rss-small.png" title="Arduino RSS Feed" label="Arduino RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Arduino.html">Arduino</a></span> (7)
+	</li>
+
+	<li>
+		<a href="../category/Authentication/feed">
+			<img src="../static/rss-small.png" title="Authentication RSS Feed" label="Authentication RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Authentication.html">Authentication</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../category/Blog/feed">
+			<img src="../static/rss-small.png" title="Blog RSS Feed" label="Blog RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Blog.html">Blog</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/C%2b%2b/feed">
+			<img src="../static/rss-small.png" title="C++ RSS Feed" label="C++ RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/C%2b%2b.html">C++</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Cloud/feed">
+			<img src="../static/rss-small.png" title="Cloud RSS Feed" label="Cloud RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Cloud.html">Cloud</a></span> (2)
+	</li>
+
+	<li>
+		<a href="../category/Filmmaking/feed">
+			<img src="../static/rss-small.png" title="Filmmaking RSS Feed" label="Filmmaking RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Filmmaking.html">Filmmaking</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Flask/feed">
+			<img src="../static/rss-small.png" title="Flask RSS Feed" label="Flask RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Flask.html">Flask</a></span> (39)
+	</li>
+
+	<li>
+		<a href="../category/Games/feed">
+			<img src="../static/rss-small.png" title="Games RSS Feed" label="Games RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Games.html">Games</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Gear/feed">
+			<img src="../static/rss-small.png" title="Gear RSS Feed" label="Gear RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Gear.html">Gear</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/HTML5/feed">
+			<img src="../static/rss-small.png" title="HTML5 RSS Feed" label="HTML5 RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/HTML5.html">HTML5</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Heroku/feed">
+			<img src="../static/rss-small.png" title="Heroku RSS Feed" label="Heroku RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Heroku.html">Heroku</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Javascript/feed">
+			<img src="../static/rss-small.png" title="Javascript RSS Feed" label="Javascript RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Javascript.html">Javascript</a></span> (3)
+	</li>
+
+	<li>
+		<a href="../category/Movie%20Reviews/feed">
+			<img src="../static/rss-small.png" title="Movie Reviews RSS Feed" label="Movie Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Movie%20Reviews.html">Movie Reviews</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Netflix/feed">
+			<img src="../static/rss-small.png" title="Netflix RSS Feed" label="Netflix RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Netflix.html">Netflix</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Node.js/feed">
+			<img src="../static/rss-small.png" title="Node.js RSS Feed" label="Node.js RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Node.html">Node.js</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/OpenStack/feed">
+			<img src="../static/rss-small.png" title="OpenStack RSS Feed" label="OpenStack RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/OpenStack.html">OpenStack</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Personal/feed">
+			<img src="../static/rss-small.png" title="Personal RSS Feed" label="Personal RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Personal.html">Personal</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Photography/feed">
+			<img src="../static/rss-small.png" title="Photography RSS Feed" label="Photography RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Photography.html">Photography</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Product%20Reviews/feed">
+			<img src="../static/rss-small.png" title="Product Reviews RSS Feed" label="Product Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Product%20Reviews.html">Product Reviews</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Programming/feed">
+			<img src="../static/rss-small.png" title="Programming RSS Feed" label="Programming RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Programming.html">Programming</a></span> (47)
+	</li>
+
+	<li>
+		<a href="../category/Project%20Management/feed">
+			<img src="../static/rss-small.png" title="Project Management RSS Feed" label="Project Management RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Project%20Management.html">Project Management</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Python/feed">
+			<img src="../static/rss-small.png" title="Python RSS Feed" label="Python RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Python.html">Python</a></span> (43)
+	</li>
+
+	<li>
+		<a href="../category/REST/feed">
+			<img src="../static/rss-small.png" title="REST RSS Feed" label="REST RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/REST.html">REST</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Rackspace/feed">
+			<img src="../static/rss-small.png" title="Rackspace RSS Feed" label="Rackspace RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Rackspace.html">Rackspace</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Raspberry%20Pi/feed">
+			<img src="../static/rss-small.png" title="Raspberry Pi RSS Feed" label="Raspberry Pi RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Raspberry%20Pi.html">Raspberry Pi</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/RhinoSteady/feed">
+			<img src="../static/rss-small.png" title="RhinoSteady RSS Feed" label="RhinoSteady RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/RhinoSteady.html">RhinoSteady</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Robotics/feed">
+			<img src="../static/rss-small.png" title="Robotics RSS Feed" label="Robotics RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Robotics.html">Robotics</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Video/feed">
+			<img src="../static/rss-small.png" title="Video RSS Feed" label="Video RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Video.html">Video</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../category/Windows/feed">
+			<img src="../static/rss-small.png" title="Windows RSS Feed" label="Windows RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Windows.html">Windows</a></span> (1)
+	</li>
+
+</ul>
+                    
+                </div>
+            </div>
+            <div class="col-md-8 col-md-pull-4">
+                <div id="main">
+                    
+                    
+                    
+                    
+                    
+
+<div class="post">
+
+<p class="date"><span class="flask-moment" data-timestamp="2013-02-24T08:07:48Z" data-format="format('LL')" data-refresh="0">2013-02-24T08:07:48Z</span></p>
+<h1 class="post-title"><a href="building-an-arduino-robot-part-v-avoiding-obstacles.html">Building an Arduino Robot, Part V: Avoiding Obstacles</a></h1>
+<div class="posted">Posted by <span class="label label-danger"><a href="http://blog.miguelgrinberg.com/author/Miguel Grinberg">Miguel Grinberg</a></span> under <span class="label label-primary"><a href="../category/Arduino.html">Arduino</a></span>, <span class="label label-primary"><a href="../category/Robotics.html">Robotics</a></span>, <span class="label label-primary"><a href="../category/C%2b%2b.html">C++</a></span>, <span class="label label-primary"><a href="../category/Programming.html">Programming</a></span>. </div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/building-an-arduino-robot-part-v-avoiding-obstacles" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/building-an-arduino-robot-part-v-avoiding-obstacles" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="building-an-arduino-robot-part-v-avoiding-obstacles.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/building-an-arduino-robot-part-v-avoiding-obstacles" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+<div class="post_body"><p><center><img alt="Arduino Robot" src="../static/images/arduino-robot-27.jpg" /></center></p>
+<p>Welcome to the fifth article in the tutorial series in which I'm building a remote controlled Arduino based vehicle robot.</p>
+<p>Here is the list of articles I have published so far:</p>
+<ul>
+<li><a href="building-an-arduino-robot-part-i-hardware-components.html">Part I: Hardware Components</a></li>
+<li><a href="building-an-arduino-robot-part-ii-programming-the-arduino.html">Part II: Programming the Arduino</a></li>
+<li><a href="building-an-arduino-robot-part-iii-assembling-the-robot.html">Part III: Assembling the Robot</a></li>
+<li><a href="building-an-arduino-robot-part-iv-a-not-so-basic-robot-firmware.html">Part IV: A (Not So) Basic Robot Firmware</a></li>
+<li><a href="building-an-arduino-robot-part-v-avoiding-obstacles.html">Part V: Avoiding Obstacles</a> (this article)</li>
+<li><a href="building-an-arduino-robot-part-vi-remote-control.html">Part VI: Remote Control</a></li>
+</ul>
+<p>In the <a href="http://blog.miguelgrinberg.com/index">previous article</a> I wrote a first version of my Michelino robot firmware that included a motor controller driver. Today I'm adding support for the distance sensor.</p>
+<h2>Distance Sensor driver</h2>
+<p>As I have shown in the last article, my firmware can handle any motor controller board as long as a device driver is written for it. A device driver in this context is nothing more than a class that implements the generic interface that I have defined for devices of this class.</p>
+<p>Distance sensors are no different, the same idea can be applied to them. I'll start by defining the interface that will be common to all distance sensor devices. This will go in file <code>distance_sensor.h</code>:</p>
+<pre><code>/**
+ * @file distance_sensor.h
+ * @brief distance sensor driver definition for the Michelino robot.
+ * @author Miguel Grinberg
+ */
+
+namespace Michelino
+{
+    class DistanceSensorDriver
+    {
+    public:
+        /**
+          * @brief Class constructor.
+          * @param distance The maximum distance in centimeters that needs to be tracked.
+          */
+        DistanceSensorDriver(unsigned int distance) : maxDistance(distance) {}
+
+        /**
+         * @brief Return the distance to the nearest obstacle in centimeters.
+         * @return the distance to the closest object in centimeters 
+         *   or maxDistance if no object was detected
+         */
+        virtual unsigned int getDistance() = 0;
+
+    protected:
+        unsigned int maxDistance;
+    };
+};
+</code></pre>
+<p>My distance sensor driver is going to be extremely simple, a driver just needs to provide one method that reports the distance to the nearest object in centimeters. This is all I need for now, I can always come back and add more functionality to the driver definition later.</p>
+<p>The constructor to the driver takes a maximum distance. This is the value that <code>getDistance()</code> will return when there is no detected obstacle.</p>
+<p>Note that <code>maxDistance</code> member variable is in a <code>protected</code> block, not a <code>private</code> block like I used in other classes. Variables that are <code>protected</code> are still private to the outside, but they are accessible to subclasses. I want this value to be accessible to implementations of this driver, that's why I made it <code>protected</code>.</p>
+<p>As I mentioned in a past article, I have found that the HC-SR04 distance sensor that I'm using works really well with the <a href="http://code.google.com/p/arduino-new-ping">arduino-new-ping</a> open source library, so I'll now implement the above driver interface for it in file <code>newping_distance_sensor.h</code>:</p>
+<pre><code>/**
+ * @file newping_distance_sensor.h
+ * @brief distance sensor driver for distance sensors supported by the NewPing library.
+ * @author Miguel Grinberg
+ */
+
+#include "distance_sensor.h"
+
+namespace Michelino
+{
+    class DistanceSensor : public DistanceSensorDriver
+    {
+    public:
+        DistanceSensor(int triggerPin, int echoPin, int maxDistance)
+            : DistanceSensorDriver(maxDistance), 
+              sensor(triggerPin, echoPin, maxDistance)
+        {
+        }
+
+        virtual unsigned int getDistance()
+        {
+            int distance = sensor.ping_cm();
+            if (distance &lt;= 0)
+                return maxDistance;
+            return distance;
+        }
+    private:
+        NewPing sensor;
+    };
+};
+</code></pre>
+<p>Note in the <code>getDistance()</code> implementation how the <code>maxDistance</code> member variable defined in the parent class is accessible. If I had defined this variable in a <code>private</code> block this code would not compile.</p>
+<h2>Integration with the firmware</h2>
+<p>As a first integration test let's make the robot go forward and stop when it finds an obstacle.</p>
+<p>I will start from the firmware I wrote in the <a href="http://blog.miguelgrinberg.com/index">previous article</a> and will just replace the <code>initialize()</code> and <code>run()</code> methods, which are my object oriented counterparts to the Arduino's <code>setup()</code> and <code>loop()</code> functions. You may want to go back to that article to see the structure of the complete sketch if you are not familiar with it.</p>
+<p>At the top of the sketch I include the driver using the same structure I used for the motor controller:</p>
+<pre><code>#define ENABLE_NEWPING_DISTANCE_SENSOR_DRIVER
+
+#ifdef ENABLE_NEWPING_DISTANCE_SENSOR_DRIVER
+#include &lt;NewPing.h&gt;
+#include "newping_distance_sensor.h"
+#define DISTANCE_SENSOR_INIT 14,15,MAX_DISTANCE
+#endif
+</code></pre>
+<p>In the <code>private</code> section of the <code>Robot</code> class a <code>DistanceSensor</code> object is created:</p>
+<pre><code>private:
+    DistanceSensor distanceSensor;
+</code></pre>
+<p>In the <code>Robot</code> class constructor the object is initialized:</p>
+<pre><code>Robot()
+    : leftMotor(LEFT_MOTOR_INIT), rightMotor(RIGHT_MOTOR_INIT),
+      distanceSensor(DISTANCE_SENSOR_INIT)
+{
+    initialize();
+}
+</code></pre>
+<p>In the <code>initialize()</code> method I start the motors and set the state to <em>running</em>:</p>
+<pre><code>void initialize()
+{
+    leftMotor.setSpeed(255);
+    rightMotor.setSpeed(255);
+    state = stateRunning;
+}
+</code></pre>
+<p>And in the <code>run()</code> method I stop the motors when the distance sensor finds a close obstacle:</p>
+<pre><code>void run()
+{
+    if (state == stateRunning) {
+        if (distanceSensor.getDistance() &lt;= TOO_CLOSE) {
+            state = stateStopped;
+            leftMotor.setSpeed(0);
+            rightMotor.setSpeed(0);
+        }
+    }
+}
+</code></pre>
+<p>I have used two constants in all the changes above, <code>MAX_DISTANCE</code> and <code>TOO_CLOSE</code>. These constants are defined at the top of the sketch, so that they are easy to find in case they need to be modified:</p>
+<pre><code>#define TOO_CLOSE 10
+#define MAX_DISTANCE (TOO_CLOSE * 20)
+</code></pre>
+<p>I'm going to use 10cm as the distance to consider an obstacle too close. The maximum distance I need to track will be twenty times that, or 2 meters. These are numbers that I pulled out of thin air, I don't really know if they will work or not, but I can always come back and adjust them after I get a chance to test them.</p>
+<p>The sketch is now in a usable state. Below is the complete <code>michelino.ino</code> sketch source code:</p>
+<pre><code>#define ENABLE_ADAFRUIT_MOTOR_DRIVER
+#define ENABLE_NEWPING_DISTANCE_SENSOR_DRIVER
+
+#define TOO_CLOSE 10
+#define MAX_DISTANCE (TOO_CLOSE * 20)
+
+#ifdef ENABLE_ADAFRUIT_MOTOR_DRIVER
+#include &lt;AFMotor.h&gt;
+#include "adafruit_motor_driver.h"
+#define LEFT_MOTOR_INIT 1
+#define RIGHT_MOTOR_INIT 3
+#endif
+
+#ifdef ENABLE_NEWPING_DISTANCE_SENSOR_DRIVER
+#include &lt;NewPing.h&gt;
+#include "newping_distance_sensor.h"
+#define DISTANCE_SENSOR_INIT 14,15,MAX_DISTANCE
+#endif
+
+namespace Michelino
+{
+    class Robot
+    {
+    public:
+        /*
+         * @brief Class constructor.
+         */
+        Robot()
+            : leftMotor(LEFT_MOTOR_INIT), rightMotor(RIGHT_MOTOR_INIT),
+              distanceSensor(DISTANCE_SENSOR_INIT)
+        {
+            initialize();
+        }
+
+        /*
+         * @brief Initialize the robot state.
+         */
+        void initialize()
+        {
+            leftMotor.setSpeed(255);
+            rightMotor.setSpeed(255);
+            state = stateRunning;
+        }
+        /*
+         * @brief Update the state of the robot based on input from sensor and remote control.
+         *  Must be called repeatedly while the robot is in operation.
+         */
+        void run()
+        {
+            if (state == stateRunning) {
+                if (distanceSensor.getDistance() &lt;= TOO_CLOSE) {
+                    state = stateStopped;
+                    leftMotor.setSpeed(0);
+                    rightMotor.setSpeed(0);
+                }
+            }
+        }
+
+    private:
+        Motor leftMotor;
+        Motor rightMotor;
+        DistanceSensor distanceSensor;
+        enum state_t { stateStopped, stateRunning };
+        state_t state;
+    };
+};
+
+Michelino::Robot robot;
+
+void setup()
+{
+    robot.initialize();
+}
+
+void loop()
+{
+    robot.run();
+}
+</code></pre>
+<p>Under the control of this sketch the robot will run until it gets 10cm or less from a wall or other obstacle and then stop. </p>
+<p>If you are building a robot like mine and give the sketch a try you may find that the robot functions as expected most of the times, but not always. Occasionally it may stop even though there is no close obstacle, or other times it may bump into a wall without stopping. Keep on reading to know how I figured out the problem and how I addressed it.</p>
+<h2>Logging</h2>
+<p>Running the above sketch a few times makes it clear that something unexpected is going on, but how can I find out what is it? I really need to see all the data the sketch is receiving and how it is reacting to it to understand why things aren't going the way I expected them to go. In other words, I need to <a href="http://en.wikipedia.org/wiki/Debugging">debug</a> my sketch.</p>
+<p>A pretty useful technique to debug embedded systems like this one is to write information passing through the application to a log that can be reviewed.</p>
+<p>To be able to log from my sketch I'm going to write a logging function that will have the same arguments as the good old <code>printf()</code> function from the C standard library, except that since my robot does not have a screen the output will go to the serial port, which I can capture from the Arduino software running on my PC, or alternatively to my cell phone via bluetooth. I'm going to call this function <code>log()</code>. Here is an example usage:</p>
+<pre><code>unsigned int distance = distanceSensor.getDistance();
+log("distance: %u\n", distance);
+</code></pre>
+<p>One aspect to consider is that once I correct this problem I may not want to continue sending logging data to the serial port. This is really an operation that is not needed during normal operation, it is only useful for debugging. But if I remove the log statements from my sketch once I have found a solution to my problem I will have to write them all again next time I have to debug. What I want is to keep the logging calls in the sketch, but selectively be able to enable or disable them. I'm going to use a C preprocessor trick to do this. Below is the source code of my logging function, partially based on the implementation of the <code>p</code> function in <a href="http://playground.arduino.cc/Main/Printf">this Arduino playground page</a>. I'm going to put it in a file named <code>logging.h</code>:</p>
+<pre><code>#ifdef LOGGING
+
+// logging is enabled
+#include &lt;stdarg.h&gt;
+
+void log(char* format, ...)
+{
+    char line[1024];
+    va_list args;
+    va_start(args, format);
+    vsnprintf(line, sizeof(line), format, args);
+    va_end(args);
+    Serial.print(line);
+}
+
+#else
+
+// logging is disabled
+#define log(...)
+
+#endif
+</code></pre>
+<p>This code defines two versions of the <code>log()</code> function. If the <code>LOGGING</code> constant is defined the <code>log()</code> function does all the work to print data to the serial port. But if the <code>LOGGING</code> constant is not defined then the <code>log()</code> function isn't really defined as a function but as a macro or constant using <code>#define</code>, with a completely empty definition. What this means is that if <code>LOGGING</code> is not defined in the main sketch, then the compiler will consider any calls to the <code>log()</code> function as an empty line, so no code will be generated. But when I need to debug I can just define <code>LOGGING</code> at the top of my sketch and all the logging statements will magically get included in the firmware.</p>
+<p>To enable logging in my sketch I've added the following near the top of the main <code>michelino.ino</code> file:</p>
+<pre><code>#define LOGGING
+#include "logging.h"
+</code></pre>
+<p>Then I changed my <code>run()</code> function as follows:</p>
+<pre><code>void run()
+{
+    if (state == stateRunning) {
+        unsigned int distance = distanceSensor.getDistance();
+        log("distance: %u\n", distance);
+        if (distance &lt;= TOO_CLOSE) {
+            state = stateStopped;
+            leftMotor.setSpeed(0);
+            rightMotor.setSpeed(0);
+        }
+    }
+}
+</code></pre>
+<p>Then I connected the robot to my computer with a long USB cable, uploaded the sketch and watched the output in the serial monitor. I had to do a few runs to get the problem to occur, but in two out of about twenty the robot stopped when there was no close obstacle.</p>
+<p>One of the failures was immediately after the sketch started running. Here is the log for that session:</p>
+<pre><code>distance: 63
+distance: 74
+distance: 5
+</code></pre>
+<p>The 63 and 74cm numbers were about right for the distance to the wall, but the 5cm came out of the blue, without nothing being that close to the robot.</p>
+<p>The other failure I captured was also odd, the robot was several meters away from a wall, so it was logging the maximum distance value, but check out what happened at some point:</p>
+<pre><code>distance: 200
+distance: 200
+distance: 200
+distance: 200
+distance: 200
+distance: 7
+</code></pre>
+<p>Based on these two failures I was able to formulate a theory that explains my problem.</p>
+<p>The sensor works by emitting an ultrasonic ping and waiting for the sound wave to bounce off of an obstacle and reach the sensor back. This measurement technique isn't precise by far and is bound to produce errors from time to time. Sometimes the wave may bounce on the floor and somehow make it back to the sensor, other times it may bounce off of a surface that absorbs sound, so the bounced signal is weak and the sensor misses it. The fact is, the readings from the distance sensor aren't always reliable.</p>
+<h2>Averaging</h2>
+<p>With the help of logging to the serial interface I found out that the sensor isn't 100% reliable. So what can I do? One way to greatly improve its accuracy is to not react to a single reading, it's better to take several readings and make sure they are consistent before causing a state change in the robot.</p>
+<p>The technique I'm going to use to filter out errors or noise is pretty simple, I'm just going to take a few readings and average them.</p>
+<p>But doing multiple readings each time I need to check for obstacles will make the robot response slower, so ideally I want to find a way to get the benefit of averaging multiple readings without having to sacrifice performance. The <a href="http://en.wikipedia.org/wiki/Moving_average">moving average</a> algorithm solves this problem nicely.</p>
+<p>A moving average works incrementally. Let's say I decide to use an average of three readings. Each time I need to obtain data from the sensor I take a single reading, but I don't use that result directly. Instead, I compute an average between that reading and the previous two. The next time I need to read the sensor I get another reading, just one like before. Now I drop the oldest of the three readings I averaged the previous time and add this new one. So I'm always adding the new reading and dropping the oldest from the average.</p>
+<p>To make it more clear let's look at an example:</p>
+<table class="data">
+<tr><th>Sensor readings</th><td>200</td><td>200</td><td>200</td><td>200</td><td>7</td><td>200</td><td>200</td><td>7</td><td>7</td><td>5</td></tr>
+<tr><th>Moving Average with N=3</th><td></td><td></td><td>200</td><td>200</td><td>135</td><td>135</td><td>135</td><td>135</td><td>71</td><td>6</td></tr>
+</table>
+
+<p>Without the moving average the robot would have stopped at the first <code>7</code>, like it did for me in one of the failures I captured logs for. But with the moving average the numbers only get down to below <code>TOO_CLOSE</code> when three consecutive readings are low, so the robot ignored that first <code>7</code> as an abnormality, but after three readings came up low the average finally reflected that.</p>
+<p>This technique can be pretty useful, so instead of hard coding it into the distance sensor driver I will create a generic moving average class that I can then apply to other types of samples. I will put this class in file <code>moving_average.h</code>:</p>
+<pre><code>/**
+ * @file moving_average.h
+ * @brief Helper class that maintains a moving average over a set of samples.
+ * @author Miguel Grinberg
+ */
+
+template &lt;typename V, int N&gt; class MovingAverage
+{
+public:
+    /*
+     * @brief Class constructor.
+     * @param def the default value to initialize the average.
+     */
+    MovingAverage(V def = 0) : sum(0), p(0)
+    {
+        for (int i = 0; i &lt; N; i++) {
+            samples[i] = def;
+            sum += samples[i];
+        }
+    }
+
+    /*
+     * @brief Add a new sample.
+     * @param new_sample the new sample to add to the moving average.
+     * @return the updated average.
+     */
+    V add(V new_sample)
+    {
+        sum = sum - samples[p] + new_sample;
+        samples[p++] = new_sample;
+        if (p &gt;= N)
+            p = 0;
+        return sum / N;
+    }
+
+private:
+    V samples[N];
+    V sum;
+    V p;
+};
+</code></pre>
+<p>The <code>MovingAverage</code> class is different than classes I wrote before. This class begins with a <code>template</code> declaration, which basically makes this class a sort of model from which many other classes can be constructed. The reason to make it a template class is that moving averages can be computed on samples of different types. For the distance sensor I'm going to be using <code>unsigned int</code> values, but in the future I may need to use the same algorithm for values of type <code>float</code>, <code>double</code> or even a user defined type. The template argument <code>V</code> declared right after the template keyboard takes care of that. Anywhere in the class where I use the <code>V</code> type the compiler will replace it with an actual type provided when an object of the class is created. The second template argument <code>N</code> is used to declare how many samples need to be kept in memory to do the average. In my example I will use three, but I may need more for other purposes. So instead of making the class use a fix size of three I can call the size <code>N</code> and once again the compiler will replace it with the proper value for each instance. If I wanted to create the instance for the distance sensor I would do it like this:</p>
+<pre><code>MovingAverage&lt;unsigned int, 3&gt; average;
+</code></pre>
+<p>Note that the class constructor takes an argument that by default is 0. This is the default sample value, the value that will be used to do the average before I have seen three samples.</p>
+<p>The implementation uses a <a href="http://en.wikipedia.org/wiki/Circular_buffer">circular buffer</a> with size <code>N</code>, which is initialized to the default sample value in the constructor. I also have a <code>sum</code> member variable that keeps the sum of the <code>N</code> samples that are in memory, and a <code>p</code> member varialble that indicates what is the entry in the circular buffer where the next sample will be stored.</p>
+<p>When a new sample is obtained it is added to the moving average via the <code>add()</code> method. The implementation stores the new sample in the circular buffer and moves the pointer <code>p</code> to the next entry. The <code>sum</code> is reduced by the value of the oldest sample (the one that is getting replaced) and increased by the value of the new sample. Finally, the new average is calculated and returned.</p>
+<p>How is this class used in the robot firmware? First I need to include the header file in the main sketch:</p>
+<pre><code>#include "moving_average.h"
+</code></pre>
+<p>Then I need to declare a <code>MovingAverage</code> object in the <code>private</code> section of the <code>Robot</code> class:</p>
+<pre><code>private:
+    MovingAverage&lt;unsigned int, 3&gt; distanceAverage;
+</code></pre>
+<p>Then I need to initialize it in the <code>Robot</code> constructor:</p>
+<pre><code>Robot()
+    : leftMotor(LEFT_MOTOR_INIT), rightMotor(RIGHT_MOTOR_INIT),
+      distanceSensor(DISTANCE_SENSOR_INIT),
+      distanceAverage(MAX_DISTANCE)
+{
+    initialize();
+}
+</code></pre>
+<p>Note that I initialize the moving average with my <code>MAX_DISTANCE</code> constant, to make sure I don't detect an obstacle when I start.</p>
+<p>The <code>initialize()</code> function does not change. The <code>run()</code> function changes as follows:</p>
+<pre><code>void run()
+{
+    if (state == stateRunning) {
+        int distance = distanceAverage.add(distanceSensor.getDistance());
+        log("distance: %u\n", distance);
+        if (distance &lt;= TOO_CLOSE) {
+            state = stateStopped;
+            leftMotor.setSpeed(0);
+            rightMotor.setSpeed(0);
+        }
+    }
+}
+</code></pre>
+<p>And with this simple enhancement the readings from the distance sensor are a lot more reliable!</p>
+<h2>Turning</h2>
+<p>Stopping when finding an obstacle is not much fun. Real robots don't just stop in front of obstacles, they find ways to avoid them and keep moving.</p>
+<p>This robot has very simple vision and motion systems, so its obstacle avoidance algorithm will also be pretty basic. What I'm going to do when the robot detects an obstacle ahead is to rotate in place for a while until no more nearby obstacles are detected and then move forward in the new direction.</p>
+<p>In essence this algorithm should make my little robot behave like a <a href="http://store.irobot.com/family/index.jsp?categoryId=2501652&amp;s=A-ProductAge">Roomba</a>. I can just attach a brush to it and have it swipe my floors!</p>
+<h2>The algorithm</h2>
+<p>I have used the concept of a <code>state</code> to make my robot have an idea what it is doing at any given time. Now that I'm also going to make the robot turn I need to define different states:</p>
+<pre><code>        enum state_t { stateStopped, stateMoving, stateTurning };
+</code></pre>
+<p>The "stopped" state will be for when the robot is not moving at all. The "moving" state will be for when the robot is moving forward. Finally, the "turning" state will be used while the robot is turning.</p>
+<p>The algorithm that I'm going to use in the <code>run()</code> method of my turn enabled firmware will be as follows:</p>
+<p><center><img alt="Arduino Robot" src="../static/images/arduino-robot-28.png" /></center></p>
+<p>In the above diagram diamond shapes represent decisions and boxes represent processes or state changes.</p>
+<p>The robot will begin in <code>stateMoving</code> state and will run for a limited amount of time, after which will change to the <code>stateStopped</code> state. The first two decisions in the flowchart address that part of the logic.</p>
+<p>If the robot is in <code>stateMoving</code> it will check for obstacles, and if one is found it will turn, which changes the state to <code>stateTurning</code>. If no obstacles are found then it will not change its state.</p>
+<p>If the robot is in <code>stateTurning</code> it will check if it is done turning, at which point it will change back to <code>stateMoving</code>. If the turn isn't complete then it will remain in the same state.</p>
+<p>Pretty simple, right?</p>
+<p>Recall that this is going to be inside the <code>run()</code> method, so as soon as this algorithm completes a pass the method will be called again, so this algorithm will run repeatedly.</p>
+<p>Since I feel pretty strongly about writing readable code I'm going to try to map the above diagram into code as directly as possible. Here is a first attempt to write my <code>run()</code> method:</p>
+<pre><code>    void run()
+    {
+        if (stopped())
+            return;
+        else if (doneRunning())
+            stop();
+        else if (moving()) {
+            if (obstacleAhead())
+                turn();
+        }
+        else if (turning()) {
+            if (doneTurning())
+                move();
+        }
+    }
+</code></pre>
+<p>What do you think? This is very readable code, right? I don't think I would have any trouble understanding this code if I come back to it after a long time away from the project.</p>
+<p>Now you may say that I'm cheating, that I just created an outline of the algorithm but in essence all I'm doing is calling functions that don't exist. </p>
+<p>I'm not cheating. This is called <a href="http://en.wikipedia.org/wiki/Top-down_and_bottom-up_design">top down design</a>, I start with the big pieces and then move on to the smaller ones. I will implement all the functions referenced above one by one, and by the end of the article I will have a fully functional sketch with a <code>run()</code> method that looks very close to the above.</p>
+<p>Let me start by describing what each supporting function does.</p>
+<ul>
+<li><code>stopped()</code> returns <code>true</code> if the robot is in <code>stateStopped</code> state or <code>false</code> otherwise.</li>
+<li><code>doneRunning()</code> returns <code>true</code> if the robot was up and running for a predetermined amount of time, which in my case I'll set to 30 seconds. <code>false</code> is returned otherwise.</li>
+<li><code>stop()</code> changes the robot state to <code>stateStopped</code>.</li>
+<li><code>moving()</code> returns <code>true</code> if the robot is in the <code>stateMoving</code> state or <code>false</code> otherwise.</li>
+<li><code>obstacleAhead()</code> returns <code>true</code> if there is an obstacle in close distance or <code>false</code> otherwise.</li>
+<li><code>turn()</code> initiates a turn. The state of the robot is changed to <code>stateTurning</code> as a result.</li>
+<li><code>turning()</code> returns <code>true</code> if the robot is in <code>stateTurning</code> state or <code>false</code> otherwise.</li>
+<li><code>doneTurning()</code> returns <code>true</code> if the turn maneuver is complete or <code>false</code> otherwise.</li>
+<li><code>move()</code> changes the robot state to <code>stateMoving</code>.</li>
+</ul>
+<h2>Implementing the turn enabled robot firmware</h2>
+<p>I now have nine auxiliary functions used by my <code>run()</code> method that I need to implement. I will start with three really easy ones:</p>
+<pre><code>        bool moving() { return (state == stateMoving); }
+        bool turning() { return (state == stateTurning); }
+        bool stopped() { return (state == stateStopped); }
+</code></pre>
+<p>I could have checked the <code>state</code> variable directly in the <code>run()</code> method, but these make the code in <code>run()</code> more readable. The C++ compiler is pretty smart and will generate the same code either way.</p>
+<p>There are two more functions from the above list that are pretty easy to implement:</p>
+<pre><code>        void move()
+        {
+            leftMotor.setSpeed(255);
+            rightMotor.setSpeed(255);
+            state = stateMoving;
+        }
+
+        void stop()
+        {
+            leftMotor.setSpeed(0);
+            rightMotor.setSpeed(0);
+            state = stateStopped;
+        }
+</code></pre>
+<p>Five functions done, four more to go!</p>
+<p>Let's look at <code>doneRunning()</code>.</p>
+<p>This function needs to return <code>true</code> after 30 seconds have passed or <code>false</code> otherwise. I have discussed how to time out actions in the previous article, so this presents no challenge.</p>
+<p>I will start by adding a member variable to the <code>Robot</code> class to store a time. I could choose to store the start time of the sketch and then in this function check that the current time is that variable plus thirty seconds, or else I could store the end time, in which case I just need to compare the current time against the variable. This last option seems more efficient, so that's what I'll do.</p>
+<p>I begin by adding the member variable:</p>
+<pre><code>    private:
+        unsigned long endTime;
+</code></pre>
+<p>Then I define a constant at the top of the sketch with the total run time in seconds:</p>
+<pre><code>#define RUN_TIME 30
+</code></pre>
+<p>In the <code>initialize()</code> method I set <code>endTime</code> to the proper value and then set the robot to <code>stateMoving</code> state:</p>
+<pre><code>        void initialize()
+        {
+            endTime = millis() + RUN_TIME * 1000;
+            move();
+        }
+</code></pre>
+<p>Now I can easily implement <code>doneRunning()</code>:</p>
+<pre><code>        bool doneRunning()
+        {
+            return (millis() &gt;= endTime);
+        }
+</code></pre>
+<p>But this implementation bothers me a bit. The <code>millis()</code> call does not feel right to me. I know I'm going to need to use the current time in some of the other functions I have yet to implement. For example, turning the robot will also be based on current time to some extent. One can imagine that obtaining the current time by calling the <code>millis()</code> function must have some cost, so it isn't very efficient to call the function multiple times, knowing that all these calls will be made very close to each other and will return the same value or close. It seems more efficient to obtain the current time once and then have all the functions that need it use it.</p>
+<p>The immediate solution one would think is to add another member variable to the <code>Robot</code> class and then at the top of the <code>run()</code> method set it to the current time, then this variable will be accessible to any method in the class.</p>
+<p>But is that really a good solution? Think about it. Member variables are used to keep state in the object. The current time can't be considered state, it is only valid for the execution of the <code>run()</code> method, the next time <code>run()</code> is called it will have to be obtained again.</p>
+<p>It seems more logical to me to have the current time as a local variable inside the <code>run()</code> method, and then passed as an argument to <code>doneRunning()</code>:</p>
+<pre><code>        void run()
+        {
+            unsigned long currentTime = millis();
+
+            if (stopped())
+                return;
+            else if (doneRunning(currentTime))
+                stop();
+            // ...
+        }
+</code></pre>
+<p>Then the <code>doneRunning()</code> method becomes:</p>
+<pre><code>        bool doneRunning(unsigned long currentTime)
+        {
+            return (currentTime &gt;= endTime);
+        }
+</code></pre>
+<p>And this feels a lot better.</p>
+<p>Now I have three functions left. Let's do <code>obstacleAhead()</code> next.</p>
+<p>To check for obstacles I need to read the distance sensor. I could read the sensor inside the <code>obstacleAhead()</code> method, but the same reasons that made me choose to get the current time once and pass it down to functions as an argument apply to the distance sensor. So I'm going to get a single (averaged) distance reading at the top of <code>run()</code> and then pass it down to any auxiliary functions that need it:</p>
+<pre><code>        void run()
+        {
+            unsigned long currentTime = millis();
+            int distance = distanceAverage.add(distanceSensor.getDistance());
+            // ...
+        }
+</code></pre>
+<p>The <code>obstacleAhead()</code> method will then take the distance reading as an argument:</p>
+<pre><code>        bool obstacleAhead(unsigned int distance)
+        {
+            return (distance &lt;= TOO_CLOSE);
+        }
+</code></pre>
+<p>The two auxiliary functions left to do are the most complex, because they deal with turning the robot when it comes close to an obstacle.</p>
+<p>Here is a basic question. Should I make the robot rotate to the left or to the right?</p>
+<p>To avoid having a robot that always moves in a predictable way I'm going to make it choose left some times and right some other times. To create this unpredictability I'm going to use the <a href="http://arduino.cc/en/Reference/Random"><code>random()</code></a> function from the Arduino library. This function takes a range of numbers as input and returns one of those numbers randomly, each time a different one. For example, <code>random(2)</code> will sometimes return 0 and sometimes 1. I can then turn left or right based on the result of the function.</p>
+<p>Another question. For how long does the robot need to turn?</p>
+<p>This question is harder to answer. I can easily get the robot to rotate in place by making one wheel go forward and the other go backwards, but the robot has no way to know how fast it rotates, or when it did a complete turn, this kind of feedback can only be obtained from an onboard magnetometer or compass.</p>
+<p>Without adding more hardware the best I can do is use more random numbers. The algorithm that I will implement comes up with a random number that determines for how long the robot will rotate. Once that time passes the robot will start checking the distance sensor, while still rotating. The rotation will end only when the distance sensor finds no obstacles in the way.</p>
+<p>Armed with the above ideas I can write <code>turn()</code> as follows:</p>
+<pre><code>        bool turn(unsigned long currentTime)
+        {
+            if (random(2) == 0) {
+                leftMotor.setSpeed(-255);
+                rightMotor.setSpeed(255);
+            }
+            else {
+                leftMotor.setSpeed(255);
+                rightMotor.setSpeed(-255);
+            }
+            state = stateTurning;
+            endStateTime = currentTime + random(500, 1000);
+        }
+</code></pre>
+<p>The first <code>if</code> statement decides to turn left or right based on the result of <code>random(2)</code>. To make the robot turn the wheels of the robot are set to run in opposite directions. And after updating the state to <code>stateTurning</code> I just need to make the robot stay in the turning state for a random amount of time. This is yet another timed action like the 30 second timeout I implemented above, so I need another member variable to keep track of when the turn is complete. I'm going to call that member variable <code>endStateTime</code>. The idea is that any robot state that needs a timed action can use this member variable to indicate the time when the action ends:</p>
+<pre><code>    private:
+        unsigned long endStateTime;
+</code></pre>
+<p>The value I store in <code>endStateTime</code> is the current time plus a random value between half and a full second (recall that all the times are in millisecond units). I chose the range of the random arbitrarily, knowing that I can always fine tune these numbers if they don't work well.</p>
+<p>And now I have one function left to do.</p>
+<p>I said above that a turn is over when two conditions are met. First, the time for the turn must have passed. Second, the distance sensor must not see any obstacles ahead. Based on the above description it is clear that <code>doneTurning()</code> will need two arguments, the current time and the sensor distance reading:</p>
+<pre><code>        bool doneTurning(unsigned long currentTime, unsigned int distance)
+        {
+            if (currentTime &gt;= endStateTime)
+                return (distance &gt; TOO_CLOSE);
+            return false;
+        }
+</code></pre>
+<p>To complete the task I'm going to review my <code>run()</code> method and make sure I'm sending the proper arguments to each auxiliary function:</p>
+<pre><code>        void run()
+        {
+            if (stopped())
+                return;
+
+            unsigned long currentTime = millis();
+            int distance = distanceAverage.add(distanceSensor.getDistance());
+            log("state: %d, currentTime: %ul, distance: %u\n", state, currentTime, distance);
+
+            if (doneRunning(currentTime))
+                stop();
+            else if (moving()) {
+                if (obstacleAhead(distance))
+                    turn(currentTime);
+            }
+            else if (turning()) {
+                if (doneTurning(currentTime, distance))
+                    move();
+            }
+        }
+</code></pre>
+<p>Since the <code>stopped()</code> function does not require any arguments I moved it to above the lines that set <code>currentTime</code> and <code>distance</code>.</p>
+<p>Also note that I threw in a logging statement that prints the current state, time and distance reading. Since I have the functionality to log already in place there is no reason not to use it!</p>
+<h2>Final words</h2>
+<p>You may feel that there is something missing, that I haven't done anything terribly complex and that with just a bunch of short and simple functions the robot will not have enough behavior built in it to move and turn.</p>
+<p>You expected something dark and complex needed to happen somewhere because the problem is complex, but the beauty of partitioning a problem into smaller pieces is that each piece by itself isn't as hard as the whole problem.</p>
+<p>Of course you don't have to take my word for it. The code is free and open source and is available on my github page. You can download it as a zip file below:</p>
+<p>Download <a href="https://codeload.github.com/miguelgrinberg/michelino/zip/v0.2">michelino v0.2</a>.</p>
+<p>Or if you prefer you can <a href="https://github.com/miguelgrinberg/michelino/tree/v0.2">clone it directly from github</a>.</p>
+<p>And for those that aren't building a robot along with me, here is a short video of my robot running today's firmware:</p>
+<p><center><iframe width="450" height="253" src="http://www.youtube-nocookie.com/embed/PMR-cwbZecQ?rel=0" frameborder="0" allowfullscreen></iframe></center></p>
+<p>In the next chapter of the series I will be adding remote control support to my robot and I will be using my cell phone as the controller.</p>
+<p>Thank you for reading these articles, I hope you will be back for the next one!</p>
+<p>Miguel</p></div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/building-an-arduino-robot-part-v-avoiding-obstacles" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/building-an-arduino-robot-part-v-avoiding-obstacles" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="building-an-arduino-robot-part-v-avoiding-obstacles.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/building-an-arduino-robot-part-v-avoiding-obstacles" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+
+
+<h4 style="text-align: right"><a name="comments"></a>64 comments</h4>
+
+
+<div class="comment">
+    <ul>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/6e15252e38ab6d8183157ba0ec7ccbc1ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#1</span> <span class="label label-primary">Mylo</span> said
+                    <span class="flask-moment" data-timestamp="2013-03-16T00:39:06Z" data-format="fromNow(0)" data-refresh="0">2013-03-16T00:39:06Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hey Miguel,
+
+great tutorial, perfect explanation for starting out with the Arduino and c++ programming language.. I&#39;m still trying to figure out some (or a lot!) of the code but your descriptions are really useful for understanding it all.. keep up the good work :)
+
+Mylo</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#2</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-03-16T00:57:49Z" data-format="fromNow(0)" data-refresh="0">2013-03-16T00:57:49Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Mylo: if anything isn&#39;t clear enough please ask. While I&#39;m also relatively new to Arduino programming, I have more years than I want to admit writing C++, so I could be inadvertently omitting stuff that is obvious to me but not to people that is new to the language. I&#39;m always open to revise and improve my articles.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/6e15252e38ab6d8183157ba0ec7ccbc1ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#3</span> <span class="label label-primary">Mylo</span> said
+                    <span class="flask-moment" data-timestamp="2013-03-16T11:53:28Z" data-format="fromNow(0)" data-refresh="0">2013-03-16T11:53:28Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hey Miguel, thanks for the response.. well the one thing i&#39;m struggling to understand is the use of the getSpeed statement, it doesn&#39;t seem to be called at any point, is it used by the AF library or am i just missing the point! Also i have the Arduino motor shield with no library.. is it good practice to writing all the statements to make it move into the motor class?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#4</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-03-16T16:45:12Z" data-format="fromNow(0)" data-refresh="0">2013-03-16T16:45:12Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Mylo: Very good question. The getSpeed() function is in the motor device driver interface that I designed. When I designed this interface I wasn&#39;t thinking specifically about the functions I would need in my robot, I was thinking about what general functions a sketch may need when working with a motor, and it seemed very reasonable to have a function to set the speed and another to return the current speed. So far I haven&#39;t had a need to use getSpeed(), but that doesn&#39;t mean it does not belong in a motor device driver, in fact it makes total sense for it to be there. So that particular function isn&#39;t used right now. But it might be used in the future. Suppose I&#39;m debugging some problem with the motors and I want to write a log of the motor speeds. Then having this function already in there will make it a lot easier.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/6e15252e38ab6d8183157ba0ec7ccbc1ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#5</span> <span class="label label-primary">Mylo</span> said
+                    <span class="flask-moment" data-timestamp="2013-03-20T15:01:36Z" data-format="fromNow(0)" data-refresh="0">2013-03-20T15:01:36Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hey Miguel, Thanks for the reply, have been looking through the rest of your code today, rather than just copy and paste it&#39;s good to understand it as i&#39;m creating my bot! and its great to learn properly for future projects. There&#39;s one more thing i was wondering if you could clarify for me :) in your template file on the line: &#39; MovingAverage(V def = 0) : sum(0), p(0)&#39; what is the V def = 0, i understand the typename V but when it declares def = 0 is &#39;def&#39; a c++ keyword or just a variable name you created? does the = 0 mean you don&#39;t need to send a value to the class?
+
+Thanks again
+Myles</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#6</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-03-21T04:11:56Z" data-format="fromNow(0)" data-refresh="0">2013-03-21T04:11:56Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Mylo: the &#34;V def = 0&#34; syntax is pretty easy. The &#34;V&#34; is the type (which is resolved by the compiler depending on the template arguments). The &#34;def&#34; is the variable name, I just picked that name as short for &#34;default&#34;, since you can&#39;t use the word default as a variable name because that is a reserved keyword in C and C++. The &#34;= 0&#34; just says that if this argument isn&#39;t given then it will default to 0, so you can call MovingAverage(0) or just MovingAverage() and in both cases &#34;def&#34; will have a value of 0.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/6e15252e38ab6d8183157ba0ec7ccbc1ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#7</span> <span class="label label-primary">Mylo</span> said
+                    <span class="flask-moment" data-timestamp="2013-03-21T19:17:50Z" data-format="fromNow(0)" data-refresh="0">2013-03-21T19:17:50Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">That&#39;s great,.. my bot now has its brains and its running around the room! Thanks again for the great tutorial.. this may not be the last you hear from me if i get any more c++ questions!!
+
+Mylo</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/8391cf22f3b29a62deef366b396ee00bce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#8</span> <span class="label label-primary">Bennett</span> said
+                    <span class="flask-moment" data-timestamp="2013-07-17T12:36:49Z" data-format="fromNow(0)" data-refresh="0">2013-07-17T12:36:49Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">First off, this tutorial is awesome. Your attention to detail and just overall dedication to this project and blog are fantastic and I really appreciate you doing this.
+I am new to both Arduino and C++. My problem I am having right now is in the newping_distance_sensor.h. The compiler is saying it expected a class name before &#39;{&#39; in line 8 when I have &#34;class DistanceSensorDriver : public DistanceSensor&#34; I have everything just like yours but for some reason it just is not working. I don&#39;t know what I am missing.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/8391cf22f3b29a62deef366b396ee00bce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#9</span> <span class="label label-primary">Bennett</span> said
+                    <span class="flask-moment" data-timestamp="2013-07-17T18:14:15Z" data-format="fromNow(0)" data-refresh="0">2013-07-17T18:14:15Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">So I have the program working great. It is a little bit different because I have some different parts and some things just didn&#39;t work out how you said. But I followed your program as close as I could and it works fine. However, it only works when it is plugged into the USB to the computer. It doesn&#39;t work when it is solely on battery power. It gets stuck in &#39;stateturning&#39; pretty much and just won&#39;t stop turning. I can not figure out why this is happening. I don&#39;t see how it is my code since it works with the USB. I have tried using different SainsmartSensors but nothing seems to work.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#10</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-07-18T04:02:34Z" data-format="fromNow(0)" data-refresh="0">2013-07-18T04:02:34Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Bennet: seeing the exact error message from gcc might help me figure out what&#39;s going on. My only guess right now is that you missed the #include &#34;distance_sensor.h&#34; at the top of the file.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#11</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-07-18T04:05:01Z" data-format="fromNow(0)" data-refresh="0">2013-07-18T04:05:01Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Bennett: you are probably having power issues. Powering the motors with a separate power supply will probably solve your problem. Alternatively a bigger single power source might help too.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/448de69e6a727f384de7a717088dd6efce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#12</span> <span class="label label-primary">Sercan</span> said
+                    <span class="flask-moment" data-timestamp="2013-07-30T20:51:01Z" data-format="fromNow(0)" data-refresh="0">2013-07-30T20:51:01Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Bennet: I had the same problem with you. But since Arduino board needs a power voltage higher than 6v, four AA batteries are not enough to supply enough power. And that causes the board malfunction. Better use a 9V battery for the board, and use 4xAA batteries for the motor shield.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/ae26f1eac609497df36b1bf25bb0de4dce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#13</span> <span class="label label-primary">Vincent</span> said
+                    <span class="flask-moment" data-timestamp="2013-08-18T14:59:21Z" data-format="fromNow(0)" data-refresh="0">2013-08-18T14:59:21Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I have some problems to compile the source. I m new with Arduino and C++. This is my error &#34;newping_distance_sensor.h:29: error: &#39;NewPing&#39; does not name a type&#34; but i have #include &lt;NewPing.h&gt; into the same file and it doesnt work, any help would be appreciated, thanks.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#14</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-08-19T22:52:06Z" data-format="fromNow(0)" data-refresh="0">2013-08-19T22:52:06Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Vincent: you probably haven&#39;t installed the NewPing library in your Arduino environment. See the Arduino documentation for how to install libraries.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/1ee4a9d96354266bfebba8d5b1c273edce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#15</span> <span class="label label-primary"><a href="http://blog.miguelgrinberg.com/index">NattyFido</a></span> said
+                    <span class="flask-moment" data-timestamp="2013-08-23T12:20:12Z" data-format="fromNow(0)" data-refresh="0">2013-08-23T12:20:12Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Excellent article, helped me sort out where I&#39;d been going wrong with my own code!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/851c5fc71f5542c0a61993b3b0e20ac5ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#16</span> <span class="label label-primary">Mauricio de Abreu Antunes</span> said
+                    <span class="flask-moment" data-timestamp="2013-08-27T12:26:48Z" data-format="fromNow(0)" data-refresh="0">2013-08-27T12:26:48Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Are 4x AA batteries enough for the robot?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#17</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-08-28T04:03:40Z" data-format="fromNow(0)" data-refresh="0">2013-08-28T04:03:40Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Mauricio: 4 AA batteries are enough for the Arduino and the sensors. They will probably not be enough to also power the motors.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/851c5fc71f5542c0a61993b3b0e20ac5ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#18</span> <span class="label label-primary">Mauricio de Abreu Antunes</span> said
+                    <span class="flask-moment" data-timestamp="2013-08-28T17:43:09Z" data-format="fromNow(0)" data-refresh="0">2013-08-28T17:43:09Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Thanks for your quick response!
+Well, good to know it, but you are using 4 AA batteries no? How is it working? I just can see 4 AA batteries on your robot.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#19</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-08-29T04:13:28Z" data-format="fromNow(0)" data-refresh="0">2013-08-29T04:13:28Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Mauricio: Yes, I was able to use just 4 AA batteries, but barely, I had to replace batteries very often. Using a 9V battery, or even better having separate power for the motors makes the robot run much more smoothly.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/c79c789392edc6193aab74ad695fca0dce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#20</span> <span class="label label-primary">Nilesh</span> said
+                    <span class="flask-moment" data-timestamp="2013-09-21T09:00:06Z" data-format="fromNow(0)" data-refresh="0">2013-09-21T09:00:06Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel. I am observing a strange occurrence. If I allocate pins 14 and 15, the distance sensor does not work. But when I allocate ping 16 and 17 it works fine. 
+
+I have not allocated pins 14 and 15 for anything else.
+
+What could be the error you think? </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#21</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-09-21T16:16:46Z" data-format="fromNow(0)" data-refresh="0">2013-09-21T16:16:46Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Nilesh: You may want to try to disconnect everything else and leave just the distance sensor. Does that work then? If not, then maybe try another Arduino board if you have one, I guess it could be a problem with the board that you are using.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/c79c789392edc6193aab74ad695fca0dce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#22</span> <span class="label label-primary">Nilesh</span> said
+                    <span class="flask-moment" data-timestamp="2013-09-22T06:12:54Z" data-format="fromNow(0)" data-refresh="0">2013-09-22T06:12:54Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Yes it does work fine. I tested that before using it in the robot car. I think it could be an issue with the motor shield. As per the tutorial the motor shield uses only 3 pins for each motor but there are 4th pins dedicated for current sensing as shown below:
+
+Function	                 Channel A	Channel B
+Direction	                 Digital 12	        Digital 13
+Speed (PWM)	         Digital 3	        Digital 11
+Brake	                 Digital 9	        Digital 8
+Current Sensing	 Analog 0	        Analog 1
+
+Do you think this could be creating a collision?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#23</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-09-22T06:25:35Z" data-format="fromNow(0)" data-refresh="0">2013-09-22T06:25:35Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Nilesh: I forgot you were using the Arduino shield, I replied thinking on the Adafruit one. This note is in the Arduino Motor Shield page:
+
+IMPORTANT: When the current sense pins are soldered they cannot be used as general analog pins. You will get bad readings if you try to use A0 and A1.
+
+I guess that says it all. If you want to use A0 and A1 you have to disable the current sensing feature.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/c79c789392edc6193aab74ad695fca0dce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#24</span> <span class="label label-primary">Nilesh</span> said
+                    <span class="flask-moment" data-timestamp="2013-09-23T09:43:48Z" data-format="fromNow(0)" data-refresh="0">2013-09-23T09:43:48Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Yes that says it all. Thanks Miguel. I guess I can use the other analog pins for my ultrasonic sensor and bluetooth module.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/5fa5d0726c1ec40237d5d09a0a8dba8ece2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#25</span> <span class="label label-primary">Laurynas</span> said
+                    <span class="flask-moment" data-timestamp="2013-09-25T13:54:49Z" data-format="fromNow(0)" data-refresh="0">2013-09-25T13:54:49Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi, Miguel. You did great tutorial, but for me your code doesn&#39;t work. I have installed libraries, but then compiling I get error message. It says: &#34;Motor&#34; does not name a type.</p>
+                </div>
+            </div>
+        </li>
+        
+    </ul>
+</div>
+
+<div class="page">
+<ul class="pager">
+  <li class="previous disabled">
+    <a href="#">&laquo;&laquo;</a>
+  </li>
+  <li class="previous disabled">
+    <a href="#">&laquo;</a>
+  </li>
+  <li class="next">
+    <a href="building-an-arduino-robot-part-v-avoiding-obstacles/page/0.html#comments">&raquo;&raquo;</a>
+  </li>
+  <li class="next">
+    <a href="building-an-arduino-robot-part-v-avoiding-obstacles/page/2.html#comments">&raquo;</a>
+  </li>
+</ul>
+</div>
+
+<h3><a name="commentform"></a>Leave a Comment</h3>
+
+<form action="#commentform" method="post"
+  class="form" role="form">
+  <div style="display:none;"><input id="csrf_token" name="csrf_token" type="hidden" value="1439536712.34##99d679b3c2ba9278a370cb8eb67b42d745d8ebec"></div>
+  
+    
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="name">Name</label>
+        <input class="form-control" id="name" name="name" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="url">URL</label>
+        <input class="form-control" id="url" name="url" type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="email">Email</label>
+        <input class="form-control" id="email" name="email" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="comment">Comment</label>
+        <textarea class="form-control" id="comment" name="comment" required></textarea>
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="captcha">Captcha</label>
+        
+<script type="text/javascript">var RecaptchaOptions = {"custom_translations": {"audio_challenge": "Get an audio challenge", "cant_hear_this": "Download sound as MP3", "help_btn": "Help", "image_alt_text": "reCAPTCHA challenge image", "incorrect_try_again": "Incorrect. Try again.", "instructions_audio": "Type what you hear", "instructions_visual": "Type the text", "play_again": "Play sound again", "privacy_and_terms": "Privacy & Terms", "refresh_btn": "Get a new challenge", "visual_challenge": "Get a visual challenge"}, "theme": "white"};</script>
+<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S"></script>
+<noscript>
+  <iframe src="http://www.google.com/recaptcha/api/noscript?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S" height="300" width="500" frameborder="0"></iframe><br>
+  <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+  <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
+</noscript>
+
+  </div>
+
+
+    
+
+
+
+
+
+  
+
+
+    <input class="btn btn-default" id="submit" name="submit" type="submit" value="Submit">
+  
+
+
+
+
+
+</form>
+
+
+</div>
+
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <p class="elapsed">This page was generated in None seconds.</p>
+            <p>&copy; 2014 by Miguel Grinberg. All rights reserved. <a href="mailto:webmaster _at_ miguelgrinberg _dot_ com">Questions?</a></p>
+        </div>
+    </div>
+
+
+    
+    
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.33/jquery.colorbox-min.js"></script>
+    <script type="text/javascript" src="../static/prettify.js"></script>
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment-with-langs.min.js"></script>
+<script>
+function flask_moment_render(elem) {
+    $(elem).text(eval('moment("' + $(elem).data('timestamp') + '").' + $(elem).data('format') + ';'));
+    $(elem).removeClass('flask-moment');
+}
+function flask_moment_render_all() {
+    $('.flask-moment').each(function() {
+        flask_moment_render(this);
+        if ($(this).data('refresh')) {
+            (function(elem, interval) { setInterval(function() { flask_moment_render(elem) }, interval); })(this, $(this).data('refresh'));
+        }
+    })
+}
+$(document).ready(function() {
+    flask_moment_render_all();
+});
+</script>
+    
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4777284-15']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".gallery").colorbox({rel:".gallery",maxWidth:"95%",maxHeight:"95%",scalePhotos:true});
+            // add prettyprint class to all <pre><code></code></pre> blocks
+            var prettify = false;
+            $("pre code").parent().each(function() {
+                $(this).addClass('prettyprint');
+                prettify = true;
+            });
+            prettyPrint();
+        });
+    </script>
+
+
+  </body>
+
+<!-- Mirrored from blog.miguelgrinberg.com/post/building-an-arduino-robot-part-v-avoiding-obstacles by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:40:36 GMT -->
+</html>

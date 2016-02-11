@@ -1,0 +1,175 @@
+<html>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch16s05.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:34 GMT -->
+<head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>16.5. Documentation strings</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><meta name="keywords" content="python, biology, bioinformatics, programming, computational biology"><link rel="home" href="index-2.html" title="Introduction to Programming using Python"><link rel="up" href="ch16.html" title="Chapter 16. Files"><link rel="previous" href="ch16s04.html" title="16.4. Design problems"><link rel="next" href="ch17.html" title="Chapter 17. Scripting"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">16.5. Documentation strings</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch16s04.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><th width="60%" align="center">Chapter 16. Files</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch17.html"><img src="images/next.png" alt="Next"></a></td></tr></table><hr></div><div class="section"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="d0e6699"></a>16.5. Documentation strings</h2></div></div><p>
+      The code of the program written in this section (<a href="ch16s04.html#prog_restrict" title="Example 16.2. Restriction of a DNA sequence">Example 16.2</a>) fills about one page. If you put it
+      away for a while and look on it a week later, it might be
+      difficult to remember all the choices made during the
+      development and it might take a lot of time to understand
+      it. This fact underlines the importance to <span class="bold"><b>document programs</b></span>.
+    </p><p>
+      For this purpose you can use comments that are ignored by the
+      interpreter. In Python, all lines starting with a
+      <tt>#</tt> character are comments. But Python has a
+      more powerful mechanism to document programs. If the first
+      statement of a function or file is a string, this string is used
+      as documentation string which is available by the
+      <b>pydoc</b> command in a shell or the
+      <tt>help</tt> function of the interpreter.
+    </p><p>
+      Here is a documented version of our restriction program. 
+    </p><pre class="programlisting">#!/usr/bin/python
+"""
+program that finds all occurences of restriction enzymes in a sequence
+
+at the moment the sequence is contained in the seq variable
+  todo: reads the sequence from a field
+
+enzyme data are read from the file: rebase.dat
+and results are written to file: restrict.res
+
+restriction: the program finds only occurences of EXACT restriction patterns
+"""
+
+def isexact(pat):
+    """
+checks if a pattern is an exact DNA sequence
+all strings containing only the following characters are considered to be
+an exact DNA sequence: atgcATGC
+    """
+    for c in pat.upper():
+        if c not in 'ATGC':
+            return 0
+    return 1
+
+def print_matches(ofh, enz, matches):
+    """
+write starting positions of occurences of a restriction site to a file
+positions in the sequence starts by 1
+    """
+    if matches:
+        print &gt;&gt;ofh, "Enzyme %s matches at:" % enz,
+        for m in matches:
+            print &gt;&gt;ofh, m+1,
+        print &gt;&gt;ofh
+    else:
+        print &gt;&gt;ofh, "No match found for enzyme %s." % enz
+
+def get_site_only(pat):
+    """
+clean a pattern string read from Rebase to obtain only the recognition site
+sequence 
+   """
+    newpat = ""
+    for c in pat:
+        if c.isalpha():
+            newpat += c
+    return newpat
+
+def findpos(seq, pat):
+    """
+find all occurences of restriction site pattern in a sequence
+RETURN VALUE: a list containing the start positions of all occurences
+RESTRICTION: can only process exact patterns, searching with ambiguous
+pattern strings would not produce an error
+    """
+    matches = []
+    current_match = seq.find(pat)
+    while current_match != -1:
+        matches.append(current_match)
+        current_match =seq.find(pat, current_match+1)
+    return matches
+
+# starting main stream
+
+seq = """atgagtgaacgtctgagcattaccccgctggggccgtatatcggcgcacaaa
+tttcgggtgccgacctgacgcgcccgttaagcgataatcagtttgaacagctttaccatgcggtg
+ctgcgccatcaggtggtgtttctacgcgatcaagctattacgccgcagcagcaacgcgcgctggc
+ccagcgttttggcgaattgcatattcaccctgtttacccgcatgccgaaggggttgacgagatca
+tcgtgctggatacccataacgataatccgccagataacgacaactggcataccgatgtgacattt
+attgaaacgccacccgcaggggcgattctggcagctaaagagttaccttcgaccggcggtgatac
+gctctggaccagcggtattgcggcctatgaggcgctctctgttcccttccgccagctgctgagtg
+ggctgcgtgcggagcatgatttccgtaaatcgttcccggaatacaaataccgcaaaaccgaggag
+gaacatcaacgctggcgcgaggcggtcgcgaaaaacccgccgttgctacatccggtggtgcgaac
+gcatccggtgagcggtaaacaggcgctgtttgtgaatgaaggctttactacgcgaattgttgatg
+tgagcgagaaagagagcgaagccttgttaagttttttgtttgcccatatcaccaaaccggagttt
+caggtgcgctggcgctggcaaccaaatgatattgcgatttgggataaccgcgtgacccagcacta
+tgccaatgccgattacctgccacagcgacggataatgcatcgggcgacgatccttggggataaac
+cgttttatcgggcggggtaa""".replace("\n","").upper()
+
+# open the input and output file
+ifh = open("../data/rebase.dat")
+ofh = open("rebase.res", "w")       
+
+# process enzyme by enzyme
+line = ifh.readline()
+while line:
+    # extract enzyme name and pattern string
+    fields = line.split()
+    name = fields[0]
+    pat = get_site_only(fields[2])
+
+    # find pattern and write the result
+    if isexact(pat):
+        print_matches(ofh, name, findpos(seq, pat))
+    # get the next enzyme
+    line = ifh.readline()
+
+# close opened files
+ofh.close() 
+ifh.close() 
+
+</pre><p>and the result of the documentation formatted with
+      <b>pydoc</b>
+    </p><pre class="programlisting">
+Python Library Documentation: module restrict_documented
+
+<span class="bold"><b>NAME</b></span>
+    restrict_documented - Program that find all occurrences of restriction enzymes in a sequence
+
+<span class="bold"><b>FILE</b></span>
+FILE
+    /home/maufrais/cours_python/code/restrict_documented.py
+
+<span class="bold"><b>DESCRIPTION</b></span>
+    At the moment the sequence is contained in the seq variable
+         
+    Enzyme data are red from the file: rebase.dat
+    and results are written to file: restrict.res
+    
+    restriction: the program finds only occurrences of EXACT restriction patterns
+
+<span class="bold"><b>FUNCTIONS</b></span>
+    <span class="bold"><b>get_site_only</b></span>(pat)
+        clean a pattern string red from Rebase to obtain only the recognition site
+        sequence
+    
+    <span class="bold"><b>isexact</b></span>(pat)
+        checks if a pattern is an exact DNA sequence
+        all strings containing only the following characters are considered to be
+        an exact DNA sequence: atgcATGC
+    
+    <span class="bold"><b>print_matches</b></span>(ofh, enz, matches)
+        write starting positions of occurrences of a restriction site to a file
+        positions in the sequence starts by 1
+    
+    <span class="bold"><b>findpos</b></span>(seq, pat)
+        find all occurrences of restriction site pattern in a sequence
+        RETURN VALUE: a list containing the start positions of all occurrences
+        RESTRICTION: can only process exact patterns, searching with ambiguous
+        pattern strings would not produce an error
+
+<span class="bold"><b>DATA</b></span>
+    <span class="bold"><b>__file__</b></span> = './restrict_documented.pyc'
+    <span class="bold"><b>__name__</b></span> = 'restrict_documented'
+    <span class="bold"><b>fields</b></span> = ['ZraI', '3', "GAC'GTC", '0', '!', 'AatII', '&gt;I', '136']
+    <span class="bold"><b>ifh</b></span> = &lt;closed file '../data/rebase.dat', mode 'r'&gt;
+    <span class="bold"><b>line</b></span> = ''
+    <span class="bold"><b>name</b></span> = 'ZraI'
+    <span class="bold"><b>ofh</b></span> = &lt;closed file 'rebase.res', mode 'w'&gt;
+    <span class="bold"><b>pat</b></span> = 'GACGTC'
+    <span class="bold"><b>seq</b></span> = 'ATGAGTGAACGTCTGAGCATTACCCCGCTGGGGCCGTATATCGGCGC...CATCGGGCGACGA...
+    </pre></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch16s04.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch16.html"><img src="images/up.png" alt="Up"></a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch17.html"><img src="images/next.png" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">16.4. Design problems&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index-2.html"><img src="images/home.png" alt="Home"></a></td><td width="40%" align="right" valign="top">&nbsp;Chapter 17. Scripting</td></tr></table></div></body>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch16s05.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:34 GMT -->
+</html>

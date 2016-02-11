@@ -1,0 +1,369 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from www.python-course.eu/file_management.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:08:39 GMT -->
+<head>
+
+<!-- Dieses Tag in den Head-Bereich oder direkt vor dem schlieÃŸenden Body-Tag einfÃ¼gen -->
+<script type="text/javascript" src="../apis.google.com/js/plusone.js"></script>
+
+
+
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "../connect.facebook.net/en_GB/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script><title>Python Tutorial: File Management</title>
+<meta http-equiv="content-type" content="text/html; charset="ISO-8859-1">
+<meta name="Description" content="File management in Python. We are covering reading and writing to a file and serializing
+objects with the pickle module" />
+<meta name="Keywords" content="Python, course, file, read, write, serialize, reading writing, pickle" />
+
+<link href="favicon.ico" rel="shortcut icon">
+
+<link href="moderna.css" rel="stylesheet" type="text/css" />
+<link href="moderna_print.css" media="print" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+<div id="container">
+
+<div id="banner">
+<!-- <a href="impressum.php">Impressum</a> | <a href="mailto:">contact</a> | --><h1>Python Course</h1>
+
+</div>
+
+	<!-- Begin Top Menu -->
+<ul id="navlist">
+<li><a href="index-2.html" >Home</a></li><li class="active"><a id="current" href="course.html" >Python 2 Tutorial</a></li><li><a href="python3_course.html" >Python 3 Tutorial</a></li><li><a href="advanced_topics.html" >Advanced Topics</a></li><li><a href="python_books.html" >Python Books</a></li><li><a href="python_tkinter.html" >Tkinter Tutorial</a></li><li><a href="contact.html" rel="nofollow">Contact</a></li>                          
+</ul>
+	<!-- End Top Menu -->
+<div id="sidebar-a">
+<img class="border" src="images/files.png" alt="box" />    <h2>Python 2 Tutorial</h2>
+
+<div class="menu">
+
+<ul>
+<li><a href="history_and_philosophy.html">History and Philosophy of Python</a></li><li><a href="why_python.html">Why Python</a></li><li><a href="interactive.html">Interactive Mode</a></li><li><a href="execute_script.html">Execute a Script</a></li><li><a href="blocks.html">Structuring with Indentation</a></li><li><a href="variables.html">Data Types and Variables</a></li><li><a href="operators.html">Operators</a></li><li><a href="input.html">input and raw_input via the keyboard</a></li><li><a href="conditional_statements.html">Conditional Statements</a></li><li><a href="loops.html">While Loops</a></li><li><a href="for_loop.html">For Loops</a></li><li><a href="formatted_output.html">Formatted output</a></li><li><a href="print.html">Output with Print</a></li><li><a href="sequential_data_types.html">Sequential Data Types</a></li><li><a href="dictionaries.html">Dictionaries</a></li><li><a href="sets_frozensets.html">Sets and Frozen Sets</a></li><li><a href="deep_copy.html">Shallow and Deep Copy</a></li><li><a href="functions.html">Functions</a></li><li><a href="recursive_functions.html">Recursion and Recursive Functions</a></li><li><a href="tests.html">Tests, DocTests, UnitTests</a></li><li><a href="memoization.html">Memoization and Decorators</a></li><li><a href="passing_arguments.html">Passing Arguments</a></li><li><a href="namespaces.html">Namespaces</a></li><li><a href="global_vs_local_variables.html">Global vs. Local Variables</a></li><li><a href="file_management.html">File Management</a></li><li><a href="modules_and_modular_programming.html">Modular Programming and Modules</a></li><li><a href="re.html">Introduction in Regular Expressions</a></li><li><a href="re_advanced.html">Regular Expressions, Advanced</a></li><li><a href="lambda.html">Lambda Operator, Filter, Reduce and Map</a></li><li><a href="list_comprehension.html">List Comprehension</a></li><li><a href="generators.html">Generators</a></li><li><a href="exception_handling.html">Exception Handling</a></li><li><a href="object_oriented_programming.html">Object Oriented Programming</a></li><li><a href="inheritance_example.html">Inheritance Example</a></li></ul>
+
+</div>
+
+<p>
+<h3>Mythology</h3>
+The first great achievement of Apollo was to slay the huge serpent Python. In some texts 
+Python is an enormous dragon and not a serpent. 
+<br>  
+But who was this mythical creature? Python was created out of the slime and mud left after 
+the great flood. She was  appointed by Gaia (Mother Earth) to guard the oracle of Delphi, 
+known as Pytho. After having defeated Python Apollo remade
+her former home and the oracle as his own.
+<br>
+
+</div><div id="sidebar-b"><img style="width: 150px;" alt="Python-Logo"
+		     src="images/python-logo.png"><!-- Dieses Tag dort einfügen, wo die +1-Schaltfläche dargestellt werden soll -->
+<g:plusone></g:plusone>
+<br><br>
+
+<div class="fb-like" data-href="www.python-course.eu" data-send="false" data-layout="button_count" 
+data-width="130" data-show-faces="true" data-action="recommend"></div>
+
+<br><br>
+This topic in German / Deutsche Übersetzung:
+    <a href="http://www.python-kurs.eu/dateien.php">Dateien lesen und schreiben in Python</a><h3>Python 2.7</h3>This tutorial deals with Python Version 2.7<br>This chapter from our course is available in a version for Python3: <a href="python3_file_management.html">File Management</a><h3>Classroom Training Courses</h3>
+<p>
+This website contains a free and extensive online tutorial by Bernd Klein with 
+material from his live <a href="python_classes.html">Python courses</a>.
+<br><br>
+If you are interested in an instructor-led classroom training course, you may have a look at the 
+<a href="http://ca.bodenseo.com/courses.php?topic=Python">Python courses
+<br><img style="width: 150px;" 
+alt="Bodenseo, Python courses and seminars"
+		     src="images/classroom_training_courses.jpg">
+</a>
+by Bernd Klein at Bodenseo.
+<br>
+<font size="1">© kabliczech - Fotolia.com</font>
+
+
+<br><br>
+<h3>... and now for something completely different ...</h3>
+Some might be interested to know the Englisch translation of the splendid love poem 
+of Catull, which is used in Latin within our course text. So here it is in a modern
+version:
+<br><br>
+<i>
+Let us live, my Lesbia, and love.<br>
+As for all the rumors of those stern old men,<br>
+Let us value them at a mere penny.<br>
+<br>
+Suns may set and yet rise again, but<br>
+Us, with our brief light, can set but once.<br>
+The night which falls is one never-ending sleep.<br>
+<br>
+Give me a thousand kisses, then a hundred.<br>
+Then, another thousand, and a second hundred.<br>
+Then, yet another thousand, and a hundred.<br>
+<br>
+Then, when we have counted up many thousands,<br>
+Let us shake the abacus[3], so that no one may know the number,<br>
+And become jealous when they see<br>
+How many kisses we have shared.<br>
+</i>
+<br>
+<h3>Comparing Python to Perl</h3>
+<i>
+"Frankly, I'd rather not try to compete with Perl in the areas where Perl is best -  
+it's a battle that's impossible to win, and I don't think it is a good idea to strive 
+for the number of obscure options and shortcuts that Perl has acquired through the years."
+</i>
+(Guido van Rossum, 7th of July 1992)
+<br><hr><br>
+But honestly, how do Python and Perl compare? Python and Perl have a similar background, 
+the Unix world with their usage of Shell scripting. The philosophy of both scripting languages
+is nearly completely different. Guido van Rossum said about this difference in his essay 
+"Comparing Python to Other Languages" (1997): 
+<i>
+"Perl emphasizes support for common application-oriented
+tasks, e.g. by having built-in regular expressions, file scanning and report generating features. 
+Python emphasizes support for common programming methodologies such as data structure design 
+and object-oriented programming, and encourages programmers to write readable (and thus maintainable)
+ code by providing an elegant but not overly cryptic notation. As a consequence, Python comes close to 
+ Perl but rarely beats it in its original application domain; however Python has an applicability well 
+ beyond Perl's niche."
+</i>
+
+ </p>
+ 
+ 
+
+</p></div>
+<div id="content">
+
+<div id="contextlinks">Previous Chapter: <a href="global_vs_local_variables.html">Global vs. Local Variables</a><br>
+<LINK rel="prev" href="global_vs_local_variables.html">Next Chapter: <a href="modules_and_modular_programming.html">Modular Programming and Modules</a><br>
+<LINK rel="next" href="modules_and_modular_programming.html"></div>
+<h2>File I/O</h2>
+<h3>Working with Files</h3>
+<p>
+<img class="imgright" src="images/files2.png" alt="Files" />
+Though everybody has an understanding of the term file, we want to give a formal definition anyway: 
+A file or a computer file is a chunk of logically related data or information which can be used by 
+computer programs. Usually a file is kept on durable storage. A unique name and path can be used 
+by human users or in programs or scripts to access a file for reading and modification purposes.
+<br><br>
+The term "file" in above described meaning appeared in the history of computers very early. It 
+was used as early as 1952, when punch cards where used.
+<br><br>  
+A programming language without the ability to store and retrieve previously stored 
+information would be hardly useful. 
+<br>The most basic tasks involved in file manipulation are reading data from files and 
+writing or appending data to files. 
+<br><br>
+The syntax for reading and writing files in Python is similar to programming languages like C 
+and C++ or Perl, but easier to handle.
+<br><br>
+In our first example we want to show how to read data from a file. The way of telling Python
+that we want to read from a file is to use the open  function. The first parameter is the name 
+of the file we want to read and with the second parameter assigned to "r" we are determining 
+that we want to read. 
+
+<pre>
+fobj = open("ad_lesbiam.txt", "r")
+</pre>
+The "r" is optional. An open() command with just a file name is opened for reading per default.
+The open() function returns a file object, which offers attributes and methods. 
+<pre>
+fobj = open("ad_lesbiam.txt")
+</pre>
+After we have finished working with a file, we have to close it again by using the 
+file object method close():
+<pre>
+fobj.close()
+</pre>
+Now we want to finally open and read a file. You can download the text file ad_lesbiam.txt, 
+if you want to test it yourself:
+<pre>
+fobj = open("ad_lesbiam.txt")
+for line in fobj:
+    print line.rstrip()
+fobj.close()
+</pre>
+If we save this script and call it "file_read.py", we get the following output, 
+provided that the textfile is available:
+<pre>
+$ python file_read.py 
+V. ad Lesbiam
+
+VIVAMUS mea Lesbia, atque amemus,
+rumoresque senum severiorum
+omnes unius aestimemus assis!
+soles occidere et redire possunt:
+nobis cum semel occidit breuis lux,
+nox est perpetua una dormienda.
+da mi basia mille, deinde centum,
+dein mille altera, dein secunda centum,
+deinde usque altera mille, deinde centum.
+dein, cum milia multa fecerimus,
+conturbabimus illa, ne sciamus,
+aut ne quis malus inuidere possit,
+cum tantum sciat esse basiorum.
+(GAIUS VALERIUS CATULLUS)
+</pre>
+By the way, the poem above is a love poem of Catull to his beloved Lesbia. 
+</p>
+
+<h3>Writing into a File</h3>
+<p>
+Writing to a file is as easy as reading from a file. To open a file for writing
+we use as the second parameter a "w" instead of a "r". To actually write the data
+to this file, we use the method write() of the file object. 
+
+<br>Example:
+<br>
+<pre>
+fobj_in = open("ad_lesbiam.txt")
+fobj_out = open("ad_lesbiam2.txt","w")
+i = 1
+for line in fobj_in:
+    print line.rstrip()
+    fobj_out.write(str(i) + ": " + line)
+    i = i + 1
+fobj_in.close()
+fobj_out.close()
+</pre>
+</p>
+Every line of the input text file is prefixed by its line number. So the result looks 
+like this:
+<pre>
+$ more ad_lesbiam2.txt 
+1: V. ad Lesbiam 
+2: 
+3: VIVAMUS mea Lesbia, atque amemus,
+4: rumoresque senum seueriorum
+5: omnes unius aestimemus assis!
+6: soles occidere et redire possunt:
+7: nobis cum semel occidit breuis lux,
+8: nox est perpetua una dormienda.
+9: da mi basia mille, deinde centum,
+10: dein mille altera, dein secunda centum,
+11: deinde usque altera mille, deinde centum.
+12: dein, cum milia multa fecerimus,
+13: conturbabimus illa, ne sciamus,
+14: aut ne quis malus inuidere possit,
+15: cum tantum sciat esse basiorum.
+16: (GAIUS VALERIUS CATULLUS)
+</pre>
+
+We have to point out one possible problem: What happens if you open a file for writing, and this file 
+already exists. Be happy, if you had a backup of this file, if you need it, because as soon as an open()
+with a "w" has been executed the file will be removed. This is often what you want, but sometimes you just
+want to append to the file, like it's the case with logfiles.
+<br><br>
+If you want to append something to an existing file, you have to use "a" instead of "w".
+<br><br>
+<h3>Reading in one go</h3>
+So far we worked on files line by line by using a for loop. Very often, especially if the file is not
+too large, it's more convenient to read the file into a complete data structure, e.g. a string or a list.
+The file can be closed after
+reading and the work is accomplished on this data structure:
+<pre>
+>>> poem = open("ad_lesbiam.txt").readlines()
+>>> print poem
+['V. ad Lesbiam \n', '\n', 'VIVAMUS mea Lesbia, atque amemus,\n', 'rumoresque senum seueriorum\n', 'omnes unius aestimemus assis!\n', 'soles occidere et redire possunt:\n', 'nobis cum semel occidit breuis lux,\n', 'nox est perpetua una dormienda.\n', 'da mi basia mille, deinde centum,\n', 'dein mille altera, dein secunda centum,\n', 'deinde usque altera mille, deinde centum.\n', 'dein, cum milia multa fecerimus,\n', 'conturbabimus illa, ne sciamus,\n', 'aut ne quis malus inuidere possit,\n', 'cum tantum sciat esse basiorum.\n', '(GAIUS VALERIUS CATULLUS)']
+>>> print poem[2]
+VIVAMUS mea Lesbia, atque amemus,
+</pre>
+In the above example, the complete poem is read into the list poem. We can acces e.g. the 3rd line with
+<code>poem[2]</code>.
+<br><br>
+Another convenient way to read in a file might be the method read() of open. With this method we can read the 
+complete file into a string, as we can see in the next example:
+<pre>
+>>> poem = open("ad_lesbiam.txt").read()
+>>> print poem[16:34]
+VIVAMUS mea Lesbia
+>>> type(poem)
+&lt;type 'str'&gt;
+>>> 
+</pre>
+
+This string contains the complete file including the carriage returns and line feeds.
+
+<h3>"How to get into a Pickle"</h3>
+<p>
+<img class="imgright" src="images/pickle.png" alt="Pickle" />
+We don't mean what the heading says. We just want to show you, how you can save your data in an easy way,
+so that you or better your program can reread them at a later date again. We are "pickling" the data, so that
+it doesn't get lost.
+<br><br>
+Python offers for this purpose a module, which is called "pickle"
+With the algorithms of the pickle module we can serialize and de-serialize Python object structures. 
+"Pickling" denotes the process which converts a Python object hierarchy into a byte stream, 
+and "unpickling" on the other hand is the inverse operation, i.e. the byte stream is converted back 
+into an object hierarchy. What we call pickling (and unpickling) is also known as "serialization" 
+or "flattening" a data structure.
+<br><br>
+An object can be dumped with the dump method of the pickle module:
+<pre>
+pickle.dump(obj, file[,protocol])
+</pre>
+A serialized version of the object "obj" will be written to a file "file". The protocol
+determines the way the object should be written:
+<ul>
+<li>0=ascii</li>
+<li>1=compact (not human readable)</li>
+<li>2=optimzed classes</li>
+</ul>
+ 
+<br>
+Objects which have been dumped to a file with <b>pickle.dump</b> can be reread into a program
+by using the method pickle.load(file). pickle.load recognizes automatically, which format
+had been used for writing the data.
+<br>
+A simple example:<br>
+<pre>
+import pickle
+data = (1.4,42)
+output = open('data.pkl', 'w')
+pickle.dump(data, output)
+output.close()
+</pre>
+After this code had been executed, the content of the file data.pkl will look like this:
+<pre>
+(F1.3999999999999999
+I42
+tp0
+.
+</pre>
+This file can easily be read in again:
+
+<pre>
+>>> import pickle
+>>> f = open("data.pkl")
+>>> data = pickle.load(f)
+>>> print data
+(1.3999999999999999, 42)
+>>> 
+</pre>
+Only the objects and not their names are saved. That's why we use the assignment to data in the 
+previous example, i.e.data = pickle.load(f).
+<br><br></p>
+
+<div id="contextlinks">Previous Chapter: <a href="global_vs_local_variables.html">Global vs. Local Variables</a><br>
+<LINK rel="prev" href="global_vs_local_variables.html">Next Chapter: <a href="modules_and_modular_programming.html">Modular Programming and Modules</a><br>
+<LINK rel="next" href="modules_and_modular_programming.html"></div><br><br><br>
+
+</div>
+<div id="footer">  &copy; 2011 - 2014 <a href="http://www.bklein.de/">Bernd Klein</a>,
+Bodenseo; 
+Design by Denise Mitchinson adapted for python-course.eu by Bernd Klein</div>
+</div>
+</body>
+
+<!-- Mirrored from www.python-course.eu/file_management.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:08:45 GMT -->
+</html>

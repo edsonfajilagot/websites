@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+    
+<!-- Mirrored from learnpythonthehardway.org/book/ex34.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 03 Sep 2014 17:52:40 GMT -->
+<head>
+        <link href='stylesheets/fonts.css' rel='stylesheet' type='text/css'>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="twitter:creator" content="@lzsthw">
+        <title>Learn Python</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href='stylesheets/pure.css' rel='stylesheet'>
+        <link href='stylesheets/pygments.css' rel='stylesheet'>
+        <link href='stylesheets/main.css' rel='stylesheet'>
+        <link href='stylesheets/nav.css' rel='stylesheet'>
+        <style>
+        </style>
+ 
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.11: http://docutils.sourceforge.net/" />
+<title>Exercise 34: Accessing Elements of Lists</title>
+    </head>
+    <body id='wrapper'>
+        <div class='master-logo-wrapper clearfix'>
+            <a href='index-2.html'>
+                <div class='python-logo-sprite'></div>
+            </a>
+                <span class='edition-3'><img src='images/3rd-edition-cloud.png' /></span>
+        </div><!-- /.master-logo-wrapper -->
+
+        <div style='clear: both;'>
+
+        <div id="main">
+            <div class='chapters-wrapper'>
+                  <nav id='chapters'>
+                      <div class='masthead-title'></div>
+                      <ul class='masthead'>
+                          <li>
+                              <a href='index.html'>
+                                  <div class='nav-tcontents'>
+                                      <img src='images/nav-contents.png' /></br>
+                                  main
+                                  </div>
+                              </a>
+                          </li>
+                          <li>
+                              <a href='#video'>
+                                  <div class='nav-play-video' id="#video_toggle_icon">
+                                      <img src='images/nav-play.png' /><br/>
+                                      play video
+                                      <div class='line-2'>(this chapter)</div>
+                                  </div>
+                              </a>
+                          </li>
+                          <li>
+                              <a href='#' id='prev_link'>
+                                  <div class='nav-previous'>
+                                      <img src='images/nav-previous.png' /></br>
+                                      previous
+                                  </div>
+                              </a>
+                          </li>
+                          <li>
+                              <a href='#' id='next_link'>
+                                  <div class='nav-next'>
+                                      <img src='images/nav-next.png' /></br>
+                                      next
+                                  </div>
+                              </a>
+                          </li>
+                          <li><!-- AMBULANCE ICON -->
+                              <a href='help.html' id=''>
+                                  <div class='ambulance'>
+                                      <img src='images/help-ambulance.png' /></br>
+                                      help
+                                  </div>
+                              </a>
+                          </li>
+                          <li id="follow">
+                                <a href="https://twitter.com/lzsthw" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false" data-dnt="true">Follow @lzsthw</a>
+                                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                           </li>
+
+                      </ul><!-- /.masthead -->
+                      <!--<img src='images/fa-bullhorn.png' />-->
+                  </nav><!-- /.chapters -->
+            </div><!-- /.chapters-wrapper -->
+
+        <!--- RST STARTS -->
+            <h1 class="title">Exercise 34: Accessing Elements of Lists</h1>
+            <p>Lists are pretty useful, but unless you can get at the things in them they aren't all that good.  You can already go through the elements of a list in order, but what if you want say, the fifth element?  You need to know how to access the elements of a list.  Here's how you would access the <em>first</em> element of a list:</p>
+<pre class="code python literal-block">
+<span class="name">animals</span> <span class="operator">=</span> <span class="punctuation">[</span><span class="literal string">'bear'</span><span class="punctuation">,</span> <span class="literal string">'tiger'</span><span class="punctuation">,</span> <span class="literal string">'penguin'</span><span class="punctuation">,</span> <span class="literal string">'zebra'</span><span class="punctuation">]</span>
+<span class="name">bear</span> <span class="operator">=</span> <span class="name">animals</span><span class="punctuation">[</span><span class="literal number integer">0</span><span class="punctuation">]</span>
+</pre>
+<p>You take a list of animals, and then you get the first (1st) one using <tt class="docutils literal">0</tt>?!  How does that work?  Because of the way math works, Python starts its lists at 0 rather than 1.  It seems weird, but there are many advantages to this, even though it is mostly arbitrary.</p>
+<p>The best way to explain why is by showing you the difference between how you use numbers and how programmers use numbers.</p>
+<p>Imagine you are watching the four animals in our list (<tt class="docutils literal">['bear', 'tiger', 'penguin', 'zebra']</tt>) run in a race.  They cross the finish line in the <em>order</em> we have them in this list.  The race was really exciting because the animals didn't eat each other and somehow managed to run a race.  Your friend shows up late and wants to know who won.  Does your friend say, &quot;Hey, who came in <em>zeroth</em>?&quot;  No, he says, &quot;Hey, who came in <em>first</em>?&quot;</p>
+<p>This is because the <em>order</em> of the animals is important.  You can't have the second animal without the first (1st) animal, and you can't have the third without the second.  It's also impossible to have a &quot;zeroth&quot; animal since zero means nothing.  How can you have a nothing win a race?  It just doesn't make sense.  We call these kinds of numbers &quot;ordinal&quot; numbers, because they indicate an ordering of things.</p>
+<p>Programmers, however, can't think this way because they can pick any element out of a list at any point.  To programmers, the list of animals is more like a deck of cards.  If they want the tiger, they grab it.  If they want the zebra, they can take it too.  This need to pull elements out of lists at random means that they need a way to indicate elements consistently by an address, or an &quot;index,&quot; and the best way to do that is to start the indices at 0.  Trust me on this: the math is <em>way</em> easier for these kinds of accesses.  This kind of number is a &quot;cardinal&quot; number and means you can pick at random, so there needs to be a 0 element.</p>
+<p>How does this help you work with lists?  Simple, every time you say to yourself, &quot;I want the third animal,&quot; you translate this &quot;ordinal&quot; number to a &quot;cardinal&quot; number by subtracting 1.  The &quot;third&quot; animal is at index 2 and is the penguin.  You have to do this because you have spent your whole life using ordinal numbers, and now you have to think in cardinal.  Just subtract 1 and you will be good.</p>
+<p>Remember:  ordinal == ordered, 1st; cardinal == cards at random, 0.</p>
+<p>Let's practice this.  Take this list of animals, and follow the exercises where I tell you to write down what animal you get for that ordinal or cardinal number.  Remember if I say &quot;first,&quot; &quot;second,&quot; then I'm using ordinal, so subtract 1.  If I give you cardinal (like &quot;The animal at 1&quot;), then use it directly.</p>
+<pre class="code python literal-block">
+<span class="name">animals</span> <span class="operator">=</span> <span class="punctuation">[</span><span class="literal string">'bear'</span><span class="punctuation">,</span> <span class="literal string">'python'</span><span class="punctuation">,</span> <span class="literal string">'peacock'</span><span class="punctuation">,</span> <span class="literal string">'kangaroo'</span><span class="punctuation">,</span> <span class="literal string">'whale'</span><span class="punctuation">,</span> <span class="literal string">'platypus'</span><span class="punctuation">]</span>
+</pre>
+<ol class="arabic simple">
+<li>The animal at 1.</li>
+<li>The third (3rd) animal.</li>
+<li>The first (1st) animal.</li>
+<li>The animal at 3.</li>
+<li>The fifth (5th) animal.</li>
+<li>The animal at 2.</li>
+<li>The sixth (6th) animal.</li>
+<li>The animal at 4.</li>
+</ol>
+<p>For each of these, write out a full sentence of the form:  &quot;The first (1st) animal is at 0 and is a bear.&quot; Then say it backwards: &quot;The animal at 0 is the 1st animal and is a bear.&quot;</p>
+<p>Use your Python to check your answers.</p>
+<div class="section" id="study-drills">
+<h1>Study Drills</h1>
+<ol class="arabic simple">
+<li>With what you know of the difference between these types of numbers, can you explain why the year 2010 in &quot;January 1, 2010,&quot; really is 2010 and not 2009?  (Hint: you can't pick years at random.)</li>
+<li>Write some more lists and work out similar indexes until you can translate them.</li>
+<li>Use Python to check your answers.</li>
+</ol>
+<div class="warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Programmers will tell you to read this guy named &quot;Dijkstra&quot; on this subject.  I recommend you avoid his writings on this unless you enjoy being yelled at by someone who stopped programming at the same time programming started.</p>
+</div>
+</div>
+        <!-- RST ENDS -->
+
+            <!-- /.help-icon -->
+        <div id="video_holder">
+            <h1>Video</h1>
+            <div id="video" class="row inner">
+                <div class="small-12 small-centered columns">
+                    <div data-paydiv_product="2" id='paydiv'>
+                        &nbsp;
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        </div><!-- /#main -->
+
+        <div class='ad-deck gold' id="footer">
+            <ul class='retailers clearfix'>
+                <li>
+                    <a href='https://paydiv.io/access/buy/2/'>
+                        <div class='retailer-name'>Zed Shaw</div>
+                        <div class='book-type'>PDF + Videos + Updates</div>
+                        <div class='book-price'>$29.95</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.amazon.com/gp/product/0321884914/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0321884914&amp;linkCode=as2&amp;tag=lepythhawa-20'>
+                        <div class='retailer-name'>Amazon</div>
+                        <div class='book-type'>Paper + DVD</div>
+                        <div class='book-price'>$29.95</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.amazon.com/gp/product/B00FGUS948/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=B00FGUS948&amp;linkCode=as2&amp;tag=lepythhawa-20'>
+                        <div class='retailer-name'>Amazon</div>
+                        <div class='book-type'>Kindle (No Videos)</div>
+                        <div class='book-price'>$17.27</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.barnesandnoble.com/w/learn-python-the-hard-way-zed-shaw/1112055406?ean=9780321884916'>
+                        <div class='retailer-name'>B&amp;N</div>
+                        <div class='book-type'>Paper + DVD</div>
+                        <div class='book-price'>$17.27</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.barnesandnoble.com/w/learn-python-the-hard-way-zed-shaw/1112055406?ean=9780133124347&amp;itm=1&amp;usri=learn+python+the+hard+way'>
+                        <div class='retailer-name'>B&amp;N</div>
+                        <div class='book-type'>Nook (No Video)</div>
+                        <div class='book-price'>$17.27</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.informit.com/store/learn-python-the-hard-way-a-very-simple-introduction-9780321884916'>
+                        <div class='retailer-name'>InformIT</div>
+                        <div class='book-type'>eBook + Paper</div>
+                        <div class='book-price'>$43.19</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://ruby.learncodethehardway.org/book/'>
+                        <div class='retailer-name'>Interested In Ruby?</div>
+                        <div class='book-type'>Ruby is also a great language.</div>
+                        <div class='book-price'>Learn Ruby The Hard Way</div>
+                    </a>
+                </li>
+
+            </ul><!-- /.places -->
+        </div><!-- /#ad-deck -->
+
+        <script src="javascripts/jquery.js"></script>
+        <script src="index.js"></script>
+        <script src="../../paydiv.io/static/jzed.js"></script>
+        <script src="../../paydiv.io/static/js/videojs/video.js"></script>
+        <link rel="stylesheet" href="../../paydiv.io/static/js/videojs/video-js.css">
+        <script src="../../paydiv.io/static/api/v1/paydiv.js"></script>
+        <script src="javascripts/app.js"></script>
+        <script src="javascripts/littools.js"></script>
+        <script type="text/javascript">
+        
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-24168052-1']);
+        _gaq.push(['_trackPageview']);
+        
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+        
+        </script>
+
+
+        <script src="javascripts/littools.js"></script>
+
+        </body>
+
+<!-- Mirrored from learnpythonthehardway.org/book/ex34.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 03 Sep 2014 17:52:40 GMT -->
+</html>
+

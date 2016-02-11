@@ -1,0 +1,396 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from www.python-course.eu/sql_python.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:07:19 GMT -->
+<head>
+
+<!-- Dieses Tag in den Head-Bereich oder direkt vor dem schlieÃŸenden Body-Tag einfÃ¼gen -->
+<script type="text/javascript" src="../apis.google.com/js/plusone.js"></script>
+
+
+
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "../connect.facebook.net/en_GB/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script><title>Python Advanced: Python and SQL</title>
+<meta http-equiv="content-type" content="text/html; charset="ISO-8859-1">
+<meta name="Description" content="Introduction in using SQL databases like MySQL SQLite with Python" />
+<meta name="Keywords" content="Python, databases, database, examples, DB-API, SLQlite3, mysql, create database, query" />
+
+<link href="favicon.ico" rel="shortcut icon">
+
+<link href="moderna.css" rel="stylesheet" type="text/css" />
+<link href="moderna_print.css" media="print" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+<div id="container">
+
+<div id="banner">
+<!-- <a href="impressum.php">Impressum</a> | <a href="mailto:">contact</a> | --><h1>Python Course</h1>
+
+</div>
+
+	<!-- Begin Top Menu -->
+<ul id="navlist">
+<li><a href="index-2.html" >Home</a></li><li><a href="course.html" >Python 2 Tutorial</a></li><li><a href="python3_course.html" >Python 3 Tutorial</a></li><li class="active"><a id="current" href="advanced_topics.html" >Advanced Topics</a></li><li><a href="python_books.html" >Python Books</a></li><li><a href="python_tkinter.html" >Tkinter Tutorial</a></li><li><a href="contact.html" rel="nofollow">Contact</a></li>                          
+</ul>
+	<!-- End Top Menu -->
+<div id="sidebar-a">
+<img class="border" src="images/sql_python_small.png" alt="box" />    <h2>Advanced Topics</h2>
+
+<div class="menu">
+
+<ul>
+<li><a href="sys_module.html">Introduction into the sys module</a></li><li><a href="os_module_shell.html">Python and the Shell</a></li><li><a href="forking.html">Forks and Forking in Python</a></li><li><a href="threads.html">Introduction into Threads</a></li><li><a href="pipes.html">Pipe, Pipes and "99 Bottles of Beer"</a></li><li><a href="graphs_python.html">Graph Theory and Graphs in Python"</a></li><li><a href="pygraph.html">Graphs: PyGraph"</a></li><li><a href="networkx.html">Graphs: NetworkX"</a></li><li><a href="finite_state_machine.html">Finite State Machine in Python</a></li><li><a href="turing_machine.html">Turing Machine in Python</a></li><li><a href="numpy.html">NumPy Module</a></li><li><a href="matrix_arithmetic.html">Matrix Arithmetic</a></li><li><a href="linear_combinations.html">Linear Combinations</a></li><li><a href="text_classification_introduction.html">Introduction into Text Classification using Naive Bayes</a></li><li><a href="text_classification_python.html">Python Implementation of Text Classification</a></li><li><a href="towers_of_hanoi.html">Example for recursive Programming: Towers of Hanoi</a></li><li><a href="mastermind.html">Mastermind / Bulls and Cows</a></li><li><a href="dynamic_websites_wsgi.html">Creating dynamic websites with WSGI</a></li><li><a href="dynamic_websites.html">Dynamic websites with mod_python</a></li><li><a href="pylons.html">Dynamic websites with Pylons</a></li><li><a href="sql_python.html">Python, SQL, MySQL and SQLite</a></li><li><a href="python_scores.html">Python Scores</a></li></ul>
+
+</div>
+
+<p>
+<hr>
+If data is the new oil of the 21th century than databases can be seen as the oil platforms.
+<br><br>
+<i>
+"You can have data without information, but you cannot have information without data." 
+(Daniel Keys Moran)
+</i>
+<br>
+<hr>
+<br>
+This website is created by:<br><br>
+<a href="http://www.python-training-courses.com/"><img style="width: 150px;" alt="Python Training Courses"
+		     src="images/toronto_building.jpg"><br><br>Python Training Courses in Toronto, Canada</a>
+<br>
+On site trainings in Europe, Canada and the US.
+<br>
+<hr>
+<i>
+"Database Management System [Origin: Data + Latin basus 'low, mean, vile, menial, degrading, 
+counterfeit.'] A complex set of interrelational data structures allowing data to be lost in 
+many convenient sequences while retaining a complete record of the logical relations between 
+the missing items."
+<br>From The Devil's DP Dictionary"
+ by Stan Kelly-Bootle
+"
+</i>
+
+<hr>
+We also like to thank Denise Mitchinson for providing the stylesheet of this website.
+</div><div id="sidebar-b"><img style="width: 150px;" alt="Python-Logo"
+		     src="images/python-logo.png"><!-- Dieses Tag dort einfügen, wo die +1-Schaltfläche dargestellt werden soll -->
+<g:plusone></g:plusone>
+<br><br>
+
+<div class="fb-like" data-href="www.python-course.eu" data-send="false" data-layout="button_count" 
+data-width="130" data-show-faces="true" data-action="recommend"></div>
+
+<br><br>
+This topic in German / Deutsche Übersetzung:
+    <a href="http://www.python-kurs.eu/sql_python.php">SQL und Python</a><h3>Classroom Training Courses</h3>
+<p>
+This website contains a free and extensive online tutorial by Bernd Klein, using
+material from his classroom <a href="python_classes.html">Python courses</a>.
+<br><br>
+If you are interested in an instructor-led classroom training, you may have a look at the 
+<a href="http://www.bodenseo.com/courses.php?topic=Python">Python courses
+<br><img style="width: 150px;" 
+alt="Bodenseo, Python and other courses and seminars"
+		     src="images/classroom_training_courses.jpg">
+</a>
+by Bernd Klein at Bodenseo.
+<font size="1">© kabliczech - Fotolia.com</font>
+ </p>
+
+
+
+<h3>Quote of the Day:</h3>
+<p>
+
+<i>"It is easier to write an incorrect program than understand a correct one. "</i> (Alan Perlis)<br><hr>
+
+<h3>Advantages of Python</h3>
+<p>
+<ul>
+<li>Easy and fast to learn</li>
+<li>Simple to get support</li>
+<li>Python's syntax is clear and readable</li>
+<li>Fast to Code, i.e. it is easier and faster to code a problem in Python than in 
+C, C++ or Java, just to mention a few other languages</li>
+<li>Python is portable, i.e. it runs on multiple platforms and systems, like e.g. Linux 
+and Microsoft Windows</li>
+<li>Object oriented</li>
+<li>It's trendy, i.e more and more successful companies switch to Python, like Google did a long
+time ago.</li>
+</ul>
+</p>
+
+
+</p></div>
+<div id="content">
+
+<div id="contextlinks">Previous Chapter: <a href="pylons.html">Dynamic websites with Pylons</a><br>
+<LINK rel="prev" href="pylons.html">Next Chapter: <a href="python_scores.html">Python Scores</a><br>
+<LINK rel="next" href="python_scores.html"></div>
+<h2>Python and SQL</h2>
+<br><br>
+<h3>Introduction</h3>
+<img class="imgright" src="images/sql_python_logo.png" alt="SQL Python Logo" />
+The history of SQL goes back to the early 70th. SQL is a Structured Query 
+Language, which is based on a relational model, 
+as it was described in Edgar F. Codds's 1970 paper "A Relational Model of 
+Data for Large Shared Data Banks. SQL is often pronounced like "sequel".
+SQL became a standard of the American National Standards Institute (ANSI) in 1986, 
+and of the International Organization for Standardization (ISO) in 1987.
+As most people coming to this website are already familiar with mSQL, PostgresSQL, MySQL or
+other variants of SQL, we will not enlarge on SQL itself.
+<br><br>
+A database is an organized collection of data. The data are typically 
+organized to model aspects of reality in a way that supports processes 
+requiring this information.
+The term "database" can both refer to the data themselves or to the 
+database management system. The Database management system is a software 
+application for the interaction between users database itself. Users don't
+have to be human users. They can be other programs and applications as well.
+We will learn how Python or better a Python program can interact as a user of
+an SQL database.
+<br><br>
+This is an introduction into using SQLite and MySQL from Python. The Python standard for 
+database interfaces is the Python DB-API, which is used by Python's database interfaces.
+The DB-API has been defined as a common interface, which can be used to access relational 
+databases. In other words, the code in Python for communicating with a database should be the same, 
+regardless of the database and the database module used. 
+
+
+<br><br>
+<h3>SQLite</h3>
+SQLite is a simple relational data base system, which saves its data in regular data files
+or even in the internal memory of the computer, i.e. the RAM. It was developped for embedded 
+applications, like Mozilla-Firefox (Bookmarks), Symbian OS or Android. SQLITE is "quite" fast,
+even though it uses a simple file. It can be used for large data bases as well. If you want to 
+use SQLite, you have to import the module sqlite3. To use a  database, you have to create first a 
+Connection object. The connection object will represent the database. The argument of connection - in
+the following example "companys.db" - 
+functions both as the name of the file, where the data will be stored, and as the name of
+the database. If a file with this name exists, it will be opened. It has to be a SQLite database
+file of course! In the following example, we will open a database called company. The file 
+does not have to exist.: 
+<br>
+<pre>
+>>> import sqlite3
+>>> connection = sqlite3.connect("company.db")
+</pre>   
+
+<br>
+
+We have now created a database with the name "company". It's like having sent the
+command "CREATE DATABASE company;" to a SQL server. If you call "sqlite3.connect('company.db')"
+again, it will open the previously created database. 
+<br><br>
+After having created an empty database, you will most probably add one or more tables to this
+database. The SQL syntax for creating a table "employee" in the database "company" looks like this:
+
+<pre>
+CREATE TABLE employee ( 
+staff_number INT NOT NULL AUTO_INCREMENT, 
+fname VARCHAR(20), 
+lname VARCHAR(30), 
+gender CHAR(1), 
+joining DATE,
+birth_date DATE,  
+PRIMARY KEY (staff_number) );
+</pre>
+
+This is the way, somebody might do it on a SQL command shell. Of course, we want to
+do this directly from Python. To be capable to send a command to "SQL", or SQLite, we
+need a cursor object. Usually, a cursor in SQL and databases is a control structure to
+traverse over the records in a database. So it's used for the fetching of the results.
+In SQLite (and other Python DB interfaces)it is more generally used. It's used for performing
+all SQL commands.
+<br><br>
+We get the cursor object by calling the cursor() method of connection. 
+An arbitrary number of cursors can be created. The cursor is used to traverse the 
+records from the result set. 
+
+
+A complete Python program for creating a database company and 
+creating an employee table looks like this:
+
+<pre>
+sql_command = """
+CREATE TABLE employee ( 
+staff_number INTEGER PRIMARY KEY, 
+fname VARCHAR(20), 
+lname VARCHAR(30), 
+gender CHAR(1), 
+joining DATE,
+birth_date DATE);"""
+</pre>
+
+Concerning the SQL syntax: You may have noticed, that the AUTOINCREMENT 
+field is missing in the SQL code within our Python program. We have defined the staff_number
+field as "INTEGER PRIMARY KEY"  A column which is labelled like this 
+will be automatically autoincremented in SQLite3.
+To put it in other words:  If a column of a table is declared to be
+an INTEGER PRIMARY KEY, then whenever a NULL will be used as an input
+for this column, the NULL will be automatically converted into an 
+integer which will one larger than the highest value so far used in that column.
+If the table is empty, the value 1 will be used. If the largest existing 
+value in this column has the 9223372036854775807, which is the largest 
+possible INT in SQLite,  an unused key value is chosen at random.
+
+<br><br>
+Now we have a database with a table but no data included. To populate the table
+we will have to send the "INSERT" command to SQLite. We will use again the
+execute method. The following example is a complete working example. To run the program
+you will either have to remove the file company.db or uncomment the "DROP TABLE" line in the
+SQL command:
+
+<br><br>
+
+<pre>
+import sqlite3
+connection = sqlite3.connect("company.db")
+
+cursor = connection.cursor()
+
+# delete 
+#cursor.execute("""DROP TABLE employee;""")
+
+sql_command = """
+CREATE TABLE employee ( 
+staff_number INTEGER PRIMARY KEY, 
+fname VARCHAR(20), 
+lname VARCHAR(30), 
+gender CHAR(1), 
+joining DATE,
+birth_date DATE);"""
+
+cursor.execute(sql_command)
+
+sql_command = """INSERT INTO employee (staff_number, fname, lname, gender, birth_date)
+    VALUES (NULL, "William", "Shakespeare", "m", "1961-10-25");"""
+cursor.execute(sql_command)
+
+
+sql_command = """INSERT INTO employee (staff_number, fname, lname, gender, birth_date)
+    VALUES (NULL, "Frank", "Schiller", "m", "1955-08-17");"""
+cursor.execute(sql_command)
+
+# never forget this, if you want the changes to be saved:
+connection.commit()
+
+connection.close()
+</pre>
+
+Of course, in most cases, you will not literally insert data into a SQL table. You will 
+rather have a lot of data inside of some Python data type e.g. a dictionary or a list, 
+which has to be used as the input of the insert statement.
+<br><br>
+The following working example, assumes, that you have already an existing database company.db
+and a table employee. We have a list with data of persons which will be used in the INSERT statement:
+
+<pre>
+import sqlite3
+connection = sqlite3.connect("company.db")
+
+cursor = connection.cursor()
+
+staff_data = [ ("William", "Shakespeare", "m", "1961-10-25"),
+               ("Frank", "Schiller", "m", "1955-08-17"),
+               ("Jane", "Wall", "f", "1989-03-14") ]
+               
+for p in staff_data:
+    format_str = """INSERT INTO employee (staff_number, fname, lname, gender, birth_date)
+    VALUES (NULL, "{first}", "{last}", "{gender}", "{birthdate}");"""
+
+    sql_command = format_str.format(first=p[0], last=p[1], gender=p[2], birthdate = p[3])
+    cursor.execute(sql_command)
+</pre> 
+
+<br>
+The time has come now to finally query our employee table:
+<br><br>
+
+<pre>
+import sqlite3
+connection = sqlite3.connect("company.db")
+
+cursor = connection.cursor()
+
+cursor.execute("SELECT * FROM employee") 
+print("fetchall:")
+result = cursor.fetchall() 
+for r in result:
+    print(r)
+cursor.execute("SELECT * FROM employee") 
+print("\nfetch one:")
+res = cursor.fetchone() 
+print(res)
+</pre>
+
+If we run this program, saved as "sql_company_query.py", we get the following result, depending on the actual data:
+
+<br><br>
+<pre>
+$ python3 sql_company_query.py 
+fetchall:
+(1, 'William', 'Shakespeare', 'm', None, '1961-10-25')
+(2, 'Frank', 'Schiller', 'm', None, '1955-08-17')
+(3, 'Bill', 'Windows', 'm', None, '1963-11-29')
+(4, 'Esther', 'Wall', 'm', None, '1991-05-11')
+(5, 'Jane', 'Thunder', 'f', None, '1989-03-14')
+
+fetch one:
+(1, 'William', 'Shakespeare', 'm', None, '1961-10-25')
+</pre>
+
+<br><br>
+<h3>MySQL</h3>
+
+The module MySQLdb has to be installed, which is quite easy under Debian or Ubuntu:
+
+<pre>
+sudo apt-get install python-MySQLdb
+</pre>
+
+Except the import and the parameters in the connect methods everything else works 
+exactly the same way as described in the previous chapter on SQLite. Therefore it works like this:
+
+<ul>
+<li>import MySQLdb modul</li>
+<li>Open a connection to the  SQL server</li>
+<li>Sending and receiving commands</li>
+<li>Closing the connection to SQL</li>
+</ul>
+
+Importing and connecting looks like this:
+
+<pre>
+import MySQLdb
+
+connection = MySQLdb.connect (host = "localhost",
+                              user = "testuser",
+                              passwd = "testpass",
+                              db = "company")
+</pre>
+
+<br><br>
+<div id="contextlinks">Previous Chapter: <a href="pylons.html">Dynamic websites with Pylons</a><br>
+<LINK rel="prev" href="pylons.html">Next Chapter: <a href="python_scores.html">Python Scores</a><br>
+<LINK rel="next" href="python_scores.html"></div><br><br><br>
+
+</div>
+<div id="footer">  &copy; 2011 - 2014 <a href="http://www.bklein.de/">Bernd Klein</a>,
+Bodenseo; 
+Design by Denise Mitchinson adapted for python-course.eu by Bernd Klein</div>
+</div>
+</body>
+
+<!-- Mirrored from www.python-course.eu/sql_python.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:07:22 GMT -->
+</html>

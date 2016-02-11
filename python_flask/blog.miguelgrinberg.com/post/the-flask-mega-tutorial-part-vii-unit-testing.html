@@ -1,0 +1,1221 @@
+﻿<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-vii-unit-testing by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 05:40:35 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    
+    <title>
+    
+        The Flask Mega-Tutorial, Part VII: Unit Testing - miguelgrinberg.com
+    
+</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="description" content="miguelgrinberg.com">
+	<meta name="copyright" content="Copyright (c) 2012-2015 Miguel Grinberg">
+	<meta name="author" content="Miguel Grinberg">
+    
+    <meta name="keywords" content="python, programming, flask, web, tutorial, unit, test, testing, unit testing">
+    
+
+    
+    <!-- Bootstrap -->
+    <link href="../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../static/prettify.css" type="text/css" rel="stylesheet" />
+    <link href="../static/colorbox/colorbox.css" rel="stylesheet" type="text/css" />
+    <link href="../static/style.css" rel="stylesheet" type="text/css" />
+
+    <link rel="shortcut icon" href="../static/favicon.ico">
+	<link rel="alternate" type="application/rss+xml" href="../feed" title="miguelgrinberg.com RSS feed">
+
+  </head>
+  <body>
+    
+    <!-- facebook sdk -->
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "../../connect.facebook.net/en_US/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    <!-- google plus sdk -->
+    <script type="text/javascript" src="../../apis.google.com/js/plusone.js"></script>
+    <!-- twitter sdk -->
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="../../platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <!-- linkedin sdk -->
+    <script src="../../platform.linkedin.com/in.js" type="text/javascript"></script>
+
+    
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://blog.miguelgrinberg.com/index">miguelgrinberg.com</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="http://blog.miguelgrinberg.com/index">Home</a></li>
+                        <li><a href="about-me.html">About Me</a></li>
+                        <li><a href="about-this-blog.html">About This Blog</a></li>
+                        
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <p class="navbar-text" style="margin-top: 10px; margin-bottom: 0px;">
+                                <a type="application/rss+xml" href="../feed"><img src="../static/rss.png" alt="RSS Feed" title="RSS Feed" /></a>
+                                <a href="https://www.facebook.com/miguelgrinbergblog"><img src="../static/facebook.png" alt="Facebook" title="Facebook" /></a>
+                                <a href="https://plus.google.com/u/0/117786742456929977820"><img src="../static/googleplus.png" alt="Google+" title="Google+" /></a>
+                                <a href="http://www.linkedin.com/in/miguelgrinberg"><img src="../static/linkedin.png" alt="LinkedIn" title="LinkedIn" /></a>
+                                <a href="http://github.com/miguelgrinberg"><img src="../static/github.png" alt="GitHub" title="GitHub" /></a>
+                                <a href="https://twitter.com/#!/miguelgrinberg"><img src="../static/twitter.png" alt="Twitter" title="Twitter" /></a>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </nav>
+
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-push-9 sidebar-bg">
+                <div id="sidebar">
+                    
+
+                    
+                    <h1>An Introduction to Flask</h1>
+                    <p>If you are a beginner giving your first steps in web development, my Flask introductory video is for you:</p>
+                    <p><center><a href="http://bit.ly/flaskintro"><img style="border: 1px solid black;" src="../static/flask-intro-cover-tiny.png"></a></center></p>
+                    <p>Visit <a href="http://flaskbook.com/">http://flaskbook.com</a> for information about this and other Flask training products I have created!</p>
+                    
+
+                    <h1>About Miguel</h1>
+                    <img style="float: right; margin: 0px 8px 8px 0px; padding: 4px; border: 1px solid #ccc;" src="../static/miguel.jpg" />
+                    <p>Welcome to my blog!</p>
+                    <p>I'm a software engineer, photographer and filmmaker in Portland, Oregon, USA.</p>
+                    <p>You can also find me on <a href="https://www.facebook.com/miguelgrinbergblog">Facebook</a>, <a href="https://plus.google.com/u/0/117786742456929977820">Google+</a>, <a href="http://www.linkedin.com/in/miguelgrinberg">LinkedIn</a>, <a href="https://github.com/miguelgrinberg">Github</a> and <a href="https://twitter.com/#!/miguelgrinberg">Twitter</a>.</p>
+                    <p>Thank you for visiting!</p>
+
+                    
+
+                    
+                    <h1>Categories</h1>
+<ul>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Arduino/feed">
+			<img src="../static/rss-small.png" title="Arduino RSS Feed" label="Arduino RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Arduino">Arduino</a></span> (7)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Authentication/feed">
+			<img src="../static/rss-small.png" title="Authentication RSS Feed" label="Authentication RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Authentication">Authentication</a></span> (4)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Blog/feed">
+			<img src="../static/rss-small.png" title="Blog RSS Feed" label="Blog RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Blog">Blog</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/C++/feed">
+			<img src="../static/rss-small.png" title="C++ RSS Feed" label="C++ RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/C++">C++</a></span> (5)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Cloud/feed">
+			<img src="../static/rss-small.png" title="Cloud RSS Feed" label="Cloud RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Cloud">Cloud</a></span> (2)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Filmmaking/feed">
+			<img src="../static/rss-small.png" title="Filmmaking RSS Feed" label="Filmmaking RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Filmmaking">Filmmaking</a></span> (6)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Flask/feed">
+			<img src="../static/rss-small.png" title="Flask RSS Feed" label="Flask RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Flask">Flask</a></span> (39)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Games/feed">
+			<img src="../static/rss-small.png" title="Games RSS Feed" label="Games RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Games">Games</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Gear/feed">
+			<img src="../static/rss-small.png" title="Gear RSS Feed" label="Gear RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Gear">Gear</a></span> (6)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/HTML5/feed">
+			<img src="../static/rss-small.png" title="HTML5 RSS Feed" label="HTML5 RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/HTML5">HTML5</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Heroku/feed">
+			<img src="../static/rss-small.png" title="Heroku RSS Feed" label="Heroku RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Heroku">Heroku</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Javascript/feed">
+			<img src="../static/rss-small.png" title="Javascript RSS Feed" label="Javascript RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Javascript">Javascript</a></span> (3)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Movie Reviews/feed">
+			<img src="../static/rss-small.png" title="Movie Reviews RSS Feed" label="Movie Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Movie Reviews">Movie Reviews</a></span> (5)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Netflix/feed">
+			<img src="../static/rss-small.png" title="Netflix RSS Feed" label="Netflix RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Netflix">Netflix</a></span> (5)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Node.js/feed">
+			<img src="../static/rss-small.png" title="Node.js RSS Feed" label="Node.js RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Node.html">Node.js</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/OpenStack/feed">
+			<img src="../static/rss-small.png" title="OpenStack RSS Feed" label="OpenStack RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/OpenStack">OpenStack</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Personal/feed">
+			<img src="../static/rss-small.png" title="Personal RSS Feed" label="Personal RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Personal">Personal</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Photography/feed">
+			<img src="../static/rss-small.png" title="Photography RSS Feed" label="Photography RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Photography">Photography</a></span> (6)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Product Reviews/feed">
+			<img src="../static/rss-small.png" title="Product Reviews RSS Feed" label="Product Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Product Reviews">Product Reviews</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Programming/feed">
+			<img src="../static/rss-small.png" title="Programming RSS Feed" label="Programming RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Programming">Programming</a></span> (47)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Project Management/feed">
+			<img src="../static/rss-small.png" title="Project Management RSS Feed" label="Project Management RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Project Management">Project Management</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Python/feed">
+			<img src="../static/rss-small.png" title="Python RSS Feed" label="Python RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Python">Python</a></span> (43)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/REST/feed">
+			<img src="../static/rss-small.png" title="REST RSS Feed" label="REST RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/REST">REST</a></span> (5)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Rackspace/feed">
+			<img src="../static/rss-small.png" title="Rackspace RSS Feed" label="Rackspace RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Rackspace">Rackspace</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Raspberry Pi/feed">
+			<img src="../static/rss-small.png" title="Raspberry Pi RSS Feed" label="Raspberry Pi RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Raspberry Pi">Raspberry Pi</a></span> (6)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/RhinoSteady/feed">
+			<img src="../static/rss-small.png" title="RhinoSteady RSS Feed" label="RhinoSteady RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/RhinoSteady">RhinoSteady</a></span> (6)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Robotics/feed">
+			<img src="../static/rss-small.png" title="Robotics RSS Feed" label="Robotics RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Robotics">Robotics</a></span> (6)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Video/feed">
+			<img src="../static/rss-small.png" title="Video RSS Feed" label="Video RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Video">Video</a></span> (4)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Windows/feed">
+			<img src="../static/rss-small.png" title="Windows RSS Feed" label="Windows RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Windows">Windows</a></span> (1)
+	</li>
+
+</ul>
+                    
+                </div>
+            </div>
+            <div class="col-md-8 col-md-pull-4">
+                <div id="main">
+                    
+                    
+                    
+                    
+                    
+
+<div class="post">
+
+<p class="date"><span class="flask-moment" data-timestamp="2012-08-01T06:50:31Z" data-format="format('LL')" data-refresh="0">2012-08-01T06:50:31Z</span></p>
+<h1 class="post-title"><a href="the-flask-mega-tutorial-part-vii-unit-testing.html">The Flask Mega-Tutorial, Part VII: Unit Testing</a></h1>
+<div class="posted">Posted by <span class="label label-danger"><a href="http://blog.miguelgrinberg.com/author/Miguel Grinberg">Miguel Grinberg</a></span> under <span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Programming">Programming</a></span>, <span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Python">Python</a></span>, <span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Flask">Flask</a></span>. </div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-vii-unit-testing" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-vii-unit-testing" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="the-flask-mega-tutorial-part-vii-unit-testing.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-vii-unit-testing" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+<div class="post_body"><p>This is the seventh article in the series in which I document my experience writing web applications in <a href="http://python.org/">Python</a> using the <a href="http://flask.pocoo.org/">Flask</a> microframework.</p>
+<p>The goal of the tutorial series is to develop a decently featured microblogging application that demonstrating total lack of originality I have decided to call <code>microblog</code>.</p>
+<p><strong>NOTE</strong>: This article was revised in September 2014 to be in sync with current versions of Python and Flask.</p>
+<p>Here is an index of all the articles in the series that have been published to date:</p>
+<ul>
+<li><a href="the-flask-mega-tutorial-part-i-hello-world.html">Part I: Hello, World!</a></li>
+<li><a href="the-flask-mega-tutorial-part-ii-templates.html">Part II: Templates</a></li>
+<li><a href="the-flask-mega-tutorial-part-iii-web-forms.html">Part III: Web Forms</a></li>
+<li><a href="the-flask-mega-tutorial-part-iv-database.html">Part IV: Database</a></li>
+<li><a href="the-flask-mega-tutorial-part-v-user-logins.html">Part V: User Logins</a></li>
+<li><a href="the-flask-mega-tutorial-part-vi-profile-page-and-avatars.html">Part VI: Profile Page And Avatars</a></li>
+<li><a href="the-flask-mega-tutorial-part-vii-unit-testing.html">Part VII: Unit Testing</a> (this article)</li>
+<li><a href="the-flask-mega-tutorial-part-viii-followers-contacts-and-friends.html">Part VIII: Followers, Contacts And Friends</a></li>
+<li><a href="the-flask-mega-tutorial-part-ix-pagination.html">Part IX: Pagination</a></li>
+<li><a href="the-flask-mega-tutorial-part-x-full-text-search.html">Part X: Full Text Search</a></li>
+<li><a href="the-flask-mega-tutorial-part-xi-email-support.html">Part XI: Email Support</a></li>
+<li><a href="the-flask-mega-tutorial-part-xii-facelift.html">Part XII: Facelift</a></li>
+<li><a href="the-flask-mega-tutorial-part-xiii-dates-and-times.html">Part XIII: Dates and Times</a></li>
+<li><a href="the-flask-mega-tutorial-part-xiv-i18n-and-l10n.html">Part XIV: I18n and L10n</a></li>
+<li><a href="the-flask-mega-tutorial-part-xv-ajax.html">Part XV: Ajax</a></li>
+<li><a href="the-flask-mega-tutorial-part-xvi-debugging-testing-and-profiling.html">Part XVI: Debugging, Testing and Profiling</a></li>
+<li><a href="the-flask-mega-tutorial-part-xvii-deployment-on-linux-even-on-the-raspberry-pi.html">Part XVII: Deployment on Linux (even on the Raspberry Pi!)</a></li>
+<li><a href="the-flask-mega-tutorial-part-xviii-deployment-on-the-heroku-cloud.html">Part XVIII: Deployment on the Heroku Cloud</a></li>
+</ul>
+<h2>Recap</h2>
+<p>In the previous chapters of this tutorial we were concentrating in adding functionality to our little application, a step at a time. By now we have a database enabled application that can register users, log them in and out and let them view and edit their profiles.</p>
+<p>In this session we are not going to add any new features to our application. Instead, we are going to find ways to add robustness to the code that we have already written, and we will also create a testing framework that will help us prevent failures and regressions in the future.</p>
+<h2>Let's find a bug</h2>
+<p>I mentioned at the end of the last chapter that I have intentionally introduced a bug in the application. Let me describe what the bug is, then we will use it to see what happens to our application when it does not work as expected.</p>
+<p>The problem in the application is that there is no effort to keep the nicknames of our users unique. The initial nickname of a user is chosen automatically by the application. If the OpenID provider provides a nickname for the user then we will just use it. If not we will use the username part of the email address as nickname. If we get two users with the same nickname then the second one will not be able to register. To make matters worse, in the profile edit form we let users change their nicknames to whatever they want, and again there is no effort to avoid name collisions.</p>
+<p>We will address these problems later, after we analyze how the application behaves when an error occurs.</p>
+<h2>Flask debugging support</h2>
+<p>So let's see what happens when we trigger our bug.</p>
+<p>Let's start by creating a brand new database. On Linux:</p>
+<pre><code>rm app.db
+./db_create.py
+</code></pre>
+<p>or on Windows:</p>
+<pre><code>del app.db
+flask/Scripts/python db_create.py
+</code></pre>
+<p>You need two OpenID accounts to reproduce this bug, ideally from different providers, so that their cookies don't make this more complicated. Follow these steps to create a nickname collision:</p>
+<ul>
+<li>login with your first account</li>
+<li>go to the edit profile page and change the nickname to 'dup'</li>
+<li>logout</li>
+<li>login with your second account</li>
+<li>go to the edit profile page and change the nickname to 'dup'</li>
+</ul>
+<p>Oops! We've got an exception from sqlalchemy. The text of the error reads:</p>
+<pre><code>sqlalchemy.exc.IntegrityError
+IntegrityError: (IntegrityError) column nickname is not unique u'UPDATE user SET nickname=?, about_me=? WHERE user.id = ?' (u'dup', u'', 2)
+</code></pre>
+<p>What follows after the error is a <a href="http://en.wikipedia.org/wiki/Stack_trace">stack trace</a> of the error, and actually it is a pretty nice one, where you can go to any frame and inspect source code or even evaluate expressions right in the browser.</p>
+<p>The error is pretty clear, we tried to insert a duplicated nickname in the database. The database model had a <code>unique</code> constrain on the <code>nickname</code> field, so this is an invalid operation.</p>
+<p>In addition to the actual error, we have a secondary problem in our hands. If a user inadvertently causes an error in our application (this one or any other that causes an exception) it will be him or her that gets the error with the revealing error message and the stack trace, not us. While this is a fantastic feature while we are developing, it is something we definitely do not want our users to ever see.</p>
+<p>All this time we have been running our application in <em>debug mode</em>. The debug mode is enabled when the application starts, by passing a <code>debug=True</code> argument to the <code>run</code> method. This is how we coded our <code>run.py</code> start-up script. </p>
+<p>When we are developing the application this is convenient, but we need to make sure it is turned off when we run our application in <em>production mode</em>. Let's just create another starter script that runs with debugging disabled (file <code>runp.py</code>):</p>
+<pre><code>#!flask/bin/python
+from app import app
+app.run(debug=False)
+</code></pre>
+<p>Now restart the application with:</p>
+<pre><code>./runp.py
+</code></pre>
+<p>And now try again to rename the nickname on the second account to 'dup'.</p>
+<p>This time we do not get an error. Instead, we get an HTTP error code 500, which is Internal Server Error. Not a great looking error, but at least we are not exposing any details of our application to strangers. The error 500 page is generated by Flask when debugging is off and an unhandled exception occurs.</p>
+<p>While this is better, we are now having two new issues. First a cosmetic one: the default error 500 page is ugly. The second problem is much more important. With things as they are we would never know when and if a user experiences a failure in our application because when debugging is turned off application failures are silently dismissed. Luckily there are easy ways to address both problems.</p>
+<h2>Custom HTTP error handlers</h2>
+<p>Flask provides a mechanism for an application to install its own error pages. As an example, let's define custom error pages for the HTTP errors 404 and 500, the two most common ones. Defining pages for other errors works in the same way.</p>
+<p>To declare a custom error handler the <code>errorhandler</code> decorator is used (file <code>app/views.py</code>):</p>
+<pre><code>@app.errorhandler(404)
+def not_found_error(error):
+    return render_template('404.html'), 404
+
+@app.errorhandler(500)
+def internal_error(error):
+    db.session.rollback()
+    return render_template('500.html'), 500
+</code></pre>
+<p>Not much to talk about for these, as they are almost self-explanatory. The only interesting bit is the <code>rollback</code> statement in the error 500 handler. This is necessary because this function will be called as a result of an exception. If the exception was triggered by a database error then the database session is going to arrive in an invalid state, so we have to roll it back in case a working session is needed for the rendering of the template for the 500 error.</p>
+<p>Here is the template for the 404 error:</p>
+<pre><code>&lt;!-- extend base layout --&gt;
+{% extends "base.html" %}
+
+{% block content %}
+  &lt;h1&gt;File Not Found&lt;/h1&gt;
+  &lt;p&gt;&lt;a href="{{ url_for('index') }}"&gt;Back&lt;/a&gt;&lt;/p&gt;
+{% endblock %}
+</code></pre>
+<p>And here is the one for the 500 error:</p>
+<pre><code>&lt;!-- extend base layout --&gt;
+{% extends "base.html" %}
+
+{% block content %}
+  &lt;h1&gt;An unexpected error has occurred&lt;/h1&gt;
+  &lt;p&gt;The administrator has been notified. Sorry for the inconvenience!&lt;/p&gt;
+  &lt;p&gt;&lt;a href="{{ url_for('index') }}"&gt;Back&lt;/a&gt;&lt;/p&gt;
+{% endblock %}
+</code></pre>
+<p>Note that in both cases we continue to use our <code>base.html</code> layout, so that the error page has the look and feel of the application.</p>
+<h2>Sending errors via email</h2>
+<p>To address our second problem we are going to configure two reporting mechanisms for application errors. The first of them is to have the application send us an email each time an error occurs. </p>
+<p>Before we get into this let's configure an email server and an administrator list in our application (file <code>config.py</code>):</p>
+<pre><code># mail server settings
+MAIL_SERVER = 'localhost'
+MAIL_PORT = 25
+MAIL_USERNAME = None
+MAIL_PASSWORD = None
+
+# administrator list
+ADMINS = ['you@example.com']
+</code></pre>
+<p>Of course it will be up to you to change these to what makes sense.</p>
+<p>Flask uses the regular Python <code>logging</code> module, so setting up an email when there is an exception is pretty easy (file <code>app/__init__.py</code>):</p>
+<pre><code>from config import basedir, ADMINS, MAIL_SERVER, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD
+
+if not app.debug:
+    import logging
+    from logging.handlers import SMTPHandler
+    credentials = None
+    if MAIL_USERNAME or MAIL_PASSWORD:
+        credentials = (MAIL_USERNAME, MAIL_PASSWORD)
+    mail_handler = SMTPHandler((MAIL_SERVER, MAIL_PORT), 'no-reply@' + MAIL_SERVER, ADMINS, 'microblog failure', credentials)
+    mail_handler.setLevel(logging.ERROR)
+    app.logger.addHandler(mail_handler)
+</code></pre>
+<p>Note that we are only enabling the emails when we run without debugging.</p>
+<p>Testing this on a development PC that does not have an email server is easy, thanks to Python's SMTP debugging server. Just open a new console window (command prompt for Windows users) and run the following to start a fake email server:</p>
+<pre><code>python -m smtpd -n -c DebuggingServer localhost:25
+</code></pre>
+<p>When this is running, the emails sent by the application will be received and displayed in the console window.</p>
+<h2>Logging to a file</h2>
+<p>Receiving errors via email is nice, but sometimes this isn't enough. There are some failure conditions that do not end in an exception and aren't a major problem, yet we may want to keep track of them in a log in case we need to do some debugging.</p>
+<p>For this reason, we are also going to maintain a log file for the application.</p>
+<p>Enabling file logging is similar to the email logging (file <code>app/__init__.py</code>):</p>
+<pre><code>if not app.debug:
+    import logging
+    from logging.handlers import RotatingFileHandler
+    file_handler = RotatingFileHandler('tmp/microblog.log', 'a', 1 * 1024 * 1024, 10)
+    file_handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
+    app.logger.setLevel(logging.INFO)
+    file_handler.setLevel(logging.INFO)
+    app.logger.addHandler(file_handler)
+    app.logger.info('microblog startup')
+</code></pre>
+<p>The log file will go to our <code>tmp</code> directory, with name <code>microblog.log</code>. We are using the <code>RotatingFileHandler</code> so that there is a limit to the amount of logs that are generated. In this case we are limiting the size of a log file to one megabyte, and we will keep the last ten log files as backups.</p>
+<p>The <code>logging.Formatter</code> class provides custom formatting for the log messages. Since these messages are going to a file, we want them to have as much information as possible, so we write a timestamp, the logging level and the file and line number where the message originated in addition to the log message and the stack trace.</p>
+<p>To make the logging more useful, we are lowering the logging level, both in the app logger and the file logger handler, as this will give us the opportunity to write useful messages to the log without having to call them errors. As an example, we start by logging the application start up as an informational level. From now on, each time you start the application without debugging the log will record the event.</p>
+<p>While we don't have a lot of need for a logger at this time, debugging a web server that is online and in use is very difficult. Logging messages to a file is an extremely useful tool in diagnosing and locating issues, so we are now all ready to go should we need to use this feature.</p>
+<h2>The bug fix</h2>
+<p>Let's fix our <code>nickname</code> duplication bug.</p>
+<p>As discussed earlier, there are two places that are currently not handling duplicates. The first is in the <code>after_login</code> handler for Flask-Login. This is called when a user successfully logs in to the system and we need to create a new User instance. Here is the affected snippet of code, with the fix in it (file <code>app/views.py</code>):</p>
+<pre><code>    if user is None:
+        nickname = resp.nickname
+        if nickname is None or nickname == "":
+            nickname = resp.email.split('@')[0]
+        nickname = User.make_unique_nickname(nickname)
+        user = User(nickname = nickname, email = resp.email)
+        db.session.add(user)
+        db.session.commit()
+</code></pre>
+<p>The way we solve the problem is by letting the User class pick a unique name for us. This is what the new <code>make_unique_nickname</code> method does (file <code>app/models.py</code>):</p>
+<pre><code>    class User(db.Model):
+    # ...
+    @staticmethod
+    def make_unique_nickname(nickname):
+        if User.query.filter_by(nickname=nickname).first() is None:
+            return nickname
+        version = 2
+        while True:
+            new_nickname = nickname + str(version)
+            if User.query.filter_by(nickname=new_nickname).first() is None:
+                break
+            version += 1
+        return new_nickname
+    # ...
+</code></pre>
+<p>This method simply adds a counter to the requested nickname until a unique name is found. For example, if the username "miguel" exists, the method will suggest "miguel2", but if that also exists it will go to "miguel3" and so on. Note that we coded the method as a <a href="http://docs.python.org/library/functions.html#staticmethod">static method</a>, since it this operation does not apply to any particular instance of the class.</p>
+<p>The second place where we have problems with duplicate nicknames is the view function for the edit profile page. This one is a little tricker to handle, because it is the user choosing the nickname. The correct thing to do here is to not accept a duplicated nickname and let the user enter another one. We will address this by adding custom validation to the nickname form field. If the user enters an invalid nickname we'll just fail the validation for the field, and that will send the user back to the edit profile page. To add our validation we just override the form's <code>validate</code> method (file <code>app/forms.py</code>):</p>
+<pre><code>from app.models import User
+
+class EditForm(Form):
+    nickname = StringField('nickname', validators=[DataRequired()])
+    about_me = TextAreaField('about_me', validators=[Length(min=0, max=140)])
+
+    def __init__(self, original_nickname, *args, **kwargs):
+        Form.__init__(self, *args, **kwargs)
+        self.original_nickname = original_nickname
+
+    def validate(self):
+        if not Form.validate(self):
+            return False
+        if self.nickname.data == self.original_nickname:
+            return True
+        user = User.query.filter_by(nickname=self.nickname.data).first()
+        if user != None:
+            self.nickname.errors.append('This nickname is already in use. Please choose another one.')
+            return False
+        return True
+</code></pre>
+<p>The form constructor now takes a new argument <code>original_nickname</code>. The <code>validate</code> method uses it to determine if the nickname has changed or not. If it hasn't changed then it accepts it. If it has changed, then it makes sure the new nickname does not exist in the database.</p>
+<p>Next we add the new constructor argument to the view function:</p>
+<pre><code>@app.route('/edit', methods=['GET', 'POST'])
+@login_required
+def edit():
+    form = EditForm(g.user.nickname)
+    # ...
+</code></pre>
+<p>To complete this change we have to enable field errors to show in our template for the form (file <code>app/templates/edit.html</code>):</p>
+<pre><code>        &lt;td&gt;Your nickname:&lt;/td&gt;
+        &lt;td&gt;
+            {{ form.nickname(size=24) }}
+            {% for error in form.errors.nickname %}
+            &lt;br&gt;&lt;span style="color: red;"&gt;[{{ error }}]&lt;/span&gt;
+            {% endfor %}
+        &lt;/td&gt;
+</code></pre>
+<p>Now the bug is fixed and duplicates will be prevented... except when they are not. We still have a potential problem with concurrent access to the database by two or more threads or processes, but this will be the topic of a future article.</p>
+<p>At this point you can try again to select a duplicated name to see how the form nicely handles the error.</p>
+<h2>Unit testing framework</h2>
+<p>To close this session on testing, let's talk about automated testing a bit.</p>
+<p>As the application grows in size it gets more and more difficult to ensure that code changes don't break existing functionality.</p>
+<p>The traditional approach to prevent regressions is a very good one. You write tests that exercise all the different features of the application. Each test runs a focused part and verifies that the result obtained is the expected one. The tests are executed periodically to make sure that the application works as expected. When the test <em>coverage</em> is large you can have confidence that modifications and additions do not affect the application in a bad way just by running the tests.</p>
+<p>We will now build a very simple testing framework using Python's <code>unittest</code> module (file <code>tests.py</code>):</p>
+<pre><code>#!flask/bin/python
+import os
+import unittest
+
+from config import basedir
+from app import app, db
+from app.models import User
+
+class TestCase(unittest.TestCase):
+    def setUp(self):
+        app.config['TESTING'] = True
+        app.config['WTF_CSRF_ENABLED'] = False
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'test.db')
+        self.app = app.test_client()
+        db.create_all()
+
+    def tearDown(self):
+        db.session.remove()
+        db.drop_all()
+
+    def test_avatar(self):
+        u = User(nickname='john', email='john@example.com')
+        avatar = u.avatar(128)
+        expected = 'http://www.gravatar.com/avatar/d4c74594d841139328695756648b6bd6'
+        assert avatar[0:len(expected)] == expected
+
+    def test_make_unique_nickname(self):
+        u = User(nickname='john', email='john@example.com')
+        db.session.add(u)
+        db.session.commit()
+        nickname = User.make_unique_nickname('john')
+        assert nickname != 'john'
+        u = User(nickname=nickname, email='susan@example.com')
+        db.session.add(u)
+        db.session.commit()
+        nickname2 = User.make_unique_nickname('john')
+        assert nickname2 != 'john'
+        assert nickname2 != nickname
+
+if __name__ == '__main__':
+    unittest.main()
+</code></pre>
+<p>Discussing the <code>unittest</code> module is outside the scope of this article. Let's just say that class <code>TestCase</code> holds our tests. The <code>setUp</code> and <code>tearDown</code> methods are special, these are run before and after each test respectively. A more complex setup could include several groups of tests each represented by a <code>unittest.TestCase</code> subclass, and each group then would have independent <code>setUp</code> and <code>tearDown</code> methods. </p>
+<p>These particular <code>setUp</code> and <code>tearDown</code> methods are pretty generic. In <code>setUp</code> the configuration is edited a bit. For instance, we want the testing database to be different that the main database. In <code>tearDown</code> we just reset the database contents.</p>
+<p>Tests are implemented as methods. A test is supposed to run some function of the application that has a known outcome, and should assert if the result is different than the expected one.</p>
+<p>So far we have two tests in the testing framework. The first one verifies that the Gravatar avatar URLs from the previous article are generated correctly. Note how the expected avatar is hardcoded in the test and checked against the one returned by the <code>User</code> class.</p>
+<p>The second test verifies the <code>make_unique_nickname</code> method we just wrote, also in the <code>User</code> class. This test is a bit more elaborate, it creates a new user and writes it to the database, then ensures the same name is not allowed as a unique name. It then creates a second user with the suggested unique name and tries one more time to request the first nickname. The expected result for this second part is to get a suggested nickname that is different from the previous two.</p>
+<p>To run the test suite you just run the <code>tests.py</code> script:</p>
+<pre><code>python tests.py
+</code></pre>
+<p>If there are any errors, you will get a report in the console.</p>
+<h2>Final words</h2>
+<p>This ends today's discussion of debugging, errors and testing. I hope you found this article useful.</p>
+<p>As always, if you have any comments please write below.</p>
+<p>The code of the microblog application update with today's changes is available below for download:</p>
+<p>Download <a href="https://codeload.github.com/miguelgrinberg/microblog/zip/version-0.7">microblog-0.7.zip</a>.</p>
+<p>As always, the flask virtual environment and the database are not included. See previous articles for instructions on how to generate them.</p>
+<p>I hope to see you again in the next installment of this series.</p>
+<p>Thank you for reading!</p>
+<p>Miguel</p></div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-vii-unit-testing" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-vii-unit-testing" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="the-flask-mega-tutorial-part-vii-unit-testing.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-vii-unit-testing" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+
+
+<h4 style="text-align: right"><a name="comments"></a>82 comments</h4>
+
+
+<div class="comment">
+    <ul>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/15005ce2a86887e768f4718e05be9fb7ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#1</span> <span class="label label-primary">Epsilon</span> said
+                    <span class="flask-moment" data-timestamp="2012-08-09T16:03:40Z" data-format="fromNow(0)" data-refresh="0">2012-08-09T16:03:40Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Thank you for making this effort.
+
+May I suggest a subject for one of you future entries? I am really interested to see how you would structure a larger Flask application. 
+
+A clear explanation of when, how and why to use blueprints and split up you app into modules (and how to initialize those) would help a lot. I find these things very hard to figure out without some guidance. 
+Digging through the Flask mailing list archives reveals other users with the same problem. I know of the existence of the large-app-how-to wiki page and I browsed through the source of several Flask applications on Github/BitBucket, but nothing beats a well guided explanation (imho).
+
+Anyway, I gained an extra RSS feed. :-)</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#2</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2012-08-10T05:11:07Z" data-format="fromNow(0)" data-refresh="0">2012-08-10T05:11:07Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Epsilon: thanks for your comment. I personally don&#39;t find blueprints that interesting. The way I structure my applications is based on mitsuhiko&#39;s large app how to, but without the blueprints. This little microblog app is also structured like that. For really big apps I just split the views.py, models.py and forms.py into multiple files each, but I don&#39;t go too crazy on splitting things up because then maintaining dependencies between modules becomes a nightmare.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/56ac70d8a254255804bd86438e658a41ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#3</span> <span class="label label-primary">MIquel</span> said
+                    <span class="flask-moment" data-timestamp="2012-08-11T18:03:16Z" data-format="fromNow(0)" data-refresh="0">2012-08-11T18:03:16Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">My congratulations for this series of posts!. I&#39;m relatively new to Flask and this is by far the best intro I&#39;ve found. Apart from being quite complete and self consistent is written using a good didactic style. I&#39;m looking forward forthcoming posts about your microblog application. ¡Enhorabuena!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/eff021ed51af87cd437c7572a3f4fe6cce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#4</span> <span class="label label-primary">Raj</span> said
+                    <span class="flask-moment" data-timestamp="2012-08-14T04:21:10Z" data-format="fromNow(0)" data-refresh="0">2012-08-14T04:21:10Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Great series , I am going to follow your articles. Speaking of the login manager with Python 2.7 on my setup , had to refer to flask_login as follows 
+from flask_login import LoginManager
+
+
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/93c5a038f8dc3adbf7e82c898a11a1d7ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#5</span> <span class="label label-primary">Wellington Cordeiro</span> said
+                    <span class="flask-moment" data-timestamp="2012-08-17T23:04:25Z" data-format="fromNow(0)" data-refresh="0">2012-08-17T23:04:25Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I had an issue early in this post on Windows 7. 
+When I run the db_upgrade.py file, after deleting and creating the database. I have this stack trace.
+http://dpaste.com/788109/
+
+I&#39;m not quite sure how I can correct this. The database is being deleted. But appears to be still in memory or something.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/eff021ed51af87cd437c7572a3f4fe6cce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#6</span> <span class="label label-primary">Raj</span> said
+                    <span class="flask-moment" data-timestamp="2012-08-17T23:34:23Z" data-format="fromNow(0)" data-refresh="0">2012-08-17T23:34:23Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Delete the database file. If not connect to db and drop the table. You can connect to SQLite db like this on unix
+
+sqlite3 mydatabase.db
+You get to the sqlite3 prompt
+
+&gt;.show tables 
+Should see the tables 
+
+Then drop the table
+
+&gt;drop table table name ;
+
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#7</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2012-08-18T01:34:04Z" data-format="fromNow(0)" data-refresh="0">2012-08-18T01:34:04Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Wellington: sorry about that, I obviously missed it. I have made a small update to the db_create.py script, and also updated this page. The problem is really that db_create.py is creating the latest version of the database, when you run db_upgrade.py after that it tries to create tables that already exist in the database. If you just run db_create.py you should be fine, but make sure you update your db_create.py script from either the zip file or from the database chapter. Sorry about that, I find that no matter how much effort I put into testing and proofreading my articles there is always something I miss.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/ff90a374938f7b7608cb02a8d4080261ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#8</span> <span class="label label-primary">Marcel</span> said
+                    <span class="flask-moment" data-timestamp="2012-12-25T10:00:36Z" data-format="fromNow(0)" data-refresh="0">2012-12-25T10:00:36Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel, I really appreciate the effort you put into creating this tutorial. 
+There is a small omission in your steps today, however. Since EditForm now excepts an argument, original_nickname, views.py needs to be edited as well and the current nickname passed in when instantiating EditForm. The fix was present in your zip file but is not mentioned here.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#9</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2012-12-27T21:51:56Z" data-format="fromNow(0)" data-refresh="0">2012-12-27T21:51:56Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Marcel: good catch, I have now updated the article. Thanks!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/bafafefac4abe76b1218317d841e167bce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#10</span> <span class="label label-primary">Dogukan Tufekci</span> said
+                    <span class="flask-moment" data-timestamp="2013-01-05T11:30:11Z" data-format="fromNow(0)" data-refresh="0">2013-01-05T11:30:11Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hello Miguel! Thank you very much for this awesome tutorial. I believe developing an exemplary app  is the best way to learn Flask.
+
+My question is in regards to &#39;Sending errors via email&#39; part: I run the app with both run.py and runp.py however I dont seem to receive any emails when I activate the &#39;unique nickname bug&#39;. I&#39;d like to learn how I can send the bugs let&#39;s say using a gmail account to an admin with another gmail account.
+
+Thanks!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/bafafefac4abe76b1218317d841e167bce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#11</span> <span class="label label-primary">Dogukan Tufekci</span> said
+                    <span class="flask-moment" data-timestamp="2013-01-05T12:30:50Z" data-format="fromNow(0)" data-refresh="0">2013-01-05T12:30:50Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Miguel Bug fix is missing for download.
+@oid.after_login
+nickname = User.make_unique_nickname(nickname) 
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#12</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-01-05T20:16:11Z" data-format="fromNow(0)" data-refresh="0">2013-01-05T20:16:11Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Dogukan: good catch on the missing make_unique_nickname, it should now be fixed. Regarding sending emails, you may want to test sending of emails in the Python shell. You will find some code and instructions in the &#39;Email Support&#39; article. If you need to send emails to other email addresses you can add all the admin emails you want in the config.py file, look for the ADMIN array there.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/2c02c167f88ee80d03aa6d3b489ca935ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#13</span> <span class="label label-primary">George Mabley</span> said
+                    <span class="flask-moment" data-timestamp="2013-02-06T02:36:16Z" data-format="fromNow(0)" data-refresh="0">2013-02-06T02:36:16Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hey Miguel.  First of all, thank you for making  the tutorial.  It has made this whole process less daunting and very fun.  I may have missed it while following along in earlier lessons, but I had to import User from app.models when adjusting the forms.py in this lesson.  Also, running Windows 7 I had to import os in my tests.py.  Your files revealed the missing lines, but this page could be updated for us writing the code out ourselves.  Again, thank you for all the help!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#14</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-02-06T06:25:47Z" data-format="fromNow(0)" data-refresh="0">2013-02-06T06:25:47Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@George: Thanks for alerting me of these little problems. Both are corrected in the text above.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/02e73fca23466162bdf41ae797c5b536ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#15</span> <span class="label label-primary"><a href="N/A.html">Austin Hulak</a></span> said
+                    <span class="flask-moment" data-timestamp="2013-03-31T21:07:41Z" data-format="fromNow(0)" data-refresh="0">2013-03-31T21:07:41Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel,
+
+Just want to stop and tell you that this tutorial is phenomenal.  I&#39;ve been going through almost every Flask tutorial on the web, and not a single one goes into the amount of depth/detail as yours.  Kudos on that.
+
+One thing that stands out particularly is that you cover Unit testing.  As a fairly novice programmer, this is something I haven&#39;t seen a lot of on the internet.  It&#39;s almost as if all the tutorials out there just want to see you get something live.. but just barely.  
+
+I know you have a lot of topics on deck for this blog, but if you could go into more depth on unit testing (eg how to design a proper unit test, test drive development) that would be very appreciated.  Or at the least, do you know of any good resources to learn more about this?
+
+Thanks for all the tutorials!! (After this I&#39;m gearin&#39; up for the Arduino Tut)
+
+Cheers,
+Austin</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#16</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-04-01T00:23:38Z" data-format="fromNow(0)" data-refresh="0">2013-04-01T00:23:38Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Austin: Thanks. There is more about unit testing in part XVI, where I implement code coverage for the unit testing framework and then use the coverage data to discover what code my unit tests are missing. </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/951119ad8ac833a842099d1f42981b1fce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#17</span> <span class="label label-primary">aikah</span> said
+                    <span class="flask-moment" data-timestamp="2013-04-05T14:03:25Z" data-format="fromNow(0)" data-refresh="0">2013-04-05T14:03:25Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">first , i love your tutorial , i&#39;m adapting your script for a django tutorial , i&#39;ll come back at you later about it. Can i suggest you make your make_unique_nickname function recursive instead on using a while true loop ? you just need to pass the version as a param at each iteration ;) thanks again ! </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#18</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-04-06T05:43:14Z" data-format="fromNow(0)" data-refresh="0">2013-04-06T05:43:14Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@aikah: recursive functions could use a big stack if many levels of calls occur, they can even cause a stack overflow.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/3b8c5632c1a73d5bf08ffd194fc21ed7ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#19</span> <span class="label label-primary">Ashwin</span> said
+                    <span class="flask-moment" data-timestamp="2013-04-24T18:46:52Z" data-format="fromNow(0)" data-refresh="0">2013-04-24T18:46:52Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Great tutorial!
+
+I have a similar question in mind when designing my own Flask based web app. I have my oauth consumer handlers in a separate module say oauthmodule.py.
+
+If there is an exception in one of the oauth sequences, obviously an exception will be raised. Does this translate directly to a 500 error in the Flask&#39;s controllers?
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#20</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-04-25T06:06:10Z" data-format="fromNow(0)" data-refresh="0">2013-04-25T06:06:10Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Ashwin: Yes, any time your code throws an exception Flask will issue a 500 page back to the client.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/6d415832373efb6cb01d9698860de558ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#21</span> <span class="label label-primary">Seth</span> said
+                    <span class="flask-moment" data-timestamp="2013-05-27T23:15:12Z" data-format="fromNow(0)" data-refresh="0">2013-05-27T23:15:12Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Thank you so much for this series Miguel, it has been really helpful in learning the Flask framework.
+
+I am currently having issues with both the email logging and file logging. I am running Ubuntu 12.04 as my development environment and have my flask application happily running in a virtualenv. The issue is that I can only launch the mail server as sudo, and even so, emails are not being sent or received.
+
+Secondly, I am unable to use the RotatingFileHandler as I get an ImportError when attempting to run my application. Have you experienced these issues or have any suggestions as to what the issue may be?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/b0f0225067f10aaf62ee2258d38f2883ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#22</span> <span class="label label-primary">James</span> said
+                    <span class="flask-moment" data-timestamp="2013-06-05T18:53:22Z" data-format="fromNow(0)" data-refresh="0">2013-06-05T18:53:22Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel, 
+
+Thanks a ton for this tutorial, it&#39;s a huge help! 
+
+I am running into an odd issue, I&#39;m following along using a hosted environment over at pythonanywhere.com Everything has been great so far, except when setting up my errorhandler views, as long as I am returning an error code along with the render_template, it will not render the template and instead I get the ugly 404 or 500 server errors. 
+
+I can return a string fine, I can return just the render_template call, but if I render_template(&#39;whatevertemplate.html&#39;), whatevererrorcode, I get no template and just the server error screen (404, 500, what have you). 
+
+Can you shed any light on why this could be happening? 
+
+Since it seems to work fine without returning an error code along with the template, I&#39;ve removed them, but I&#39;m not sure what the side effects of this is for other error handling purposes. </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#23</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-06-06T05:51:58Z" data-format="fromNow(0)" data-refresh="0">2013-06-06T05:51:58Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@James: can you return a string and an error code, or does that also fail?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/e4ba6f79978cd89e6194e3b4b69540c1ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#24</span> <span class="label label-primary">Vasco Correia</span> said
+                    <span class="flask-moment" data-timestamp="2013-07-12T23:40:11Z" data-format="fromNow(0)" data-refresh="0">2013-07-12T23:40:11Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hello, and thanks for the tutorials.
+
+I have (I think) a problem with unit testing. The tests.py script is just taking too long. And when I interrupt the process, the stack trace shows that the execution is going into the flask/ folder created by virtualenv (http://pastebin.com/Mr2QY9rS). 
+Is it running the tests of all the libs? Is this what&#39;s supposed to happen? 
+
+Thanks in advance.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#25</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-07-13T03:52:38Z" data-format="fromNow(0)" data-refresh="0">2013-07-13T03:52:38Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Vasco: Have you checked that your code matches what I have on github? From the stack trace it appears one of the tests is in a endless loop when trying to find a unique nickname.</p>
+                </div>
+            </div>
+        </li>
+        
+    </ul>
+</div>
+
+<div class="page">
+<ul class="pager">
+  <li class="previous disabled">
+    <a href="#">&laquo;&laquo;</a>
+  </li>
+  <li class="previous disabled">
+    <a href="#">&laquo;</a>
+  </li>
+  <li class="next">
+    <a href="the-flask-mega-tutorial-part-vii-unit-testing/page/0.html#comments">&raquo;&raquo;</a>
+  </li>
+  <li class="next">
+    <a href="the-flask-mega-tutorial-part-vii-unit-testing/page/2.html#comments">&raquo;</a>
+  </li>
+</ul>
+</div>
+
+<h3><a name="commentform"></a>Leave a Comment</h3>
+
+<form action="#commentform" method="post"
+  class="form" role="form">
+  <div style="display:none;"><input id="csrf_token" name="csrf_token" type="hidden" value="1439534467.04##16060d7bfc7422ca20a3d36838b7d25a69748d65"></div>
+  
+    
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="name">Name</label>
+        <input class="form-control" id="name" name="name" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="url">URL</label>
+        <input class="form-control" id="url" name="url" type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="email">Email</label>
+        <input class="form-control" id="email" name="email" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="comment">Comment</label>
+        <textarea class="form-control" id="comment" name="comment" required></textarea>
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="captcha">Captcha</label>
+        
+<script type="text/javascript">var RecaptchaOptions = {"custom_translations": {"audio_challenge": "Get an audio challenge", "cant_hear_this": "Download sound as MP3", "help_btn": "Help", "image_alt_text": "reCAPTCHA challenge image", "incorrect_try_again": "Incorrect. Try again.", "instructions_audio": "Type what you hear", "instructions_visual": "Type the text", "play_again": "Play sound again", "privacy_and_terms": "Privacy & Terms", "refresh_btn": "Get a new challenge", "visual_challenge": "Get a visual challenge"}, "theme": "white"};</script>
+<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S"></script>
+<noscript>
+  <iframe src="http://www.google.com/recaptcha/api/noscript?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S" height="300" width="500" frameborder="0"></iframe><br>
+  <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+  <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
+</noscript>
+
+  </div>
+
+
+    
+
+
+
+
+
+  
+
+
+    <input class="btn btn-default" id="submit" name="submit" type="submit" value="Submit">
+  
+
+
+
+
+
+</form>
+
+
+</div>
+
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <p class="elapsed">This page was generated in None seconds.</p>
+            <p>&copy; 2014 by Miguel Grinberg. All rights reserved. <a href="mailto:webmaster _at_ miguelgrinberg _dot_ com">Questions?</a></p>
+        </div>
+    </div>
+
+
+    
+    
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.33/jquery.colorbox-min.js"></script>
+    <script type="text/javascript" src="../static/prettify.js"></script>
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment-with-langs.min.js"></script>
+<script>
+function flask_moment_render(elem) {
+    $(elem).text(eval('moment("' + $(elem).data('timestamp') + '").' + $(elem).data('format') + ';'));
+    $(elem).removeClass('flask-moment');
+}
+function flask_moment_render_all() {
+    $('.flask-moment').each(function() {
+        flask_moment_render(this);
+        if ($(this).data('refresh')) {
+            (function(elem, interval) { setInterval(function() { flask_moment_render(elem) }, interval); })(this, $(this).data('refresh'));
+        }
+    })
+}
+$(document).ready(function() {
+    flask_moment_render_all();
+});
+</script>
+    
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4777284-15']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".gallery").colorbox({rel:".gallery",maxWidth:"95%",maxHeight:"95%",scalePhotos:true});
+            // add prettyprint class to all <pre><code></code></pre> blocks
+            var prettify = false;
+            $("pre code").parent().each(function() {
+                $(this).addClass('prettyprint');
+                prettify = true;
+            });
+            prettyPrint();
+        });
+    </script>
+
+
+  </body>
+
+<!-- Mirrored from blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-vii-unit-testing by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 05:40:45 GMT -->
+</html>

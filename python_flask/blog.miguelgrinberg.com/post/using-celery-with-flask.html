@@ -1,0 +1,1218 @@
+﻿<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from blog.miguelgrinberg.com/post/using-celery-with-flask by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:44:45 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    
+    <title>
+    
+        Using Celery With Flask - miguelgrinberg.com
+    
+</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="description" content="miguelgrinberg.com">
+	<meta name="copyright" content="Copyright (c) 2012-2015 Miguel Grinberg">
+	<meta name="author" content="Miguel Grinberg">
+    
+    <meta name="keywords" content="python, flask, celery, asynchronous, background, task">
+    
+
+    
+    <!-- Bootstrap -->
+    <link href="../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../static/prettify.css" type="text/css" rel="stylesheet" />
+    <link href="../static/colorbox/colorbox.css" rel="stylesheet" type="text/css" />
+    <link href="../static/style.css" rel="stylesheet" type="text/css" />
+
+    <link rel="shortcut icon" href="../static/favicon.ico">
+	<link rel="alternate" type="application/rss+xml" href="../feed" title="miguelgrinberg.com RSS feed">
+
+  </head>
+  <body>
+    
+    <!-- facebook sdk -->
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "../../connect.facebook.net/en_US/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    <!-- google plus sdk -->
+    <script type="text/javascript" src="../../apis.google.com/js/plusone.js"></script>
+    <!-- twitter sdk -->
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="../../platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <!-- linkedin sdk -->
+    <script src="../../platform.linkedin.com/in.js" type="text/javascript"></script>
+
+    
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://blog.miguelgrinberg.com/index">miguelgrinberg.com</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="http://blog.miguelgrinberg.com/index">Home</a></li>
+                        <li><a href="about-me.html">About Me</a></li>
+                        <li><a href="about-this-blog.html">About This Blog</a></li>
+                        
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <p class="navbar-text" style="margin-top: 10px; margin-bottom: 0px;">
+                                <a type="application/rss+xml" href="../feed"><img src="../static/rss.png" alt="RSS Feed" title="RSS Feed" /></a>
+                                <a href="https://www.facebook.com/miguelgrinbergblog"><img src="../static/facebook.png" alt="Facebook" title="Facebook" /></a>
+                                <a href="https://plus.google.com/u/0/117786742456929977820"><img src="../static/googleplus.png" alt="Google+" title="Google+" /></a>
+                                <a href="http://www.linkedin.com/in/miguelgrinberg"><img src="../static/linkedin.png" alt="LinkedIn" title="LinkedIn" /></a>
+                                <a href="http://github.com/miguelgrinberg"><img src="../static/github.png" alt="GitHub" title="GitHub" /></a>
+                                <a href="https://twitter.com/#!/miguelgrinberg"><img src="../static/twitter.png" alt="Twitter" title="Twitter" /></a>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </nav>
+
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-push-9 sidebar-bg">
+                <div id="sidebar">
+                    
+
+                    
+                    <h1>Building Web APIs with Flask</h1>
+                    <p>Flask is the ideal Python framework for building REST APIs that are flexible, easy to maintain and efficient. I have created a training video with O'Reilly in which I show all my techniques:</p>
+                    <p><center><a href="http://bit.ly/flaskapi"><img style="border: 1px solid black;" src="../static/flask-api-cover-tiny.png"></a></center></p>
+                    <p>Visit <a href="http://flaskbook.com/">http://flaskbook.com</a> for information about this and other Flask training products I have created!</p>
+                    
+
+                    <h1>About Miguel</h1>
+                    <img style="float: right; margin: 0px 8px 8px 0px; padding: 4px; border: 1px solid #ccc;" src="../static/miguel.jpg" />
+                    <p>Welcome to my blog!</p>
+                    <p>I'm a software engineer, photographer and filmmaker in Portland, Oregon, USA.</p>
+                    <p>You can also find me on <a href="https://www.facebook.com/miguelgrinbergblog">Facebook</a>, <a href="https://plus.google.com/u/0/117786742456929977820">Google+</a>, <a href="http://www.linkedin.com/in/miguelgrinberg">LinkedIn</a>, <a href="https://github.com/miguelgrinberg">Github</a> and <a href="https://twitter.com/#!/miguelgrinberg">Twitter</a>.</p>
+                    <p>Thank you for visiting!</p>
+
+                    
+
+                    
+                    <h1>Categories</h1>
+<ul>
+
+	<li>
+		<a href="../category/Arduino/feed">
+			<img src="../static/rss-small.png" title="Arduino RSS Feed" label="Arduino RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Arduino.html">Arduino</a></span> (7)
+	</li>
+
+	<li>
+		<a href="../category/Authentication/feed">
+			<img src="../static/rss-small.png" title="Authentication RSS Feed" label="Authentication RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Authentication.html">Authentication</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../category/Blog/feed">
+			<img src="../static/rss-small.png" title="Blog RSS Feed" label="Blog RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Blog.html">Blog</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/C%2b%2b/feed">
+			<img src="../static/rss-small.png" title="C++ RSS Feed" label="C++ RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/C%2b%2b.html">C++</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Cloud/feed">
+			<img src="../static/rss-small.png" title="Cloud RSS Feed" label="Cloud RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Cloud.html">Cloud</a></span> (2)
+	</li>
+
+	<li>
+		<a href="../category/Filmmaking/feed">
+			<img src="../static/rss-small.png" title="Filmmaking RSS Feed" label="Filmmaking RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Filmmaking.html">Filmmaking</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Flask/feed">
+			<img src="../static/rss-small.png" title="Flask RSS Feed" label="Flask RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Flask.html">Flask</a></span> (39)
+	</li>
+
+	<li>
+		<a href="../category/Games/feed">
+			<img src="../static/rss-small.png" title="Games RSS Feed" label="Games RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Games.html">Games</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Gear/feed">
+			<img src="../static/rss-small.png" title="Gear RSS Feed" label="Gear RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Gear.html">Gear</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/HTML5/feed">
+			<img src="../static/rss-small.png" title="HTML5 RSS Feed" label="HTML5 RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/HTML5.html">HTML5</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Heroku/feed">
+			<img src="../static/rss-small.png" title="Heroku RSS Feed" label="Heroku RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Heroku.html">Heroku</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Javascript/feed">
+			<img src="../static/rss-small.png" title="Javascript RSS Feed" label="Javascript RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Javascript.html">Javascript</a></span> (3)
+	</li>
+
+	<li>
+		<a href="../category/Movie%20Reviews/feed">
+			<img src="../static/rss-small.png" title="Movie Reviews RSS Feed" label="Movie Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Movie%20Reviews.html">Movie Reviews</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Netflix/feed">
+			<img src="../static/rss-small.png" title="Netflix RSS Feed" label="Netflix RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Netflix.html">Netflix</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Node.js/feed">
+			<img src="../static/rss-small.png" title="Node.js RSS Feed" label="Node.js RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Node.html">Node.js</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/OpenStack/feed">
+			<img src="../static/rss-small.png" title="OpenStack RSS Feed" label="OpenStack RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/OpenStack.html">OpenStack</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Personal/feed">
+			<img src="../static/rss-small.png" title="Personal RSS Feed" label="Personal RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Personal.html">Personal</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Photography/feed">
+			<img src="../static/rss-small.png" title="Photography RSS Feed" label="Photography RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Photography.html">Photography</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Product%20Reviews/feed">
+			<img src="../static/rss-small.png" title="Product Reviews RSS Feed" label="Product Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Product%20Reviews.html">Product Reviews</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Programming/feed">
+			<img src="../static/rss-small.png" title="Programming RSS Feed" label="Programming RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Programming.html">Programming</a></span> (47)
+	</li>
+
+	<li>
+		<a href="../category/Project%20Management/feed">
+			<img src="../static/rss-small.png" title="Project Management RSS Feed" label="Project Management RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Project%20Management.html">Project Management</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Python/feed">
+			<img src="../static/rss-small.png" title="Python RSS Feed" label="Python RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Python.html">Python</a></span> (43)
+	</li>
+
+	<li>
+		<a href="../category/REST/feed">
+			<img src="../static/rss-small.png" title="REST RSS Feed" label="REST RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/REST.html">REST</a></span> (5)
+	</li>
+
+	<li>
+		<a href="../category/Rackspace/feed">
+			<img src="../static/rss-small.png" title="Rackspace RSS Feed" label="Rackspace RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Rackspace.html">Rackspace</a></span> (1)
+	</li>
+
+	<li>
+		<a href="../category/Raspberry%20Pi/feed">
+			<img src="../static/rss-small.png" title="Raspberry Pi RSS Feed" label="Raspberry Pi RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Raspberry%20Pi.html">Raspberry Pi</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/RhinoSteady/feed">
+			<img src="../static/rss-small.png" title="RhinoSteady RSS Feed" label="RhinoSteady RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/RhinoSteady.html">RhinoSteady</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Robotics/feed">
+			<img src="../static/rss-small.png" title="Robotics RSS Feed" label="Robotics RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Robotics.html">Robotics</a></span> (6)
+	</li>
+
+	<li>
+		<a href="../category/Video/feed">
+			<img src="../static/rss-small.png" title="Video RSS Feed" label="Video RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Video.html">Video</a></span> (4)
+	</li>
+
+	<li>
+		<a href="../category/Windows/feed">
+			<img src="../static/rss-small.png" title="Windows RSS Feed" label="Windows RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../category/Windows.html">Windows</a></span> (1)
+	</li>
+
+</ul>
+                    
+                </div>
+            </div>
+            <div class="col-md-8 col-md-pull-4">
+                <div id="main">
+                    
+                    
+                    
+                    
+                    
+
+<div class="post">
+
+<p class="date"><span class="flask-moment" data-timestamp="2015-01-01T23:54:07Z" data-format="format('LL')" data-refresh="0">2015-01-01T23:54:07Z</span></p>
+<h1 class="post-title"><a href="using-celery-with-flask.html">Using Celery With Flask</a></h1>
+<div class="posted">Posted by <span class="label label-danger"><a href="http://blog.miguelgrinberg.com/author/Miguel Grinberg">Miguel Grinberg</a></span> under <span class="label label-primary"><a href="../category/Programming.html">Programming</a></span>, <span class="label label-primary"><a href="../category/Python.html">Python</a></span>, <span class="label label-primary"><a href="../category/Flask.html">Flask</a></span>. </div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/using-celery-with-flask" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/using-celery-with-flask" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="using-celery-with-flask.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/using-celery-with-flask" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+<div class="post_body"><p><center><img src="../static/images/flask-celery.png"></center></p>
+<p>The topic of running background tasks is complex, and because of that there is a lot of confusion around it. I have tackled it in my <a href="the-flask-mega-tutorial-part-xi-email-support.html">Mega-Tutorial</a>, later in <a href="http://bit.ly/flaskbook">my book</a>, and then again in much more detail in my <a href="http://bit.ly/flaskapi">REST API training video</a>. To keep things simple, in all the examples I have used so far I have executed background tasks in threads, but I always noted that for a more scalable and production ready solution a <em>task queue</em> such as <a href="http://www.celeryproject.org/">Celery</a> should be used instead.</p>
+<p>My readers constantly ask me about Celery, and how a Flask application can use it, so today I am going to show you two examples that I hope will cover most application needs.</p>
+<h2>What is Celery?</h2>
+<p>Celery is an asynchronous task queue. You can use it to execute tasks outside of the context of your application. The general idea is that any resource consuming tasks that your application may need to run can be offloaded to the task queue, leaving your application free to respond to client requests.</p>
+<p>Running background tasks through Celery is not as trivial as doing so in threads. But the benefits are many, as Celery has a distributed architecture that will enable your application to scale. A Celery installation has three core components:</p>
+<ol>
+<li><strong>The Celery client</strong>. This is used to issue background jobs. When working with Flask, the client runs with the Flask application.</li>
+<li><strong>The Celery workers</strong>. These are the processes that run the background jobs. Celery supports local and remote workers, so you can start with a single worker running on the same machine as the Flask server, and later add more workers as the needs of your application grow.</li>
+<li><strong>The message broker</strong>. The client communicates with the the workers through a <em>message queue</em>, and Celery supports several ways to implement these queues. The most commonly used brokers are <a href="http://www.rabbitmq.com/">RabbitMQ</a> and <a href="http://redis.io/">Redis</a>.</li>
+</ol>
+<h2>For The Impatient</h2>
+<p>If you are the instant gratification type, and the screenshot at the top of this article intrigued you, then head over to the <a href="https://github.com/miguelgrinberg/flask-celery-example">Github repository</a> for the code used in this article. The README file there will give you the quick and dirty approach to running and playing with the example application.</p>
+<p>Then come back to learn how everything works!</p>
+<h2>Working with Flask and Celery</h2>
+<p>The integration of Celery with Flask is so simple that no extension is required. A Flask application that uses Celery needs to initialize the Celery client as follows:</p>
+<pre><code>from flask import Flask
+from celery import Celery
+
+app = Flask(__name__)
+app.config['CELERY_BROKER_URL'] = 'redis://localhost:6379/0'
+app.config['CELERY_RESULT_BACKEND'] = 'redis://localhost:6379/0'
+
+celery = Celery(app.name, broker=app.config['CELERY_BROKER_URL'])
+celery.conf.update(app.config)
+</code></pre>
+<p>As you can see, Celery is initialized by creating an object of class <code>Celery</code>, and passing the application name and the connection URL for the message broker, which I put in <code>app.config</code> under key <code>CELERY_BROKER_URL</code>. This URL tells Celery where the broker service is running. If you run something other than Redis, or have the broker on a different machine, then you will need to change the URL accordingly.</p>
+<p>Any additional configuration options for Celery can be passed directly from Flask's configuration through the <code>celery.conf.update()</code> call. The <code>CELERY_RESULT_BACKEND</code> option is only necessary if you need to have Celery store status and results from tasks. The first example I will show you does not require this functionality, but the second does, so it's best to have it configured from the start.</p>
+<p>Any functions that you want to run as background tasks need to be decorated with the <code>celery.task</code> decorator. For example:</p>
+<pre><code>@celery.task
+def my_background_task(arg1, arg2):
+    # some long running task here
+    return result
+</code></pre>
+<p>Then the Flask application can request the execution of this background task as follows:</p>
+<pre><code>task = my_background_task.delay(10, 20)
+</code></pre>
+<p>The <code>delay()</code> method is a shortcut to the more powerful <code>apply_async()</code> call. Here is the equivalent call using <code>apply_async()</code>:</p>
+<pre><code>task = my_background_task.apply_async(args=[10, 20])
+</code></pre>
+<p>When using <code>apply_async()</code>, you can give Celery more detailed instructions about how the background task is to be executed. A useful option is to request that the task executes at some point in the future. For example, this invocation will schedule the task to run in about a minute:</p>
+<pre><code>task = my_background_task.apply_async(args=[10, 20], countdown=60)
+</code></pre>
+<p>The return value of <code>delay()</code> and <code>apply_async()</code> is an object that represents the task, and this object can be used to obtain status. I will show you how this is done later in this article, but for now let's keep it simple and not worry about results from tasks.</p>
+<p>Consult the <a href="http://docs.celeryproject.org/en/latest/index.html">Celery documentation</a> to learn about many other available options.</p>
+<h2>Simple Example: Sending Asynchronous Emails</h2>
+<p>The first example that I'm going to show is a very common need of applications: the ability to send emails without blocking the main application.</p>
+<p>For this example I'm going to use the <a href="https://pythonhosted.org/Flask-Mail/">Flask-Mail</a> extension, which I covered in very good detail in other articles. I'm going to assume that you are familiar with this extension, so if you need a refresher see <a href="the-flask-mega-tutorial-part-xi-email-support.html">this tutorial</a> or my <a href="http://bit.ly/flaskbook">Flask book</a>.</p>
+<p>The example application that I'm going to use to illustrate the topic presents a simple web form with one text field. The user is asked to enter an email address in this field, and upon submission, the server sends a test email to this address. The form includes two submit buttons, one to send the email immediately, and another to send it after a wait of one minute. The top portion of the screenshot at the top of this article shows how this form looks.</p>
+<p>Here is the HTML template that supports this example:</p>
+<pre><code>&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;Flask + Celery Examples&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Flask + Celery Examples&lt;/h1&gt;
+    &lt;h2&gt;Example 1: Send Asynchronous Email&lt;/h2&gt;
+    {% for message in get_flashed_messages() %}
+    &lt;p style="color: red;"&gt;{{ message }}&lt;/p&gt;
+    {% endfor %}
+    &lt;form method="POST"&gt;
+      &lt;p&gt;Send test email to: &lt;input type="text" name="email" value="{{ email }}"&gt;&lt;/p&gt;
+      &lt;input type="submit" name="submit" value="Send"&gt;
+      &lt;input type="submit" name="submit" value="Send in 1 minute"&gt;
+    &lt;/form&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>Hopefully you find nothing earth shattering here. Just a regular HTML form, plus the ability to show flashed messages from Flask.</p>
+<p>The Flask-Mail extension requires some configuration, specifically the details about the email server to use when sending emails. To make things easy I use my Gmail account as email server:</p>
+<pre><code># Flask-Mail configuration
+app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
+app.config['MAIL_DEFAULT_SENDER'] = 'flask@example.com'
+</code></pre>
+<p>Note how to avoid putting my email account's credentials at risk I set them in environment variables, which I import from the application.</p>
+<p>There is a single route to support this example:</p>
+<pre><code>@app.route('/', methods=['GET', 'POST'])
+def index():
+    if request.method == 'GET':
+        return render_template('index.html', email=session.get('email', ''))
+    email = request.form['email']
+    session['email'] = email
+
+    # send the email
+    msg = Message('Hello from Flask',
+                  recipients=[request.form['email']])
+    msg.body = 'This is a test email sent from a background Celery task.'
+    if request.form['submit'] == 'Send':
+        # send right away
+        send_async_email.delay(msg)
+        flash('Sending email to {0}'.format(email))
+    else:
+        # send in one minute
+        send_async_email.apply_async(args=[msg], countdown=60)
+        flash('An email will be sent to {0} in one minute'.format(email))
+
+    return redirect(url_for('index'))
+</code></pre>
+<p>Once again, this is all pretty standard Flask. Since this is a very simple form, I decided to handle it without the help of an extension, so I use <code>request.method</code> and <code>request.form</code> to do all the management. I save the value that the user enters in the text field in the <code>session</code>, so that I can remember it after the page reloads.</p>
+<p>The interesting bit in this route is the sending of the email, which is handled by a Celery task called <code>send_async_email</code>, invoked either via <code>delay()</code> or <code>apply_async()</code>.</p>
+<p>The last piece of this application is the asynchronous task that gets the job done:</p>
+<pre><code>@celery.task
+def send_async_email(msg):
+    """Background task to send an email with Flask-Mail."""
+    with app.app_context():
+        mail.send(msg)
+</code></pre>
+<p>This task is decorated with <code>celery.task</code> to make it a background job. The only notable thing in this function is that Flask-Mail requires an application context to run, so one needs to be created before the <code>send()</code> method can be invoked.</p>
+<p>It is important to note that in this example the return value from the asynchronous call is not preserved, so the application will never know if the call succeeded or not. When you get to run this example, you can look at the output of the Celery worker to troubleshoot any problems with the sending of the email.</p>
+<h2>Complex Example: Showing Status Updates and Results</h2>
+<p>The above example is overly simple, the background job is started and then the application forgets about it. Most Celery tutorials for web development end right there, but the fact is that for many applications it is necessary for the application to monitor its background tasks and obtain results from it.</p>
+<p>What I'm going to do now is extend the above application with a second example that shows a fictitious long running task. The user can start one or more of these long running jobs clicking a button, and the web page running in your browser uses ajax to poll the server for status updates on all these tasks. For each task the page will show a graphical status bar, a completion percentage, a status message, and when the task completes, a result value will be shown as well. You can see how all this looks in the screenshot at the top of this article.</p>
+<h3>Background Tasks with Status Updates</h3>
+<p>Let me start by showing you the background task that I'm using for this second example:</p>
+<pre><code>@celery.task(bind=True)
+def long_task(self):
+    """Background task that runs a long function with progress reports."""
+    verb = ['Starting up', 'Booting', 'Repairing', 'Loading', 'Checking']
+    adjective = ['master', 'radiant', 'silent', 'harmonic', 'fast']
+    noun = ['solar array', 'particle reshaper', 'cosmic ray', 'orbiter', 'bit']
+    message = ''
+    total = random.randint(10, 50)
+    for i in range(total):
+        if not message or random.random() &lt; 0.25:
+            message = '{0} {1} {2}...'.format(random.choice(verb),
+                                              random.choice(adjective),
+                                              random.choice(noun))
+        self.update_state(state='PROGRESS',
+                          meta={'current': i, 'total': total,
+                                'status': message})
+        time.sleep(1)
+    return {'current': 100, 'total': 100, 'status': 'Task completed!',
+            'result': 42}
+</code></pre>
+<p>For this task I've added a <code>bind=True</code> argument in the Celery decorator. This instructs Celery to send a <code>self</code> argument to my function, which I can then use to record the status updates.</p>
+<p>Since this task doesn't really do anything useful, I decided to use humorous status messages that are assembled from random verbs, adjectives and nouns. You can see the lists of non-sensical items I use to generate these messages above. Nothing wrong with having a little bit of fun, right?</p>
+<p>The function loops for a random number of iterations between 10 and 50, so each run of the task will have a different duration. The random status message is generated on the first iteration, and then can be replaced in later iterations with a 25% chance.</p>
+<p>The <code>self.update_state()</code> call is how Celery receives these task updates. There are a number of built-in states, such as <code>STARTED</code>, <code>SUCCESS</code> and so on, but Celery allows custom states as well. Here I'm using a custom state that I called <code>PROGRESS</code>. Attached to the state there is additional metadata, in the form of a Python dictionary that includes the current and total number of iterations and the randomly generated status message. A client can use these elements to display a nice progress bar. Each iteration sleeps for one second, to simulate some work being done.</p>
+<p>When the loop exits, a Python dictionary is returned as the function's result. This dictionary includes the updated iteration counters, a final status message and a humorous <a href="http://en.wikipedia.org/wiki/42_(number)">result</a>.</p>
+<p>The <code>long_task()</code> function above runs in a Celery worker process. Below you can see the Flask application route that starts this background job:</p>
+<pre><code>@app.route('/longtask', methods=['POST'])
+def longtask():
+    task = long_task.apply_async()
+    return jsonify({}), 202, {'Location': url_for('taskstatus',
+                                                  task_id=task.id)}
+</code></pre>
+<p>As you can see the client needs to issue a <code>POST</code> request to <code>/longtask</code> to kick off one of these tasks. The server starts the task, and stores the return value. For the response I used status code 202, which is normally used in REST APIs to indicate that a request is in progress. I also added a <code>Location</code> header, with a URL that the client can use to obtain status information. This URL points to another Flask route called <code>taskstatus</code>, and has <code>task.id</code> as a dynamic component.</p>
+<h3>Accessing Task Status from the Flask Application</h3>
+<p>The <code>taskstatus</code> route referenced above is in charge of reporting status updates provided by background tasks. Here is the implementation of this route:</p>
+<pre><code>@app.route('/status/&lt;task_id&gt;')
+def taskstatus(task_id):
+    task = long_task.AsyncResult(task_id)
+    if task.state == 'PENDING':
+        // job did not start yet
+        response = {
+            'state': task.state,
+            'current': 0,
+            'total': 1,
+            'status': 'Pending...'
+        }
+    elif task.state != 'FAILURE':
+        response = {
+            'state': task.state,
+            'current': task.info.get('current', 0),
+            'total': task.info.get('total', 1),
+            'status': task.info.get('status', '')
+        }
+        if 'result' in task.info:
+            response['result'] = task.info['result']
+    else:
+        # something went wrong in the background job
+        response = {
+            'state': task.state,
+            'current': 1,
+            'total': 1,
+            'status': str(task.info),  # this is the exception raised
+        }
+    return jsonify(response)
+</code></pre>
+<p>This route generates a JSON response that includes the task state and all the values that I set in the <code>update_state()</code> call as the <code>meta</code> argument, which the client can use to build a progress bar. Unfortunately this function needs to check for a few edge conditions as well, so it ended up being a bit long. To access task data I recreate the task object, which is an instance of class <code>AsyncResult</code>, using the task id given in the URL.</p>
+<p>The first <code>if</code> block is for when the task hasn't started yet (<code>PENDING</code> state). In this case there is no status information, so I make up some data. The <code>elif</code> block that follows is that one that returns the status information from the background task. Here the information that the task provided is accessible as <code>task.info</code>. If the data contains a <code>result</code> key, then that means that this is the final result and the task finished, so I add that result to the response as well. The <code>else</code> block at the end covers the possibility of an error, which Celery will report by setting a task state of <code>"FAILURE"</code>, and in that case <code>task.info</code> will contain the exception raised. To handle errors I set the text of the exception as a status message.</p>
+<p>Believe it or not, this is all it takes from the server. The rest needs to be implemented by the client, which in this example is a web page with Javascript scripting.</p>
+<h3>Client-Side Javascript</h3>
+<p>It isn't really the focus of this article to describe the Javascript portion of this example, but in case you are interested, here is some information.</p>
+<p>For the graphical progress bar I'm using <a href="http://nanobar.micronube.com/">nanobar.js</a>, which I included from a CDN. I also included jQuery, which simplifies the ajax calls significantly:</p>
+<pre><code>&lt;script src="//cdnjs.cloudflare.com/ajax/libs/nanobar/0.2.1/nanobar.min.js"&gt;&lt;/script&gt;
+&lt;script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"&gt;&lt;/script&gt;
+</code></pre>
+<p>The button that starts a background job is connected to the following Javascript handler:</p>
+<pre><code>    function start_long_task() {
+        // add task status elements 
+        div = $('&lt;div class="progress"&gt;&lt;div&gt;&lt;/div&gt;&lt;div&gt;0%&lt;/div&gt;&lt;div&gt;...&lt;/div&gt;&lt;div&gt;&amp;nbsp;&lt;/div&gt;&lt;/div&gt;&lt;hr&gt;');
+        $('#progress').append(div);
+
+        // create a progress bar
+        var nanobar = new Nanobar({
+            bg: '#44f',
+            target: div[0].childNodes[0]
+        });
+
+        // send ajax POST request to start background job
+        $.ajax({
+            type: 'POST',
+            url: '/longtask',
+            success: function(data, status, request) {
+                status_url = request.getResponseHeader('Location');
+                update_progress(status_url, nanobar, div[0]);
+            },
+            error: function() {
+                alert('Unexpected error');
+            }
+        });
+    }
+</code></pre>
+<p>This function starts by adding a few HTML elements that will be used to display the new background task's progress bar and status. This is done dynamically because the user can add any number of jobs, and each job needs to get its own set of HTML elements.</p>
+<p>To help you understand this better, here is the structure of the added elements for a task, with comments to indicate what each <code>div</code> is used for:</p>
+<pre><code>&lt;div class="progress"&gt;
+    &lt;div&gt;&lt;/div&gt;         &lt;-- Progress bar
+    &lt;div&gt;0%&lt;/div&gt;       &lt;-- Percentage
+    &lt;div&gt;...&lt;/div&gt;      &lt;-- Status message
+    &lt;div&gt;&amp;nbsp;&lt;/div&gt;   &lt;-- Result
+&lt;/div&gt;
+&lt;hr&gt;
+</code></pre>
+<p>The <code>start_long_task()</code> function then instantiates the progress bar according to <a href="http://nanobar.micronube.com/">nanobar</a>'s documentation, and finally sends the ajax <code>POST</code> request to <code>/longtask</code> to initiate the Celery background job in the server.</p>
+<p>When the <code>POST</code> ajax call returns, the callback function obtains the value of the <code>Location</code> header, which as you saw in the previous section is for the client to invoke to get status updates. It then calls another function, <code>update_progress()</code> with this status URL, the progress bar object and the root <code>div</code> element subtree created for the task. Below you can see this <code>update_progress()</code> function, which sends the status request and then updates the UI elements with the information returned by it:</p>
+<pre><code>    function update_progress(status_url, nanobar, status_div) {
+        // send GET request to status URL
+        $.getJSON(status_url, function(data) {
+            // update UI
+            percent = parseInt(data['current'] * 100 / data['total']);
+            nanobar.go(percent);
+            $(status_div.childNodes[1]).text(percent + '%');
+            $(status_div.childNodes[2]).text(data['status']);
+            if (data['state'] != 'PENDING' &amp;&amp; data['state'] != 'PROGRESS') {
+                if ('result' in data) {
+                    // show result
+                    $(status_div.childNodes[3]).text('Result: ' + data['result']);
+                }
+                else {
+                    // something unexpected happened
+                    $(status_div.childNodes[3]).text('Result: ' + data['state']);
+                }
+            }
+            else {
+                // rerun in 2 seconds
+                setTimeout(function() {
+                    update_progress(status_url, nanobar, status_div);
+                }, 2000);
+            }
+        });
+    }
+</code></pre>
+<p>This function sends the <code>GET</code> request to the status URL, and when a response is received it updates the different HTML elements for the task. If the background task completed and a result is available then it is added to the page. If there is no result then that means that the task ended due to an error, so the task state, which is going to be <code>FAILURE</code>, is shown as result.</p>
+<p>When the server is still running the job I need to continue polling the task status and updating the UI. To achieve this I set a timer to call the function again in two seconds. This will continue until the Celery task completes.</p>
+<p>A Celery worker runs as many concurrent jobs as there are CPUs by default, so when you play with this example make sure you start a large number of tasks to see how Celery keeps jobs in <code>PENDING</code> state until the worker can take it.</p>
+<h2>Running the Examples</h2>
+<p>If you made it all the way here without running the example application, then it is now time for you to try all this Celery goodness. Go ahead and clone the <a href="https://github.com/miguelgrinberg/flask-celery-example">Github repository</a>, create a virtual environment, and populate it:</p>
+<pre><code>$ git clone https://github.com/miguelgrinberg/flask-celery-example.git
+$ cd flask-celery-example
+$ virtualenv venv
+$ source venv/bin/activate
+(venv) $ pip install -r requirements.txt
+</code></pre>
+<p>Note that the <code>requirements.txt</code> file included with this repository contains Flask, Flask-Mail, Celery and the Redis client, along with all their dependencies.</p>
+<p>Now you need to run the three processes required by this application, so the easiest way is to open three terminal windows. On the first terminal run Redis. You can just install Redis according to the <a href="http://redis.io/download">download instructions</a> for your operating system, but if you are on a Linux or OS X machine, I have included a small script that downloads, compiles and runs Redis as a private server:</p>
+<pre><code>$ ./run-redis.sh
+</code></pre>
+<p>Note that for the above script to work you need to have <code>gcc</code> installed. Also note that the above command is blocking, Redis will start in the foreground.</p>
+<p>On the second terminal run a Celery worker. This is done with the <code>celery</code> command, which is installed in your virtual environment. Since this is the process that will be sending out emails, the <code>MAIL_USERNAME</code> and <code>MAIL_PASSWORD</code> environment variables must be set to a valid Gmail account before starting the worker:</p>
+<pre><code>$ export MAIL_USERNAME=&lt;your-gmail-username&gt;
+$ export MAIL_PASSWORD=&lt;your-gmail-password&gt;
+$ source venv/bin/activate
+(venv) $ celery worker -A app.celery --loglevel=info
+</code></pre>
+<p>The <code>-A</code> option gives Celery the application module and the Celery instance, and <code>--loglevel=info</code> makes the logging more verbose, which can sometimes be useful in diagnosing problems.</p>
+<p>Finally, on the third terminal window run the Flask application, also from the virtual environment:</p>
+<pre><code>$ source venv/bin/activate
+(venv) $ python app.py
+</code></pre>
+<p>Now you can navigate to <code>http://localhost:5000/</code> in your web browser and try the examples!</p>
+<h2>Conclusion</h2>
+<p>Unfortunately when working with Celery you have to take a few more steps than simply sending a job to a background thread, but the benefits in flexibility and scalability are hard to ignore. In this article I tried to go beyond the "let's start a background job" example and give you a more complete and realistic portrait of what using Celery might entail. I sincerely hope I haven't scared you with too much information!</p>
+<p>As always, feel free to write down any questions or comments below.</p>
+<p>Miguel</p></div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/using-celery-with-flask" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/using-celery-with-flask" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="using-celery-with-flask.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/using-celery-with-flask" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+
+
+<h4 style="text-align: right"><a name="comments"></a>40 comments</h4>
+
+
+<div class="comment">
+    <ul>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/3f7b65fac3dd34e84c902898edc1f5bece2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#1</span> <span class="label label-primary">Pete Forman</span> said
+                    <span class="flask-moment" data-timestamp="2015-01-03T13:33:16Z" data-format="fromNow(0)" data-refresh="0">2015-01-03T13:33:16Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">There is a typo in the h2 of your HTML template: Asnychronous
+
+The initial screenshot is okay though.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#2</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2015-01-03T19:20:10Z" data-format="fromNow(0)" data-refresh="0">2015-01-03T19:20:10Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Pete: yes, I thought I got rid of the typo everywhere, but looks like I missed one. Thanks!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/a1358aa4b260b8789242362cdb4529e0ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#3</span> <span class="label label-primary"><a href="https://github.com/jwhelland/flask-socketio-celery-example">Jason Helland</a></span> said
+                    <span class="flask-moment" data-timestamp="2015-01-19T03:38:14Z" data-format="fromNow(0)" data-refresh="0">2015-01-19T03:38:14Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Like all of your work, another well thought out example and nicely done code.  Thanks for all the good work you&#39;ve done with Flask; I&#39;ve learned a lot.
+
+If anyone is interested, I modified this example to use Flask-SocketIO as an exercise in learning that module.  Instead of the client polling, the celery task can notify the client via a post to the Flask app.
+
+https://github.com/jwhelland/flask-socketio-celery-example
+
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#4</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2015-01-19T07:58:39Z" data-format="fromNow(0)" data-refresh="0">2015-01-19T07:58:39Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Jason: Very nice!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/41882ff2ff7ac4052067197a2b043d2cce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#5</span> <span class="label label-primary">Andy</span> said
+                    <span class="flask-moment" data-timestamp="2015-01-19T09:43:12Z" data-format="fromNow(0)" data-refresh="0">2015-01-19T09:43:12Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Brilliant Miguel. These more fully realistic examples are fantastic.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/26a4e8be0a97fcc96ba503841a9fcd95ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#6</span> <span class="label label-primary">Patricio</span> said
+                    <span class="flask-moment" data-timestamp="2015-01-26T19:19:20Z" data-format="fromNow(0)" data-refresh="0">2015-01-26T19:19:20Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Miguel, thank you for posting this how-to ! I wonder if celery or this toolset is able to persist its data. I mean, what happens if, on a long task that received some kind of existing object, the flask server is stopped and the app is restarted ? I suppose the messages are still on the broker but is everything able to resume where it was, to restart the function call or to delete everything ?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#7</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2015-01-27T02:22:27Z" data-format="fromNow(0)" data-refresh="0">2015-01-27T02:22:27Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Patricio: If only the server needs to be restarted then I guess as long as the task IDs were preserved somewhere you can ask for status on tasks that were started by the previous server run. Any tasks that are being executed by the worker(s) will continue normally, the web server restarting has no effect on them.
+
+But note that in many cases the code that runs in the workers is shared with code running in the web server, so depending on the change you may also need to restart the Celery workers, in which case I think it is best to assume any ongoing tasks did not complete.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/3c73d4f74be37aa647e43a9be142b386ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#8</span> <span class="label label-primary">Ax3</span> said
+                    <span class="flask-moment" data-timestamp="2015-02-06T22:37:17Z" data-format="fromNow(0)" data-refresh="0">2015-02-06T22:37:17Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hello, and thanks for tutorial!
+
+My question is: how do I pass arguments to the long task? For example, server received some &#34;post&#34; data, how do I pass it to the long task function? 
+
+Thanks in advance!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#9</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2015-02-07T00:42:04Z" data-format="fromNow(0)" data-refresh="0">2015-02-07T00:42:04Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Ax3: You can have arguments on the background function, then you pass values for these arguments when you call it. See the email example above.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/fcf38504ed5159724f51eaafad858880ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#10</span> <span class="label label-primary">Michael</span> said
+                    <span class="flask-moment" data-timestamp="2015-02-13T02:51:40Z" data-format="fromNow(0)" data-refresh="0">2015-02-13T02:51:40Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">This was another great tutorial. However, I remain a little confused about how to integrate celery into a larger app, say structured along the lines of Flasky. It almost seems like two different version of celery are needed or an extension to do an init_app thing. Any suggestions would be greatly appreciated.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#11</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2015-02-13T19:29:14Z" data-format="fromNow(0)" data-refresh="0">2015-02-13T19:29:14Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Michael: Celery does not need an init_app function, it does not use the app instance for anything. Note that the constructor takes the application&#39;s name (in my example I pass app.name) and the broker URL. If you put the app name as a string, then there is no dependency on the flask app instance.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/d4fd3c4e9e457d23b9578c903311ce10ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#12</span> <span class="label label-primary">Sebastian Cheung</span> said
+                    <span class="flask-moment" data-timestamp="2015-03-02T21:06:38Z" data-format="fromNow(0)" data-refresh="0">2015-03-02T21:06:38Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Not sure how to resolve this, but upon launching the browser:
+
+Exception in thread Thread-2:
+Traceback (most recent call last):
+  File &#34;/Users/me/anaconda/envs/oracle/lib/python2.7/threading.py&#34;, line 810, in __bootstrap_inner
+    self.run()
+  File &#34;/Users/me/anaconda/envs/oracle/lib/python2.7/threading.py&#34;, line 763, in run
+    self.__target(*self.__args, **self.__kwargs)
+  File &#34;/Users/me/PycharmProjects/celery-socketio/app.py&#34;, line 47, in background_celery_thread
+    my_monitor(app)
+  File &#34;/Users/me/PycharmProjects/celery-socketio/app.py&#34;, line 41, in my_monitor
+    &#39;*&#39;: announce_tasks,
+  File &#34;/Users/me/anaconda/envs/oracle/lib/python2.7/site-packages/celery/events/__init__.py&#34;, line 287, in __init__
+    self.channel = maybe_channel(channel)
+  File &#34;/Users/me/anaconda/envs/oracle/lib/python2.7/site-packages/kombu/connection.py&#34;, line 1054, in maybe_channel
+    return channel.default_channel
+  File &#34;/Users/me/anaconda/envs/oracle/lib/python2.7/site-packages/kombu/connection.py&#34;, line 756, in default_channel
+    self.connection
+  File &#34;/Users/me/anaconda/envs/oracle/lib/python2.7/site-packages/kombu/connection.py&#34;, line 741, in connection
+    self._connection = self._establish_connection()
+  File &#34;/Users/me/anaconda/envs/oracle/lib/python2.7/site-packages/kombu/connection.py&#34;, line 696, in _establish_connection
+    conn = self.transport.establish_connection()
+  File &#34;/Users/me/anaconda/envs/oracle/lib/python2.7/site-packages/kombu/transport/pyamqp.py&#34;, line 112, in establish_connection
+    conn = self.Connection(**opts)
+  File &#34;/Users/me/anaconda/envs/oracle/lib/python2.7/site-packages/amqp/connection.py&#34;, line 165, in __init__
+    self.transport = self.Transport(host, connect_timeout, ssl)
+  File &#34;/Users/me/anaconda/envs/oracle/lib/python2.7/site-packages/amqp/connection.py&#34;, line 186, in Transport
+    return create_transport(host, connect_timeout, ssl)
+  File &#34;/Users/me/anaconda/envs/oracle/lib/python2.7/site-packages/amqp/transport.py&#34;, line 299, in create_transport
+    return TCPTransport(host, connect_timeout)
+  File &#34;/Users/me/anaconda/envs/oracle/lib/python2.7/site-packages/amqp/transport.py&#34;, line 95, in __init__
+    raise socket.error(last_err)
+error: [Errno 61] Connection refused
+
+
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#13</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2015-03-03T18:24:58Z" data-format="fromNow(0)" data-refresh="0">2015-03-03T18:24:58Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Sebastian: Are you running a celery worker process?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/92db9cedf927440b6edfd31d89e8843ece2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#14</span> <span class="label label-primary">Daniel Jorge</span> said
+                    <span class="flask-moment" data-timestamp="2015-03-31T21:06:19Z" data-format="fromNow(0)" data-refresh="0">2015-03-31T21:06:19Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi, Miguel. Great tutorial!
+
+In the complex example, supose I start a long running task (5 min or so) and then close the browser when it is at around 50% completion... I know the task will keep runing on the server, but I want to be able to reopen my browser and &#34;re-capture&#34; THAT task status, which will probably be at around 60% completion now... I don&#39;t know if I&#39;m being clear enough... I hope so...
+
+Thanks!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#15</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2015-04-01T14:50:23Z" data-format="fromNow(0)" data-refresh="0">2015-04-01T14:50:23Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Daniel: All you need to do is save the &#34;status_url&#34; so that you can still have it when you reopen the browser. You can put it in a cookie, for example, or write it to the user session, which ends up in a cookie, also.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/6e967d0cc250f58500dd2a4a23c43041ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#16</span> <span class="label label-primary">Biboufr</span> said
+                    <span class="flask-moment" data-timestamp="2015-04-04T08:55:55Z" data-format="fromNow(0)" data-refresh="0">2015-04-04T08:55:55Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel, thank your for the tutorial.
+I have a question that I posted here (http://stackoverflow.com/questions/29371514/celery-update-state-inside-class-method) but got no answers so I&#39;m going to ask you here : how do you use the &#39;update_state&#39; method inside a class  and not directly in the binded function ?
+Cheers !</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#17</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2015-04-04T17:37:17Z" data-format="fromNow(0)" data-refresh="0">2015-04-04T17:37:17Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Biboufr: I replied on stack overflow.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/3c39db441342a7cfff943449123bd8b8ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#18</span> <span class="label label-primary">Raymond</span> said
+                    <span class="flask-moment" data-timestamp="2015-04-14T18:13:09Z" data-format="fromNow(0)" data-refresh="0">2015-04-14T18:13:09Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel,
+I met a little question here.
+I did exactly as your instruction but when I start the long task, those task can only processed one by one instead of running at the same time. Is that may be cause of my virtual machine only have 1 processor for worker?
+Thank you!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#19</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2015-04-15T02:55:14Z" data-format="fromNow(0)" data-refresh="0">2015-04-15T02:55:14Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Raymond: A celery worker by default can only execute a job per CPU, so yes, if you have a single CPU then you can only have one job at a time. To be able to handle more concurrent jobs you can run more workers either in the same host or in a different one.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/2d9fdfdc29c7148e1b8a87c1b7a732c4ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#20</span> <span class="label label-primary">Jonathan</span> said
+                    <span class="flask-moment" data-timestamp="2015-04-16T09:57:49Z" data-format="fromNow(0)" data-refresh="0">2015-04-16T09:57:49Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi, I&#39;m trying to use celery in my Flask app. 
+It (the app) was built by following your book &#34;Flask Web Development&#34;. And one of my blueprints uses task from celery. So I&#39;m initializing celery twice: first time, when I&#39;m connecting to this blueprint. And this works well. But when I&#39;m trying to run celery, it also initialises application, than blueprint, then itself again. So here I&#39;ve got a cycle import. Could you advice how to change my application to break this cycle?
+Here is the code:
+http://stackoverflow.com/questions/29670961/flask-blueprints-uses-celery-task-and-got-cycle-import
+
+thanks in advance</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#21</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2015-04-16T15:37:03Z" data-format="fromNow(0)" data-refresh="0">2015-04-16T15:37:03Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Jonathan: just replied to the SO question.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/ffeacf38e73efcbe478ef3e008a6d7edce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#22</span> <span class="label label-primary">spitz</span> said
+                    <span class="flask-moment" data-timestamp="2015-04-24T01:39:31Z" data-format="fromNow(0)" data-refresh="0">2015-04-24T01:39:31Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Great article! Can you mention something about using the use of sqlalchemy models within the @celery.task? Basically, I&#39;m having a issue that model updates taking place within Flask are not updated in Celery. Basically, I have to do a &#34;sudo service celery restart&#34; to sync the models.  </p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#23</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2015-04-24T17:15:44Z" data-format="fromNow(0)" data-refresh="0">2015-04-24T17:15:44Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">By &#34;sync the models&#34; you mean changes to the database schema, or just new data that is added without changing the schema? If the former, then yes, it is expected that when the model structure changes you have to restart every application that uses those models.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/ffeacf38e73efcbe478ef3e008a6d7edce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#24</span> <span class="label label-primary">spitz</span> said
+                    <span class="flask-moment" data-timestamp="2015-04-25T01:57:11Z" data-format="fromNow(0)" data-refresh="0">2015-04-25T01:57:11Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">It would be the latter. For example, when a user uploads a file through @app.route I process the files and store file details (name, path, extension, etc.) to the Uploads table, however, if the user then runs an @celery.task that accesses Uploads the file is not found. If I do a &#34;sudo service celery restart&#34; the file is found and the task complete successfully. Today I added &#34;with app.app_context():&#34; and it seems that the issue is fixed itself.... Could this be due to celery running as an independent process (different user) than the Flask app?</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#25</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2015-04-25T17:56:25Z" data-format="fromNow(0)" data-refresh="0">2015-04-25T17:56:25Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@spitz: Hmm, this is pretty odd. It&#39;s difficult to diagnose without seeing the code, if you have the code available publicly I&#39;d like to take a look at it to see if I can figure out what happened.</p>
+                </div>
+            </div>
+        </li>
+        
+    </ul>
+</div>
+
+<div class="page">
+<ul class="pager">
+  <li class="previous disabled">
+    <a href="#">&laquo;&laquo;</a>
+  </li>
+  <li class="previous disabled">
+    <a href="#">&laquo;</a>
+  </li>
+  <li class="next">
+    <a href="using-celery-with-flask/page/0.html#comments">&raquo;&raquo;</a>
+  </li>
+  <li class="next">
+    <a href="using-celery-with-flask/page/2.html#comments">&raquo;</a>
+  </li>
+</ul>
+</div>
+
+<h3><a name="commentform"></a>Leave a Comment</h3>
+
+<form action="#commentform" method="post"
+  class="form" role="form">
+  <div style="display:none;"><input id="csrf_token" name="csrf_token" type="hidden" value="1439536744.47##4b74a58e74865f66367fa732ba38c606b781f88f"></div>
+  
+    
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="name">Name</label>
+        <input class="form-control" id="name" name="name" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="url">URL</label>
+        <input class="form-control" id="url" name="url" type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="email">Email</label>
+        <input class="form-control" id="email" name="email" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="comment">Comment</label>
+        <textarea class="form-control" id="comment" name="comment" required></textarea>
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="captcha">Captcha</label>
+        
+<script type="text/javascript">var RecaptchaOptions = {"custom_translations": {"audio_challenge": "Get an audio challenge", "cant_hear_this": "Download sound as MP3", "help_btn": "Help", "image_alt_text": "reCAPTCHA challenge image", "incorrect_try_again": "Incorrect. Try again.", "instructions_audio": "Type what you hear", "instructions_visual": "Type the text", "play_again": "Play sound again", "privacy_and_terms": "Privacy & Terms", "refresh_btn": "Get a new challenge", "visual_challenge": "Get a visual challenge"}, "theme": "white"};</script>
+<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S"></script>
+<noscript>
+  <iframe src="http://www.google.com/recaptcha/api/noscript?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S" height="300" width="500" frameborder="0"></iframe><br>
+  <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+  <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
+</noscript>
+
+  </div>
+
+
+    
+
+
+
+
+
+  
+
+
+    <input class="btn btn-default" id="submit" name="submit" type="submit" value="Submit">
+  
+
+
+
+
+
+</form>
+
+
+</div>
+
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <p class="elapsed">This page was generated in None seconds.</p>
+            <p>&copy; 2014 by Miguel Grinberg. All rights reserved. <a href="mailto:webmaster _at_ miguelgrinberg _dot_ com">Questions?</a></p>
+        </div>
+    </div>
+
+
+    
+    
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.33/jquery.colorbox-min.js"></script>
+    <script type="text/javascript" src="../static/prettify.js"></script>
+    <script src="../../cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment-with-langs.min.js"></script>
+<script>
+function flask_moment_render(elem) {
+    $(elem).text(eval('moment("' + $(elem).data('timestamp') + '").' + $(elem).data('format') + ';'));
+    $(elem).removeClass('flask-moment');
+}
+function flask_moment_render_all() {
+    $('.flask-moment').each(function() {
+        flask_moment_render(this);
+        if ($(this).data('refresh')) {
+            (function(elem, interval) { setInterval(function() { flask_moment_render(elem) }, interval); })(this, $(this).data('refresh'));
+        }
+    })
+}
+$(document).ready(function() {
+    flask_moment_render_all();
+});
+</script>
+    
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4777284-15']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".gallery").colorbox({rel:".gallery",maxWidth:"95%",maxHeight:"95%",scalePhotos:true});
+            // add prettyprint class to all <pre><code></code></pre> blocks
+            var prettify = false;
+            $("pre code").parent().each(function() {
+                $(this).addClass('prettyprint');
+                prettify = true;
+            });
+            prettyPrint();
+        });
+    </script>
+
+
+  </body>
+
+<!-- Mirrored from blog.miguelgrinberg.com/post/using-celery-with-flask by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 06:44:54 GMT -->
+</html>

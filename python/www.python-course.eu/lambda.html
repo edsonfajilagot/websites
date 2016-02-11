@@ -1,0 +1,271 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from www.python-course.eu/lambda.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:09:06 GMT -->
+<head>
+
+<!-- Dieses Tag in den Head-Bereich oder direkt vor dem schlieÃŸenden Body-Tag einfÃ¼gen -->
+<script type="text/javascript" src="../apis.google.com/js/plusone.js"></script>
+
+
+
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "../connect.facebook.net/en_GB/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script><title>Python Tutorial: Lambda Operator, filter, reduce and map</title>
+<meta http-equiv="content-type" content="text/html; charset="ISO-8859-1">
+<meta name="Description" content="Introduction into the Lambda Operator and the functions  
+map, filter and reduce" />
+<meta name="Keywords" content="Python, Lambda Operator, map, filter, reduce" />
+
+<link href="favicon.ico" rel="shortcut icon">
+
+<link href="moderna.css" rel="stylesheet" type="text/css" />
+<link href="moderna_print.css" media="print" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+<div id="container">
+
+<div id="banner">
+<!-- <a href="impressum.php">Impressum</a> | <a href="mailto:">contact</a> | --><h1>Python Course</h1>
+
+</div>
+
+	<!-- Begin Top Menu -->
+<ul id="navlist">
+<li><a href="index-2.html" >Home</a></li><li class="active"><a id="current" href="course.html" >Python 2 Tutorial</a></li><li><a href="python3_course.html" >Python 3 Tutorial</a></li><li><a href="advanced_topics.html" >Advanced Topics</a></li><li><a href="python_books.html" >Python Books</a></li><li><a href="python_tkinter.html" >Tkinter Tutorial</a></li><li><a href="contact.html" rel="nofollow">Contact</a></li>                          
+</ul>
+	<!-- End Top Menu -->
+<div id="sidebar-a">
+<img class="border" src="images/lambda_cubism100.png" alt="box" />    <h2>Python 2 Tutorial</h2>
+
+<div class="menu">
+
+<ul>
+<li><a href="history_and_philosophy.html">History and Philosophy of Python</a></li><li><a href="why_python.html">Why Python</a></li><li><a href="interactive.html">Interactive Mode</a></li><li><a href="execute_script.html">Execute a Script</a></li><li><a href="blocks.html">Structuring with Indentation</a></li><li><a href="variables.html">Data Types and Variables</a></li><li><a href="operators.html">Operators</a></li><li><a href="input.html">input and raw_input via the keyboard</a></li><li><a href="conditional_statements.html">Conditional Statements</a></li><li><a href="loops.html">While Loops</a></li><li><a href="for_loop.html">For Loops</a></li><li><a href="formatted_output.html">Formatted output</a></li><li><a href="print.html">Output with Print</a></li><li><a href="sequential_data_types.html">Sequential Data Types</a></li><li><a href="dictionaries.html">Dictionaries</a></li><li><a href="sets_frozensets.html">Sets and Frozen Sets</a></li><li><a href="deep_copy.html">Shallow and Deep Copy</a></li><li><a href="functions.html">Functions</a></li><li><a href="recursive_functions.html">Recursion and Recursive Functions</a></li><li><a href="tests.html">Tests, DocTests, UnitTests</a></li><li><a href="memoization.html">Memoization and Decorators</a></li><li><a href="passing_arguments.html">Passing Arguments</a></li><li><a href="namespaces.html">Namespaces</a></li><li><a href="global_vs_local_variables.html">Global vs. Local Variables</a></li><li><a href="file_management.html">File Management</a></li><li><a href="modules_and_modular_programming.html">Modular Programming and Modules</a></li><li><a href="re.html">Introduction in Regular Expressions</a></li><li><a href="re_advanced.html">Regular Expressions, Advanced</a></li><li><a href="lambda.html">Lambda Operator, Filter, Reduce and Map</a></li><li><a href="list_comprehension.html">List Comprehension</a></li><li><a href="generators.html">Generators</a></li><li><a href="exception_handling.html">Exception Handling</a></li><li><a href="object_oriented_programming.html">Object Oriented Programming</a></li><li><a href="inheritance_example.html">Inheritance Example</a></li></ul>
+
+</div>
+
+<p>
+<h3>Mythology</h3>
+The first great achievement of Apollo was to slay the huge serpent Python. In some texts 
+Python is an enormous dragon and not a serpent. 
+<br>  
+But who was this mythical creature? Python was created out of the slime and mud left after 
+the great flood. She was  appointed by Gaia (Mother Earth) to guard the oracle of Delphi, 
+known as Pytho. After having defeated Python Apollo remade
+her former home and the oracle as his own.
+<br>
+
+</div><div id="sidebar-b"><img style="width: 150px;" alt="Python-Logo"
+		     src="images/python-logo.png"><!-- Dieses Tag dort einfügen, wo die +1-Schaltfläche dargestellt werden soll -->
+<g:plusone></g:plusone>
+<br><br>
+
+<div class="fb-like" data-href="www.python-course.eu" data-send="false" data-layout="button_count" 
+data-width="130" data-show-faces="true" data-action="recommend"></div>
+
+<br><br>
+This topic in German / Deutsche Übersetzung:
+    <a href="http://www.python-kurs.eu/lambda.php">Lambda, filter, reduce und map</a><h3>Python 2.7</h3>This tutorial deals with Python Version 2.7<br>This chapter from our course is available in a version for Python3: <a href="python3_lambda.html">Lambda Operator, filter, reduce and map</a><h3>Classroom Training Courses</h3>
+<p>
+This website contains a free and extensive online tutorial by Bernd Klein, using
+material from his classroom <a href="python_classes.html">Python courses</a>.
+<br><br>
+If you are interested in an instructor-led classroom training, you may have a look at the 
+<a href="http://www.bodenseo.com/courses.php?topic=Python">Python courses
+<br><img style="width: 150px;" 
+alt="Bodenseo, Python and other courses and seminars"
+		     src="images/classroom_training_courses.jpg">
+</a>
+by Bernd Klein at Bodenseo.
+<font size="1">© kabliczech - Fotolia.com</font>
+ </p>
+
+
+
+<h3>Quote of the Day:</h3>
+<p>
+
+<i>"Clearly, programming courses should teach methods of design and construction, and 
+the selected examples should be such that a gradual development can be nicely 
+demonstrated."</i> (Niklaus Wirth)<br><hr>
+
+<h3>Advantages of Python</h3>
+<p>
+<ul>
+<li>Easy and fast to learn</li>
+<li>Simple to get support</li>
+<li>Python's syntax is clear and readable</li>
+<li>Fast to Code, i.e. it is easier and faster to code a problem in Python than in 
+C, C++ or Java, just to mention a few other languages</li>
+<li>Python is portable, i.e. it runs on multiple platforms and systems, like e.g. Linux 
+and Microsoft Windows</li>
+<li>Object oriented</li>
+<li>It's trendy, i.e more and more successful companies switch to Python, like Google did a long
+time ago.</li>
+</ul>
+</p>
+
+
+</p></div>
+<div id="content">
+
+<div id="contextlinks">Previous Chapter: <a href="re_advanced.html">Regular Expressions, Advanced</a><br>
+<LINK rel="prev" href="re_advanced.html">Next Chapter: <a href="list_comprehension.html">List Comprehension</a><br>
+<LINK rel="next" href="list_comprehension.html"></div>
+<h2>Lambda, filter, reduce and map</h2>
+<h3>Lambda Operator</h3>
+<img class="imgright" src="images/lambda_cubism.png" 
+alt="Ring als Symbol der for-Schleife" />
+<p>
+Some like it, others hate it and many are afraid of the lambda operator. We are confident, that you will like
+it, when you have finished with this chapter of our tutorial. If not, you can learn all about 
+"<a href="list_comprehension.html">List Comprehensions</a>", Guido van Rossums preferred way to do it, because
+he doesn't like Lamba, map, filter and reduce neither.
+<br><br>
+The lambda operator or lambda function is a way to create small anonymous functions, i.e. functions without 
+a name. These functions are throw-away functions, i.e. they are just needed where they have been created.
+Lambda functions are mainly used in combination with the functions filter(), map() and reduce().
+The lambda feature was added to Python due to the demand from Lisp programmers. 
+<br><br>
+The general syntax of a lambda function is quite simple:<br>
+lambda argument_list: expression
+<br>
+The argument list consists of a comma separated list of arguments and the expression
+is an arithmetic expression using these arguments. You can assign the 
+function to a variable to give it a name.
+<br>
+The following example of a lambda function returns the sum of its two arguments:
+<pre>
+>>> f = lambda x, y : x + y
+>>> f(1,1)
+2
+</pre>
+<h3>The map() Function</h3>
+The advantage of the lambda operator can be seen when it is used in combination with the map() 
+function.
+<br>map() is a function with two arguments:
+<pre>r = map(func, seq)</pre>
+The first argument <i>func</i> is the name of a function and the second a sequence 
+(e.g. a list) <i>seq</i>. <i>map()</i> applies the function <i>func</i> to all the elements of
+the sequence <i>seq</i>. It returns a new list with the elements changed by <i>func</i>
+<pre>
+def fahrenheit(T):
+    return ((float(9)/5)*T + 32)
+def celsius(T):
+    return (float(5)/9)*(T-32)
+temp = (36.5, 37, 37.5,39)
+
+F = map(fahrenheit, temp)
+C = map(celsius, F)
+</pre>
+In the example above we haven't used lambda. By using lambda, we wouldn't have had to define and name 
+the functions fahrenheit() and celsius(). You can see this in the following interactive session:
+<pre>
+>>> Celsius = [39.2, 36.5, 37.3, 37.8]
+>>> Fahrenheit = map(lambda x: (float(9)/5)*x + 32, Celsius)
+>>> print Fahrenheit
+[102.56, 97.700000000000003, 99.140000000000001, 100.03999999999999]
+>>> C = map(lambda x: (float(5)/9)*(x-32), Fahrenheit)
+>>> print C
+[39.200000000000003, 36.5, 37.300000000000004, 37.799999999999997]
+>>> 
+</pre>
+map() can be applied to more than one list. The lists have to have the same length. map() will apply
+its lambda function to the elements of the argument lists, i.e. it first applies to the elements with 
+the 0th index, then to the elements with the 1st index until the n-th index is reached:
+<pre>
+>>> a = [1,2,3,4]
+>>> b = [17,12,11,10]
+>>> c = [-1,-4,5,9]
+>>> map(lambda x,y:x+y, a,b)
+[18, 14, 14, 14]
+>>> map(lambda x,y,z:x+y+z, a,b,c)
+[17, 10, 19, 23]
+>>> map(lambda x,y,z:x+y-z, a,b,c)
+[19, 18, 9, 5]
+</pre>
+We can see in the example above, that the parameter x gets its values from the list a, while y gets
+its values from b and z from list c.
+<h3>Filtering</h3>
+The function filter(function, list) offers an elegant way to filter out all the elements of a list,
+for which the function <i>function</i> returns True.
+<br>
+The function filter(f,l) needs a function f as its first argument. f returns a Boolean value, i.e. either
+True or False. This function will be applied to every element of the list <i>l</i>. Only if f returns True 
+will the element of the list be included in the result list. 
+<pre>
+>>> fib = [0,1,1,2,3,5,8,13,21,34,55]
+>>> result = filter(lambda x: x % 2, fib)
+>>> print result
+[1, 1, 3, 5, 13, 21, 55]
+>>> result = filter(lambda x: x % 2 == 0, fib)
+>>> print result
+[0, 2, 8, 34]
+>>> 
+</pre>
+<h3>Reducing a List</h3>
+The function reduce(func, seq) continually applies the function func() to the sequence seq. It returns a
+single value. 
+<br><br>
+If seq = [ s<sub>1</sub>, s<sub>2</sub>, s<sub>3</sub>, ... , s<sub>n</sub> ], calling 
+reduce(func, seq) works like this:<br>
+<ul>
+<li>At first the first two elements of seq will be applied to func, i.e. func(s<sub>1</sub>,s<sub>2</sub>)
+The list on which reduce() works looks now like this:
+[ func(s<sub>1</sub>, s<sub>2</sub>), s<sub>3</sub>, ... , s<sub>n</sub> ]
+</li>
+<li>In the next step func will be applied on the previous result and the third element of the list,
+i.e. func(func(s<sub>1</sub>, s<sub>2</sub>),s<sub>3</sub>)<br>
+The list looks like this now:
+[ func(func(s<sub>1</sub>, s<sub>2</sub>),s<sub>3</sub>), ... , s<sub>n</sub> ]
+</li>
+<li>Continue like this until just one element is left and return this element as the result of reduce()</li>
+</ul>
+We illustrate this process in the following example:
+<pre>
+>>> reduce(lambda x,y: x+y, [47,11,42,13])
+113
+</pre>
+The following diagram shows the intermediate steps of the calculation:
+<br>
+<img class="img" src="images/reduce_diagram.png" 
+alt="Veranschulichung von Reduce" />
+<br>
+<h3>Examples of reduce()</h3>
+Determining the maximum of a list of numerical values by using reduce:
+<pre>
+>>> f = lambda a,b: a if (a > b) else b
+>>> reduce(f, [47,11,42,102,13])
+102
+>>> 
+</pre>
+Calculating the sum of the numbers from 1 to 100:
+<pre>
+>>> reduce(lambda x, y: x+y, range(1,101))
+5050
+</pre>
+<br><br>
+</p>
+
+<div id="contextlinks">Previous Chapter: <a href="re_advanced.html">Regular Expressions, Advanced</a><br>
+<LINK rel="prev" href="re_advanced.html">Next Chapter: <a href="list_comprehension.html">List Comprehension</a><br>
+<LINK rel="next" href="list_comprehension.html"></div><br><br><br>
+
+</div>
+<div id="footer">  &copy; 2011 - 2014 <a href="http://www.bklein.de/">Bernd Klein</a>,
+Bodenseo; 
+Design by Denise Mitchinson adapted for python-course.eu by Bernd Klein</div>
+</div>
+</body>
+
+<!-- Mirrored from www.python-course.eu/lambda.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:09:13 GMT -->
+</html>

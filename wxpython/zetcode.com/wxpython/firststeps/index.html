@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from zetcode.com/wxpython/firststeps/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Aug 2015 19:21:27 GMT -->
+<head>
+<title>First steps in wxPython</title>
+<link rel="stylesheet" href="../../cfg/format2.css" type="text/css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="wxPython, guide, tutorial, programming, Python, first steps, wx.Frame">
+<meta name="description" content="In this part of the wxPython tutorial, we do first steps in wxPython.">
+<meta name="author" content="Jan Bodnar">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div id="wide_ad" class="ltow">
+<script async src="../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- 160x600, August 2011 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:600px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="2484182563"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+
+<div class="content">
+
+
+<header>
+
+<nav>
+<a href="http://zetcode.com/" title="Home">Home</a>&#160;
+<a href="../index.html">Contents</a>
+</nav>
+
+</header>
+
+
+<h1>First Steps</h1>
+
+<p>
+In this part of the wxPython tutorial, we will create some simple examples.
+</p>
+
+<h2>Simple example</h2>
+
+<p>
+We start with a very simple example. Our first script will only show 
+a small window. 
+</p>
+
+<div class="med_rec">
+<script async src="../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- NewSquare -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:250px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="0364418177"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div> 
+
+<p>
+It will not do much. We will analyse the script line by line. 
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+
+# simple.py
+
+import wx
+
+app = wx.App()
+
+frame = wx.Frame(None, -1, 'simple.py')
+frame.Show()
+
+app.MainLoop()
+</pre>
+
+<p>
+This is our first example in wxPython. 
+</p>
+
+
+<pre class="explanation">
+#!/usr/bin/python
+
+# simple.py
+</pre>
+
+<p>
+The first line is a she-bang followed by the path to a Python interpreter. 
+The second line is a comment. It provides a name for the script.
+</p>
+
+<pre class="explanation">
+import wx
+</pre>
+
+<p>
+This line imports the basic wxPython modules. Namely the core, 
+controls, gdi, misc, and windows. Technically, <code>wx</code> is a namespace. 
+All functions and objects from the basic modules will start with a 
+<code>wx.</code> prefix. The next line of code will create an application object.
+</p>
+
+<pre class="explanation">
+app = wx.App()
+</pre>
+
+<p>
+Each wxPython program must have one application object. 
+</p>
+
+<pre class="explanation">
+frame = wx.Frame(None, -1, 'simple.py')
+frame.Show()
+</pre>
+
+<p>
+Here we create a <code>wx.Frame</code> object. A <code>wx.Frame</code> widget is 
+an important container widget. We will analyse this widget in  detail later.
+The <code>wx.Frame</code> widget is a parent widget for other widgets. It has no 
+parent itself. If we specify <code>None</code> for a parent parameter we indicate 
+that our widget has no parents. It is a top widget in the hierarchy 
+of widgets. After we create the <code>wx.Frame</code> widget, we must call the 
+<code>Show()</code> method to actually display it on the screen.
+</p>
+
+<pre class="explanation">
+app.MainLoop()
+</pre>
+
+<p>
+The last line enters the mainloop. The mainloop is an endless cycle. 
+It catches and dispatches all events that exist during the life of 
+our application.
+</p>
+
+<p>
+This was a very simplistic example. Despite this simplicity we can do 
+quite a lot with this window. We can resize the window, maximise it, 
+minimise it. This functionality requires a lot of coding. All this is 
+hidden and provided by default by the wxPython toolkit. There is no 
+reason for reinventing the wheel.
+</p>
+
+<figure>
+<img  src="../../img/gui/wxpython/simple.png" alt="Simple example">
+<figcaption>Figure: Simple example</figcaption>
+</figure>
+
+
+<h2>wx.Frame</h2>
+
+<p>
+wx.Frame widget is one of the most important widgets in wxPython. It is a 
+container widget. It means that it can contain other widgets. Actually it 
+can contain any window that is not a frame or dialog. <code>wx.Frame</code> consists of 
+a title bar, borders and a central container area. The title bar and borders 
+are optional. They can be removed by various flags. 
+<!--By default, wx.Frame is created with the following flags.-->
+</p>
+
+<p>
+<code>wx.Frame</code> has the following constructor: 
+</p>
+
+<pre>
+wx.Frame(wx.Window parent, int id=-1, string title='', wx.Point pos = wx.DefaultPosition, 
+wx.Size size = wx.DefaultSize, style = wx.DEFAULT_FRAME_STYLE, string name = "frame")
+</pre>
+
+<p>
+The constructor has seven parameters. The first parameter does not have a default value. 
+The other six parameters do have. Those four parameters are optional. The first three 
+are mandatory.
+</p>
+
+<p>
+wx.DEFAULT_FRAME_STYLE is a set of default flags. 
+wx.MINIMIZE_BOX | wx.MAXIMIZE_BOX | wx.RESIZE_BORDER | wx.SYSTEM_MENU | wx.CAPTION | wx.CLOSE_BOX | wx.CLIP_CHILDREN.
+By combining various styles we can change the style of the wx.Frame widget. 
+A short example follows.
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+
+# nominimizebox.py
+
+import wx
+
+app = wx.App()
+window = wx.Frame(None, style=wx.MAXIMIZE_BOX | wx.RESIZE_BORDER 
+	| wx.SYSTEM_MENU | wx.CAPTION |	 wx.CLOSE_BOX)
+window.Show(True)
+
+app.MainLoop()
+</pre>
+
+<p>
+Our intention was to display a window without a minimise box. So we
+did not specify this flag in the style parameter. 
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/nominimizebox.png" alt="A window without a minimize box">
+<figcaption>Figure: A window without a minimise box</figcaption>
+</figure>
+
+
+<h2>Size and Position</h2>
+
+<p>
+We can specify the size of our application in two ways. We have a size 
+parameter in the constructor of our widget. Or we can call the 
+<code>SetSize()</code> method. 
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+# size.py
+
+import wx
+
+class Example(wx.Frame):
+  
+    def __init__(self, parent, title):
+        super(Example, self).__init__(parent, title=title, 
+            size=(250, 200))
+            
+        self.Show()
+
+
+if __name__ == '__main__':
+  
+    app = wx.App()
+    Example(None, title='Size')
+    app.MainLoop()
+</pre>
+
+<p>
+In this example, the application will be 250x200 px in size.
+</p>
+
+<pre class="explanation">
+def __init__(self, parent, title):
+    super(Example, self).__init__(parent, title=title, 
+        size=(250, 200))
+</pre>
+
+<p>
+In the constructor we set the width of the wx.Frame widget to 250px. 
+The height of the widget to 200px. 
+</p>
+
+
+<p>
+Similarly, we can position our application on the screen. By default the 
+window is placed in the upper left corner of the 
+screen. But it can differ on various OS platforms or even window managers. 
+Some window managers place application windows themselves. Some of them 
+do some optimisation, so that windows do not overlap. A programmer can 
+position the window programmatically. We already saw a <code>pos</code> parameter
+in the constructor of our <code>wx.Frame</code> widget. By providing other than the 
+default values, we can control the position ourselves. 
+</p>
+
+
+<table>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+<tr>
+<td>Move(wx.Point point)</td><td>move a window to the given position</td>
+</tr>
+<tr>
+<td class="gray">MoveXY(int x, int y)</td><td class="gray">move a window to the given position</td>
+</tr>
+<tr>
+<td>SetPosition(wx.Point point)</td><td>set the position of a window</td>
+</tr>
+<tr>
+<td class="gray">SetDimensions(x, y, width, height, sizeFlags)</td><td class="gray">set 
+the position and the size of a window</td>
+</tr>
+</table>
+
+<p>
+There are several methods to do this. 
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+# move.py
+
+import wx
+
+class Example(wx.Frame):
+  
+    def __init__(self, parent, title):
+        super(Example, self).__init__(parent, title=title, 
+            size=(300, 200))
+            
+        self.Move((800, 250))
+        self.Show()
+
+
+if __name__ == '__main__':
+  
+    app = wx.App()
+    Example(None, title='Move')
+    app.MainLoop()
+</pre>
+
+<p>
+There is one particular situation. We might want to display our window maximised. 
+In this case, the window is positioned at (0, 0) and takes the whole screen. 
+wxPython internally calculates the screen coordinates. To maximise our 
+<code>wx.Frame</code>, we call the <code>Maximize()</code> method.
+</p>
+
+
+<h2>Centering on the screen</h2>
+
+<p>
+If we want to center our application on the screen, wxPython has a handy method. 
+The <code>Centre()</code> method simply centers the window on the screen. No need to 
+calculate the width and the height of the screen. Simply call the method. 
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+# center.py
+
+import wx
+
+class Example(wx.Frame):
+  
+    def __init__(self, parent, title):
+        super(Example, self).__init__(parent, title=title, 
+            size=(300, 200))
+            
+        self.Centre()
+        self.Show()
+
+
+if __name__ == '__main__':
+  
+    app = wx.App()
+    Example(None, title='Center')
+    app.MainLoop()
+</pre>
+
+<p>
+In this example, we center a small window on our screen.
+</p>
+
+<pre class="explanation">
+self.Centre()
+</pre>
+
+<p>
+This is the method that centers a window on the screen.
+</p>
+
+<p>
+In this chapter, we have created some simple code examples in wxPython.
+</p>
+
+<div class="hor">
+<script async src="../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- horizontal -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:468px;height:60px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="1734478269"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<footer>
+
+<nav class="center">
+<span class="botNavItem"><a href="http://zetcode.com/">Home</a></span> ‡ <span class="botNavItem"><a href="../index.html">Contents</a></span> ‡ 
+<span class="botNavItem"><a href="#">Top of Page</a></span>
+</nav>
+
+<div class="signature">
+<a href="http://zetcode.com/">ZetCode</a> last modified February 22, 2011  <span class="copyright">&copy; 2007 - 2015 Jan Bodnar</span>
+</div>
+
+</footer>
+
+</div> <!-- content -->
+
+</div> <!-- container -->
+
+</body>
+
+<!-- Mirrored from zetcode.com/wxpython/firststeps/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Aug 2015 19:21:29 GMT -->
+</html>
+
+
+

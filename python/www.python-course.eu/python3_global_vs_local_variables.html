@@ -1,0 +1,297 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from www.python-course.eu/python3_global_vs_local_variables.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:08:36 GMT -->
+<head>
+
+<!-- Dieses Tag in den Head-Bereich oder direkt vor dem schlieÃŸenden Body-Tag einfÃ¼gen -->
+<script type="text/javascript" src="../apis.google.com/js/plusone.js"></script>
+
+
+
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "../connect.facebook.net/en_GB/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script><title>Python3 Tutorial: Global vs. Local Variables and Namespaces</title>
+<meta http-equiv="content-type" content="text/html; charset="ISO-8859-1">
+<meta name="Description" content="Global versus local Variables, i.e. when and how to use global and local 
+variables in Python namespaces." />
+<meta name="Keywords" content="Python, global, local, how to use, when to use, namespace, namespaces" />
+
+<link href="favicon.ico" rel="shortcut icon">
+
+<link href="moderna.css" rel="stylesheet" type="text/css" />
+<link href="moderna_print.css" media="print" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+<div id="container">
+
+<div id="banner">
+<!-- <a href="impressum.php">Impressum</a> | <a href="mailto:">contact</a> | --><h1>Python Course</h1>
+
+</div>
+
+	<!-- Begin Top Menu -->
+<ul id="navlist">
+<li><a href="index-2.html" >Home</a></li><li><a href="course.html" >Python 2 Tutorial</a></li><li class="active"><a id="current" href="python3_course.html" >Python 3 Tutorial</a></li><li><a href="advanced_topics.html" >Advanced Topics</a></li><li><a href="python_books.html" >Python Books</a></li><li><a href="python_tkinter.html" >Tkinter Tutorial</a></li><li><a href="contact.html" rel="nofollow">Contact</a></li>                          
+</ul>
+	<!-- End Top Menu -->
+<div id="sidebar-a">
+<img class="border" src="images/earth_moon_small.jpg" alt="box" />    <h2>Python 3 Tutorial</h2>
+
+<div class="menu">
+
+<ul>
+<li><a href="python3_history_and_philosophy.html">The Origins of Python</a></li><li><a href="python3_interactive.html">Starting with Python: The Interactive Shell</a></li><li><a href="python3_execute_script.html">Executing a Script</a></li><li><a href="python3_blocks.html">Indentation</a></li><li><a href="python3_variables.html">Data Types and Variables</a></li><li><a href="python3_operators.html">Operators</a></li><li><a href="python3_sequential_data_types.html">Sequential Data Types: Lists and Strings</a></li><li><a href="python3_deep_copy.html">Shallow and Deep Copy</a></li><li><a href="python3_dictionaries.html">Dictionaries</a></li><li><a href="python3_sets_frozensets.html">Sets and Frozen Sets</a></li><li><a href="python3_input.html">input via the keyboard</a></li><li><a href="python3_conditional_statements.html">Conditional Statements</a></li><li><a href="python3_loops.html">Loops, while Loop</a></li><li><a href="python3_for_loop.html">For Loops</a></li><li><a href="python3_print.html">Output with Print</a></li><li><a href="python3_formatted_output.html">Formatted output with string modulo and the format method</a></li><li><a href="python3_functions.html">Functions</a></li><li><a href="python3_recursive_functions.html">Recursion and Recursive Functions</a></li><li><a href="python3_tests.html">Tests, DocTests, UnitTests</a></li><li><a href="python3_memoization.html">Memoization and Decorators</a></li><li><a href="python3_passing_arguments.html">Parameter Passing in Functions</a></li><li><a href="python3_namespaces.html">Namespaces</a></li><li><a href="python3_global_vs_local_variables.html">Global and Local Variables</a></li><li><a href="python3_file_management.html">Read and Write Files</a></li><li><a href="python3_modules_and_modular_programming.html">Modular Programming and Modules</a></li><li><a href="python3_re.html">Regular Expressions</a></li><li><a href="python3_re_advanced.html">Regular Expressions, Advanced</a></li><li><a href="python3_lambda.html">Lambda Operator, Filter, Reduce and Map</a></li><li><a href="python3_list_comprehension.html">List Comprehension</a></li><li><a href="python3_generators.html">Iterators and Generators</a></li><li><a href="python3_exception_handling.html">Exception Handling</a></li><li><a href="python3_object_oriented_programming.html">Object Oriented Programming</a></li><li><a href="python3_class_and_instance_attributes.html">Class and Instance Attributes</a></li><li><a href="python3_properties.html">Properties vs. getters and setters</a></li><li><a href="python3_inheritance.html">Inheritance</a></li><li><a href="python3_multiple_inheritance.html">Multiple Inheritance</a></li><li><a href="python3_magic_methods.html">Magic Methods and Operator Overloading</a></li><li><a href="python3_inheritance_example.html">OOP, Inheritance Example</a></li></ul>
+
+</div>
+
+<p>
+<hr>
+<h3>Global</h3>
+<br>
+The general meanings of global:
+<br>
+1. involving the entire earth; not limited or provincial in
+ scope; as, global war; global monetary policy.
+<br> 
+2. shaped like a globe, sphere or a ball, "a spherical object"; spherical.
+<br>
+ 3. broad in scope or content; comprehensive. Opposite of
+ noncomprehensive.
+ <br>
+4. (Computers) Accessible and effective throughout an entire
+ computer program, rather than in only one subroutine; --
+ used of variables; as, global variable. Opposite of
+ local.
+<br><br>
+<h3>Local</h3>
+Originates from the latin word "locus" meaning place. It means pertaining to or of a 
+particular place, or to a definite region or portion of space; restricted to one place or
+ region; as, a local custom.
+<br><br>
+<hr>
+<br>
+This website is created by:<br><br>
+<a href="http://www.python-training-courses.com/"><img style="width: 150px;" alt="Python Training Courses"
+		     src="images/toronto_building.jpg"><br><br>Python Training Courses in Toronto, Canada</a>
+<br>
+On site trainings in Europe, Canada and the US.
+<br>
+<hr>
+<br>
+<h3>Think Globally, Act Locally</h3>
+"Think Globally, Act Locally" is an urgent request to people to consider the health of the 
+entire planet and to take action in their own environment, i.e. local communities and cities.
+<br><br>
+But this principle should be a guiding line to programming both in Python and and other 
+programming languages as well.
+<br><br>
+</div><div id="sidebar-b"><img style="width: 150px;" alt="Python-Logo"
+		     src="images/python-logo.png"><!-- Dieses Tag dort einfügen, wo die +1-Schaltfläche dargestellt werden soll -->
+<g:plusone></g:plusone>
+<br><br>
+
+<div class="fb-like" data-href="www.python-course.eu" data-send="false" data-layout="button_count" 
+data-width="130" data-show-faces="true" data-action="recommend"></div>
+
+<br><br>
+This topic in German / Deutsche Übersetzung:
+    <a href="http://www.python-kurs.eu/python3_global_lokal.php">Globale und lokale Variablen und Namensräume in Python</a><h3>Python3</h3>This is a tutorial in Python3, but this chapter of our course is available in a version for Python 2.x as well: <a href="global_vs_local_variables.html">Global vs. Local Variables and Namespaces in Python 2.x</a><p>
+<h3>Classroom Training Courses</h3>
+The goal of this website is to provide educational material, 
+allowing you to learn Python on your own.
+Nevertheless, it is faster and more efficient to attend a "real" 
+Python course in a classroom, with
+an experienced trainer. So why not attend one of the live 
+<a href="python_classes.html">Python courses</a> in Paris, London, Berlin, Munich
+or Lake Constance by Bernd Klein, the author of this tutorial?
+<br><br>
+You can also check the   
+<a href="http://www.bodenseo.com/courses.php?topic=Python">Python Training courses
+<img style="width: 150px;" alt="Bodenseo Kurse in Python"
+		     src="images/bodenseo_stairs_to_python.png"></a>
+		     delivered by Bodenseo and Bernd Klein.
+<br><br>
+You can book on-site classes at your company or organization, e.g. in England, Switzerland, Austria, Germany,
+France, Belgium, the Netherlands, Luxembourg, Poland, UK, Italy and other locations in Europe.
+<br><br>
+<h3>Python3</h3>This is a tutorial in Python3, but this chapter of our course is available in a version for Python 2.x as well: <a href="global_vs_local_variables.html">Global vs. Local Variables and Namespaces in Python 2.x</a>
+ </p>
+
+
+
+
+    
+</p></div>
+<div id="content">
+
+<div id="contextlinks">Previous Chapter: <a href="python3_namespaces.html">Namespaces</a><br>
+<LINK rel="prev" href="python3_namespaces.html">Next Chapter: <a href="python3_file_management.html">Read and Write Files</a><br>
+<LINK rel="next" href="python3_file_management.html"></div>
+<h2>Global and Local Variables</h2>
+<img class="imgright" src="images/earth_moon.jpg" alt="Earth and moon, signifying gloabl and local" />
+
+The way Python uses global and local variables is maverick. While in many or most other
+programming languages variables are treated as global if not otherwise declared, Python deals 
+with variables the other way around. They are local, if not otherwiese declared. The driving 
+reason behind this approach is that global variables are generally bad pratice and should be 
+avoided. In most cases where you are tempted to use a global variable, it is better to utilize 
+a parameter for getting a value into a function or return value to get it out. Like in many 
+other program structures, Python also imposes good programming habit by design. 
+<br><br>
+So when you define variables inside a function definition, they are local to this function by default.
+This means, that anything you will do to such a variable in the body of the function will have
+no effect on other variables outside of the function, even if the have the same name.
+This means, that the function body is the scope of such a variable, i.e. the enclosing context
+where this name with its values is associated.   
+<br><br>All variables have the scope of the block, where they are declared and defined in. They 
+can only be used after the point of their declaration.
+<br><br>
+Just to make things clear: Variables don't have to be and can't be declared in the way they are 
+declared in programming languages like Java or C. Variables in Python are implicitly declared 
+by defining them, i.e.
+the first time you assign a value to a variable, this variable is declared and has automatically the
+the data type of the object which has to be assigned to it. If you have problems understanding this, 
+please consult our chapter about data types and variables, see links on the left side.   
+
+<br><br>
+<h3>Global and local Variables in Functions</h3>
+<p>
+In the following example, we want to demonstrate, how global values can be used
+inside the body of a function:
+<pre>
+def f(): 
+    print(s) 
+s = "I love Paris in the summer!"
+f()
+</pre>
+The variable s is defined as the string "I love Paris in the summer!", 
+before calling the function f(). 
+The body of f() consists solely of the "print(s)" statement. 
+As there is no local variable s, i.e. no assignment to s, the value from the 
+global variable s will be used. 
+So the output will be the string "I love Paris in the summer!".
+The question is, what will happen, if we change the value of s inside 
+of the function f()? Will it affect the global
+variable as well? We test this in the following piece of code:
+<pre>
+def f(): 
+    s = "I love London!"
+    print(s) 
+
+s = "I love Paris!" 
+f()
+print(s)
+</pre>
+The output looks like this:
+<pre>
+I love London!
+I love Paris!
+</pre>
+What if we combine the first example with the second one, i.e. first access s with a print() function,
+ hoping to get the global value, and then assigning a new value to it? Assigning a value to it, would mean creating a local variable
+s. So, we would have s both as a global and a local variable in the same scope, i.e. the body of the function.
+Python doesn't allow this ambiguity.  So, it will throw an error, as we can see in the following example:
+<pre>
+>>> def f(): 
+...   print(s)
+...   s = "I love London!"
+...   print(s)
+... 
+>>> s = "I love Paris!"
+>>> f()
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+  File "&lt;stdin&gt;", line 2, in f
+UnboundLocalError: local variable 's' referenced before assignment
+>>> 
+</pre>
+A variable can't be both local and global inside of a function. So Python decides that we want a 
+local variable due to the assignment to s inside of f(), so the first print statement before the
+definition of s throws the error message above. Any variable which is changed or created 
+inside of a function is local, if it hasn't been declared as a global variable. To tell Python, 
+that we want to use the global variable, we have to explicitly state this by using the keyword 
+"global", as can be seen in the following example:
+<pre>
+def f():
+    global s
+    print(s)
+    s = "Only in spring, but London is great as well!"
+    print(s)
+
+
+s = "I am looking for a course in Paris!" 
+f()
+print(s)
+</pre>
+We have solved our problem. There is no ambiguity left. The output of this small script looks like this:
+<pre>
+I am looking for a course in Paris!
+Only in spring, but London is great as well!
+Only in spring, but London is great as well!
+</pre> 
+Local variables of functions can't be accessed from outside, when the function call has finished:
+<pre>
+def f():
+    s = "I am globally not known"
+    print(s) 
+
+f()
+print(s)
+</pre>
+Starting this script gives us the following output with an error message:
+<pre>
+monty@python:~$ python3 ex.py 
+I am globally not known
+Traceback (most recent call last):
+  File "ex.py", line 6, in &lt;module&gt;
+    print(s)
+NameError: name 's' is not defined
+monty@python:~$ 
+</pre>
+
+The following example shows a wild combination of local and global variables and function parameters: 
+<pre>
+def foo(x, y):
+    global a
+    a = 42
+    x,y = y,x
+    b = 33
+    b = 17
+    c = 100
+    print(a,b,x,y)
+
+a,b,x,y = 1,15,3,4
+foo(17,4)
+print(a,b,x,y)
+</pre>
+The output looks like this:
+<pre>
+42 17 4 17
+42 15 3 4
+</pre>
+<br><br>
+
+
+</p>
+<div id="contextlinks">Previous Chapter: <a href="python3_namespaces.html">Namespaces</a><br>
+<LINK rel="prev" href="python3_namespaces.html">Next Chapter: <a href="python3_file_management.html">Read and Write Files</a><br>
+<LINK rel="next" href="python3_file_management.html"></div><br><br><br>
+
+</div>
+<div id="footer">  &copy; 2011 - 2014 <a href="http://www.bklein.de/">Bernd Klein</a>,
+Bodenseo; 
+Design by Denise Mitchinson adapted for python-course.eu by Bernd Klein</div>
+</div>
+</body>
+
+<!-- Mirrored from www.python-course.eu/python3_global_vs_local_variables.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:08:39 GMT -->
+</html>

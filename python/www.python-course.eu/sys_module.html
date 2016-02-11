@@ -1,0 +1,571 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from www.python-course.eu/sys_module.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:05:41 GMT -->
+<head>
+
+<!-- Dieses Tag in den Head-Bereich oder direkt vor dem schlieÃŸenden Body-Tag einfÃ¼gen -->
+<script type="text/javascript" src="../apis.google.com/js/plusone.js"></script>
+
+
+
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "../connect.facebook.net/en_GB/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script><title>Python Advanced: Introduction into the Sys Module</title>
+<meta http-equiv="content-type" content="text/html; charset="ISO-8859-1">
+<meta name="Description" content="Introduction into the operating system interfaces of Python: sys module" />
+<meta name="Keywords" content="Python, course, system interface, interfaces,sys module, sys" />
+
+<link href="favicon.ico" rel="shortcut icon">
+
+<link href="moderna.css" rel="stylesheet" type="text/css" />
+<link href="moderna_print.css" media="print" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+<div id="container">
+
+<div id="banner">
+<!-- <a href="impressum.php">Impressum</a> | <a href="mailto:">contact</a> | --><h1>Python Course</h1>
+
+</div>
+
+	<!-- Begin Top Menu -->
+<ul id="navlist">
+<li><a href="index-2.html" >Home</a></li><li><a href="course.html" >Python 2 Tutorial</a></li><li><a href="python3_course.html" >Python 3 Tutorial</a></li><li class="active"><a id="current" href="advanced_topics.html" >Advanced Topics</a></li><li><a href="python_books.html" >Python Books</a></li><li><a href="python_tkinter.html" >Tkinter Tutorial</a></li><li><a href="contact.html" rel="nofollow">Contact</a></li>                          
+</ul>
+	<!-- End Top Menu -->
+<div id="sidebar-a">
+<img class="border" src="images/system_programming_100.png" alt="box" />    <h2>Advanced Topics</h2>
+
+<div class="menu">
+
+<ul>
+<li><a href="sys_module.html">Introduction into the sys module</a></li><li><a href="os_module_shell.html">Python and the Shell</a></li><li><a href="forking.html">Forks and Forking in Python</a></li><li><a href="threads.html">Introduction into Threads</a></li><li><a href="pipes.html">Pipe, Pipes and "99 Bottles of Beer"</a></li><li><a href="graphs_python.html">Graph Theory and Graphs in Python"</a></li><li><a href="pygraph.html">Graphs: PyGraph"</a></li><li><a href="networkx.html">Graphs: NetworkX"</a></li><li><a href="finite_state_machine.html">Finite State Machine in Python</a></li><li><a href="turing_machine.html">Turing Machine in Python</a></li><li><a href="numpy.html">NumPy Module</a></li><li><a href="matrix_arithmetic.html">Matrix Arithmetic</a></li><li><a href="linear_combinations.html">Linear Combinations</a></li><li><a href="text_classification_introduction.html">Introduction into Text Classification using Naive Bayes</a></li><li><a href="text_classification_python.html">Python Implementation of Text Classification</a></li><li><a href="towers_of_hanoi.html">Example for recursive Programming: Towers of Hanoi</a></li><li><a href="mastermind.html">Mastermind / Bulls and Cows</a></li><li><a href="dynamic_websites_wsgi.html">Creating dynamic websites with WSGI</a></li><li><a href="dynamic_websites.html">Dynamic websites with mod_python</a></li><li><a href="pylons.html">Dynamic websites with Pylons</a></li><li><a href="sql_python.html">Python, SQL, MySQL and SQLite</a></li><li><a href="python_scores.html">Python Scores</a></li></ul>
+
+</div>
+
+<p>
+This website is created by:<br><br>
+<a href="http://www.python-training-courses.com/"><img style="width: 150px;" alt="Python Training Courses"
+		     src="images/toronto_building.jpg"><br><br>Python Training Courses in Toronto, Canada</a>
+<br>
+On site trainings in Europe, Canada and the US.
+<br>
+<hr>
+<br>
+<h3>System Origin</h3>
+System is derived from the Latin word systema, which in turn stems from the Greek.
+System means a "whole compounded of several parts or members"
+A system is a set of interacting or interdependent system components which form
+ an integrated whole.
+
+<h3>CLI</h3>
+A command-line interface (CLI) is a shell or a mechanism for interacting with a 
+computer operating system or softwares. This interface is text-only and commands
+are typed in, in contrast with graphical user interfaces (GUI), where commands are 
+chosen by mouse click. 
+
+<br>
+<hr>
+<br>
+
+</div><div id="sidebar-b"><img style="width: 150px;" alt="Python-Logo"
+		     src="images/python-logo.png"><!-- Dieses Tag dort einfügen, wo die +1-Schaltfläche dargestellt werden soll -->
+<g:plusone></g:plusone>
+<br><br>
+
+<div class="fb-like" data-href="www.python-course.eu" data-send="false" data-layout="button_count" 
+data-width="130" data-show-faces="true" data-action="recommend"></div>
+
+<br><br>
+This topic in German / Deutsche Übersetzung:
+    <a href="http://www.python-kurs.eu/sys_modul.php">Sys-Modul</a> mit Informationen über den Python-Interpreter, die Benutzung von 
+	 Kommandozeilenargumente und Standard-Datenströmen.<h3>Classroom Training Courses</h3>
+<p>
+This website contains a free and extensive online tutorial by Bernd Klein with 
+material from his live <a href="python_classes.html">Python courses</a>.
+<br><br>
+If you are interested in an instructor-led classroom training course, you may have a look at the 
+<a href="http://ca.bodenseo.com/courses.php?topic=Python">Python courses
+<br><img style="width: 150px;" 
+alt="Bodenseo, Python courses and seminars"
+		     src="images/classroom_training_courses.jpg">
+</a>
+by Bernd Klein at Bodenseo.
+<br>
+<font size="1">© kabliczech - Fotolia.com</font>
+
+
+<br><br>
+<h3>Python Tricks</h3>
+<i>
+"Python tricks" is a tough one, cuz the language is so clean. E.g., C makes an art of confusing 
+pointers with arrays and strings, which leads to lotsa neat pointer tricks; APL mistakes 
+everything for an array, leading to neat one-liners; and Perl confuses everything period, 
+making each line a joyous adventure <wink>.
+</i>
+(Tim Peters, Pythoneer who formulated the "Zen of Python")
+<h3>Python compared to Lisp</h3>
+Greenspun's "Tenth Rule of Programming" states:
+<br>
+<i>
+Any sufficiently complicated C or Fortran program contains an ad hoc, informally-specified, 
+bug-ridden, slow implementation of half of Common Lisp.
+</i>
+Sounds complicated? Lisp is complicated. Guido van Rossum compared it - or to be precise 
+Common Lisp and Scheme - to Python with the following words:
+<i>
+"These languages are close to Python in their dynamic semantics, but so different in their approach 
+to syntax that a comparison becomes almost a religious argument: is Lisp's lack of syntax an 
+advantage or a disadvantage? It should be noted that Python has introspective capabilities 
+similar to those of Lisp, and Python programs can construct and execute program fragments on 
+the fly. Usually, real-world properties are decisive: Common Lisp is big (in every sense), 
+and the Scheme world is fragmented between many incompatible versions, where Python has a 
+single, free, compact implementation."
+</i>
+<br>(excerpt from "Comparing Python to Other Languages" by Guido van Rossum)
+
+<h3>Wizards and Magic</h3>
+<i>
+"Things in Python are very clear, but are harder to find than the secrets of wizards. 
+Things in Perl are easy to find, but look like arcane spells to invoke magic."
+</i>
+
+ </p>
+
+</p></div>
+<div id="content">
+
+<div id="contextlinks">Next Chapter: <a href="os_module_shell.html">Python and the Shell</a><br>
+<LINK rel="next" href="os_module_shell.html"></div>
+<h2>sys-Modul</h2>
+<h3>Information on the Python Interpreter</h3>
+<p>
+<img class="imgright" src="images/system_programming_300.png" alt="sys module and system programming" />
+Like all the other modules, the sys module has to be imported with the import statement, i.e.
+<br><br>
+<code>
+import sys
+</code>
+<br><br>
+If there are questions about the import statement, we recommend the introductory chapter of
+our basic course concerning this topic   
+<a href="modules_and_modular_programming.html">Modular Programming and Modules</a>
+<br><br>
+The sys module provides information about constants, functions and methods of the Python
+interpreter. dir(system) gives a summary of the available constants, functions and methods.
+Another possibility is the help() function. Using help(sys) provides valuable datail information. 
+<br><br>
+The module sys informs e.g. about the maximal recursion depth 
+(<code>sys.getrecursionlimit() </code>) and provides the possibility to change ist
+(sys.setrecursionlimit())
+<br>The current version number of Python can be accessed as well:
+<br>
+<br>
+<pre>
+>>> import sys
+>>> sys.version
+'2.6.5 (r265:79063, Apr 16 2010, 13:57:41) \n[GCC 4.4.3]'
+>>> sys.version_info
+(2, 6, 5, 'final', 0)
+>>> 
+</pre>
+<br>
+<h3>Command-line arguments</h3>
+Lots of scripts need access to the arguments passed to the script, 
+when the script was started.  <code>argv</code>argv (or to be precise 
+<code>sys.argv</code>) is a list, which 
+contains the command-line arguments passed to the script. 
+The first item of this list contains the name of the script itself. The arguments 
+follow the script name.
+<br>The following script iterates over the <code>sys.argv</code> list :
+<pre>
+#!/usr/bin/python
+
+import sys
+
+# it's easy to print this list of course:
+print sys.argv
+
+# or it can be iterated via a for loop:
+
+for i in range(len(sys.argv)):
+    if i == 0:
+        print "Function name: %s" % sys.argv[0]
+    else:
+        print "%d. argument: %s" % (i,sys.argv[i])
+</pre>
+We save this script as <code>arguments.py</code>. If we call it, we get the following 
+output::
+<pre>
+$ python arguments.py arg1 arg2
+['arguments.py', 'arg1', 'arg2']
+Function name: arguments.py
+1. argument: arg1
+2. argument: arg2
+$
+</pre> 
+<br>
+<h3>Changing the output behaviour of the interactive Python shell</h3>
+Python's interactive mode is one of the things which make Python special among other 
+programming languages like Perl or Java. As we have seen in the chapter  
+<a href="interactive.html">Interactive mode</a> of our introductory tutorial, it's enough 
+to write aan expression on the command line and get back a meaningful output.  
+However some users might prefer a different output behaviour. To change the way the
+ interpreter prints interactively entered expressions, you will have to rebind 
+ <code>sys.displayhook</code> to a callable object. 
+<br><br>We will demonstrate this in the following interactive example session:
+<br>
+<pre>
+>>> import sys
+>>> x = 42
+>>> x
+42
+>>> import sys
+>>> def my_display(x):
+...     print "out: ",
+...     print x
+... 
+>>> sys.displayhook = my_display
+>>> x
+out:  42
+>>> 
+>>> print x
+42
+</pre>
+<br>
+We can see from this example, that the standard behaviour of the print() function 
+will not be changed.
+
+<h3>Standard data streams</h3>
+<img class="imgright" src="images/standard_data_streams.png" alt="standard data streams" />
+Every serious user of a UNIX or Linux operating system knows standard streams, i.e.
+ input, standard output and standard error. They are known as pipes. They are commonly 
+abbreviated as stdin, stdout, stderr.
+<br>The standard input (stdin) is normally connected to the keyboard, while the standard 
+error and standard output go to the terminal (or window) in which you are working. 
+<br><br>
+These data streams can be accessed from Python via the objects of the sys module with the 
+same names, i.e. sys.stdin, sys.stdout and sys.stderr.
+<br>
+<pre>
+>>> import sys
+>>> for i in (sys.stdin, sys.stdout, sys.stderr):
+...     print(i)
+... 
+<open file '&lt;stdin&gt;', mode 'r' at 0x7f3397a2c0c0>
+<open file '<stdout>', mode 'w' at 0x7f3397a2c150>
+<open file '<stderr>', mode 'w' at 0x7f3397a2c1e0>
+>>>
+</pre>
+The following example illustrates the usage of the standard data streams:
+<pre>
+>>> import sys
+>>> print "Going via stdout"
+Going via stdout
+>>> sys.stdout.write("Another way to do it!\n")
+Another way to do it!
+>>> x = raw_input("read value via stdin: ")
+read value via stdin: 42
+>>> print x
+42
+>>> print "type in value: ", ; sys.stdin.readline()[:-1]
+type in value: 42
+
+'42'
+>>> 
+</pre> 
+The following example combines input and output:
+<pre>
+import sys
+
+while True:
+  # output to stdout:
+  print "Yet another iteration ..."
+  try:
+    # reading from sys.stdin (stop with Ctrl-D):
+    number = raw_input("Enter a number: ")
+  except EOFError:
+    print "\nciao"
+    break
+  else:
+    number = int(number)
+    if number == 0:
+      print >> sys.stderr, "0 has no inverse"
+    else:
+      print "inverse of %d is %f" % (number, 1.0/number) 
+</pre>
+If we save the previous example under "streams.py" and use a file called 
+"number.txt" with numbers (one number per line) for the input, 
+we can call the script in the following way from the Bash shell: 
+<pre>
+$ python streams.py < numbers.txt
+</pre>
+It's also possible to redirect the output into a file:
+<pre>
+$ python streams.py < numbers.txt > output.txt
+</pre>
+Now the only output left in the shell will be:
+
+<pre>
+0 has no inverse
+</pre>
+because this comes via the sterr stream.
+
+<br>
+<h3>Redirections</h3>
+<img class="imgright" src="images/umleitungen3.png" alt="Umleitungen" />
+There is hardly a user of a Linux or a Unix Shell, e.g. the Bourne or the Bash Shell, who hasn't 
+used input or output redirections. It's not exaggerated to say, that a usefull work is not 
+possible without redirections. 
+<br><br
+The same is true for "System Programming" or "System focused programming" under Python. 
+<br><br>The standard output (stdout) can be redirected e.g. into a file, so that we can
+process this file later with another program. The same is possible with the standard error stream,
+we can redirect it into a file as well. We can redirect both stderr and stdout into the same file
+or into separate files.
+<br><br>
+The following script should be self-explanatory. But nevertheless here are some explanations: 
+The first statement uses the regular standard output
+(stdout), i.e. the text "Coming through stdout" will be printed into the terminal from which the 
+script has been called. In the next line we are storing the standard output channel in the 
+variable save_stdout, so that we will be capable of restoring the original state at a later point
+in the script. After this we open a file "test.txt" for writing. After the statement 
+<code>sys.stdout = fh</code> all print statements will directly print into this file. The original 
+condition is restored with  <code>sys.stdout = save_stdout</code>.
+
+<pre>
+import sys
+
+print("Coming through stdout")
+
+# stdout is saved
+save_stdout = sys.stdout
+
+fh = open("test.txt","w")
+
+sys.stdout = fh
+print("This line goes to test.txt")
+
+# return to normal:
+sys.stdout = save_stdout
+
+fh.close()
+</pre>
+The following example shows how to redirect the standard error stream into a file:
+<pre>
+import sys
+
+save_stderr = sys.stderr
+fh = open("errors.txt","w")
+sys.stderr = fh
+
+x = 10 / 0
+
+# return to normal:
+sys.stderr = save_stderr
+
+fh.close()
+</pre>
+<br>
+It's posible to write into the error stream directly, i.e. without changing the general output 
+behaviour. This can be achieved by appending <code>&gt;&gt; sys.stderr</code> to a print statement.
+<pre>
+import sys
+
+save_stderr = sys.stderr
+fh = open("errors.txt","w")
+sys.stderr = fh
+
+print >> sys.stderr, "printing to error.txt"
+
+# return to normal:
+sys.stderr = save_stderr
+
+fh.close()
+</pre>
+
+
+<h3>Other interesting Variables and Constants in the sys Module</h3>
+
+<table  cellpadding="3" cellspacing="3" border="1" align="left" valign="top" bgcolor="#E5E5E5">
+<tr>
+<th align="left">Name</th>
+<th align="left">Description</th>
+</tr>
+<tr>
+<td align="left" valign="top">byteorder</td>
+<td align="left" valign="top">An indicator of the native byte order. <br>
+The following output was created on a Linux machine and Python 2.6.5:
+<pre>
+>>> sys.byteorder
+'little'
+>>> 
+</pre>
+ The value will be 'big' on big-endian (most-significant byte first) platforms, and 
+'little' on little-endian (least-significant byte first) platforms.</td>
+</tr>
+<tr>
+<td align="left" valign="top">executable</td>
+<td align="left" valign="top">A string containing the name of the executable binary (path and executable file name) for the Python interpreter. E.g. "c:\\Python31\\python.exe on Windows 7 or "/usr/bin/python" on
+Linux.
+<pre>
+>>> sys.executable
+'/usr/bin/python'
+</pre>
+</td>
+</tr>
+<tr>
+<td align="left" valign="top">maxint</td>
+<td align="left" valign="top">
+This attribute contains the largest positive integer supported by Python's 
+regular integer type. 
+The minumum value for the maximal integer value is at least <pre>2<sup>31-1</sup></pre>. 
+The largest negative integer corresponds to the value of <pre>- maxint - 1</pre>.
+This asymmetry results from the use of 2's complement binary arithmetic.
+<br>The value of maxint depends on the operating system.
+<br>
+<br>
+<b>Remark concerning Python 3.X:</b>
+The sys.maxint constant was removed with Python 3.0, since there is no longer a limit 
+to the values of integers. 
+However, sys.maxsize can be used as an integer larger than any practical list or string index. 
+It conforms to the implementation's "natural" integer size and is typically the same as sys.maxint 
+in previous releases on the same platform (assuming the same build options).
+</td>
+</tr>
+
+<tr>
+<td align="left" valign="top">maxsize</td>
+The largest positive integer supported by the platform's Py_ssize_t type, and thus the maximum 
+size lists, strings, dicts, and many other containers can have.
+</td>
+</tr>
+
+<tr>
+<td align="left" valign="top">maxunicode</td>
+<td align="left" valign="top">An integer giving the largest supported code point for a 
+Unicode character. The value of this depends on the configuration option that specifies 
+whether Unicode characters are stored as UCS-2 or UCS-4.
+</td>
+</tr>
+
+<tr>
+<td align="left" valign="top">modules</td>
+<td align="left" valign="top">The value of sys.modules is a dictionary mapping the names of modules 
+to modules which have already been loaded. This can be manipulated e.g. to enforce the reloading of 
+modules. Note that removing a module from this dictionary is not the same as calling reload() 
+on the corresponding module object.
+</td>
+</tr>
+
+<tr>
+<td align="left" valign="top">path</td>
+<td align="left" valign="top">Contains the search pyth, where Python is looking for modules.
+<pre>
+>>> sys.path
+['', '/usr/lib/python2.6', '/usr/lib/python2.6/plat-linux2', '/usr/lib/python2.6/lib-tk', 
+'/usr/lib/python2.6/lib-old', '/usr/lib/python2.6/lib-dynload', '/usr/lib/python2.6/dist-packages', 
+'/usr/lib/python2.6/dist-packages/PIL', '/usr/lib/python2.6/dist-packages/gst-0.10', 
+'/usr/lib/pymodules/python2.6', '/usr/lib/python2.6/dist-packages/gtk-2.0', 
+'/usr/lib/pymodules/python2.6/gtk-2.0', '/usr/lib/python2.6/dist-packages/wx-2.8-gtk2-unicode', 
+'/usr/local/lib/python2.6/dist-packages']
+>>> 
+</pre>
+</td>
+</tr>
+
+<tr>
+<td align="left" valign="top">platform</td>
+<td align="left" valign="top">Name of the platform on which Python is running, e.g. "linux2" for 
+Linux and "win32" for Windows
+<pre>
+>>> sys.platform
+'linux2'
+>>> 
+</pre>
+</td>
+</tr>
+
+<tr>
+<td align="left" valign="top">version</td>
+<td align="left" valign="top">Version number of the Python interpreter
+<pre>
+>>> sys.version
+'2.6.5 (r265:79063, Apr 16 2010, 13:57:41) \n[GCC 4.4.3]'
+>>> 
+</pre>
+
+</td>
+</tr>
+
+<tr>
+<td align="left" valign="top">version_info</td>
+<td align="left" valign="top">Similiar information than sys.version, but the output is a tuple
+containing the five components of the version number: major, minor, micro, releaselevel, and serial. 
+The values of this tuple are integers except the value for the release level, which is one of the
+following: 'alpha', 'beta', 'candidate', or 'final'. 
+
+<pre>
+>>> sys.version_info
+(2, 6, 5, 'final', 0)
+>>> 
+</pre>
+</td>
+</tr>
+
+<tr>
+<td align="left" valign="top">__stdin__<br>
+__stdout__<br>
+__stderr__</td>
+<td align="left" valign="top">These attributes contain the original values of stdin, stderr and stdout at the start 
+of the program. They can be useful to print to the actual standard stream no matter if the 
+sys.std* object has been redirected.  They can also be used to restore the actual files 
+to known working file objects in case they have been overwritten with a broken object. 
+But instead of using these values, the original stream should always be explicitly saved in a 
+variable (as shown in our previous examples) before replacing it, and the original state should 
+be restored by using the saved object.
+<td align="left" valign="top">
+</td>
+</tr>
+
+<tr>
+<td align="left" valign="top">getrecursionlimit()<br>
+setrecursionlimit(limit)</td>
+<td align="left" valign="top">getrecursionlimit() returns the current value of the recursion limit, 
+the maximum depth of the Python interpreter stack. This limit prevents 
+infinite recursion from causing an overflow of the C stack and 
+crashing Python. 
+<pre>
+>>> sys.getrecursionlimit()
+>>> 1000
+</pre>
+<br>
+setrecursionlimit(limit) sets the maximum depth of the Python interpreter stack to the value of 
+"limit". 
+</table>
+<br>
+ &nbsp;
+<br><br>
+</p>
+
+<div id="contextlinks">Next Chapter: <a href="os_module_shell.html">Python and the Shell</a><br>
+<LINK rel="next" href="os_module_shell.html"></div><br><br><br>
+
+</div>
+<div id="footer">  &copy; 2011 - 2014 <a href="http://www.bklein.de/">Bernd Klein</a>,
+Bodenseo; 
+Design by Denise Mitchinson adapted for python-course.eu by Bernd Klein</div>
+</div>
+</body>
+
+<!-- Mirrored from www.python-course.eu/sys_module.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:05:48 GMT -->
+</html>

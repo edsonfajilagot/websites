@@ -1,0 +1,212 @@
+<html>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch18s02.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:37 GMT -->
+<head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>18.2. What are objects and classes? An example</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><meta name="keywords" content="python, biology, bioinformatics, programming, computational biology"><link rel="home" href="index-2.html" title="Introduction to Programming using Python"><link rel="up" href="ch18.html" title="Chapter 18. Object-oriented programming"><link rel="previous" href="ch18.html" title="Chapter 18. Object-oriented programming"><link rel="next" href="ch18s03.html" title="18.3. Defining classes in Python"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">18.2. What are objects and classes? An example</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch18.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><th width="60%" align="center">Chapter 18. Object-oriented programming</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch18s03.html"><img src="images/next.png" alt="Next"></a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="sect_class_exa"></a>18.2. What are objects and classes? An example</h2></div></div>
+      
+      Our example is a class that handles DNA sequences.
+      <div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="sect_class_exa_obj"></a>18.2.1. Objects description</h3></div></div><p>
+	  Let us first start by describing our <tt>DNA</tt>
+	  object. <a href="ch18s02.html#fig_object_repr_seq" title="Figure 18.1. A DNA object">Figure 18.1</a> shows
+	  an internal and schematic representation of such an object
+	  named <tt>s1</tt>. The object is actually
+	  represented in this diagram as a box enclosing
+	  <span class="emphasis"><em>attributes</em></span>: the name of the sequence
+	  (for instance 'seq1') is stored in a
+	  <tt>name</tt> attribute, and the sequence characters
+	  (e.g 'aaacaacttcgtaagtata') is stored in a <tt>seq</tt>
+	  attribute.  Attributes are the same as variables, except
+	  that they are associated to an object.
+
+	  </p><div class="figure"><a name="fig_object_repr_seq"></a><p class="title"><b>Figure 18.1. A DNA object</b></p><div class="mediaobject"><img src="images/object_repr_seq.png"></div></div><p>
+
+	</p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="sect_class_exa_obj2"></a>18.2.2. Methods</h3></div></div><p>
+	  As it is described so far, the <tt>DNA</tt> object is just a kind
+	  of record to  
+	  group data. There are other ways of grouping data in Python:
+	  you can either use a list, or a dictionary:
+	  <pre class="programlisting">
+&gt;&gt;&gt; seq_record = {'name': 'seq1', 'seq': 'aaacaacttcgtaagtata'}
+&gt;&gt;&gt; seq_record['name']
+'seq1'
+	  </pre>
+	  but an object is actually more
+	  than just that. As shown in <a href="ch18s02.html#fig_object_repr_mtd" title="Figure 18.2. Representation showing object's methods as counters">Figure 18.2</a> (and as stated in <a href="ch06.html#sect_string_val_obj" title="6.1. Values as objects">Section 6.1</a>), an object is indeed more
+	  than just a value or a record of values: it can "do" things, and it 
+          "knows" what it can do, or. In other words, it has an associated
+	  behaviour. This behaviour is described by functions that are
+	  associated to it, and these 
+	  functions are called <span class="emphasis"><em>methods</em></span>.
+
+	  For instance, our <tt>DNA</tt> object can perform 
+	  operations: it can translate its sequence or it can compute its GC percent by calling the  
+	  <tt>gc</tt> function:   
+	  <pre class="programlisting">
+&gt;&gt;&gt; s1.gc()
+0.26
+	  </pre>
+
+	  So, available operations are an important aspect of objects,
+	  that we need to add in our representation.
+	  In <a href="ch18s02.html#fig_object_repr_mtd" title="Figure 18.2. Representation showing object's methods as counters">Figure 18.2</a>, methods are
+	  represented as "counters", as at the post office.
+
+	  </p><div class="figure"><a name="fig_object_repr_mtd"></a><p class="title"><b>Figure 18.2. Representation showing object's methods as counters</b></p><div class="mediaobject"><img src="images/object_repr_mtd_seq.png"></div></div><p>
+
+  	</p><p>
+	So, with objects, not only do we have a convenient way to group
+	data that are 
+	related, but we also have a way to group data <span class="emphasis"><em>and their
+	related operations</em></span> in the same place.
+  	</p><div class="definition"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/definition.png"></td><td><p class="title"><b><tt>Object</tt></b></p></td></tr><tr><td colspan="2" align="left" valign="top">
+	    
+	    <p>
+	      An object is a construction to group values and
+	      operations on these values. 
+	    </p>
+	  </td></tr></table></div></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="sect_class_exa_def"></a>18.2.3. Classes</h3></div></div><p>
+	  Now, how do you define objects, such as our <tt>DNA</tt> object,
+	  with their attributes and methods? 
+	</p><p>
+	  In object-oriented programming, you define objects by
+	  defining a class for them. 
+
+	  </p><div class="definition"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/definition.png"></td><td><p class="title"><b><tt>Class</tt></b></p></td></tr><tr><td colspan="2" align="left" valign="top">
+	    
+	    <p>
+	      A class is an <span class="emphasis"><em>object
+	  maker</em></span>: it contains all the statements needed
+	  to create an object, its attributes, as well as the
+	  statements to describe the  operations that the object will
+	  be able to perform. 
+	    </p>
+	  </td></tr></table></div><p>   
+
+	  The term <span class="emphasis"><em>class</em></span> can be somewhat
+	  misleading, for it also refers to something belonging to a
+	  <span class="emphasis"><em>classification</em></span>. In object-oriented 
+	  programming, a class can indeed also be a member of a set of
+	  classes organized in a hierarchy. This aspect will be
+	  introduced later  (see <a href="ch19s04.html" title="19.4. Inheritance: sharing code among classes">Section 19.4</a>), through the concept of
+	  inheritance.  But for now, we will use
+	  the term <span class="emphasis"><em>class</em></span> as just a maker of
+	  objects, or an object <span class="emphasis"><em>factory</em></span>. 
+
+	</p><p>
+
+	  Having a class defined, you can create as many
+	  objects as needed. These objects are called
+	  <span class="emphasis"><em>instances</em></span> of this class. 
+	  All the instances created with a given
+	  class will have the same structure and behaviour. They will
+	  only differ regarding their state, i.e regarding the value
+	  of their attributes. Namely, names and sequences  
+	  will not be the same for all sequences objects that will be created.
+
+	  </p><div class="definition"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/definition.png"></td><td><p class="title"><b><tt>Instance</tt></b></p></td></tr><tr><td colspan="2" align="left" valign="top">
+	    
+	    <p>
+	      Instances are objects created with a class.
+	    </p>
+	  </td></tr></table></div><p>   
+
+	  </p><p>
+
+	  The behaviour of the instances, i.e, the operations that are
+	  available for them either to modify them or to ask them for
+	  services, is described by functions associated to the
+	  class. These functions are called
+	  <span class="emphasis"><em>methods</em></span>.
+
+	  </p><div class="definition"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/definition.png"></td><td><p class="title"><b>Method</b></p></td></tr><tr><td colspan="2" align="left" valign="top">
+	    
+	    <p>
+	      A method is a <span class="emphasis"><em>function</em></span> defined for
+	      a class, specifying the behaviour of the class instances.
+	    </p>
+	  </td></tr></table></div><p>   
+
+
+    </p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/important.png"></td><th align="left">Important</th></tr><tr><td colspan="2" align="left" valign="top"><p>
+	  Classes and instances are not the same: the class is the maker,
+	  whereas the instance is the object being made, according to
+	  the model defined by the class.
+      </p></td></tr></table></div><p>
+
+	</p></div><div class="sect2"><div class="titlepage"><div><h3 class="title"><a name="sect_use_class_inst"></a>18.2.4. Creating objects</h3></div></div><p>
+      How are we going to create <tt>DNA</tt> objects?
+	You have actually already created objects 
+	throughout this course: strings, lists,
+	etc... However, most of the time the objects you have manipulated
+	were not directly created by your own code, but rather by
+	other components: for instance the &#8220;[]&#8221; operator
+	creates a 
+	list, the &#8220;""&#8221; operator creates a string, the
+	<tt>open</tt> function creates a file handle,
+	etc... 
+      </p><p>
+	But the actual direct syntax to create objects or to
+	<span class="emphasis"><em>instantiate</em></span> a class, 
+	i.e to create an instance of class, is by calling a function
+	with the same name as the class. So, in order to create an
+	instance of the <tt>DNA</tt> class we have
+	just defined, i.e an object which handles a DNA sequence, you do: 
+	<pre class="programlisting">
+&gt;&gt;&gt; s1 = DNA()
+	</pre>
+	After the <tt>DNA()</tt> function is called,
+      the instance of the class <tt>DNA</tt> is
+      referred to by the <tt>s1</tt> variable, just like
+      with any Python value. You could also provide more information
+      at instantiation. Let's say that we can create the
+	 <tt>name</tt> and <tt>seq</tt> attributes,
+	 we can do :
+	<pre class="programlisting">
+&gt;&gt;&gt; s2 = DNA('seq2', 'acaagatgccattgtcccccggcctcctgctgctgctgctctccggggcca')
+	</pre>
+
+	This time, the new <tt>DNA</tt> instance has
+	been created with values for <tt>name</tt> and
+	<tt>seq</tt> attributes. You  
+	can also use keyword arguments (especially if you are no longer
+        sure in what order they should be entered) :
+	
+<pre class="programlisting">
+&gt;&gt;&gt; s2 = DNA(name='seq2', seq='acaagatgccattgtcccccggcctcctgctgctgctgctctccggggcca')
+</pre>
+        
+      </p><p>
+
+	So, this creates the object and makes it available from the
+	<tt>s2</tt> variable. You can now use this
+	object to call <tt>DNA</tt> class methods, by
+	using the dot operator:
+	<pre class="programlisting">
+&gt;&gt;&gt; s2.gc()
+0.66
+ 	</pre>
+	The interpretor can find which class <tt>s2</tt>
+	belongs to, and calls the <tt>gc</tt> method that
+	is defined for  
+	the <tt>DNA</tt> class. 
+
+You can also actually
+	access to object's attributes by using the dot operator:
+
+	<pre class="programlisting">
+&gt;&gt;&gt; s2.name
+'seq2'
+&gt;&gt;&gt; s2.seq
+'acaagatgccattgtcccccggcctcctgctgctgctgctctccggggcca'
+ 	</pre>
+
+	The <tt>setname</tt> method enables to change the name
+	attribute of our object:
+	<pre class="programlisting">
+&gt;&gt;&gt; s2.setname('new name')
+&gt;&gt;&gt; s2.name
+'new name'
+ 	</pre>
+      </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch18.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch18.html"><img src="images/up.png" alt="Up"></a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch18s03.html"><img src="images/next.png" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 18. Object-oriented programming&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index-2.html"><img src="images/home.png" alt="Home"></a></td><td width="40%" align="right" valign="top">&nbsp;18.3. Defining classes in Python</td></tr></table></div></body>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch18s02.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:38 GMT -->
+</html>

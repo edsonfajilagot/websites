@@ -1,0 +1,368 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from www.python-course.eu/turing_machine.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:06:47 GMT -->
+<head>
+
+<!-- Dieses Tag in den Head-Bereich oder direkt vor dem schlieÃŸenden Body-Tag einfÃ¼gen -->
+<script type="text/javascript" src="../apis.google.com/js/plusone.js"></script>
+
+
+
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "../connect.facebook.net/en_GB/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script><title>Python Advanced: Turing Machine in Python</title>
+<meta http-equiv="content-type" content="text/html; charset="ISO-8859-1">
+<meta name="Description" content="Introduction in Turing Machines and implementation in Python" />
+<meta name="Keywords" content="Python, Introduction, Turing Machine, Alan Turing, Python program, implementation" />
+
+<link href="favicon.ico" rel="shortcut icon">
+
+<link href="moderna.css" rel="stylesheet" type="text/css" />
+<link href="moderna_print.css" media="print" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+<div id="container">
+
+<div id="banner">
+<!-- <a href="impressum.php">Impressum</a> | <a href="mailto:">contact</a> | --><h1>Python Course</h1>
+
+</div>
+
+	<!-- Begin Top Menu -->
+<ul id="navlist">
+<li><a href="index-2.html" >Home</a></li><li><a href="course.html" >Python 2 Tutorial</a></li><li><a href="python3_course.html" >Python 3 Tutorial</a></li><li class="active"><a id="current" href="advanced_topics.html" >Advanced Topics</a></li><li><a href="python_books.html" >Python Books</a></li><li><a href="python_tkinter.html" >Tkinter Tutorial</a></li><li><a href="contact.html" rel="nofollow">Contact</a></li>                          
+</ul>
+	<!-- End Top Menu -->
+<div id="sidebar-a">
+<img class="border" src="images/Flying_machine_small.jpg" alt="box" />    <h2>Advanced Topics</h2>
+
+<div class="menu">
+
+<ul>
+<li><a href="sys_module.html">Introduction into the sys module</a></li><li><a href="os_module_shell.html">Python and the Shell</a></li><li><a href="forking.html">Forks and Forking in Python</a></li><li><a href="threads.html">Introduction into Threads</a></li><li><a href="pipes.html">Pipe, Pipes and "99 Bottles of Beer"</a></li><li><a href="graphs_python.html">Graph Theory and Graphs in Python"</a></li><li><a href="pygraph.html">Graphs: PyGraph"</a></li><li><a href="networkx.html">Graphs: NetworkX"</a></li><li><a href="finite_state_machine.html">Finite State Machine in Python</a></li><li><a href="turing_machine.html">Turing Machine in Python</a></li><li><a href="numpy.html">NumPy Module</a></li><li><a href="matrix_arithmetic.html">Matrix Arithmetic</a></li><li><a href="linear_combinations.html">Linear Combinations</a></li><li><a href="text_classification_introduction.html">Introduction into Text Classification using Naive Bayes</a></li><li><a href="text_classification_python.html">Python Implementation of Text Classification</a></li><li><a href="towers_of_hanoi.html">Example for recursive Programming: Towers of Hanoi</a></li><li><a href="mastermind.html">Mastermind / Bulls and Cows</a></li><li><a href="dynamic_websites_wsgi.html">Creating dynamic websites with WSGI</a></li><li><a href="dynamic_websites.html">Dynamic websites with mod_python</a></li><li><a href="pylons.html">Dynamic websites with Pylons</a></li><li><a href="sql_python.html">Python, SQL, MySQL and SQLite</a></li><li><a href="python_scores.html">Python Scores</a></li></ul>
+
+</div>
+
+<p>
+<br>
+<hr>
+<br>
+<h3>Alan Turing</h3>
+Alan Mathison Turing (23 June 1912 - 7 June 1954) was an English mathematician, logician, cryptanalyst, and computer scientist. He developped the concept of a Turing Machine. "Machine" is misleading, because the Turing machine has never been intended as a practical computing technology. It's a theoretical model of a device that is representing
+a real computer. A Turing Machine is useful to get to the bottom of "algorithms" and the theory of "computation".
+It's useful to explore the limits of computations.
+<br><br>
+He is also famous for his "Turing Test". He devised this test to answer the question, when a machine could be called "intelligent". A computer could be said to "think" if a human interrogator could not tell it apart, through conversation, from a human being. 
+
+<br>
+<hr>
+<br>
+This website is created by:<br><br>
+<a href="http://www.python-training-courses.com/"><img style="width: 150px;" alt="Python Training Courses"
+		     src="images/toronto_building.jpg"><br><br>Python Training Courses in Toronto, Canada</a>
+<br>
+On site trainings in Europe, Canada and the US.
+<br>
+<hr>		     
+
+</div><div id="sidebar-b"><img style="width: 150px;" alt="Python-Logo"
+		     src="images/python-logo.png"><!-- Dieses Tag dort einfügen, wo die +1-Schaltfläche dargestellt werden soll -->
+<g:plusone></g:plusone>
+<br><br>
+
+<div class="fb-like" data-href="www.python-course.eu" data-send="false" data-layout="button_count" 
+data-width="130" data-show-faces="true" data-action="recommend"></div>
+
+<br><br>
+This topic in German / Deutsche Übersetzung:
+    <a href="http://www.python-kurs.eu/turingmaschine.php">Turingmaschine in Python</a><h3>Classroom Training Courses</h3>
+<p>
+This website contains a free and extensive online tutorial by Bernd Klein, using
+material from his classroom <a href="python_classes.html">Python courses</a>.
+<br><br>
+If you are interested in an instructor-led classroom training, you may have a look at the 
+<a href="http://www.bodenseo.com/courses.php?topic=Python">Python courses
+<br><img style="width: 150px;" 
+alt="Bodenseo, Python and other courses and seminars"
+		     src="images/classroom_training_courses.jpg">
+</a>
+by Bernd Klein at Bodenseo.
+<font size="1">© kabliczech - Fotolia.com</font>
+ </p>
+
+
+
+<h3>Quote of the Day:</h3>
+<p>
+
+<i>"Some programming languages manage to absorb change, but withstand progress. "</i> (Alan Perlis)
+
+<br><hr>
+
+<h3>Advantages of Python</h3>
+<p>
+<ul>
+<li>Easy and fast to learn</li>
+<li>Simple to get support</li>
+<li>Python's syntax is clear and readable</li>
+<li>Fast to Code, i.e. it is easier and faster to code a problem in Python than in 
+C, C++ or Java, just to mention a few other languages</li>
+<li>Python is portable, i.e. it runs on multiple platforms and systems, like e.g. Linux 
+and Microsoft Windows</li>
+<li>Object oriented</li>
+<li>It's trendy, i.e more and more successful companies switch to Python, like Google did a long
+time ago.</li>
+</ul>
+</p>
+
+
+</p></div>
+<div id="content">
+
+<div id="contextlinks">Previous Chapter: <a href="finite_state_machine.html">Finite State Machine in Python</a><br>
+<LINK rel="prev" href="finite_state_machine.html">Next Chapter: <a href="numpy.html">NumPy Module</a><br>
+<LINK rel="next" href="numpy.html"></div>
+<h2>Turing Machine</h2>
+<p>
+<img class="imgright" src="images/turing_machine.gif" alt="Turing Machine" />  
+
+Just to let you know straightaway: The Turing machine is not a machine. It is a mathematical model,
+which was formulated by the English mathematician Alan Turing in 1936. It's a very simple model of 
+a computer, yet it has the complete computing capability of a general purpose computer. The Turing 
+machine serves two needs in theoretical computer science: 
+<ol>
+<li>The class of languages defined by a TM, i.e. structured or recursively enumerable languages</li>
+<li>The class of functions it is capable to compute, i.e. the partial recursive functions</li>
+</ol>
+A Turing machine consists only of a few components:
+A tape on which data can be sequentially stored. The tape consists of fields, which are sequentially arranged.
+Each field can contain a character of a finite alphabet. This tape has no limits, it goes on infinitely
+in both directions. In a real machine, the tape would have to be large enough to contain all the data for 
+the algorithm. A TM also contains a head moving in both directions over the tape. This head can read
+and write one character from the field over which the head resides. The Turing machine is at every moment
+in a certain state, one of a finite number of states. A Turing program is a list of transitions, which determine
+for a given state and character ("under" the head) a new state, a character which has to be written into the field
+under the head and a movement direction for the head, i.e. either left, right or static (motionless).
+
+<br><br>
+<h2>Formal Definition of a Turing machine</h2>
+A deterministic Turing machine can be defined as a 7-tuple
+<br><br>
+<font size="+1">M = (Q, &Sigma;, &Gamma;, &delta;, b, 
+q<sub><font size="-1">0</font></sub>,
+q<sub><font size="-1">f</font></sub>)
+</font>
+
+<br><br>
+with
+<ul>
+<li>Q is a finite, non-empty set of states</li>
+<li>&Gamma; is a finite, non-empty set of the tape alphabet </li>
+<li>&Sigma; is the set of input symbols with &Sigma; &sub; &Gamma; </li>
+<li>&delta;  is a partially defined function, the transition function:<br>
+&delta; : (Q \ {q<sub><font size="-1">f</font></sub>}) x &Gamma; &rarr; Q x &Gamma; x {L,N,R}
+</li>
+<li>b &isin; &Gamma \ &Sigma; is the blank symbol</li>
+<li>q<sub><font size="-1">0</font></sub> &isin; Q is the initial state</li>
+<li>q<sub><font size="-1">f</font></sub> &isin; Q is the set of accepting or final states</li>
+</ul>
+
+<h3>Example: Binary Complement function</h3>
+Let's define a Turing machine, which complements a binary input on the tape, i.e.
+an input "1100111" e.g. will be turned into "0011000".
+<br>
+&Sigma; = {0, 1} 
+<br>
+Q = {init, final}
+<br>
+q<sub><font size="-1">0</font></sub> = init
+<br>
+q<sub><font size="-1">f</font></sub> = final
+
+<br>
+
+<table cellpadding="2" cellspacing="2" border="1" align="left" valign="top">
+<tr>
+<th  width="30%">Function Definition</th>
+<th>Description</th>
+</tr>
+<tr>
+<td>&delta;(init,0) = (init, 1, R)</td>
+<td>If the machine is in state "init" and a 0 is read by the head, a 1 will be written, the state
+will change to "init" (so actually, it will not change) and the head will be moved 
+one field to the right.</td>
+</tr>
+<tr>
+<td>&delta;(init,1) = (init, 0, R)</td>
+<td>If the machine is in state "init" and a 1 is read by the head, a 0 will be written, the state
+will change to "init" (so actually, it will not change) and the head will be moved 
+one field to the right.</td>
+<tr>
+<td>&delta;(init,b) = (final, b, N)</td>
+<td>If a blank ("b"), defining the end of the input string, is read, the TM reaches the final state "final" and
+halts.</td>
+</tr>
+</table>
+
+&nbsp;
+
+<br>
+
+<h2>Implementation of a Turing machine in Python</h2>
+
+We implement a Turing Machine in Python as a class. We define another class
+for the read/write tape of the Turing Machine. The core of the tape inside
+the class Tape is a dictionary, which contains the entries of the tape.
+This way, we can have negative indices. A Python list is not a convenient 
+data structure, because Python lists a bounded on one side, i.e. bounded by 0.
+<br><br>
+We define the method __str__(self) for the class Tape. __str__(self) is called
+by the built-in str() function and the print function uses it to calculate the
+"informal" string representation of an object, in our case the tape of the TM.
+The print function in the method  show_tape() of our class TuringMachine makes 
+use of this possibility.
+<br><br>
+With the aid of the method __getitem__(), we have a reading access to the tape
+via indices. The definition of the method __setitem() allows a writing access as
+well, as we can see e.g. in the statement 
+"<code>self.__tape[self.__head_position] = y[1]</code> of our class TuringMachine
+implementation" 
+<br><br>
+
+The class TuringMachine:
+
+We define the method __str__(self), which is called by the str() built-in function and 
+by the print statement to compute the "informal" string representation of an object, 
+in our case the string representation of a tape. 
+<pre>
+class Tape(object):
+    blank_symbol = " "
+    def __init__(self,
+                 input=""):
+        self.__tape = {}
+        for i in range(len(input)):
+            self.__tape[i] = input[i]
+        
+    def __str__(self):
+        s = ""
+        min_used_index = min(self.__tape.keys()) 
+        max_used_index = max(self.__tape.keys())
+        for i in range(min_used_index,max_used_index):
+            s += self.__tape[i]
+        return s    
+    
+   
+    def __getitem__(self,index):
+        if index in self.__tape:
+            return self.__tape[index]
+        else:
+            return blank_symbol
+
+    def __setitem__(self, pos, char):
+        self.__tape[pos] = char 
+
+        
+class TuringMachine(object):
+    def __init__(self, 
+                 tape = "", 
+                 blank_symbol = " ",
+                 tape_alphabet = ["0", "1"],
+                 initial_state = "",
+                 accepting_states = [],
+                 final_states = [],
+                 transition_function = {}):
+        self.__tape = Tape(tape)
+        self.__head_position = 0
+        self.__blank_symbol = blank_symbol
+        self.__current_state = initial_state
+        self.__transition_function = transition_function
+        self.__tape_alphabet = tape_alphabet
+        self.__final_states = final_states
+        
+    def show_tape(self): 
+        print(self.__tape)
+        return True
+    
+    def step(self):
+        char_under_head = self.__tape[self.__head_position]
+        x = (self.__current_state, char_under_head)
+        if x in self.__transition_function:
+            y = self.__transition_function[x]
+            self.__tape[self.__head_position] = y[1]
+            if y[2] == "R":
+                 self.__head_position += 1
+            elif y[2] == "L":
+                self.__head_position -= 1
+            self.__current_state = y[0]
+
+    def final(self):
+        if self.__current_state in self.__final_states:
+            return True
+        else:
+            return False
+</pre>
+
+Using the TuringMachine class:
+
+<pre>
+from turing_machine import TuringMachine
+
+initial_state = "init",
+accepting_states = ["final"],
+transition_function = {("init","0"):("init", "1", "R"),
+                       ("init","1"):("init", "0", "R"),
+                       ("init"," "):("final"," ", "N"),
+                       }
+final_states = ["final"]
+
+t = TuringMachine("010011 ", 
+                  initial_state = "init",
+                  final_states = final_states,
+                  transition_function=transition_function)
+
+print("Input on Tape:")
+t.show_tape()
+
+while not t.final():
+    t.step()
+
+print("Result of the Turing machine calculation:")    
+t.show_tape()
+</pre>
+<br><br>
+</p>
+
+<br><br>
+It prints the following result:
+<pre>
+Input on Tape:
+010011
+Result of the Turing machine calculation:
+101100
+</pre>
+<br>
+
+
+
+<div id="contextlinks">Previous Chapter: <a href="finite_state_machine.html">Finite State Machine in Python</a><br>
+<LINK rel="prev" href="finite_state_machine.html">Next Chapter: <a href="numpy.html">NumPy Module</a><br>
+<LINK rel="next" href="numpy.html"></div><br><br><br>
+
+</div>
+<div id="footer">  &copy; 2011 - 2014 <a href="http://www.bklein.de/">Bernd Klein</a>,
+Bodenseo; 
+Design by Denise Mitchinson adapted for python-course.eu by Bernd Klein</div>
+</div>
+</body>
+
+<!-- Mirrored from www.python-course.eu/turing_machine.php by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 Dec 2014 20:06:48 GMT -->
+</html>

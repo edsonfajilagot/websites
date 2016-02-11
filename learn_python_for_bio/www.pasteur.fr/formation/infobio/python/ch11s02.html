@@ -1,0 +1,231 @@
+<html>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch11s02.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:30 GMT -->
+<head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>11.2. The for loop</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><meta name="keywords" content="python, biology, bioinformatics, programming, computational biology"><link rel="home" href="index-2.html" title="Introduction to Programming using Python"><link rel="up" href="ch11.html" title="Chapter 11. Repetitions"><link rel="previous" href="ch11.html" title="Chapter 11. Repetitions"><link rel="next" href="ch11s03.html" title="11.3. The while loop"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">11.2. The for loop</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch11.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><th width="60%" align="center">Chapter 11. Repetitions</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch11s03.html"><img src="images/next.png" alt="Next"></a></td></tr></table><hr></div><div class="section"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="d0e4174"></a>11.2. The <tt>for</tt> loop</h2></div></div><p><b>Verify protein sequences.&nbsp;</b>
+      Let us start with an example that checks whether all characters of a
+      protein sequence are valid amino acid characters. How
+      could we do this by hand? One possibility is to start at the
+      beginning of the protein sequence and check each character one
+      by one. Here is a more formal description of the algorithm:
+      </p><div class="procedure"><ol type="1"><li><span class="bold"><b>for each</b></span> character of the
+	protein sequence
+	<ol type="a"><li><span class="bold"><b>if</b></span> the current
+	    character is not an amino acid 
+	    <ol type="i"><li>print the invalid character</li></ol></li><li><span class="bold"><b>end if</b></span></li></ol></li><li><span class="bold"><b>end for</b></span></li></ol></div><p>
+      In Python this can be performed with the
+      <tt>for</tt> statement.
+    </p><div class="definition"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/definition.png"></td><td><p class="title"><b>The <tt>for</tt> loop</b></p></td></tr><tr><td colspan="2" align="left" valign="top">
+      
+      <p> The <tt>for</tt> loop enables
+	to iterate on an ordered collection of objects and to
+	execute the same sequence of statements for each element.
+      </p>
+      <p>
+	This <span class="emphasis"><em>sort of iteration</em></span> is also known as
+	a <span class="emphasis"><em>traversal</em></span>, because the collection is
+	<span class="emphasis"><em>traversed</em></span> from left to right and a
+	particular task is applied to each element.
+      </p>
+    </td></tr></table></div><p>
+      So in our example, the collection of elements is a string
+      which we traverse with the
+      <tt>for</tt> loop. We also have to specify what a
+      valid amino acid is, because computers do not know
+      about it. Nevertheless we have already written a function doing 
+      this (<a href="ch08s04.html#exa_isAminoAcid" title="Example 8.2. Function to check whether a character is a valid amino acid">Example 8.2</a>).  
+
+      <pre class="programlisting">
+&gt;&gt;&gt; protein = "SERLSITPLGPYIGAQIJSGADLTRPLSDNQFEQLYHAVLRHQVVFLRDQAITPQQQRALA"
+
+&gt;&gt;&gt; for aa in protein:
+...    if not isAminoAcid(aa):
+...        print "protein contains unknown amino acid: ", aa
+...
+protein contains unknown amino acid:  J
+      </pre>
+    </p><p>
+      As <tt>def</tt> and <tt>if</tt>, the
+      <tt>for</tt> statement is also a statement
+      containing a <span class="emphasis"><em>block</em></span>. The <span class="emphasis"><em>header
+	line</em></span> gives the two essential information for the
+      traversal. It starts with <tt>for</tt> followed by 
+      a <span class="emphasis"><em>variable name</em></span> to which each element of
+      the collection is assigned during the execution of
+      the <span class="emphasis"><em>block</em></span> of statements. The second half of
+      the <span class="emphasis"><em>header</em></span> indicates the collection 
+      <tt>in</tt> which the elements can be
+      found. As in all functions, operations and expressions, the
+      collection can be specified by a <span class="emphasis"><em>value</em></span>, a
+      <span class="emphasis"><em>variable</em></span> or even a <span class="emphasis"><em>composed
+      expression</em></span>.
+    </p><div class="figure"><p class="title"><b>Figure 11.1. The <tt>for</tt> loop</b></p><div class="mediaobject"><img src="images/for_statement.png" width="409.5"></div></div><p><b>Getting the position of invalid amino acids.&nbsp;</b>
+	As written above we cannot show the position of the invalid
+	amino acid in the protein sequence, because only the amino
+	acid character is known in the body of the
+	<tt>for</tt> loop. Therefore, we have to iterate
+	over the indices of the sequence. Here is the
+	algorithm:
+      </p><div class="procedure"><ol type="1"><li><span class="bold"><b>for</b></span> each position in the
+	protein sequence
+	<ol type="a"><li><span class="bold"><b>if</b></span> the character at
+	  this position is not an amino acid 
+	    <ol type="i"><li>print the position and the invalid character</li></ol></li><li><span class="bold"><b>end if</b></span></li></ol></li><li><span class="bold"><b>end for</b></span></li></ol></div><p>
+      What are the possible values of the positions? Remember the
+      string indices, they start at 0 and end at one before the
+      length of the string. Python has a function that gives the
+      possibility to create a list of numbers that is called
+      <tt>range</tt>. Using this function, we can translate
+      the algorithms above into Python:
+
+      <pre class="programlisting">
+&gt;&gt;&gt; for i in range(len(protein)):
+...    if not isAminoAcid(protein[i]):
+...        print "protein contains unknown amino acid " , protein[i] , \
+...              " at position ", i
+      </pre>
+    </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/note.png"></td><th align="left">Note</th></tr><tr><td colspan="2" align="left" valign="top"><p>
+	  There is a convention in most programming languages to
+	  use <tt>i, k, l </tt> as variable names for the
+	  iteration variable.
+	</p></td></tr></table></div><p><b>Translate cds sequences.&nbsp;</b>
+      Let's take another example. Say that we have a cds sequence
+      and that we would like to know such things as the corresponding
+      amino acid sequence or the codon usage. How could we achieve this? 
+      For sure, it looks like a traversal of the cds sequence, but
+      the things we are looking for do not correspond anymore to one
+      nucleotide of
+      the cds sequence but to a codon which is a three letter
+      substring. If we could
+      access the codons one by one, the translation into the amino acid
+      sequence would look like this: 
+    </p><div class="procedure"><ul><li>for each codon in the cds sequence:
+	<ol type="a"><li>add the amino acid corresponding to the current codon to
+	  the protein sequence</li></ol></li></ul></div><p>
+      In the body of the loop we need to establish the correspondence
+      between a codon sequence and the amino acid. We know how to do
+      this by hand, by looking up a codon in the codon translation
+      table. A dictionary is the data type that
+      gives us such sort of access to the collection of codons.
+
+      <pre class="programlisting">
+&gt;&gt;&gt; code = {     'ttt': 'F', 'tct': 'S', 'tat': 'Y', 'tgt': 'C',
+...              'ttc': 'F', 'tcc': 'S', 'tac': 'Y', 'tgc': 'C',
+...              'tta': 'L', 'tca': 'S', 'taa': '*', 'tga': '*',
+...              'ttg': 'L', 'tcg': 'S', 'tag': '*', 'tgg': 'W',
+...              'ctt': 'L', 'cct': 'P', 'cat': 'H', 'cgt': 'R',
+...              'ctc': 'L', 'ccc': 'P', 'cac': 'H', 'cgc': 'R',
+...              'cta': 'L', 'cca': 'P', 'caa': 'Q', 'cga': 'R',
+...              'ctg': 'L', 'ccg': 'P', 'cag': 'Q', 'cgg': 'R',
+...              'att': 'I', 'act': 'T', 'aat': 'N', 'agt': 'S',
+...              'atc': 'I', 'acc': 'T', 'aac': 'N', 'agc': 'S',
+...              'ata': 'I', 'aca': 'T', 'aaa': 'K', 'aga': 'R',
+...              'atg': 'M', 'acg': 'T', 'aag': 'K', 'agg': 'R',
+...              'gtt': 'V', 'gct': 'A', 'gat': 'D', 'ggt': 'G',
+...              'gtc': 'V', 'gcc': 'A', 'gac': 'D', 'ggc': 'G',
+...              'gta': 'V', 'gca': 'A', 'gaa': 'E', 'gga': 'G',
+...              'gtg': 'V', 'gcg': 'A', 'gag': 'E', 'ggg': 'G'
+...         }
+&gt;&gt;&gt; code['atg']
+'M'
+      </pre>
+    </p><p>
+      Now let us go back to the first part of the problem: getting the
+      codons. If we know where a 
+      codon starts, we only have to extract the substring of length 3
+      starting from this position. Here is the algorithm:
+    </p><div class="procedure"><ul><li>for each third position in the cds sequence:
+	<ol type="a"><li>get the substring of length three starting from this position
+	  </li></ol></li></ul></div><p>
+      Fortunately, the <tt>range</tt> function
+      can take an optional step argument.
+
+      <pre class="programlisting">
+&gt;&gt;&gt; range(10) 
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+&gt;&gt;&gt; range(4,10)
+[4, 5, 6, 7, 8, 9]
+&gt;&gt;&gt; range(0,10,3)
+[0, 3, 6, 9]
+      </pre>
+    </p><p>
+      We can now print the codon list:
+
+      <pre class="programlisting">
+&gt;&gt;&gt; cds = "atgagtgaacgtctgagcattaccccgctggggccgtatatcggcgcacaataa"
+
+&gt;&gt;&gt; for i in range(0,len(cds),3):
+...     print cds[i:i+3],
+... 
+atg
+agt
+gaa
+cgt
+ctg
+agc
+att
+acc
+ccg
+ctg
+ggg
+ccg
+tat
+atc
+ggc
+gca
+caa
+taa
+taa
+      </pre>
+    </p><p>
+      If  we  replace the
+      <tt>print</tt> statement with the access to the
+      dictionary of translation, we can translate the codon into the amino acid.
+    </p><div class="example"><a name="exa_translate_for"></a><p class="title"><b>Example 11.1. Translate a cds sequence into its corresponding protein sequence</b></p><pre class="programlisting">
+&gt;&gt;&gt; def translate(cds, code):
+...    prot = ""
+...    for i in range(0,len(cds),3):
+...        codon = cds[i:i+3]
+...        prot = prot + code[codon]
+...    return prot
+&gt;&gt;&gt; translate(cds, code)
+'MSERLSITPLGPYIGAQ*'
+      </pre></div><p>
+      What about the computing of the codon usage? We do not need the
+      translation table anymore. But we have to count each codon
+      now. We also
+      need a data structure accessible by codons, although it is not
+      to get information, but to store the result. Here is the
+      algorithm: do not forget that accessing a key which does not
+      exist in a dictionary, is not allowed.
+    </p><div class="procedure"><ul><li>for each codon in the coding sequence:
+	<ol type="a"><li>if the codon is already in the dictionary of the usage:
+	    <ol type="i"><li>then add 1 to the count</li></ol></li><li>otherwise:
+	    <ol type="i"><li>put the codon in the dictionary with count = 1</li></ol></li></ol></li></ul></div><p>
+      Here is the corresponding Python code:
+
+      <pre class="programlisting">
+&gt;&gt;&gt; def count_codons(cds):
+...     usage = {}
+...     for i in range(0,len(cds),3):
+...        codon = cds[i:i+3]
+...        if usage.has_key(codon):
+...           usage[codon] += 1
+...        else:
+...           usage[codon] = 1
+...     return usage
+...
+&gt;&gt;&gt; count_codons(cds)
+{'acc': 1, 'atg': 1, 'atc': 1, 'gca': 1, 'agc': 1, 'ggg': 1, 'att': 1, 'ctg': 2,
+ 'taa': 1, 'ggc': 1, 'tat': 1, 'ccg': 2, 'agt': 1, 'caa': 1, 'cgt': 1, 'gaa': 1}
+      </pre>
+    </p><div class="exercise"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/exercise.png"></td><td><p class="title"><b>Exercise 11.1. Write the complete codon usage function</b></p></td></tr><tr><td colspan="2" align="left" valign="top">
+      
+      <p>
+	Transform the <tt>count_codons</tt> function into
+	a function getting the real codon usage. Hint: You need to
+	divide each count by the total number of codons.
+      </p>
+    </td></tr></table></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch11.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch11.html"><img src="images/up.png" alt="Up"></a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch11s03.html"><img src="images/next.png" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 11. Repetitions&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index-2.html"><img src="images/home.png" alt="Home"></a></td><td width="40%" align="right" valign="top">&nbsp;11.3. The while loop</td></tr></table></div></body>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch11s02.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:30 GMT -->
+</html>

@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from zetcode.com/wxpython/menustoolbars/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Aug 2015 19:21:29 GMT -->
+<head>
+<title>Menus and toolbars in wxPython</title>
+<link rel="stylesheet" href="../../cfg/format2.css" type="text/css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="wxPython, programming, Python, gui, menus, toolbars">
+<meta name="description" content="This part of the wxPython tutorial covers menus and toolbars.">
+<meta name="author" content="Jan Bodnar">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div id="wide_ad" class="ltow">
+<script async src="../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- 160x600, August 2011 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:600px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="2484182563"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<div class="content">
+
+
+<header>
+
+<nav>
+<a href="http://zetcode.com/" title="Home">Home</a>&#160;
+<a href="../index.html">Contents</a>
+</nav>
+
+</header>
+
+
+<h1>Menus and toolbars</h1>
+
+
+<p>
+A common part in a GUI application is a menubar. A menubar consists of 
+objects called menus. Top-level menus have their labels on the menubar. 
+The menus have menu items. Menu items are commands that perform a specific 
+action inside the application. Menus can also have submenus, which have their own menu items.
+The following three classes are used to create menubars in wxPython.
+A <code>wx.MenuBar</code>, a <code>wx.Menu</code> and a <code>wx.MenuItem</code>.
+</p>
+
+<div class="med_rec">
+<script async src="../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- NewSquare -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:250px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="0364418177"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div> 
+
+
+<h2>Simple menu</h2>
+
+<p>
+In our first example, we will create a menubar with one file menu. 
+The menu will have only one menu item. By selecting the item 
+the application quits.
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+'''
+ZetCode wxPython tutorial
+
+This example shows a simple menu.
+
+author: Jan Bodnar
+website: www.zetcode.com
+last modified: September 2011
+'''
+
+import wx
+
+class Example(wx.Frame):
+    
+    def __init__(self, *args, **kwargs):
+        super(Example, self).__init__(*args, **kwargs) 
+            
+        self.InitUI()
+        
+    def InitUI(self):    
+
+        menubar = wx.MenuBar()
+        fileMenu = wx.Menu()
+        fitem = fileMenu.Append(wx.ID_EXIT, 'Quit', 'Quit application')
+        menubar.Append(fileMenu, '&amp;File')
+        self.SetMenuBar(menubar)
+        
+        self.Bind(wx.EVT_MENU, self.OnQuit, fitem)
+
+        self.SetSize((300, 200))
+        self.SetTitle('Simple menu')
+        self.Centre()
+        self.Show(True)
+        
+    def OnQuit(self, e):
+        self.Close()
+
+def main():
+    
+    ex = wx.App()
+    Example(None)
+    ex.MainLoop()    
+
+
+if __name__ == '__main__':
+    main()
+</pre>
+
+<p>
+This is a small example with minimal menubar functionality.
+</p>
+
+<pre class="explanation">
+menubar = wx.MenuBar()
+</pre>
+
+<p>
+First we create a menubar object. 
+</p>
+
+<pre class="explanation">
+fileMenu = wx.Menu()
+</pre>
+
+<p>
+Next we create a menu object. 
+</p>
+
+<pre class="explanation">
+fitem = fileMenu.Append(wx.ID_EXIT, 'Quit', 'Quit application')
+</pre>
+
+<p>
+We append a menu item into the menu object. The first parameter is 
+the id of the menu item. The standard id will automatically add an icon
+and a shortcut, <kbd>Ctrl</kbd>+<kbd>Q</kbd> in our case. 
+The second parameter is the name of the menu item. The last parameter 
+defines the short help string that is displayed on the statusbar, when 
+the menu item is selected. Here we did not create a <code>wx.MenuItem</code> explicitly. 
+It was created by the <code>Append()</code> method behind the scenes. The method
+returns the created menu item. This reference will be used later to bind an event.
+</p>
+
+<pre class="explanation">
+self.Bind(wx.EVT_MENU, self.OnQuit, fitem)
+</pre>
+
+<p>
+We bind the <code>wx.EVT_MENU</code> of the menu item to the custom 
+<code>OnQuit()</code> method. This method will close the application. 
+</p>
+
+<pre class="explanation">
+menubar.Append(fileMenu, '&amp;File')
+self.SetMenuBar(menubar)
+</pre>
+
+<p>
+After that, we append a menu into the menubar. 
+The &amp; character creates an accelerator key. The character that follows the &amp; is underlined. 
+This way the menu is accessible via the <kbd>Alt</kbd>+<kbd>F</kbd> shortcut. 
+In the end, we call the <code>SetMenuBar()</code> method.
+This method belongs to the <code>wx.Frame</code> widget. It sets up the menubar. 
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/simplemenu.png" alt="A simple menu example">
+<figcaption>Figure: A simple menu example</figcaption>
+</figure>
+
+
+<h2>Icons and shortcuts</h2>
+
+<p>
+The next example is essentially the same as the previous one.
+This time, we manually create a <code>wx.MenuItem</code>.
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+'''
+ZetCode wxPython tutorial
+
+In this example, we manually create 
+a menu item.
+
+author: Jan Bodnar
+website: www.zetcode.com
+last modified: September 2011
+'''
+
+import wx
+
+APP_EXIT = 1
+
+class Example(wx.Frame):
+    
+    def __init__(self, *args, **kwargs):
+        super(Example, self).__init__(*args, **kwargs) 
+            
+        self.InitUI()
+        
+    def InitUI(self):
+
+        menubar = wx.MenuBar()
+        fileMenu = wx.Menu()
+        qmi = wx.MenuItem(fileMenu, APP_EXIT, '&amp;Quit\tCtrl+Q')
+        qmi.SetBitmap(wx.Bitmap('exit.png'))
+        fileMenu.AppendItem(qmi)
+
+        self.Bind(wx.EVT_MENU, self.OnQuit, id=APP_EXIT)
+
+        menubar.Append(fileMenu, '&amp;File')
+        self.SetMenuBar(menubar)
+
+        self.SetSize((250, 200))
+        self.SetTitle('Icons and shortcuts')
+        self.Centre()
+        self.Show(True)
+        
+    def OnQuit(self, e):
+        self.Close()
+
+def main():
+    
+    ex = wx.App()
+    Example(None)
+    ex.MainLoop()    
+
+
+if __name__ == '__main__':
+    main()
+</pre>
+
+<p>
+In this example, we create a quit menu item. We choose a custom icon and
+shortcut for the menu item. 
+</p>
+
+<pre class="explanation">
+qmi = wx.MenuItem(fileMenu, APP_EXIT, '&amp;Quit\tCtrl+Q')
+qmi.SetBitmap(wx.Bitmap('exit.png'))
+fileMenu.AppendItem(qmi)
+</pre>
+
+<p>
+We create a <code>wx.MenuItem</code> object. The &amp; character specifies 
+an accelerator key. The character following the ampersand 
+is underlined. The actual shortcut is defined by the combination of characters. 
+We have specified <kbd>Ctrl</kbd>+<kbd>Q</kbd> characters. So if we press 
+<kbd>Ctrl</kbd>+<kbd>Q</kbd>, we close the 
+application. We put a tab character between the &amp; character and the shortcut. 
+This way, we manage to put some space between them. 
+To provide an icon for a menu item, we call a <code>SetBitmap()</code> method.
+A manually created menu item is appended to the menu by calling the 
+<code>AppendItem()</code> method.
+</p>
+
+<pre class="explanation">
+self.Bind(wx.EVT_MENU, self.OnQuit, id=APP_EXIT)
+</pre>
+
+<p>
+When we select the created menu item, the OnQuit() method is called. 
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/iconsshortcuts.png" alt="Icons and shortcuts">
+<figcaption>Figure: Icons and shortcuts</figcaption>
+</figure>
+
+
+<h2>Submenus and separators</h2>
+
+<p>
+Each menu can also have a submenu. This way we can place similar commands 
+into groups. For example we can place commands that hide/show various 
+toolbars like personal bar, address bar, status bar or navigation bar into 
+a submenu called toolbars. Within a 
+menu, we can seperate commands with a separator. It is a simple line. It is 
+common practice to separate commands like New, Open, Save from commands like Print, 
+Print preview with a single separator. In our example we will see, how we can 
+create submenus and menu separators. 
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+'''
+ZetCode wxPython tutorial
+
+In this example, we create a submenu and a menu
+separator.
+
+author: Jan Bodnar
+website: www.zetcode.com
+last modified: September 2011
+'''
+
+import wx
+
+
+class Example(wx.Frame):
+    
+    def __init__(self, *args, **kwargs):
+        super(Example, self).__init__(*args, **kwargs) 
+            
+        self.InitUI()
+        
+    def InitUI(self):
+
+        menubar = wx.MenuBar()
+
+        fileMenu = wx.Menu()
+        fileMenu.Append(wx.ID_NEW, '&amp;New')
+        fileMenu.Append(wx.ID_OPEN, '&amp;Open')
+        fileMenu.Append(wx.ID_SAVE, '&amp;Save')
+        fileMenu.AppendSeparator()
+
+        imp = wx.Menu()
+        imp.Append(wx.ID_ANY, 'Import newsfeed list...')
+        imp.Append(wx.ID_ANY, 'Import bookmarks...')
+        imp.Append(wx.ID_ANY, 'Import mail...')
+
+        fileMenu.AppendMenu(wx.ID_ANY, 'I&amp;mport', imp)
+
+        qmi = wx.MenuItem(fileMenu, wx.ID_EXIT, '&amp;Quit\tCtrl+W')
+        fileMenu.AppendItem(qmi)
+
+        self.Bind(wx.EVT_MENU, self.OnQuit, qmi)
+
+        menubar.Append(fileMenu, '&amp;File')
+        self.SetMenuBar(menubar)
+
+        self.SetSize((350, 250))
+        self.SetTitle('Submenu')
+        self.Centre()
+        self.Show(True)
+        
+    def OnQuit(self, e):
+        self.Close()
+
+def main():
+    
+    ex = wx.App()
+    Example(None)
+    ex.MainLoop()    
+
+
+if __name__ == '__main__':
+    main()
+</pre>
+
+<p>
+In the above example, we create New, Open, and Save standard menu items.
+These are separated from a submenu with a horizontal separator. A submenu
+has additional three menu items. 
+</p>
+
+<pre class="explanation">
+fileMenu.Append(wx.ID_NEW, '&amp;New')
+fileMenu.Append(wx.ID_OPEN, '&amp;Open')
+fileMenu.Append(wx.ID_SAVE, '&amp;Save')
+</pre>
+
+<p>
+Here we have three common menu items: New, Open, and Save. 
+</p>
+
+<pre class="explanation">
+fileMenu.AppendSeparator()
+</pre>
+
+<p>
+A menu separator is appended with the <code>AppendSeparator()</code> method.
+</p>
+
+<pre class="explanation">
+imp = wx.Menu()
+imp.Append(wx.ID_ANY, 'Import newsfeed list...')
+imp.Append(wx.ID_ANY, 'Import bookmarks...')
+imp.Append(wx.ID_ANY, 'Import mail...')
+
+fileMenu.AppendMenu(wx.ID_ANY, 'I&amp;mport', imp)
+</pre>
+
+<p>
+A submenu is also a <code>wx.Menu</code>. Three menu items are appended
+to the menu. The submenu is appended to the file menu with the <code>AppenMenu()</code> 
+method.
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/submenu.png" alt="A submenu example">
+<figcaption>Figure: A submenu example</figcaption>
+</figure>
+
+
+<h2>Check menu item</h2>
+
+<p>
+There are tree kinds of menu items. 
+</p>
+
+<ul>
+	<li>normal item</li>
+	<li>check item</li>
+	<li>radio item</li>
+</ul>
+
+<p>
+In the following example, we will demonstrate the check menu item. 
+A check menu item is visually represented by a tick in the menu.
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+'''
+ZetCode wxPython tutorial
+
+This example creates a checked
+menu item.
+
+author: Jan Bodnar
+website: www.zetcode.com
+last modified: September 2011
+'''
+
+import wx
+
+
+class Example(wx.Frame):
+    
+    def __init__(self, *args, **kwargs):
+        super(Example, self).__init__(*args, **kwargs) 
+            
+        self.InitUI()
+        
+    def InitUI(self):    
+
+        menubar = wx.MenuBar()
+        fileMenu = wx.Menu()
+        viewMenu = wx.Menu()
+        
+        self.shst = viewMenu.Append(wx.ID_ANY, 'Show statubar', 
+            'Show Statusbar', kind=wx.ITEM_CHECK)
+        self.shtl = viewMenu.Append(wx.ID_ANY, 'Show toolbar', 
+            'Show Toolbar', kind=wx.ITEM_CHECK)
+            
+        viewMenu.Check(self.shst.GetId(), True)
+        viewMenu.Check(self.shtl.GetId(), True)
+
+        self.Bind(wx.EVT_MENU, self.ToggleStatusBar, self.shst)
+        self.Bind(wx.EVT_MENU, self.ToggleToolBar, self.shtl)
+
+        menubar.Append(fileMenu, '&amp;File')
+        menubar.Append(viewMenu, '&amp;View')
+        self.SetMenuBar(menubar)
+
+        self.toolbar = self.CreateToolBar()
+        self.toolbar.AddLabelTool(1, '', wx.Bitmap('texit.png'))
+        self.toolbar.Realize()
+
+        self.statusbar = self.CreateStatusBar()
+        self.statusbar.SetStatusText('Ready')
+
+        self.SetSize((350, 250))
+        self.SetTitle('Check menu item')
+        self.Centre()
+        self.Show(True)
+        
+        
+    def ToggleStatusBar(self, e):
+        
+        if self.shst.IsChecked():
+            self.statusbar.Show()
+        else:
+            self.statusbar.Hide()
+
+    def ToggleToolBar(self, e):
+        
+        if self.shtl.IsChecked():
+            self.toolbar.Show()
+        else:
+            self.toolbar.Hide()        
+
+def main():
+    
+    ex = wx.App()
+    Example(None)
+    ex.MainLoop()    
+
+
+if __name__ == '__main__':
+    main()
+
+</pre>
+
+<p>
+We have a view menu, where we have two check menu items. These two menu items
+will show and hide a statusbar and a toolbar.
+</p>
+
+<pre class="explanation">
+self.shst = viewMenu.Append(wx.ID_ANY, 'Show statubar', 
+    'Show Statusbar', kind=wx.ITEM_CHECK)
+self.shtl = viewMenu.Append(wx.ID_ANY, 'Show toolbar', 
+    'Show Toolbar', kind=wx.ITEM_CHECK)
+</pre>
+
+<p>
+If we want to append a  check menu item, we set a <code>kind</code> 
+parameter to <code>wx.ITEM_CHECK</code>. 
+The default parameter is <code>wx.ITEM_NORMAL</code>.
+The <code>Append()</code> method returns a <code>wx.MenuItem</code>.
+</p>
+
+<pre class="explanation">
+viewMenu.Check(self.shst.GetId(), True)
+viewMenu.Check(self.shtl.GetId(), True)
+</pre>
+
+<p>
+When the application starts, both statusbar and toolbar are visible. So we check 
+both menu items with the <code>Check()</code> method.
+</p>
+
+<pre class="explanation">
+def ToggleStatusBar(self, e):
+    
+    if self.shst.IsChecked():
+        self.statusbar.Show()
+    else:
+        self.statusbar.Hide()
+</pre>
+
+<p>
+We show or hide the statusbar according to the state of the check menu item. We 
+find out the state of the check menu item with the <code>IsChecked()</code> method.  
+Same with toolbar. 
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/checkmenuitem.png" alt="Check menu item">
+<figcaption>Figure: Check menu item</figcaption>
+</figure>
+
+
+<h2>Context menu</h2>
+
+<p>
+A <em>context menu</em> is a list of commands that appears under some context. 
+For example, in a Firefox web browser, when we right click on a web page, 
+we get a context menu. Here we can reload a page, go back or view page source. 
+If we right click on a toolbar, we get another context menu for managing toolbars. 
+Context menus are sometimes called popup menus.
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+'''
+ZetCode wxPython tutorial
+
+In this example, we create a context menu.
+
+author: Jan Bodnar
+website: www.zetcode.com
+last modified: September 2011
+'''
+
+import wx
+
+class MyPopupMenu(wx.Menu):
+    
+    def __init__(self, parent):
+        super(MyPopupMenu, self).__init__()
+        
+        self.parent = parent
+
+        mmi = wx.MenuItem(self, wx.NewId(), 'Minimize')
+        self.AppendItem(mmi)
+        self.Bind(wx.EVT_MENU, self.OnMinimize, mmi)
+
+        cmi = wx.MenuItem(self, wx.NewId(), 'Close')
+        self.AppendItem(cmi)
+        self.Bind(wx.EVT_MENU, self.OnClose, cmi)
+
+
+    def OnMinimize(self, e):
+        self.parent.Iconize()
+
+    def OnClose(self, e):
+        self.parent.Close()
+        
+
+class Example(wx.Frame):
+    
+    def __init__(self, *args, **kwargs):
+        super(Example, self).__init__(*args, **kwargs) 
+            
+        self.InitUI()
+        
+    def InitUI(self):
+
+        self.Bind(wx.EVT_RIGHT_DOWN, self.OnRightDown)
+
+        self.SetSize((250, 200))
+        self.SetTitle('Context menu')
+        self.Centre()
+        self.Show(True)
+        
+    def OnRightDown(self, e):
+        self.PopupMenu(MyPopupMenu(self), e.GetPosition())
+
+def main():
+    
+    ex = wx.App()
+    Example(None)
+    ex.MainLoop()    
+
+
+if __name__ == '__main__':
+    main()
+</pre>
+
+<p>
+In the example, we create a context menu for the main window. It has
+two items. One will minimize the application, the other one will terminate it.
+</p>
+
+
+<pre class="explanation">
+class MyPopupMenu(wx.Menu):
+    
+    def __init__(self, parent):
+        super(MyPopupMenu, self).__init__()
+</pre>
+
+
+<p>
+We create a separate <code>wx.Menu</code> class. 
+</p>
+
+<pre class="explanation">
+mmi = wx.MenuItem(self, wx.NewId(), 'Minimize')
+self.AppendItem(mmi)
+self.Bind(wx.EVT_MENU, self.OnMinimize, mmi)
+</pre>
+
+<p>
+A menu item is created. Appended to the context menu. An event
+handler is binded to this menu item. 
+</p>
+
+<pre class="explanation">
+self.Bind(wx.EVT_RIGHT_DOWN, self.OnRightDown)
+</pre>
+
+<p>
+If we right click on the frame, we call the <code>OnRightDown()</code> method. For 
+this, we use the <code>wx.EVT_RIGHT_DOWN</code> event binder.
+</p>
+
+<pre class="explanation">
+def OnRightDown(self, e):
+    self.PopupMenu(MyPopupMenu(self), e.GetPosition())
+</pre>
+
+<p>
+In the <code>OnRightDown()</code> method, we call the <code>PopupMenu()</code> method. 
+This method shows the context menu. The first parameter is the menu to be shown. 
+The second parameter is the position, where the context menu appears. The context menus 
+appear at the point of the mouse cursor. To get the actual mouse position, we 
+call the <code>GetPosition()</code> method of the supplied event object.
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/contextmenu.png" alt="Context menu">
+<figcaption>Figure: Context menu</figcaption>
+</figure>
+
+
+<h2>Toolbars</h2>
+
+<p>
+Menus group all commands that we can use in an application. Toolbars provide a 
+quick access to the most frequently used commands. 
+</p>
+
+<p>
+To create a toolbar, we call the <code>CreateToolBar()</code> method of the frame widget.
+</p>
+
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+'''
+ZetCode wxPython tutorial
+
+This example creates a simple toolbar.
+
+author: Jan Bodnar
+website: www.zetcode.com
+last modified: September 2011
+'''
+
+import wx
+
+class Example(wx.Frame):
+    
+    def __init__(self, *args, **kwargs):
+        super(Example, self).__init__(*args, **kwargs) 
+            
+        self.InitUI()
+        
+    def InitUI(self):    
+
+        toolbar = self.CreateToolBar()
+        qtool = toolbar.AddLabelTool(wx.ID_ANY, 'Quit', wx.Bitmap('texit.png'))
+        toolbar.Realize()
+
+        self.Bind(wx.EVT_TOOL, self.OnQuit, qtool)
+
+        self.SetSize((250, 200))
+        self.SetTitle('Simple toolbar')
+        self.Centre()
+        self.Show(True)
+        
+    def OnQuit(self, e):
+        self.Close()
+
+def main():
+    
+    ex = wx.App()
+    Example(None)
+    ex.MainLoop()    
+
+
+if __name__ == '__main__':
+    main()
+</pre>
+
+<p>
+In our example, we have a toolbar with one tool. The tool will close the application,
+when we click on it. 
+</p>
+
+<pre class="explanation">
+toolbar = self.CreateToolBar()
+</pre>
+
+<p>
+We create a toolbar. By default, the toolbar is horizontal, has no borders
+and displays icons. 
+</p>
+
+<pre class="explanation">
+qtool = toolbar.AddLabelTool(wx.ID_ANY, 'Quit', wx.Bitmap('texit.png'))
+</pre>
+
+<p>
+To create a toolbar tool, we call the <code>AddLabelTool()</code> method.
+The second parameter is the tool's label, the third is the tool's image. 
+Note that the label is not visible, because the default style shows only 
+icons.
+</p>
+
+<pre class="explanation">
+toolbar.Realize()
+</pre>
+
+<p>
+After we have put our items to the toolbar, we call the <code>Realize()</code> method. 
+Calling this method is not obligatory on Linux. On windows it is.
+</p>
+
+<pre class="explanation">
+self.Bind(wx.EVT_TOOL, self.OnQuit, qtool)
+</pre>
+
+<p>
+To handle toolbar events, we use the <code>wx.EVT_TOOL</code> event binder.
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/simpletoolbar.png" alt="Simple toolbar">
+<figcaption>Figure: Simple toolbar</figcaption>
+</figure>
+
+<p>
+If we want to create more than one toolbars, we must do it differently.
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+'''
+ZetCode wxPython tutorial
+
+In this example, we create two horizontal 
+toolbars. 
+
+author: Jan Bodnar
+website: www.zetcode.com
+last modified: September 2011
+'''
+
+import wx
+
+class Example(wx.Frame):
+    
+    def __init__(self, *args, **kwargs):
+        super(Example, self).__init__(*args, **kwargs) 
+            
+        self.InitUI()
+        
+    def InitUI(self):    
+
+        vbox = wx.BoxSizer(wx.VERTICAL)
+
+        toolbar1 = wx.ToolBar(self)
+        toolbar1.AddLabelTool(wx.ID_ANY, '', wx.Bitmap('tnew.png'))
+        toolbar1.AddLabelTool(wx.ID_ANY, '', wx.Bitmap('topen.png'))
+        toolbar1.AddLabelTool(wx.ID_ANY, '', wx.Bitmap('tsave.png'))
+        toolbar1.Realize()
+
+        toolbar2 = wx.ToolBar(self)
+        qtool = toolbar2.AddLabelTool(wx.ID_EXIT, '', wx.Bitmap('texit.png'))
+        toolbar2.Realize()
+
+        vbox.Add(toolbar1, 0, wx.EXPAND)
+        vbox.Add(toolbar2, 0, wx.EXPAND)
+
+        self.Bind(wx.EVT_TOOL, self.OnQuit, qtool)
+        
+        self.SetSizer(vbox)
+
+        self.SetSize((300, 250))
+        self.SetTitle('Toolbars')
+        self.Centre()
+        self.Show(True)
+        
+    def OnQuit(self, e):
+        self.Close()
+
+def main():
+    
+    ex = wx.App()
+    Example(None)
+    ex.MainLoop()    
+
+
+if __name__ == '__main__':
+    main()
+</pre>
+
+<p>
+In the above example, we create two horizontal toolbars.
+</p>
+
+<pre class="explanation">
+toolbar1 = wx.ToolBar(self)
+... 
+toolbar2 = wx.ToolBar(self)
+</pre>
+
+<p>
+We create two toolbar objects. And put them into a vertical box.
+</p>
+
+
+<figure>
+<img src="../../img/gui/wxpython/toolbars.png" alt="Toolbars">
+<figcaption>Figure: Toolbars</figcaption>
+</figure>
+
+
+<h2>Enable, disable</h2>
+
+<p>
+In the following example, we will show, how we can enable and disable toolbar 
+buttons. We will also see a separator line.
+</p>
+
+<pre class="code">
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+'''
+ZetCode wxPython tutorial
+
+In this example, we create two horizontal 
+toolbars. 
+
+author: Jan Bodnar
+website: www.zetcode.com
+last modified: September 2011
+'''
+
+import wx
+
+class Example(wx.Frame):
+    
+    def __init__(self, *args, **kwargs):
+        super(Example, self).__init__(*args, **kwargs) 
+            
+        self.InitUI()
+        
+    def InitUI(self):    
+
+        self.count = 5
+
+        self.toolbar = self.CreateToolBar()
+        tundo = self.toolbar.AddLabelTool(wx.ID_UNDO, '', wx.Bitmap('tundo.png'))
+        tredo = self.toolbar.AddLabelTool(wx.ID_REDO, '', wx.Bitmap('tredo.png'))
+        self.toolbar.EnableTool(wx.ID_REDO, False)
+        self.toolbar.AddSeparator()
+        texit = self.toolbar.AddLabelTool(wx.ID_EXIT, '', wx.Bitmap('texit.png'))
+        self.toolbar.Realize()
+
+        self.Bind(wx.EVT_TOOL, self.OnQuit, texit)
+        self.Bind(wx.EVT_TOOL, self.OnUndo, tundo)
+        self.Bind(wx.EVT_TOOL, self.OnRedo, tredo)
+
+        self.SetSize((250, 200))
+        self.SetTitle('Undo redo')
+        self.Centre()
+        self.Show(True)
+        
+    def OnUndo(self, e):
+        if self.count > 1 and self.count &lt;= 5:
+            self.count = self.count - 1
+
+        if self.count == 1:
+            self.toolbar.EnableTool(wx.ID_UNDO, False)
+
+        if self.count == 4:
+            self.toolbar.EnableTool(wx.ID_REDO, True)
+
+    def OnRedo(self, e):
+        if self.count &lt; 5 and self.count >= 1:
+            self.count = self.count + 1
+
+        if self.count == 5:
+            self.toolbar.EnableTool(wx.ID_REDO, False)
+
+        if self.count == 2:
+            self.toolbar.EnableTool(wx.ID_UNDO, True)
+   
+        
+    def OnQuit(self, e):
+        self.Close()
+
+def main():
+    
+    ex = wx.App()
+    Example(None)
+    ex.MainLoop()    
+
+
+if __name__ == '__main__':
+    main()
+</pre>
+
+<p>
+In our example, we have three toolbar buttons. One button is for exiting the 
+application. The other two buttons are undo and redo buttons. They simulate 
+undo/redo functionality in an application. (For a real example, see tips and tricks)  
+We have 4 changes. The undo and redo buttons are disabled accordingly.
+</p>
+
+<pre class="explanation">
+self.toolbar.EnableTool(wx.ID_REDO, False)
+self.toolbar.AddSeparator()
+</pre>
+
+<p>
+In the beginning, the redo button is disabled. We do it by calling the 
+<code>EnableTool()</code> method. We can create some logical groups within 
+a toolbar. We can separate various groups of buttons by a small vertical line. 
+To do this, we call the <code>AddSeparator()</code> method.
+</p>
+
+<pre class="explanation">
+def OnUndo(self, e):
+    if self.count > 1 and self.count &lt;= 5:
+        self.count = self.count - 1
+
+    if self.count == 1:
+        self.toolbar.EnableTool(wx.ID_UNDO, False)
+
+    if self.count == 4:
+        self.toolbar.EnableTool(wx.ID_REDO, True)
+</pre>
+
+<p>
+We simulate undo and redo functionality. We have 4 changes. If there is 
+nothing left to undo, the undo button is disabled. After undoing the 
+first change, we enable the redo button. Same logic applies for the 
+<code>OnRedo()</code> method.
+</p>
+
+<figure>
+<img src="../../img/gui/wxpython/undoredo.png" alt="Undo redo">
+<figcaption>Figure: Undo redo</figcaption>
+</figure>
+
+<p>
+In this part of the wxPython tutorial, we have worked with 
+menus and toolbars.
+</p>
+
+<div class="hor">
+<script async src="../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- horizontal -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:468px;height:60px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="1734478269"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<footer>
+
+<nav class="center">
+<span class="botNavItem"><a href="http://zetcode.com/">Home</a></span> ‡ <span class="botNavItem"><a href="../index.html">Contents</a></span> ‡
+<span class="botNavItem"><a href="#">Top of Page</a></span>
+</nav>
+
+<div class="signature">
+<a href="http://zetcode.com/">ZetCode</a> last modified September 13, 2011  <span class="copyright">&copy; 2007 - 2015 Jan Bodnar</span>
+</div>
+
+</footer>
+
+</div> <!-- content -->
+
+</div> <!-- container -->
+
+</body>
+
+<!-- Mirrored from zetcode.com/wxpython/menustoolbars/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Aug 2015 19:21:35 GMT -->
+</html>

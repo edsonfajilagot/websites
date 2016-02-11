@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+    
+<!-- Mirrored from learnpythonthehardway.org/book/appendix-a-cli/ex13.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 03 Sep 2014 17:52:55 GMT -->
+<head>
+        <link href='stylesheets/fonts.html' rel='stylesheet' type='text/css'>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="twitter:creator" content="@lzsthw">
+        <title>Learn Python</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href='stylesheets/pure.css' rel='stylesheet'>
+        <link href='stylesheets/pygments.css' rel='stylesheet'>
+        <link href='stylesheets/main.css' rel='stylesheet'>
+        <link href='stylesheets/nav.css' rel='stylesheet'>
+        <style>
+        </style>
+ 
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.11: http://docutils.sourceforge.net/" />
+<title>Exercise 13: Stream a File (cat)</title>
+    </head>
+    <body id='wrapper'>
+        <div class='master-logo-wrapper clearfix'>
+            <a href='index.html'>
+                <div class='python-logo-sprite'></div>
+            </a>
+                <span class='edition-3'><img src='images/3rd-edition-cloud.png' /></span>
+        </div><!-- /.master-logo-wrapper -->
+
+        <div style='clear: both;'>
+
+        <div id="main">
+            <div class='chapters-wrapper'>
+                  <nav id='chapters'>
+                      <div class='masthead-title'></div>
+                      <ul class='masthead'>
+                          <li>
+                              <a href='../index.html'>
+                                  <div class='nav-tcontents'>
+                                      <img src='images/nav-contents.png' /></br>
+                                  main
+                                  </div>
+                              </a>
+                          </li>
+                          <li>
+                              <a href='#video'>
+                                  <div class='nav-play-video' id="#video_toggle_icon">
+                                      <img src='images/nav-play.png' /><br/>
+                                      play video
+                                      <div class='line-2'>(this chapter)</div>
+                                  </div>
+                              </a>
+                          </li>
+                          <li>
+                              <a href='#' id='prev_link'>
+                                  <div class='nav-previous'>
+                                      <img src='images/nav-previous.png' /></br>
+                                      previous
+                                  </div>
+                              </a>
+                          </li>
+                          <li>
+                              <a href='#' id='next_link'>
+                                  <div class='nav-next'>
+                                      <img src='images/nav-next.png' /></br>
+                                      next
+                                  </div>
+                              </a>
+                          </li>
+                          <li><!-- AMBULANCE ICON -->
+                              <a href='help.html' id=''>
+                                  <div class='ambulance'>
+                                      <img src='images/help-ambulance.png' /></br>
+                                      help
+                                  </div>
+                              </a>
+                          </li>
+                          <li id="follow">
+                                <a href="https://twitter.com/lzsthw" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false" data-dnt="true">Follow @lzsthw</a>
+                                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                           </li>
+
+                      </ul><!-- /.masthead -->
+                      <!--<img src='images/fa-bullhorn.png' />-->
+                  </nav><!-- /.chapters -->
+            </div><!-- /.chapters-wrapper -->
+
+        <!--- RST STARTS -->
+            <h1 class="title">Exercise 13: Stream a File (cat)</h1>
+            <p>You're going to do some more setup for this one so you get used to making files in one program and then accessing them from the command line.  With the same text editor from the last exercise, create another file named <tt class="docutils literal">test2.txt</tt> but this time save it directly to your <tt class="docutils literal">temp</tt> directory.</p>
+<div class="section" id="do-this">
+<h1>Do This</h1>
+<div class="section" id="linux-osx">
+<h2>Linux/OSX</h2>
+<div class="highlight"><pre><a name="appendix-a-cli--code--ex13.sh-session-pyg.html-1"></a><span class="gp">$</span> less test2.txt
+<a name="appendix-a-cli--code--ex13.sh-session-pyg.html-2"></a><span class="go">[displays file here]</span>
+<a name="appendix-a-cli--code--ex13.sh-session-pyg.html-3"></a><span class="gp">$</span> cat test2.txt
+<a name="appendix-a-cli--code--ex13.sh-session-pyg.html-4"></a><span class="go">I am a fun guy.</span>
+<a name="appendix-a-cli--code--ex13.sh-session-pyg.html-5"></a><span class="go">Don&#39;t you know why?</span>
+<a name="appendix-a-cli--code--ex13.sh-session-pyg.html-6"></a><span class="go">Because I make poems,</span>
+<a name="appendix-a-cli--code--ex13.sh-session-pyg.html-7"></a><span class="go">that make babies cry.</span>
+<a name="appendix-a-cli--code--ex13.sh-session-pyg.html-8"></a><span class="gp">$</span> cat test.txt
+<a name="appendix-a-cli--code--ex13.sh-session-pyg.html-9"></a><span class="go">Hi there this is cool.</span>
+<a name="appendix-a-cli--code--ex13.sh-session-pyg.html-10"></a><span class="gp">$</span>
+</pre></div></div>
+<div class="section" id="windows">
+<h2>Windows</h2>
+<div class="highlight"><pre><a name="appendix-a-cli--code--ex13-win.sh-session-pyg.html-1"></a><span class="gp">&gt;</span> more test2.txt
+<a name="appendix-a-cli--code--ex13-win.sh-session-pyg.html-2"></a><span class="go">[displays file here]</span>
+<a name="appendix-a-cli--code--ex13-win.sh-session-pyg.html-3"></a><span class="gp">&gt;</span> cat test2.txt
+<a name="appendix-a-cli--code--ex13-win.sh-session-pyg.html-4"></a><span class="go">I am a fun guy.</span>
+<a name="appendix-a-cli--code--ex13-win.sh-session-pyg.html-5"></a><span class="go">Don&#39;t you know why?</span>
+<a name="appendix-a-cli--code--ex13-win.sh-session-pyg.html-6"></a><span class="go">Because I make poems,</span>
+<a name="appendix-a-cli--code--ex13-win.sh-session-pyg.html-7"></a><span class="go">that make babies cry.</span>
+<a name="appendix-a-cli--code--ex13-win.sh-session-pyg.html-8"></a><span class="gp">&gt;</span> cat test.txt
+<a name="appendix-a-cli--code--ex13-win.sh-session-pyg.html-9"></a><span class="go">Hi there this is cool.</span>
+<a name="appendix-a-cli--code--ex13-win.sh-session-pyg.html-10"></a><span class="gp">&gt;</span>
+</pre></div><p>Remember that when I say <tt class="docutils literal">[displays file here]</tt> I'm abbreviating the output of that command so I don't have to show you exactly everything.</p>
+</div>
+</div>
+<div class="section" id="you-learned-this">
+<h1>You Learned This</h1>
+<p>Do you like my poem? Totally going to win a Nobel.  Anyway, you already know the first command, and I'm just having you check that your file is there.  Then you <tt class="docutils literal">cat</tt> the file to the screen.  This command just spews the whole file to the screen with no paging or stopping.  To demonstrate that, I have you do this to the <tt class="docutils literal">test.txt</tt> which should just spew a bunch of lines from that exercise.</p>
+</div>
+<div class="section" id="do-more">
+<h1>Do More</h1>
+<ul class="simple">
+<li>Make a few more text files and work with <tt class="docutils literal">cat</tt>.</li>
+<li>Unix: Try <tt class="docutils literal">cat test.txt test2.txt</tt> and see what it does.</li>
+<li>Windows: Try <tt class="docutils literal">cat test.txt,test2.txt</tt> and see what it does.</li>
+</ul>
+</div>
+        <!-- RST ENDS -->
+
+            <!-- /.help-icon -->
+        <div id="video_holder">
+            <h1>Video</h1>
+            <div id="video" class="row inner">
+                <div class="small-12 small-centered columns">
+                    <div data-paydiv_product="2" id='paydiv'>
+                        &nbsp;
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        </div><!-- /#main -->
+
+        <div class='ad-deck gold' id="footer">
+            <ul class='retailers clearfix'>
+                <li>
+                    <a href='https://paydiv.io/access/buy/2/'>
+                        <div class='retailer-name'>Zed Shaw</div>
+                        <div class='book-type'>PDF + Videos + Updates</div>
+                        <div class='book-price'>$29.95</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.amazon.com/gp/product/0321884914/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0321884914&amp;linkCode=as2&amp;tag=lepythhawa-20'>
+                        <div class='retailer-name'>Amazon</div>
+                        <div class='book-type'>Paper + DVD</div>
+                        <div class='book-price'>$29.95</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.amazon.com/gp/product/B00FGUS948/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=B00FGUS948&amp;linkCode=as2&amp;tag=lepythhawa-20'>
+                        <div class='retailer-name'>Amazon</div>
+                        <div class='book-type'>Kindle (No Videos)</div>
+                        <div class='book-price'>$17.27</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.barnesandnoble.com/w/learn-python-the-hard-way-zed-shaw/1112055406?ean=9780321884916'>
+                        <div class='retailer-name'>B&amp;N</div>
+                        <div class='book-type'>Paper + DVD</div>
+                        <div class='book-price'>$17.27</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.barnesandnoble.com/w/learn-python-the-hard-way-zed-shaw/1112055406?ean=9780133124347&amp;itm=1&amp;usri=learn+python+the+hard+way'>
+                        <div class='retailer-name'>B&amp;N</div>
+                        <div class='book-type'>Nook (No Video)</div>
+                        <div class='book-price'>$17.27</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://www.informit.com/store/learn-python-the-hard-way-a-very-simple-introduction-9780321884916'>
+                        <div class='retailer-name'>InformIT</div>
+                        <div class='book-type'>eBook + Paper</div>
+                        <div class='book-price'>$43.19</div>
+                    </a>
+                </li>
+                <li>
+                    <a href='http://ruby.learncodethehardway.org/book/'>
+                        <div class='retailer-name'>Interested In Ruby?</div>
+                        <div class='book-type'>Ruby is also a great language.</div>
+                        <div class='book-price'>Learn Ruby The Hard Way</div>
+                    </a>
+                </li>
+
+            </ul><!-- /.places -->
+        </div><!-- /#ad-deck -->
+
+        <script src="javascripts/jquery.js"></script>
+        <script src="index.js"></script>
+        <script src="../../../paydiv.io/static/jzed.js"></script>
+        <script src="../../../paydiv.io/static/js/videojs/video.js"></script>
+        <link rel="stylesheet" href="../../../paydiv.io/static/js/videojs/video-js.css">
+        <script src="../../../paydiv.io/static/api/v1/paydiv.js"></script>
+        <script src="javascripts/app.js"></script>
+        <script src="javascripts/littools.js"></script>
+        <script type="text/javascript">
+        
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-24168052-1']);
+        _gaq.push(['_trackPageview']);
+        
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+        
+        </script>
+
+
+        <script src="javascripts/littools.js"></script>
+
+        </body>
+
+<!-- Mirrored from learnpythonthehardway.org/book/appendix-a-cli/ex13.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 03 Sep 2014 17:52:55 GMT -->
+</html>
+

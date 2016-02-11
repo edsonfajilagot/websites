@@ -1,0 +1,62 @@
+<html>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch04s02.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:22 GMT -->
+<head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>4.2. Formatting strings</title><meta name="generator" content="DocBook XSL Stylesheets V1.50.0"><meta name="keywords" content="python, biology, bioinformatics, programming, computational biology"><link rel="home" href="index-2.html" title="Introduction to Programming using Python"><link rel="up" href="ch04.html" title="Chapter 4. Communication with outside"><link rel="previous" href="ch04.html" title="Chapter 4. Communication with outside"><link rel="next" href="ch04s03.html" title="4.3. Input"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">4.2. Formatting strings</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch04.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><th width="60%" align="center">Chapter 4. Communication with outside</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch04s03.html"><img src="images/next.png" alt="Next"></a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="d0e1136"></a>4.2. Formatting strings</h2></div></div><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/important.png"></td><th align="left">Important</th></tr><tr><td colspan="2" align="left" valign="top"><p>
+	All data printed on the screen have to be character
+	data. But  values can have different
+	types. Therefore they have to be transformed into strings
+	beforehand. This transformation is handled by
+	the <tt>print</tt> statement.
+      </p></td></tr></table></div><p>
+      It is possible to control this transformation when a specific
+      format is needed. In the examples above, the float value of the
+      gc calculation is written with lots of digits following the
+      dot which are not very significant. The next example shows a
+      more reasonable output:
+    </p><pre class="programlisting">
+&gt;&gt;&gt; print "%.3f" % gc
+0.432
+&gt;&gt;&gt; print "%3.1f %%" % (gc*100)
+43.2 %
+&gt;&gt;&gt; print "the gc percentage of dna: %10s... is: %4.1f %%." % (dna, gc*100)
+the gc percentage of dna: ATGCAGTGCA... is: 43.2 %
+    </pre><p>
+      <a href="ch04s02.html#fig_string_format" title="Figure 4.1. Interpretation of formatting templates">Figure 4.1</a> shows how to interpret the
+      example above. The <tt>%</tt> (modulo) operator can
+      be used to format strings. It is preceded by the  formatting
+      template and followed by a comma separated list of values
+      enclosed in parentheses. These values replace the formatting
+      place holders in the template string. A place holder starts with a
+      % followed by some modifiers and a character indicating the type
+      of the value. There has to be the same number of values and
+      place holders.
+
+    </p><div class="figure"><a name="fig_string_format"></a><p class="title"><b>Figure 4.1. Interpretation of formatting templates</b></p><div class="mediaobject"><img src="images/string_format_2.png"></div></div><p>
+    .
+    </p><p>
+      <a href="ch04s02.html#tab_formatstring" title="Table 4.1. String formatting: Conversion characters">Table 4.1</a>
+      provides the characters that you can use in the formatting template
+      and <a href="ch04s02.html#tab_modulstring" title="Table 4.2. String formatting: Modifiers">Table 4.2</a> gives the
+      modifiers of the formatting character.
+    </p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0"><tr><td rowspan="2" align="center" valign="top" width="25"><img src="images/important.png"></td><th align="left">Important</th></tr><tr><td colspan="2" align="left" valign="top"><p>
+	Remember that the type of a formatting result is a string and
+	no more the type of the input value.
+      </p><pre class="programlisting">
+&gt;&gt;&gt; "%.1f" % (gc*100) 
+'43.2'
+&gt;&gt;&gt; res = "%.1f" % (gc*100)
+&gt;&gt;&gt; at = 100 - res
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in ?
+TypeError: unsupported operand type(s) for -: 'int' and 'str'
+&gt;&gt;&gt; res
+'43.2'
+&gt;&gt;&gt;
+</pre></td></tr></table></div><div class="table"><a name="tab_formatstring"></a><p class="title"><b>Table 4.1. String formatting: Conversion characters</b></p><table summary="String formatting: Conversion characters" border="1"><colgroup><col width="25%"><col width="25%"><col width="25%"><col width="25%"></colgroup><thead><tr><th align="left">Formatting character</th><th align="left">Output</th><th align="left">Example</th><th align="left">Result</th></tr></thead><tbody><tr><td align="left"><tt>d,i</tt></td><td align="left">decimal or long integer</td><td align="left"><tt>"%d" % 10</tt></td><td align="left">'10'</td></tr><tr><td align="left"><tt>o,x</tt></td><td align="left">octal/hexadecimal integer</td><td align="left"><tt>"%o" %
+		10</tt></td><td align="left">'12'</td></tr><tr><td align="left"><tt>f,e,E</tt></td><td align="left">normal, 'E' notation of floating point numbers</td><td align="left"><tt>"%e" % 10.0</tt></td><td align="left">'1.000000e+01'</td></tr><tr><td align="left"><tt>s</tt></td><td align="left">strings or any object that has a
+		<tt>str()</tt> method</td><td align="left"><tt> "%s" % [1, 2, 3]</tt></td><td align="left">'[1, 2, 3]'</td></tr><tr><td align="left"><tt>r</tt></td><td align="left">string, use the <tt>repr()</tt> function of
+		the object</td><td align="left"><tt> "%r" % [1, 2, 3]</tt></td><td align="left">'[1, 2, 3]'</td></tr><tr><td align="left"><tt>%</tt></td><td align="left">literal %</td><td class="auto-generated">&nbsp;</td><td class="auto-generated">&nbsp;</td></tr></tbody></table></div><div class="table"><a name="tab_modulstring"></a><p class="title"><b>Table 4.2. String formatting: Modifiers</b></p><table summary="String formatting: Modifiers" border="1"><colgroup><col width="25%"><col width="25%"><col width="25%"><col width="25%"></colgroup><thead><tr><th align="left">Modifier</th><th align="left">Action</th><th align="left">Example</th><th align="left">Result</th></tr></thead><tbody><tr><td align="left">name in parentheses</td><td align="left">selects the key name in a mapping object</td><td align="left"><tt>"%(num)d %(str)s" % { 'num':1,
+		'str':'dna'}</tt></td><td align="left">'1 dna'</td></tr><tr><td align="left"><tt>-,+</tt></td><td align="left">left, right alignment</td><td align="left"><tt>"%-10s" % "dna"</tt></td><td align="left">'dna_______'</td></tr><tr><td align="left"><tt>0</tt></td><td align="left">zero filled string</td><td align="left"><tt>"%04i" % 10</tt></td><td align="left">'0010'</td></tr><tr><td align="left">number</td><td align="left">minimum field width</td><td align="left"><tt>"%10s" % "dna"</tt></td><td align="left">'_______dna'</td></tr><tr><td align="left"><tt>. number</tt></td><td align="left">precision</td><td align="left"><tt>"%4.2f" % 10.1</tt></td><td align="left">'10.10'</td></tr></tbody></table></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch04.html"><img src="images/prev.png" alt="Prev"></a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch04.html"><img src="images/up.png" alt="Up"></a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch04s03.html"><img src="images/next.png" alt="Next"></a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 4. Communication with outside&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index-2.html"><img src="images/home.png" alt="Home"></a></td><td width="40%" align="right" valign="top">&nbsp;4.3. Input</td></tr></table></div></body>
+<!-- Mirrored from www.pasteur.fr/formation/infobio/python/ch04s02.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Sep 2014 13:38:22 GMT -->
+</html>

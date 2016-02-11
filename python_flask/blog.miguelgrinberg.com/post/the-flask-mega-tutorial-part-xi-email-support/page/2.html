@@ -1,0 +1,1222 @@
+﻿<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xi-email-support/page/2 by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 05:48:00 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    
+    <title>
+    
+        The Flask Mega-Tutorial, Part XI: Email Support - miguelgrinberg.com
+    
+</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="description" content="miguelgrinberg.com">
+	<meta name="copyright" content="Copyright (c) 2012-2015 Miguel Grinberg">
+	<meta name="author" content="Miguel Grinberg">
+    
+    <meta name="keywords" content="python, programming, flask, web, tutorial, email">
+    
+
+    
+    <!-- Bootstrap -->
+    <link href="../../../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../../../static/prettify.css" type="text/css" rel="stylesheet" />
+    <link href="../../../static/colorbox/colorbox.css" rel="stylesheet" type="text/css" />
+    <link href="../../../static/style.css" rel="stylesheet" type="text/css" />
+
+    <link rel="shortcut icon" href="../../../static/favicon.ico">
+	<link rel="alternate" type="application/rss+xml" href="../../../feed" title="miguelgrinberg.com RSS feed">
+
+  </head>
+  <body>
+    
+    <!-- facebook sdk -->
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "../../../../connect.facebook.net/en_US/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    <!-- google plus sdk -->
+    <script type="text/javascript" src="../../../../apis.google.com/js/plusone.js"></script>
+    <!-- twitter sdk -->
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="../../../../platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <!-- linkedin sdk -->
+    <script src="../../../../platform.linkedin.com/in.js" type="text/javascript"></script>
+
+    
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://blog.miguelgrinberg.com/index">miguelgrinberg.com</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="http://blog.miguelgrinberg.com/index">Home</a></li>
+                        <li><a href="../../about-me.html">About Me</a></li>
+                        <li><a href="../../about-this-blog.html">About This Blog</a></li>
+                        
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <p class="navbar-text" style="margin-top: 10px; margin-bottom: 0px;">
+                                <a type="application/rss+xml" href="../../../feed"><img src="../../../static/rss.png" alt="RSS Feed" title="RSS Feed" /></a>
+                                <a href="https://www.facebook.com/miguelgrinbergblog"><img src="../../../static/facebook.png" alt="Facebook" title="Facebook" /></a>
+                                <a href="https://plus.google.com/u/0/117786742456929977820"><img src="../../../static/googleplus.png" alt="Google+" title="Google+" /></a>
+                                <a href="http://www.linkedin.com/in/miguelgrinberg"><img src="../../../static/linkedin.png" alt="LinkedIn" title="LinkedIn" /></a>
+                                <a href="http://github.com/miguelgrinberg"><img src="../../../static/github.png" alt="GitHub" title="GitHub" /></a>
+                                <a href="https://twitter.com/#!/miguelgrinberg"><img src="../../../static/twitter.png" alt="Twitter" title="Twitter" /></a>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </nav>
+
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-push-9 sidebar-bg">
+                <div id="sidebar">
+                    
+
+                    
+                    <h1>Flask Web Development</h1>
+                    <p>If you want to learn modern web development techniques with Python and Flask, you may find my O'Reilly book useful:</p>
+                    <p><center><a href="http://bit.ly/flaskbook"><img style="border: 1px solid black;" src="../../../static/flask-book-cover-tiny.png"></a></center></p>
+                    <p>Visit <a href="http://flaskbook.com/">http://flaskbook.com</a> for information about this and other Flask training products I have created!</p>
+                    
+
+                    <h1>About Miguel</h1>
+                    <img style="float: right; margin: 0px 8px 8px 0px; padding: 4px; border: 1px solid #ccc;" src="../../../static/miguel.jpg" />
+                    <p>Welcome to my blog!</p>
+                    <p>I'm a software engineer, photographer and filmmaker in Portland, Oregon, USA.</p>
+                    <p>You can also find me on <a href="https://www.facebook.com/miguelgrinbergblog">Facebook</a>, <a href="https://plus.google.com/u/0/117786742456929977820">Google+</a>, <a href="http://www.linkedin.com/in/miguelgrinberg">LinkedIn</a>, <a href="https://github.com/miguelgrinberg">Github</a> and <a href="https://twitter.com/#!/miguelgrinberg">Twitter</a>.</p>
+                    <p>Thank you for visiting!</p>
+
+                    
+
+                    
+                    <h1>Categories</h1>
+<ul>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Arduino/feed">
+			<img src="../../../static/rss-small.png" title="Arduino RSS Feed" label="Arduino RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Arduino">Arduino</a></span> (7)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Authentication/feed">
+			<img src="../../../static/rss-small.png" title="Authentication RSS Feed" label="Authentication RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Authentication">Authentication</a></span> (4)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Blog/feed">
+			<img src="../../../static/rss-small.png" title="Blog RSS Feed" label="Blog RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Blog">Blog</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/C++/feed">
+			<img src="../../../static/rss-small.png" title="C++ RSS Feed" label="C++ RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/C++">C++</a></span> (5)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Cloud/feed">
+			<img src="../../../static/rss-small.png" title="Cloud RSS Feed" label="Cloud RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Cloud">Cloud</a></span> (2)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Filmmaking/feed">
+			<img src="../../../static/rss-small.png" title="Filmmaking RSS Feed" label="Filmmaking RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Filmmaking">Filmmaking</a></span> (6)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Flask/feed">
+			<img src="../../../static/rss-small.png" title="Flask RSS Feed" label="Flask RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Flask">Flask</a></span> (39)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Games/feed">
+			<img src="../../../static/rss-small.png" title="Games RSS Feed" label="Games RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Games">Games</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Gear/feed">
+			<img src="../../../static/rss-small.png" title="Gear RSS Feed" label="Gear RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Gear">Gear</a></span> (6)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/HTML5/feed">
+			<img src="../../../static/rss-small.png" title="HTML5 RSS Feed" label="HTML5 RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/HTML5">HTML5</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Heroku/feed">
+			<img src="../../../static/rss-small.png" title="Heroku RSS Feed" label="Heroku RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Heroku">Heroku</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Javascript/feed">
+			<img src="../../../static/rss-small.png" title="Javascript RSS Feed" label="Javascript RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Javascript">Javascript</a></span> (3)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Movie Reviews/feed">
+			<img src="../../../static/rss-small.png" title="Movie Reviews RSS Feed" label="Movie Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Movie Reviews">Movie Reviews</a></span> (5)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Netflix/feed">
+			<img src="../../../static/rss-small.png" title="Netflix RSS Feed" label="Netflix RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Netflix">Netflix</a></span> (5)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Node.js/feed">
+			<img src="../../../static/rss-small.png" title="Node.js RSS Feed" label="Node.js RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="../../../category/Node.html">Node.js</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/OpenStack/feed">
+			<img src="../../../static/rss-small.png" title="OpenStack RSS Feed" label="OpenStack RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/OpenStack">OpenStack</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Personal/feed">
+			<img src="../../../static/rss-small.png" title="Personal RSS Feed" label="Personal RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Personal">Personal</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Photography/feed">
+			<img src="../../../static/rss-small.png" title="Photography RSS Feed" label="Photography RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Photography">Photography</a></span> (6)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Product Reviews/feed">
+			<img src="../../../static/rss-small.png" title="Product Reviews RSS Feed" label="Product Reviews RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Product Reviews">Product Reviews</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Programming/feed">
+			<img src="../../../static/rss-small.png" title="Programming RSS Feed" label="Programming RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Programming">Programming</a></span> (47)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Project Management/feed">
+			<img src="../../../static/rss-small.png" title="Project Management RSS Feed" label="Project Management RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Project Management">Project Management</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Python/feed">
+			<img src="../../../static/rss-small.png" title="Python RSS Feed" label="Python RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Python">Python</a></span> (43)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/REST/feed">
+			<img src="../../../static/rss-small.png" title="REST RSS Feed" label="REST RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/REST">REST</a></span> (5)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Rackspace/feed">
+			<img src="../../../static/rss-small.png" title="Rackspace RSS Feed" label="Rackspace RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Rackspace">Rackspace</a></span> (1)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Raspberry Pi/feed">
+			<img src="../../../static/rss-small.png" title="Raspberry Pi RSS Feed" label="Raspberry Pi RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Raspberry Pi">Raspberry Pi</a></span> (6)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/RhinoSteady/feed">
+			<img src="../../../static/rss-small.png" title="RhinoSteady RSS Feed" label="RhinoSteady RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/RhinoSteady">RhinoSteady</a></span> (6)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Robotics/feed">
+			<img src="../../../static/rss-small.png" title="Robotics RSS Feed" label="Robotics RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Robotics">Robotics</a></span> (6)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Video/feed">
+			<img src="../../../static/rss-small.png" title="Video RSS Feed" label="Video RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Video">Video</a></span> (4)
+	</li>
+
+	<li>
+		<a href="http://blog.miguelgrinberg.com/category/Windows/feed">
+			<img src="../../../static/rss-small.png" title="Windows RSS Feed" label="Windows RSS Feed" />
+		</a>
+		<span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Windows">Windows</a></span> (1)
+	</li>
+
+</ul>
+                    
+                </div>
+            </div>
+            <div class="col-md-8 col-md-pull-4">
+                <div id="main">
+                    
+                    
+                    
+                    
+                    
+
+<div class="post">
+
+<p class="date"><span class="flask-moment" data-timestamp="2012-12-12T07:54:49Z" data-format="format('LL')" data-refresh="0">2012-12-12T07:54:49Z</span></p>
+<h1 class="post-title"><a href="../../the-flask-mega-tutorial-part-xi-email-support.html">The Flask Mega-Tutorial, Part XI: Email Support</a></h1>
+<div class="posted">Posted by <span class="label label-danger"><a href="http://blog.miguelgrinberg.com/author/Miguel Grinberg">Miguel Grinberg</a></span> under <span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Programming">Programming</a></span>, <span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Python">Python</a></span>, <span class="label label-primary"><a href="http://blog.miguelgrinberg.com/category/Flask">Flask</a></span>. </div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xi-email-support" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xi-email-support" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="../../the-flask-mega-tutorial-part-xi-email-support.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xi-email-support" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+<div class="post_body"><p>This is the eleventh article in the series in which I document my experience writing web applications in <a href="http://python.org/">Python</a> using the <a href="http://flask.pocoo.org/">Flask</a> microframework.</p>
+<p>The goal of the tutorial series is to develop a decently featured microblogging application that demonstrating total lack of originality I have decided to call <code>microblog</code>.</p>
+<p><strong>NOTE</strong>: This article was revised in September 2014 to be in sync with current versions of Python and Flask.</p>
+<p>Here is an index of all the articles in the series that have been published to date:</p>
+<ul>
+<li><a href="../../the-flask-mega-tutorial-part-i-hello-world.html">Part I: Hello, World!</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-ii-templates.html">Part II: Templates</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-iii-web-forms.html">Part III: Web Forms</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-iv-database.html">Part IV: Database</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-v-user-logins.html">Part V: User Logins</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-vi-profile-page-and-avatars.html">Part VI: Profile Page And Avatars</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-vii-unit-testing.html">Part VII: Unit Testing</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-viii-followers-contacts-and-friends.html">Part VIII: Followers, Contacts And Friends</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-ix-pagination.html">Part IX: Pagination</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-x-full-text-search.html">Part X: Full Text Search</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xi-email-support.html">Part XI: Email Support</a> (this article)</li>
+<li><a href="../../the-flask-mega-tutorial-part-xii-facelift.html">Part XII: Facelift</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xiii-dates-and-times.html">Part XIII: Dates and Times</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xiv-i18n-and-l10n.html">Part XIV: I18n and L10n</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xv-ajax.html">Part XV: Ajax</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xvi-debugging-testing-and-profiling.html">Part XVI: Debugging, Testing and Profiling</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xvii-deployment-on-linux-even-on-the-raspberry-pi.html">Part XVII: Deployment on Linux (even on the Raspberry Pi!)</a></li>
+<li><a href="../../the-flask-mega-tutorial-part-xviii-deployment-on-the-heroku-cloud.html">Part XVIII: Deployment on the Heroku Cloud</a></li>
+</ul>
+<h2>Recap</h2>
+<p>In the most recent installments of this tutorial we've been looking at improvements that mostly had to do with our database.</p>
+<p>Today we are letting our database rest for a bit, and instead we'll look at another important function that most web applications  have: the ability to send emails to its users.</p>
+<p>In our little <code>microblog</code> application we are going to implement one email related function, we will send an email to a user each time he/she gets a new follower. There are several more ways in which email support can be useful, so we'll make sure we design a generic framework for sending emails that can be reused.</p>
+<h2>Configuration</h2>
+<p>Luckily for us, Flask already has an extension that handles email called Flask-Mail, and while it will not take us 100% of the way, it gets us pretty close.</p>
+<p>Back when we looked at <a href="../../the-flask-mega-tutorial-part-vii-unit-testing.html">unit testing</a>, we added configuration for Flask to send us an email should an error occur in the production version of our application. That same information is used for sending application related emails.</p>
+<p>Just as a reminder, what we need is two pieces of information:</p>
+<ul>
+<li>the email server that will be used to send the emails, along with any required authentication</li>
+<li>the email address(es) of the admins</li>
+</ul>
+<p>This is what we did in the previous article (file <code>config.py</code>):</p>
+<pre><code># email server
+MAIL_SERVER = 'your.mailserver.com'
+MAIL_PORT = 25
+MAIL_USERNAME = None
+MAIL_PASSWORD = None
+
+# administrator list
+ADMINS = ['you@example.com']
+</code></pre>
+<p>It goes without saying that you have enter the details of an actual email server and administrator above before the application can actually send emails. We are not going to enhance the server setup to allow those that require an encrypted communication through TLS or SSL. For example, if you want the application to send emails via your gmail account you would enter the following:</p>
+<pre><code># email server
+MAIL_SERVER = 'smtp.googlemail.com'
+MAIL_PORT = 465
+MAIL_USE_TLS = False
+MAIL_USE_SSL = True
+MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
+MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
+
+# administrator list
+ADMINS = ['your-gmail-username@gmail.com']
+</code></pre>
+<p>Note that the username and password are read from environment variables. You will need to set <code>MAIL_USERNAME</code> and <code>MAIL_PASSWORD</code> to your Gmail login credentials. Putting sensitive information in environment variables is safer than writing down the information on a source file.</p>
+<p>We also need to initialize a <code>Mail</code> object, as this will be the object that will connect to the SMTP server and send the emails for us (file <code>app/__init__.py</code>):</p>
+<pre><code>from flask.ext.mail import Mail
+mail = Mail(app)
+</code></pre>
+<h2>Let's send an email!</h2>
+<p>To learn how Flask-Mail works we'll just send an email from the command line. So let's fire up Python from our virtual environment and run the following:</p>
+<pre><code>&gt;&gt;&gt; from flask.ext.mail import Message
+&gt;&gt;&gt; from app import app, mail
+&gt;&gt;&gt; from config import ADMINS
+&gt;&gt;&gt; msg = Message('test subject', sender=ADMINS[0], recipients=ADMINS)
+&gt;&gt;&gt; msg.body = 'text body'
+&gt;&gt;&gt; msg.html = '&lt;b&gt;HTML&lt;/b&gt; body'
+&gt;&gt;&gt; with app.app_context():
+...     mail.send(msg)
+....
+</code></pre>
+<p>The snippet of code above will send an email to the list of admins that are configured in <code>config.py</code>. The sender will be the first admin in the list. The email will have text and HTML versions, so depending on how your email client is setup you may see one or the other. Note that we needed to create an <code>app_context</code> to send the email. Recent releases of Flask-Mail require this. An application context is created automatically when a request is handled by Flask. Since we are not inside a request we have to create the context by hand just so that Flask-Mail can do its job.</p>
+<p>Pretty, neat. Now it's time to integrate this code into our application!</p>
+<h2>A simple email framework</h2>
+<p>We will now write a helper function that sends an email. This is just a generic version of the above test. We'll put this function in a new source file that will be dedicated to our email support functions (file <code>app/emails.py</code>):</p>
+<pre><code>from flask.ext.mail import Message
+from app import mail
+
+def send_email(subject, sender, recipients, text_body, html_body):
+    msg = Message(subject, sender=sender, recipients=recipients)
+    msg.body = text_body
+    msg.html = html_body
+    mail.send(msg)
+</code></pre>
+<p>Note that Flask-Mail support goes beyond what we are using. Bcc lists and attachments are available, for example, but we won't use them in this application.</p>
+<h2>Follower notifications</h2>
+<p>Now that we have the basic framework to send an email in place, we can write the function that sends out the follower notification (file <code>app/emails.py</code>):</p>
+<pre><code>from flask import render_template
+from config import ADMINS
+
+def follower_notification(followed, follower):
+    send_email("[microblog] %s is now following you!" % follower.nickname,
+               ADMINS[0],
+               [followed.email],
+               render_template("follower_email.txt", 
+                               user=followed, follower=follower),
+               render_template("follower_email.html", 
+                               user=followed, follower=follower))
+</code></pre>
+<p>Do you find any surprises in here? Our old friend the <code>render_template</code> function is making an appearance. If you recall, we used this function to render all the HTML templates from our views. Like the HTML from our views, the bodies of email messages are an ideal candidate for using templates. As much as possible we want to keep logic separate from presentation, so emails will also go into the <code>templates</code> folder along with our views.</p>
+<p>So we now need to write the templates for the text and HTML versions of our follower notification email.  Here is the text version (file <code>app/templates/follower_email.txt</code>):</p>
+<pre><code>Dear {{ user.nickname }},
+
+{{ follower.nickname }} is now a follower. Click on the following link to visit {{ follower.nickname }}'s profile page:
+
+{{ url_for('user', nickname=follower.nickname, _external=True) }}
+
+Regards,
+
+The microblog admin
+</code></pre>
+<p>For the HTML version we can do a little bit better and even show the follower's avatar and profile information (file <code>app/templates/follower_email.html</code>):</p>
+<pre><code>&lt;p&gt;Dear {{ user.nickname }},&lt;/p&gt;
+&lt;p&gt;&lt;a href="{{ url_for('user', nickname=follower.nickname, _external=True) }}"&gt;{{ follower.nickname }}&lt;/a&gt; is now a follower.&lt;/p&gt;
+&lt;table&gt;
+    &lt;tr valign="top"&gt;
+        &lt;td&gt;&lt;img src="{{ follower.avatar(50) }}"&gt;&lt;/td&gt;
+        &lt;td&gt;
+            &lt;a href="{{ url_for('user', nickname=follower.nickname, _external=True) }}"&gt;{{ follower.nickname }}&lt;/a&gt;&lt;br /&gt;
+            {{ follower.about_me }}
+        &lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;
+&lt;p&gt;Regards,&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;microblog&lt;/code&gt; admin&lt;/p&gt;
+</code></pre>
+<p>Note the <code>_external=True</code> argument to <code>url_for</code> in the above templates. By default, the <code>url_for</code> function generates URLs that are relative to the domain from which the current page comes from. For example, the return value from <code>url_for("index")</code> will be <code>/index</code>, while in this case we want <code>http://localhost:5000/index</code>. In an email there is no domain context, so we have to force fully qualified URLs that include the domain, and the <code>_external</code> argument is just for that. </p>
+<p>The final step is to hook up the sending of the email with the actual view function that processes the "follow" (file <code>app/views.py</code>):</p>
+<pre><code>from .emails import follower_notification
+
+@app.route('/follow/&lt;nickname&gt;')
+@login_required
+def follow(nickname):
+    user = User.query.filter_by(nickname=nickname).first()
+    # ...
+    follower_notification(user, g.user)
+    return redirect(url_for('user', nickname=nickname))
+</code></pre>
+<p>Now you can create two users (if you haven't yet) and make one follow the other to see how the email notification works.</p>
+<h2>So that's it? Are we done?</h2>
+<p>We could now pat ourselves in the back for a job well done and take email notifications out of our list of features yet to implement. </p>
+<p>But if you played with the application for some time and paid attention you may have noticed that now that we have email notifications when you click the <code>follow</code> link it takes 2 to 3 seconds for the browser to refresh the page, whereas before it was  almost instantaneous.</p>
+<p>So what happened? </p>
+<p>The problem is that Flask-Mail sends emails synchronously. The web server blocks while the email is being sent and only returns its response back to the browser once the email has been delivered. Can you imagine what would happen if we try to send an email to a server that is slow, or even worse, temporarily offline? Not good.</p>
+<p>This is a terrible limitation, sending an email should be a background task that does not interfere with the web server, so let's see how we can fix this.</p>
+<h2>Asynchronous calls in Python</h2>
+<p>What we really want is for the <code>send_email</code> function to return immediately, while the work of sending the email is moved to a background process.</p>
+<p>Turns out Python already has support for running asynchronous tasks, actually in more than one way. The <code>threading</code> and <code>multiprocessing</code> modules can both do this.</p>
+<p>Starting a thread each time we need to send an email is much less resource intensive than starting a brand new process, so let's move the <code>mail.send(msg)</code> call into thread (file <code>app/emails.py</code>):</p>
+<pre><code>from threading import Thread
+from app import app
+
+def send_async_email(app, msg):
+    with app.app_context():
+        mail.send(msg)
+
+def send_email(subject, sender, recipients, text_body, html_body):
+    msg = Message(subject, sender=sender, recipients=recipients)
+    msg.body = text_body
+    msg.html = html_body
+    thr = Thread(target=send_async_email, args=[app, msg])
+    thr.start()
+</code></pre>
+<p>The <code>send_async_email</code> function now runs in a background thread. Because it is a separate thread, the application context required by Flask-Mail will not be automatically set for us, so the <code>app</code> instance is passed to the thread, and the application context is set up manually, like we did above when we sent an email from the Python console.</p>
+<p>If you test the 'follow' function of our application now you will notice that the web browser shows the refreshed page before the email is actually sent.</p>
+<p>So now we have asynchronous emails implemented, but what if in the future we need to implement other asynchronous functions? The procedure would be identical, but we would need to duplicate the threading code for each particular case, which is not good.</p>
+<p>We can improve our solution by implementing a <a href="http://www.python.org/dev/peps/pep-0318/">decorator</a>. With a decorator the above code would change to this:</p>
+<pre><code>from .decorators import async
+
+@async
+def send_async_email(app, msg):
+    with app.app_context():
+        mail.send(msg)
+
+def send_email(subject, sender, recipients, text_body, html_body):
+    msg = Message(subject, sender=sender, recipients=recipients)
+    msg.body = text_body
+    msg.html = html_body
+    send_async_email(app, msg)
+</code></pre>
+<p>Much nicer, right?</p>
+<p>The code that allows this magic is actually pretty simple. We will put it in a new source file (file <code>app/decorators.py</code>):</p>
+<pre><code>from threading import Thread
+
+def async(f):
+    def wrapper(*args, **kwargs):
+        thr = Thread(target=f, args=args, kwargs=kwargs)
+        thr.start()
+    return wrapper
+</code></pre>
+<p>And now that we indirectly have created a useful framework for asynchronous tasks we can say we are done!</p>
+<p>Just as an exercise, let's consider how this solution would look using processes instead of threads. We do not want a new process started for each email that we need to send, so instead we could use the <code>Pool</code> class from the <code>multiprocessing</code> module. This class creates a specified number of processes (which are forks of the main process) and all those processes wait to receive jobs to run, given to the pool via the <code>apply_async</code> method. This could be an interesting approach for a busy site, but we will stay with the threads for now.</p>
+<h2>Final words</h2>
+<p>The source code for the updated <code>microblog</code> application is available below:</p>
+<p>Download <a href="https://codeload.github.com/miguelgrinberg/microblog/zip/version-0.11">microblog-0.11.zip</a>.</p>
+<p>I've got a few requests for putting this application up on github or similar, which I think is a pretty good idea. I will be working on that in the near future. Stay tuned.</p>
+<p>Thank you again for following me on this tutorial series. I look forward to see you on the next chapter.</p>
+<p>Miguel</p></div>
+<div class="social-bar">
+    <table>
+        <tr>
+            <td><div class="social-box" style="padding-top: 8px;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xi-email-support" data-via="miguelgrinberg" data-count="vertical">Tweet</a></div></td>
+            <td><div class="social-box" style="padding-left: 6px;"><div class="fb-like" data-href="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xi-email-support" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="verdana"></div></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><g:plusone href="../../the-flask-mega-tutorial-part-xi-email-support.html" size="tall"></g:plusone></div></td>
+            <td><div class="social-box" style="padding-top: 8px;"><script type="IN/Share" data-url="http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xi-email-support" data-counter="top"></script></div></td>
+        </tr>
+    </table>
+</div>
+
+
+<h4 style="text-align: right"><a name="comments"></a>69 comments</h4>
+
+
+<div class="comment">
+    <ul>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#26</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-10-30T04:35:15Z" data-format="fromNow(0)" data-refresh="0">2013-10-30T04:35:15Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Jordan: There are plenty of tasks in software development that are unpleasant. I agree with Jeff that email is one of them. If you can afford to pay someone else to do it for you then great, but in my opinion setting up a server to send emails is several orders of magnitude simpler than developing code, so we are all well capable of doing it, and doing it well.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/84698c6a92571c8f9eed72e0446ed634ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#27</span> <span class="label label-primary">Gigi</span> said
+                    <span class="flask-moment" data-timestamp="2013-11-24T22:26:27Z" data-format="fromNow(0)" data-refresh="0">2013-11-24T22:26:27Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Best tutorial ever! I noticed a little typo: &#34;payed attention&#34; should be &#34;paid attention&#34;.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/0423c81bb0879e8b8f830a0aee69b079ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#28</span> <span class="label label-primary">Marcus Darden</span> said
+                    <span class="flask-moment" data-timestamp="2013-12-15T18:13:01Z" data-format="fromNow(0)" data-refresh="0">2013-12-15T18:13:01Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Great work!
+
+In the third code block of &#34;Follower Notifcations&#34;, the url_for should use single quotes around the endpoint function.
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#29</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-12-15T18:58:57Z" data-format="fromNow(0)" data-refresh="0">2013-12-15T18:58:57Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Marcus: good catch. No matter how careful I try to be there&#39;s always little things that slip. Thanks!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/96748be40ee52e8d4255ae9337849ffcce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#30</span> <span class="label label-primary">Ale Borba</span> said
+                    <span class="flask-moment" data-timestamp="2013-12-31T01:11:38Z" data-format="fromNow(0)" data-refresh="0">2013-12-31T01:11:38Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel, 
+
+The RuntimeError is not happening on the command line, but in the Thread function send_async_email():
+
+Take a look:
+
+Exception in thread Thread-1:
+Traceback (most recent call last):
+  File &#34;/usr/lib/python2.7/threading.py&#34;, line 808, in __bootstrap_inner
+    self.run()
+  File &#34;/usr/lib/python2.7/threading.py&#34;, line 761, in run
+    self.__target(*self.__args, **self.__kwargs)
+  File &#34;/home/alexandre/Projetos/microblog/app/emails.py&#34;, line 11, in send_async_email
+    mail.send(msg)
+  File &#34;/home/alexandre/Projetos/microblog/flask/local/lib/python2.7/site-packages/flask_mail.py&#34;, line 416, in send
+    message.send(connection)
+  File &#34;/home/alexandre/Projetos/microblog/flask/local/lib/python2.7/site-packages/flask_mail.py&#34;, line 351, in send
+    connection.send(self)
+  File &#34;/home/alexandre/Projetos/microblog/flask/local/lib/python2.7/site-packages/flask_mail.py&#34;, line 170, in send
+    email_dispatched.send(message, app=current_app._get_current_object())
+  File &#34;/home/alexandre/Projetos/microblog/flask/local/lib/python2.7/site-packages/werkzeug/local.py&#34;, line 297, in _get_current_object
+    return self.__local()
+  File &#34;/home/alexandre/Projetos/microblog/flask/local/lib/python2.7/site-packages/flask/globals.py&#34;, line 34, in _find_app
+    raise RuntimeError(&#39;working outside of application context&#39;)
+RuntimeError: working outside of application context
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#31</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2013-12-31T02:19:50Z" data-format="fromNow(0)" data-refresh="0">2013-12-31T02:19:50Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Ale: what version of Flask-Mail are you using? I believe if you use 0.7.6, which is the version that I recommended in Part I of this tutorial, you should be fine. Later versions of Flask-Mail require the application context to be active when calling the send() function, so to make it work you will need to do something like this instead:
+
+@async
+def send_async_email(app, msg):
+    with app.app_context():
+        mail.send(msg)
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/4f921cba2f84f388a1b6a94078827df2ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#32</span> <span class="label label-primary"><a href="snapfiber.html">Alex</a></span> said
+                    <span class="flask-moment" data-timestamp="2013-12-31T21:07:04Z" data-format="fromNow(0)" data-refresh="0">2013-12-31T21:07:04Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Miguel
+
+I also received the runtime error that Olga and Zach described.  The trivial fix is to wrap mail.send(msg) in send_async_email in the app context:
+
+def send_async_email(msg):
+    with app.app_context():
+        mail.send(msg)</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/9420223f607cc486adfc975a9ea5e0d4ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#33</span> <span class="label label-primary">Dan</span> said
+                    <span class="flask-moment" data-timestamp="2014-01-01T22:15:58Z" data-format="fromNow(0)" data-refresh="0">2014-01-01T22:15:58Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">What did you change to fix the flask-mail error ? Thanks!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/9420223f607cc486adfc975a9ea5e0d4ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#34</span> <span class="label label-primary">Daniel</span> said
+                    <span class="flask-moment" data-timestamp="2014-01-01T22:20:37Z" data-format="fromNow(0)" data-refresh="0">2014-01-01T22:20:37Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">ah now I see -- &#39;with app.app_context: mail.send(...)&#39; -- Thanks!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/82bf5dea1b7292d7d5f5f12316c96bcfce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#35</span> <span class="label label-primary">Bogdan</span> said
+                    <span class="flask-moment" data-timestamp="2014-02-25T17:19:15Z" data-format="fromNow(0)" data-refresh="0">2014-02-25T17:19:15Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel, 
+This tutorial is really amazing. It&#39;s the best out there!
+I am really interested in the multiprocessing variant where you spawn some processes and then keep them alive so they can be &#34;fed&#34; by throwing tasks in the pool from time to time. Can you provide an example or point me to a resource as good as the one you have here where I could learn how to do it?
+
+Thanks a lot again!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#36</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-02-25T17:22:08Z" data-format="fromNow(0)" data-refresh="0">2014-02-25T17:22:08Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Bogdan: one way is to use the Pool from the multiprocessing package to start a few worker processes. Another very good option (and easier to implement) is to use Celery, which is a package specifically designed for this task.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/f74a01a3409b3e82f005df6e133e7596ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#37</span> <span class="label label-primary">newhouse</span> said
+                    <span class="flask-moment" data-timestamp="2014-03-07T12:54:51Z" data-format="fromNow(0)" data-refresh="0">2014-03-07T12:54:51Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel,
+
+First off, I am very, very, very grateful for the time you&#39;ve put into this (and your other) tutorials.  Very helpful and much appreciated.
+
+For my recent attempt at following the tutorial, I&#39;ve gone ahead and used the latest versions of just about everything except for SQLAlchemy.  So, Flask-Mail is version 0.9.0.
+
+When running my async send_async_email thread I also got the &#34;working outside of application context&#34; error/warning.  I dug around and it seems like you have to import app and use a &#34;with app.app_context():&#34; clause around the &#34;mail.send(msg)&#34;.  Here&#39;s the relevant code in emails.py:
+
+from app import app, mail
+
+@async
+def send_async_email(msg):
+    with app.app_context():
+        mail.send(msg)
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#38</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-03-07T15:15:14Z" data-format="fromNow(0)" data-refresh="0">2014-03-07T15:15:14Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@newhouse: Yes, in fact I have implemented an almost identical solution in my book:
+
+def send_async_email(app, msg):
+    with app.app_context():
+        mail.send(msg)
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/90c41c08e0cbd07e56b1846513af475cce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#39</span> <span class="label label-primary">Alex Leonhardt</span> said
+                    <span class="flask-moment" data-timestamp="2014-05-27T08:40:35Z" data-format="fromNow(0)" data-refresh="0">2014-05-27T08:40:35Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">I think I finally understand decorators! yay! :)</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/a32b2fdfd8af1b7df8039ef520a94573ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#40</span> <span class="label label-primary"><a href="http://calpolyieee.org/">Robin</a></span> said
+                    <span class="flask-moment" data-timestamp="2014-06-22T17:21:13Z" data-format="fromNow(0)" data-refresh="0">2014-06-22T17:21:13Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Miguel, I&#39;m still getting the same error that Olga is getting even with your updated code.
+
+Here&#39;s the full traceback:
+
+reply: &#39;250 2.0.0 OK 1403457521 nx12sm79358076pab.6 - gsmtp\r\n&#39;
+reply: retcode (250); Msg: 2.0.0 OK 1403457521 nx12sm79358076pab.6 - gsmtp
+data: (250, &#39;2.0.0 OK 1403457521 nx12sm79358076pab.6 - gsmtp&#39;)
+send: &#39;quit\r\n&#39;
+reply: &#39;221 2.0.0 closing connection nx12sm79358076pab.6 - gsmtp\r\n&#39;
+reply: retcode (221); Msg: 2.0.0 closing connection nx12sm79358076pab.6 - gsmtpException in thread Thread-2:
+Traceback (most recent call last):
+  File &#34;/usr/lib64/python2.7/threading.py&#34;, line 810, in __bootstrap_inner
+    self.run()
+  File &#34;/usr/lib64/python2.7/threading.py&#34;, line 763, in run
+    self.__target(*self.__args, **self.__kwargs)
+  File &#34;/home/robin/github/ieee/calpoly/emails.py&#34;, line 13, in send_message
+    mail.send(msg)
+  File &#34;/home/robin/github/ieee/venv/lib/python2.7/site-packages/flask_mail.py&#34;, line 416, in send
+    message.send(connection)
+  File &#34;/home/robin/github/ieee/venv/lib/python2.7/site-packages/flask_mail.py&#34;, line 351, in send
+    connection.send(self)
+  File &#34;/home/robin/github/ieee/venv/lib/python2.7/site-packages/flask_mail.py&#34;, line 170, in send
+    email_dispatched.send(message, app=current_app._get_current_object())
+  File &#34;/home/robin/github/ieee/venv/lib/python2.7/site-packages/werkzeug/local.py&#34;, line 297, in _get_current_object
+    return self.__local()
+  File &#34;/home/robin/github/ieee/venv/lib/python2.7/site-packages/flask/globals.py&#34;, line 34, in _find_app
+    raise RuntimeError(&#39;working outside of application context&#39;)
+RuntimeError: working outside of application context
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#41</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-06-23T07:52:29Z" data-format="fromNow(0)" data-refresh="0">2014-06-23T07:52:29Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Robin: with current versions of Flask-Mail you have to put the send() call inside a  &#34;with app.app_context()&#34; block.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/f159fd5d4ac605315ac19af725e5f2b1ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#42</span> <span class="label label-primary">Jack Maney</span> said
+                    <span class="flask-moment" data-timestamp="2014-07-15T07:49:04Z" data-format="fromNow(0)" data-refresh="0">2014-07-15T07:49:04Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">First of all, thank you for the tutorial. It&#39;s an extremely useful resource for learning Flask.
+
+I got the same &#34;working outside of application context&#34; error that Olga got above. I found a workaround by changing send_async_email to the following:
+
+@async
+def send_async_email(msg):
+    with app.app_context():
+        mail.send(msg)</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/f9edbfcf6eafe0297ef6bdcb4df02018ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#43</span> <span class="label label-primary">Mihai</span> said
+                    <span class="flask-moment" data-timestamp="2014-07-25T12:17:54Z" data-format="fromNow(0)" data-refresh="0">2014-07-25T12:17:54Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Hi Miguel,
+
+what is the role of &#39;sender&#39; in Message(.., sender=sender,....)?
+It has no effect, it is ignored. I see the mail to be coming from whatever I have set in my settings file:
+MAIL_USERNAME = &#39;your-gmail-username&#39;
+Thanks.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#44</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-07-25T16:16:14Z" data-format="fromNow(0)" data-refresh="0">2014-07-25T16:16:14Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@Mihai: I believe gmail overrides the sender. A less intrusive email server would show what you pass in the &#34;From&#34; header.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/6fb9b77c4251224274040c4ffe7b3637ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#45</span> <span class="label label-primary">Howard Edson</span> said
+                    <span class="flask-moment" data-timestamp="2014-08-01T01:29:38Z" data-format="fromNow(0)" data-refresh="0">2014-08-01T01:29:38Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Miguel - can&#39;t thank you enough for this incredible tutorial. In this chapter I was getting the same error message about the application context. In case it is of use to future readers, I wanted to share that I was able to fix it by making two slight changes to emails.py -
+
+...
+from app import app, mail
+...
+@async
+def send_async_email(msg):
+    with app.app_context():
+        mail.send(msg)
+...</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/151d6ee174244e66b1559359e8be1787ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#46</span> <span class="label label-primary">B</span> said
+                    <span class="flask-moment" data-timestamp="2014-09-01T02:53:07Z" data-format="fromNow(0)" data-refresh="0">2014-09-01T02:53:07Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Getting the same error now...
+
+Traceback (most recent call last):
+  File &#34;/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/threading.py&#34;, line 808, in __bootstrap_inner
+    self.run()
+  File &#34;/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/threading.py&#34;, line 761, in run
+    self.__target(*self.__args, **self.__kwargs)
+  File &#34;server4.py&#34;, line 445, in send_async_email
+    mail.send(msg)
+  File &#34;/Users/benabelman/Dropbox/python/notify/flasksite/venv/lib/python2.7/site-packages/flask_mail.py&#34;, line 416, in send
+    message.send(connection)
+  File &#34;/Users/benabelman/Dropbox/python/notify/flasksite/venv/lib/python2.7/site-packages/flask_mail.py&#34;, line 351, in send
+    connection.send(self)
+  File &#34;/Users/benabelman/Dropbox/python/notify/flasksite/venv/lib/python2.7/site-packages/flask_mail.py&#34;, line 170, in send
+    email_dispatched.send(message, app=current_app._get_current_object())
+  File &#34;/Users/benabelman/Dropbox/python/notify/flasksite/venv/lib/python2.7/site-packages/werkzeug/local.py&#34;, line 297, in _get_current_object
+    return self.__local()
+  File &#34;/Users/benabelman/Dropbox/python/notify/flasksite/venv/lib/python2.7/site-packages/flask/globals.py&#34;, line 34, in _find_app
+    raise RuntimeError(&#39;working outside of application context&#39;)
+RuntimeError: working outside of application context
+
+
+Again - the email does go through!
+Any fix for the error?
+
+Your guide is fantastic by the way!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/729e26a2a2c7ff24a71958d4aa4e5f35ce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#47</span> <span class="label label-danger">Miguel Grinberg</span> said
+                    <span class="flask-moment" data-timestamp="2014-09-01T03:05:40Z" data-format="fromNow(0)" data-refresh="0">2014-09-01T03:05:40Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">@B: you are using a newer version of Flask-Email than the one I used back when I wrote this article. The current versions required an application context to be set, as shown in comment #45 above.</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/f1e4170f6bfb1acc01e549ac42529cb5ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#48</span> <span class="label label-primary">Mostafa Moradian</span> said
+                    <span class="flask-moment" data-timestamp="2014-10-09T08:39:32Z" data-format="fromNow(0)" data-refresh="0">2014-10-09T08:39:32Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Thanks for threading decorator. It helped me a lot!</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/29aa0f65d34a98a93f56bd88b70a4289ce2c.png?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#49</span> <span class="label label-primary">Andrew</span> said
+                    <span class="flask-moment" data-timestamp="2014-11-13T05:20:07Z" data-format="fromNow(0)" data-refresh="0">2014-11-13T05:20:07Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">My solution to the request context problem was to pass the context, not the app. 
+
+Change the async function:
+
+def send_async_email(context, msg):
+    with context:
+
+and if you&#39;re using the first example, the line:
+
+ thr = Thread(target=send_async_email, args=app.app_context(), msg])
+
+or, if you&#39;re using the decorator:
+
+ send_async_emailapp.app_context(), msg)
+
+</p>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="comment-thumbnail"><img src="../../../../gravatar.com/avatar/13ba51326d6730418de1643dacbbf1bdce2c.jpeg?s=60&amp;d=identicon" /></div>
+            <div class="comment-body">
+                <p>
+                    <span class="label label-default">#50</span> <span class="label label-primary">Dmitry Belyakov</span> said
+                    <span class="flask-moment" data-timestamp="2014-11-14T10:03:00Z" data-format="fromNow(0)" data-refresh="0">2014-11-14T10:03:00Z</span>
+                </p>
+                <div style="overflow: auto;">
+                    <p style="white-space: pre-wrap;">Anyone having outside of context error with latest flask versions: please do not pass current_app proxy directly. Use current_app._get_current_object() instead.
+
+</p>
+                </div>
+            </div>
+        </li>
+        
+    </ul>
+</div>
+
+<div class="page">
+<ul class="pager">
+  <li class="previous">
+    <a href="1.html#comments">&laquo;&laquo;</a>
+  </li>
+  <li class="previous">
+    <a href="1.html#comments">&laquo;</a>
+  </li>
+  <li class="next">
+    <a href="0.html#comments">&raquo;&raquo;</a>
+  </li>
+  <li class="next">
+    <a href="3.html#comments">&raquo;</a>
+  </li>
+</ul>
+</div>
+
+<h3><a name="commentform"></a>Leave a Comment</h3>
+
+<form action="#commentform" method="post"
+  class="form" role="form">
+  <div style="display:none;"><input id="csrf_token" name="csrf_token" type="hidden" value="1439534620.45##66172314830303fbf52c6e1221b70a049d435548"></div>
+  
+    
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="name">Name</label>
+        <input class="form-control" id="name" name="name" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="url">URL</label>
+        <input class="form-control" id="url" name="url" type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="email">Email</label>
+        <input class="form-control" id="email" name="email" required type="text" value="">
+  </div>
+
+
+    
+
+
+
+
+
+
+<div class="form-group "><label class="control-label" for="comment">Comment</label>
+        <textarea class="form-control" id="comment" name="comment" required></textarea>
+  </div>
+
+
+    
+
+
+
+
+<div class="form-group "><label class="control-label" for="captcha">Captcha</label>
+        
+<script type="text/javascript">var RecaptchaOptions = {"custom_translations": {"audio_challenge": "Get an audio challenge", "cant_hear_this": "Download sound as MP3", "help_btn": "Help", "image_alt_text": "reCAPTCHA challenge image", "incorrect_try_again": "Incorrect. Try again.", "instructions_audio": "Type what you hear", "instructions_visual": "Type the text", "play_again": "Play sound again", "privacy_and_terms": "Privacy & Terms", "refresh_btn": "Get a new challenge", "visual_challenge": "Get a visual challenge"}, "theme": "white"};</script>
+<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S"></script>
+<noscript>
+  <iframe src="http://www.google.com/recaptcha/api/noscript?k=6Ld5Zs4SAAAAAOY0DOi4r18bgHlEaz41qAoRf__S" height="300" width="500" frameborder="0"></iframe><br>
+  <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+  <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
+</noscript>
+
+  </div>
+
+
+    
+
+
+
+
+
+  
+
+
+    <input class="btn btn-default" id="submit" name="submit" type="submit" value="Submit">
+  
+
+
+
+
+
+</form>
+
+
+</div>
+
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <p class="elapsed">This page was generated in None seconds.</p>
+            <p>&copy; 2014 by Miguel Grinberg. All rights reserved. <a href="mailto:webmaster _at_ miguelgrinberg _dot_ com">Questions?</a></p>
+        </div>
+    </div>
+
+
+    
+    
+    <script src="../../../../cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="../../../../cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../../../cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.33/jquery.colorbox-min.js"></script>
+    <script type="text/javascript" src="../../../static/prettify.js"></script>
+    <script src="../../../../cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment-with-langs.min.js"></script>
+<script>
+function flask_moment_render(elem) {
+    $(elem).text(eval('moment("' + $(elem).data('timestamp') + '").' + $(elem).data('format') + ';'));
+    $(elem).removeClass('flask-moment');
+}
+function flask_moment_render_all() {
+    $('.flask-moment').each(function() {
+        flask_moment_render(this);
+        if ($(this).data('refresh')) {
+            (function(elem, interval) { setInterval(function() { flask_moment_render(elem) }, interval); })(this, $(this).data('refresh'));
+        }
+    })
+}
+$(document).ready(function() {
+    flask_moment_render_all();
+});
+</script>
+    
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4777284-15']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".gallery").colorbox({rel:".gallery",maxWidth:"95%",maxHeight:"95%",scalePhotos:true});
+            // add prettyprint class to all <pre><code></code></pre> blocks
+            var prettify = false;
+            $("pre code").parent().each(function() {
+                $(this).addClass('prettyprint');
+                prettify = true;
+            });
+            prettyPrint();
+        });
+    </script>
+
+
+  </body>
+
+<!-- Mirrored from blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xi-email-support/page/2 by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 14 Aug 2015 05:48:11 GMT -->
+</html>

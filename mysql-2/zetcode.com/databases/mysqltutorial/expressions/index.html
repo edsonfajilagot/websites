@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from zetcode.com/databases/mysqltutorial/expressions/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Jul 2015 02:47:03 GMT -->
+<head>
+<title>MySQL expressions</title>
+<link rel="stylesheet" href="../../../cfg/format2.css" type="text/css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="MySQL, SQL, database, expressions">
+<meta name="description" content="In this part of the MySQL tutorial, we cover
+MySQL expressions.">
+<meta name="author" content="Jan Bodnar">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div id="wide_ad" class="ltow">
+<script async src="../../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- 160x600, August 2011 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:600px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="2484182563"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<div class="content">
+
+
+<header>
+
+<nav>
+<a href="http://zetcode.com/" title="Home">Home</a>&#160;
+<a href="../index.html">Contents</a>
+</nav>
+
+</header>
+
+
+<h1>MySQL expressions</h1>
+
+
+<p>
+In this part of the MySQL tutorial, we will cover expressions. 
+</p>
+
+<div class="med_rec">
+<script async src="../../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+<!-- NewSquare -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:250px"
+     data-ad-client="ca-pub-9706709751191532"
+     data-ad-slot="0364418177"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<p>
+An expression in a programming language is a combination of values, 
+variables, operators, and functions that are interpreted (evaluated) 
+according to the particular rules of precedence and of association for
+a particular programming language, which computes and then produces 
+(returns, in a stateful environment) another value. The expression is
+said to evaluate to that value. (wikipedia)
+</p>
+
+
+<h2 id="literal">Literal values</h2>
+
+<p>
+A literal value is a constant of some kind. 
+Literal values may be strings, numbers, hexadecimal values, boolean values, 
+and NULL.
+</p>
+
+
+<pre class="code">
+mysql> SELECT 3, 'Wolf', 34.5, 0x34, 0+b'10111';
++---+------+------+------+------------+
+| 3 | Wolf | 34.5 | 0x34 | 0+b'10111' |
++---+------+------+------+------------+
+| 3 | Wolf | 34.5 | 4    |         23 |
++---+------+------+------+------------+
+</pre>
+
+<p>
+Here we return five literals. Namely an integer, a string a floating point a
+hexadecimal number and a binary value. The hexadecimal value is preceded by 
+<code>0x</code>, which is a standard in programming languages. The binary value 
+is preceded by a <code>b</code> character and written inside single quotes. 
+To display a printable value, we add a zero to the binary notation.
+</p>
+
+<pre class="code">
+mysql> SELECT NULL, \N;
++------+------+
+| NULL | NULL |
++------+------+
+| NULL | NULL |
++------+------+
+</pre>
+
+<p>
+This is the <code>NULL</code> value. It is an absence of a value.
+A synonym for <code>NULL</code> is <code>\N</code>.
+</p>
+
+<pre class="code">
+mysql> SELECT TRUE, FALSE;
++------+-------+
+| TRUE | FALSE |
++------+-------+
+|    1 |     0 |
++------+-------+
+</pre>
+
+<p>
+MySQL also recognises boolean <code>TRUE</code>, <code>FALSE</code> values. 
+They may be written in any letter case. 
+</p>
+
+
+<pre class="code">
+mysql> SELECT '2011-01-11', '23:33:01', '98/11/31/ 14:22:20';
++------------+----------+--------------------+
+| 2011-01-11 | 23:33:01 | 98/11/31/ 14:22:20 |
++------------+----------+--------------------+
+| 2011-01-11 | 23:33:01 | 98/11/31/ 14:22:20 |
++------------+----------+--------------------+
+</pre>
+
+<p>
+MySQL database supports various date and time literals. 
+</p>
+
+
+<h2 id="variables">Variables</h2>
+
+<p>
+A variable is a symbolic name associated with a value.
+This value may be changed over time. Variables in MySQL
+are preceded by the <code>@</code> character.
+</p>
+
+
+<pre class="code">
+mysql> SET @name = 'Jane';
+
+mysql> SELECT @name;
++-------+
+| @name |
++-------+
+| Jane  |
++-------+
+</pre>
+
+<p>
+We set a variable and show its contents afterwards.
+</p>
+
+
+<h2 id="operators">Operators</h2>
+
+<p>
+<em>Operators</em> are used to build expressions. SQL operators are 
+very similar to mathematical operators. There are two kinds of operators. 
+Binary and unary. Binary operators work with two operands, unary work with one. 
+An operator may have one or two operands. An <em>operand</em> is one of 
+the inputs (arguments) of an operator. 
+</p>
+
+<p>
+We have several types of operators:
+</p>
+
+<ul>
+<li>Arithmetic operators</li>
+<li>Boolean operators</li>
+<li>Relational operators</li>
+<li>Bitwise operators</li>
+<li>Other operators</li>
+</ul>
+
+
+<h3>Unary operators</h3>
+
+<p>
+We will show some unary operators.
+</p>
+
+<pre class="code">
+mysql> SELECT +3, 3;
++---+---+
+| 3 | 3 |
++---+---+
+| 3 | 3 |
++---+---+
+</pre>
+
+<p>
+The <code>+</code> is a no-op. It does not do anything. 
+
+</p>
+
+<pre class="code">
+mysql> SELECT -(3-44);
++---------+
+| -(3-44) |
++---------+
+|      41 |
++---------+
+</pre>
+ 
+<p>
+The - unary operator changes positive values
+to negative and vice versa. 
+</p>
+
+<pre class="code">
+mysql> SELECT NOT (3>9);
++-----------+
+| NOT (3>9) |
++-----------+
+|         1 |
++-----------+
+</pre>
+ 
+<p>
+The <code>NOT</code> operator negates a value. The result of the 
+<code>3>9</code> comparison is false and the negation operator negates 
+it to true.
+</p>
+
+
+<h3>Arithmetic operators</h3>
+
+<p>
+Common arithmetic operators are: multiplication, division, integer division, 
+addition, subtraction, and modulo. 
+</p>
+
+<pre class="code">
+mysql> SELECT 3 + 4 - 5;
++-----------+
+| 3 + 4 - 5 |
++-----------+
+|         2 |
++-----------+
+</pre>
+
+<p>
+Addition and subtraction operators. 
+</p>
+
+<pre class="code">
+mysql> SELECT 3*3/9;
++--------+
+| 3*3/9  |
++--------+
+| 1.0000 |
++--------+
+</pre>
+
+<p>
+These are multiplication and division operators that we 
+know from mathematics. 
+</p>
+
+<pre class="code">
+mysql> SELECT 9/2, 9 DIV 2;
++--------+---------+
+| 9/2    | 9 DIV 2 |
++--------+---------+
+| 4.5000 |       4 |
++--------+---------+
+</pre>
+
+<p>
+The above SQL statement shows the difference between the division 
+and integer division operators. The first returns a floating point number, 
+the second returns an integer.
+</p>
+
+<pre class="code">
+mysql> SELECT 11 % 3;
++--------+
+| 11 % 3 |
++--------+
+|      2 |
++--------+
+</pre>
+
+<p>
+The <code>%</code> operator is called the modulo operator. It finds the remainder 
+of division of one number by another. The <code>11 % 3</code>, 11 modulo 3 is 2, 
+because 3 goes into 11 three times with a remainder of 2. 
+</p>
+
+
+<h3>Logical operators</h3>
+
+<p>
+With logical operators we perform boolean operations. MySQL understands
+these logical operators: <code>AND</code>, <code>OR</code> and <code>NOT</code>
+and <code>XOR</code>. Logical operators return <code>TRUE</code> or 
+<code>FALSE</code>. In MySQL, 1 is true, 0 is false. 
+</p>
+
+
+<p>
+The <code>AND</code> operator evaluates to true if both operands are true. 
+</p>
+
+<pre class="code">
+mysql> SELECT FALSE AND FALSE, FALSE AND TRUE,
+    -> TRUE AND FALSE, TRUE AND TRUE;
++-----------------+----------------+----------------+---------------+
+| FALSE AND FALSE | FALSE AND TRUE | TRUE AND FALSE | TRUE AND TRUE |
++-----------------+----------------+----------------+---------------+
+|               0 |              0 |              0 |             1 |
++-----------------+----------------+----------------+---------------+
+</pre>
+
+<p>
+The first three operations evaluate to false, the last one to true. 
+</p>
+
+
+<pre class="code">
+mysql> SELECT 3=3 AND 4=4;
++-------------+
+| 3=3 AND 4=4 |
++-------------+
+|           1 |
++-------------+
+</pre>
+
+<p>
+Both operands are true, so the result is true (1).
+</p>
+
+<p>
+The <code>OR</code> operator evaluates to true if at least one 
+of the operands is true. 
+</p>
+
+<pre class="code">
+mysql> SELECT FALSE OR FALSE, FALSE OR TRUE, 
+    -> TRUE OR FALSE, TRUE OR TRUE;
++----------------+---------------+---------------+--------------+
+| FALSE OR FALSE | FALSE OR TRUE | TRUE OR FALSE | TRUE OR TRUE |
++----------------+---------------+---------------+--------------+
+|              0 |             1 |             1 |            1 |
++----------------+---------------+---------------+--------------+
+</pre>
+
+<p>
+The first operation evaluates to false, other operations evaluate to true.
+</p>
+
+<p>
+The <code>XOR</code> operator evaluates to true if exactly one of the 
+operands is true.
+</p>
+
+<pre class="code">
+mysql> SELECT FALSE XOR FALSE, FALSE XOR TRUE,
+    -> TRUE XOR FALSE, TRUE XOR TRUE;
++-----------------+----------------+----------------+---------------+
+| FALSE XOR FALSE | FALSE XOR TRUE | TRUE XOR FALSE | TRUE XOR TRUE |
++-----------------+----------------+----------------+---------------+
+|               0 |              1 |              1 |             0 |
++-----------------+----------------+----------------+---------------+
+</pre>
+
+<p>
+Two of the operations result in true.
+</p>
+
+<p>
+The <code>NOT</code> operator is negation operator. It makes true false and 
+false true. 
+</p>
+
+<pre class="code">
+mysql> SELECT NOT TRUE, NOT FALSE;
++----------+-----------+
+| NOT TRUE | NOT FALSE |
++----------+-----------+
+|        0 |         1 |
++----------+-----------+
+
+mysql> SELECT NOT (3=3);
++-----------+
+| NOT (3=3) |
++-----------+
+|         0 |
++-----------+
+</pre>
+
+
+<h3>Relational operators</h3>
+
+<p>
+Relational operators are used to compare values. These operators always 
+result in boolean value. 
+</p>
+
+<pre class="code">
+mysql> SELECT 3*3=9, 9=9;
++-------+-----+
+| 3*3=9 | 9=9 |
++-------+-----+
+|     1 |   1 |
++-------+-----+
+</pre>
+
+<p>
+The = is the equality operator. 
+</p>
+
+<pre class="code">
+mysql> SELECT 3 &lt; 4, 3 &lt;&gt; 5, 4 &lt;= 4, 5 != 5;
++-------+--------+--------+--------+
+| 3 &lt; 4 | 3 &lt;&gt; 5 | 4 &lt;= 4 | 5 != 5 |
++-------+--------+--------+--------+
+|     1 |      1 |      1 |      0 |
++-------+--------+--------+--------+
+</pre>
+
+<p>
+Usage of the relational operators is known from mathematics. 
+</p>
+
+
+<h3>Bitwise operators</h3>
+
+<p>
+Decimal numbers are natural to humans. Binary numbers are native to computers. 
+Binary, octal, decimal or hexadecimal symbols are only notations of the 
+same number. Bitwise operators work with bits of a binary number. 
+We have binary logical operators and shift operators.
+</p>
+
+<p>
+The <em>bitwise and operator</em> performs bit-by-bit comparison between two numbers. 
+The result for a bit position is 1 only if both corresponding bits in the operands are 1. 
+</p>
+
+<pre>     
+    00110
+  &amp; 00011
+  = 00010
+</pre>
+
+<p>
+The first number is a binary notation of 6, the second is 3 and the 
+result is 2. 
+</p>
+
+<pre class="code">
+mysql> SELECT 6 &amp; 3, 3 &amp; 6;
++-------+-------+
+| 6 &amp; 3 | 3 &amp; 6 |
++-------+-------+
+|     2 |     2 |
++-------+-------+
+</pre>
+
+<p>
+The <em>bitwise or operator</em> performs bit-by-bit comparison between two numbers.
+The result for a bit position is 1 if either of the corresponding bits in the operands is 1. 
+</p>
+
+<pre>    
+     00110
+  |  00011
+   = 00111
+</pre>
+
+<p>
+The result is <code>00110</code> or decimal 7. 
+</p>
+
+<pre class="code">
+mysql> SELECT 6 | 3, 3 | 6;
++-------+-------+
+| 6 | 3 | 3 | 6 |
++-------+-------+
+|     7 |     7 |
++-------+-------+
+</pre>
+
+
+<p>
+The <em>bitwise shift operators</em> shift bits to the right or left. 
+</p>
+
+<pre>
+number &lt;&lt; n : multiply number 2 to the nth power
+number &gt;&gt; n : divide number by 2 to the nth power
+</pre>
+
+<p>
+These operators are also called arithmetic shift. 
+</p>
+
+<pre>
+     00110
+ &gt;&gt;  00001
+   = 00011
+</pre>
+
+<p>
+We shift each of the bits of number six to the right. It is equal to dividing 
+the six by 2. The result is <code>00011</code> or decimal 3. 
+</p>
+
+<pre class="code">
+mysql> SELECT 6 >> 1;
++--------+
+| 6 >> 1 |
++--------+
+|      3 |
++--------+
+</pre>
+
+<pre>
+     00110
+  &lt;&lt; 00001
+   = 01100
+</pre>
+
+<p>
+
+We shift each of the bits of number six to the left. It is equal to multiplying 
+the number six by 2. The result is <code>01100</code> or decimal 12. 
+</p>
+
+<pre class="code">
+mysql> SELECT 6 &lt;&lt; 1;
++--------+
+| 6 &lt;&lt; 1 |
++--------+
+|     12 |
++--------+
+</pre>
+
+
+<h3>Other operators</h3>
+
+<p>
+There are some other operators left. These include <code>IS</code>,
+<code>IN</code>, <code>LIKE</code>, <code>REGEXP</code>, <code>BETWEEN</code>. 
+</p>
+
+<p>
+The <code>IS</code> operator tests if an operand is a boolean value.
+</p>
+
+<pre class="code">
+mysql> SET @running = FALSE;
+mysql> SELECT @running IS FALSE;
++-------------------+
+| @running IS FALSE |
++-------------------+
+|                 1 |
++-------------------+
+</pre>
+
+<p>
+We set a variable to boolean false. We check if the variable is 
+<code>FALSE</code> using the <code>IS</code> operator.
+</p>
+
+<p>
+We can use the <code>IN</code> operator in two cases. 
+</p>
+
+<pre class="code">
+mysql> SELECT 'Tom' IN ('Tom', 'Frank', 'Jane');
++-----------------------------------+
+| 'Tom' IN ('Tom', 'Frank', 'Jane') |
++-----------------------------------+
+|                                 1 |
++-----------------------------------+
+</pre>
+
+<p>
+Here we check if the string value 'Tom' is in the list of names, 
+following the <code>IN</code> operator. The return is a boolean value. 
+</p>
+
+<p>
+For the following example recapitulates what we have in the 
+<code>Cars</code> table. 
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM Cars;
++----+------------+--------+
+| Id | Name       | Cost   |
++----+------------+--------+
+|  1 | Audi       |  52642 |
+|  2 | Mercedes   |  57127 |
+|  3 | Skoda      |   9000 |
+|  4 | Volvo      |  29000 |
+|  5 | Bentley    | 350000 |
+|  6 | Citroen    |  21000 |
+|  7 | Hummer     |  41400 |
+|  8 | Volkswagen |  21600 |
++----+------------+--------+
+</pre>
+
+<p>
+In the second case, the <code>IN</code> operator allows you 
+to specify multiple values in a <code>WHERE</code> clause.
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM Cars Where Name IN ('Audi', 'Hummer');
++----+--------+-------+
+| Id | Name   | Cost  |
++----+--------+-------+
+|  1 | Audi   | 52642 |
+|  7 | Hummer | 41400 |
++----+--------+-------+
+</pre>
+
+<p>
+From the <code>Cars</code> table we choose cars that are listed 
+after the <code>IN</code> operator.
+</p>
+
+<p>
+The <code>LIKE</code> operator is used in a <code>WHERE</code> 
+clause to search for a specified pattern in a column.
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM Cars WHERE Name LIKE 'Vol%';
++----+------------+-------+
+| Id | Name       | Cost  |
++----+------------+-------+
+|  4 | Volvo      | 29000 |
+|  8 | Volkswagen | 21600 |
++----+------------+-------+
+</pre>
+
+<p>
+Here we select cars, whose names begin with 'Vol'.
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM Cars WHERE Name LIKE '____';
++----+------+-------+
+| Id | Name | Cost  |
++----+------+-------+
+|  1 | Audi | 52642 |
++----+------+-------+
+</pre>
+
+<p>
+Here we select a car name that has exactly four characters. 
+There are four underscores. 
+</p>
+
+<p>
+The <code>LIKE</code> operator only provides simple pattern matching. 
+The <code>REGEXP</code> operator is more powerful. It provides pattern 
+matching with regular expressions. <code>RLIKE</code> is a synonym for 
+<code>REGEXP</code>.
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM Cars WHERE Name REGEXP 'e.$';
++----+------------+--------+
+| Id | Name       | Cost   |
++----+------------+--------+
+|  2 | Mercedes   |  57127 |
+|  5 | Bentley    | 350000 |
+|  6 | Citroen    |  21000 |
+|  7 | Hummer     |  41400 |
+|  8 | Volkswagen |  21600 |
++----+------------+--------+
+</pre>
+
+<p>
+Here we have cars, whose last but one character is 'e'.
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM Cars WHERE Name REGEXP '^.e.*e.$';
++----+----------+--------+
+| Id | Name     | Cost   |
++----+----------+--------+
+|  2 | Mercedes |  57127 |
+|  5 | Bentley  | 350000 |
++----+----------+--------+
+</pre>
+
+<p>
+We select cars, whose second and last but one characters is 'e'.
+</p>
+
+
+<p>
+The <code>BETWEEN</code> operator is equivalent to a pair of comparisons. 
+The <code>a BETWEEN b AND c</code> is equivalent to 
+<code>a&gt;=b AND a&lt;=c</code>.
+</p>
+
+<pre class="code">
+mysql> SELECT * FROM Cars WHERE Cost BETWEEN 20000 AND 55000;
++----+------------+-------+
+| Id | Name       | Cost  |
++----+------------+-------+
+|  1 | Audi       | 52642 |
+|  4 | Volvo      | 29000 |
+|  6 | Citroen    | 21000 |
+|  7 | Hummer     | 41400 |
+|  8 | Volkswagen | 21600 |
++----+------------+-------+
+</pre>
+
+<p>
+In this SQL statement, we have selected cars, which cost between 
+20000 and 55000 units. 
+</p>
+
+<h2 id="precedence">Precedence</h2>
+
+<p>
+The <em>operator precedence</em> tells us which operators are 
+evaluated first. The precedence level is necessary to avoid
+ambiguity in expressions. 
+
+</p>
+
+<p>
+What is the outcome of the following expression, 28 or 40?
+</p>
+
+<pre>
+3 + 5 * 5
+</pre>
+
+<p>
+Like in mathematics, the multiplication operator has a higher precedence 
+than addition operator. So the outcome is 28.
+</p>
+
+<pre>
+(3 + 5) * 5
+</pre>
+
+<p>
+To change the order of evaluation, we can use square brackets. 
+Expressions inside square brackets are always evaluated first. 
+</p>
+
+
+<pre class="code">
+mysql> SELECT 3+5*5, (3+5)*5;
++-------+---------+
+| 3+5*5 | (3+5)*5 |
++-------+---------+
+|    28 |      40 |
++-------+---------+
+</pre>
+
+<p>
+The first expression evaluates to 28, because the multiplication 
+operator has a higher precedence, than the addition one. In the 
+second example, we have used square brackets to change the order of
+precedence. So the second expressions evaluates to 40. 
+</p>
+
+
+<h2 id="associativity">Associativity</h2>
+
+<p>
+Sometimes the precedence is not satisfactory to determine the outcome 
+of an expression. There is another rule called
+<em>associativity</em>. The associativity of operators determines the 
+order of evaluation of operators with the <em>same</em> precedence level. 
+</p>
+
+<pre>
+9 / 3 * 3
+</pre>
+
+<p>
+What is the outcome of this expression, 9 or 1? The multiplication, deletion, 
+and the modulo operator are left to right associated. So the expression is 
+evaluated this way: <code>(9 / 3) * 3</code> and the result is 9.
+</p>
+
+<pre class="code">
+mysql> SELECT 9 / 3 * 3;
++-----------+
+| 9 / 3 * 3 |
++-----------+
+|    9.0000 |
++-----------+
+</pre>
+
+<p>
+The associativity rule is left to right. 
+</p>
+
+<pre class="code">
+mysql> SELECT 0 AND 0 OR 1;
++--------------+
+| 0 AND 0 OR 1 |
++--------------+
+|            1 |
+</pre>
+
+<p>
+The associativity rule is again left to right. If it was right to left, 
+the result would be 0.
+</p>
+
+<p>
+Arithmetic, boolean, relational, and bitwise operators are all left 
+to right associated. 
+</p>
+
+<p>
+In this part of the MySQL tutorial, we have covered the MySQL expressions. 
+</p>
+
+<footer>
+
+<nav class="center">
+<span class="botNavItem"><a href="http://zetcode.com/">Home</a></span> ‡ <span class="botNavItem"><a href="../index.html">Contents</a></span> ‡
+<span class="botNavItem"><a href="#">Top of Page</a></span>
+</nav>
+
+<div class="signature">
+<a href="http://zetcode.com/">ZetCode</a> last modified January 20, 2011  <span class="copyright">&copy; 2007 - 2015 Jan Bodnar</span>
+</div>
+
+</footer>
+
+</div> <!-- content -->
+
+</div> <!-- container -->
+
+</body>
+
+<!-- Mirrored from zetcode.com/databases/mysqltutorial/expressions/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Jul 2015 02:47:03 GMT -->
+</html>
